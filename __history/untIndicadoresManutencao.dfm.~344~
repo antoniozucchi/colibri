@@ -1,0 +1,1978 @@
+object FrmIndicadoresManutencao: TFrmIndicadoresManutencao
+  Left = 0
+  Top = 0
+  Caption = 'Indicadores de Manuten'#231#227'o'
+  ClientHeight = 761
+  ClientWidth = 1278
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  FormStyle = fsMDIChild
+  OldCreateOrder = False
+  Visible = True
+  WindowState = wsMaximized
+  OnClose = FormClose
+  OnCreate = FormCreate
+  OnDestroy = FormDestroy
+  PixelsPerInch = 96
+  TextHeight = 13
+  object Panel7: TPanel
+    Left = 0
+    Top = 0
+    Width = 1278
+    Height = 25
+    Align = alTop
+    Caption = 'Indicadores de Manuten'#231#227'o'
+    Color = clGradientActiveCaption
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -13
+    Font.Name = 'Tahoma'
+    Font.Style = [fsBold]
+    ParentBackground = False
+    ParentFont = False
+    TabOrder = 0
+  end
+  object PageControlIndicadores: TPageControl
+    Left = 0
+    Top = 25
+    Width = 1278
+    Height = 736
+    ActivePage = TabSheet1
+    Align = alClient
+    TabOrder = 1
+    OnChange = PageControlIndicadoresChange
+    object TabSheet4: TTabSheet
+      Caption = 'Resumo'
+      ImageIndex = 3
+      object Splitter4: TSplitter
+        Left = 697
+        Top = 0
+        Height = 708
+        ExplicitLeft = 528
+        ExplicitTop = 72
+        ExplicitHeight = 100
+      end
+      object PanelResumoIndicadorResultados: TPanel
+        Left = 0
+        Top = 0
+        Width = 697
+        Height = 708
+        Align = alLeft
+        TabOrder = 0
+        object Splitter3: TSplitter
+          Left = 1
+          Top = 456
+          Width = 695
+          Height = 3
+          Cursor = crVSplit
+          Align = alBottom
+          ExplicitTop = 216
+          ExplicitWidth = 447
+        end
+        object ToolBar1: TToolBar
+          Left = 1
+          Top = 1
+          Width = 695
+          Height = 29
+          ButtonHeight = 23
+          Caption = 'ToolBar1'
+          DrawingStyle = dsGradient
+          EdgeBorders = [ebLeft, ebTop, ebRight, ebBottom]
+          TabOrder = 0
+          object BitBtn21: TBitBtn
+            Left = 0
+            Top = 0
+            Width = 80
+            Height = 23
+            Action = actGravarResumo
+            Align = alLeft
+            Caption = 'Gravar'
+            ParentShowHint = False
+            ShowHint = True
+            TabOrder = 1
+          end
+          object BitBtn18: TBitBtn
+            Left = 80
+            Top = 0
+            Width = 80
+            Height = 23
+            Action = actResumoIndicadores
+            Align = alLeft
+            Caption = 'Atualizar'
+            ParentShowHint = False
+            ShowHint = True
+            TabOrder = 0
+          end
+        end
+        object RLResumo: TStringGrid
+          Left = 1
+          Top = 30
+          Width = 695
+          Height = 426
+          Align = alClient
+          DefaultColWidth = 100
+          FixedCols = 0
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -16
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goColSizing, goEditing]
+          ParentFont = False
+          TabOrder = 1
+          OnDrawCell = RLResumoDrawCell
+          ColWidths = (
+            112
+            49
+            127
+            117
+            81)
+          RowHeights = (
+            24
+            24
+            26
+            24
+            24)
+        end
+        object PanelResumoIndicadorDados: TPanel
+          Left = 1
+          Top = 459
+          Width = 695
+          Height = 248
+          Align = alBottom
+          TabOrder = 2
+          object ToolBar11: TToolBar
+            Left = 1
+            Top = 1
+            Width = 693
+            Height = 29
+            ButtonHeight = 23
+            Caption = 'ToolBar11'
+            DrawingStyle = dsGradient
+            EdgeBorders = [ebLeft, ebTop, ebRight, ebBottom]
+            TabOrder = 0
+            object DBNavigator1: TDBNavigator
+              Left = 0
+              Top = 0
+              Width = 138
+              Height = 23
+              DataSource = FrmDataModule.DataSourceResumoIndicador
+              VisibleButtons = [nbInsert, nbDelete, nbEdit, nbPost, nbCancel, nbRefresh]
+              Hints.Strings = (
+                'Primeiro'
+                'Anterior'
+                'Pr'#243'ximo'
+                #218'ltimo'
+                'Inserir'
+                'Excluir'
+                'Editar'
+                'Gravar'
+                'Cancelar'
+                'Atualizar'
+                'Aplicar atualiza'#231#245'es'
+                'Calcelar atualiza'#231#245'es')
+              ParentShowHint = False
+              ShowHint = True
+              TabOrder = 0
+            end
+            object BitBtn19: TBitBtn
+              Left = 138
+              Top = 0
+              Width = 65
+              Height = 23
+              Action = actLimparFiltros
+              Align = alLeft
+              Caption = 'Limpar'
+              ParentShowHint = False
+              ShowHint = True
+              TabOrder = 1
+            end
+            object BitBtn20: TBitBtn
+              Left = 203
+              Top = 0
+              Width = 65
+              Height = 23
+              Action = actFiltrosTabela
+              Align = alLeft
+              Caption = 'Filtros'
+              ParentShowHint = False
+              ShowHint = True
+              TabOrder = 2
+            end
+          end
+          object DBGridResumoIndicador: TDBGrid
+            Left = 1
+            Top = 30
+            Width = 693
+            Height = 198
+            Align = alClient
+            DataSource = FrmDataModule.DataSourceResumoIndicador
+            TabOrder = 1
+            TitleFont.Charset = DEFAULT_CHARSET
+            TitleFont.Color = clWindowText
+            TitleFont.Height = -11
+            TitleFont.Name = 'Tahoma'
+            TitleFont.Style = []
+            OnDrawColumnCell = DBGridResumoIndicadorDrawColumnCell
+            OnTitleClick = DBGridResumoIndicadorTitleClick
+            Columns = <
+              item
+                Alignment = taCenter
+                Expanded = False
+                FieldName = 'DataIndicador'
+                Title.Alignment = taCenter
+                Title.Caption = 'Data Indicador'
+                Visible = True
+              end
+              item
+                Expanded = False
+                FieldName = 'Descricao'
+                Title.Alignment = taCenter
+                Title.Caption = 'Descri'#231#227'o'
+                Width = 128
+                Visible = True
+              end
+              item
+                Alignment = taCenter
+                Expanded = False
+                FieldName = 'ICPM'
+                Title.Alignment = taCenter
+                Visible = True
+              end
+              item
+                Alignment = taCenter
+                Expanded = False
+                FieldName = 'ICPMSO'
+                Title.Alignment = taCenter
+                Title.Caption = 'ICPM-SO'
+                Visible = True
+              end
+              item
+                Alignment = taCenter
+                Expanded = False
+                FieldName = 'ICPI'
+                Title.Alignment = taCenter
+                Visible = True
+              end
+              item
+                Alignment = taCenter
+                Expanded = False
+                FieldName = 'IMRI'
+                Title.Alignment = taCenter
+                Visible = True
+              end
+              item
+                Alignment = taCenter
+                Expanded = False
+                FieldName = 'IMRI_B'
+                Title.Alignment = taCenter
+                Title.Caption = 'IMRI-B'
+                Visible = True
+              end>
+          end
+          object ColunasLayoutResumo: TStringGrid
+            Left = 56
+            Top = 71
+            Width = 97
+            Height = 106
+            FixedCols = 0
+            Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goDrawFocusSelected, goRowSizing, goColSizing, goEditing]
+            TabOrder = 2
+            Visible = False
+            RowHeights = (
+              24
+              24
+              21
+              24
+              24)
+          end
+          object StatusBarResumoIndicador: TStatusBar
+            Left = 1
+            Top = 228
+            Width = 693
+            Height = 19
+            Panels = <
+              item
+                Width = 50
+              end
+              item
+                Width = 50
+              end
+              item
+                Width = 50
+              end
+              item
+                Width = 50
+              end>
+          end
+        end
+      end
+      object PanelGrafico: TPanel
+        Left = 700
+        Top = 0
+        Width = 570
+        Height = 708
+        Align = alClient
+        TabOrder = 1
+        object ChartGrafico: TChart
+          Left = 1
+          Top = 30
+          Width = 484
+          Height = 677
+          Border.Width = 2
+          Border.Fill.Gradient.EndColor = clBlack
+          Border.Fill.Gradient.StartColor = clBlack
+          Border.Fill.Gradient.Visible = True
+          Border.Visible = True
+          Legend.TextStyle = ltsRightValue
+          Legend.Visible = False
+          Title.Font.Color = clBlack
+          Title.Font.Height = -16
+          Title.Text.Strings = (
+            'TChart')
+          BottomAxis.Axis.Style = psDash
+          BottomAxis.Axis.Visible = False
+          BottomAxis.ExactDateTime = False
+          BottomAxis.Grid.Style = psDash
+          BottomAxis.LabelsOnAxis = False
+          BottomAxis.LabelsSeparation = 20
+          BottomAxis.LabelStyle = talPointValue
+          BottomAxis.MaximumOffset = 1
+          BottomAxis.MinimumOffset = 1
+          BottomAxis.RoundFirstLabel = False
+          BottomAxis.Title.Caption = 'Tempo'
+          LeftAxis.Grid.Style = psDash
+          LeftAxis.Grid.DrawAlways = True
+          LeftAxis.MaximumRound = True
+          LeftAxis.MinimumRound = True
+          LeftAxis.MinorGrid.Style = psDash
+          LeftAxis.MinorGrid.SmallDots = True
+          View3D = False
+          Align = alClient
+          Color = clWhite
+          TabOrder = 0
+          DefaultCanvas = 'TGDIPlusCanvas'
+          ColorPaletteIndex = 13
+          object Series2: TLineSeries
+            Brush.BackColor = clDefault
+            Pointer.InflateMargins = True
+            Pointer.Style = psRectangle
+            Pointer.Visible = True
+            XValues.Name = 'X'
+            XValues.Order = loAscending
+            YValues.Name = 'Y'
+            YValues.Order = loNone
+          end
+        end
+        object ToolBar13: TToolBar
+          Left = 1
+          Top = 1
+          Width = 568
+          Height = 29
+          ButtonHeight = 23
+          Caption = 'ToolBar4'
+          DrawingStyle = dsGradient
+          EdgeBorders = [ebLeft, ebTop, ebRight, ebBottom]
+          HotTrackColor = clRed
+          Images = FrmPrincipal.ImageList1
+          TabOrder = 1
+          object ToolButton4: TToolButton
+            Left = 0
+            Top = 0
+            Action = actGRFSalvarImagem
+            ParentShowHint = False
+            ShowHint = True
+          end
+          object ToolButton5: TToolButton
+            Left = 23
+            Top = 0
+            Action = actGRFSalvarData
+            ParentShowHint = False
+            ShowHint = True
+          end
+          object ToolButton7: TToolButton
+            Left = 46
+            Top = 0
+            Action = actGRFImprimir
+            ParentShowHint = False
+            ShowHint = True
+          end
+          object ToolButton9: TToolButton
+            Left = 69
+            Top = 0
+            Action = actGRFTitulo
+          end
+          object ToolButton12: TToolButton
+            Left = 92
+            Top = 0
+            Action = actZoomMais
+            ParentShowHint = False
+            ShowHint = True
+          end
+          object ToolButton13: TToolButton
+            Left = 115
+            Top = 0
+            Action = actZoomMenos
+            ParentShowHint = False
+            ShowHint = True
+          end
+          object btnMark: TToolButton
+            Left = 138
+            Top = 0
+            Action = actEtiqueta
+            ParentShowHint = False
+            ShowHint = True
+            Style = tbsCheck
+          end
+        end
+        object RadioGroupGrafico: TRadioGroup
+          Left = 485
+          Top = 30
+          Width = 84
+          Height = 677
+          Align = alRight
+          Caption = 'Gr'#225'fico'
+          ItemIndex = 0
+          Items.Strings = (
+            'ICPM'
+            'ICPM-SO'
+            'ICPI'
+            'IMRI'
+            'IMRI-B'
+            'Todos')
+          TabOrder = 2
+          OnClick = actGraficoExecute
+        end
+      end
+    end
+    object TabSheet1: TTabSheet
+      Caption = 'ICPM e ICPM-SO'
+      object Splitter1: TSplitter
+        Left = 937
+        Top = 0
+        Height = 689
+        Align = alRight
+        ExplicitLeft = 541
+        ExplicitTop = 3
+        ExplicitHeight = 382
+      end
+      object StatusBarICPM: TStatusBar
+        Left = 0
+        Top = 689
+        Width = 1270
+        Height = 19
+        Panels = <
+          item
+            Width = 50
+          end
+          item
+            Width = 50
+          end
+          item
+            Width = 50
+          end
+          item
+            Width = 50
+          end>
+      end
+      object PanelICPM: TPanel
+        Left = 0
+        Top = 0
+        Width = 937
+        Height = 689
+        Align = alClient
+        TabOrder = 1
+        object DBGridICPM: TDBGrid
+          Left = 1
+          Top = 30
+          Width = 935
+          Height = 658
+          Align = alClient
+          DataSource = FrmDataModule.DataSourceICPM
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -13
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          ParentFont = False
+          TabOrder = 0
+          TitleFont.Charset = DEFAULT_CHARSET
+          TitleFont.Color = clWindowText
+          TitleFont.Height = -11
+          TitleFont.Name = 'Tahoma'
+          TitleFont.Style = []
+          OnCellClick = DBGridICPMCellClick
+          OnDrawColumnCell = DBGridICPMDrawColumnCell
+          OnKeyDown = DBGridICPMKeyDown
+          OnKeyPress = DBGridICPMKeyPress
+          OnTitleClick = DBGridICPMTitleClick
+          Columns = <
+            item
+              Expanded = False
+              FieldName = 'BooleanCritico'
+              ReadOnly = True
+              Title.Alignment = taCenter
+              Title.Caption = 'Cr'#237'tico'
+              Visible = True
+            end
+            item
+              Expanded = False
+              FieldName = 'Plataforma'
+              ReadOnly = True
+              Title.Alignment = taCenter
+              Title.Caption = 'Instala'#231#227'o'
+              Width = 66
+              Visible = True
+            end
+            item
+              Expanded = False
+              FieldName = 'TextoBreveOM'
+              ReadOnly = True
+              Title.Alignment = taCenter
+              Title.Caption = 'Texto Breve [OM]'
+              Width = 236
+              Visible = True
+            end
+            item
+              Expanded = False
+              FieldName = 'DenominacaoLocalInstalacao'
+              ReadOnly = True
+              Title.Alignment = taCenter
+              Title.Caption = 'Denomin. Local Instala'#231#227'o'
+              Width = 203
+              Visible = True
+            end
+            item
+              Expanded = False
+              FieldName = 'txtTipoEtapaServico'
+              ReadOnly = True
+              Title.Alignment = taCenter
+              Title.Caption = 'Tipo Etapa Servi'#231'o'
+              Width = 119
+              Visible = True
+            end
+            item
+              Alignment = taCenter
+              Expanded = False
+              FieldName = 'StatusICPM'
+              PickList.Strings = (
+                'REALIZADO'
+                'PENDENTE')
+              Title.Alignment = taCenter
+              Title.Caption = 'Status ICPM'
+              Width = 83
+              Visible = True
+            end
+            item
+              Alignment = taCenter
+              Expanded = False
+              FieldName = 'RiscoAtendimento'
+              Title.Alignment = taCenter
+              Title.Caption = 'Risco'
+              Width = 32
+              Visible = True
+            end
+            item
+              Expanded = False
+              FieldName = 'Comentario'
+              Title.Alignment = taCenter
+              Title.Caption = 'Coment'#225'rio'
+              Width = 163
+              Visible = True
+            end
+            item
+              Alignment = taCenter
+              Expanded = False
+              FieldName = 'HHPlanejado'
+              ReadOnly = True
+              Title.Alignment = taCenter
+              Title.Caption = 'HH Plan.'
+              Visible = True
+            end
+            item
+              Alignment = taCenter
+              Expanded = False
+              FieldName = 'HHRealizado'
+              Title.Alignment = taCenter
+              Title.Caption = 'HH Real.'
+              Visible = True
+            end
+            item
+              Expanded = False
+              FieldName = 'LocalInstalacao'
+              ReadOnly = True
+              Title.Alignment = taCenter
+              Title.Caption = 'Local Instala'#231#227'o'
+              Width = 101
+              Visible = True
+            end
+            item
+              Expanded = False
+              FieldName = 'StatusSistema'
+              ReadOnly = True
+              Title.Alignment = taCenter
+              Title.Caption = 'Status Sistema'
+              Width = 82
+              Visible = True
+            end
+            item
+              Expanded = False
+              FieldName = 'TipoAtvMnt'
+              ReadOnly = True
+              Title.Alignment = taCenter
+              Visible = True
+            end
+            item
+              Expanded = False
+              FieldName = 'DataFimReal'
+              ReadOnly = True
+              Title.Alignment = taCenter
+              Title.Caption = 'Data Fim Real.'
+              Width = 89
+              Visible = True
+            end
+            item
+              Expanded = False
+              FieldName = 'CentroTrabalhoOM'
+              ReadOnly = True
+              Title.Alignment = taCenter
+              Title.Caption = 'Centro Trabalho [OM]'
+              Width = 117
+              Visible = True
+            end
+            item
+              Expanded = False
+              FieldName = 'OrdemManutencao'
+              ReadOnly = True
+              Title.Alignment = taCenter
+              Title.Caption = 'Ordem Manuten'#231#227'o'
+              Width = 102
+              Visible = True
+            end
+            item
+              Expanded = False
+              FieldName = 'AreaOP'
+              ReadOnly = True
+              Title.Alignment = taCenter
+              Title.Caption = #193'rea Op.'
+              Visible = True
+            end
+            item
+              Alignment = taCenter
+              Expanded = False
+              FieldName = 'ComentarioPor'
+              ReadOnly = True
+              Title.Alignment = taCenter
+              Title.Caption = 'Comentado Por'
+              Visible = True
+            end
+            item
+              Alignment = taCenter
+              Expanded = False
+              FieldName = 'ComputadorComentario'
+              ReadOnly = True
+              Title.Alignment = taCenter
+              Title.Caption = 'Computador Coment'#225'rio'
+              Visible = True
+            end
+            item
+              Alignment = taCenter
+              Expanded = False
+              FieldName = 'DataComentario'
+              ReadOnly = True
+              Title.Alignment = taCenter
+              Title.Caption = 'Data Coment'#225'rio'
+              Visible = True
+            end
+            item
+              Alignment = taCenter
+              Expanded = False
+              FieldName = 'ImportadoPor'
+              ReadOnly = True
+              Title.Alignment = taCenter
+              Title.Caption = 'Importado Por'
+              Visible = True
+            end
+            item
+              Alignment = taCenter
+              Expanded = False
+              FieldName = 'ComputadorImportacao'
+              ReadOnly = True
+              Title.Alignment = taCenter
+              Title.Caption = 'Computador Importa'#231#227'o'
+              Visible = True
+            end
+            item
+              Alignment = taCenter
+              Expanded = False
+              FieldName = 'DataImportacao'
+              ReadOnly = True
+              Title.Alignment = taCenter
+              Title.Caption = 'Data Importa'#231#227'o'
+              Visible = True
+            end>
+        end
+        object ToolBar2: TToolBar
+          Left = 1
+          Top = 1
+          Width = 935
+          Height = 29
+          Caption = 'ToolBar2'
+          DrawingStyle = dsGradient
+          EdgeBorders = [ebLeft, ebTop, ebRight, ebBottom]
+          Images = FrmPrincipal.ImageList1
+          TabOrder = 1
+          object ToolButton1: TToolButton
+            Left = 0
+            Top = 0
+            Action = actZoomMais
+            ParentShowHint = False
+            ShowHint = True
+          end
+          object ToolButton2: TToolButton
+            Left = 23
+            Top = 0
+            Action = actZoomMenos
+            ParentShowHint = False
+            ShowHint = True
+          end
+          object ToolButton17: TToolButton
+            Left = 46
+            Top = 0
+            Action = actICPMLimpar
+            ParentShowHint = False
+            ShowHint = True
+          end
+          object ToolButton18: TToolButton
+            Left = 69
+            Top = 0
+            Action = actICPMSel
+            ParentShowHint = False
+            ShowHint = True
+          end
+          object BitBtn2: TBitBtn
+            Left = 92
+            Top = 0
+            Width = 80
+            Height = 22
+            Action = actExcelICPM
+            Align = alLeft
+            Caption = 'Exportar'
+            ParentShowHint = False
+            ShowHint = True
+            TabOrder = 0
+          end
+          object BitBtn1: TBitBtn
+            Left = 172
+            Top = 0
+            Width = 65
+            Height = 22
+            Action = actLimparFiltros
+            Align = alLeft
+            Caption = 'Limpar'
+            ParentShowHint = False
+            ShowHint = True
+            TabOrder = 1
+          end
+          object BitBtn16: TBitBtn
+            Left = 237
+            Top = 0
+            Width = 65
+            Height = 22
+            Action = actFiltrosTabela
+            Align = alLeft
+            Caption = 'Filtros'
+            ParentShowHint = False
+            ShowHint = True
+            TabOrder = 3
+          end
+          object BitBtn17: TBitBtn
+            Left = 302
+            Top = 0
+            Width = 79
+            Height = 22
+            Action = actProcurarICPM
+            Align = alLeft
+            Caption = 'Procurar'
+            ParentShowHint = False
+            ShowHint = True
+            TabOrder = 5
+          end
+          object BitBtn3: TBitBtn
+            Left = 381
+            Top = 0
+            Width = 79
+            Height = 22
+            Action = actImprimirICPM
+            Align = alLeft
+            Caption = 'Imprimir'
+            ParentShowHint = False
+            ShowHint = True
+            TabOrder = 6
+          end
+          object BitBtn4: TBitBtn
+            Left = 460
+            Top = 0
+            Width = 59
+            Height = 22
+            Action = actCopiarComentario
+            Align = alLeft
+            Caption = 'Copiar'
+            ParentShowHint = False
+            ShowHint = True
+            TabOrder = 7
+          end
+          object BitBtn12: TBitBtn
+            Left = 519
+            Top = 0
+            Width = 59
+            Height = 22
+            Action = actColarComentario
+            Align = alLeft
+            Caption = 'Colar'
+            ParentShowHint = False
+            ShowHint = True
+            TabOrder = 8
+          end
+          object BitBtn6: TBitBtn
+            Left = 578
+            Top = 0
+            Width = 63
+            Height = 22
+            Action = actRealizadoPendente
+            Align = alLeft
+            Caption = 'Status'
+            ParentShowHint = False
+            ShowHint = True
+            TabOrder = 2
+          end
+          object DBEditStatusICPM: TDBEdit
+            Left = 641
+            Top = 0
+            Width = 96
+            Height = 22
+            DataField = 'StatusICPM'
+            DataSource = FrmDataModule.DataSourceICPM
+            TabOrder = 9
+            Visible = False
+          end
+          object DBEditComentarioICPM: TDBEdit
+            Left = 737
+            Top = 0
+            Width = 125
+            Height = 22
+            DataField = 'Comentario'
+            DataSource = FrmDataModule.DataSourceICPM
+            TabOrder = 4
+            Visible = False
+          end
+        end
+        object ColunasLayoutICPM: TStringGrid
+          Left = 24
+          Top = 118
+          Width = 161
+          Height = 137
+          FixedCols = 0
+          Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goDrawFocusSelected, goRowSizing, goColSizing, goEditing]
+          TabOrder = 2
+          Visible = False
+          RowHeights = (
+            24
+            24
+            21
+            24
+            24)
+        end
+        object RLImprimirICPM: TStringGrid
+          Left = 216
+          Top = 102
+          Width = 161
+          Height = 137
+          Align = alCustom
+          FixedCols = 0
+          Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goDrawFocusSelected, goRowSizing, goColSizing, goEditing]
+          TabOrder = 3
+          Visible = False
+          RowHeights = (
+            24
+            24
+            21
+            24
+            24)
+        end
+      end
+      object PanelFiltroICPM: TPanel
+        Left = 940
+        Top = 0
+        Width = 330
+        Height = 689
+        Align = alRight
+        TabOrder = 2
+        object ToolBar7: TToolBar
+          Left = 1
+          Top = 1
+          Width = 328
+          Height = 29
+          Caption = 'ToolBar7'
+          DrawingStyle = dsGradient
+          EdgeBorders = [ebLeft, ebTop, ebRight, ebBottom]
+          Images = FrmPrincipal.ImageList1
+          TabOrder = 0
+          object btnMostrarOcultarICPM: TToolButton
+            Left = 0
+            Top = 0
+            Action = actOcultarICPM
+            ParentShowHint = False
+            ShowHint = True
+          end
+        end
+        object PageControlICPM: TPageControl
+          Left = 1
+          Top = 30
+          Width = 328
+          Height = 658
+          ActivePage = TabSheet11
+          Align = alClient
+          TabOrder = 1
+          object TabSheet8: TTabSheet
+            Caption = 'Filtro do Usu'#225'rio'
+            object CheckListBoxSistemaFiltroICPM: TCheckListBox
+              Left = 0
+              Top = 29
+              Width = 320
+              Height = 601
+              Align = alClient
+              ItemHeight = 13
+              TabOrder = 0
+              OnClick = actFiltrosICPMExecute
+            end
+            object ToolBar8: TToolBar
+              Left = 0
+              Top = 0
+              Width = 320
+              Height = 29
+              Caption = 'ToolBar2'
+              DrawingStyle = dsGradient
+              EdgeBorders = [ebLeft, ebTop, ebRight, ebBottom]
+              Images = FrmPrincipal.ImageList1
+              TabOrder = 1
+              object ToolButton15: TToolButton
+                Left = 0
+                Top = 0
+              end
+              object ToolButton16: TToolButton
+                Left = 23
+                Top = 0
+              end
+            end
+          end
+          object TabSheet9: TTabSheet
+            Caption = 'Instala'#231#227'o'
+            ImageIndex = 1
+            object CheckListBoxPlataformaICPM: TCheckListBox
+              Left = 0
+              Top = 29
+              Width = 320
+              Height = 601
+              Align = alClient
+              ItemHeight = 13
+              TabOrder = 0
+              OnClick = actFiltrosICPMExecute
+            end
+            object ToolBar9: TToolBar
+              Left = 0
+              Top = 0
+              Width = 320
+              Height = 29
+              Caption = 'ToolBar2'
+              DrawingStyle = dsGradient
+              EdgeBorders = [ebLeft, ebTop, ebRight, ebBottom]
+              Images = FrmPrincipal.ImageList1
+              TabOrder = 1
+              object ToolButton6: TToolButton
+                Left = 0
+                Top = 0
+                ParentShowHint = False
+                ShowHint = True
+              end
+              object ToolButton8: TToolButton
+                Left = 23
+                Top = 0
+                ParentShowHint = False
+                ShowHint = True
+              end
+            end
+          end
+          object TabSheet10: TTabSheet
+            Caption = 'Tipo de Etapa Servi'#231'o'
+            ImageIndex = 2
+            object CheckListBoxTipoEtapaServicoICPM: TCheckListBox
+              Left = 0
+              Top = 29
+              Width = 320
+              Height = 601
+              Align = alClient
+              ItemHeight = 13
+              TabOrder = 0
+              OnClick = actFiltrosICPMExecute
+            end
+            object ToolBar10: TToolBar
+              Left = 0
+              Top = 0
+              Width = 320
+              Height = 29
+              Caption = 'ToolBar2'
+              DrawingStyle = dsGradient
+              EdgeBorders = [ebLeft, ebTop, ebRight, ebBottom]
+              Images = FrmPrincipal.ImageList1
+              TabOrder = 1
+              object ToolButton10: TToolButton
+                Left = 0
+                Top = 0
+                ParentShowHint = False
+                ShowHint = True
+              end
+              object ToolButton11: TToolButton
+                Left = 23
+                Top = 0
+                ParentShowHint = False
+                ShowHint = True
+              end
+            end
+          end
+          object TabSheet11: TTabSheet
+            Caption = 'Indicador'
+            ImageIndex = 3
+            object RLICPM: TStringGrid
+              Left = 0
+              Top = 48
+              Width = 320
+              Height = 238
+              Align = alTop
+              ColCount = 7
+              DefaultRowHeight = 22
+              FixedCols = 0
+              RowCount = 3
+              TabOrder = 0
+              OnDrawCell = RLICPMDrawCell
+              ColWidths = (
+                64
+                64
+                64
+                64
+                64
+                64
+                64)
+            end
+            object Panel1: TPanel
+              Left = 0
+              Top = 29
+              Width = 320
+              Height = 19
+              Align = alTop
+              Caption = 'ICPM'
+              Color = clSilver
+              Font.Charset = DEFAULT_CHARSET
+              Font.Color = clWindowText
+              Font.Height = -13
+              Font.Name = 'Tahoma'
+              Font.Style = [fsBold]
+              ParentBackground = False
+              ParentFont = False
+              TabOrder = 1
+            end
+            object Panel2: TPanel
+              Left = 0
+              Top = 286
+              Width = 320
+              Height = 344
+              Align = alClient
+              TabOrder = 2
+              object Panel3: TPanel
+                Left = 1
+                Top = 1
+                Width = 318
+                Height = 19
+                Align = alTop
+                Caption = 'ICPM-SO'
+                Color = clSilver
+                Font.Charset = DEFAULT_CHARSET
+                Font.Color = clWindowText
+                Font.Height = -13
+                Font.Name = 'Tahoma'
+                Font.Style = [fsBold]
+                ParentBackground = False
+                ParentFont = False
+                TabOrder = 0
+              end
+              object RLICPMSO: TStringGrid
+                Left = 1
+                Top = 20
+                Width = 318
+                Height = 323
+                Align = alClient
+                ColCount = 6
+                DefaultRowHeight = 22
+                FixedCols = 0
+                RowCount = 3
+                TabOrder = 1
+                OnDrawCell = RLICPMSODrawCell
+                ColWidths = (
+                  64
+                  64
+                  64
+                  64
+                  64
+                  64)
+              end
+            end
+            object ToolBar3: TToolBar
+              Left = 0
+              Top = 0
+              Width = 320
+              Height = 29
+              Caption = 'ToolBar3'
+              DrawingStyle = dsGradient
+              EdgeBorders = [ebLeft, ebTop, ebRight, ebBottom]
+              TabOrder = 3
+              object BitBtn5: TBitBtn
+                Left = 0
+                Top = 0
+                Width = 65
+                Height = 22
+                Action = actIndicadorICPM
+                Align = alLeft
+                Caption = 'ICPM'
+                ParentShowHint = False
+                ShowHint = True
+                TabOrder = 0
+              end
+            end
+          end
+        end
+      end
+    end
+    object TabSheet2: TTabSheet
+      Caption = 'Medidas PH e IMRI'
+      ImageIndex = 1
+      object PanelTitulo: TPanel
+        Left = 0
+        Top = 0
+        Width = 1270
+        Height = 25
+        Align = alTop
+        Caption = 'Recomenda'#231#245'es T'#233'cnicas de Inspe'#231#227'o (SAP)'
+        Color = clGradientActiveCaption
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -13
+        Font.Name = 'Tahoma'
+        Font.Style = [fsBold]
+        ParentBackground = False
+        ParentFont = False
+        TabOrder = 0
+      end
+      object StatusBarRTI: TStatusBar
+        Left = 0
+        Top = 689
+        Width = 1270
+        Height = 19
+        Panels = <
+          item
+            Width = 50
+          end
+          item
+            Width = 50
+          end
+          item
+            Width = 50
+          end
+          item
+            Width = 50
+          end
+          item
+            Width = 50
+          end>
+      end
+      object ToolBar14: TToolBar
+        Left = 0
+        Top = 25
+        Width = 1270
+        Height = 29
+        Caption = 'ToolBar7'
+        DrawingStyle = dsGradient
+        EdgeBorders = [ebLeft, ebTop, ebRight, ebBottom]
+        Images = FrmPrincipal.ImageList1
+        TabOrder = 2
+        object BitBtn10: TBitBtn
+          Left = 0
+          Top = 0
+          Width = 81
+          Height = 22
+          Action = actIndicadorRTI
+          Align = alLeft
+          Caption = 'Calcular'
+          ParentShowHint = False
+          ShowHint = True
+          TabOrder = 1
+        end
+        object DateTimeVencimentoRTI: TDateTimePicker
+          Left = 81
+          Top = 0
+          Width = 106
+          Height = 22
+          Date = 43854.629868055560000000
+          Time = 43854.629868055560000000
+          TabOrder = 0
+        end
+        object SpinEdit1: TSpinEdit
+          Left = 187
+          Top = 0
+          Width = 52
+          Height = 22
+          Hint = 'N'#250'mero de meses para proje'#231#227'o'
+          MaxValue = 0
+          MinValue = 0
+          ParentShowHint = False
+          ShowHint = True
+          TabOrder = 2
+          Value = 5
+          OnChange = actIndicadorRTIExecute
+        end
+      end
+      object Panel19: TPanel
+        Left = 0
+        Top = 54
+        Width = 1270
+        Height = 635
+        Align = alClient
+        TabOrder = 3
+        object Splitter2: TSplitter
+          Left = 425
+          Top = 1
+          Height = 633
+          ExplicitLeft = 960
+          ExplicitTop = 120
+          ExplicitHeight = 100
+        end
+        object PanelPH: TPanel
+          Left = 1
+          Top = 1
+          Width = 424
+          Height = 633
+          Align = alLeft
+          TabOrder = 0
+          object Panel9: TPanel
+            Left = 1
+            Top = 1
+            Width = 422
+            Height = 19
+            Align = alTop
+            Caption = 'Medidas PH'
+            Color = clSilver
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -13
+            Font.Name = 'Tahoma'
+            Font.Style = [fsBold]
+            ParentBackground = False
+            ParentFont = False
+            TabOrder = 0
+          end
+          object RLPH: TStringGrid
+            Left = 1
+            Top = 20
+            Width = 422
+            Height = 612
+            Align = alClient
+            ColCount = 2
+            DefaultRowHeight = 22
+            FixedCols = 0
+            RowCount = 3
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -16
+            Font.Name = 'Tahoma'
+            Font.Style = []
+            ParentFont = False
+            TabOrder = 1
+            OnDrawCell = RLICPMSODrawCell
+            ColWidths = (
+              154
+              64)
+          end
+        end
+        object Panel_IMRI: TPanel
+          Left = 428
+          Top = 1
+          Width = 841
+          Height = 633
+          Align = alClient
+          TabOrder = 1
+          object Panel8: TPanel
+            Left = 1
+            Top = 1
+            Width = 839
+            Height = 19
+            Align = alTop
+            Caption = 'IMRI'
+            Color = clSilver
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -13
+            Font.Name = 'Tahoma'
+            Font.Style = [fsBold]
+            ParentBackground = False
+            ParentFont = False
+            TabOrder = 0
+          end
+          object RLIMRI: TStringGrid
+            Left = 1
+            Top = 20
+            Width = 839
+            Height = 612
+            Align = alClient
+            ColCount = 6
+            DefaultRowHeight = 22
+            FixedCols = 0
+            RowCount = 3
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -16
+            Font.Name = 'Tahoma'
+            Font.Style = []
+            ParentFont = False
+            TabOrder = 1
+            OnDrawCell = RLICPMSODrawCell
+            ColWidths = (
+              64
+              64
+              64
+              64
+              64
+              64)
+          end
+        end
+      end
+    end
+    object TabSheet3: TTabSheet
+      Caption = 'ICPI'
+      ImageIndex = 2
+      object Splitter5: TSplitter
+        Left = 1267
+        Top = 137
+        Height = 552
+        Align = alRight
+        ExplicitLeft = 672
+        ExplicitTop = 60
+        ExplicitHeight = 676
+      end
+      object Splitter7: TSplitter
+        Left = 0
+        Top = 134
+        Width = 1270
+        Height = 3
+        Cursor = crVSplit
+        Align = alTop
+        ExplicitTop = 153
+        ExplicitWidth = 536
+      end
+      object ToolBar4: TToolBar
+        Left = 0
+        Top = 0
+        Width = 1270
+        Height = 29
+        Caption = 'ToolBar2'
+        DrawingStyle = dsGradient
+        EdgeBorders = [ebLeft, ebTop, ebRight, ebBottom]
+        TabOrder = 0
+        object BitBtn7: TBitBtn
+          Left = 0
+          Top = 0
+          Width = 80
+          Height = 22
+          Action = actExcelICPI
+          Align = alLeft
+          Caption = 'Exportar'
+          ParentShowHint = False
+          ShowHint = True
+          TabOrder = 0
+        end
+        object BitBtn8: TBitBtn
+          Left = 80
+          Top = 0
+          Width = 65
+          Height = 22
+          Action = actLimparFiltros
+          Align = alLeft
+          Caption = 'Limpar'
+          ParentShowHint = False
+          ShowHint = True
+          TabOrder = 1
+        end
+        object BitBtn11: TBitBtn
+          Left = 145
+          Top = 0
+          Width = 65
+          Height = 22
+          Action = actFiltrosTabela
+          Align = alLeft
+          Caption = 'Filtros'
+          ParentShowHint = False
+          ShowHint = True
+          TabOrder = 3
+        end
+        object BitBtn9: TBitBtn
+          Left = 210
+          Top = 0
+          Width = 65
+          Height = 22
+          Action = actIndicadorICPI
+          Align = alLeft
+          Caption = 'Calcular'
+          ParentShowHint = False
+          ShowHint = True
+          TabOrder = 2
+        end
+        object BitBtn14: TBitBtn
+          Left = 275
+          Top = 0
+          Width = 59
+          Height = 22
+          Action = actCopiarComentario
+          Align = alLeft
+          Caption = 'Copiar'
+          ParentShowHint = False
+          ShowHint = True
+          TabOrder = 7
+        end
+        object BitBtn15: TBitBtn
+          Left = 334
+          Top = 0
+          Width = 59
+          Height = 22
+          Action = actColarComentario
+          Align = alLeft
+          Caption = 'Colar'
+          ParentShowHint = False
+          ShowHint = True
+          TabOrder = 8
+        end
+        object BitBtn13: TBitBtn
+          Left = 393
+          Top = 0
+          Width = 62
+          Height = 22
+          Action = actRealizadoPendente
+          Align = alLeft
+          Caption = 'Status'
+          ParentShowHint = False
+          ShowHint = True
+          TabOrder = 5
+        end
+        object DBEditStatusICPI: TDBEdit
+          Left = 455
+          Top = 0
+          Width = 94
+          Height = 22
+          DataField = 'StatusICPI'
+          DataSource = FrmDataModule.DataSourceICPI
+          TabOrder = 4
+          Visible = False
+        end
+        object DBEditComentarioICPI: TDBEdit
+          Left = 549
+          Top = 0
+          Width = 130
+          Height = 22
+          DataField = 'Comentario'
+          DataSource = FrmDataModule.DataSourceICPI
+          TabOrder = 6
+          Visible = False
+        end
+      end
+      object DBGridICPI: TDBGrid
+        Left = 0
+        Top = 137
+        Width = 1267
+        Height = 552
+        Align = alClient
+        DataSource = FrmDataModule.DataSourceICPI
+        TabOrder = 1
+        TitleFont.Charset = DEFAULT_CHARSET
+        TitleFont.Color = clWindowText
+        TitleFont.Height = -11
+        TitleFont.Name = 'Tahoma'
+        TitleFont.Style = []
+        OnCellClick = DBGridICPICellClick
+        OnDrawColumnCell = DBGridICPIDrawColumnCell
+        OnKeyDown = DBGridICPIKeyDown
+        OnKeyPress = DBGridICPIKeyPress
+        OnTitleClick = DBGridICPITitleClick
+        Columns = <
+          item
+            Alignment = taCenter
+            Expanded = False
+            FieldName = 'Equipamento'
+            Title.Alignment = taCenter
+            Width = 80
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'ObjetoReferencia'
+            Title.Alignment = taCenter
+            Title.Caption = 'Objeto Refer'#234'ncia'
+            Width = 149
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'DenominacaoLocalInstalacao'
+            Title.Alignment = taCenter
+            Title.Caption = 'Denomin. Local Instala'#231#227'o'
+            Width = 203
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'DescricaoEquipamento'
+            Title.Alignment = taCenter
+            Title.Caption = 'Descri'#231#227'o Equipamento'
+            Width = 154
+            Visible = True
+          end
+          item
+            Alignment = taCenter
+            Expanded = False
+            FieldName = 'ICPISup'
+            Title.Alignment = taCenter
+            Title.Caption = 'ICPI Sup.'
+            Width = 72
+            Visible = True
+          end
+          item
+            Alignment = taCenter
+            Expanded = False
+            FieldName = 'EmDia'
+            Title.Alignment = taCenter
+            Title.Caption = 'Em Dia'
+            Visible = True
+          end
+          item
+            Alignment = taCenter
+            Expanded = False
+            FieldName = 'EmAtraso'
+            Title.Alignment = taCenter
+            Title.Caption = 'Em Atraso'
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'LocalInstalacao'
+            Title.Alignment = taCenter
+            Title.Caption = 'Local Instala'#231#227'o'
+            Width = 129
+            Visible = True
+          end
+          item
+            Alignment = taCenter
+            Expanded = False
+            FieldName = 'StatusICPI'
+            PickList.Strings = (
+              'REALIZADO'
+              'PENDENTE')
+            Title.Alignment = taCenter
+            Title.Caption = 'Status ICPI'
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'RiscoAtendimento'
+            Title.Alignment = taCenter
+            Title.Caption = 'Risco'
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'Comentario'
+            Title.Alignment = taCenter
+            Title.Caption = 'Coment'#225'rio'
+            Width = 163
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'DataComentario'
+            Title.Alignment = taCenter
+            Title.Caption = 'Data Coment'#225'rio'
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'ComentarioPor'
+            Title.Alignment = taCenter
+            Title.Caption = 'Comentado Por'
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'ComputadorComentario'
+            Title.Alignment = taCenter
+            Title.Caption = 'Computador Coment'#225'rio'
+            Visible = True
+          end
+          item
+            Alignment = taCenter
+            Expanded = False
+            FieldName = 'DataImportacao'
+            Title.Alignment = taCenter
+            Title.Caption = 'Data Importa'#231#227'o'
+            Visible = True
+          end
+          item
+            Alignment = taCenter
+            Expanded = False
+            FieldName = 'ImportadoPor'
+            Title.Alignment = taCenter
+            Title.Caption = 'Importado Por'
+            Visible = True
+          end
+          item
+            Alignment = taCenter
+            Expanded = False
+            FieldName = 'ComputadorImportacao'
+            Title.Alignment = taCenter
+            Title.Caption = 'Computador Importa'#231#227'o'
+            Visible = True
+          end>
+      end
+      object StatusBarICPI: TStatusBar
+        Left = 0
+        Top = 689
+        Width = 1270
+        Height = 19
+        Panels = <
+          item
+            Width = 50
+          end
+          item
+            Width = 50
+          end
+          item
+            Width = 50
+          end
+          item
+            Width = 50
+          end>
+      end
+      object ColunasLayoutICPI: TStringGrid
+        Left = 122
+        Top = 169
+        Width = 113
+        Height = 94
+        ColCount = 2
+        DefaultRowHeight = 21
+        TabOrder = 3
+        Visible = False
+        RowHeights = (
+          21
+          21
+          21
+          21
+          21)
+      end
+      object RLICPI: TStringGrid
+        Left = 0
+        Top = 29
+        Width = 1270
+        Height = 105
+        Align = alTop
+        ColCount = 3
+        DefaultRowHeight = 22
+        FixedCols = 0
+        RowCount = 3
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -16
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        ParentFont = False
+        TabOrder = 4
+        OnDrawCell = RLICPMSODrawCell
+        ColWidths = (
+          130
+          107
+          96)
+      end
+    end
+  end
+  object ActionManager1: TActionManager
+    Images = FrmPrincipal.ImageList1
+    Left = 264
+    Top = 208
+    StyleName = 'Platform Default'
+    object actProcurarICPM: TAction
+      Category = 'Procurar'
+      Caption = 'Procurar'
+      Hint = 'Procurar'
+      ImageIndex = 28
+      OnExecute = actProcurarICPMExecute
+    end
+    object actExcelICPM: TAction
+      Category = 'Excel'
+      Caption = 'Exportar'
+      Hint = 'Exportar para o Excel'
+      ImageIndex = 54
+      OnExecute = actExcelICPMExecute
+    end
+    object actFiltroInserir: TAction
+      Category = 'Tabela'
+      Caption = 'actFiltroInserir'
+      OnExecute = actFiltroInserirExecute
+    end
+    object actGridASC: TAction
+      Category = 'Tabela'
+      Caption = 'actGridASC'
+      OnExecute = actGridASCExecute
+    end
+    object actGridDESC: TAction
+      Category = 'Tabela'
+      Caption = 'actGridDESC'
+      OnExecute = actGridDESCExecute
+    end
+    object actSubstituirPor: TAction
+      Category = 'Tabela'
+      Caption = 'actSubstituirPor'
+      OnExecute = actSubstituirPorExecute
+    end
+    object actLimparFiltros: TAction
+      Category = 'Tabela'
+      Caption = 'Limpar'
+      Hint = 'Limpar Filtros'
+      ImageIndex = 469
+      OnExecute = actLimparFiltrosExecute
+    end
+    object actFiltrosTabela: TAction
+      Category = 'Tabela'
+      Caption = 'Filtros'
+      Hint = 'Visualizar tabela de filtros'
+      ImageIndex = 470
+      OnExecute = actFiltrosTabelaExecute
+    end
+    object actProcuraFiltrosTabela: TAction
+      Category = 'Tabela'
+      Caption = 'actProcuraFiltrosTabela'
+      OnExecute = actProcuraFiltrosTabelaExecute
+    end
+    object actFiltrosICPM: TAction
+      Category = 'Configura'#231#227'o'
+      Caption = 'actFiltrosICPM'
+      OnExecute = actFiltrosICPMExecute
+    end
+    object actOcultarICPM: TAction
+      Category = 'ICPM'
+      Caption = 'actOcultar'
+      Hint = 'Mostrar'
+      ImageIndex = 25
+      OnExecute = actOcultarICPMExecute
+    end
+    object actMostrarICPM: TAction
+      Category = 'ICPM'
+      Caption = 'actMostrarICPM'
+      Hint = 'Ocultar'
+      ImageIndex = 26
+      OnExecute = actMostrarICPMExecute
+    end
+    object actZoomMais: TAction
+      Category = 'ICPM'
+      Caption = 'actZoomMais'
+      Hint = 'Zoom mais'
+      ImageIndex = 46
+      OnExecute = actZoomMaisExecute
+    end
+    object actZoomMenos: TAction
+      Category = 'ICPM'
+      Caption = 'actZoomMenos'
+      Hint = 'Zoom menos'
+      ImageIndex = 47
+      OnExecute = actZoomMenosExecute
+    end
+    object actIndicadorICPM: TAction
+      Category = 'ICPM'
+      Caption = 'ICPM'
+      Hint = 'C'#225'lcular ICPM'
+      ImageIndex = 40
+      OnExecute = actIndicadorICPMExecute
+    end
+    object actCopiarComentario: TAction
+      Category = 'ICPM'
+      Caption = 'Copiar'
+      Hint = 'Copiar Coment'#225'rio'
+      ImageIndex = 138
+      ShortCut = 118
+      OnExecute = actCopiarComentarioExecute
+    end
+    object actColarComentario: TAction
+      Category = 'ICPM'
+      Caption = 'Colar'
+      Hint = 'Colar Coment'#225'rio'
+      ImageIndex = 24
+      ShortCut = 119
+      OnExecute = actColarComentarioExecute
+    end
+    object actImprimirICPM: TAction
+      Category = 'ICPM'
+      Caption = 'Imprimir'
+      Hint = 'Imprimir'
+      ImageIndex = 21
+      OnExecute = actImprimirICPMExecute
+    end
+    object actResumoIndicadores: TAction
+      Category = 'Resumo'
+      Caption = 'Atualizar'
+      Hint = 'Atualizar'
+      ImageIndex = 238
+      OnExecute = actResumoIndicadoresExecute
+    end
+    object actGravarResumo: TAction
+      Category = 'Resumo'
+      Caption = 'Gravar'
+      Hint = 'Gravar resumo de indicadores'
+      ImageIndex = 18
+      OnExecute = actGravarResumoExecute
+    end
+    object actGRFSalvarImagem: TAction
+      Category = 'Gr'#225'fico'
+      Caption = 'actGRFSalvarImagem'
+      Hint = 'Salvar como imagem...'
+      ImageIndex = 264
+      OnExecute = actGRFSalvarImagemExecute
+    end
+    object actGRFSalvarData: TAction
+      Category = 'Gr'#225'fico'
+      Caption = 'actGRFSalvarData'
+      Hint = 'Salvar imagem'
+      ImageIndex = 18
+      OnExecute = actGRFSalvarDataExecute
+    end
+    object actGRFZoomMais: TAction
+      Category = 'Gr'#225'fico'
+      Caption = 'actGRFZoomMais'
+      Hint = 'Zoom mais'
+      ImageIndex = 46
+      OnExecute = actGRFZoomMaisExecute
+    end
+    object actGRFZoomMenos: TAction
+      Category = 'Gr'#225'fico'
+      Caption = 'actGRFZoomMenos'
+      Hint = 'Zoom menos'
+      ImageIndex = 47
+      OnExecute = actGRFZoomMenosExecute
+    end
+    object actGRFTitulo: TAction
+      Category = 'Gr'#225'fico'
+      Caption = 'actGRFTitulo'
+      Hint = 'Alterar titulo'
+      ImageIndex = 43
+      OnExecute = actGRFTituloExecute
+    end
+    object actGRFImprimir: TAction
+      Category = 'Gr'#225'fico'
+      Caption = 'actGRFImprimir'
+      Hint = 'Imprimir gr'#225'fico'
+      ImageIndex = 21
+      OnExecute = actGRFImprimirExecute
+    end
+    object actEtiqueta: TAction
+      Category = 'Gr'#225'fico'
+      Caption = 'actEtiqueta'
+      Hint = 'Legenda por barra'
+      ImageIndex = 55
+      OnExecute = actEtiquetaExecute
+    end
+    object actProcurarResumo: TAction
+      Category = 'Procurar'
+      Caption = 'actProcurarResumo'
+      OnExecute = actProcurarResumoExecute
+    end
+    object actGrafico: TAction
+      Category = 'Gr'#225'fico'
+      Caption = 'actGrafico'
+      OnExecute = actGraficoExecute
+    end
+    object actOcultarRTI: TAction
+      Category = 'RTI'
+      Caption = 'actOcultarRTI'
+      Hint = 'Mostrar'
+      ImageIndex = 25
+    end
+    object actMostrarRTI: TAction
+      Category = 'RTI'
+      Caption = 'actMostrarRTI'
+      Hint = 'Ocultar'
+      ImageIndex = 26
+    end
+    object actExcelICPI: TAction
+      Category = 'ICPI'
+      Caption = 'Exportar'
+      Hint = 'Exportar para o Excel'
+      ImageIndex = 54
+      OnExecute = actExcelICPIExecute
+    end
+    object actIndicadorRTI: TAction
+      Category = 'RTI'
+      Caption = 'Calcular'
+      Hint = 'Calcular IMRI e IMRI-B'
+      ImageIndex = 40
+      OnExecute = actIndicadorRTIExecute
+    end
+    object actICPMLimpar: TAction
+      Category = 'ICPM'
+      Caption = 'actICPMLimpar'
+      Hint = 'Limpar sele'#231#227'o de risco de todos os registros'
+      ImageIndex = 155
+      OnExecute = actICPMLimparExecute
+    end
+    object actICPMSel: TAction
+      Category = 'ICPM'
+      Caption = 'actICPMSel'
+      Hint = 'Marcar todos como risco'
+      ImageIndex = 154
+      OnExecute = actICPMSelExecute
+    end
+    object actProcurarICPI: TAction
+      Category = 'ICPI'
+      Caption = 'actProcurarICPI'
+      OnExecute = actProcurarICPIExecute
+    end
+    object actIndicadorICPI: TAction
+      Category = 'ICPI'
+      Caption = 'Calcular'
+      Hint = 'Calcular o ICPI'
+      ImageIndex = 40
+      OnExecute = actIndicadorICPIExecute
+    end
+    object actRealizadoPendente: TAction
+      Category = 'ICPM'
+      Caption = 'Status'
+      Hint = 'Alterar de Realizado/Pendente ou vice versa'
+      ImageIndex = 2
+      ShortCut = 117
+      OnExecute = actRealizadoPendenteExecute
+    end
+    object actMedidasPH: TAction
+      Category = 'RTI'
+      Caption = 'actMedidasPH'
+      OnExecute = actMedidasPHExecute
+    end
+  end
+  object SavePictureDialog1: TSavePictureDialog
+    Left = 292
+    Top = 207
+  end
+end

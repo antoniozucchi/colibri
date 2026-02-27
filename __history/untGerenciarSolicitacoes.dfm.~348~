@@ -1,0 +1,1632 @@
+object FrmGerenciarSolicitacoes: TFrmGerenciarSolicitacoes
+  Left = 0
+  Top = 0
+  Caption = 'Gerenciar Programa'#231#227'o Di'#225'ria de Servi'#231'os'
+  ClientHeight = 578
+  ClientWidth = 1538
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  FormStyle = fsMDIChild
+  Visible = True
+  WindowState = wsMaximized
+  OnClose = FormClose
+  OnCreate = FormCreate
+  OnDestroy = FormDestroy
+  TextHeight = 13
+  object Splitter1: TSplitter
+    Left = 500
+    Top = 25
+    Height = 526
+    ExplicitLeft = 392
+    ExplicitTop = 136
+    ExplicitHeight = 100
+  end
+  object PanelTitulo: TPanel
+    Left = 0
+    Top = 0
+    Width = 1538
+    Height = 25
+    Align = alTop
+    Caption = 'Gerenciar Programa'#231#227'o Di'#225'ria de Servi'#231'os'
+    Color = clGradientActiveCaption
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -13
+    Font.Name = 'Tahoma'
+    Font.Style = [fsBold]
+    ParentBackground = False
+    ParentFont = False
+    TabOrder = 0
+    ExplicitWidth = 1536
+  end
+  object PanelResultados: TPanel
+    Left = 503
+    Top = 25
+    Width = 1035
+    Height = 526
+    Align = alClient
+    TabOrder = 1
+    ExplicitWidth = 1033
+    ExplicitHeight = 518
+    object PanelServicos: TPanel
+      Left = 1
+      Top = 500
+      Width = 1033
+      Height = 25
+      Align = alBottom
+      TabOrder = 0
+      ExplicitTop = 492
+      ExplicitWidth = 1031
+      object Panel4: TPanel
+        Left = 1
+        Top = 1
+        Width = 1031
+        Height = 25
+        Align = alTop
+        Caption = 'Servi'#231'os Programados'
+        Color = clMenuBar
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -13
+        Font.Name = 'Tahoma'
+        Font.Style = [fsBold]
+        ParentBackground = False
+        ParentFont = False
+        TabOrder = 0
+        ExplicitWidth = 1029
+        object btnMostrarOcultar: TBitBtn
+          Left = 1
+          Top = 1
+          Width = 30
+          Height = 23
+          Action = actOcultar
+          Align = alLeft
+          ParentShowHint = False
+          ShowHint = True
+          TabOrder = 0
+        end
+      end
+      object Panel19: TPanel
+        Left = 1
+        Top = 26
+        Width = 1031
+        Height = 173
+        Align = alClient
+        TabOrder = 1
+        ExplicitWidth = 1029
+        object DBGridServicos: TFilterDBGrid
+          Left = 1
+          Top = 1
+          Width = 1029
+          Height = 171
+          Align = alClient
+          DataSource = FrmDataModule.DataSourceGerenciarServico
+          Options = [dgEditing, dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgAlwaysShowSelection, dgConfirmDelete, dgCancelOnExit, dgTitleClick, dgTitleHotTrack]
+          TabOrder = 0
+          TitleFont.Charset = DEFAULT_CHARSET
+          TitleFont.Color = clWindowText
+          TitleFont.Height = -11
+          TitleFont.Name = 'Tahoma'
+          TitleFont.Style = []
+          Visible = False
+          OnDrawColumnCell = DBGridServicosDrawColumnCell
+          OnKeyDown = DBGridServicosKeyDown
+          OnKeyPress = DBGridServicosKeyPress
+          EnableZebra = False
+          Columns = <
+            item
+              Alignment = taCenter
+              Expanded = False
+              FieldName = 'CampoSelecao'
+              ReadOnly = True
+              Title.Alignment = taCenter
+              Title.Caption = 'Servi'#231'o/Ano-Etapa'
+              Width = 100
+              Visible = True
+            end
+            item
+              Expanded = False
+              FieldName = 'TextoBreveOP'
+              ReadOnly = True
+              Title.Alignment = taCenter
+              Title.Caption = 'Texto Breve da Opera'#231#227'o'
+              Width = 250
+              Visible = True
+            end
+            item
+              Expanded = False
+              FieldName = 'OrdemManutencao'
+              ReadOnly = True
+              Title.Alignment = taCenter
+              Title.Caption = 'Ordem de manuten'#231#227'o'
+              Width = 120
+              Visible = True
+            end
+            item
+              Alignment = taCenter
+              Expanded = False
+              FieldName = 'Operacao'
+              Title.Alignment = taCenter
+              Title.Caption = 'Opera'#231#227'o'
+              Visible = True
+            end
+            item
+              Alignment = taCenter
+              Expanded = False
+              FieldName = 'CentroTrabalhoOP'
+              Title.Alignment = taCenter
+              Title.Caption = 'Centro Trabalho [OP]'
+              Visible = True
+            end>
+        end
+        object ColunasLayoutServico: TStringGrid
+          Left = 64
+          Top = 55
+          Width = 86
+          Height = 65
+          ColCount = 2
+          DefaultRowHeight = 21
+          TabOrder = 1
+          Visible = False
+          RowHeights = (
+            21
+            21
+            21
+            21
+            21)
+        end
+      end
+    end
+    object PanelExecutantes: TPanel
+      Left = 1
+      Top = 1
+      Width = 1033
+      Height = 499
+      Align = alClient
+      TabOrder = 1
+      ExplicitWidth = 1031
+      ExplicitHeight = 491
+      object Panel6: TPanel
+        Left = 1
+        Top = 1
+        Width = 1031
+        Height = 25
+        Align = alTop
+        Caption = 'Executantes Programados'
+        Color = clMenuBar
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -13
+        Font.Name = 'Tahoma'
+        Font.Style = [fsBold]
+        ParentBackground = False
+        ParentFont = False
+        TabOrder = 0
+        ExplicitWidth = 1029
+      end
+      object ToolBar2: TToolBar
+        Left = 1
+        Top = 26
+        Width = 1031
+        Height = 29
+        Caption = 'ToolBar2'
+        DrawingStyle = dsGradient
+        EdgeBorders = [ebLeft, ebTop, ebRight, ebBottom]
+        Images = FrmPrincipal.ImageList1
+        TabOrder = 1
+        ExplicitWidth = 1029
+        object ToolButton5: TToolButton
+          Left = 0
+          Top = 0
+          Action = actSelecaoTodos
+          ParentShowHint = False
+          ShowHint = True
+        end
+        object ToolButton4: TToolButton
+          Left = 23
+          Top = 0
+          Action = actSelecaoLimpar
+          ParentShowHint = False
+          ShowHint = True
+        end
+        object DateProgramacao: TDateTimePicker
+          Left = 46
+          Top = 0
+          Width = 102
+          Height = 22
+          Hint = 'Selecione a data da programa'#231#227'o'
+          Date = 43003.000000000000000000
+          Time = 0.628257106480305100
+          ParentShowHint = False
+          ShowHint = True
+          TabOrder = 3
+          OnCloseUp = DateProgramacaoCloseUp
+        end
+        object BitBtn7: TBitBtn
+          Left = 148
+          Top = 0
+          Width = 70
+          Height = 22
+          Action = actCarregarDestinoJanela
+          Caption = 'Destinos'
+          ParentShowHint = False
+          ShowHint = True
+          TabOrder = 4
+        end
+        object btnTransbordo: TBitBtn
+          Left = 218
+          Top = 0
+          Width = 80
+          Height = 22
+          Action = actTransbordos
+          Caption = 'Transbordo'
+          ParentShowHint = False
+          ShowHint = True
+          TabOrder = 5
+        end
+        object btnKITPS: TBitBtn
+          Left = 298
+          Top = 0
+          Width = 95
+          Height = 22
+          Action = actCopiarKITPS
+          Caption = 'KIT Embarque'
+          ParentShowHint = False
+          ShowHint = True
+          TabOrder = 6
+        end
+        object btnAprovar: TBitBtn
+          Left = 393
+          Top = 0
+          Width = 65
+          Height = 22
+          Action = actAprovarSelecionado
+          Caption = 'Aprovar'
+          ParentShowHint = False
+          ShowHint = True
+          TabOrder = 0
+        end
+        object btnCancelar: TBitBtn
+          Left = 458
+          Top = 0
+          Width = 74
+          Height = 22
+          Action = actCancelarSelecionado
+          Caption = 'Cancelar'
+          ParentShowHint = False
+          ShowHint = True
+          TabOrder = 1
+        end
+        object btnMudanca: TBitBtn
+          Left = 532
+          Top = 0
+          Width = 70
+          Height = 22
+          Action = actMudanca
+          Caption = 'Mudan'#231'a'
+          ParentShowHint = False
+          ShowHint = True
+          TabOrder = 7
+        end
+        object ToolButton1: TToolButton
+          Left = 602
+          Top = 0
+          Width = 8
+          Caption = 'ToolButton1'
+          ImageIndex = 981
+          Style = tbsSeparator
+        end
+        object ToolButton2: TToolButton
+          Left = 610
+          Top = 0
+          Action = actZoomMais
+          ParentShowHint = False
+          ShowHint = True
+        end
+        object ToolButton3: TToolButton
+          Left = 633
+          Top = 0
+          Action = actZoomMenos
+          ParentShowHint = False
+          ShowHint = True
+        end
+        object ToolButton10: TToolButton
+          Left = 656
+          Top = 0
+          Action = actExcel
+          ParentShowHint = False
+          ShowHint = True
+        end
+        object btnFiltroClearExecutantes: TToolButton
+          Left = 679
+          Top = 0
+          Hint = 'Limpar filtro'
+          Caption = 'btnFiltroClearExecutantes'
+          ImageIndex = 225
+          ParentShowHint = False
+          ShowHint = True
+        end
+        object DBEditidProgramacaoExecutante: TDBEdit
+          Left = 702
+          Top = 0
+          Width = 47
+          Height = 22
+          DataField = 'idProgramacaoExecutante'
+          DataSource = FrmDataModule.DataSourceGerenciarExecutante
+          TabOrder = 2
+          Visible = False
+          OnChange = actAbrirServicoExecute
+        end
+      end
+      object StatusBarExecutantes: TStatusBar
+        Left = 1
+        Top = 479
+        Width = 1031
+        Height = 19
+        Panels = <
+          item
+            Width = 50
+          end
+          item
+            Width = 50
+          end
+          item
+            Width = 50
+          end
+          item
+            Width = 50
+          end
+          item
+            Width = 50
+          end>
+        ExplicitTop = 471
+        ExplicitWidth = 1029
+      end
+      object ColunasLayoutExecutantes: TStringGrid
+        Left = 49
+        Top = 106
+        Width = 113
+        Height = 94
+        ColCount = 7
+        DefaultRowHeight = 21
+        RowCount = 24
+        TabOrder = 3
+        Visible = False
+        RowHeights = (
+          21
+          21
+          21
+          21
+          21
+          21
+          21
+          21
+          21
+          21
+          21
+          21
+          21
+          21
+          21
+          21
+          21
+          21
+          21
+          21
+          21
+          21
+          21
+          21)
+      end
+      object Panel18: TPanel
+        Left = 1
+        Top = 55
+        Width = 1031
+        Height = 424
+        Align = alClient
+        TabOrder = 4
+        ExplicitWidth = 1029
+        ExplicitHeight = 416
+        object DBGridExecutantes: TFilterDBGrid
+          Left = 1
+          Top = 1
+          Width = 1029
+          Height = 422
+          Align = alClient
+          DataSource = FrmDataModule.DataSourceGerenciarExecutante
+          Options = [dgEditing, dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgAlwaysShowSelection, dgTitleClick, dgTitleHotTrack]
+          TabOrder = 0
+          TitleFont.Charset = DEFAULT_CHARSET
+          TitleFont.Color = clWindowText
+          TitleFont.Height = -11
+          TitleFont.Name = 'Tahoma'
+          TitleFont.Style = []
+          OnCellClick = DBGridExecutantesCellClick
+          OnDrawColumnCell = DBGridExecutantesDrawColumnCell
+          OnKeyDown = DBGridExecutantesKeyDown
+          OnKeyPress = DBGridExecutantesKeyPress
+          ClearFilterButton = btnFiltroClearExecutantes
+          SearchAction = actProcurar
+          LayoutGrid = ColunasLayoutExecutantes
+          EnableZebra = False
+          Columns = <
+            item
+              Expanded = False
+              FieldName = 'booleanFavorito'
+              ReadOnly = True
+              Title.Alignment = taCenter
+              Title.Caption = 'Fav.'
+              Visible = True
+            end
+            item
+              Alignment = taCenter
+              Expanded = False
+              FieldName = 'booleanSelecao'
+              Title.Alignment = taCenter
+              Title.Caption = 'Sele'#231#227'o'
+              Width = 46
+              Visible = True
+            end
+            item
+              Alignment = taCenter
+              Expanded = False
+              FieldName = 'Kit_PS'
+              Title.Alignment = taCenter
+              Title.Caption = 'KIT Emb.'
+              Width = 58
+              Visible = True
+            end
+            item
+              Alignment = taCenter
+              DropDownRows = 20
+              Expanded = False
+              FieldName = 'Origem'
+              Title.Alignment = taCenter
+              Width = 60
+              Visible = True
+            end
+            item
+              Alignment = taCenter
+              DropDownRows = 20
+              Expanded = False
+              FieldName = 'txtDestino'
+              ReadOnly = True
+              Title.Alignment = taCenter
+              Title.Caption = 'Destino'
+              Width = 60
+              Visible = True
+            end
+            item
+              Expanded = False
+              FieldName = 'txtTipoEtapaServico'
+              ReadOnly = True
+              Title.Alignment = taCenter
+              Title.Caption = 'Tipo de Etapa de Servico'
+              Width = 144
+              Visible = True
+            end
+            item
+              Expanded = False
+              FieldName = 'NomeExecutante'
+              ReadOnly = True
+              Title.Alignment = taCenter
+              Title.Caption = 'Nome do Executante'
+              Width = 211
+              Visible = True
+            end
+            item
+              Expanded = False
+              FieldName = 'Funcao'
+              ReadOnly = True
+              Title.Alignment = taCenter
+              Title.Caption = 'Fun'#231#227'o'
+              Width = 115
+              Visible = True
+            end
+            item
+              Expanded = False
+              FieldName = 'Empresa'
+              Title.Alignment = taCenter
+              Width = 87
+              Visible = True
+            end
+            item
+              Alignment = taCenter
+              Expanded = False
+              FieldName = 'StatusProgramacao'
+              ReadOnly = True
+              Title.Alignment = taCenter
+              Title.Caption = 'Status [Programa'#231#227'o]'
+              Width = 124
+              Visible = True
+            end
+            item
+              Alignment = taCenter
+              Expanded = False
+              FieldName = 'NumExecutantes'
+              ReadOnly = True
+              Title.Alignment = taCenter
+              Title.Caption = 'N'#176' Exec.'
+              Width = 50
+              Visible = True
+            end
+            item
+              Alignment = taCenter
+              Expanded = False
+              FieldName = 'NumAprovados'
+              ReadOnly = True
+              Title.Alignment = taCenter
+              Title.Caption = 'N'#176' Apro.'
+              Width = 50
+              Visible = True
+            end
+            item
+              Alignment = taCenter
+              Expanded = False
+              FieldName = 'NumCancelados'
+              ReadOnly = True
+              Title.Alignment = taCenter
+              Title.Caption = 'N'#176' Canc.'
+              Width = 50
+              Visible = True
+            end
+            item
+              Expanded = False
+              FieldName = 'MotivoProgramacao'
+              ReadOnly = True
+              Title.Alignment = taCenter
+              Title.Caption = 'Motivo [Programa'#231#227'o]'
+              Width = 130
+              Visible = True
+            end
+            item
+              Expanded = False
+              FieldName = 'Empresa'
+              ReadOnly = True
+              Title.Alignment = taCenter
+              Width = 159
+              Visible = True
+            end
+            item
+              Alignment = taCenter
+              Expanded = False
+              FieldName = 'CriadoPor'
+              ReadOnly = True
+              Title.Alignment = taCenter
+              Title.Caption = 'Criado Por'
+              Visible = True
+            end
+            item
+              Alignment = taCenter
+              Expanded = False
+              FieldName = 'DataCriacao'
+              ReadOnly = True
+              Title.Alignment = taCenter
+              Title.Caption = 'Data [Cria'#231#227'o]'
+              Visible = True
+            end
+            item
+              Alignment = taCenter
+              Expanded = False
+              FieldName = 'ComputadorCriacao'
+              ReadOnly = True
+              Title.Alignment = taCenter
+              Title.Caption = 'Computador [Cria'#231#227'o]'
+              Visible = True
+            end
+            item
+              Alignment = taCenter
+              Expanded = False
+              FieldName = 'AvaliadoPorProgramacao'
+              ReadOnly = True
+              Title.Alignment = taCenter
+              Title.Caption = 'Avalia'#231#227'o [Programa'#231#227'o]'
+              Width = 68
+              Visible = True
+            end
+            item
+              Alignment = taCenter
+              Expanded = False
+              FieldName = 'DataAvaliacaoProgramacao'
+              ReadOnly = True
+              Title.Alignment = taCenter
+              Title.Caption = 'Data [Programa'#231#227'o]'
+              Visible = True
+            end
+            item
+              Alignment = taCenter
+              Expanded = False
+              FieldName = 'ComputadorProgramacao'
+              ReadOnly = True
+              Title.Alignment = taCenter
+              Title.Caption = 'Computador [Programa'#231#227'o]'
+              Visible = True
+            end
+            item
+              Expanded = False
+              FieldName = 'Documento'
+              Visible = True
+            end
+            item
+              Expanded = False
+              FieldName = 'DataProgramacao'
+              Visible = True
+            end
+            item
+              Expanded = False
+              FieldName = 'idProgramacaoDiaria'
+              Visible = True
+            end>
+        end
+      end
+    end
+  end
+  object PanelDestinosOrigens: TPanel
+    Left = 0
+    Top = 25
+    Width = 500
+    Height = 526
+    Align = alLeft
+    TabOrder = 2
+    ExplicitHeight = 518
+    object Splitter3: TSplitter
+      Left = 1
+      Top = 369
+      Width = 498
+      Height = 3
+      Cursor = crVSplit
+      Align = alBottom
+      ExplicitTop = 55
+      ExplicitWidth = 265
+    end
+    object PanelTituloDestinoOrigem: TPanel
+      Left = 1
+      Top = 1
+      Width = 498
+      Height = 25
+      Align = alTop
+      Caption = 'Origens Programadas'
+      Color = clMenuBar
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -13
+      Font.Name = 'Tahoma'
+      Font.Style = [fsBold]
+      ParentBackground = False
+      ParentFont = False
+      TabOrder = 0
+    end
+    object ToolBar5: TToolBar
+      Left = 1
+      Top = 26
+      Width = 498
+      Height = 29
+      Caption = 'ToolBar1'
+      Color = clBtnFace
+      EdgeBorders = [ebLeft, ebTop, ebRight, ebBottom]
+      HotTrackColor = clRed
+      Images = FrmPrincipal.ImageList1
+      ParentColor = False
+      TabOrder = 1
+      object btnOrigem: TToolButton
+        Left = 0
+        Top = 0
+        Hint = 'Analise por Origem'
+        Caption = 'btnOrigem'
+        ImageIndex = 181
+        ParentShowHint = False
+        ShowHint = True
+        Style = tbsCheck
+        OnClick = btnOrigemClick
+      end
+      object btnDestino: TToolButton
+        Left = 23
+        Top = 0
+        Hint = 'Analise por destino'
+        Caption = 'btnDestino'
+        Down = True
+        ImageIndex = 182
+        ParentShowHint = False
+        ShowHint = True
+        Style = tbsCheck
+        OnClick = btnDestinoClick
+      end
+      object BitBtn6: TBitBtn
+        Left = 46
+        Top = 0
+        Width = 70
+        Height = 22
+        Action = actDestinoOrigem
+        Caption = 'Atualizar'
+        ParentShowHint = False
+        ShowHint = True
+        TabOrder = 0
+      end
+      object ToolButton7: TToolButton
+        Left = 116
+        Top = 0
+        Action = actInfo
+        ParentShowHint = False
+        ShowHint = True
+      end
+      object ToolButton11: TToolButton
+        Left = 139
+        Top = 0
+        Action = actConfigurarContador
+        ParentShowHint = False
+        ShowHint = True
+      end
+    end
+    object RLDestinoOrigem: TStringGrid
+      Left = 1
+      Top = 55
+      Width = 498
+      Height = 314
+      Align = alClient
+      ColCount = 8
+      DefaultRowHeight = 22
+      FixedColor = 4227327
+      FixedCols = 0
+      RowCount = 2
+      Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goDrawFocusSelected, goColSizing, goRowSelect]
+      ParentShowHint = False
+      ShowHint = False
+      TabOrder = 2
+      OnDrawCell = RLDestinoOrigemDrawCell
+      OnSelectCell = RLDestinoOrigemSelectCell
+      ExplicitHeight = 306
+    end
+    object PanelNotas: TPanel
+      Left = 1
+      Top = 372
+      Width = 498
+      Height = 153
+      Align = alBottom
+      TabOrder = 3
+      ExplicitTop = 364
+      object Panel1: TPanel
+        Left = 1
+        Top = 1
+        Width = 496
+        Height = 25
+        Align = alTop
+        Caption = 'Observa'#231#245'es da Programa'#231#227'o'
+        Color = clGradientActiveCaption
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -13
+        Font.Name = 'Tahoma'
+        Font.Style = [fsBold]
+        ParentBackground = False
+        ParentFont = False
+        TabOrder = 0
+      end
+      object ToolBar3: TToolBar
+        Left = 1
+        Top = 26
+        Width = 496
+        Height = 29
+        ButtonHeight = 21
+        Caption = 'ToolBar3'
+        DrawingStyle = dsGradient
+        EdgeBorders = [ebLeft, ebTop, ebRight, ebBottom]
+        TabOrder = 1
+        object DBNavigator1: TDBNavigator
+          Left = 0
+          Top = 0
+          Width = 96
+          Height = 21
+          DataSource = FrmDataModule.DataSourceProgramacaoNotas
+          VisibleButtons = [nbEdit, nbPost, nbCancel, nbRefresh]
+          Hints.Strings = (
+            'Primeiro'
+            'Anterior'
+            'Pr'#243'ximo'
+            #218'ltimo'
+            'Inserir'
+            'Excluir'
+            'Editar'
+            'Gravar'
+            'Cancelar'
+            'Atualizar'
+            'Aplicar atualiza'#231#245'es'
+            'Calcelar atualiza'#231#245'es')
+          ParentShowHint = False
+          ShowHint = True
+          TabOrder = 0
+        end
+        object DBEdit3: TDBEdit
+          Left = 96
+          Top = 0
+          Width = 53
+          Height = 21
+          Hint = 'Atualizado por'
+          Color = clInfoBk
+          DataField = 'AvaliadoPor'
+          DataSource = FrmDataModule.DataSourceProgramacaoNotas
+          ParentShowHint = False
+          ReadOnly = True
+          ShowHint = True
+          TabOrder = 2
+        end
+        object DBEdit2: TDBEdit
+          Left = 149
+          Top = 0
+          Width = 136
+          Height = 21
+          Hint = 'Data da '#250'ltima atualiza'#231#227'o'
+          Color = clInfoBk
+          DataField = 'DataAtualizacao'
+          DataSource = FrmDataModule.DataSourceProgramacaoNotas
+          ParentShowHint = False
+          ReadOnly = True
+          ShowHint = True
+          TabOrder = 1
+        end
+      end
+      object DBMemoNotas: TDBMemo
+        Left = 1
+        Top = 55
+        Width = 496
+        Height = 97
+        Align = alClient
+        DataField = 'Notas'
+        DataSource = FrmDataModule.DataSourceProgramacaoNotas
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -13
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        ParentFont = False
+        TabOrder = 2
+      end
+    end
+  end
+  object PanelAjuda: TPanel
+    Left = 50
+    Top = 132
+    Width = 500
+    Height = 300
+    Color = clMenu
+    ParentBackground = False
+    TabOrder = 3
+    Visible = False
+    object PanelTituloAjuda1: TPanel
+      Left = 1
+      Top = 1
+      Width = 498
+      Height = 26
+      Align = alTop
+      Caption = 'Alterar Destino dos Executantes da Programa'#231#227'o'
+      Color = clGradientActiveCaption
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -12
+      Font.Name = 'Tahoma'
+      Font.Style = [fsBold]
+      ParentBackground = False
+      ParentFont = False
+      TabOrder = 0
+      OnMouseDown = PanelTituloAjuda1MouseDown
+      OnMouseMove = PanelTituloAjuda1MouseMove
+      OnMouseUp = PanelTituloAjuda1MouseUp
+      object SpeedButton4: TSpeedButton
+        Left = 474
+        Top = 1
+        Width = 23
+        Height = 24
+        Hint = 'Cancelar opera'#231#227'o'
+        Align = alRight
+        Glyph.Data = {
+          36040000424D3604000000000000360000002800000010000000100000000100
+          2000000000000004000000000000000000000000000000000000FF00FF00FF00
+          FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
+          FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00181A
+          65003436CB003638DB00363ADF00363AE3003639E7003538EB003537EF00393D
+          F0003C41F2004046F200454DF0004046CC000B0C3500FF00FF0003032F001717
+          C2000000BD000000C4000000CB000000D2000202D9001B1BE3001718E7000E12
+          E8001820EA00212CEC002B39ED003344EF003A45D1000000040003034F000000
+          B5000000BC000000C3000E0ECD008D8DEB00EDEDFC00FFFFFF00FFFFFF00DEDF
+          FC00797DF300232EEC002B39ED003444EF00394BEA000000150000004A000000
+          B3000000BB000F0FC500D0D0F500FFFFFF00B4B4EE006D6DE6007878EB00D2D2
+          F700FFFFFF00ACB0F8002A37ED003343EF003647E70000001400000045000A0A
+          B2000E0EBC009999E500FFFFFF007272DE000303D4000000DC000000E2000B0D
+          E400ABADF200FFFFFF006F78F300303FEE003242E30000001200000040001919
+          B2002424BF00F2F2FB00D3D3F2002B2BD2002E2ED9002525DD001414E1000405
+          E5001D21E600F9F9FE00BDC1F9002A38ED002D3BDF000000120000003C002626
+          B2004141C400FFFFFF00B0B0EB003B3BD2003E3ED8004040DE004343E3003E3E
+          E8001F20E800DBDBFB00D8D9FB00232DEC002531DC0000001200000037003232
+          B1004444C100F8F8FC00D0D0F3004A4AD2004D4DD700C0C0F3009292ED005656
+          E6005F5FEC00F8F8FE00BFC1F700181FEA001B24D90000001200000034003F3F
+          B1005151C100C1C1E600FEFEFF008B8BE0005C5CD600FFFFFF00CACAF5006565
+          E400BABAF500FFFFFF009797EF001215E8000E12D50000001200000033004B4B
+          B2006060C2007373C900F0F0F700FCFCFE008282DC00FFFFFF00CFCFF400BEBE
+          F100FFFFFF00DCDCF3007C7CE9006363EB000505D00000001200000032005B5B
+          B5006F6FC3007171C8008484CC00B6B6DD007D7DD400FFFFFF00D3D3F300B2B2
+          E400C6C6E7008A8AE1008989E7008C8CE9004747D00000001100000031007474
+          BD007C7CC4007F7FC9008181CD008484D1008787D400FFFFFF00D8D8F3008F8F
+          DE009292E0009595E2009898E3009A9AE4007171D00001011200101034008989
+          C3008B8BC6008D8DCB009090CE009393D2009696D400C5C5E000B2B2DD009E9E
+          DC00A0A0DE00A3A3E000A6A6E000A8A8E1009F9FD90000000C00000007007B7B
+          AA00A4A4CF00A3A3D100A6A6D400A9A9D700ACACD900AFAFDC00B2B2DE00B5B5
+          E000B7B7E200BABAE300BDBDE300C9C9E8006C6C8C00FF00FF00FF00FF000303
+          0B004040590056566C0058586D005A5A6E005C5C6F005E5E70005F5F71006161
+          720062627200636373006363730039394C0000000200FF00FF00}
+        ParentShowHint = False
+        ShowHint = True
+        OnClick = SpeedButton4Click
+        ExplicitLeft = 0
+        ExplicitTop = -4
+        ExplicitHeight = 39
+      end
+    end
+    object PanelAlterarDestinos: TPanel
+      Left = 1
+      Top = 297
+      Width = 498
+      Height = 174
+      Align = alTop
+      TabOrder = 1
+      object ToolBar1: TToolBar
+        Left = 1
+        Top = 1
+        Width = 496
+        Height = 29
+        ButtonHeight = 23
+        Caption = 'ToolBar2'
+        DrawingStyle = dsGradient
+        EdgeBorders = [ebLeft, ebTop, ebRight, ebBottom]
+        TabOrder = 0
+        object BitBtn2: TBitBtn
+          Left = 0
+          Top = 0
+          Width = 105
+          Height = 23
+          Action = actCarregarDestino
+          Caption = 'Individualmente'
+          ParentShowHint = False
+          ShowHint = True
+          TabOrder = 1
+        end
+        object BitBtn13: TBitBtn
+          Left = 105
+          Top = 0
+          Width = 72
+          Height = 23
+          Action = actCarregarDestinoProgramacao
+          Caption = 'Todos'
+          ParentShowHint = False
+          ShowHint = True
+          TabOrder = 0
+        end
+      end
+      object RLAlterarDestinos: TStringGrid
+        Left = 1
+        Top = 30
+        Width = 496
+        Height = 124
+        Align = alClient
+        FixedCols = 0
+        Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goDrawFocusSelected, goColSizing, goFixedRowClick]
+        TabOrder = 1
+        OnSelectCell = RLAlterarDestinosSelectCell
+      end
+      object StatusBarAlterarDestinos: TStatusBar
+        Left = 1
+        Top = 154
+        Width = 496
+        Height = 19
+        Panels = <
+          item
+            Width = 50
+          end
+          item
+            Width = 50
+          end>
+      end
+      object ComboBoxDestino: TComboBox
+        Left = 120
+        Top = 90
+        Width = 100
+        Height = 22
+        AutoDropDown = True
+        BevelInner = bvSpace
+        BevelKind = bkFlat
+        Style = csOwnerDrawFixed
+        DragMode = dmAutomatic
+        DropDownCount = 10
+        ParentShowHint = False
+        ShowHint = True
+        TabOrder = 3
+        Visible = False
+        OnCloseUp = ComboBoxDestinoCloseUp
+        OnMouseLeave = ComboBoxDestinoMouseLeave
+      end
+    end
+    object PanelConfigurarContador: TPanel
+      Left = 1
+      Top = 27
+      Width = 498
+      Height = 270
+      Align = alTop
+      TabOrder = 2
+      object ToolBar6: TToolBar
+        Left = 1
+        Top = 1
+        Width = 496
+        Height = 29
+        Caption = 'ToolBar6'
+        DrawingStyle = dsGradient
+        EdgeBorders = [ebLeft, ebTop, ebRight, ebBottom]
+        TabOrder = 0
+        object DBNavigatorComissao: TDBNavigator
+          Left = 0
+          Top = 0
+          Width = 138
+          Height = 22
+          DataSource = FrmDataModule.DataSourceContadorSolicitacao
+          VisibleButtons = [nbInsert, nbDelete, nbEdit, nbPost, nbCancel, nbRefresh]
+          Hints.Strings = (
+            'Primeiro'
+            'Anterior'
+            'Pr'#243'ximo'
+            #218'ltimo'
+            'Inserir'
+            'Excluir'
+            'Editar'
+            'Gravar'
+            'Cancelar'
+            'Atualizar'
+            'Aplicar atualiza'#231#245'es'
+            'Calcelar atualiza'#231#245'es')
+          ParentShowHint = False
+          ShowHint = True
+          TabOrder = 0
+        end
+      end
+      object Panel2: TPanel
+        Left = 1
+        Top = 121
+        Width = 496
+        Height = 148
+        Align = alBottom
+        TabOrder = 1
+        object Panel48: TPanel
+          Left = 1
+          Top = 48
+          Width = 494
+          Height = 25
+          Align = alTop
+          TabOrder = 0
+          object Panel49: TPanel
+            Left = 1
+            Top = 1
+            Width = 120
+            Height = 23
+            Align = alLeft
+            Alignment = taLeftJustify
+            Caption = ' Origem:'
+            TabOrder = 0
+          end
+          object Panel50: TPanel
+            Left = 121
+            Top = 1
+            Width = 372
+            Height = 23
+            Align = alClient
+            TabOrder = 1
+            object DBEdit1: TDBEdit
+              Left = 1
+              Top = 1
+              Width = 370
+              Height = 21
+              Align = alClient
+              DataField = 'Origem'
+              DataSource = FrmDataModule.DataSourceContadorSolicitacao
+              TabOrder = 0
+            end
+          end
+        end
+        object Panel3: TPanel
+          Left = 1
+          Top = 73
+          Width = 494
+          Height = 25
+          Align = alTop
+          TabOrder = 1
+          object Panel5: TPanel
+            Left = 1
+            Top = 1
+            Width = 120
+            Height = 23
+            Align = alLeft
+            Alignment = taLeftJustify
+            Caption = ' Destino:'
+            TabOrder = 0
+          end
+          object Panel7: TPanel
+            Left = 121
+            Top = 1
+            Width = 372
+            Height = 23
+            Align = alClient
+            TabOrder = 1
+            object DBEdit4: TDBEdit
+              Left = 1
+              Top = 1
+              Width = 370
+              Height = 21
+              Align = alClient
+              DataField = 'Destino'
+              DataSource = FrmDataModule.DataSourceContadorSolicitacao
+              TabOrder = 0
+            end
+          end
+        end
+        object Panel8: TPanel
+          Left = 1
+          Top = 98
+          Width = 494
+          Height = 25
+          Align = alTop
+          TabOrder = 2
+          object Panel9: TPanel
+            Left = 1
+            Top = 1
+            Width = 120
+            Height = 23
+            Align = alLeft
+            Alignment = taLeftJustify
+            Caption = ' Tipo Etapa Servi'#231'o:'
+            TabOrder = 0
+          end
+          object Panel10: TPanel
+            Left = 121
+            Top = 1
+            Width = 372
+            Height = 23
+            Align = alClient
+            TabOrder = 1
+            object DBEdit5: TDBEdit
+              Left = 1
+              Top = 1
+              Width = 370
+              Height = 21
+              Align = alClient
+              DataField = 'TipoEtapaServico'
+              DataSource = FrmDataModule.DataSourceContadorSolicitacao
+              TabOrder = 0
+            end
+          end
+        end
+        object Panel11: TPanel
+          Left = 1
+          Top = 23
+          Width = 494
+          Height = 25
+          Align = alTop
+          TabOrder = 3
+          object Panel12: TPanel
+            Left = 1
+            Top = 1
+            Width = 120
+            Height = 23
+            Align = alLeft
+            Alignment = taLeftJustify
+            Caption = ' Descri'#231#227'o:'
+            TabOrder = 0
+          end
+          object Panel13: TPanel
+            Left = 121
+            Top = 1
+            Width = 372
+            Height = 23
+            Align = alClient
+            TabOrder = 1
+            object DBEdit7: TDBEdit
+              Left = 1
+              Top = 1
+              Width = 370
+              Height = 21
+              Align = alClient
+              DataField = 'Descricao'
+              DataSource = FrmDataModule.DataSourceContadorSolicitacao
+              TabOrder = 0
+            end
+          end
+        end
+        object Panel14: TPanel
+          Left = 1
+          Top = 123
+          Width = 494
+          Height = 25
+          Align = alTop
+          TabOrder = 4
+          object Panel15: TPanel
+            Left = 1
+            Top = 1
+            Width = 120
+            Height = 23
+            Align = alLeft
+            Alignment = taLeftJustify
+            Caption = ' Status [Program'#231#227'o]:'
+            TabOrder = 0
+          end
+          object Panel16: TPanel
+            Left = 121
+            Top = 1
+            Width = 372
+            Height = 23
+            Align = alClient
+            TabOrder = 1
+            object DBEdit6: TDBEdit
+              Left = 1
+              Top = 1
+              Width = 370
+              Height = 21
+              Align = alClient
+              DataField = 'StatusProgramacao'
+              DataSource = FrmDataModule.DataSourceContadorSolicitacao
+              TabOrder = 0
+            end
+          end
+        end
+        object Panel17: TPanel
+          Left = 1
+          Top = 1
+          Width = 494
+          Height = 22
+          Align = alTop
+          TabOrder = 5
+          object DBCheckBox1: TDBCheckBox
+            Left = 1
+            Top = 1
+            Width = 492
+            Height = 20
+            Align = alClient
+            Caption = 'Origem<>Destino'
+            DataField = 'BooleanOrigemDestino'
+            DataSource = FrmDataModule.DataSourceContadorSolicitacao
+            TabOrder = 0
+          end
+        end
+      end
+      object DBGridContador: TFilterDBGrid
+        Left = 1
+        Top = 30
+        Width = 496
+        Height = 91
+        Align = alClient
+        DataSource = FrmDataModule.DataSourceContadorSolicitacao
+        TabOrder = 2
+        TitleFont.Charset = DEFAULT_CHARSET
+        TitleFont.Color = clWindowText
+        TitleFont.Height = -11
+        TitleFont.Name = 'Tahoma'
+        TitleFont.Style = []
+        OnCellClick = DBGridContadorCellClick
+        OnDrawColumnCell = DBGridContadorDrawColumnCell
+        EnableZebra = False
+        Columns = <
+          item
+            Alignment = taCenter
+            Expanded = False
+            FieldName = 'BooleanOrigemDestino'
+            Title.Alignment = taCenter
+            Title.Caption = 'Origem<>Destino'
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'Descricao'
+            Title.Alignment = taCenter
+            Title.Caption = 'Descri'#231#227'o'
+            Width = 60
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'Origem'
+            Title.Alignment = taCenter
+            Width = 60
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'Destino'
+            Title.Alignment = taCenter
+            Width = 60
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'TipoEtapaServico'
+            Title.Alignment = taCenter
+            Title.Caption = 'Tipo Etapa Servi'#231'o'
+            Width = 100
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'StatusProgramacao'
+            Title.Alignment = taCenter
+            Title.Caption = 'Status [Programacao]'
+            Width = 110
+            Visible = True
+          end>
+      end
+      object ColunasLayoutContador: TStringGrid
+        Left = 352
+        Top = 36
+        Width = 88
+        Height = 62
+        TabOrder = 3
+        Visible = False
+      end
+    end
+  end
+  object PanelContadorSolicitacao: TPanel
+    Left = 0
+    Top = 551
+    Width = 1538
+    Height = 27
+    Align = alBottom
+    TabOrder = 4
+    ExplicitTop = 543
+    ExplicitWidth = 1536
+    object RLContadorSolicitacao: TStringGrid
+      Left = 1
+      Top = 1
+      Width = 1536
+      Height = 25
+      Align = alClient
+      ColCount = 1
+      DefaultRowHeight = 22
+      FixedCols = 0
+      RowCount = 1
+      FixedRows = 0
+      Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goDrawFocusSelected, goColSizing, goColMoving, goFixedRowClick]
+      TabOrder = 0
+      ExplicitWidth = 1534
+    end
+  end
+  object ActionManager1: TActionManager
+    Images = FrmPrincipal.ImageList1
+    Left = 584
+    Top = 145
+    StyleName = 'Platform Default'
+    object actAprovarSelecionado: TAction
+      Category = 'Bot'#245'es'
+      Caption = 'Aprovar'
+      Hint = 'Aprovar registros selecionados'
+      ImageIndex = 192
+      OnExecute = actAprovarSelecionadoExecute
+    end
+    object actCancelarSelecionado: TAction
+      Category = 'Bot'#245'es'
+      Caption = 'Cancelar'
+      Hint = 'Cancelar registros selecionados'
+      ImageIndex = 188
+      OnExecute = actCancelarSelecionadoExecute
+    end
+    object actMatrizOrigemDestino: TAction
+      Category = 'Destino Origem'
+      OnExecute = actMatrizOrigemDestinoExecute
+    end
+    object actAjudaLimpar: TAction
+      Category = 'Configura'#231#245'es'
+      Caption = 'actAjudaLimpar'
+      OnExecute = actAjudaLimparExecute
+    end
+    object actDestino: TAction
+      Category = 'Destino Origem'
+      Caption = 'actDestino'
+      OnExecute = actDestinoExecute
+    end
+    object actOrigem: TAction
+      Category = 'Destino Origem'
+      Caption = 'actOrigem'
+      OnExecute = actOrigemExecute
+    end
+    object actMudanca: TAction
+      Category = 'Bot'#245'es'
+      Caption = 'Mudan'#231'a'
+      Hint = 'Mudan'#231'a de programa'#231#227'o'
+      ImageIndex = 446
+      OnExecute = actMudancaExecute
+    end
+    object actProcurar: TAction
+      Category = 'Procurar'
+      Caption = 'Procurar'
+      Hint = 'Buscar registros no banco de dados'
+      ImageIndex = 27
+      ShortCut = 116
+      OnExecute = actProcurarExecute
+    end
+    object actDestinoOrigem: TAction
+      Category = 'Configura'#231#245'es'
+      Caption = 'Atualizar'
+      Hint = 'Atualizar todos os status de programa'#231#227'o das plataformas'
+      ImageIndex = 238
+      OnExecute = actDestinoOrigemExecute
+    end
+    object actSelecaoTodos: TAction
+      Category = 'Configura'#231#245'es'
+      Caption = 'Selecionar todos'
+      Hint = 'Selecionar todos os Executantes'
+      ImageIndex = 152
+      OnExecute = actSelecaoTodosExecute
+    end
+    object actSelecaoLimpar: TAction
+      Category = 'Configura'#231#245'es'
+      Caption = 'Limpar sele'#231#227'o'
+      Hint = 'Limpar sele'#231#227'o de todos os Executantes'
+      ImageIndex = 153
+      OnExecute = actSelecaoLimparExecute
+    end
+    object actOcultar: TAction
+      Category = 'Configura'#231#245'es'
+      Hint = 'Mostrar Servi'#231'os'
+      ImageIndex = 125
+      OnExecute = actOcultarExecute
+    end
+    object actMostrar: TAction
+      Category = 'Configura'#231#245'es'
+      Hint = 'Ocultar Servi'#231'os'
+      ImageIndex = 126
+      OnExecute = actMostrarExecute
+    end
+    object actAbrirServico: TAction
+      Category = 'Configura'#231#245'es'
+      Caption = 'actAbrirServico'
+      OnExecute = actAbrirServicoExecute
+    end
+    object actZoomMais: TAction
+      Category = 'Bot'#245'es'
+      Caption = 'actZoomMais'
+      Hint = 'Zoom Mais'
+      ImageIndex = 46
+      OnExecute = actZoomMaisExecute
+    end
+    object actZoomMenos: TAction
+      Category = 'Bot'#245'es'
+      Caption = 'actZoomMenos'
+      Hint = 'Zoom Menos'
+      ImageIndex = 47
+      OnExecute = actZoomMenosExecute
+    end
+    object actExcel: TAction
+      Category = 'Bot'#245'es'
+      Caption = 'Exportar'
+      Hint = 'Exportar para o Excel'
+      ImageIndex = 54
+      OnExecute = actExcelExecute
+    end
+    object actExcelDuplicados: TAction
+      Category = 'Bot'#245'es'
+      Caption = 'Exportar'
+      Hint = 'Exportar para o Excel'
+      ImageIndex = 54
+    end
+    object actAutoFit: TAction
+      Category = 'Bot'#245'es'
+      Caption = 'actAutoFit'
+      ImageIndex = 45
+      OnExecute = actAutoFitExecute
+    end
+    object actStatusTodos: TAction
+      Category = 'Configura'#231#245'es'
+      Caption = 'Status da programa'#231#227'o (TODOS)'
+      Hint = 'Atualizar todos os status de programa'#231#227'o das plataformas'
+      ImageIndex = 238
+      OnExecute = actStatusTodosExecute
+    end
+    object actInfo: TAction
+      Category = 'Bot'#245'es'
+      Caption = 'actInfo'
+      Hint = 'Descri'#231#227'o das colunas'
+      ImageIndex = 22
+      OnExecute = actInfoExecute
+    end
+    object actConfigurarContador: TAction
+      Category = 'Bot'#245'es'
+      Caption = 'actConfigurarContador'
+      Hint = 'Configurar Contadores'
+      ImageIndex = 40
+      OnExecute = actConfigurarContadorExecute
+    end
+    object actTransbordos: TAction
+      Category = 'Bot'#245'es'
+      Caption = 'Transbordo'
+      Hint = 'Transbordos internos (Origem diferente de PCM-09 e TMIB)'
+      ImageIndex = 456
+      OnExecute = actTransbordosExecute
+    end
+    object actContadorSolicitacao: TAction
+      Category = 'Configura'#231#245'es'
+      Caption = 'actContadorSolicitacao'
+      OnExecute = actContadorSolicitacaoExecute
+    end
+    object actCopiarKITPS: TAction
+      Category = 'Bot'#245'es'
+      Caption = 'KIT Embarque'
+      Hint = 
+        'Copiar lista de respons'#225'veis pelo Kit Embarque de outra data sel' +
+        'ecionada'
+      ImageIndex = 458
+      OnExecute = actCopiarKITPSExecute
+    end
+    object actCarregarDestinoJanela: TAction
+      Category = 'Bot'#245'es'
+      Caption = 'Destinos'
+      Hint = 'Carregar altera'#231#227'o do destino de executantes'
+      ImageIndex = 211
+      OnExecute = actCarregarDestinoJanelaExecute
+    end
+    object actCarregarDestino: TAction
+      Category = 'Bot'#245'es'
+      Caption = 'Individualmente'
+      Hint = 'Alterar destinos individualmente'
+      ImageIndex = 211
+      OnExecute = actCarregarDestinoExecute
+    end
+    object actCarregarDestinoProgramacao: TAction
+      Category = 'Bot'#245'es'
+      Caption = 'Todos'
+      Hint = 'Alterar destino da programa'#231#227'o completa'
+      ImageIndex = 211
+      OnExecute = actCarregarDestinoProgramacaoExecute
+    end
+    object actExcluirProgramacao: TAction
+      Category = 'Bot'#245'es'
+      Caption = 'Excluir programa'#231#227'o completa selecionada'
+      Hint = 'Excluir programa'#231#227'o completa selecionada'
+      ImageIndex = 324
+      OnExecute = actExcluirProgramacaoExecute
+    end
+    object actexcluirExecutante: TAction
+      Category = 'Bot'#245'es'
+      Caption = 'Excluir executante selecionado'
+      Hint = 'Excluir programa'#231#227'o executante selecionado'
+      ImageIndex = 324
+      OnExecute = actexcluirExecutanteExecute
+    end
+    object actDuplicados: TAction
+      Category = 'Bot'#245'es'
+      Caption = 'actDuplicados'
+      Hint = 'Mostrar todos os duplicados'
+      ImageIndex = 95
+      OnExecute = actDuplicadosExecute
+    end
+  end
+  object PopupMenuDestinoOrigem: TPopupMenu
+    Left = 40
+    Top = 185
+    object StatusdaprogramaoTODOS1: TMenuItem
+      Action = actStatusTodos
+    end
+    object StatusdaprogramaoTODOS2: TMenuItem
+      Caption = 'Status da programa'#231#227'o (SELECIONADO)'
+      Hint = 'Atualizar o status de programa'#231#227'o da plataforma selecionada'
+      ImageIndex = 238
+    end
+  end
+  object PopupMenuExcluir: TPopupMenu
+    Left = 637
+    Top = 226
+    object Excluirprogramaoexecutanteselecionado1: TMenuItem
+      Action = actexcluirExecutante
+    end
+    object Excluirprogramaocompletaselecionada1: TMenuItem
+      Action = actExcluirProgramacao
+    end
+  end
+  object PopupMenuForaOperacao: TPopupMenu
+    Left = 600
+    Top = 305
+  end
+end

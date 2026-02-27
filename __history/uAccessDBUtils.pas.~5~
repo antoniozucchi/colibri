@@ -1,0 +1,904 @@
+﻿unit uAccessDBUtils;
+
+interface
+
+uses
+  System.SysUtils, System.Variants, System.Classes, Dialogs,
+  ComObj, StrUtils, uMensagens, uFuncoes,
+  ActiveX, ADOX_TLB, Vcl.StdCtrls, Vcl.CheckLst,
+  System.Generics.Collections, Winapi.Windows, Data.DB, Data.Win.ADODB;
+
+function SafeIdent(const S: string): string;
+
+procedure CriarFieldDB(NovoCampo, NomeTabela, Tipo: String;
+Query: TADOQuery);
+
+procedure AtualizarRelacionamentoTblExcentricidade(
+  const AConnection: TADOConnection);
+
+procedure CriarTableDB(const NomeTabela, NomeID, SQLVariaveis: String;
+  const AConnection: TADOConnection);
+
+function TableExistsADO(const AConnection: TADOConnection; const TableName: string): Boolean;
+
+procedure ExcluirTableDB(NomeTabela: String; sourceQuery: TADOQuery);
+
+procedure ExcluirFieldDB(const NomeTabela, NomeCampoExcluir: String;
+  const Conn: TADOConnection);
+procedure ExcluirTabelaDB(NomeTabela: String; Query: TADOQuery);
+
+procedure AlterarNomeFieldDB(
+  const CampoNomeNovo, CampoNomeOriginal, NomeTabela, Tipo: String;
+  const FDConnection: TADOConnection);
+
+procedure AlterarTipoFieldDB(const CampoNome, NomeTabela, NovoTipo: String;
+  const ZConnection: TADOConnection);
+
+procedure AlterarNomeTableDB(
+  const TabelaNomeNovo, TabelaNomeOriginal: String;
+  const FDConnection: TADOConnection);
+
+procedure ExecQuery(const SQL: String; Connection: TADOConnection);
+
+procedure ExcluirRegistros(NomeTabela: String; Query: TADOQuery);
+
+procedure CriarRelacaoTable(const TabelaPai, TabelaFilho, IDPai, IDFilho: String;
+  updateCascade, deleteCascade: Boolean);
+
+procedure SetCascadeAllFKs(const ADOConn: TADOConnection; MemoLog: TMemo);
+
+procedure ExcluirRelacionamento(
+  const ADOConn: TADOConnection;
+  const TabelaPai, TabelaFilho, CampoPai, CampoFilho: string);
+
+procedure ListarRelacionamentos(ADOConn: TADOConnection);
+
+function JuntarStrings(Lista: TStringList; const Separador: String): String;
+function ObterConversaoSQL(const CampoNome, TipoOriginal, NovoTipo: String): String;
+function ObterTipoAccessPorTField(Field: TField): String;
+
+function BuildInParams(const ParamPrefix: string; const IDs: TArray<Integer>): string;
+procedure BindInParams(Qry: TADOQuery; const ParamPrefix: string; const IDs: TArray<Integer>);
+function GetSelectedProjectIDsFromDB(AConn: TADOConnection): TArray<Integer>;
+procedure ExecSQL_NotIn(Qry: TADOQuery; const SQLText, ParamPrefix: string; const IDs: TArray<Integer>);
+procedure AlterarDefaultCampo(
+  const NomeCampo, NomeTabela, TipoCampo, ValorDefault: string;
+  Connection: TADOConnection
+);
+
+implementation
+
+function BuildInParams(const ParamPrefix: string; const IDs: TArray<Integer>): string;
+var
+  i: Integer;
+begin
+  Result := '';
+  for i := 0 to High(IDs) do
+  begin
+    if Result <> '' then
+      Result := Result + ',';
+    Result := Result + ':' + ParamPrefix + IntToStr(i);
+  end;
+end;
+
+procedure BindInParams(Qry: TADOQuery; const ParamPrefix: string; const IDs: TArray<Integer>);
+var
+  i: Integer;
+begin
+  for i := 0 to High(IDs) do
+    Qry.Parameters.ParamByName(ParamPrefix + IntToStr(i)).Value := IDs[i];
+end;
+
+// Pega os IDs marcados no TCheckListBox.
+// Preferência: carregar o checklist com AddObject(..., TObject(NativeInt(ID))).
+// Fallback: tenta extrair o inteiro do começo do texto (ex: "123 - Projeto X").
+function GetSelectedProjectIDsFromDB(AConn: TADOConnection): TArray<Integer>;
+var
+  Qry: TADOQuery;
+  L: TList<Integer>;
+begin
+  L := TList<Integer>.Create;
+  Qry := TADOQuery.Create(nil);
+  try
+    Qry.Connection := AConn;
+    Qry.SQL.Text :=
+      'SELECT idProjeto ' +
+      'FROM tblProjeto ' +
+      'WHERE booleanSelecao = true';
+    Qry.Open;
+
+    while not Qry.Eof do
+    begin
+      L.Add(Qry.FieldByName('idProjeto').AsInteger);
+      Qry.Next;
+    end;
+
+    if L.Count = 0 then
+      raise Exception.Create('Nenhum projeto selecionado para exportação.');
+
+    Result := L.ToArray;
+  finally
+    Qry.Free;
+    L.Free;
+  end;
+end;
+
+
+procedure ExecSQL_NotIn(Qry: TADOQuery; const SQLText, ParamPrefix: string; const IDs: TArray<Integer>);
+begin
+  Qry.Close;
+  Qry.SQL.Clear;
+  Qry.Parameters.Clear;
+  Qry.SQL.Text := SQLText;
+  BindInParams(Qry, ParamPrefix, IDs);
+  Qry.ExecSQL;
+end;
+
+//===============================================================
+
+procedure ExcluirRelacionamento(
+  const ADOConn: TADOConnection;
+  const TabelaPai, TabelaFilho, CampoPai, CampoFilho: string);
+var
+  Catalog: _Catalog;
+  Tabela: _Table;
+  Chave: _Key;
+  i, j: Integer;
+begin
+  Catalog := CoCatalog.Create;
+  Catalog.Set_ActiveConnection(ADOConn.ConnectionObject);
+
+  for i := 0 to Catalog.Tables.Count - 1 do
+  begin
+    Tabela := Catalog.Tables.Item[i] as _Table;
+
+    if (Tabela.Type_ = 'TABLE') and SameText(Tabela.Name, TabelaFilho) then
+    begin
+      for j := 0 to Tabela.Keys.Count - 1 do
+      begin
+        Chave := Tabela.Keys.Item[j] as _Key;
+
+        if (Chave.Type_ = adKeyForeign) then
+        begin
+          if (SameText(Chave.RelatedTable, TabelaPai)) and
+             (Chave.Columns.Count = 1) and
+             (SameText(Chave.Columns.Item[0].Name, CampoFilho)) and
+             (SameText(Chave.Columns.Item[0].RelatedColumn, CampoPai)) then
+          begin
+            Tabela.Keys.Delete(Chave.Name);
+            ShowMessage('Relacionamento excluído: ' + Chave.Name);
+            Exit;
+          end;
+        end;
+      end;
+    end;
+  end;
+
+  ShowMessage('Relacionamento não encontrado.');
+end;
+
+procedure ListarRelacionamentos(ADOConn: TADOConnection);
+var
+  Catalog: _Catalog;
+  Tabela: ADOX_TLB._Table;
+  Key: _Key;
+  i, j: Integer;
+begin
+  if not ADOConn.Connected then
+    raise Exception.Create('A conexão ADO não está ativa.');
+
+  Catalog := CoCatalog.Create;
+  Catalog.Set_ActiveConnection(ADOConn.ConnectionObject);
+
+  for i := 0 to Catalog.Tables.Count - 1 do
+  begin
+    Tabela := Catalog.Tables.Item[i] as _Table;
+
+    if Tabela.Type_ = 'TABLE' then
+    begin
+      ShowMessage('Tabela: ' + Tabela.Name);
+
+      for j := 0 to Tabela.Keys.Count - 1 do
+      begin
+        Key := Tabela.Keys.Item[j] as _Key;
+        ShowMessage('  Constraint: ' + Key.Name +
+          ' | Tipo: ' + IntToStr(Integer(Key.Type_)));
+      end;
+    end;
+  end;
+end;
+
+procedure SetCascadeAllFKs(const ADOConn: TADOConnection; MemoLog: TMemo);
+var
+  Cat       : _Catalog;
+  Tbl       : _Table;
+  KeyOld    : _Key;
+  KeyNew    : _Key;
+  ColOld    : _Column;
+  ColNew    : _Column;
+  iT, iK, iC: Integer;
+  TblName, KeyName, ParentTable: WideString;
+  ChildCols, ParentCols: array of WideString;
+
+  procedure Log(const S: string);
+  begin
+    MemoLog.Lines.Add(FormatDateTime('hh:nn:ss.zzz', Now) + '  ' + S);
+  end;
+
+  // cria a FK completa (colunas + regras) e anexa via late-binding
+  procedure AppendKeyWithCascade_LateBinding;
+  var
+    VKeys, VCols: OleVariant;
+    j: Integer; // <- variável de controle LOCAL ao procedimento
+  begin
+    KeyNew := CoKey.Create;
+    KeyNew.Name         := KeyName;
+    KeyNew.Type_        := adKeyForeign;
+    KeyNew.RelatedTable := ParentTable;
+    KeyNew.UpdateRule   := adRICascade;
+    KeyNew.DeleteRule   := adRICascade;
+
+    VCols := OleVariant(KeyNew.Columns);
+    for j := 0 to High(ChildCols) do
+    begin
+      ColNew := CoColumn.Create;
+      ColNew.Name          := ChildCols[j];    // no FILHO
+      ColNew.RelatedColumn := ParentCols[j];   // no PAI
+      VCols.Append(OleVariant(ColNew));        // evita overload com DefinedSize
+    end;
+
+    VKeys := OleVariant(Tbl.Keys);
+    VKeys.Append(OleVariant(KeyNew));          // anexa a Key pronta
+  end;
+
+begin
+  if not ADOConn.Connected then
+    raise Exception.Create('Conexão ADO não está aberta.');
+
+  Log('=== Ajustando FKs para CASCADE (ADOX) ===');
+
+  Cat := CoCatalog.Create;
+  Cat._Set_ActiveConnection(ADOConn.ConnectionObject as _Connection);
+
+  for iT := 0 to Cat.Tables.Count - 1 do
+  begin
+    Tbl := Cat.Tables.Item[iT];
+    TblName := Tbl.Name;
+
+    // opcional: ignore tabelas de sistema
+    if (Copy(TblName,1,4) = 'MSys') then
+      Continue;
+
+    for iK := Tbl.Keys.Count - 1 downto 0 do
+    begin
+      KeyOld := Tbl.Keys.Item[iK];
+      if KeyOld.Type_ <> adKeyForeign then
+        Continue;
+
+      if (KeyOld.UpdateRule = adRICascade) and (KeyOld.DeleteRule = adRICascade) then
+      begin
+        Log(Format('[%s] FK "%s" já está CASCADE — pulando.', [TblName, KeyOld.Name]));
+        Continue;
+      end;
+
+      // coleta pares filho->pai
+      SetLength(ChildCols, KeyOld.Columns.Count);
+      SetLength(ParentCols, KeyOld.Columns.Count);
+      for iC := 0 to KeyOld.Columns.Count - 1 do
+      begin
+        ColOld := KeyOld.Columns.Item[iC];
+        ChildCols[iC]  := ColOld.Name;
+        ParentCols[iC] := ColOld.RelatedColumn;
+      end;
+
+      KeyName     := KeyOld.Name;
+      ParentTable := KeyOld.RelatedTable;
+
+      Log(Format('[%s] Recriando FK "%s" -> %s', [TblName, KeyName, ParentTable]));
+
+      // remove FK antiga
+      try
+        Tbl.Keys.Delete(KeyName);
+      except
+        on E: Exception do
+        begin
+          Log(Format('  ERRO ao remover FK "%s": %s', [KeyName, E.Message]));
+          Continue;
+        end;
+      end;
+
+      // recria com cascade
+      try
+        if Length(ChildCols) = 0 then
+        begin
+          Log('  ERRO: FK sem colunas — ignorada.');
+          Continue;
+        end;
+
+        AppendKeyWithCascade_LateBinding;
+        Log('  OK: Update/Delete CASCADE aplicados.');
+      except
+        on E: Exception do
+        begin
+          Log('  ERRO ao recriar com CASCADE (late-binding): ' + E.Message);
+
+          // fallback: recria sem cascade para não deixar sem FK
+          try
+            Tbl.Keys.Append(KeyName, adKeyForeign, ChildCols[0], ParentTable, ParentCols[0]);
+            KeyNew := Tbl.Keys.Item[KeyName];
+            if Length(ChildCols) > 1 then
+            begin
+              for iC := 1 to High(ChildCols) do
+              begin
+                ColNew := CoColumn.Create;
+                ColNew.Name := ChildCols[iC];
+                KeyNew.Columns.Append(ColNew, adInteger, 0);
+                KeyNew.Columns.Item[ChildCols[iC]].RelatedColumn := ParentCols[iC];
+              end;
+            end;
+            Log('  FK restaurada SEM CASCADE.');
+          except
+            on E2: Exception do
+              Log('  ERRO ao restaurar FK sem CASCADE: ' + E2.Message);
+          end;
+        end;
+      end;
+
+    end; // keys
+  end; // tables
+
+  Log('=== Concluído ===');
+end;
+
+procedure AlterarTipoFieldDB(const CampoNome, NomeTabela, NovoTipo: String;
+  const ZConnection: TADOConnection);
+var
+  Q: TADOQuery;
+  ListaCamposOriginais, ListaCamposConvertidos, CamposDefinicao: TStringList;
+  NomeTabelaTemp, CampoAtual, TipoAtual, SQLCreate, SQLInsert: String;
+  i: Integer;
+  CampoEncontrado: Boolean;
+begin
+  if not Assigned(ZConnection) then
+    raise Exception.Create('Connection não pode ser nil');
+
+  Q := TADOQuery.Create(nil);
+  ListaCamposOriginais := TStringList.Create;
+  ListaCamposConvertidos := TStringList.Create;
+  CamposDefinicao := TStringList.Create;
+  try
+    Q.Connection := ZConnection;
+    CampoEncontrado := False;
+
+    // 1. Obter informações detalhadas dos campos da tabela
+    Q.SQL.Text := Format('SELECT TOP 1 * FROM [%s]', [NomeTabela]);
+    Q.Open;
+    try
+      for i := 0 to Q.FieldCount - 1 do
+      begin
+        CampoAtual := Q.Fields[i].FieldName;
+        TipoAtual := ObterTipoAccessPorTField(Q.Fields[i]);
+
+        ListaCamposOriginais.Add('[' + CampoAtual + ']');
+
+        if SameText(CampoAtual, CampoNome) then
+        begin
+          CampoEncontrado := True;
+          // Definir novo tipo para o campo específico
+          CamposDefinicao.Add(Format('[%s] %s', [CampoAtual, NovoTipo]));
+          // Conversão adequada baseada nos tipos
+          ListaCamposConvertidos.Add(ObterConversaoSQL(CampoAtual, TipoAtual, NovoTipo));
+        end
+        else
+        begin
+          // Manter tipo original para outros campos
+          CamposDefinicao.Add(Format('[%s] %s', [CampoAtual, TipoAtual]));
+          ListaCamposConvertidos.Add('[' + CampoAtual + ']');
+        end;
+      end;
+    finally
+      Q.Close;
+    end;
+
+    if not CampoEncontrado then
+    begin
+      ShowMessage(Format('Campo "%s" não encontrado na tabela "%s".', [CampoNome, NomeTabela]));
+      Exit;
+    end;
+
+    if ListaCamposOriginais.Count = 0 then
+    begin
+      ShowMessage('Tabela sem campos.');
+      Exit;
+    end;
+
+    // 2. Gerar nome único para tabela temporária
+    NomeTabelaTemp := Format('%s_temp_%s', [NomeTabela, FormatDateTime('yyyymmdd_hhnnsszzz', Now)]);
+
+    try
+      // 3. Criar nova tabela com estrutura corrigida
+      SQLCreate := Format('CREATE TABLE [%s] (%s)',
+        [NomeTabelaTemp, JuntarStrings(CamposDefinicao, ', ')]);
+      ExecQuery(SQLCreate, ZConnection);
+
+      // 4. Copiar dados com conversões adequadas
+      SQLInsert := Format('INSERT INTO [%s] (%s) SELECT %s FROM [%s]',
+        [NomeTabelaTemp,
+         JuntarStrings(ListaCamposOriginais, ', '),
+         JuntarStrings(ListaCamposConvertidos, ', '),
+         NomeTabela]);
+      ExecQuery(SQLInsert, ZConnection);
+
+      // 5. Substituir tabela original
+      ExecQuery(Format('DROP TABLE [%s]', [NomeTabela]), ZConnection);
+
+      // 6. Renomear tabela temporária (Access não suporta RENAME diretamente)
+      SQLCreate := Format('SELECT * INTO [%s] FROM [%s]', [NomeTabela, NomeTabelaTemp]);
+      ExecQuery(SQLCreate, ZConnection);
+      ExecQuery(Format('DROP TABLE [%s]', [NomeTabelaTemp]), ZConnection);
+
+      ShowMessage(Format('✅ Tipo do campo "%s" alterado para "%s" na tabela "%s".',
+        [CampoNome, NovoTipo, NomeTabela]));
+
+    except
+      on E: Exception do
+      begin
+        // Cleanup em caso de erro
+        try
+          ExecQuery(Format('DROP TABLE [%s]', [NomeTabelaTemp]), ZConnection);
+        except
+          // Ignore se tabela temp não existir
+        end;
+
+        ShowMessage(Format('❌ Erro ao alterar tipo do campo: %s', [E.Message]));
+        raise;
+      end;
+    end;
+
+  finally
+    CamposDefinicao.Free;
+    ListaCamposConvertidos.Free;
+    ListaCamposOriginais.Free;
+    Q.Free;
+  end;
+end;
+
+// Funções auxiliares necessárias:
+
+function ObterTipoAccessPorTField(Field: TField): String;
+begin
+  case Field.DataType of
+    ftString, ftFixedChar:
+      Result := Format('TEXT(%d)', [Field.Size]);
+    ftWideString, ftFixedWideChar:
+      Result := Format('TEXT(%d)', [Field.Size]);
+    ftMemo, ftWideMemo:
+      Result := 'MEMO';
+    ftInteger, ftSmallint, ftWord:
+      Result := 'INTEGER';
+    ftLargeint:
+      Result := 'LONG';
+    ftAutoInc:
+      Result := 'AUTOINCREMENT';
+    ftBoolean:
+      Result := 'YESNO';
+    ftFloat, ftCurrency, ftBCD:
+      Result := 'DOUBLE';
+    ftDateTime:
+      Result := 'DATETIME';
+    ftDate:
+      Result := 'DATETIME';
+    ftTime:
+      Result := 'DATETIME';
+    else
+      Result := 'TEXT(255)'; // Padrão
+  end;
+end;
+
+function ObterConversaoSQL(const CampoNome, TipoOriginal, NovoTipo: String): String;
+var
+  TipoOriginalUpper, NovoTipoUpper: String;
+begin
+  TipoOriginalUpper := UpperCase(TipoOriginal);
+  NovoTipoUpper := UpperCase(NovoTipo);
+
+  // Conversões específicas baseadas nos tipos
+  if (Pos('TEXT', TipoOriginalUpper) > 0) and (Pos('INTEGER', NovoTipoUpper) > 0) then
+    Result := Format('IIf(IsNumeric([%s]), CInt([%s]), 0)', [CampoNome, CampoNome])
+  else if (Pos('INTEGER', TipoOriginalUpper) > 0) and (Pos('TEXT', NovoTipoUpper) > 0) then
+    Result := Format('CStr([%s])', [CampoNome])
+  else if (Pos('DOUBLE', TipoOriginalUpper) > 0) and (Pos('INTEGER', NovoTipoUpper) > 0) then
+    Result := Format('CInt([%s])', [CampoNome])
+  else if (Pos('INTEGER', TipoOriginalUpper) > 0) and (Pos('DOUBLE', NovoTipoUpper) > 0) then
+    Result := Format('CDbl([%s])', [CampoNome])
+  else if (Pos('DATETIME', TipoOriginalUpper) > 0) and (Pos('TEXT', NovoTipoUpper) > 0) then
+    Result := Format('Format([%s], "dd/mm/yyyy hh:nn:ss")', [CampoNome])
+  else if (Pos('TEXT', TipoOriginalUpper) > 0) and (Pos('DATETIME', NovoTipoUpper) > 0) then
+    Result := Format('IIf(IsDate([%s]), CDate([%s]), Null)', [CampoNome, CampoNome])
+  else
+    Result := '[' + CampoNome + ']'; // Sem conversão específica
+end;
+
+function JuntarStrings(Lista: TStringList; const Separador: String): String;
+var
+  i: Integer;
+begin
+  Result := '';
+  for i := 0 to Lista.Count - 1 do
+  begin
+    if i > 0 then
+      Result := Result + Separador;
+    Result := Result + Lista[i];
+  end;
+end;
+
+// Sua função ExecQuery deve estar assim:
+procedure ExecQuery(const SQL: String; Connection: TADOConnection);
+var
+  Q: TADOQuery;
+begin
+  Q := TADOQuery.Create(nil);
+  try
+    Q.Connection := Connection;
+    Q.SQL.Text := SQL;
+    Q.ExecSQL;
+  finally
+    Q.Free;
+  end;
+end;
+
+procedure AlterarDefaultCampo(
+  const NomeCampo, NomeTabela, TipoCampo, ValorDefault: string;
+  Connection: TADOConnection
+);
+begin
+  Connection.Execute(
+    Format(
+      'ALTER TABLE %s ALTER COLUMN %s %s DEFAULT %s',
+      [NomeTabela, NomeCampo, TipoCampo, ValorDefault]
+    )
+  );
+end;
+
+procedure CriarFieldDB(NovoCampo, NomeTabela, Tipo: String;
+Query: TADOQuery);
+  var
+    SQLBase: String;
+begin
+  try
+    SQLBase:= 'ALTER TABLE '+NomeTabela+' ADD COLUMN '+NovoCampo+' '+Tipo+';';
+    //SQLBase:= Format('ALTER TABLE %s  ADD COLUMN %s %s;', [NomeTabela,NovoCampo,NovoCampo]);
+    Query.Close;
+    Query.SQL.Clear;
+    Query.SQL.Add(SQLBase);
+    Query.ExecSQL;
+  except
+    //Query.Free;
+  end;
+end;
+
+procedure CriarRelacaoTable(
+  const TabelaPai, TabelaFilho, IDPai, IDFilho: String;
+  updateCascade, deleteCascade: Boolean);
+var
+  DBEngine, DB, Relation, Field: OleVariant;
+  MDBPath: string;
+  Flags: Integer;
+  NomeConstraint: string;
+begin
+  MDBPath := TFuncoes.registroEndereco('Banco de dados');
+  NomeConstraint := 'FK_' + TabelaFilho + '_' + IDFilho;
+
+  try
+    DBEngine := CreateOleObject('DAO.DBEngine.36'); // ou .36, .35, conforme versão do Office
+    DB := DBEngine.OpenDatabase(MDBPath, False, False, '');
+
+    // Remove relação antiga se existir
+    try
+      DB.Relations.Delete(NomeConstraint);
+    except
+      // ignorar se não existir
+    end;
+
+    // Define flags da relação
+    Flags := 0;
+    if updateCascade then
+      Flags := Flags + 256;  // dbRelationUpdateCascade
+    if deleteCascade then
+      Flags := Flags + 4096; // dbRelationDeleteCascade
+
+    // Cria relação
+    Relation := DB.CreateRelation(NomeConstraint, TabelaPai, TabelaFilho, Flags);
+    Field := Relation.CreateField(IDPai);
+    Field.ForeignName := IDFilho;
+    Relation.Fields.Append(Field);
+    DB.Relations.Append(Relation);
+
+    //ShowMessage('Relacionamento com integridade criado com sucesso.');
+
+    DB.Close;
+  except
+    on E: Exception do
+      ShowMessage('Erro ao criar relação DAO: ' + E.Message);
+  end;
+end;
+
+procedure ExcluirTableDB(NomeTabela: String; sourceQuery: TADOQuery);
+  var
+    SQLBase: String;
+begin
+  try
+    SQLBase:= 'DROP TABLE '+NomeTabela+';';
+    sourceQuery.Close;
+    sourceQuery.SQL.Clear;
+    sourceQuery.SQL.Add(SQLBase);
+    sourceQuery.ExecSQL;
+  except
+  end;
+end;
+
+procedure CriarTableDB(const NomeTabela, NomeID, SQLVariaveis: string; const AConnection: TADOConnection);
+var
+  Q: TADOQuery;
+  SQLBase: string;
+begin
+  if TableExistsADO(AConnection, NomeTabela) then Exit;
+
+  Q := TADOQuery.Create(nil);
+  try
+    Q.Connection := AConnection;
+    SQLBase := 'CREATE TABLE [' + NomeTabela + '] '+
+               '([' + NomeID + '] AUTOINCREMENT PRIMARY KEY NOT NULL, ' +
+               SQLVariaveis + ');';
+    Q.SQL.Text := SQLBase;
+    Q.ExecSQL;
+  finally
+    Q.Free;
+  end;
+end;
+
+
+function TableExistsADO(const AConnection: TADOConnection; const TableName: string): Boolean;
+var
+  RS: _Recordset;
+begin
+  Result := False;
+
+  RS := AConnection.OpenSchema(
+          siTables,
+          VarArrayOf([Null, Null, TableName, 'TABLE'])
+        );
+  try
+    Result := not RS.EOF;
+  finally
+    RS.Close;
+  end;
+end;
+
+
+procedure ExcluirFieldDB(
+  const NomeTabela, NomeCampoExcluir: String;
+  const Conn: TADOConnection);
+var
+  Q: TADOQuery;
+begin
+  Q := TADOQuery.Create(nil);
+  try
+    Q.Connection := Conn;
+    Q.SQL.Text :=
+      Format('ALTER TABLE %s DROP COLUMN %s', [SafeIdent(NomeTabela), SafeIdent(NomeCampoExcluir)]);
+    try
+      Q.ExecSQL;
+    except
+    end;
+  finally
+    Q.Free; // <<< evita vazamento
+  end;
+end;
+
+function SafeIdent(const S: string): string;
+begin
+  // Access/Jet: envolve com [ ] e escapa ] -> ]]
+  Result := '[' + StringReplace(S, ']', ']]', [rfReplaceAll]) + ']';
+end;
+
+procedure AlterarNomeTableDB(
+  const TabelaNomeNovo, TabelaNomeOriginal: String;
+  const FDConnection: TADOConnection);
+var
+  Catalog: OleVariant;
+  DBPath: string;
+begin
+  if (Trim(TabelaNomeOriginal) = '') or (Trim(TabelaNomeNovo) = '') then
+  begin
+    ShowMessage('Nome da tabela original ou novo não pode estar vazio.');
+    Exit;
+  end;
+
+  try
+    // Caminho do banco .mdb ou .accdb
+    DBPath := FDConnection.ConnectionString;
+
+    // Cria o objeto do catálogo
+    Catalog := CreateOleObject('ADOX.Catalog');
+    Catalog.ActiveConnection := FDConnection.ConnectionObject;
+
+    // Renomeia a tabela
+    Catalog.Tables[TabelaNomeOriginal].Name := TabelaNomeNovo;
+
+    ShowMessage(Format('Tabela "%s" renomeada para "%s" com sucesso.',
+      [TabelaNomeOriginal, TabelaNomeNovo]));
+  except
+    on E: Exception do
+      ShowMessage('Erro ao renomear tabela: ' + E.Message);
+  end;
+end;
+
+
+procedure AlterarNomeFieldDB(
+  const CampoNomeNovo, CampoNomeOriginal, NomeTabela, Tipo: String;
+  const FDConnection: TADOConnection);
+var
+  CamposOriginais, CamposNovos: TStringList;
+  Q: TADOQuery;
+  NomeTabelaTemp, Campo, SQL: String;
+  i: Integer;
+begin
+  CamposOriginais := TStringList.Create;
+  CamposNovos := TStringList.Create;
+  Q := TADOQuery.Create(nil);
+  try
+    Q.Connection := FDConnection;
+
+    // 1. Lê estrutura da tabela
+    Q.SQL.Text := Format('SELECT * FROM [%s] WHERE 1=0;', [NomeTabela]);
+    Q.Open;
+
+    for i := 0 to Q.Fields.Count - 1 do
+    begin
+      Campo := Q.Fields[i].FieldName;
+      if SameText(Campo, CampoNomeOriginal) then
+      begin
+        CamposOriginais.Add(Campo);
+        CamposNovos.Add(CampoNomeNovo);
+      end
+      else
+      begin
+        CamposOriginais.Add(Campo);
+        CamposNovos.Add(Campo);
+      end;
+    end;
+    Q.Close;
+
+    if CamposOriginais.IndexOf(CampoNomeOriginal) = -1 then
+    begin
+      ShowMessage('Campo "' + CampoNomeOriginal + '" não encontrado.');
+      Exit;
+    end;
+
+    NomeTabelaTemp := NomeTabela + '_temp_' + FormatDateTime('hhnnsszzz', Now);
+
+    // 2. Cria a nova tabela com o novo nome de campo
+    SQL := Format('CREATE TABLE [%s] (', [NomeTabelaTemp]);
+    for i := 0 to CamposNovos.Count - 1 do
+    begin
+      if i > 0 then SQL := SQL + ', ';
+      SQL := SQL + Format('[%s] %s', [CamposNovos[i], Tipo]); // usa mesmo tipo
+    end;
+    SQL := SQL + ');';
+    FDConnection.Execute(SQL);
+
+    // 3. Copia os dados
+    SQL := Format('INSERT INTO [%s] (', [NomeTabelaTemp]);
+    for i := 0 to CamposNovos.Count - 1 do
+    begin
+      if i > 0 then SQL := SQL + ', ';
+      SQL := SQL + Format('[%s]', [CamposNovos[i]]);
+    end;
+    SQL := SQL + ') SELECT ';
+    for i := 0 to CamposOriginais.Count - 1 do
+    begin
+      if i > 0 then SQL := SQL + ', ';
+      SQL := SQL + Format('[%s]', [CamposOriginais[i]]);
+    end;
+    SQL := SQL + Format(' FROM [%s];', [NomeTabela]);
+    FDConnection.Execute(SQL);
+
+    // 4. Substitui tabelas
+    FDConnection.Execute(Format('DROP TABLE [%s];', [NomeTabela]));
+    FDConnection.Execute(Format('SELECT * INTO [%s] FROM [%s];', [NomeTabela, NomeTabelaTemp]));
+    FDConnection.Execute(Format('DROP TABLE [%s];', [NomeTabelaTemp]));
+
+    ShowMessage(Format('Campo "%s" renomeado para "%s" na tabela "%s".',
+      [CampoNomeOriginal, CampoNomeNovo, NomeTabela]));
+  finally
+    CamposOriginais.Free;
+    CamposNovos.Free;
+    Q.Free;
+  end;
+end;
+
+procedure ExcluirTabelaDB(NomeTabela: String; Query: TADOQuery);
+  var
+    SQLBase: String;
+begin
+  try
+    SQLBase:= 'DROP TABLE '+NomeTabela+';';
+    Query.Close;
+    Query.SQL.Clear;
+    Query.SQL.Add(SQLBase);
+    Query.ExecSQL;
+  except
+
+  end;
+end;
+
+procedure ExcluirRegistros(NomeTabela: String; Query: TADOQuery);
+  var
+    SQLBase: String;
+begin
+  try
+    SQLBase:= 'DELETE FROM '+NomeTabela+';';
+    Query.Close;
+    Query.SQL.Clear;
+    Query.SQL.Add(SQLBase);
+    Query.ExecSQL;
+  except
+
+  end;
+end;
+
+procedure AtualizarRelacionamentoTblExcentricidade(
+  const AConnection: TADOConnection);
+var
+  ADOXCatalog, Table, Key: OleVariant;
+  i: Integer;
+  RelExists: Boolean;
+begin
+  try
+    RelExists := False;
+
+    ADOXCatalog := CreateOleObject('ADOX.Catalog');
+    ADOXCatalog.ActiveConnection := AConnection.ConnectionString;
+
+    Table := ADOXCatalog.Tables.Item('tblExcentricidade');
+
+    for i := 0 to Table.Keys.Count - 1 do
+    begin
+      Key := Table.Keys.Item(i);
+      if (Key.Type_ = 3) and // adKeyForeign
+         (Key.RelatedTable = 'tblProjeto') and
+         (Key.Columns.Item(0).Name = 'codigoProjeto') then
+      begin
+        RelExists := True;
+        Break;
+      end;
+    end;
+
+    if RelExists then
+    begin
+      ShowMessage('Relacionamento com tblProjeto já existe na tblExcentricidade.');
+      Exit;
+    end;
+
+    // Cria relacionamento com ON DELETE CASCADE
+    Key := CreateOleObject('ADOX.Key');
+    Key.Name := 'FK_tblExcentricidade_tblProjeto';
+    Key.Type_ := 3; // adKeyForeign
+    Key.RelatedTable := 'tblProjeto';
+    Key.Columns.Append('codigoProjeto');
+    Key.Columns.Item('codigoProjeto').RelatedColumn := 'idProjeto';
+    Key.DeleteRule := 1; // adRICascade
+
+    Table.Keys.Append(Key);
+
+    ShowMessage('Relacionamento com tblProjeto criado com sucesso na tblExcentricidade.');
+
+  except
+    on E: Exception do
+      ShowMessage('Erro ao criar relacionamento: ' + E.Message);
+  end;
+end;
+
+end.
+

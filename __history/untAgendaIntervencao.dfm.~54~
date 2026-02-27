@@ -1,0 +1,201 @@
+object FrmAgendaIntervencao: TFrmAgendaIntervencao
+  Left = 0
+  Top = 0
+  Caption = 'Resumo de Programa'#231#227'o'
+  ClientHeight = 425
+  ClientWidth = 871
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  FormStyle = fsMDIChild
+  OldCreateOrder = False
+  Visible = True
+  WindowState = wsMaximized
+  OnClose = FormClose
+  OnCreate = FormCreate
+  OnDestroy = FormDestroy
+  PixelsPerInch = 96
+  TextHeight = 13
+  object Panel7: TPanel
+    Left = 0
+    Top = 0
+    Width = 871
+    Height = 25
+    Align = alTop
+    Caption = 'Resumo de Programa'#231#227'o'
+    Color = clGradientActiveCaption
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -13
+    Font.Name = 'Tahoma'
+    Font.Style = [fsBold]
+    ParentBackground = False
+    ParentFont = False
+    TabOrder = 0
+  end
+  object StringGrid: TStringGrid
+    Left = 0
+    Top = 54
+    Width = 871
+    Height = 371
+    Align = alClient
+    ColCount = 1
+    FixedCols = 0
+    RowCount = 2
+    FixedRows = 0
+    Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goColSizing, goEditing, goFixedRowClick]
+    TabOrder = 1
+    OnDrawCell = StringGridDrawCell
+    OnFixedCellClick = StringGridFixedCellClick
+  end
+  object ToolBar1: TToolBar
+    Left = 0
+    Top = 25
+    Width = 871
+    Height = 29
+    ButtonHeight = 30
+    ButtonWidth = 29
+    Caption = 'ToolBar1'
+    EdgeBorders = [ebLeft, ebTop, ebRight, ebBottom]
+    Images = FrmPrincipal.ImageList1
+    TabOrder = 2
+    object ToolButton2: TToolButton
+      Left = 0
+      Top = 0
+      Hint = 'Extratos'
+      Caption = 'ToolButton2'
+      DropdownMenu = PopupMenuExtratos
+      ImageIndex = 40
+      Style = tbsDropDown
+    end
+    object Panel8: TPanel
+      Left = 44
+      Top = 0
+      Width = 70
+      Height = 30
+      Align = alLeft
+      Alignment = taLeftJustify
+      Caption = '   Data In'#237'cio:'
+      TabOrder = 2
+    end
+    object dataInicio: TDateTimePicker
+      Left = 114
+      Top = 0
+      Width = 95
+      Height = 30
+      Hint = 'Data In'#237'cio para filtro'
+      Align = alLeft
+      Date = 42599.462823229160000000
+      Time = 42599.462823229160000000
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 3
+    end
+    object Panel4: TPanel
+      Left = 209
+      Top = 0
+      Width = 70
+      Height = 30
+      Align = alLeft
+      Alignment = taLeftJustify
+      Caption = '   Data Fim:'
+      TabOrder = 4
+    end
+    object dataFim: TDateTimePicker
+      Left = 279
+      Top = 0
+      Width = 95
+      Height = 30
+      Hint = 'Data Fim para filtro'
+      Align = alLeft
+      Date = 42599.462823229160000000
+      Time = 42599.462823229160000000
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 5
+    end
+    object ToolButton1: TToolButton
+      Left = 374
+      Top = 0
+      Width = 8
+      Caption = 'ToolButton1'
+      Style = tbsSeparator
+    end
+    object BitBtn13: TBitBtn
+      Left = 382
+      Top = 0
+      Width = 70
+      Height = 30
+      Action = actExcel
+      Caption = 'Exportar'
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 0
+    end
+    object edtComparar: TEdit
+      Left = 452
+      Top = 0
+      Width = 90
+      Height = 30
+      Color = clInfoBk
+      ReadOnly = True
+      TabOrder = 1
+      Visible = False
+    end
+  end
+  object ActionManager1: TActionManager
+    Images = FrmPrincipal.ImageList1
+    Left = 104
+    Top = 160
+    StyleName = 'Platform Default'
+    object actAgendaProgramacao: TAction
+      Caption = 'Extrato de programa'#231#227'o di'#225'ria de servi'#231'o'
+      Hint = 'Extrato de programa'#231#227'o'
+      ImageIndex = 0
+      OnExecute = actAgendaProgramacaoExecute
+    end
+    object actAgendaResumo: TAction
+      Caption = 'Extrato de distribui'#231#227'o de passageiros por origem'
+      Hint = 'Resumo total de programa'#231#245'es'
+      ImageIndex = 40
+      OnExecute = actAgendaResumoExecute
+    end
+    object actCompararRealizacao: TAction
+      Caption = 'Comparar uma programa'#231#227'o PIOp gravada com o realizado no per'#237'odo'
+      Hint = 'Comparar programa'#231#227'o PIOp gravada com o realizado no per'#237'odo'
+      ImageIndex = 209
+      OnExecute = actCompararRealizacaoExecute
+    end
+    object actEmbarcacao: TAction
+      Caption = 'Lista de embarca'#231#245'es de passageiros programadas por dia'
+      Hint = 'Embarca'#231#245'es programadas por dia'
+      ImageIndex = 458
+      OnExecute = actEmbarcacaoExecute
+    end
+    object actExcel: TAction
+      Caption = 'Exportar'
+      Hint = 'Exportar para o Excel'
+      ImageIndex = 54
+      OnExecute = actExcelExecute
+    end
+  end
+  object PopupMenuExtratos: TPopupMenu
+    Left = 368
+    Top = 256
+    object ExtratodeProgramaoDiriadeServio1: TMenuItem
+      Action = actAgendaProgramacao
+    end
+    object ExtratodeDistribuiodePassageiros1: TMenuItem
+      Action = actAgendaResumo
+    end
+    object CompararprogramaoPIOpgravadacomorealizadonoperodo1: TMenuItem
+      Action = actCompararRealizacao
+    end
+    object EmbarcaoProgramadaPorDia: TMenuItem
+      Action = actEmbarcacao
+    end
+  end
+end

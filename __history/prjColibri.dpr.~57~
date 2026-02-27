@@ -1,0 +1,49 @@
+program prjColibri;
+
+{$IF CompilerVersion >= 21.0}
+{$WEAKLINKRTTI ON}
+{$RTTI EXPLICIT METHODS([]) PROPERTIES([]) FIELDS([])}
+{$IFEND}
+
+uses
+  Vcl.Forms,
+  untConsultaProgramacao in 'untConsultaProgramacao.pas' {FrmConsultaProgramacao},
+  untPrincipal in 'untPrincipal.pas' {FrmPrincipal},
+  untDataModule in 'untDataModule.pas' {FrmDataModule: TDataModule},
+  untFrmLogin in 'untFrmLogin.pas' {FrmLogin},
+  untPlataforma in 'untPlataforma.pas' {FrmPlataforma},
+  untExecutante in 'untExecutante.pas' {FrmExecutante},
+  untEmbarcacao in 'untEmbarcacao.pas' {FrmEmbarcacao},
+  untFrmCadastroUsuario in 'untFrmCadastroUsuario.pas' {FrmCadastroUsuario},
+  untFrmPreview in 'untFrmPreview.pas' {FrmPreview},
+  untProgramacaoDiaria in 'untProgramacaoDiaria.pas' {FrmProgramacaoDiaria},
+  untImportacao in 'untImportacao.pas' {FrmImportacao},
+  untFrmSobre in 'untFrmSobre.pas' {FrmSobre},
+  untGerenciarSolicitacoes in 'untGerenciarSolicitacoes.pas' {FrmGerenciarSolicitacoes},
+  untGerenciarEmbarcacoes in 'untGerenciarEmbarcacoes.pas' {FrmGerenciarEmbarcacoes},
+  untConsultaServicosProgramados in 'untConsultaServicosProgramados.pas' {FrmConsultaServicosProgramados},
+  untConsultaExecutantesProgramados in 'untConsultaExecutantesProgramados.pas' {FrmConsultaExecutantesProgramados},
+  untControleGeradores in 'untControleGeradores.pas' {FrmControleGeradores},
+  untMovimentacaoCarga in 'untMovimentacaoCarga.pas' {FrmMovimentacaoCarga},
+  untTelaAbertura in 'untTelaAbertura.pas' {FrmTelaAbertura},
+  untAgendaIntervencao in 'untAgendaIntervencao.pas' {FrmAgendaIntervencao},
+  untSituacaoEquipamentoAcesso in 'untSituacaoEquipamentoAcesso.pas' {FrmSituacaoEquipamentoAcesso},
+  uExcelSapRunner in 'uExcelSapRunner.pas',
+  uAccessDBUtils in 'uAccessDBUtils.pas';
+
+{$R *.res}
+
+begin
+  FrmTelaAbertura:= TFrmTelaAbertura.Create(Application);
+  FrmTelaAbertura.show;
+  FrmTelaAbertura.Update;
+  //=====================================================
+  Application.Initialize;
+  Application.MainFormOnTaskbar := True;
+  Application.CreateForm(TFrmDataModule, FrmDataModule);
+  Application.CreateForm(TFrmPrincipal, FrmPrincipal);
+  //=====================================================
+  FrmTelaAbertura.Hide; {Esconde o FormAbertura}
+  FrmTelaAbertura.Free; {Libera Memória}
+  Application.Run;
+end.

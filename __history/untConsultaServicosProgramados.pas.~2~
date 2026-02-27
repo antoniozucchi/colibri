@@ -1,0 +1,191 @@
+unit untConsultaServicosProgramados;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Data.DB, Vcl.StdCtrls, Vcl.Buttons,
+  Vcl.ToolWin, Vcl.ComCtrls, Vcl.ExtCtrls, Vcl.Grids, Vcl.DBGrids,
+  System.Actions, Vcl.ActnList, Vcl.PlatformDefaultStyleActnCtrls, Vcl.ActnMan,
+  Vcl.CheckLst,DateUtils;
+
+type
+  TFrmConsultaServicosProgramados = class(TForm)
+    DBGridServicosProgramados: TDBGrid;
+    Panel2: TPanel;
+    ActionManager1: TActionManager;
+    actProcurar: TAction;
+    actExcel: TAction;
+    PanelDataInicio: TPanel;
+    Panel12: TPanel;
+    dataInicio: TDateTimePicker;
+    Panel24: TPanel;
+    dataFim: TDateTimePicker;
+    Panel8: TPanel;
+    StatusBar1: TStatusBar;
+    ColunasLayout: TStringGrid;
+    actFiltroInserir: TAction;
+    actGridASC: TAction;
+    actGridDESC: TAction;
+    actLimparFiltros: TAction;
+    actFiltrosTabela: TAction;
+    actProcuraFiltrosTabela: TAction;
+    BitBtn2: TBitBtn;
+    BitBtn3: TBitBtn;
+    BitBtn1: TBitBtn;
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure FormCreate(Sender: TObject);
+    procedure FormDestroy(Sender: TObject);
+    procedure DBGridServicosProgramadosDrawColumnCell(Sender: TObject;
+      const Rect: TRect; DataCol: Integer; Column: TColumn;
+      State: TGridDrawState);
+    procedure actProcurarExecute(Sender: TObject);
+    procedure actExcelExecute(Sender: TObject);
+    procedure DBGridServicosProgramadosTitleClick(Column: TColumn);
+    procedure actFiltroInserirExecute(Sender: TObject);
+    procedure actGridASCExecute(Sender: TObject);
+    procedure actGridDESCExecute(Sender: TObject);
+    procedure actLimparFiltrosExecute(Sender: TObject);
+    procedure actFiltrosTabelaExecute(Sender: TObject);
+    procedure actProcuraFiltrosTabelaExecute(Sender: TObject);
+  private
+    { Private declarations }
+    procedure WMMDIACTIVATE(var msg: TWMMDIACTIVATE);message WM_MDIACTIVATE;
+  public
+    { Public declarations }
+  end;
+
+var
+  FrmConsultaServicosProgramados: TFrmConsultaServicosProgramados;
+
+implementation
+  uses untPrincipal,untDataModule;
+{$R *.dfm}
+
+procedure TFrmConsultaServicosProgramados.actExcelExecute(Sender: TObject);
+begin
+  FrmPrincipal.GerarExcel(DBGridServicosProgramados,'Serviços Programados');
+end;
+
+procedure TFrmConsultaServicosProgramados.actFiltroInserirExecute(
+  Sender: TObject);
+begin
+  FrmPrincipal.inserirProcura(DBGridServicosProgramados,ColunasLayout);
+  actProcurar.Execute;
+  if (FrmPrincipal.PanelFiltrosTabela.Visible)AND(FrmPrincipal.PanelAjuda1.Visible) then
+    actFiltrosTabela.Execute;
+end;
+
+procedure TFrmConsultaServicosProgramados.actFiltrosTabelaExecute(
+  Sender: TObject);
+begin
+  FrmPrincipal.btnProcurarFiltrosTabela.Action:= actProcuraFiltrosTabela;
+  FrmPrincipal.FiltrosTabela(DBGridServicosProgramados,ColunasLayout);
+end;
+
+procedure TFrmConsultaServicosProgramados.actGridASCExecute(Sender: TObject);
+begin
+  FrmPrincipal.ClassificaDBGrid(DBGridServicosProgramados,
+  FrmDataModule.ADOQueryConsultaServicosProgramados,0);
+end;
+
+procedure TFrmConsultaServicosProgramados.actGridDESCExecute(Sender: TObject);
+begin
+  FrmPrincipal.ClassificaDBGrid(DBGridServicosProgramados,
+  FrmDataModule.ADOQueryConsultaServicosProgramados,1);
+end;
+
+procedure TFrmConsultaServicosProgramados.actLimparFiltrosExecute(
+  Sender: TObject);
+begin
+  FrmPrincipal.LimparColunasFiltro(DBGridServicosProgramados,ColunasLayout);
+  actProcurar.Execute;
+  if (FrmPrincipal.PanelFiltrosTabela.Visible)AND(FrmPrincipal.PanelAjuda1.Visible) then
+    actFiltrosTabela.Execute;
+end;
+
+procedure TFrmConsultaServicosProgramados.actProcuraFiltrosTabelaExecute(
+  Sender: TObject);
+begin
+  frmPrincipal.CarregaFiltrosProcura(ColunasLayout);
+  actProcurar.Execute;
+end;
+
+procedure TFrmConsultaServicosProgramados.actProcurarExecute(
+  Sender: TObject);
+  var
+    SQLString,SQLBase,DataProcuraIncio,DataProcuraFim: String;
+begin
+  DataProcuraIncio:= (FormatDateTime('mm/dd/yyyy',dataInicio.Date));
+  DataProcuraFim:= (FormatDateTime('mm/dd/yyyy',dataFim.Date));
+  //=======================================================
+  SQLString:= frmPrincipal.SQLStringFiltroTabela(ColunasLayout,false);
+  if SQLString <> '' then
+    SQLString:= ' AND '+SQLString;
+  SQLBase:= 'SELECT tblProgramacaoDiaria.*, tblProgramacaoServico.* '+
+  'FROM tblProgramacaoDiaria INNER JOIN tblProgramacaoServico '+
+  'ON tblProgramacaoDiaria.idProgramacaoDiaria = '+
+  'tblProgramacaoServico.CodigoProgramacaoDiaria '+
+  'WHERE (DataProgramacao BETWEEN #'+DataProcuraIncio+'# and #'+DataProcuraFim+'#)'+
+  SQLString+' ORDER BY DataProgramacao;';
+  FrmPrincipal.ProcuraQuery(SQLBase,FrmDataModule.ADOQueryConsultaServicosProgramados,
+  StatusBar1);
+end;
+
+procedure TFrmConsultaServicosProgramados.DBGridServicosProgramadosDrawColumnCell(
+  Sender: TObject; const Rect: TRect; DataCol: Integer; Column: TColumn;
+  State: TGridDrawState);
+begin
+  FrmPrincipal.GridZebrado(DBGridServicosProgramados,ColunasLayout,State,Rect,DataCol,Column);
+end;
+
+procedure TFrmConsultaServicosProgramados.DBGridServicosProgramadosTitleClick(
+  Column: TColumn);
+begin
+  FrmPrincipal.configurarFiltro(0,Column.FieldName,IntToStr(Column.Index),
+  Column.ReadOnly,actFiltroInserir,actGridASC,actGridDESC,actGridDESC);
+  //======================================================
+  FrmPrincipal.titleGrid(ColunasLayout,
+  StatusBar1,'Colibri',FrmDataModule.ADOQueryConsultaServicosProgramados.SQL.Text);
+end;
+
+procedure TFrmConsultaServicosProgramados.FormClose(Sender: TObject;
+  var Action: TCloseAction);
+begin
+  Action:= caFree;
+  FrmConsultaServicosProgramados:=nil;
+end;
+
+procedure TFrmConsultaServicosProgramados.FormCreate(Sender: TObject);
+begin
+  //======ADICIONAR TABSET DO FOMRMDI=======
+  FrmPrincipal.MDIChildCreated(self.Handle);
+  dataInicio.Date:= IncDay(now,1);
+  dataFim.Date:= IncDay(now,1);
+  //Incicialização
+  FrmPrincipal.SetUpColunasLayout(DBGridServicosProgramados, ColunasLayout);
+  actProcurar.Execute;
+end;
+
+procedure TFrmConsultaServicosProgramados.FormDestroy(Sender: TObject);
+begin
+  FrmPrincipal.MDIChildDestroyed(self.Handle);
+end;
+
+procedure TFrmConsultaServicosProgramados.WMMDIACTIVATE(var msg: TWMMDIACTIVATE);
+var
+  active: TWinControl;
+  idx: Integer;
+begin
+  active := FindControl(msg.ActiveWnd) ;
+
+  if Assigned(active) then
+  begin
+    idx := FrmPrincipal.mdiChildrenTabs.Tabs.IndexOfObject(TObject(msg.ActiveWnd));
+    FrmPrincipal.mdiChildrenTabs.Tag := -1;
+    FrmPrincipal.mdiChildrenTabs.TabIndex := idx;
+    FrmPrincipal.mdiChildrenTabs.Tag := 0;
+  end;
+end;
+
+end.

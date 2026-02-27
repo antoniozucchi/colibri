@@ -1,0 +1,484 @@
+unit untWEB;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, ComCtrls, ToolWin, ImgList, StdCtrls,OleCtrls,
+  SHDocVw, Menus,WBFuncs,Registry, System.ImageList,ComOBJ,ShellAPI,
+  MSHTML, Vcl.ExtCtrls,Clipbrd, Vcl.Samples.Spin;
+
+type
+  TFrmWEB = class(TForm)
+    CoolBar1: TCoolBar;
+    ToolBar1: TToolBar;
+    btnvoltar: TToolButton;
+    btnavancar: TToolButton;
+    btnparar: TToolButton;
+    btnatualizar: TToolButton;
+    ToolButton10: TToolButton;
+    btnhome: TToolButton;
+    ToolButton11: TToolButton;
+    btnprocurar: TToolButton;
+    StatusBar1: TStatusBar;
+    ImageList1: TImageList;
+    btnimprimir: TToolButton;
+    Button1: TButton;
+    ProgressBar1: TProgressBar;
+    ComboBox1: TComboBox;
+    WebBrowser1: TWebBrowser;
+    OpenDialog1: TOpenDialog;
+    MemoBuscaEmpreagado: TMemo;
+    Splitter1: TSplitter;
+    procedure btnvoltarClick(Sender: TObject);
+    procedure btnavancarClick(Sender: TObject);
+    procedure btnpararClick(Sender: TObject);
+    procedure btnatualizarClick(Sender: TObject);
+    procedure btnhomeClick(Sender: TObject);
+    procedure btnprocurarClick(Sender: TObject);
+    procedure btnimprimirClick(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+    procedure ComboBox1KeyPress(Sender: TObject; var Key: Char);
+    procedure WebBrowser1CommandStateChange(Sender: TObject;
+      Command: Integer; Enable: WordBool);
+    procedure WebBrowser1ProgressChange(Sender: TObject; Progress,
+      ProgressMax: Integer);
+    procedure FormResize(Sender: TObject);
+    procedure WebBrowser1StatusTextChange(Sender: TObject;
+      const Text: WideString);
+    procedure WebBrowser1TitleChange(Sender: TObject;
+      const Text: WideString);
+    procedure Abrir1Click(Sender: TObject);
+    procedure SalvarComo1Click(Sender: TObject);
+    procedure Imprimir1Click(Sender: TObject);
+    procedure VisualizarImpresso1Click(Sender: TObject);
+    procedure Propriedades1Click(Sender: TObject);
+    procedure Sair1Click(Sender: TObject);
+    procedure Recortar1Click(Sender: TObject);
+    procedure Copiar1Click(Sender: TObject);
+    procedure Colar1Click(Sender: TObject);
+    procedure LocalizaNestaPgina1Click(Sender: TObject);
+    procedure ConfigurarPgina1Click(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure FormDestroy(Sender: TObject);
+    procedure WebBrowser1DocumentComplete(ASender: TObject;
+      const pDisp: IDispatch; const URL: OleVariant);
+    procedure WebBrowser1BeforeNavigate2(ASender: TObject;
+      const pDisp: IDispatch; const URL, Flags, TargetFrameName, PostData,
+      Headers: OleVariant; var Cancel: WordBool);
+  private
+    { Private declarations }
+    buscarTodos: Boolean;
+    gravarOnde: Integer;
+    procedure WMMDIACTIVATE(var msg: TWMMDIACTIVATE);message WM_MDIACTIVATE;
+    function buscaInfo(txtReferencia: String; somaLinha: Integer): String;
+  public
+    { Public declarations }
+    booleanCopiar: Boolean;
+    procedure procuraEmpregado(txtBusca: String;Fonte: Integer);
+  end;
+
+var
+  FrmWEB: TFrmWEB;
+
+implementation
+  uses untPrincipal,untDataModule,untImportacao,untExecutante;
+
+{$R *.dfm}
+
+procedure ExibirURLsVisitadas(Urls: TStrings);
+  var
+    Reg: TRegistry;
+    S: TStringList;
+    i: Integer;
+begin
+  Reg := TRegistry.Create;
+  try
+    Reg.RootKey := HKEY_CURRENT_USER;
+    if Reg.OpenKey(
+    'http://portalpetrobras.petrobras.com.br/PetrobrasPortal/appmanager/portal/'+
+    'desktop?_nfpb=true&_pageLabel=home_a_petrobras', False) then
+    begin
+      S := TStringList.Create;
+      try
+        reg.GetValueNames(S);
+        for i := 0 to S.Count - 1 do
+        begin
+          Urls.Add(reg.ReadString(S.Strings[i]));
+        end;
+      finally
+        S.Free;
+      end;
+      Reg.CloseKey;
+    end;
+  finally
+    Reg.Free;
+  end;
+end;
+
+procedure TFrmWEB.btnvoltarClick(Sender: TObject);
+begin
+  //Serve para Voltar à página anteriormente visitada.
+  webbrowser1.goback;
+end;
+
+function TFrmWEB.buscaInfo(txtReferencia: String; somaLinha: Integer): String;
+  var
+    i,linha,tamanho : Integer;
+begin
+  for i := 0 to MemoBuscaEmpreagado.Lines.Count - 1 do
+  begin
+    if Pos(txtReferencia,MemoBuscaEmpreagado.Lines[i]) > 0 then
+    begin
+      linha := i + somaLinha;
+      tamanho := Length(MemoBuscaEmpreagado.Lines.Strings[linha]);
+      Result:= Copy(MemoBuscaEmpreagado.Lines.Strings[linha],0,tamanho);
+      Break;
+    end;
+  end;
+end;
+
+procedure TFrmWEB.btnavancarClick(Sender: TObject);
+begin
+  //Serve para vançar para a próxima página.
+  webbrowser1.GoForward;
+end;
+
+procedure TFrmWEB.btnpararClick(Sender: TObject);
+begin
+  //Serve para parar a página que está sendo carregada.
+  webbrowser1.Stop;
+end;
+
+procedure TFrmWEB.btnatualizarClick(Sender: TObject);
+begin
+  //Serve para Atualizar a página Atual
+  webbrowser1.Refresh;
+end;
+
+procedure TFrmWEB.btnhomeClick(Sender: TObject);
+begin
+  //Serve para ir até a página inicial da internet
+  webbrowser1.GoHome;
+end;
+
+procedure TFrmWEB.btnprocurarClick(Sender: TObject);
+begin
+  // Essa função, abre a página de pesquisa padrão do IE.
+  webbrowser1.GoSearch;
+end;
+
+procedure TFrmWEB.btnimprimirClick(Sender: TObject);
+begin
+  WB_ShowPrintDialog(WebBrowser1);
+end;    
+
+procedure TFrmWEB.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+  Action:= caFree;
+  frmWEB:=nil;
+end;
+
+procedure TFrmWEB.FormCreate(Sender: TObject);
+begin
+  FrmPrincipal.MDIChildCreated(self.Handle);
+  webbrowser1.GoHome;
+  ExibirURLsVisitadas(combobox1.Items);
+  booleanCopiar:= false;
+  buscarTodos:= false;
+end;
+
+procedure TFrmWEB.FormDestroy(Sender: TObject);
+begin
+  FrmPrincipal.MDIChildDestroyed(self.Handle);
+end;
+
+procedure TFrmWEB.ComboBox1KeyPress(Sender:
+TObject; var Key: Char);
+begin
+  if (key=#13) then
+  begin
+    webbrowser1.Navigate(combobox1.Text);
+  end;
+end;
+
+procedure TFrmWEB.WebBrowser1BeforeNavigate2(ASender: TObject;
+  const pDisp: IDispatch; const URL, Flags, TargetFrameName, PostData,
+  Headers: OleVariant; var Cancel: WordBool);
+begin
+  {Ao Nevagar uma página, ele coloca automaticamente
+  o endereço dela no combobox, para sabermos que página
+  estamos entrando, o endereço da mesma}
+  combobox1.Text:=url;
+end;
+
+procedure TFrmWEB.WebBrowser1CommandStateChange(Sender: TObject;
+  Command: Integer; Enable: WordBool);
+begin
+  case Command of
+    CSC_NAVIGATEBACK:
+    begin
+      //Ativa e Desativa Automaticamente o Botão Voltar,
+      //Caso tenha alguma página para voltar
+      BtnVoltar.Enabled := Enable;
+    end;
+    CSC_NAVIGATEFORWARD:
+    begin
+      //Ativa e Desativa Automaticamente o Botão Avançar,
+      //Caso tenha alguma página para voltar
+      BtnAvancar.Enabled := Enable;
+    end;
+  end;
+end;
+
+procedure TFrmWEB.WebBrowser1DocumentComplete(ASender: TObject;
+  const pDisp: IDispatch; const URL: OleVariant);
+  var
+    vaIn, vaOut:  OleVariant;
+    NomeExecutante,txtFuncao,txtEmpresa,Chave,Matricula: String;
+begin
+  try
+    if (booleanCopiar = true) then
+    begin
+      //Copiar e colar no memo1
+      ((WebBrowser1.Document as IHTMLDocument2).body as IHTMLElement2).focus();
+      WebBrowser1.ExecWB(OLECMDID_SELECTALL, OLECMDEXECOPT_PROMPTUSER, vaIn, vaOut);
+      WB_Copy(webbrowser1);
+      MemoBuscaEmpreagado.Text:= Clipboard.AsText;
+      //Carregar resultado no banco de dados
+      if pos('Empregado',MemoBuscaEmpreagado.Lines.Text)<>0 then
+      begin
+        NomeExecutante:=  FrmPrincipal.TextoMaiusculo(buscaInfo('Empregado',3));
+        txtFuncao:=  FrmPrincipal.TextoMaiusculo(buscaInfo('Cargo',2));
+        txtEmpresa:=  FrmPrincipal.TextoMaiusculo(buscaInfo('Empresa',2));
+        Chave:=  FrmPrincipal.TextoMaiusculo(buscaInfo('Chave',2));
+        Matricula:=  FrmPrincipal.TextoMaiusculo(buscaInfo('Matrícula',2));
+
+        if NomeExecutante <> '' then
+        begin
+          case gravarOnde of
+            0://Tabela de Executantes
+            begin
+              try
+                FrmDataModule.ADOQueryExecutante.Edit;
+                FrmDataModule.DataSourceExecutante.DataSet.FieldByName('NomeExecutante').AsString:= NomeExecutante;
+                FrmDataModule.DataSourceExecutante.DataSet.FieldByName('txtFuncao').AsString:= txtFuncao;
+                FrmDataModule.DataSourceExecutante.DataSet.FieldByName('txtEmpresa').AsString:= txtEmpresa;
+                FrmDataModule.DataSourceExecutante.DataSet.FieldByName('Chave').AsString:= Chave;
+                FrmDataModule.DataSourceExecutante.DataSet.FieldByName('CodigoSAP').AsString:= Matricula;
+                FrmDataModule.DataSourceExecutante.DataSet.FieldByName('AvaliadoPor').AsString:= FrmPrincipal.logChave;
+                FrmDataModule.DataSourceExecutante.DataSet.FieldByName('DataAtualizacao').AsDateTime:= now;
+                FrmDataModule.DataSourceExecutante.DataSet.FieldByName('Computador').AsString:= FrmPrincipal.logMaquina;
+                FrmDataModule.DataSourceExecutante.DataSet.FieldByName('booleanBuscaEmpregado').AsBoolean:= true;
+                FrmDataModule.ADOQueryExecutante.Post;
+                FrmExecutante.SetFocus;
+                FrmExecutante.DBGridExecutante.SetFocus;
+              except
+              end;
+            end;
+            1://Tabela de importação
+            begin
+              FrmImportacao.StringGridND.Cells[0,FrmImportacao.StringGridND.Row]:= NomeExecutante;
+              FrmImportacao.StringGridND.Cells[2,FrmImportacao.StringGridND.Row]:= txtFuncao;
+              FrmImportacao.StringGridND.Cells[3,FrmImportacao.StringGridND.Row]:= txtEmpresa;
+            end;
+          end;
+        end
+        else
+        begin
+          FrmExecutante.StatusBarExecutntes.Panels[5].Text:=
+          'Encontrado mais de um resultado!';
+          FrmPrincipal.AutoFitStatusBar(FrmExecutante.StatusBarExecutntes);
+        end;
+      end
+      else if pos('Prestador',MemoBuscaEmpreagado.Lines.Text)<>0 then
+      begin
+        NomeExecutante:=  FrmPrincipal.TextoMaiusculo(buscaInfo('Prestador',3));
+        txtEmpresa:=  FrmPrincipal.TextoMaiusculo(buscaInfo('Empresa Contratada',2));
+        Chave:=  FrmPrincipal.TextoMaiusculo(buscaInfo('Chave',2));
+        Matricula:=  FrmPrincipal.TextoMaiusculo(buscaInfo('Identificador',2));
+        if NomeExecutante <> '' then
+        begin
+          case gravarOnde of
+            0://Tabela de Executantes
+            begin
+              try
+                FrmDataModule.ADOQueryExecutante.Edit;
+                FrmDataModule.DataSourceExecutante.DataSet.FieldByName('NomeExecutante').AsString:= NomeExecutante;
+                FrmDataModule.DataSourceExecutante.DataSet.FieldByName('txtEmpresa').AsString:= txtEmpresa;
+                FrmDataModule.DataSourceExecutante.DataSet.FieldByName('Chave').AsString:= Chave;
+                FrmDataModule.DataSourceExecutante.DataSet.FieldByName('CodigoSAP').AsString:= Matricula;
+                FrmDataModule.DataSourceExecutante.DataSet.FieldByName('AvaliadoPor').AsString:= FrmPrincipal.logChave;
+                FrmDataModule.DataSourceExecutante.DataSet.FieldByName('DataAtualizacao').AsDateTime:= now;
+                FrmDataModule.DataSourceExecutante.DataSet.FieldByName('Computador').AsString:= FrmPrincipal.logMaquina;
+                FrmDataModule.DataSourceExecutante.DataSet.FieldByName('booleanBuscaEmpregado').AsBoolean:= true;
+                FrmDataModule.ADOQueryExecutante.Post;
+                FrmExecutante.SetFocus;
+                FrmExecutante.DBGridExecutante.SetFocus;
+              except
+              end;
+            end;
+            1://Tabela de importação
+            begin
+              FrmImportacao.StringGridND.Cells[0,FrmImportacao.StringGridND.Row]:= NomeExecutante;
+              FrmImportacao.StringGridND.Cells[3,FrmImportacao.StringGridND.Row]:= txtEmpresa;
+            end;
+          end;
+        end
+        else
+        begin
+          ShowMessage('Encontrado mais de um resultado!'+#13+'Necessário analisar página completa');
+          FrmWEB.Show;
+        end;
+      end
+      else
+      begin
+        FrmDataModule.ADOQueryExecutante.Edit;
+        FrmDataModule.DataSourceExecutante.DataSet.FieldByName('booleanBuscaEmpregado').AsBoolean:= false;
+        FrmDataModule.ADOQueryExecutante.Post;
+        FrmExecutante.SetFocus;
+        FrmExecutante.DBGridExecutante.SetFocus;
+      end;
+    end;
+  finally
+    booleanCopiar:= false;
+  end;
+end;
+
+procedure TFrmWEB.WebBrowser1ProgressChange
+(Sender: TObject; Progress,ProgressMax: Integer);
+begin
+{Ele faz um rotina para saber se o valor Maximo do
+Progressbar é maior que 1 e o valor minimo tbem
+se for, então ele faz a rotina}
+  If (Progress>=1) and (ProgressMax>1) then
+  begin
+    //Ele tira uma valor percentual para colocar
+    //no Progressbar
+    ProgressBar1.Position := Round((Progress * 100) Div ProgressMax);
+    ProgressBar1.Visible  := True;
+  end
+  else
+  begin
+    ProgressBar1.Position := 1;
+    ProgressBar1.Visible  := False;
+  end;
+end;
+
+procedure TFrmWEB.FormResize(Sender: TObject);
+var
+  r: TRect;
+const
+  SB_GETRECT = WM_USER + 10;
+begin
+  // Set Progressbar Position
+  Statusbar1.Perform(SB_GETRECT, 1, Integer(@R));
+  ProgressBar1.Parent := Statusbar1;
+  ProgressBar1.SetBounds(r.Left, r.Top,
+  r.Right - r.Left - 5, r.Bottom - r.Top);
+end;
+
+procedure TFrmWEB.WebBrowser1StatusTextChange(Sender:
+TObject;
+  const Text: WideString);
+begin
+  StatusBar1.Panels[0].Text:=text;
+end;
+
+procedure TFrmWEB.WebBrowser1TitleChange(Sender: TObject;
+  const Text: WideString);
+begin
+  frmWEB.Caption:= text;
+end;
+
+procedure TFrmWEB.WMMDIACTIVATE(var msg: TWMMDIACTIVATE);
+var
+  active: TWinControl;
+  idx: Integer;
+begin
+  active := FindControl(msg.ActiveWnd) ;
+
+  if Assigned(active) then
+  begin
+    idx := FrmPrincipal.mdiChildrenTabs.Tabs.IndexOfObject(TObject(msg.ActiveWnd));
+    FrmPrincipal.mdiChildrenTabs.Tag := -1;
+    FrmPrincipal.mdiChildrenTabs.TabIndex := idx;
+    FrmPrincipal.mdiChildrenTabs.Tag := 0;
+  end;
+end;
+
+procedure TFrmWEB.procuraEmpregado(txtBusca: String;Fonte: Integer);
+begin
+  //Selecionar toda a página e copiar
+  booleanCopiar:= true;
+  //Seleção do radiobutton Localizador de Pessoas
+  WebBrowser1.OleObject.Document.all.Item('radio-lope',0).click;
+  //preencher valor de pesquisa
+  WebBrowser1.OleObject.Document.all.Item('buscar',0).value := txtBusca;
+  //Clicar no botão de busca
+  WebBrowser1.OleObject.Document.all.Item('botao',0).click;
+  case Fonte of
+    0: gravarOnde:= 0;
+    1: gravarOnde:= 1;
+  end;
+end;
+
+procedure TFrmWEB.Abrir1Click(Sender: TObject);
+begin
+  if OpenDialog1.Execute then
+   webbrowser1.Navigate(OpenDialog1.FileName)
+  else
+   exit;
+end;
+
+procedure TFrmWEB.SalvarComo1Click(Sender: TObject);
+begin
+  WB_Save(WebBrowser1);
+end;
+
+procedure TFrmWEB.Imprimir1Click(Sender: TObject);
+begin
+  WB_ShowPrintDialog(WebBrowser1);
+end;
+
+procedure TFrmWEB.VisualizarImpresso1Click(Sender: TObject);
+begin
+  WB_ShowPrintPreview(webbrowser1);
+end;
+
+procedure TFrmWEB.Propriedades1Click(Sender: TObject);
+begin
+  WB_ShowPropertiesDialog(webbrowser1);
+end;
+
+procedure TFrmWEB.Sair1Click(Sender: TObject);
+begin
+application.Terminate;
+end;
+
+procedure TFrmWEB.Recortar1Click(Sender: TObject);
+begin
+  WB_Cut(webbrowser1);
+end;
+
+procedure TFrmWEB.Copiar1Click(Sender: TObject);
+begin
+  WB_Copy(webbrowser1);
+end;
+
+procedure TFrmWEB.Colar1Click(Sender: TObject);
+begin
+  WB_paste(webbrowser1);
+end;
+
+procedure TFrmWEB.LocalizaNestaPgina1Click(Sender: TObject);
+begin
+  WB_ShowFindDialog(webbrowser1);
+end;
+
+procedure TFrmWEB.ConfigurarPgina1Click(Sender: TObject);
+begin
+  WB_ShowPageSetup(webbrowser1);
+end;
+
+end.

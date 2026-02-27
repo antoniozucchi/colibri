@@ -1,0 +1,48 @@
+unit untFrmConfigRT;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ToolWin, Vcl.ComCtrls, Vcl.ExtCtrls,
+  Vcl.DBCtrls, Vcl.StdCtrls, Vcl.Buttons, Vcl.Mask;
+
+type
+  TFrmConfigRT = class(TForm)
+    ToolBar1: TToolBar;
+    GridPanel2: TGridPanel;
+    Label3: TLabel;
+    Label4: TLabel;
+    DBNavigator1: TDBNavigator;
+    DBEdit3: TDBEdit;
+    DBEdit4: TDBEdit;
+    Label5: TLabel;
+    DBEdit5: TDBEdit;
+    GridPanel3: TGridPanel;
+    Label7: TLabel;
+    DBEdit7: TDBEdit;
+    Label8: TLabel;
+    DBEdit8: TDBEdit;
+    Label1: TLabel;
+    DBEdit1: TDBEdit;
+    Label9: TLabel;
+    DBEdit2: TDBEdit;
+    Label6: TLabel;
+    DBEdit6: TDBEdit;
+    Label2: TLabel;
+    DBEdit9: TDBEdit;
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  FrmConfigRT: TFrmConfigRT;
+
+implementation
+  uses untDataModule;
+
+{$R *.dfm}
+
+end.

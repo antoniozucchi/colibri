@@ -1,0 +1,2929 @@
+unit untImportacao;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, SysUtils, System.Variants, System.Classes,
+  Vcl.Graphics,Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ComCtrls, Vcl.ToolWin,
+  Vcl.PlatformDefaultStyleActnCtrls, System.Actions, Vcl.ActnList, Vcl.ActnMan,
+  Vcl.ExtCtrls, Data.DB, Vcl.Grids, Vcl.DBGrids, Vcl.StdCtrls,ComOBJ,
+  Data.Win.ADODB, Vcl.Buttons,UITYPES, Vcl.DBCtrls,DateUtils,Math,ShellAPI,
+  Vcl.Menus,ActiveX, Vcl.Mask, Vcl.TabNotBk;
+
+type
+  TFrmImportacao = class(TForm)
+    PageControlImportacao: TPageControl;
+    TabSheet1: TTabSheet;
+    TabSheet2: TTabSheet;
+    ToolBar1: TToolBar;
+    ActionManager1: TActionManager;
+    Panel7: TPanel;
+    actEnderecoExecutanteAPLAT: TAction;
+    OpenDialog1: TOpenDialog;
+    actImportarExecutanteAPLAT: TAction;
+    actExcelExecutanteAPLAT: TAction;
+    DBGridExecutanteSAP: TDBGrid;
+    ToolBar2: TToolBar;
+    actExcelExecutanteSAP: TAction;
+    actImportarExecutanteSAP: TAction;
+    actEnderecoExecutanteSAP: TAction;
+    actExecutanteSAP: TAction;
+    actEnderecoCarteira: TAction;
+    actExecutanteAPLAT: TAction;
+    Panel1: TPanel;
+    Panel2: TPanel;
+    actLocalizarAPLATExecutante: TAction;
+    actLocalizarSAPExecutante: TAction;
+    actLocalizarCarteira: TAction;
+    Edit4: TEdit;
+    btnAbrirAPLAT: TSpeedButton;
+    edtEnderecoExecutanteAPLAT: TEdit;
+    Edit3: TEdit;
+    btnAbrirSAP: TSpeedButton;
+    edtEnderecoExecutanteSAP: TEdit;
+    BitBtn3: TBitBtn;
+    btnExecSAP: TBitBtn;
+    actAnalisaExecutanteAPLAT: TAction;
+    actAnalisaExecutanteSAP: TAction;
+    btnExecAPLAT: TBitBtn;
+    btnAnaliseExecSAP: TBitBtn;
+    StatusBarExecSAP: TStatusBar;
+    btnNaoDefinidoAPLAT: TBitBtn;
+    BitBtn8: TBitBtn;
+    actExcelCarteira: TAction;
+    actExcluirAPLAT_Executantes: TAction;
+    btnExcluirAPLAT: TBitBtn;
+    actExcluirSAP_Executantes: TAction;
+    btnExcluirSAP: TBitBtn;
+    actExcluirSAP_Carteira: TAction;
+    actND_APLAT: TAction;
+    btnAnaliseExecAPLAT: TBitBtn;
+    btnNaoDefinidoSAP: TBitBtn;
+    actND_SAP: TAction;
+    PanelAjuda: TPanel;
+    PanelTituloAjuda: TPanel;
+    SpeedButton4: TSpeedButton;
+    ToolBar4: TToolBar;
+    StringGridND: TStringGrid;
+    actExcluirLinha: TAction;
+    actInserirExecutantes: TAction;
+    ComboBoxEmpresa: TComboBox;
+    ComboBoxTipoEtapaServico: TComboBox;
+    ComboBoxFuncao: TComboBox;
+    RadioGroupOrigem: TRadioGroup;
+    BitBtn4: TBitBtn;
+    BitBtn5: TBitBtn;
+    Panel4: TPanel;
+    StatusBarExecAPLAT: TStatusBar;
+    DBGridExecutanteAPLAT: TDBGrid;
+    Splitter1: TSplitter;
+    actCarteiraTipoEtapaServico: TAction;
+    actExcluirSAP_FO: TAction;
+    actEnderecoNotaManutencao: TAction;
+    actCarteiraPlataforma: TAction;
+    actNotaManutencao: TAction;
+    actNOTATipoEtapaServico: TAction;
+    actExcelForaOperacao: TAction;
+    actNOTAPlataforma: TAction;
+    actLocalizarNotaManutencao: TAction;
+    actEnderecoTextoLongoOM: TAction;
+    actBuscaEmpregado: TAction;
+    BitBtn11: TBitBtn;
+    BitBtn13: TBitBtn;
+    actInterromper: TAction;
+    ColunasAPLAT: TStringGrid;
+    ColunasT31: TStringGrid;
+    actFiltroInserir: TAction;
+    actGridASC: TAction;
+    actGridDESC: TAction;
+    actLimparFiltros: TAction;
+    actFiltrosTabela: TAction;
+    actProcuraFiltrosTabela: TAction;
+    BitBtn14: TBitBtn;
+    BitBtn17: TBitBtn;
+    BitBtn18: TBitBtn;
+    BitBtn19: TBitBtn;
+    actImportarLocalInstalacao: TAction;
+    actExcelLocalInstalacao: TAction;
+    actEnderecoLocalInstalacao: TAction;
+    actLocalAnalisa: TAction;
+    actLocalizarLocalInstalacao: TAction;
+    actExcluirLocalInstalacao: TAction;
+    actLocalInstalacao: TAction;
+    actOrdemManutencaoSAP: TAction;
+    actVetorLocalCritico: TAction;
+    actEnderecoTextoLongoOP: TAction;
+    actNOTA_SIGM: TAction;
+    actLocalizarItemManutencao: TAction;
+    actNOTA_Padrao: TAction;
+    actImportarNotaManutencao: TAction;
+    actImportarOrdemManutencao: TAction;
+    actNOTASIGM: TAction;
+    actAnalisaHierarquia: TAction;
+    actProcurar: TAction;
+    actTextoLongoOP: TAction;
+    actTextoLongoOM: TAction;
+    actLocalizarRTI: TAction;
+    actSubstituirMemoriaLocal: TAction;
+    actCopiarMemoriaLocal: TAction;
+    actLocalizarICPM: TAction;
+    actLocalizarIARI: TAction;
+    actLocalizarICPI: TAction;
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure FormCreate(Sender: TObject);
+    procedure FormDestroy(Sender: TObject);
+    procedure actEnderecoExecutanteAPLATExecute(Sender: TObject);
+    procedure actImportarExecutanteAPLATExecute(Sender: TObject);
+    procedure actExcelExecutanteAPLATExecute(Sender: TObject);
+    procedure DBGridExecutanteAPLATDrawColumnCell(Sender: TObject;
+      const Rect: TRect; DataCol: Integer; Column: TColumn;
+      State: TGridDrawState);
+    procedure DBGridExecutanteSAPDrawColumnCell(Sender: TObject;
+      const Rect: TRect; DataCol: Integer; Column: TColumn;
+      State: TGridDrawState);
+    procedure actExcelExecutanteSAPExecute(Sender: TObject);
+    procedure actImportarExecutanteSAPExecute(Sender: TObject);
+    procedure actEnderecoExecutanteSAPExecute(Sender: TObject);
+    procedure actExecutanteSAPExecute(Sender: TObject);
+    procedure actEnderecoCarteiraExecute(Sender: TObject);
+    procedure actExecutanteAPLATExecute(Sender: TObject);
+    procedure DBGridCarteiraTrabalhoDrawColumnCell(Sender: TObject;
+      const Rect: TRect; DataCol: Integer; Column: TColumn;
+      State: TGridDrawState);
+    procedure actLocalizarAPLATExecutanteExecute(Sender: TObject);
+    procedure actLocalizarSAPExecutanteExecute(Sender: TObject);
+    procedure actLocalizarCarteiraExecute(Sender: TObject);
+    procedure actAnalisaExecutanteSAPExecute(Sender: TObject);
+    procedure actAnalisaExecutanteAPLATExecute(Sender: TObject);
+    procedure actExcelCarteiraExecute(Sender: TObject);
+    procedure actExcluirAPLAT_ExecutantesExecute(Sender: TObject);
+    procedure actExcluirSAP_ExecutantesExecute(Sender: TObject);
+    procedure actExcluirSAP_CarteiraExecute(Sender: TObject);
+    procedure actND_APLATExecute(Sender: TObject);
+    procedure SpeedButton4Click(Sender: TObject);
+    procedure PanelTituloAjudaMouseDown(Sender: TObject; Button: TMouseButton;
+      Shift: TShiftState; X, Y: Integer);
+    procedure StringGridNDSelectCell(Sender: TObject; ACol, ARow: Integer;
+      var CanSelect: Boolean);
+    procedure ComboBoxTipoEtapaServicoCloseUp(Sender: TObject);
+    procedure actExcluirLinhaExecute(Sender: TObject);
+    procedure actInserirExecutantesExecute(Sender: TObject);
+    procedure actND_SAPExecute(Sender: TObject);
+    procedure ComboBoxEmpresaCloseUp(Sender: TObject);
+    procedure ComboBoxFuncaoCloseUp(Sender: TObject);
+    procedure StringGridNDFixedCellClick(Sender: TObject; ACol, ARow: Integer);
+    procedure actCarteiraTipoEtapaServicoExecute(Sender: TObject);
+    procedure actExcluirSAP_FOExecute(Sender: TObject);
+    procedure actCarteiraPlataformaExecute(Sender: TObject);
+    procedure actNotaManutencaoExecute(Sender: TObject);
+    procedure actNOTATipoEtapaServicoExecute(Sender: TObject);
+    procedure actExcelForaOperacaoExecute(Sender: TObject);
+    procedure actEnderecoNotaManutencaoExecute(Sender: TObject);
+    procedure DBGridNotaManutencaoDrawColumnCell(Sender: TObject;
+      const Rect: TRect; DataCol: Integer; Column: TColumn;
+      State: TGridDrawState);
+    procedure actNOTAPlataformaExecute(Sender: TObject);
+    procedure actLocalizarNotaManutencaoExecute(Sender: TObject);
+    procedure actEnderecoTextoLongoOMExecute(Sender: TObject);
+    procedure actBuscaEmpregadoExecute(Sender: TObject);
+    procedure actInterromperExecute(Sender: TObject);
+    procedure Timer1Timer(Sender: TObject);
+    procedure actFiltroInserirExecute(Sender: TObject);
+    procedure actGridASCExecute(Sender: TObject);
+    procedure actGridDESCExecute(Sender: TObject);
+    procedure actLimparFiltrosExecute(Sender: TObject);
+    procedure actFiltrosTabelaExecute(Sender: TObject);
+    procedure actProcuraFiltrosTabelaExecute(Sender: TObject);
+    procedure DBGridExecutanteAPLATTitleClick(Column: TColumn);
+    procedure DBGridExecutanteSAPTitleClick(Column: TColumn);
+    procedure DBGridCarteiraTrabalhoTitleClick(Column: TColumn);
+    procedure DBGridNotaManutencaoTitleClick(Column: TColumn);
+    procedure actExcelLocalInstalacaoExecute(Sender: TObject);
+    procedure actEnderecoLocalInstalacaoExecute(Sender: TObject);
+    procedure actLocalAnalisaExecute(Sender: TObject);
+    procedure actLocalizarLocalInstalacaoExecute(Sender: TObject);
+    procedure actExcluirLocalInstalacaoExecute(Sender: TObject);
+    procedure actImportarLocalInstalacaoExecute(Sender: TObject);
+    procedure actLocalInstalacaoExecute(Sender: TObject);
+    procedure DBGridLocalInstalacaoDrawColumnCell(Sender: TObject;
+      const Rect: TRect; DataCol: Integer; Column: TColumn;
+      State: TGridDrawState);
+    procedure DBGridLocalInstalacaoTitleClick(Column: TColumn);
+    procedure actOrdemManutencaoSAPExecute(Sender: TObject);
+    procedure actVetorLocalCriticoExecute(Sender: TObject);
+    procedure actNOTA_SIGMExecute(Sender: TObject);
+    procedure actNOTA_PadraoExecute(Sender: TObject);
+    procedure actImportarNotaManutencaoExecute(Sender: TObject);
+    procedure actImportarOrdemManutencaoExecute(Sender: TObject);
+    procedure actNOTASIGMExecute(Sender: TObject);
+    procedure actAnalisaHierarquiaExecute(Sender: TObject);
+    procedure actProcurarExecute(Sender: TObject);
+    procedure actTextoLongoOMExecute(Sender: TObject);
+    procedure actSubstituirMemoriaLocalExecute(Sender: TObject);
+    procedure actCopiarMemoriaLocalExecute(Sender: TObject);
+    type
+      TExecCadastro = record
+        NomeExecutante,TipoEtapaServico,Funcao,Empresa,Documento: String;
+      end;
+  private
+    { Private declarations }
+    Interromper,tempoExcedido: Boolean;
+    TabIndexPageControl: Integer;
+    procedure WMMDIACTIVATE(var msg: TWMMDIACTIVATE);message WM_MDIACTIVATE;
+    procedure editEndereco(edt: TEdit);
+    function AnalisaExecutanteAPLAT(CodigoSAP: String): TExecCadastro;
+    function AnalisaExecutanteSAP(CodigoSAP,Documento: String): TExecCadastro;
+    procedure AnalisaTipoEtapaServico_BooleanCritico(DataSource: TDataSource;ADOQuery:
+    TADOQuery;CentroTrabalho: String; Tratamento: Integer);
+    procedure preenchePlataforma_LocalInstalacaoSAP(Plataforma,
+    LocalInstalacaoConsulta,Tabela,Fonte: String;booleanRegistro: Boolean);
+    function VerificaCodigoTipoEtapaServico(TipoEtapaServico: String): Integer;
+    function VerificaClasseBCVT(Classe: String): Boolean;
+    procedure PlataformaTabela(Tabela,Fonte: String;booleanRegistro: Boolean);
+
+  public
+    { Public declarations }
+  end;
+
+var
+  FrmImportacao: TFrmImportacao;
+
+implementation
+  uses untDataModule,untPrincipal, untWEB;
+
+{$R *.dfm}
+
+procedure TFrmImportacao.actOrdemManutencaoSAPExecute(Sender: TObject);
+  var
+    enderecoDB,enderecoExcel: String;
+    ListaColunas: TStringList;
+begin
+  ListaColunas:=TStringList.Create;
+  ListaColunas.Add('OrdemManutencao');
+  ListaColunas.Add('Sala');
+  ListaColunas.Add('CampoSelecao');
+  ListaColunas.Add('DataBaseInicio');
+  ListaColunas.Add('DataBaseFim');
+  ListaColunas.Add('Operacao');
+  ListaColunas.Add('LocalInstalacao');
+  ListaColunas.Add('DenominacaoLocalInstalacao');
+  ListaColunas.Add('TextoBreveOM');
+  ListaColunas.Add('TextoBreveOP');
+  ListaColunas.Add('CentroTrabalhoOM');
+  ListaColunas.Add('CentroTrabalhoOP');
+  ListaColunas.Add('Prioridade');
+  ListaColunas.Add('TipoAtvMnt');
+  ListaColunas.Add('StatusUsuarioOM');
+  ListaColunas.Add('StatusSistemaOM');
+  ListaColunas.Add('StatusSistemaOP');
+  ListaColunas.Add('CriadoPor');
+  ListaColunas.Add('PlanoManutencao');
+  ListaColunas.Add('NotaManutencao');
+  ListaColunas.Add('Equipamento');
+  ListaColunas.Add('ImpactoFalha');
+  ListaColunas.Add('CodigoABC');
+  ListaColunas.Add('TotalReal');
+  ListaColunas.Add('TotalPlanejado');
+  ListaColunas.Add('Trabalho');
+  ListaColunas.Add('undTrabalho');
+  ListaColunas.Add('DuracaoNormal');
+  ListaColunas.Add('undDuracaoNormal');
+  ListaColunas.Add('DataReferencia');
+  ListaColunas.Add('DataEntrada');
+  ListaColunas.Add('ChaveControle');
+  ListaColunas.Add('StatusUsuarioOP');
+  ListaColunas.Add('NumExecTrabalho');
+  ListaColunas.Add('TrabalhoReal');
+  ListaColunas.Add('DataRealInicio');
+  ListaColunas.Add('DataRealFim');
+  ListaColunas.Add('GrupoPlanejamento');
+  ListaColunas.Add('InicioProgramadoOM');
+  ListaColunas.Add('FimProgramadoOM');
+  ListaColunas.Add('InicioProgramadoOP');
+  ListaColunas.Add('FimProgramadoOP');
+  ListaColunas.Add('CPO');
+  enderecoDB := ExtractFilePath(Application.ExeName)+'TEMPMemoria.mdb';
+  enderecoExcel:= edtEnderecoCarteiraTrabalho.Text;
+  FrmPrincipal.ImportExcelAcess(enderecoExcel,enderecoDB,'tblCarteiraTrabalho',
+  ListaColunas,FrmDataModule.ADOQueryImportarCarteiraTrabalho);
+  actLocalizarCarteira.Execute;
+end;
+
+procedure TFrmImportacao.actCarteiraTipoEtapaServicoExecute(Sender: TObject);
+  var
+    txtTipoEtapaServicoOP,txtTipoEtapaServicoOM,
+    ImportadoPor,ComputadorImportacao,ImpactoFalha: String;
+    DataImportacao: TDateTime;
+begin
+  ImportadoPor:= FrmPrincipal.logChave;
+  DataImportacao:= now;
+  ComputadorImportacao:= FrmPrincipal.logMaquina;
+  FrmDataModule.ADOQueryAnalisarTipoEtapaServico.Active:= false;
+  FrmDataModule.ADOQueryAnalisarTipoEtapaServico.Active:= true;
+  FrmPrincipal.ProgressBarIncializa(FrmDataModule.
+  ADOQueryAnalisarTipoEtapaServico.RecordCount,
+  'Analisando "Tipo de Etapa de Serviço"...');
+  actInterromper.Enabled:= true;
+  FrmDataModule.ADOQueryAnalisarTipoEtapaServico.First;
+  while not FrmDataModule.ADOQueryAnalisarTipoEtapaServico.Eof do
+  begin
+    //Interromper Processo
+    Application.ProcessMessages;
+    if Interromper and (Application.MessageBox(PChar('Deseja realmente cancelar o processo?'),
+    '.::ATENÇÃO::.',36) = 6) then
+    begin
+      Interromper := False;
+      break;
+    end
+    else
+      Interromper := False;
+    //=========================================
+    txtTipoEtapaServicoOP:= FrmPrincipal.verificaTipoEtapaServico(FrmDataModule.
+    DataSourceAnalisarTipoEtapaServico.DataSet.FieldByName('CentroTrabalhoOP').asString);
+    txtTipoEtapaServicoOM:= FrmPrincipal.verificaTipoEtapaServico(FrmDataModule.
+    DataSourceAnalisarTipoEtapaServico.DataSet.FieldByName('CentroTrabalhoOM').asString);
+    ImpactoFalha:= FrmPrincipal.verificaImpactoFalha(FrmDataModule.
+    DataSourceAnalisarTipoEtapaServico.DataSet.FieldByName('LocalInstalacao').asString);
+    //=========================================
+    FrmDataModule.ADOQueryAnalisarTipoEtapaServico.Edit;
+    FrmDataModule.DataSourceAnalisarTipoEtapaServico.DataSet.
+    FieldByName('txtTipoEtapaServicoOP').asString:= txtTipoEtapaServicoOP;
+    FrmDataModule.DataSourceAnalisarTipoEtapaServico.DataSet.
+    FieldByName('txtTipoEtapaServicoOM').asString:= txtTipoEtapaServicoOM;
+    FrmDataModule.DataSourceAnalisarTipoEtapaServico.DataSet.
+    FieldByName('TipoOperacao').AsString :=
+    FrmPrincipal.verificaOperacao(FrmDataModule.DataSourceAnalisarTipoEtapaServico.DataSet.
+    FieldByName('StatusSistemaOP').asString);
+    FrmDataModule.DataSourceAnalisarTipoEtapaServico.DataSet.
+    FieldByName('ImpactoFalha').AsString := ImpactoFalha;
+    if ImpactoFalha = '6' then
+      FrmDataModule.DataSourceAnalisarTipoEtapaServico.DataSet.
+      FieldByName('BooleanCritico').AsBoolean := true;
+    //Usuário
+    FrmDataModule.DataSourceAnalisarTipoEtapaServico.DataSet.
+    FieldByName('ImportadoPor').asString:= ImportadoPor;
+    FrmDataModule.DataSourceAnalisarTipoEtapaServico.DataSet.
+    FieldByName('DataImportacao').AsDateTime:= DataImportacao;
+    FrmDataModule.DataSourceAnalisarTipoEtapaServico.DataSet.
+    FieldByName('ComputadorImportacao').AsString:= ComputadorImportacao;
+    FrmDataModule.ADOQueryAnalisarTipoEtapaServico.Post;
+    FrmDataModule.ADOQueryAnalisarTipoEtapaServico.Next;
+    FrmPrincipal.ProgressBarIncremento(1);
+  end;
+  FrmPrincipal.ProgressBarAtualizar;
+  actInterromper.Enabled:= false;
+  //FrmPrincipal.actUploadDBMemoria.Execute;
+  actLimparFiltros.Execute;
+end;
+
+procedure TFrmImportacao.actCopiarMemoriaLocalExecute(Sender: TObject);
+  var
+    Caminho_Copia,enderecoMemoria: String;
+begin
+  FrmDataModule.ADOQueryColibri.Active:= false;
+  FrmDataModule.ADOQueryColibri.Active:= true;
+  enderecoMemoria := FrmPrincipal.Caption;
+  enderecoMemoria:= ExtractFilePath(enderecoMemoria)+'\dbMemoria.mdb';
+  Caminho_Copia := ExtractFilePath(Application.ExeName) + 'TEMPMemoria.mdb';
+  DeleteFile(Caminho_Copia);
+  CopyFile(PChar(enderecoMemoria), PChar(Caminho_Copia), false);
+  FrmPrincipal.conectarBDDireto(Caminho_Copia,FrmDataModule.ADOConnectionMemoria);
+end;
+
+procedure TFrmImportacao.actNOTATipoEtapaServicoExecute(Sender: TObject);
+begin
+  AnalisaTipoEtapaServico_BooleanCritico(FrmDataModule.DataSourceImportarNotaManutencao,
+  FrmDataModule.ADOQueryImportarNotaManutencao,'CentroTrabalhoOM',0);
+end;
+
+procedure TFrmImportacao.actNOTA_PadraoExecute(Sender: TObject);
+  var
+    TAGBusca,SQLString,SQLBase,PlataformaBusca,SQLPlataforma: String;
+    PrazoToleravel: Integer;
+begin
+  FrmDataModule.ADOQueryPadraoLEC.Active:= False;
+  FrmDataModule.ADOQueryPadraoLEC.Active:= True;
+  FrmPrincipal.ProgressBarIncializa(FrmDataModule.ADOQueryPadraoLEC.RecordCount,
+  'Analisando Padrão LEC...');
+  FrmDataModule.ADOQueryPadraoLEC.First;
+  while not FrmDataModule.ADOQueryPadraoLEC.Eof do
+  begin
+    TAGBusca:= FrmDataModule.DataSourcePadraoLEC.DataSet.FieldByName('TAGBusca').AsString;
+    PlataformaBusca:= FrmDataModule.DataSourcePadraoLEC.DataSet.FieldByName('PlataformaBusca').AsString;
+    if TAGBusca <> '' then
+    begin
+      SQLPlataforma:= '';
+      if PlataformaBusca <> 'Todas' then
+      begin
+       SQLPlataforma:= 'AND'+FrmPrincipal.palavraBusca(SQLPlataforma,'Plataforma','Exato',PlataformaBusca,'AND');
+      end;
+      SQLString:= FrmPrincipal.palavraBuscaAND('DenominacaoLocalInstalacao',TAGBusca);
+      SQLBase:= 'SELECT tblNotaManutencao.* FROM tblNotaManutencao '+
+      'WHERE ((TextoBreveNOTA LIKE "FO:%")AND(FimAvaria IS NULL)AND(BooleanCritico = True))AND'+
+      SQLString+SQLPlataforma+';';
+      FrmDataModule.ADOQueryTemporarioDBMemoria.Close;
+      FrmDataModule.ADOQueryTemporarioDBMemoria.SQL.Clear;
+      FrmDataModule.ADOQueryTemporarioDBMemoria.SQL.Add(SQLBase);
+      FrmDataModule.ADOQueryTemporarioDBMemoria.Open;
+      while not FrmDataModule.ADOQueryTemporarioDBMemoria.Eof do
+      begin
+        try
+          PrazoToleravel:= FrmDataModule.DataSourcePadraoLEC.DataSet.FieldByName('PrazoToleravel').AsInteger;
+        except
+          PrazoToleravel:= 0;
+        end;
+        FrmDataModule.ADOQueryTemporarioDBMemoria.Edit;
+        FrmDataModule.DataSourceTemporarioDBMemoria.DataSet.FieldByName('BooleanSIGM').AsBoolean:= True;
+        FrmDataModule.DataSourceTemporarioDBMemoria.DataSet.FieldByName('Salvaguarda').AsString:=
+        FrmDataModule.DataSourcePadraoLEC.DataSet.FieldByName('Salvaguarda').AsString;
+        FrmDataModule.DataSourceTemporarioDBMemoria.DataSet.FieldByName('AcaoAdotadaIndisponibilidade').AsString:=
+        FrmDataModule.DataSourcePadraoLEC.DataSet.FieldByName('AcaoAdotadaIndisponibilidade').AsString;
+        FrmDataModule.DataSourceTemporarioDBMemoria.DataSet.FieldByName('PrazoToleravel').AsInteger:= PrazoToleravel;
+        if PrazoToleravel = 0 then
+          FrmDataModule.DataSourceTemporarioDBMemoria.DataSet.FieldByName('VencimentoAvaria').AsString:= '-'
+        else
+          FrmDataModule.DataSourceTemporarioDBMemoria.DataSet.FieldByName('VencimentoAvaria').AsString:=
+          FormatDateTime('dd/mm/yyyy',IncDay(FrmDataModule.
+          DataSourceTemporarioDBMemoria.DataSet.FieldByName('InicioAvaria').AsDateTime,PrazoToleravel));
+        FrmDataModule.ADOQueryTemporarioDBMemoria.Post;
+        //==================================================================
+        FrmDataModule.ADOQueryTemporarioDBMemoria.Next;
+      end;
+    end;
+    //=========================================================================
+    FrmDataModule.ADOQueryPadraoLEC.Next;
+    FrmPrincipal.ProgressBarIncremento(1);
+  end;
+  FrmPrincipal.ProgressBarAtualizar;
+end;
+
+procedure TFrmImportacao.actNOTA_SIGMExecute(Sender: TObject);
+  var
+    NotaManutencao: Integer;
+    SQLBase: String;
+begin
+  SQLBase:= 'SELECT tblNotaManutencao.* FROM tblNotaManutencao WHERE (BooleanSIGM = True);';
+  FrmDataModule.ADOQueryTemporarioDBMemoria.Close;
+  FrmDataModule.ADOQueryTemporarioDBMemoria.SQL.Clear;
+  FrmDataModule.ADOQueryTemporarioDBMemoria.SQL.Add(SQLBase);
+  FrmDataModule.ADOQueryTemporarioDBMemoria.Open;
+
+  while not FrmDataModule.ADOQueryTemporarioDBMemoria.Eof do
+  begin
+    NotaManutencao:= FrmDataModule.DataSourceTemporarioDBMemoria.DataSet.FieldByName('NotaManutencao').AsInteger;
+    //Abre pesquisa na tabela SIGM com o numero da Nota de Manutenção e Grava na Tabela de Notas.
+    SQLBase:= 'SELECT tblSIGM.* FROM tblSIGM WHERE (NotaManutencao = "'+IntToStr(NotaManutencao)+'");';
+    FrmDataModule.ADOQueryTemporarioDBOperacao.Close;
+    FrmDataModule.ADOQueryTemporarioDBOperacao.SQL.Clear;
+    FrmDataModule.ADOQueryTemporarioDBOperacao.SQL.Add(SQLBase);
+    FrmDataModule.ADOQueryTemporarioDBOperacao.Open;
+    //============================================================
+    FrmDataModule.ADOQueryTemporarioDBMemoria.Edit;
+    FrmDataModule.DataSourceTemporarioDBMemoria.DataSet.FieldByName('CodigoSIGM').AsInteger:=
+    FrmDataModule.DataSourceTemporarioDBOperacao.DataSet.FieldByName('idSIGM').AsInteger;
+    FrmDataModule.DataSourceTemporarioDBMemoria.DataSet.FieldByName('GIM_FAM').AsString:=
+    FrmDataModule.DataSourceTemporarioDBOperacao.DataSet.FieldByName('GIM_FAM').AsString;
+    FrmDataModule.DataSourceTemporarioDBMemoria.DataSet.FieldByName('DescricaoGM').AsString:=
+    FrmDataModule.DataSourceTemporarioDBOperacao.DataSet.FieldByName('DescricaoGM').AsString;
+    FrmDataModule.DataSourceTemporarioDBMemoria.DataSet.FieldByName('PrazoGM').AsString:=
+    FrmDataModule.DataSourceTemporarioDBOperacao.DataSet.FieldByName('PrazoGM').AsString;
+    FrmDataModule.ADOQueryTemporarioDBMemoria.Post;
+    //============================================================
+    FrmDataModule.ADOQueryTemporarioDBMemoria.Next;
+  end;
+end;
+
+procedure TFrmImportacao.actEnderecoNotaManutencaoExecute(Sender: TObject);
+begin
+  editEndereco(edtEnderecoNotaManutencao);
+  FrmPrincipal.registroEscrever('NOTA_MANUTENCAO', edtEnderecoNotaManutencao.Text);
+end;
+
+procedure TFrmImportacao.actEnderecoLocalInstalacaoExecute(Sender: TObject);
+begin
+  editEndereco(edtEnderecoLocalInstalacao);
+  FrmPrincipal.registroEscrever('LOCALSAP', edtEnderecoLocalInstalacao.Text);
+end;
+
+procedure TFrmImportacao.actEnderecoExecutanteAPLATExecute(Sender: TObject);
+begin
+  editEndereco(edtEnderecoExecutanteAPLAT);
+  FrmPrincipal.registroEscrever('POB_APLAT', edtEnderecoExecutanteAPLAT.Text);
+end;
+
+procedure TFrmImportacao.actEnderecoExecutanteSAPExecute(Sender: TObject);
+begin
+  editEndereco(edtEnderecoExecutanteSAP);
+  FrmPrincipal.registroEscrever('RT_SAP', edtEnderecoExecutanteSAP.Text);
+end;
+
+procedure TFrmImportacao.actEnderecoCarteiraExecute(Sender: TObject);
+begin
+  editEndereco(edtEnderecoCarteiraTrabalho);
+  FrmPrincipal.registroEscrever('CARTEIRA', edtEnderecoCarteiraTrabalho.Text);
+end;
+
+procedure TFrmImportacao.actEnderecoTextoLongoOMExecute(Sender: TObject);
+begin
+  editEndereco(edtEnderecoTextoLongoOM);
+  FrmPrincipal.registroEscrever('LONGO_OM', edtEnderecoTextoLongoOM.Text);
+end;
+
+procedure TFrmImportacao.actFiltroInserirExecute(Sender: TObject);
+begin
+  case TabIndexPageControl of
+    0:
+    begin
+      FrmPrincipal.inserirProcura(DBGridExecutanteAPLAT,ColunasAPLAT);
+      actLocalizarAPLATExecutante.Execute;
+    end;
+    1:
+    begin
+      FrmPrincipal.inserirProcura(DBGridExecutanteSAP,ColunasT31);
+      actLocalizarSAPExecutante.Execute;
+    end;
+    2:
+    begin
+      FrmPrincipal.inserirProcura(DBGridCarteiraTrabalho,ColunasCarteira);
+      actLocalizarCarteira.Execute;
+    end;
+    3:
+    begin
+      FrmPrincipal.inserirProcura(DBGridNotaManutencao,ColunasNotaManutencao);
+      actLocalizarNotaManutencao.Execute;
+    end;
+    4:
+    begin
+      FrmPrincipal.inserirProcura(DBGridLocalInstalacao,ColunasLocalInstalacao );
+      actLocalizarLocalInstalacao.Execute;
+    end;
+  end;
+  if (FrmPrincipal.PanelFiltrosTabela.Visible)AND(FrmPrincipal.PanelAjuda1.Visible) then
+    actFiltrosTabela.Execute;
+end;
+
+procedure TFrmImportacao.actFiltrosTabelaExecute(Sender: TObject);
+begin
+  FrmPrincipal.btnProcurarFiltrosTabela.Action:= actProcuraFiltrosTabela;
+  case TabIndexPageControl of
+    0: FrmPrincipal.FiltrosTabela(DBGridExecutanteAPLAT,ColunasAPLAT);
+    1: FrmPrincipal.FiltrosTabela(DBGridExecutanteSAP,ColunasT31);
+    2: FrmPrincipal.FiltrosTabela(DBGridCarteiraTrabalho,ColunasCarteira);
+    3: FrmPrincipal.FiltrosTabela(DBGridNotaManutencao,ColunasNotaManutencao);
+    4: FrmPrincipal.FiltrosTabela(DBGridLocalInstalacao,ColunasLocalInstalacao);
+  end;
+end;
+
+procedure TFrmImportacao.actGridASCExecute(Sender: TObject);
+begin
+  case TabIndexPageControl of
+    0: FrmPrincipal.ClassificaDBGrid(DBGridExecutanteAPLAT,
+    FrmDataModule.ADOQueryImportarExecutanteAPLAT,0);
+    1: FrmPrincipal.ClassificaDBGrid(DBGridExecutanteSAP,
+    FrmDataModule.ADOQueryImportarExecutanteSAP,0);
+    2: FrmPrincipal.ClassificaDBGrid(DBGridCarteiraTrabalho,
+    FrmDataModule.ADOQueryImportarCarteiraTrabalho,0);
+    3: FrmPrincipal.ClassificaDBGrid(DBGridNotaManutencao,
+    FrmDataModule.ADOQueryImportarNotaManutencao,0);
+    4: FrmPrincipal.ClassificaDBGrid(DBGridLocalInstalacao,
+    FrmDataModule.ADOQueryImportarLocalInstalacao,0);
+  end;
+end;
+
+procedure TFrmImportacao.actGridDESCExecute(Sender: TObject);
+begin
+  case TabIndexPageControl of
+    0: FrmPrincipal.ClassificaDBGrid(DBGridExecutanteAPLAT,
+    FrmDataModule.ADOQueryImportarExecutanteAPLAT,1);
+    1: FrmPrincipal.ClassificaDBGrid(DBGridExecutanteSAP,
+    FrmDataModule.ADOQueryImportarExecutanteSAP,1);
+    2: FrmPrincipal.ClassificaDBGrid(DBGridCarteiraTrabalho,
+    FrmDataModule.ADOQueryImportarCarteiraTrabalho,1);
+    3: FrmPrincipal.ClassificaDBGrid(DBGridNotaManutencao,
+    FrmDataModule.ADOQueryImportarNotaManutencao,1);
+    4: FrmPrincipal.ClassificaDBGrid(DBGridLocalInstalacao,
+    FrmDataModule.ADOQueryImportarLocalInstalacao,1);
+  end;
+end;
+
+procedure TFrmImportacao.actExcelForaOperacaoExecute(Sender: TObject);
+begin
+    FrmPrincipal.GerarExcel(DBGridNotaManutencao,'Notas de Manutenção');
+end;
+
+procedure TFrmImportacao.actExcelLocalInstalacaoExecute(Sender: TObject);
+begin
+  FrmPrincipal.GerarExcel(DBGridLocalInstalacao,'Local de Instalação');
+end;
+
+procedure TFrmImportacao.actExcelExecutanteAPLATExecute(Sender: TObject);
+begin
+  FrmPrincipal.GerarExcel(DBGridExecutanteAPLAT,'Executantes APLAT');
+end;
+
+procedure TFrmImportacao.actExcelExecutanteSAPExecute(Sender: TObject);
+begin
+  FrmPrincipal.GerarExcel(DBGridExecutanteSAP,'Executantes SAP');
+end;
+
+procedure TFrmImportacao.actExcelCarteiraExecute(Sender: TObject);
+begin
+  FrmPrincipal.GerarExcel(DBGridCarteiraTrabalho,'Carteira de Trabalho');
+end;
+
+procedure TFrmImportacao.actExcluirAPLAT_ExecutantesExecute(Sender: TObject);
+begin
+  if Application.MessageBox(PChar(
+  'Deseja realmente excluir todos os registros de Executantes APLAT?'),
+  '.::ATENÇÃO::.',36) = 6 then
+  begin
+    FrmPrincipal.deleteQueryRapido(FrmDataModule.ADOQueryImportarExecutanteAPLAT,
+    'tblExecutanteAPLAT');
+  end;
+end;
+
+procedure TFrmImportacao.actExcluirSAP_FOExecute(Sender: TObject);
+begin
+  if Application.MessageBox(PChar(
+  'Deseja realmente excluir todos os registros?'),
+  '.::ATENÇÃO::.',36) = 6 then
+  begin
+    FrmPrincipal.deleteQueryRapido(FrmDataModule.ADOQueryImportarNotaManutencao,
+    'tblNotaManutencao');
+  end;
+end;
+
+procedure TFrmImportacao.actExcluirSAP_ExecutantesExecute(Sender: TObject);
+begin
+  if Application.MessageBox(PChar(
+  'Deseja realmente excluir todos os registros de Executantes SAP?'),
+  '.::ATENÇÃO::.',36) = 6 then
+  begin
+    FrmPrincipal.deleteQueryRapido(FrmDataModule.ADOQueryImportarExecutanteSAP,
+    'tblExecutanteSAP');
+  end;
+end;
+
+procedure TFrmImportacao.actInserirExecutantesExecute(Sender: TObject);
+  var
+    i,codigoTipoEtapaServico: Integer;
+    NomeExecutnate,CPF,OutroDocumento: String;
+    EncontrouTodos: Boolean;
+begin
+  EncontrouTodos:= true;
+  FrmDataModule.ADOQueryInserirExecutanteCadastro.Active:= false;
+  FrmDataModule.ADOQueryInserirExecutanteCadastro.Active:= true;
+  //Verificar preenchimento do Tipo de Etapa de Serviço
+  for I := 1 to StringGridND.RowCount-1 do
+  begin
+    codigoTipoEtapaServico:= VerificaCodigoTipoEtapaServico(StringGridND.Cells[1,i]);
+    if (codigoTipoEtapaServico = 0) then
+    begin
+      NomeExecutnate:= FrmPrincipal.TextoMaiusculo(StringGridND.Cells[0,i]);
+      MessageBox(0,PChar('O Tipo de Etapa de Serviço inserido para o Executante: '+
+      NomeExecutnate+' não é valido! Corrigir e tentar novamente!'),'Colibri', MB_ICONERROR);
+      EncontrouTodos:= false;
+      Break
+    end;
+  end;
+  //Todos preenchido corretamente
+  if EncontrouTodos = true then
+  begin
+    for I := 1 to StringGridND.RowCount-1 do
+    begin
+      //Verifica se é um CPF e corrige mascara de CPF
+      CPF:= FrmPrincipal.VerificaCPF(StringGridND.Cells[5,i]);
+      if CPF = '' then
+        OutroDocumento:= StringGridND.Cells[6,i]
+      else
+        OutroDocumento:= '';
+      //=====================================================================
+      codigoTipoEtapaServico:= VerificaCodigoTipoEtapaServico(StringGridND.Cells[1,i]);
+      NomeExecutnate:= FrmPrincipal.TextoMaiusculo(StringGridND.Cells[0,i]);
+      FrmDataModule.ADOQueryInserirExecutanteCadastro.Insert;
+      FrmDataModule.DataSourceInserirExecutanteCadastro.DataSet.
+      FieldByName('NomeExecutante').AsString:= NomeExecutnate;
+      FrmDataModule.DataSourceInserirExecutanteCadastro.DataSet.
+      FieldByName('txtTipoEtapaServico').AsString:= StringGridND.Cells[1,i];
+      FrmDataModule.DataSourceInserirExecutanteCadastro.DataSet.
+      FieldByName('txtFuncao').AsString:= FrmPrincipal.TextoMaiusculo(StringGridND.Cells[2,i]);
+      FrmDataModule.DataSourceInserirExecutanteCadastro.DataSet.
+      FieldByName('txtEmpresa').AsString:= FrmPrincipal.TextoMaiusculo(StringGridND.Cells[3,i]);
+      FrmDataModule.DataSourceInserirExecutanteCadastro.DataSet.
+      FieldByName('CodigoSAP').AsString:= StringGridND.Cells[4,i];
+      if StringGridND.ColCount = 7 then
+      begin
+        FrmDataModule.DataSourceInserirExecutanteCadastro.DataSet.
+        FieldByName('CPF').AsString:= CPF;
+        FrmDataModule.DataSourceInserirExecutanteCadastro.DataSet.
+        FieldByName('OutroDocumento').AsString:= OutroDocumento;
+      end;
+      FrmDataModule.DataSourceInserirExecutanteCadastro.DataSet.
+      FieldByName('codigoTipoEtapaServico').AsInteger:= codigoTipoEtapaServico;
+      FrmDataModule.DataSourceInserirExecutanteCadastro.DataSet.
+      FieldByName('AvaliadoPor').AsString:= FrmPrincipal.logChave;
+      FrmDataModule.DataSourceInserirExecutanteCadastro.DataSet.
+      FieldByName('DataAtualizacao').AsDateTime:= now;
+      FrmDataModule.DataSourceInserirExecutanteCadastro.DataSet.
+      FieldByName('Computador').AsString:= FrmPrincipal.logMaquina;
+      FrmDataModule.ADOQueryInserirExecutanteCadastro.Post;
+    end;
+    //Finalização
+    PanelAjuda.Visible:= false;
+    Splitter1.Visible:= false;
+    case RadioGroupOrigem.ItemIndex of
+      0:
+      begin
+        actAnalisaExecutanteAPLAT.Execute;
+        actLimparFiltros.Execute;
+      end;
+      1:
+      begin
+        actAnalisaExecutanteSAP.Execute;
+        actLimparFiltros.Execute;
+      end;
+    end;
+    MessageBox(0,'Executantes inseridos com sucesso!','Colibri', MB_ICONINFORMATION);
+  end;
+end;
+
+procedure TFrmImportacao.actInterromperExecute(Sender: TObject);
+begin
+  Interromper:= true;
+end;
+
+procedure TFrmImportacao.actExcluirSAP_CarteiraExecute(Sender: TObject);
+begin
+  if Application.MessageBox(PChar(
+  'Deseja realmente excluir todos os registros da Carteira de Trabalho?'),
+  '.::ATENÇÃO::.',36) = 6 then
+  begin
+    FrmPrincipal.deleteQueryRapido(FrmDataModule.ADOQueryImportarCarteiraTrabalho,
+    'tblCarteiraTrabalho');
+  end;
+end;
+
+procedure TFrmImportacao.actExcluirLinhaExecute(Sender: TObject);
+begin
+  FrmPrincipal.DeleteRow(StringGridND,StringGridND.Row);
+  FrmPrincipal.AutoFitGrade(StringGridND);
+end;
+
+procedure TFrmImportacao.actExcluirLocalInstalacaoExecute(Sender: TObject);
+begin
+  if Application.MessageBox(PChar(
+  'Deseja realmente excluir todos os registros de Local de Instalação?'),
+  '.::ATENÇÃO::.',36) = 6 then
+  begin
+    FrmPrincipal.deleteQueryRapido(FrmDataModule.ADOQueryImportarLocalInstalacao,
+    'tblLocalInstalacao');
+  end;
+end;
+
+procedure TFrmImportacao.actLimparFiltrosExecute(Sender: TObject);
+begin
+  case TabIndexPageControl of
+    0:
+    begin
+      FrmPrincipal.LimparColunasFiltro(DBGridExecutanteAPLAT,ColunasAPLAT);
+      actLocalizarAPLATExecutante.Execute;
+    end;
+    1:
+    begin
+      FrmPrincipal.LimparColunasFiltro(DBGridExecutanteSAP,ColunasT31);
+      actLocalizarSAPExecutante.Execute;
+    end;
+    2:
+    begin
+      FrmPrincipal.LimparColunasFiltro(DBGridCarteiraTrabalho,ColunasCarteira);
+      actLocalizarCarteira.Execute;
+    end;
+    3:
+    begin
+      FrmPrincipal.LimparColunasFiltro(DBGridNotaManutencao,ColunasNotaManutencao);
+      actLocalizarNotaManutencao.Execute;
+    end;
+    4:
+    begin
+      FrmPrincipal.LimparColunasFiltro(DBGridLocalInstalacao,ColunasLocalInstalacao);
+      actLocalizarLocalInstalacao.Execute;
+    end;
+  end;
+  if (FrmPrincipal.PanelFiltrosTabela.Visible)AND(FrmPrincipal.PanelAjuda1.Visible) then
+    actFiltrosTabela.Execute;
+end;
+
+procedure TFrmImportacao.actLocalizarAPLATExecutanteExecute(Sender: TObject);
+  var
+    SQLString,SQLBase: String;
+begin
+  SQLString:= frmPrincipal.SQLStringFiltroTabela(ColunasAPLAT,true);
+  SQLBase:= 'SELECT tblExecutanteAPLAT.* FROM tblExecutanteAPLAT '+
+  SQLString+' ORDER BY NomeExecutante;';
+  FrmPrincipal.ProcuraQuery(SQLBase,FrmDataModule.ADOQueryImportarExecutanteAPLAT,
+  StatusBarExecAPLAT);
+end;
+
+procedure TFrmImportacao.actLocalizarCarteiraExecute(Sender: TObject);
+  var
+    SQLString,SQLBase: String;
+begin
+  SQLString:= frmPrincipal.SQLStringFiltroTabela(ColunasCarteira,true);
+  SQLBase:= 'SELECT tblCarteiraTrabalho.* FROM tblCarteiraTrabalho '+
+  SQLString+' ORDER BY txtTipoEtapaServicoOM;';
+  FrmPrincipal.ProcuraQuery(SQLBase,FrmDataModule.ADOQueryImportarCarteiraTrabalho,
+  StatusBarCarteira);
+end;
+
+procedure TFrmImportacao.actLocalizarNotaManutencaoExecute(Sender: TObject);
+  var
+    SQLString,SQLBase: String;
+begin
+  SQLString:= frmPrincipal.SQLStringFiltroTabela(ColunasNotaManutencao,true);
+  SQLBase:= 'SELECT tblNotaManutencao.* FROM tblNotaManutencao '+
+  SQLString+' ORDER BY LocalInstalacao;';
+  FrmPrincipal.ProcuraQuery(SQLBase,FrmDataModule.ADOQueryImportarNotaManutencao,
+  StatusBarFO);
+end;
+
+procedure TFrmImportacao.actLocalizarLocalInstalacaoExecute(Sender: TObject);
+  var
+    SQLString,SQLBase: String;
+begin
+  SQLString:= frmPrincipal.SQLStringFiltroTabela(ColunasLocalInstalacao,true);
+  SQLBase:= 'SELECT tblLocalInstalacao.* FROM tblLocalInstalacao '+
+  SQLString+' ORDER BY LocalInstalacao;';
+  FrmPrincipal.ProcuraQuery(SQLBase,FrmDataModule.ADOQueryImportarLocalInstalacao,
+  StatusBarLocalInstalacao);
+end;
+
+procedure TFrmImportacao.actLocalizarSAPExecutanteExecute(Sender: TObject);
+  var
+    SQLString,SQLBase: String;
+begin
+  SQLString:= frmPrincipal.SQLStringFiltroTabela(ColunasT31,true);
+  SQLBase:= 'SELECT tblExecutanteSAP.* FROM tblExecutanteSAP '+
+  SQLString+' ORDER BY NomeExecutante;';
+  FrmPrincipal.ProcuraQuery(SQLBase,FrmDataModule.ADOQueryImportarExecutanteSAP,
+  StatusBarExecSAP);
+end;
+
+procedure TFrmImportacao.actVetorLocalCriticoExecute(Sender: TObject);
+  var
+    NumRegistros,i: Integer;
+begin
+  FrmDataModule.ADOQueryTemporarioDBMemoria.Close;
+  FrmDataModule.ADOQueryTemporarioDBMemoria.SQL.Clear;
+  FrmDataModule.ADOQueryTemporarioDBMemoria.SQL.Add(
+  'SELECT tblLocalInstalacao.* '+
+  'FROM tblLocalInstalacao '+
+  'WHERE ((ImpactoFalha LIKE "6")AND(StatusSistema NOT LIKE "%INAT%"));');
+  FrmDataModule.ADOQueryTemporarioDBMemoria.Open;
+  FrmDataModule.ADOQueryTemporarioDBMemoria.Active:= true;
+  NumRegistros:= FrmDataModule.ADOQueryTemporarioDBMemoria.RecordCount;
+  FrmPrincipal.VetorLocalCritico:= nil;
+  SetLength(FrmPrincipal.VetorLocalCritico, NumRegistros);
+
+  i:= 0;
+  while not FrmDataModule.ADOQueryTemporarioDBMemoria.Eof do
+  begin
+    FrmPrincipal.VetorLocalCritico[i]:= FrmDataModule.DataSourceTemporarioDBMemoria.DataSet.
+    FieldByName('LocalInstalacao').AsString;
+    FrmDataModule.ADOQueryTemporarioDBMemoria.Next;
+    i:= i+1;
+  end;
+end;
+
+procedure TFrmImportacao.actND_APLATExecute(Sender: TObject);
+  var
+    numLinhas: Integer;
+    CodigoSAP,NomeExecutante: String;
+begin
+  RadioGroupOrigem.ItemIndex:= 0;
+  FrmDataModule.ADOQueryExecutante.Active:= false;
+  FrmDataModule.ADOQueryExecutante.Active:= true;
+  FrmDataModule.ADOQueryImportarExecutanteAPLAT.Close;
+  FrmDataModule.ADOQueryImportarExecutanteAPLAT.SQL.Clear;
+  FrmDataModule.ADOQueryImportarExecutanteAPLAT.SQL.Add(
+  'SELECT tblExecutanteAPLAT.* '+
+  'FROM tblExecutanteAPLAT '+
+  'WHERE (txtTipoEtapaServico like '+QuotedStr('NÃO DEFINIDO')+');');
+  FrmDataModule.ADOQueryImportarExecutanteAPLAT.Open;
+  FrmDataModule.ADOQueryImportarExecutanteAPLAT.Active:= true;
+  if not FrmDataModule.ADOQueryImportarExecutanteAPLAT.IsEmpty then
+  begin
+    StringGridND.FixedRows:= 0;
+    StringGridND.RowCount:= 1;
+    StringGridND.ColCount:= 5;
+    StringGridND.Cells[0,0]:= 'Executante';
+    StringGridND.Cells[1,0]:= 'Tipo de Etapa de Serviço';
+    StringGridND.Cells[2,0]:= 'Função';
+    StringGridND.Cells[3,0]:= 'Empresa';
+    StringGridND.Cells[4,0]:= 'Código SAP';
+    FrmPrincipal.carregarComboBox(FrmDataModule.ADOConnectionConsulta,'TipoEtapaServico',
+    'SELECT tblTipoEtapaServico.* FROM tblTipoEtapaServico ORDER BY TipoEtapaServico;',
+    ComboBoxTipoEtapaServico);
+    FrmPrincipal.carregarComboBox(FrmDataModule.ADOConnectionConsulta,'txtFuncao',
+    'SELECT tblExecutante.txtFuncao FROM tblExecutante GROUP BY tblExecutante.txtFuncao;',
+    ComboBoxFuncao);
+    FrmPrincipal.carregarComboBox(FrmDataModule.ADOConnectionConsulta,'txtEmpresa',
+    'SELECT tblExecutante.txtEmpresa FROM tblExecutante GROUP BY tblExecutante.txtEmpresa;',
+    ComboBoxEmpresa);
+
+    FrmDataModule.ADOQueryImportarExecutanteAPLAT.First;
+    while not FrmDataModule.ADOQueryImportarExecutanteAPLAT.Eof do
+    begin
+      CodigoSAP:= FrmDataModule.DataSourceImportarExecutanteAPLAT.DataSet.
+      FieldByName('CodigoSAP').AsString;
+      NomeExecutante:= FrmPrincipal.TextoMaiusculo(FrmDataModule.DataSourceImportarExecutanteAPLAT.DataSet.
+      FieldByName('NomeExecutante').AsString);
+      //Caso vazio, procurar se existe executante no
+      //cadastro e atualiza o a planilha do APLAT
+      if CodigoSAP = '' then
+      begin
+        FrmDataModule.ADOQueryTemporarioDBConsulta1.Close;
+        FrmDataModule.ADOQueryTemporarioDBConsulta1.SQL.Clear;
+        FrmDataModule.ADOQueryTemporarioDBConsulta1.SQL.Add(
+        'SELECT tblExecutante.* FROM tblExecutante '+
+        'WHERE (((NomeExecutante like '+QuotedStr('%'+NomeExecutante+'%')+')));');
+        FrmDataModule.ADOQueryTemporarioDBConsulta1.Open;
+        //====================================================
+        if not FrmDataModule.ADOQueryTemporarioDBConsulta1.IsEmpty then
+        begin
+          FrmDataModule.ADOQueryImportarExecutanteAPLAT.Edit;
+          FrmDataModule.DataSourceImportarExecutanteAPLAT.DataSet.
+          FieldByName('txtTipoEtapaServico').AsString:=
+          FrmDataModule.DataSourceTemporarioDBConsulta1.DataSet.
+          FieldByName('txtTipoEtapaServico').AsString;
+          FrmDataModule.DataSourceImportarExecutanteAPLAT.DataSet.
+          FieldByName('txtFuncao').AsString:=
+          FrmDataModule.DataSourceTemporarioDBConsulta1.DataSet.
+          FieldByName('txtFuncao').AsString;
+          FrmDataModule.DataSourceImportarExecutanteAPLAT.DataSet.
+          FieldByName('txtEmpresa').AsString:=
+          FrmDataModule.DataSourceTemporarioDBConsulta1.DataSet.
+          FieldByName('txtEmpresa').AsString;
+          FrmDataModule.DataSourceImportarExecutanteAPLAT.DataSet.
+          FieldByName('CodigoSAP').AsString:=
+          FrmDataModule.DataSourceTemporarioDBConsulta1.DataSet.
+          FieldByName('CodigoSAP').AsString;
+          FrmDataModule.ADOQueryImportarExecutanteAPLAT.Post;
+          MessageBox(0,PChar(
+          'O código SAP não definido na planilha de importação do APLAT foi corrigido!'+#13+
+          'Necessário corrigir somente a base de dados do APLAT para futuras importações!'),
+          'Colibri', MB_ICONINFORMATION);
+        end;
+      end
+      else
+      begin
+        numLinhas:= StringGridND.RowCount;
+        StringGridND.RowCount:= numLinhas+1;
+        StringGridND.Cells[0,numLinhas]:= NomeExecutante;
+        StringGridND.Cells[1,numLinhas]:= '';
+        StringGridND.Cells[2,numLinhas]:= FrmDataModule.DataSourceImportarExecutanteAPLAT.DataSet.
+        FieldByName('Funcao').AsString;
+        StringGridND.Cells[3,numLinhas]:= FrmDataModule.DataSourceImportarExecutanteAPLAT.DataSet.
+        FieldByName('Empresa').AsString;
+        StringGridND.Cells[4,numLinhas]:= CodigoSAP;
+      end;
+      FrmDataModule.ADOQueryImportarExecutanteAPLAT.Next;
+    end;
+    if StringGridND.RowCount > 1 then
+    begin
+      try
+        StringGridND.FixedRows:= 1;
+      except
+        StringGridND.FixedRows:= 0;
+        StringGridND.RowCount:= 1;
+      end;
+      FrmPrincipal.AutoFitGrade(StringGridND);
+      StringGridND.ColWidths[2]:= 120;
+      StringGridND.ColWidths[3]:= 120;
+      PanelAjuda.Visible:= true;
+      Splitter1.Visible:= true;
+      Splitter1.Top:= 145;
+    end;
+  end
+  else
+  begin
+    MessageBox(0,'Não existem Executantes "NÃO DEFINIDO"','Colibri', MB_ICONINFORMATION);
+    actLimparFiltros.Execute;
+  end;
+end;
+
+procedure TFrmImportacao.actND_SAPExecute(Sender: TObject);
+  var
+    numLinhas,i: Integer;
+    NomeExecutante,CPF,OutroDocumento: String;
+    ListaNomes: TStringList;
+    inserirExec: Boolean;
+begin
+  RadioGroupOrigem.ItemIndex:= 1;
+  ListaNomes:=TStringList.Create;
+  FrmDataModule.ADOQueryExecutante.Active:= false;
+  FrmDataModule.ADOQueryExecutante.Active:= true;
+  FrmDataModule.ADOQueryImportarExecutanteSAP.Close;
+  FrmDataModule.ADOQueryImportarExecutanteSAP.SQL.Clear;
+  FrmDataModule.ADOQueryImportarExecutanteSAP.SQL.Add(
+  'SELECT tblExecutanteSAP.* '+
+  'FROM tblExecutanteSAP '+
+  'WHERE (txtTipoEtapaServico like '+QuotedStr('NÃO DEFINIDO')+');');
+  FrmDataModule.ADOQueryImportarExecutanteSAP.Open;
+  FrmDataModule.ADOQueryImportarExecutanteSAP.Active:= true;
+  if not FrmDataModule.ADOQueryImportarExecutanteSAP.IsEmpty then
+  begin
+    StringGridND.FixedRows:= 0;
+    StringGridND.RowCount:= 1;
+    StringGridND.ColCount:= 7;
+    StringGridND.Cells[0,0]:= 'Executante';
+    StringGridND.Cells[1,0]:= 'Tipo de Etapa de Serviço';
+    StringGridND.Cells[2,0]:= 'Função';
+    StringGridND.Cells[3,0]:= 'Empresa';
+    StringGridND.Cells[4,0]:= 'Código SAP';
+    StringGridND.Cells[5,0]:= 'CPF';
+    StringGridND.Cells[6,0]:= 'Outro Documento';
+    FrmPrincipal.carregarComboBox(FrmDataModule.ADOConnectionConsulta,'TipoEtapaServico',
+    'SELECT tblTipoEtapaServico.* FROM tblTipoEtapaServico ORDER BY TipoEtapaServico;',
+    ComboBoxTipoEtapaServico);
+    FrmPrincipal.carregarComboBox(FrmDataModule.ADOConnectionConsulta,'txtFuncao',
+    'SELECT tblExecutante.txtFuncao FROM tblExecutante GROUP BY tblExecutante.txtFuncao;',
+    ComboBoxFuncao);
+    FrmPrincipal.carregarComboBox(FrmDataModule.ADOConnectionConsulta,'txtEmpresa',
+    'SELECT tblExecutante.txtEmpresa FROM tblExecutante GROUP BY tblExecutante.txtEmpresa;',
+    ComboBoxEmpresa);
+
+    FrmDataModule.ADOQueryImportarExecutanteSAP.First;
+    while not FrmDataModule.ADOQueryImportarExecutanteSAP.Eof do
+    begin
+      NomeExecutante:= FrmDataModule.DataSourceImportarExecutanteSAP.DataSet.
+      FieldByName('NomeExecutante').AsString;
+      inserirExec:= true;
+      for i := 0 to ListaNomes.Count-1 do
+      begin
+        if ListaNomes[i] = NomeExecutante then
+          inserirExec:= false;
+      end;
+      if inserirExec then
+      begin
+        //Verifica se é um CPF e corrige mascara de CPF
+        CPF:= FrmPrincipal.VerificaCPF(FrmDataModule.DataSourceImportarExecutanteSAP.DataSet.
+        FieldByName('Documento').AsString);
+        if CPF = '' then
+          OutroDocumento:= FrmDataModule.DataSourceImportarExecutanteSAP.DataSet.
+          FieldByName('Documento').AsString
+        else
+          OutroDocumento:= '';
+        //=======================================================
+        numLinhas:= StringGridND.RowCount;
+        StringGridND.RowCount:= numLinhas+1;
+        StringGridND.Cells[0,numLinhas]:= NomeExecutante;
+        StringGridND.Cells[1,numLinhas]:= '';
+        StringGridND.Cells[2,numLinhas]:= '';
+        StringGridND.Cells[3,numLinhas]:= '';
+        StringGridND.Cells[4,numLinhas]:= FrmDataModule.DataSourceImportarExecutanteSAP.
+        DataSet.FieldByName('CodigoSAP').AsString;
+        StringGridND.Cells[5,numLinhas]:= CPF;
+        StringGridND.Cells[6,numLinhas]:= OutroDocumento;
+      end;
+      ListaNomes.Add(NomeExecutante);
+      FrmDataModule.ADOQueryImportarExecutanteSAP.Next;
+    end;
+    try
+      StringGridND.FixedRows:= 1;
+    except
+      StringGridND.FixedRows:= 0;
+      StringGridND.RowCount:= 1;
+    end;
+    FrmPrincipal.AutoFitGrade(StringGridND);
+    StringGridND.ColWidths[2]:= 120;
+    StringGridND.ColWidths[3]:= 120;
+    PanelAjuda.Visible:= true;
+    Splitter1.Visible:= true;
+    Splitter1.Top:= 145;
+  end
+  else
+  begin
+    MessageBox(0,'Não existem Executantes "NÃO DEFINIDO"','Colibri', MB_ICONINFORMATION);
+    actLimparFiltros.Execute;
+  end;
+  actLimparFiltros.Execute;
+end;
+
+procedure TFrmImportacao.actCarteiraPlataformaExecute(Sender: TObject);
+begin
+  PlataformaTabela('tblCarteiraTrabalho','Memoria',false);
+  actLimparFiltros.Execute;
+end;
+
+procedure TFrmImportacao.actNOTAPlataformaExecute(Sender: TObject);
+begin
+  PlataformaTabela('tblNotaManutencao','Memoria',false);
+  actLocalizarNotaManutencao.Execute;
+end;
+
+procedure TFrmImportacao.actNOTASIGMExecute(Sender: TObject);
+begin
+  actNOTA_Padrao.Execute;
+  actNOTA_SIGM.Execute;
+  actLocalizarNotaManutencao.Execute;
+end;
+
+procedure TFrmImportacao.actLocalAnalisaExecute(Sender: TObject);
+begin
+  actLimparFiltros.Execute;
+  PlataformaTabela('tblLocalInstalacao','Memoria',true);
+  actLimparFiltros.Execute;
+  actAnalisaHierarquia.Execute;
+  actLimparFiltros.Execute;
+end;
+
+procedure TFrmImportacao.actLocalInstalacaoExecute(Sender: TObject);
+  var
+    enderecoDB,enderecoExcel: String;
+    ListaColunas: TStringList;
+begin
+  ListaColunas:=TStringList.Create;
+  ListaColunas.Add('Categoria');
+  ListaColunas.Add('LocalInstalacao');
+  ListaColunas.Add('DenominacaoLocalInstalacao');
+  ListaColunas.Add('PerfilCatalogo');
+  ListaColunas.Add('Fabricante');
+  ListaColunas.Add('NPFabricante');
+  ListaColunas.Add('DenominacaoTipo');
+  ListaColunas.Add('NSerie');
+  ListaColunas.Add('CampoSelecao');
+  ListaColunas.Add('Sala');
+  ListaColunas.Add('ImpactoFalha');
+  ListaColunas.Add('StatusSistema');
+  ListaColunas.Add('CentroTrabalho');
+  ListaColunas.Add('CentroTrabalhoResp');
+  ListaColunas.Add('CentroCusto');
+  ListaColunas.Add('Classe');
+  enderecoDB := ExtractFilePath(Application.ExeName)+'TEMPMemoria.mdb';
+  enderecoExcel:= edtEnderecoLocalInstalacao.Text;
+  FrmPrincipal.ImportExcelAcess(enderecoExcel,enderecoDB,'tblLocalInstalacao',
+  ListaColunas,FrmDataModule.ADOQueryImportarLocalInstalacao);
+  actLocalizarLocalInstalacao.Execute;
+end;
+
+procedure TFrmImportacao.actProcuraFiltrosTabelaExecute(Sender: TObject);
+begin
+  case TabIndexPageControl of
+    0:
+    begin
+      frmPrincipal.CarregaFiltrosProcura(ColunasAPLAT);
+      actLocalizarAPLATExecutante.Execute;
+    end;
+    1:
+    begin
+      frmPrincipal.CarregaFiltrosProcura(ColunasT31);
+      actLocalizarSAPExecutante.Execute;
+    end;
+    2:
+    begin
+      frmPrincipal.CarregaFiltrosProcura(ColunasCarteira);
+      actLocalizarCarteira.Execute;
+    end;
+    3:
+    begin
+      frmPrincipal.CarregaFiltrosProcura(ColunasNotaManutencao);
+      actLocalizarNotaManutencao.Execute;
+    end;
+    4:
+    begin
+      frmPrincipal.CarregaFiltrosProcura(ColunasLocalInstalacao);
+      actLocalizarLocalInstalacao.Execute;
+    end;
+  end;
+end;
+
+procedure TFrmImportacao.actProcurarExecute(Sender: TObject);
+begin
+  if PageControlImportacao.ActivePage.Caption = 'Executantes: Hotelaria [APLAT]' then
+  begin
+    actLocalizarAPLATExecutante.Execute;
+    edtEnderecoExecutanteAPLAT.Text:= FrmPrincipal.registroEndereco('POB_APLAT');
+    TabIndexPageControl:= 0;
+  end
+  else if PageControlImportacao.ActivePage.Caption = 'Executantes: Requisição de Transporte [SAP]' then
+  begin
+    actLocalizarSAPExecutante.Execute;
+    edtEnderecoExecutanteSAP.Text:= FrmPrincipal.registroEndereco('RT_SAP');
+    TabIndexPageControl:= 1;
+  end
+  else if PageControlImportacao.ActivePage.Caption = 'Ordem de Manutenção [SAP]' then
+  begin
+    actLocalizarCarteira.Execute;
+    edtEnderecoCarteiraTrabalho.Text:= FrmPrincipal.registroEndereco('CARTEIRA');
+    edtEnderecoTextoLongoOM.Text:= FrmPrincipal.registroEndereco('LONGO_OM');
+    TabIndexPageControl:= 2;
+  end
+  else if PageControlImportacao.ActivePage.Caption = 'Notas de Manutenção [SAP]' then
+  begin
+    actLocalizarNotaManutencao.Execute;
+    edtEnderecoNotaManutencao.Text:= FrmPrincipal.registroEndereco('NOTA_MANUTENCAO');
+    TabIndexPageControl:= 3;
+  end
+  else if PageControlImportacao.ActivePage.Caption = 'Local de Instalação [SAP]' then
+  begin
+    actLocalizarLocalInstalacao.Execute;
+    edtEnderecoLocalInstalacao.Text:= FrmPrincipal.registroEndereco('LOCALSAP');
+    TabIndexPageControl:= 4;
+  end
+end;
+
+procedure TFrmImportacao.actTextoLongoOMExecute(Sender: TObject);
+var
+  ExcelOM,SheetOM: Variant;
+  i,matrizLinhaOM,ARow: Integer;
+begin
+  try
+    try
+      ARow:= 4;
+      try
+        ExcelOM := CreateOleObject('Excel.Application');
+      except
+        MessageBox(0,'Verifique se o Microsoft Office Excel esta instalado na sua máquina.',
+        'Excel', MB_ICONERROR);
+      end;
+      // Abrir o arquivo
+      try
+        ExcelOM.Workbooks.Open(edtEnderecoTextoLongoOM.Text);
+      except
+        MessageBox(0,'Arquivo não encontrado, verifique o endereço do arquivo!',
+        'Excel', MB_ICONERROR);
+      end;
+      // Abrir a primeira planilha do arquivo
+      SheetOM := ExcelOM.WorkSheets[1];
+      //Excluir todos os registros atuais
+      FrmPrincipal.deleteQueryRapido(
+      FrmDataModule.ADOQueryImportarTextoLongoCarteira,'tblTextoLongoCarteira');
+      //Verificar a ultima Linha
+      matrizLinhaOM:= (SheetOM.Cells.SpecialCells(11).Row);
+      // Inicializar ProgressBar
+      FrmPrincipal.ProgressBarIncializa(matrizLinhaOM,'Texto Longo OM...');
+      //Importar texto longo da planilha de OM
+      actInterromper.Enabled:= true;
+      for i := ARow to matrizLinhaOM do
+      begin
+        Application.ProcessMessages;
+        if Interromper and (Application.MessageBox(PChar('Deseja realmente cancelar o processo?'),
+        '.::ATENÇÃO::.',36) = 6) then
+        begin
+          Interromper := False;
+          break;
+        end
+        else
+          Interromper := False;
+        try
+          // Inserir novo registro na tabela de dados
+          FrmDataModule.ADOQueryImportarTextoLongoCarteira.Insert;
+          // Preencher as colunas do registro na tabela de dados
+          FrmDataModule.DataSourceImportarTextoLongoCarteira.DataSet.
+          FieldByName('OrdemManutencao').AsInteger := ExcelOM.Workbooks[1].Sheets[1].Cells[i,1];
+          FrmDataModule.DataSourceImportarTextoLongoCarteira.DataSet.
+          FieldByName('TextoLongoCarteira').AsWideString := ExcelOM.Workbooks[1].Sheets[1].Cells[i,2];
+          FrmDataModule.ADOQueryImportarTextoLongoCarteira.Post;
+        except
+        end;
+        // Incremento ProgressBar
+        FrmPrincipal.ProgressBarIncremento(1);
+      end;
+       //===================================================
+      FrmDataModule.ADOQueryImportarTextoLongoCarteira.First;
+      actInterromper.Enabled:= false;
+      // Atualizar ProgressBar
+      FrmPrincipal.ProgressBarAtualizar;
+    finally
+      //Fechar Excel OM
+      ExcelOM.Application.DisplayAlerts := False;
+      ExcelOM.Quit;
+      ExcelOM := Unassigned;
+      FreeAndNil(ExcelOM);
+    end;
+  except
+    MessageBox(0,'Ocorreu um erro durante a importação e a operação foi cancelada!',
+    'Excel', MB_ICONERROR);
+    FrmDataModule.ADOQueryImportarTextoLongoCarteira.First;
+    FrmDataModule.DataSourceImportarTextoLongoCarteira.Enabled := true;
+    // Atualizar ProgressBar
+    FrmPrincipal.ProgressBarAtualizar;
+    //Fechar Excel OM
+    ExcelOM.Application.DisplayAlerts := False;
+    ExcelOM.Quit;
+    ExcelOM := Unassigned;
+    FreeAndNil(ExcelOM);
+  end;
+end;
+
+procedure TFrmImportacao.actSubstituirMemoriaLocalExecute(Sender: TObject);
+  var
+    Caminho_Copia,enderecoMemoria: String;
+begin
+  FrmDataModule.ADOQueryColibri.Active:= false;
+  FrmDataModule.ADOQueryColibri.Active:= true;
+  enderecoMemoria := FrmPrincipal.Caption;
+  enderecoMemoria:= ExtractFilePath(enderecoMemoria)+'\dbMemoria.mdb';
+  Caminho_Copia := ExtractFilePath(Application.ExeName) + 'TEMPMemoria.mdb';
+  FrmPrincipal.compactarDB(Caminho_Copia,false,true,FrmDataModule.ADOConnectionColibri);
+  FrmDataModule.ADOConnectionMemoria.Connected:= false;
+  CopyFile(PChar(Caminho_Copia), PChar(enderecoMemoria), false);
+  FrmPrincipal.conectarBDDireto(enderecoMemoria,FrmDataModule.ADOConnectionMemoria);
+  actLimparFiltros.Execute;
+end;
+
+procedure TFrmImportacao.actAnalisaExecutanteAPLATExecute(Sender: TObject);
+  var
+    ExecutanteAPLAT: TExecCadastro;
+begin
+  FrmPrincipal.ProgressBarIncializa(FrmDataModule.
+  ADOQueryImportarExecutanteAPLAT.RecordCount,
+  'Analisando Executantes Cadastrados...');
+  FrmDataModule.ADOQueryImportarExecutanteAPLAT.Active:= false;
+  FrmDataModule.ADOQueryImportarExecutanteAPLAT.Active:= true;
+  FrmDataModule.DataSourceImportarExecutanteAPLAT.Enabled:= false;
+  FrmDataModule.ADOQueryImportarExecutanteAPLAT.First;
+  while not FrmDataModule.ADOQueryImportarExecutanteAPLAT.Eof do
+  begin
+    try
+      ExecutanteAPLAT:= AnalisaExecutanteAPLAT(FrmDataModule.
+      DataSourceImportarExecutanteAPLAT.DataSet.FieldByName('CodigoSAP').asString);
+
+      FrmDataModule.ADOQueryImportarExecutanteAPLAT.Edit;
+      FrmDataModule.DataSourceImportarExecutanteAPLAT.DataSet.
+      FieldByName('txtTipoetapaServico').asString:= ExecutanteAPLAT.TipoEtapaServico;
+      FrmDataModule.DataSourceImportarExecutanteAPLAT.DataSet.
+      FieldByName('txtFuncao').asString:= ExecutanteAPLAT.Funcao;
+      FrmDataModule.DataSourceImportarExecutanteAPLAT.DataSet.
+      FieldByName('txtEmpresa').asString:= ExecutanteAPLAT.Empresa;
+      FrmDataModule.DataSourceImportarExecutanteAPLAT.DataSet.
+      FieldByName('txtNomeExecutante').asString:= ExecutanteAPLAT.NomeExecutante;
+      FrmDataModule.DataSourceImportarExecutanteAPLAT.DataSet.
+      FieldByName('txtDocumento').asString:= ExecutanteAPLAT.Documento;
+      //================================================
+      FrmDataModule.ADOQueryImportarExecutanteAPLAT.Post;
+      FrmDataModule.ADOQueryImportarExecutanteAPLAT.Next;
+      FrmPrincipal.ProgressBarIncremento(1);
+    except
+      FrmDataModule.ADOQueryImportarExecutanteAPLAT.Cancel;
+      FrmDataModule.ADOQueryImportarExecutanteAPLAT.Next;
+    end;
+  end;
+  ExecutanteAPLAT:= AnalisaExecutanteAPLAT(FrmDataModule.
+  DataSourceImportarExecutanteAPLAT.DataSet.FieldByName('CodigoSAP').asString);
+  FrmDataModule.ADOQueryImportarExecutanteAPLAT.Edit;
+  FrmDataModule.DataSourceImportarExecutanteAPLAT.DataSet.
+  FieldByName('txtTipoetapaServico').asString:= ExecutanteAPLAT.TipoEtapaServico;
+  FrmDataModule.DataSourceImportarExecutanteAPLAT.DataSet.
+  FieldByName('txtFuncao').asString:= ExecutanteAPLAT.Funcao;
+  FrmDataModule.DataSourceImportarExecutanteAPLAT.DataSet.
+  FieldByName('txtEmpresa').asString:= ExecutanteAPLAT.Empresa;
+  FrmDataModule.DataSourceImportarExecutanteAPLAT.DataSet.
+  FieldByName('txtNomeExecutante').asString:= ExecutanteAPLAT.NomeExecutante;
+  FrmDataModule.DataSourceImportarExecutanteAPLAT.DataSet.
+  FieldByName('txtDocumento').asString:= ExecutanteAPLAT.Documento;
+  //=============================================================
+  FrmDataModule.ADOQueryImportarExecutanteAPLAT.First;
+  FrmDataModule.DataSourceImportarExecutanteAPLAT.Enabled:= true;
+  FrmPrincipal.ProgressBarAtualizar;
+end;
+
+procedure TFrmImportacao.actAnalisaExecutanteSAPExecute(Sender: TObject);
+  var
+    ExecutanteSAP: TExecCadastro;
+begin
+  FrmPrincipal.ProgressBarIncializa(FrmDataModule.ADOQueryImportarExecutanteSAP.RecordCount,
+  'Analisando Executantes Cadastrados...');
+  FrmDataModule.ADOQueryImportarExecutanteSAP.Active:= false;
+  FrmDataModule.ADOQueryImportarExecutanteSAP.Active:= true;
+  FrmDataModule.ADOQueryImportarExecutanteSAP.First;
+  FrmDataModule.DataSourceImportarExecutanteSAP.Enabled:= false;
+  actInterromper.Enabled:= true;
+  while not FrmDataModule.ADOQueryImportarExecutanteSAP.Eof do
+  begin
+    try
+      //Interromper Processo
+      Application.ProcessMessages;
+      if Interromper and (Application.MessageBox(PChar('Deseja realmente cancelar o processo?'),
+      '.::ATENÇÃO::.',36) = 6) then
+      begin
+        Interromper := False;
+        break;
+      end
+      else
+        Interromper := False;
+      //=========================================
+      ExecutanteSAP:= AnalisaExecutanteSAP(FrmDataModule.
+      DataSourceImportarExecutanteSAP.DataSet.FieldByName('CodigoSAP').asString,
+      FrmDataModule.DataSourceImportarExecutanteSAP.DataSet.FieldByName('Documento').asString);
+
+      FrmDataModule.ADOQueryImportarExecutanteSAP.Edit;
+      FrmDataModule.DataSourceImportarExecutanteSAP.DataSet.
+      FieldByName('txtTipoetapaServico').asString:= ExecutanteSAP.TipoEtapaServico;
+      FrmDataModule.DataSourceImportarExecutanteSAP.DataSet.
+      FieldByName('txtNomeExecutante').asString:= ExecutanteSAP.NomeExecutante;
+      FrmDataModule.DataSourceImportarExecutanteSAP.DataSet.
+      FieldByName('txtFuncao').asString:= ExecutanteSAP.Funcao;
+      FrmDataModule.DataSourceImportarExecutanteSAP.DataSet.
+      FieldByName('txtEmpresa').asString:= ExecutanteSAP.Empresa;
+      //================================================
+      FrmDataModule.ADOQueryImportarExecutanteSAP.Next;
+      FrmPrincipal.ProgressBarIncremento(1);
+    except
+      FrmDataModule.ADOQueryImportarExecutanteSAP.Cancel;
+      FrmDataModule.ADOQueryImportarExecutanteSAP.Next;
+    end;
+  end;
+  ExecutanteSAP:= AnalisaExecutanteSAP(FrmDataModule.
+  DataSourceImportarExecutanteSAP.DataSet.FieldByName('CodigoSAP').asString,
+  FrmDataModule.DataSourceImportarExecutanteSAP.DataSet.FieldByName('Documento').asString);
+  FrmDataModule.ADOQueryImportarExecutanteSAP.Edit;
+  FrmDataModule.DataSourceImportarExecutanteSAP.DataSet.
+  FieldByName('txtTipoetapaServico').asString:= ExecutanteSAP.TipoEtapaServico;
+  FrmDataModule.DataSourceImportarExecutanteSAP.DataSet.
+  FieldByName('txtNomeExecutante').asString:= ExecutanteSAP.NomeExecutante;
+  FrmDataModule.DataSourceImportarExecutanteSAP.DataSet.
+  FieldByName('txtFuncao').asString:= ExecutanteSAP.Funcao;
+  FrmDataModule.DataSourceImportarExecutanteSAP.DataSet.
+  FieldByName('txtEmpresa').asString:= ExecutanteSAP.Empresa;
+  //=========================================================
+  FrmDataModule.ADOQueryImportarExecutanteSAP.First;
+  FrmDataModule.DataSourceImportarExecutanteSAP.Enabled:= true;
+  FrmPrincipal.ProgressBarAtualizar;
+  actInterromper.Enabled:= false;
+end;
+
+procedure TFrmImportacao.actAnalisaHierarquiaExecute(Sender: TObject);
+  var
+    ListaLocal: TStringList;
+    LocalInstalacao: String;
+    BooleanCritico: Boolean;
+begin
+  ListaLocal:=TStringList.Create;
+  ListaLocal.delimiter:= '.';
+  ListaLocal.StrictDelimiter:=true;
+  FrmDataModule.DataSourceImportarLocalInstalacao.Enabled:= false;
+  FrmDataModule.ADOQueryImportarLocalInstalacao.First;
+  FrmPrincipal.ProgressBarIncializa(FrmDataModule.ADOQueryImportarLocalInstalacao.RecordCount,
+  'Analisando "Hierarquia"...');
+  actInterromper.Enabled:= true;
+  while not FrmDataModule.ADOQueryImportarLocalInstalacao.Eof do
+  begin
+    //Interromper Processo
+    Application.ProcessMessages;
+    if Interromper and (Application.MessageBox(PChar('Deseja realmente cancelar o processo?'),
+    '.::ATENÇÃO::.',36) = 6) then
+    begin
+      Interromper := False;
+      break;
+    end
+    else
+      Interromper := False;
+    //=========================================
+    LocalInstalacao:= FrmDataModule.DataSourceImportarLocalInstalacao.DataSet.
+    FieldByName('LocalInstalacao').asString;
+    ListaLocal.Clear;
+    ListaLocal.DelimitedText:= LocalInstalacao;
+    try
+      if FrmDataModule.DataSourceImportarLocalInstalacao.DataSet.
+      FieldByName('ImpactoFalha').AsInteger = 6 then
+        BooleanCritico:= true
+      else
+        BooleanCritico:= false;
+    except
+      BooleanCritico:= false;
+    end;
+    //=============================================================
+    FrmDataModule.ADOQueryImportarLocalInstalacao.Edit;
+    FrmDataModule.DataSourceImportarLocalInstalacao.DataSet.
+    FieldByName('Hierarquia').AsInteger:= ListaLocal.Count;
+    FrmDataModule.DataSourceImportarLocalInstalacao.DataSet.
+    FieldByName('BooleanCritico').AsBoolean:= BooleanCritico;
+    FrmDataModule.DataSourceImportarLocalInstalacao.DataSet.
+    FieldByName('BCVT').AsBoolean:= VerificaClasseBCVT(
+    FrmDataModule.DataSourceImportarLocalInstalacao.DataSet.
+    FieldByName('Classe').AsString);
+    FrmDataModule.ADOQueryImportarLocalInstalacao.Post;
+    //================================================
+    FrmDataModule.ADOQueryImportarLocalInstalacao.Next;
+    FrmPrincipal.ProgressBarIncremento(1);
+  end;
+  FrmDataModule.ADOQueryImportarLocalInstalacao.First;
+  FrmDataModule.DataSourceImportarLocalInstalacao.Enabled:= true;
+  FrmPrincipal.ProgressBarAtualizar;
+  actInterromper.Enabled:= false;
+  actLimparFiltros.Execute;
+end;
+
+procedure TFrmImportacao.actBuscaEmpregadoExecute(Sender: TObject);
+  var
+    CodigoSAP: String;
+begin
+  //Preparar página de internet
+  if not Assigned(FrmWEB) then
+    FrmWEB:= TFrmWEB.Create(Application);
+  //========================================
+  CodigoSAP:= StringGridND.Cells[4,StringGridND.Row];
+  try
+    //FrmWEB.webbrowser1.GoHome;
+    FrmWEB.procuraEmpregado(CodigoSAP,1);
+  except
+    //Tentar abrir página intranet
+    try
+      FrmWEB.webbrowser1.Navigate('http://portalpetrobras.petrobras.com.br');
+      FrmWEB.procuraEmpregado(CodigoSAP,1);
+    finally
+      MessageBox(0, 'Não foi possível se conectar com a intranet Petrobras!',
+      'Intranet Petrobras', MB_ICONERROR);
+    end;
+  end;
+end;
+
+procedure TFrmImportacao.actNotaManutencaoExecute(Sender: TObject);
+  var
+    enderecoDB,enderecoExcel: String;
+    ListaColunas: TStringList;
+begin
+  ListaColunas:=TStringList.Create;
+  ListaColunas.Add('InicioAvaria');
+  ListaColunas.Add('FimAvaria');
+  ListaColunas.Add('LocalInstalacao');
+  ListaColunas.Add('NotaManutencao');
+  ListaColunas.Add('OrdemManutencao');
+  ListaColunas.Add('Equipamento');
+  ListaColunas.Add('AutorNota');
+  ListaColunas.Add('TextoBreveNOTA');
+  ListaColunas.Add('Parada');
+  ListaColunas.Add('DenominacaoLocalInstalacao');
+  ListaColunas.Add('CentroTrabalhoOM');
+  ListaColunas.Add('StatusSistemaOM');
+  ListaColunas.Add('Prioridade');
+  ListaColunas.Add('Sala');
+  ListaColunas.Add('DataInicioDesejado');
+  ListaColunas.Add('DataFimDesejado');
+  ListaColunas.Add('GrupoPlanejamento');
+  ListaColunas.Add('TipoNota');
+  ListaColunas.Add('CampoSelecao');
+  enderecoDB := ExtractFilePath(Application.ExeName)+'TEMPMemoria.mdb';
+  enderecoExcel:= edtEnderecoNotaManutencao.Text;
+  FrmPrincipal.ImportExcelAcess(enderecoExcel,enderecoDB,'tblNotaManutencao',
+  ListaColunas,FrmDataModule.ADOQueryImportarNotaManutencao);
+  actLocalizarNotaManutencao.Execute;
+end;
+
+procedure TFrmImportacao.actImportarLocalInstalacaoExecute(Sender: TObject);
+begin
+  if (FileExists(edtEnderecoLocalInstalacao.Text)) then
+  begin
+    if Application.MessageBox(PChar(
+    'Deseja realmente importar a planilha de Local de Instalação do SAP?'),
+    '.::ATENÇÃO::.',36) = 6 then
+    begin
+      actCopiarMemoriaLocal.Execute;
+      FrmPrincipal.registroEscrever('LOCALSAP',edtEnderecoLocalInstalacao.Text);
+      actLimparFiltros.Execute;
+      actLocalInstalacao.Execute;
+      actLocalizarLocalInstalacao.Execute;
+      actLocalAnalisa.Execute;
+      edtEnderecoLocalInstalacao.Text:= FrmPrincipal.registroEndereco('LOCALSAP');
+      actSubstituirMemoriaLocal.Execute;
+    end;
+  end
+  else
+  begin
+    MessageBox(0,'O endereço da planilha Excel não existe e operação foi cancelada!',
+    'Colibri', MB_ICONWARNING);
+  end;
+end;
+
+procedure TFrmImportacao.actImportarNotaManutencaoExecute(Sender: TObject);
+begin
+  if (FileExists(edtEnderecoNotaManutencao.Text)) then
+  begin
+    if Application.MessageBox(PChar(
+    'Deseja realmente importar a planilha de Notas de Manutenção do SAP?'),
+    '.::ATENÇÃO::.',36) = 6 then
+    begin
+      actCopiarMemoriaLocal.Execute;
+      FrmPrincipal.actMatrizCentroTrabalho.Execute;
+      FrmPrincipal.registroEscrever('NOTA_MANUTENCAO',edtEnderecoNotaManutencao.Text);
+      actLimparFiltros.Execute;
+      actNotaManutencao.Execute;
+      actLocalizarNotaManutencao.Execute;
+      actNOTATipoEtapaServico.Execute;
+      actNOTAPlataforma.Execute;
+      actLocalizarNotaManutencao.Execute;
+      actNOTA_Padrao.Execute;
+      actNOTA_SIGM.Execute;
+      edtEnderecoNotaManutencao.Text:= FrmPrincipal.registroEndereco('NOTA_MANUTENCAO');
+      actSubstituirMemoriaLocal.Execute;
+    end;
+  end
+  else
+  begin
+    MessageBox(0,'O endereço da planilha Excel não existe e operação foi cancelada!',
+    'Colibri', MB_ICONWARNING);
+  end;
+end;
+
+procedure TFrmImportacao.actImportarOrdemManutencaoExecute(Sender: TObject);
+begin
+  if ((FileExists(edtEnderecoCarteiraTrabalho.Text))AND
+  (FileExists(edtEnderecoTextoLongoOM.Text))) then
+  begin
+    if Application.MessageBox(PChar(
+    'Deseja realmente importar a planilha de serviços do SAP (Carteira de Trabalho)?'),
+    '.::ATENÇÃO::.',36) = 6 then
+    begin
+      actCopiarMemoriaLocal.Execute;
+      FrmPrincipal.actMatrizCentroTrabalho.Execute;
+      FrmPrincipal.registroEscrever('CARTEIRA',edtEnderecoCarteiraTrabalho.Text);
+      actLimparFiltros.Execute;
+      actOrdemManutencaoSAP.Execute;
+      actCarteiraTipoEtapaServico.Execute;
+      actCarteiraPlataforma.Execute;
+      actTextoLongoOP.Execute;
+      actTextoLongoOM.Execute;
+      edtEnderecoCarteiraTrabalho.Text:= FrmPrincipal.registroEndereco('CARTEIRA');
+      actLimparFiltros.Execute;
+      actSubstituirMemoriaLocal.Execute;
+    end;
+  end
+  else
+  begin
+    MessageBox(0,'O endereço da planilha Excel não existe e operação foi cancelada!',
+    'Colibri', MB_ICONWARNING);
+  end;
+end;
+
+procedure TFrmImportacao.actImportarExecutanteAPLATExecute(Sender: TObject);
+begin
+  if fileexists(edtEnderecoExecutanteAPLAT.Text) then
+  begin
+    FrmPrincipal.registroEscrever('POB_APLAT', edtEnderecoExecutanteAPLAT.Text);
+    if Application.MessageBox(PChar(
+    'Deseja realmente importar a planilha de executantes disponíveis no APLAT?'),
+    '.::ATENÇÃO::.',36) = 6 then
+    begin
+      FrmPrincipal.registroEscrever('POB_APLAT',edtEnderecoExecutanteAPLAT.Text);
+      actLimparFiltros.Execute;
+      actExecutanteAPLAT.Execute;
+      actAnalisaExecutanteAPLAT.Execute;
+      edtEnderecoExecutanteAPLAT.Text:= FrmPrincipal.registroEndereco('POB_APLAT');
+      actLimparFiltros.Execute;
+    end;
+  end
+  else
+  begin
+    MessageBox(0,'O endereço da planilha Excel não existe e operação foi cancelada!',
+    'Colibri', MB_ICONWARNING);
+  end;
+end;
+
+procedure TFrmImportacao.actImportarExecutanteSAPExecute(Sender: TObject);
+begin
+  if fileexists(edtEnderecoExecutanteSAP.Text) then
+  begin
+    FrmPrincipal.registroEscrever('RT_SAP', edtEnderecoExecutanteSAP.Text);
+    if Application.MessageBox(PChar(
+    'Deseja realmente importar a planilha de RT''s marítimas SAP-T31 de embarque?'),
+    '.::ATENÇÃO::.',36) = 6 then
+    begin
+      FrmPrincipal.registroEscrever('RT_SAP',edtEnderecoExecutanteSAP.Text);
+      actLimparFiltros.Execute;
+      actExecutanteSAP.Execute;
+      actAnalisaExecutanteSAP.Execute;
+      edtEnderecoExecutanteAPLAT.Text:= FrmPrincipal.registroEndereco('RT_SAP');
+    end;
+  end
+  else
+  begin
+    MessageBox(0,'O endereço da planilha Excel não existe e operação foi cancelada!',
+    'Colibri', MB_ICONWARNING);
+  end;
+end;
+
+procedure TFrmImportacao.actExecutanteAPLATExecute(Sender: TObject);
+var
+  Excel, Sheet: Variant;
+  i,matrizLinha,ARow: Integer;
+  texto: String;
+begin
+  FrmDataModule.ADOQueryImportarExecutanteAPLAT.Close;
+  FrmDataModule.ADOQueryImportarExecutanteAPLAT.SQL.Clear;
+  FrmDataModule.ADOQueryImportarExecutanteAPLAT.SQL.Add(
+  'SELECT tblExecutanteAPLAT.* FROM tblExecutanteAPLAT '+
+  'ORDER BY NomeExecutante;');
+  FrmDataModule.ADOQueryImportarExecutanteAPLAT.Open;
+  FrmDataModule.ADOQueryImportarExecutanteAPLAT.Active:= true;
+  try
+    try
+      ARow:= 7;
+      try
+        Excel := CreateOleObject('Excel.Application');
+      except
+        MessageBox(0,'Verifique se o Microsoft Office Excel esta instalado na sua máquina.',
+        'Excel', MB_ICONERROR);
+      end;
+      // Abrir o arquivo
+      try
+        Excel.Workbooks.Open(edtEnderecoExecutanteAPLAT.Text);
+      except
+        MessageBox(0,'Arquivo não encontrado, verifique o endereço do arquivo!',
+        'Excel', MB_ICONERROR);
+      end;
+      // Abrir a primeira planilha do arquivo
+      Sheet := Excel.WorkSheets[1];
+      // ============================================
+      //Excluir todos os registros atuais
+      // ============================================
+      FrmPrincipal.deleteQueryRapido(FrmDataModule.ADOQueryImportarExecutanteAPLAT,
+      'tblExecutanteAPLAT');
+      // ============================================
+      //Verificar a ultima Linha
+      // ============================================
+      matrizLinha:= (Sheet.Cells.SpecialCells(11).Row);
+      // Inicializar ProgressBar
+      FrmPrincipal.ProgressBarIncializa(matrizLinha,
+      'Importando Arquivo Excel...');
+      // ============================================
+      // Preencher as planilhas
+      // ============================================
+      FrmDataModule.DataSourceImportarExecutanteAPLAT.Enabled := false;
+      actInterromper.Enabled:= true;
+      for i := ARow to matrizLinha do
+      begin
+        Application.ProcessMessages;
+        if Interromper and (Application.MessageBox(PChar('Deseja realmente cancelar o processo?'),
+        '.::ATENÇÃO::.',36) = 6) then
+        begin
+          Interromper := False;
+          break;
+        end
+        else
+          Interromper := False;
+
+        try
+          // Inserir novo registro na tabela de dados
+          FrmDataModule.ADOQueryImportarExecutanteAPLAT.Insert;
+          // Preencher as colunas do registro na tabela de dados
+          texto:= Excel.Workbooks[1].Sheets[1].Cells[i,1];
+          FrmDataModule.DataSourceImportarExecutanteAPLAT.DataSet.
+          FieldByName('CamaLeito').AsString := Excel.Workbooks[1].Sheets[1].Cells[i,1];
+          FrmDataModule.DataSourceImportarExecutanteAPLAT.DataSet.
+          FieldByName('NomeExecutante').AsString := Excel.Workbooks[1].Sheets[1].Cells[i,2];
+          FrmDataModule.DataSourceImportarExecutanteAPLAT.DataSet.
+          FieldByName('codigoSAP').AsString := Excel.Workbooks[1].Sheets[1].Cells[i,3];
+          FrmDataModule.DataSourceImportarExecutanteAPLAT.DataSet.
+          FieldByName('Funcao').AsString := Excel.Workbooks[1].Sheets[1].Cells[i,4];
+          FrmDataModule.DataSourceImportarExecutanteAPLAT.DataSet.
+          FieldByName('DataEmbarque').AsDateTime :=
+          StrToDate(Excel.Workbooks[1].Sheets[1].Cells[i,5]);
+          FrmDataModule.DataSourceImportarExecutanteAPLAT.DataSet.
+          FieldByName('DataDesembarque').AsDateTime :=
+          StrToDate(Excel.Workbooks[1].Sheets[1].Cells[i,6]);
+          FrmDataModule.DataSourceImportarExecutanteAPLAT.DataSet.
+          FieldByName('Empresa').AsString := Excel.Workbooks[1].Sheets[1].Cells[i,7];
+          FrmDataModule.DataSourceImportarExecutanteAPLAT.DataSet.
+          FieldByName('DiasEmbarcado').AsString := Excel.Workbooks[1].Sheets[1].Cells[i,8];
+
+          FrmDataModule.ADOQueryImportarExecutanteAPLAT.Post;
+        except
+          FrmDataModule.ADOQueryImportarExecutanteAPLAT.Cancel;
+        end;
+        // Incremento ProgressBar
+        FrmPrincipal.ProgressBarIncremento(1);
+      end;
+      FrmDataModule.ADOQueryImportarExecutanteAPLAT.First;
+      FrmDataModule.DataSourceImportarExecutanteAPLAT.Enabled := true;
+      actInterromper.Enabled:= false;
+      // Atualizar ProgressBar
+      FrmPrincipal.ProgressBarAtualizar;
+    finally
+      //Fechar Excel
+      Excel.Application.DisplayAlerts := False; // Alle Rückfragen ausstellen
+      Excel.Quit;
+      Excel := Unassigned;
+      FreeAndNil(Excel);
+      Excel := 0;
+    end;
+  except
+    MessageBox(0,'Ocorreu um erro durante a importação e a operação foi cancelada!',
+    'Excel', MB_ICONERROR);
+    FrmDataModule.ADOQueryImportarExecutanteAPLAT.First;
+    FrmDataModule.DataSourceImportarExecutanteAPLAT.Enabled := true;
+    // Atualizar ProgressBar
+    FrmPrincipal.ProgressBarAtualizar;
+    //Fechar Excel
+    Excel.Application.DisplayAlerts := False; // Alle Rückfragen ausstellen
+    Excel.Quit;
+    Excel := Unassigned;
+    FreeAndNil(Excel);
+    Excel := 0;
+  end;
+end;
+
+procedure TFrmImportacao.actExecutanteSAPExecute(Sender: TObject);
+var
+  Excel, Sheet: Variant;
+  matrizLinha,ARow,i: Integer;
+  Origem,Documento: String;
+begin
+  FrmDataModule.ADOQueryImportarExecutanteSAP.Close;
+  FrmDataModule.ADOQueryImportarExecutanteSAP.SQL.Clear;
+  FrmDataModule.ADOQueryImportarExecutanteSAP.SQL.Add(
+  'SELECT tblExecutanteSAP.* FROM tblExecutanteSAP '+
+  'ORDER BY NomeExecutante;');
+  FrmDataModule.ADOQueryImportarExecutanteSAP.Open;
+  FrmDataModule.ADOQueryImportarExecutanteSAP.Active:= true;
+  try
+    try
+      ARow:= 2;
+      try
+        Excel := CreateOleObject('Excel.Application');
+      except
+        MessageBox(0,'Verifique se o Microsoft Office Excel esta instalado na sua máquina.',
+        'Excel', MB_ICONERROR);
+      end;
+      // Abrir o arquivo
+      try
+        Excel.Workbooks.Open(edtEnderecoExecutanteSAP.Text);
+      except
+        MessageBox(0,'Arquivo não encontrado, verifique o endereço do arquivo!',
+        'Excel', MB_ICONERROR);
+      end;
+      // Abrir a primeira planilha do arquivo
+      Sheet := Excel.WorkSheets[1];
+      // ============================================
+      //Excluir todos os registros atuais
+      // ============================================
+      FrmPrincipal.deleteQueryRapido(FrmDataModule.ADOQueryImportarExecutanteSAP,'tblExecutanteSAP');
+      // ============================================
+      //Verificar a ultima Linha
+      // ============================================
+      matrizLinha:= (Sheet.Cells.SpecialCells(11).Row);
+      // Inicializar ProgressBar
+      FrmPrincipal.ProgressBarIncializa(matrizLinha,
+      'Importando Arquivo Excel...');
+      // ============================================
+      // Preencher as planilhas
+      // ============================================
+      FrmDataModule.DataSourceImportarExecutanteSAP.Enabled := false;
+      actInterromper.Enabled:= true;
+      for i := ARow to matrizLinha do
+      begin
+        Application.ProcessMessages;
+        if Interromper and (Application.MessageBox(PChar('Deseja realmente cancelar o processo?'),
+        '.::ATENÇÃO::.',36) = 6) then
+        begin
+          Interromper := False;
+          break;
+        end
+        else
+          Interromper := False;
+        Origem:= Excel.Workbooks[1].Sheets[1].Cells[i,11];
+        if Origem = 'TMIB' then
+        begin
+          //Verifica se é CPF e Corrige se não mantem numero para OutroDocumento
+          Documento:= Excel.Workbooks[1].Sheets[1].Cells[i,5];
+          if Documento <> '' then
+          begin
+            Documento:= FrmPrincipal.VerificaCPF(Documento);
+            if Documento = '' then
+            Documento:= Excel.Workbooks[1].Sheets[1].Cells[i,5];
+          end;
+          try
+            // Inserir novo registro na tabela de dados
+            FrmDataModule.ADOQueryImportarExecutanteSAP.Insert;
+            // Preencher as colunas do registro na tabela de dados
+            FrmDataModule.DataSourceImportarExecutanteSAP.DataSet.
+            FieldByName('TipoNota').AsString := Excel.Workbooks[1].Sheets[1].Cells[i,1];
+            FrmDataModule.DataSourceImportarExecutanteSAP.DataSet.
+            FieldByName('Nota').AsString := Excel.Workbooks[1].Sheets[1].Cells[i,2];
+            FrmDataModule.DataSourceImportarExecutanteSAP.DataSet.
+            FieldByName('DescricaoNota').AsString := Excel.Workbooks[1].Sheets[1].Cells[i,3];
+            FrmDataModule.DataSourceImportarExecutanteSAP.DataSet.
+            FieldByName('CodigoSAP').AsString := Excel.Workbooks[1].Sheets[1].Cells[i,4];
+            FrmDataModule.DataSourceImportarExecutanteSAP.DataSet.
+            FieldByName('Documento').AsString := Documento;
+            FrmDataModule.DataSourceImportarExecutanteSAP.DataSet.
+            FieldByName('NomeExecutante').AsString := Excel.Workbooks[1].Sheets[1].Cells[i,6];
+            FrmDataModule.DataSourceImportarExecutanteSAP.DataSet.
+            FieldByName('DataEmbarque').AsDateTime :=
+            StrToDate(Excel.Workbooks[1].Sheets[1].Cells[i,7]);
+            FrmDataModule.DataSourceImportarExecutanteSAP.DataSet.
+            FieldByName('Destino').AsString := Excel.Workbooks[1].Sheets[1].Cells[i,8];
+            FrmDataModule.DataSourceImportarExecutanteSAP.DataSet.
+            FieldByName('ModalDefinido').AsString := Excel.Workbooks[1].Sheets[1].Cells[i,9];
+            FrmDataModule.DataSourceImportarExecutanteSAP.DataSet.
+            FieldByName('Origem').AsString := Excel.Workbooks[1].Sheets[1].Cells[i,11];
+            FrmDataModule.DataSourceImportarExecutanteSAP.DataSet.
+            FieldByName('CriadoPor').AsString := Excel.Workbooks[1].Sheets[1].Cells[i,19];
+            FrmDataModule.ADOQueryImportarExecutanteSAP.Post;
+          except
+            FrmDataModule.ADOQueryImportarExecutanteSAP.Cancel;
+          end;
+        end;
+        // Incremento ProgressBar
+        FrmPrincipal.ProgressBarIncremento(1);
+      end;
+      FrmDataModule.ADOQueryImportarExecutanteSAP.First;
+      FrmDataModule.DataSourceImportarExecutanteSAP.Enabled := true;
+      actInterromper.Enabled:= false;
+      // Atualizar ProgressBar
+      FrmPrincipal.ProgressBarAtualizar;
+    finally
+      //Fechar Excel
+      Excel.Application.DisplayAlerts := False; // Alle Rückfragen ausstellen
+      Excel.Quit;
+      Excel := Unassigned;
+      FreeAndNil(Excel);
+      Excel := 0;
+    end;
+  except
+    MessageBox(0,'Ocorreu um erro durante a importação e a operação foi cancelada!',
+    'Excel', MB_ICONERROR);
+    FrmDataModule.ADOQueryImportarExecutanteSAP.First;
+    FrmDataModule.DataSourceImportarExecutanteSAP.Enabled := true;
+    // Atualizar ProgressBar
+    FrmPrincipal.ProgressBarAtualizar;
+    //Fechar Excel
+    Excel.Application.DisplayAlerts := False; // Alle Rückfragen ausstellen
+    Excel.Quit;
+    Excel := Unassigned;
+    FreeAndNil(Excel);
+    Excel := 0;
+  end;
+end;
+
+procedure TFrmImportacao.DBGridNotaManutencaoDrawColumnCell(Sender: TObject;
+  const Rect: TRect; DataCol: Integer; Column: TColumn; State: TGridDrawState);
+begin
+  FrmPrincipal.GridZebrado(DBGridNotaManutencao,ColunasNotaManutencao,State,Rect,DataCol,Column);
+  if (Column.Field.FieldName = 'BooleanCritico') then
+  begin
+    if (FrmDataModule.DataSourceImportarNotaManutencao.DataSet.
+    FieldByName('BooleanCritico').AsBoolean) then
+    begin
+      TDBGrid(Sender).Canvas.FillRect(Rect);
+      FrmPrincipal.ImageList1.Draw(TDBGrid(Sender).Canvas, Rect.Left +10,Rect.Top + 1, 154);
+    end
+    else
+    begin
+      TDBGrid(Sender).Canvas.FillRect(Rect);
+      FrmPrincipal.ImageList1.Draw(TDBGrid(Sender).Canvas, Rect.Left +10,Rect.Top + 1, 155);
+    end;
+  end;
+end;
+
+procedure TFrmImportacao.DBGridNotaManutencaoTitleClick(Column: TColumn);
+begin
+  FrmPrincipal.configurarFiltro(0,Column.FieldName,IntToStr(Column.Index),
+  Column.ReadOnly,actFiltroInserir,actGridASC,actGridDESC,actGridDESC);
+  //======================================================
+  FrmPrincipal.titleGrid(ColunasNotaManutencao,'Memoria',FrmDataModule.ADOQueryImportarNotaManutencao.SQL.Text);
+end;
+
+procedure TFrmImportacao.DBGridLocalInstalacaoDrawColumnCell(Sender: TObject;
+  const Rect: TRect; DataCol: Integer; Column: TColumn; State: TGridDrawState);
+begin
+  FrmPrincipal.GridZebrado(DBGridLocalInstalacao,ColunasLocalInstalacao,
+  State,Rect,DataCol,Column);
+  if (Column.Field.FieldName = 'BooleanCritico') then
+  begin
+    if (FrmDataModule.DataSourceImportarLocalInstalacao.DataSet.
+    FieldByName('BooleanCritico').AsBoolean) then
+    begin
+      TDBGrid(Sender).Canvas.FillRect(Rect);
+      FrmPrincipal.ImageList1.Draw(TDBGrid(Sender).Canvas, Rect.Left +10,Rect.Top + 1, 154);
+    end
+    else
+    begin
+      TDBGrid(Sender).Canvas.FillRect(Rect);
+      FrmPrincipal.ImageList1.Draw(TDBGrid(Sender).Canvas, Rect.Left +10,Rect.Top + 1, 155);
+    end;
+  end
+  else if (Column.Field.FieldName = 'BCVT') then
+  begin
+    if (FrmDataModule.DataSourceImportarLocalInstalacao.DataSet.
+    FieldByName('BCVT').AsBoolean) then
+    begin
+      TDBGrid(Sender).Canvas.FillRect(Rect);
+      FrmPrincipal.ImageList1.Draw(TDBGrid(Sender).Canvas, Rect.Left +10,Rect.Top + 1, 154);
+    end
+    else
+    begin
+      TDBGrid(Sender).Canvas.FillRect(Rect);
+      FrmPrincipal.ImageList1.Draw(TDBGrid(Sender).Canvas, Rect.Left +10,Rect.Top + 1, 155);
+    end;
+  end;
+end;
+
+procedure TFrmImportacao.DBGridLocalInstalacaoTitleClick(Column: TColumn);
+begin
+  FrmPrincipal.configurarFiltro(0,Column.FieldName,IntToStr(Column.Index),
+  Column.ReadOnly,actFiltroInserir,actGridASC,actGridDESC,actGridDESC);
+  //======================================================
+  FrmPrincipal.titleGrid(ColunasLocalInstalacao,'Memoria',FrmDataModule.ADOQueryImportarLocalInstalacao.SQL.Text);
+end;
+
+procedure TFrmImportacao.DBGridExecutanteAPLATDrawColumnCell(Sender: TObject;
+  const Rect: TRect; DataCol: Integer; Column: TColumn; State: TGridDrawState);
+begin
+  FrmPrincipal.GridZebrado(DBGridExecutanteAPLAT,ColunasAPLAT,State,Rect,DataCol,Column);
+  if (Column.Field.FieldName = 'txtTipoEtapaServico')then
+  begin
+    if (FrmDataModule.DataSourceImportarExecutanteAPLAT.DataSet.
+    FieldByName('txtTipoEtapaServico').AsString = 'NÃO DEFINIDO')  then
+    begin
+      DBGridExecutanteAPLAT.Canvas.Brush.Color:= clRed;
+      DBGridExecutanteAPLAT.Font.Color:= clBlack;
+      DBGridExecutanteAPLAT.Canvas.FillRect(Rect);
+      DBGridExecutanteAPLAT.DefaultDrawColumnCell(Rect, DataCol,Column, State);
+    end;
+  end;
+  if (Column.Field.FieldName = 'txtFuncao')then
+  begin
+    if (FrmDataModule.DataSourceImportarExecutanteAPLAT.DataSet.
+    FieldByName('txtFuncao').AsString = 'NÃO DEFINIDO')  then
+    begin
+      DBGridExecutanteAPLAT.Canvas.Brush.Color:= clRed;
+      DBGridExecutanteAPLAT.Font.Color:= clBlack;
+      DBGridExecutanteAPLAT.Canvas.FillRect(Rect);
+      DBGridExecutanteAPLAT.DefaultDrawColumnCell(Rect, DataCol,Column, State);
+    end;
+  end;
+  if (Column.Field.FieldName = 'txtEmpresa')then
+  begin
+    if (FrmDataModule.DataSourceImportarExecutanteAPLAT.DataSet.
+    FieldByName('txtEmpresa').AsString = 'NÃO DEFINIDO')  then
+    begin
+      DBGridExecutanteAPLAT.Canvas.Brush.Color:= clRed;
+      DBGridExecutanteAPLAT.Font.Color:= clBlack;
+      DBGridExecutanteAPLAT.Canvas.FillRect(Rect);
+      DBGridExecutanteAPLAT.DefaultDrawColumnCell(Rect, DataCol,Column, State);
+    end;
+  end;
+end;
+
+procedure TFrmImportacao.DBGridExecutanteAPLATTitleClick(Column: TColumn);
+begin
+  FrmPrincipal.configurarFiltro(0,Column.FieldName,IntToStr(Column.Index),
+  Column.ReadOnly,actFiltroInserir,actGridASC,actGridDESC,actGridDESC);
+  //======================================================
+  FrmPrincipal.titleGrid(ColunasAPLAT,'Memoria',FrmDataModule.ADOQueryImportarExecutanteAPLAT.SQL.Text);
+end;
+
+procedure TFrmImportacao.DBGridExecutanteSAPDrawColumnCell(Sender: TObject;
+  const Rect: TRect; DataCol: Integer; Column: TColumn; State: TGridDrawState);
+begin
+  FrmPrincipal.GridZebrado(DBGridExecutanteSAP,ColunasT31,State,Rect,DataCol,Column);
+  if (Column.Field.FieldName = 'txtTipoEtapaServico') then
+  begin
+    if (FrmDataModule.DataSourceImportarExecutanteSAP.DataSet.
+    FieldByName('txtTipoEtapaServico').AsString = 'NÃO DEFINIDO')  then
+    begin
+      DBGridExecutanteSAP.Canvas.Brush.Color:= clRed;
+      DBGridExecutanteSAP.Font.Color:= clBlack;
+      DBGridExecutanteSAP.Canvas.FillRect(Rect);
+      DBGridExecutanteSAP.DefaultDrawColumnCell(Rect, DataCol,Column, State);
+    end;
+  end;
+  if (Column.Field.FieldName = 'txtFuncao') then
+  begin
+    if (FrmDataModule.DataSourceImportarExecutanteSAP.DataSet.
+    FieldByName('txtFuncao').AsString = 'NÃO DEFINIDO')  then
+    begin
+      DBGridExecutanteSAP.Canvas.Brush.Color:= clRed;
+      DBGridExecutanteSAP.Font.Color:= clBlack;
+      DBGridExecutanteSAP.Canvas.FillRect(Rect);
+      DBGridExecutanteSAP.DefaultDrawColumnCell(Rect, DataCol,Column, State);
+    end;
+  end;
+  if (Column.Field.FieldName = 'txtEmpresa') then
+  begin
+    if (FrmDataModule.DataSourceImportarExecutanteSAP.DataSet.
+    FieldByName('txtEmpresa').AsString = 'NÃO DEFINIDO')  then
+    begin
+      DBGridExecutanteSAP.Canvas.Brush.Color:= clRed;
+      DBGridExecutanteSAP.Font.Color:= clBlack;
+      DBGridExecutanteSAP.Canvas.FillRect(Rect);
+      DBGridExecutanteSAP.DefaultDrawColumnCell(Rect, DataCol,Column, State);
+    end;
+  end;
+
+end;
+
+procedure TFrmImportacao.DBGridExecutanteSAPTitleClick(Column: TColumn);
+begin
+  FrmPrincipal.configurarFiltro(0,Column.FieldName,IntToStr(Column.Index),
+  Column.ReadOnly,actFiltroInserir,actGridASC,actGridDESC,actGridDESC);
+  //======================================================
+  FrmPrincipal.titleGrid(ColunasT31,'Memoria',FrmDataModule.ADOQueryImportarExecutanteSAP.SQL.Text);
+end;
+
+procedure TFrmImportacao.DBGridCarteiraTrabalhoDrawColumnCell(Sender: TObject;
+  const Rect: TRect; DataCol: Integer; Column: TColumn; State: TGridDrawState);
+begin
+  FrmPrincipal.GridZebrado(DBGridCarteiraTrabalho,ColunasCarteira,State,Rect,DataCol,Column);
+  if (Column.Field.FieldName = 'BooleanCritico') then
+  begin
+    if FrmDataModule.DataSourceImportarCarteiraTrabalho.DataSet.
+    FieldByName('BooleanCritico').AsBoolean then
+    begin
+      TDBGrid(Sender).Canvas.FillRect(Rect);
+      FrmPrincipal.ImageList1.Draw(TDBGrid(Sender).Canvas, Rect.Left +10,Rect.Top + 1, 154);
+    end
+    else
+    begin
+      TDBGrid(Sender).Canvas.FillRect(Rect);
+      FrmPrincipal.ImageList1.Draw(TDBGrid(Sender).Canvas, Rect.Left +10,Rect.Top + 1, 155);
+    end;
+  end
+  else if (Column.Field.FieldName = 'txtTipoEtapaServicoOM')then
+  begin
+    if (FrmDataModule.DataSourceImportarCarteiraTrabalho.DataSet.
+    FieldByName('txtTipoEtapaServicoOM').AsString = 'NÃO DEFINIDO')  then
+    begin
+      DBGridCarteiraTrabalho.Canvas.Brush.Color:= clRed;
+      DBGridCarteiraTrabalho.Font.Color:= clBlack;
+      DBGridCarteiraTrabalho.Canvas.FillRect(Rect);
+      DBGridCarteiraTrabalho.DefaultDrawColumnCell(Rect, DataCol,Column, State);
+    end;
+  end
+  else if (Column.Field.FieldName = 'txtTipoEtapaServicoOP')then
+  begin
+    if (FrmDataModule.DataSourceImportarCarteiraTrabalho.DataSet.
+    FieldByName('txtTipoEtapaServicoOP').AsString = 'NÃO DEFINIDO')  then
+    begin
+      DBGridCarteiraTrabalho.Canvas.Brush.Color:= clRed;
+      DBGridCarteiraTrabalho.Font.Color:= clBlack;
+      DBGridCarteiraTrabalho.Canvas.FillRect(Rect);
+      DBGridCarteiraTrabalho.DefaultDrawColumnCell(Rect, DataCol,Column, State);
+    end;
+  end
+  else if (Column.Field.FieldName = 'TipoOperacao') then
+  begin
+    if FrmDataModule.DataSourceImportarCarteiraTrabalho.DataSet.
+    FieldByName('TipoOperacao').AsString = 'ABER' then
+    begin
+      DBGridCarteiraTrabalho.Canvas.Brush.Color:= clLime;
+      DBGridCarteiraTrabalho.Font.Color:= clBlack;
+      DBGridCarteiraTrabalho.Canvas.FillRect(Rect);
+      DBGridCarteiraTrabalho.DefaultDrawColumnCell(Rect, DataCol,Column, State);
+    end
+    else if FrmDataModule.DataSourceImportarCarteiraTrabalho.DataSet.
+    FieldByName('TipoOperacao').AsString = 'LIB' then
+    begin
+      DBGridCarteiraTrabalho.Canvas.Brush.Color:= clGreen;
+      DBGridCarteiraTrabalho.Font.Color:= clBlack;
+      DBGridCarteiraTrabalho.Canvas.FillRect(Rect);
+      DBGridCarteiraTrabalho.DefaultDrawColumnCell(Rect, DataCol,Column, State);
+    end
+    else if FrmDataModule.DataSourceImportarCarteiraTrabalho.DataSet.
+    FieldByName('TipoOperacao').AsString = 'IMPR' then
+    begin
+      DBGridCarteiraTrabalho.Canvas.Brush.Color:= clAqua;
+      DBGridCarteiraTrabalho.Font.Color:= clBlack;
+      DBGridCarteiraTrabalho.Canvas.FillRect(Rect);
+      DBGridCarteiraTrabalho.DefaultDrawColumnCell(Rect, DataCol,Column, State);
+    end
+    else if FrmDataModule.DataSourceImportarCarteiraTrabalho.DataSet.
+    FieldByName('TipoOperacao').AsString = 'CNPA' then
+    begin
+      DBGridCarteiraTrabalho.Canvas.Brush.Color:= clYellow;
+      DBGridCarteiraTrabalho.Font.Color:= clBlack;
+      DBGridCarteiraTrabalho.Canvas.FillRect(Rect);
+      DBGridCarteiraTrabalho.DefaultDrawColumnCell(Rect, DataCol,Column, State);
+    end
+    else if FrmDataModule.DataSourceImportarCarteiraTrabalho.DataSet.
+    FieldByName('TipoOperacao').AsString = 'CONF' then
+    begin
+      DBGridCarteiraTrabalho.Canvas.Brush.Color:= clSkyBlue;
+      DBGridCarteiraTrabalho.Font.Color:= clBlack;
+      DBGridCarteiraTrabalho.Canvas.FillRect(Rect);
+      DBGridCarteiraTrabalho.DefaultDrawColumnCell(Rect, DataCol,Column, State);
+    end
+    else if FrmDataModule.DataSourceImportarCarteiraTrabalho.DataSet.
+    FieldByName('TipoOperacao').AsString = 'CCTA' then
+    begin
+      DBGridCarteiraTrabalho.Canvas.Brush.Color:= clSilver;
+      DBGridCarteiraTrabalho.Font.Color:= clBlack;
+      DBGridCarteiraTrabalho.Canvas.FillRect(Rect);
+      DBGridCarteiraTrabalho.DefaultDrawColumnCell(Rect, DataCol,Column, State);
+    end;
+  end;
+end;
+
+procedure TFrmImportacao.DBGridCarteiraTrabalhoTitleClick(Column: TColumn);
+begin
+  FrmPrincipal.configurarFiltro(0,Column.FieldName,IntToStr(Column.Index),
+  Column.ReadOnly,actFiltroInserir,actGridASC,actGridDESC,actGridDESC);
+  //======================================================
+  FrmPrincipal.titleGrid(ColunasCarteira,'Memoria',FrmDataModule.ADOQueryImportarCarteiraTrabalho.SQL.Text);
+end;
+
+procedure TFrmImportacao.editEndereco(edt: TEdit);
+begin
+  OpenDialog1.Filter := 'Microsoft Excel |*.xlsx|Microsoft Excel 97-2003|*.xls|Dados XML|*.xml|Página da Web|*.htm;*.html';
+  OpenDialog1.DefaultExt := '*.xlsx';
+  //OpenDialog1.DefaultExt:= '*.xls';
+  OpenDialog1.FileName:= edt.Text;
+  if OpenDialog1.Execute then
+    edt.Text:= OpenDialog1.FileName;
+end;
+
+procedure TFrmImportacao.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+  Action:= caFree;
+  FrmImportacao:=nil;
+end;
+
+procedure TFrmImportacao.FormCreate(Sender: TObject);
+begin
+  FrmPrincipal.MDIChildCreated(self.Handle);
+  PageControlImportacao.TabIndex:=0;
+  Interromper:= false;
+  tempoExcedido:= false;
+  actInterromper.Enabled:= false;
+  FrmDataModule.ADOQueryTipoEtapaServico.Active:= false;
+  FrmDataModule.ADOQueryTipoEtapaServico.Active:= true;
+  //=====================================
+  PageControlImportacao.Pages[0].TabVisible:= true;
+  PageControlImportacao.Pages[1].TabVisible:= true;
+  //Incicialização
+  FrmPrincipal.SetUpColunasLayout(DBGridExecutanteAPLAT, ColunasAPLAT);
+  FrmPrincipal.SetUpColunasLayout(DBGridExecutanteSAP, ColunasT31);
+  FrmPrincipal.SetUpColunasLayout(DBGridCarteiraTrabalho, ColunasCarteira);
+  FrmPrincipal.SetUpColunasLayout(DBGridNotaManutencao, ColunasNotaManutencao);
+  FrmPrincipal.SetUpColunasLayout(DBGridLocalInstalacao, ColunasLocalInstalacao);
+  //Carregar endereços
+  edtEnderecoExecutanteAPLAT.Text:= FrmPrincipal.registroEndereco('POB_APLAT');
+  if FrmPrincipal.logPerfil = 'Administrador' then
+  begin
+    DBGridExecutanteSAP.ReadOnly:= false;
+    DBGridExecutanteAPLAT.ReadOnly:= false;
+    //Executantes APLAT
+    actImportarExecutanteAPLAT.Enabled:= true;
+    actAnalisaExecutanteAPLAT.Enabled:= true;
+    actND_APLAT.Enabled:= true;
+    actExcluirAPLAT_Executantes.Enabled:= true;
+    actEnderecoExecutanteAPLAT.Enabled:= true;
+    //Executantes SAP
+    actImportarExecutanteSAP.Enabled:= true;
+    actAnalisaExecutanteSAP.Enabled:= true;
+    actND_SAP.Enabled:= true;
+    actExcluirSAP_Executantes.Enabled:= true;
+    actEnderecoExecutanteSAP.Enabled:= true;
+    //Carteira de trabalho
+    actImportarOrdemManutencao.Enabled:= true;
+    actCarteiraTipoEtapaServico.Enabled:= true;
+    actCarteiraPlataforma.Enabled:= true;
+    actExcluirSAP_Carteira.Enabled:= true;
+    actEnderecoTextoLongoOM.Enabled:= true;
+    actEnderecoTextoLongoOP.Enabled:= true;
+    actEnderecoCarteira.Enabled:= true;
+    //Nota de Manutenação
+    actImportarNotaManutencao.Enabled:= true;
+    actNOTATipoEtapaServico.Enabled:= true;
+    actNOTAPlataforma.Enabled:= true;
+    actExcluirSAP_FO.Enabled:= true;
+    actEnderecoNotaManutencao.Enabled:= true;
+    //Local de Instalação
+    actImportarLocalInstalacao.Enabled:= true;
+    actLocalAnalisa.Enabled:= true;
+    actExcluirLocalInstalacao.Enabled:= true;
+    actEnderecoLocalInstalacao.Enabled:= true;
+    //Vetor de impacto de falha
+    FrmPrincipal.actMatrizImpactoFalha.Execute;
+  end
+  else if FrmPrincipal.logPerfil = 'Supervisor' then
+  begin
+    DBGridExecutanteSAP.ReadOnly:= false;
+    DBGridExecutanteAPLAT.ReadOnly:= false;
+    //Executantes APLAT
+    actImportarExecutanteAPLAT.Enabled:= true;
+    actAnalisaExecutanteAPLAT.Enabled:= true;
+    actND_APLAT.Enabled:= true;
+    actExcluirAPLAT_Executantes.Enabled:= true;
+    actEnderecoExecutanteAPLAT.Enabled:= true;
+    //Executantes SAP
+    actImportarExecutanteSAP.Enabled:= true;
+    actAnalisaExecutanteSAP.Enabled:= true;
+    actND_SAP.Enabled:= true;
+    actExcluirSAP_Executantes.Enabled:= true;
+    actEnderecoExecutanteSAP.Enabled:= true;
+    //Carteira de trabalho
+    actImportarOrdemManutencao.Enabled:= true;
+    actCarteiraTipoEtapaServico.Enabled:= true;
+    actCarteiraPlataforma.Enabled:= true;
+    actExcluirSAP_Carteira.Enabled:= true;
+    actEnderecoTextoLongoOM.Enabled:= true;
+    actEnderecoTextoLongoOP.Enabled:= true;
+    actEnderecoCarteira.Enabled:= true;
+    //Nota de Manutenação
+    actImportarNotaManutencao.Enabled:= true;
+    actNOTATipoEtapaServico.Enabled:= true;
+    actNOTAPlataforma.Enabled:= true;
+    actExcluirSAP_FO.Enabled:= true;
+    actEnderecoNotaManutencao.Enabled:= true;
+    //Local de Instalação
+    actImportarLocalInstalacao.Enabled:= true;
+    actLocalAnalisa.Enabled:= true;
+    actExcluirLocalInstalacao.Enabled:= true;
+    actEnderecoLocalInstalacao.Enabled:= true;
+    //Vetor de impacto de falha
+    FrmPrincipal.actMatrizImpactoFalha.Execute;
+  end
+  else if FrmPrincipal.logPerfil = 'PIOP' then
+  begin
+    DBGridExecutanteSAP.ReadOnly:= true;
+    DBGridExecutanteAPLAT.ReadOnly:= true;
+    //Executantes APLAT
+    actImportarExecutanteAPLAT.Enabled:= true;
+    actAnalisaExecutanteAPLAT.Enabled:= true;
+    actND_APLAT.Enabled:= true;
+    actExcluirAPLAT_Executantes.Enabled:= true;
+    actEnderecoExecutanteAPLAT.Enabled:= true;
+    //Executantes SAP
+    actImportarExecutanteSAP.Enabled:= true;
+    actAnalisaExecutanteSAP.Enabled:= true;
+    actND_SAP.Enabled:= true;
+    actExcluirSAP_Executantes.Enabled:= true;
+    actEnderecoExecutanteSAP.Enabled:= true;
+    //Carteira de trabalho
+    actImportarOrdemManutencao.Enabled:= true;
+    actCarteiraTipoEtapaServico.Enabled:= true;
+    actCarteiraPlataforma.Enabled:= true;
+    actExcluirSAP_Carteira.Enabled:= true;
+    actEnderecoTextoLongoOM.Enabled:= true;
+    actEnderecoTextoLongoOP.Enabled:= true;
+    actEnderecoCarteira.Enabled:= true;
+    //Nota de Manutenação
+    actImportarNotaManutencao.Enabled:= true;
+    actNOTATipoEtapaServico.Enabled:= true;
+    actNOTAPlataforma.Enabled:= true;
+    actExcluirSAP_FO.Enabled:= true;
+    actEnderecoNotaManutencao.Enabled:= true;
+    //Local de Instalação
+    actImportarLocalInstalacao.Enabled:= true;
+    actLocalAnalisa.Enabled:= true;
+    actExcluirLocalInstalacao.Enabled:= true;
+    actEnderecoLocalInstalacao.Enabled:= true;
+    //Vetor de impacto de falha
+    FrmPrincipal.actMatrizImpactoFalha.Execute;
+  end
+  else if ((FrmPrincipal.logPerfil = 'Programação')OR
+  (FrmPrincipal.logPerfil = 'SEG')) then
+  begin
+    DBGridExecutanteSAP.ReadOnly:= true;
+    DBGridExecutanteAPLAT.ReadOnly:= true;
+    //Executantes APLAT
+    actImportarExecutanteAPLAT.Enabled:= true;
+    actAnalisaExecutanteAPLAT.Enabled:= true;
+    actND_APLAT.Enabled:= true;
+    actExcluirAPLAT_Executantes.Enabled:= true;
+    actEnderecoExecutanteAPLAT.Enabled:= true;
+    //Executantes SAP
+    actImportarExecutanteSAP.Enabled:= true;
+    actAnalisaExecutanteSAP.Enabled:= true;
+    actND_SAP.Enabled:= true;
+    actExcluirSAP_Executantes.Enabled:= true;
+    actEnderecoExecutanteSAP.Enabled:= true;
+    //Carteira de trabalho
+    actImportarOrdemManutencao.Enabled:= false;
+    actCarteiraTipoEtapaServico.Enabled:= false;
+    actCarteiraPlataforma.Enabled:= false;
+    actExcluirSAP_Carteira.Enabled:= false;
+    actEnderecoTextoLongoOM.Enabled:= false;
+    actEnderecoTextoLongoOP.Enabled:= false;
+    actEnderecoCarteira.Enabled:= false;
+    //Nota de Manutenação
+    actImportarNotaManutencao.Enabled:= false;
+    actNOTATipoEtapaServico.Enabled:= false;
+    actNOTAPlataforma.Enabled:= false;
+    actExcluirSAP_FO.Enabled:= false;
+    actEnderecoNotaManutencao.Enabled:= false;
+    //Local de Instalação
+    actImportarLocalInstalacao.Enabled:= false;
+    actLocalAnalisa.Enabled:= false;
+    actExcluirLocalInstalacao.Enabled:= false;
+    actEnderecoLocalInstalacao.Enabled:= false;
+    //Vetor de impacto de falha
+    FrmPrincipal.actMatrizImpactoFalha.Execute;
+  end
+  else if FrmPrincipal.logPerfil = 'Hotelaria' then
+  begin
+    DBGridExecutanteSAP.ReadOnly:= true;
+    DBGridExecutanteAPLAT.ReadOnly:= true;
+    //Executantes APLAT
+    actImportarExecutanteAPLAT.Enabled:= true;
+    actAnalisaExecutanteAPLAT.Enabled:= true;
+    actND_APLAT.Enabled:= true;
+    actExcluirAPLAT_Executantes.Enabled:= true;
+    actEnderecoExecutanteAPLAT.Enabled:= true;
+    //Executantes SAP
+    actImportarExecutanteSAP.Enabled:= true;
+    actAnalisaExecutanteSAP.Enabled:= true;
+    actND_SAP.Enabled:= true;
+    actExcluirSAP_Executantes.Enabled:= true;
+    actEnderecoExecutanteSAP.Enabled:= true;
+    //Carteira de trabalho
+    actImportarOrdemManutencao.Enabled:= false;
+    actCarteiraTipoEtapaServico.Enabled:= false;
+    actCarteiraPlataforma.Enabled:= false;
+    actExcluirSAP_Carteira.Enabled:= false;
+    actEnderecoTextoLongoOM.Enabled:= false;
+    actEnderecoTextoLongoOP.Enabled:= false;
+    actEnderecoCarteira.Enabled:= false;
+    //Nota de Manutenação
+    actImportarNotaManutencao.Enabled:= false;
+    actNOTATipoEtapaServico.Enabled:= false;
+    actNOTAPlataforma.Enabled:= false;
+    actExcluirSAP_FO.Enabled:= false;
+    actEnderecoNotaManutencao.Enabled:= false;
+    //Local de Instalação
+    actImportarLocalInstalacao.Enabled:= false;
+    actLocalAnalisa.Enabled:= false;
+    actExcluirLocalInstalacao.Enabled:= false;
+    actEnderecoLocalInstalacao.Enabled:= false;
+  end
+  else
+  begin
+    DBGridExecutanteSAP.ReadOnly:= true;
+    DBGridExecutanteAPLAT.ReadOnly:= true;
+    //Executantes APLAT
+    actImportarExecutanteAPLAT.Enabled:= false;
+    actAnalisaExecutanteAPLAT.Enabled:= false;
+    actND_APLAT.Enabled:= false;
+    actExcluirAPLAT_Executantes.Enabled:= false;
+    actEnderecoExecutanteAPLAT.Enabled:= false;
+    //Executantes SAP
+    actImportarExecutanteSAP.Enabled:= false;
+    actAnalisaExecutanteSAP.Enabled:= false;
+    actND_SAP.Enabled:= false;
+    actExcluirSAP_Executantes.Enabled:= false;
+    actEnderecoExecutanteSAP.Enabled:= false;
+    //Carteira de trabalho
+    actImportarOrdemManutencao.Enabled:= false;
+    actCarteiraTipoEtapaServico.Enabled:= false;
+    actCarteiraPlataforma.Enabled:= false;
+    actExcluirSAP_Carteira.Enabled:= false;
+    actEnderecoTextoLongoOM.Enabled:= false;
+    actEnderecoTextoLongoOP.Enabled:= false;
+    actEnderecoCarteira.Enabled:= false;
+    //Nota de Manutenação
+    actImportarNotaManutencao.Enabled:= false;
+    actNOTATipoEtapaServico.Enabled:= false;
+    actNOTAPlataforma.Enabled:= false;
+    actExcluirSAP_FO.Enabled:= false;
+    actEnderecoNotaManutencao.Enabled:= false;
+    //Local de Instalação
+    actImportarLocalInstalacao.Enabled:= false;
+    actLocalAnalisa.Enabled:= false;
+    actExcluirLocalInstalacao.Enabled:= false;
+    actEnderecoLocalInstalacao.Enabled:= false;
+  end;
+  actProcurar.Execute;
+end;
+
+procedure TFrmImportacao.FormDestroy(Sender: TObject);
+begin
+  FrmPrincipal.MDIChildDestroyed(self.Handle);
+end;
+
+procedure TFrmImportacao.PanelTituloAjudaMouseDown(Sender: TObject;
+  Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
+begin
+  FrmPrincipal.Capturing := true;
+  FrmPrincipal.MouseDownSpot.X := X;
+  FrmPrincipal.MouseDownSpot.Y := Y;
+end;
+
+procedure TFrmImportacao.PlataformaTabela(Tabela,Fonte: String;booleanRegistro: Boolean);
+  var
+    Plataforma,LocalInstalacaoSAP: String;
+begin
+  FrmDataModule.ADOQueryConsultaPlataforma.Active:= false;
+  FrmDataModule.ADOQueryConsultaPlataforma.Active:= true;
+  FrmPrincipal.ProgressBarIncializa(FrmDataModule.
+  ADOQueryConsultaPlataforma.RecordCount,
+  'Analisando "Instalação"...');
+  FrmDataModule.ADOQueryConsultaPlataforma.First;
+  actInterromper.Enabled:= true;
+  while not FrmDataModule.ADOQueryConsultaPlataforma.Eof do
+  begin
+    //Interromper Processo
+    Application.ProcessMessages;
+    if Interromper and (Application.MessageBox(PChar('Deseja realmente cancelar o processo?'),
+    '.::ATENÇÃO::.',36) = 6) then
+    begin
+      Interromper := False;
+      break;
+    end
+    else
+      Interromper := False;
+    //=========================================
+    LocalInstalacaoSAP:= FrmDataModule.DataSourceConsultaPlataforma.
+    DataSet.FieldByName('LocalInstalacaoSAP').asString;
+    Plataforma:= FrmDataModule.DataSourceConsultaPlataforma.
+    DataSet.FieldByName('Plataforma').asString;
+    preenchePlataforma_LocalInstalacaoSAP(Plataforma,
+    LocalInstalacaoSAP,Tabela,Fonte,booleanRegistro);
+    //================================================
+    FrmDataModule.ADOQueryConsultaPlataforma.Next;
+    FrmPrincipal.ProgressBarIncremento(1);
+  end;
+  FrmDataModule.ADOQueryConsultaPlataforma.First;
+  FrmPrincipal.ProgressBarAtualizar;
+  actInterromper.Enabled:= false;
+end;
+
+procedure TFrmImportacao.preenchePlataforma_LocalInstalacaoSAP(Plataforma,
+  LocalInstalacaoConsulta,Tabela,Fonte: String;booleanRegistro: Boolean);
+begin
+  if ((LocalInstalacaoConsulta = '')or(LocalInstalacaoConsulta = '0')) then
+    LocalInstalacaoConsulta:= '999999999';
+  try
+    if Fonte = 'Consulta' then
+    begin
+      FrmDataModule.ADOQueryTemporarioDBConsulta1.Close;
+      FrmDataModule.ADOQueryTemporarioDBConsulta1.SQL.Clear;
+      FrmDataModule.ADOQueryTemporarioDBConsulta1.SQL.Add(
+      'SELECT '+tabela+'.* FROM '+tabela+
+      ' WHERE (LocalInstalacao LIKE '+QuotedStr('%'+LocalInstalacaoConsulta+'%')+');');
+      FrmDataModule.ADOQueryTemporarioDBConsulta1.Open;
+      FrmDataModule.ADOQueryTemporarioDBConsulta1.Active:= true;
+      //Preencher Plataforma na consulta da carteira
+      FrmDataModule.ADOQueryTemporarioDBConsulta1.First;
+      while not FrmDataModule.ADOQueryTemporarioDBConsulta1.Eof do
+      begin
+        FrmDataModule.ADOQueryTemporarioDBConsulta1.Edit;
+        FrmDataModule.DataSourceTemporarioDBConsulta1.
+        DataSet.FieldByName('Plataforma').AsString:= Plataforma;
+        FrmDataModule.ADOQueryTemporarioDBConsulta1.Next;
+      end;
+    end
+    else if Fonte = 'Memoria' then
+    begin
+      FrmDataModule.ADOQueryTemporarioDBMemoria.Close;
+      FrmDataModule.ADOQueryTemporarioDBMemoria.SQL.Clear;
+      FrmDataModule.ADOQueryTemporarioDBMemoria.SQL.Add(
+      'SELECT '+tabela+'.* FROM '+tabela+
+      ' WHERE (LocalInstalacao LIKE '+QuotedStr('%'+LocalInstalacaoConsulta+'%')+');');
+      FrmDataModule.ADOQueryTemporarioDBMemoria.Open;
+      FrmDataModule.ADOQueryTemporarioDBMemoria.Active:= true;
+      //Preencher Plataforma na consulta da carteira
+      FrmDataModule.ADOQueryTemporarioDBMemoria.First;
+      while not FrmDataModule.ADOQueryTemporarioDBMemoria.Eof do
+      begin
+        FrmDataModule.ADOQueryTemporarioDBMemoria.Edit;
+        FrmDataModule.DataSourceTemporarioDBMemoria.
+        DataSet.FieldByName('Plataforma').AsString:= Plataforma;
+        if booleanRegistro then
+        begin
+          //Usuário
+          FrmDataModule.DataSourceTemporarioDBMemoria.DataSet.
+          FieldByName('ImportadoPor').asString:= FrmPrincipal.logChave;
+          FrmDataModule.DataSourceTemporarioDBMemoria.DataSet.
+          FieldByName('DataImportacao').AsDateTime:= now;
+          FrmDataModule.DataSourceTemporarioDBMemoria.DataSet.
+          FieldByName('ComputadorImportacao').AsString:= FrmPrincipal.logMaquina;
+        end;
+        FrmDataModule.ADOQueryTemporarioDBMemoria.Next;
+      end;
+    end;
+  except
+
+  end;
+end;
+
+procedure TFrmImportacao.SpeedButton4Click(Sender: TObject);
+begin
+  PanelAjuda.Visible:= false;
+  Splitter1.Visible:= false;
+end;
+
+procedure TFrmImportacao.StringGridNDFixedCellClick(Sender: TObject; ACol,
+  ARow: Integer);
+begin
+  FrmPrincipal.clasifica(StringGridND,ACol,true);
+  FrmPrincipal.AutoFitGrade(StringGridND);
+end;
+
+procedure TFrmImportacao.StringGridNDSelectCell(Sender: TObject; ACol,
+  ARow: Integer; var CanSelect: Boolean);
+  var
+    R: TRect;
+begin
+  if ((ACol = 1) AND(ARow > 0)) then
+  begin
+    R := StringGridND.CellRect(ACol, ARow);
+    R.Left := R.Left + StringGridND.Left;
+    R.Right := R.Right + StringGridND.Left;
+    R.Top := R.Top + StringGridND.Top;
+    R.Bottom := R.Bottom + StringGridND.Top;
+    ComboBoxTipoEtapaServico.Left := R.Left + 1;
+    ComboBoxTipoEtapaServico.Top := R.Top + 1;
+    ComboBoxTipoEtapaServico.Width := (R.Right + 1) - R.Left;
+    ComboBoxTipoEtapaServico.Height := (R.Bottom + 1) - R.Top;
+    ComboBoxTipoEtapaServico.Visible := True;
+    ComboBoxTipoEtapaServico.SetFocus;
+  end
+  else
+    ComboBoxTipoEtapaServico.Visible := false;
+  if ((ACol = 2) AND(ARow > 0)) then
+  begin
+    R := StringGridND.CellRect(ACol, ARow);
+    R.Left := R.Left + StringGridND.Left;
+    R.Right := R.Right + StringGridND.Left;
+    R.Top := R.Top + StringGridND.Top;
+    R.Bottom := R.Bottom + StringGridND.Top;
+    ComboBoxFuncao.Left := R.Left + 1;
+    ComboBoxFuncao.Top := R.Top + 1;
+    ComboBoxFuncao.Width := (R.Right + 1) - R.Left;
+    ComboBoxFuncao.Height := (R.Bottom + 1) - R.Top;
+    ComboBoxFuncao.Visible := True;
+    ComboBoxFuncao.SetFocus;
+  end
+  else
+    ComboBoxFuncao.Visible := false;
+  if ((ACol = 3) AND(ARow > 0)) then
+  begin
+    R := StringGridND.CellRect(ACol, ARow);
+    R.Left := R.Left + StringGridND.Left;
+    R.Right := R.Right + StringGridND.Left;
+    R.Top := R.Top + StringGridND.Top;
+    R.Bottom := R.Bottom + StringGridND.Top;
+    ComboBoxEmpresa.Left := R.Left + 1;
+    ComboBoxEmpresa.Top := R.Top + 1;
+    ComboBoxEmpresa.Width := (R.Right + 1) - R.Left;
+    ComboBoxEmpresa.Height := (R.Bottom + 1) - R.Top;
+    ComboBoxEmpresa.Visible := True;
+    ComboBoxEmpresa.SetFocus;
+  end
+  else
+    ComboBoxEmpresa.Visible := false;
+
+
+
+  CanSelect := True;
+end;
+
+procedure TFrmImportacao.Timer1Timer(Sender: TObject);
+begin
+  ShowMessage('Tempo excedido, tente novamente!');
+end;
+
+function TFrmImportacao.VerificaClasseBCVT(Classe: String): Boolean;
+  var
+    SQLBase: String;
+begin
+  SQLBase:= 'SELECT tblClasseBCVT.* FROM tblClasseBCVT WHERE(Classe LIKE '+QuotedStr(Classe)+');';
+  FrmDataModule.ADOQueryTemporarioDBConsulta1.Close;
+  FrmDataModule.ADOQueryTemporarioDBConsulta1.SQL.Clear;
+  FrmDataModule.ADOQueryTemporarioDBConsulta1.SQL.Add(SQLBase);
+  FrmDataModule.ADOQueryTemporarioDBConsulta1.Open;
+  if not FrmDataModule.ADOQueryTemporarioDBConsulta1.IsEmpty then
+    Result:= true
+  else
+    Result:= false;
+end;
+
+function TFrmImportacao.VerificaCodigoTipoEtapaServico(
+  TipoEtapaServico: String): Integer;
+begin
+  FrmDataModule.ADOQueryConsultaCodigoTipoEtapaServico_TipoEtapaServico.Active := false;
+  FrmDataModule.ADOQueryConsultaCodigoTipoEtapaServico_TipoEtapaServico.Parameters.Items[0].Value:=
+  TipoEtapaServico;
+  FrmDataModule.ADOQueryConsultaCodigoTipoEtapaServico_TipoEtapaServico.Active := true;
+  try
+   Result:= FrmDataModule.DataSourceConsultaCodigoTipoEtapaServico_TipoEtapaServico.
+   DataSet.FieldByName('idTipoEtapaServico').AsInteger;
+  except
+    Result:= 0;
+  end;
+end;
+
+function TFrmImportacao.AnalisaExecutanteAPLAT(CodigoSAP: String): TExecCadastro;
+  var
+    txtTipoEtapaServico,txtEmpresa,txtFuncao,NomeExecutante,
+    CPF,Documento: String;
+begin
+  CPF:= FrmPrincipal.VerificaCPF(CodigoSAP);
+  if ((CodigoSAP = '')or(CodigoSAP = '0')) then
+    CodigoSAP:= '999999999';
+  try
+    FrmDataModule.ADOQueryTemporarioDBConsulta1.Close;
+    FrmDataModule.ADOQueryTemporarioDBConsulta1.SQL.Clear;
+    FrmDataModule.ADOQueryTemporarioDBConsulta1.SQL.Add(
+    'SELECT tblExecutante.* '+
+    'FROM tblExecutante '+
+    'WHERE ((CodigoSAP like '+QuotedStr(CodigoSAP)+
+    ')OR(CPF like '+QuotedStr(CodigoSAP)+
+    ')OR(OutroDocumento like '+QuotedStr(CodigoSAP)+'));');
+    FrmDataModule.ADOQueryTemporarioDBConsulta1.Open;
+    FrmDataModule.ADOQueryTemporarioDBConsulta1.Active:= true;
+    txtTipoEtapaServico:= FrmDataModule.DataSourceTemporarioDBConsulta1.
+    DataSet.FieldByName('txtTipoEtapaServico').AsString;
+    txtEmpresa:= FrmDataModule.DataSourceTemporarioDBConsulta1.
+    DataSet.FieldByName('txtEmpresa').AsString;
+    txtFuncao:= FrmDataModule.DataSourceTemporarioDBConsulta1.
+    DataSet.FieldByName('txtFuncao').AsString;
+    NomeExecutante:= FrmPrincipal.TextoMaiusculo(FrmDataModule.DataSourceTemporarioDBConsulta1.
+    DataSet.FieldByName('NomeExecutante').AsString);
+    if CPF = '' then
+      Documento:= FrmDataModule.DataSourceTemporarioDBConsulta1.
+      DataSet.FieldByName('OutroDocumento').AsString
+    else
+      Documento:= CPF;
+    //==========================================================================
+    if txtTipoEtapaServico <> '' then
+    begin
+      Result.NomeExecutante:= NomeExecutante;
+      Result.TipoEtapaServico:= txtTipoEtapaServico;
+      Result.Funcao:= txtFuncao;
+      Result.Empresa:= txtEmpresa;
+      Result.Documento:= Documento;
+    end
+    else
+    begin
+      Result.NomeExecutante:= 'NÃO DEFINIDO';
+      Result.TipoEtapaServico:= 'NÃO DEFINIDO';
+      Result.Funcao:= 'NÃO DEFINIDO';
+      Result.Empresa:= 'NÃO DEFINIDO';
+      Result.Documento:= 'NÃO DEFINIDO';
+    end;
+  except
+    Result.NomeExecutante:= 'NÃO DEFINIDO';
+    Result.TipoEtapaServico:= 'NÃO DEFINIDO';
+    Result.Funcao:= 'NÃO DEFINIDO';
+    Result.Empresa:= 'NÃO DEFINIDO';
+    Result.Documento:= 'NÃO DEFINIDO';
+  end;
+end;
+
+function TFrmImportacao.AnalisaExecutanteSAP(CodigoSAP,
+  Documento: String): TExecCadastro;
+  var
+    txtTipoEtapaServico,txtEmpresa,txtFuncao,NomeExecutante: String;
+begin
+  if ((CodigoSAP = '')or(CodigoSAP = '0')) then
+    CodigoSAP:= '999999999';
+  if (Documento = '') then
+    Documento:= '999999999';
+
+  try
+    FrmDataModule.ADOQueryTemporarioDBConsulta1.Close;
+    FrmDataModule.ADOQueryTemporarioDBConsulta1.SQL.Clear;
+    FrmDataModule.ADOQueryTemporarioDBConsulta1.SQL.Add(
+    'SELECT tblExecutante.* '+
+    'FROM tblExecutante '+
+    'WHERE ((CodigoSAP like '+QuotedStr(CodigoSAP)+
+    ')OR(CPF like '+QuotedStr(Documento)+
+    ')OR(OutroDocumento like '+QuotedStr(Documento)+'));');
+    FrmDataModule.ADOQueryTemporarioDBConsulta1.Open;
+    FrmDataModule.ADOQueryTemporarioDBConsulta1.Active:= true;
+    txtTipoEtapaServico:= FrmDataModule.DataSourceTemporarioDBConsulta1.
+    DataSet.FieldByName('txtTipoEtapaServico').AsString;
+    txtEmpresa:= FrmDataModule.DataSourceTemporarioDBConsulta1.
+    DataSet.FieldByName('txtEmpresa').AsString;
+    txtFuncao:= FrmDataModule.DataSourceTemporarioDBConsulta1.
+    DataSet.FieldByName('txtFuncao').AsString;
+    NomeExecutante:= FrmPrincipal.TextoMaiusculo(FrmDataModule.DataSourceTemporarioDBConsulta1.
+    DataSet.FieldByName('NomeExecutante').AsString);
+    if txtTipoEtapaServico <> '' then
+    begin
+      Result.NomeExecutante:= NomeExecutante;
+      Result.TipoEtapaServico:= txtTipoEtapaServico;
+      Result.Funcao:= txtFuncao;
+      Result.Empresa:= txtEmpresa;
+    end
+    else
+    begin
+      Result.NomeExecutante:= 'NÃO DEFINIDO';
+      Result.TipoEtapaServico:= 'NÃO DEFINIDO';
+      Result.Funcao:= 'NÃO DEFINIDO';
+      Result.Empresa:= 'NÃO DEFINIDO';
+    end;
+  except
+    Result.NomeExecutante:= 'NÃO DEFINIDO';
+    Result.TipoEtapaServico:= 'NÃO DEFINIDO';
+    Result.Funcao:= 'NÃO DEFINIDO';
+    Result.Empresa:= 'NÃO DEFINIDO';
+  end;
+end;
+
+procedure TFrmImportacao.AnalisaTipoEtapaServico_BooleanCritico(DataSource: TDataSource;ADOQuery: TADOQuery;
+CentroTrabalho: String; Tratamento: Integer);
+  var
+    SQLBase,NotaManutencao: String;
+begin
+  actVetorLocalCritico.Execute;
+  //=========================================
+  DataSource.Enabled:= false;
+  ADOQuery.First;
+  FrmPrincipal.ProgressBarIncializa(ADOQuery.RecordCount,
+  'Analisando "Tipo de Etapa de Serviço"...');
+  actInterromper.Enabled:= true;
+  //=========================================
+  while not ADOQuery.Eof do
+  begin
+    //Interromper Processo
+    Application.ProcessMessages;
+    if Interromper and (Application.MessageBox(PChar('Deseja realmente cancelar o processo?'),
+    '.::ATENÇÃO::.',36) = 6) then
+    begin
+      Interromper := False;
+      break;
+    end
+    else
+      Interromper := False;
+    //=========================================
+    ADOQuery.Edit;
+    DataSource.DataSet.FieldByName('txtTipoEtapaServico').asString:= FrmPrincipal.verificaTipoEtapaServico(
+    DataSource.DataSet.FieldByName(CentroTrabalho).asString);
+    DataSource.DataSet.FieldByName('BooleanCritico').AsBoolean := FrmPrincipal.verificaCritico(
+    DataSource.DataSet.FieldByName('LocalInstalacao').asString);
+    case Tratamento of
+      0://Notas de Manutenção Fora de Operação
+      begin
+        //Comentario
+        NotaManutencao:= DataSource.DataSet.FieldByName('NotaManutencao').AsString;
+        SQLBase:= 'SELECT tblComentarioForaOperacao.* FROM tblComentarioForaOperacao '+
+        'WHERE ((NotaManutencao LIKE '+QuotedStr(NotaManutencao)+'));';
+        FrmDataModule.ADOQueryTemporarioDBConsulta1.Close;
+        FrmDataModule.ADOQueryTemporarioDBConsulta1.SQL.Clear;
+        FrmDataModule.ADOQueryTemporarioDBConsulta1.SQL.Add(SQLBase);
+        FrmDataModule.ADOQueryTemporarioDBConsulta1.Open;
+        if not FrmDataModule.ADOQueryTemporarioDBConsulta1.IsEmpty then
+        begin
+          DataSource.DataSet.FieldByName('Comentario').AsString:= FrmDataModule.
+          ADOQueryTemporarioDBConsulta1.FieldByName('Comentario').AsString;
+          DataSource.DataSet.FieldByName('DataComentario').AsDateTime:= FrmDataModule.
+          ADOQueryTemporarioDBConsulta1.FieldByName('DataComentario').AsDateTime;
+          DataSource.DataSet.FieldByName('ComentarioPor').AsString:= FrmDataModule.
+          ADOQueryTemporarioDBConsulta1.FieldByName('ComentarioPor').AsString;
+          DataSource.DataSet.FieldByName('ComputadorComentario').AsString:= FrmDataModule.
+          ADOQueryTemporarioDBConsulta1.FieldByName('ComputadorComentario').AsString;
+        end
+        else
+        begin
+          DataSource.DataSet.FieldByName('Comentario').AsString:= '';
+          DataSource.DataSet.FieldByName('DataComentario').AsString:= '';
+          DataSource.DataSet.FieldByName('ComentarioPor').AsString:= '';
+          DataSource.DataSet.FieldByName('ComputadorComentario').AsString:= '';
+        end;
+      end;
+    end;
+    //Usuário
+    DataSource.DataSet.FieldByName('ImportadoPor').asString:= FrmPrincipal.logChave;
+    DataSource.DataSet.FieldByName('DataImportacao').AsDateTime:= now;
+    DataSource.DataSet.FieldByName('ComputadorImportacao').AsString:= FrmPrincipal.logMaquina;
+    //================================================
+    FrmPrincipal.ProgressBarIncremento(1);
+    ADOQuery.Post;
+    ADOQuery.Next;
+  end;
+  ADOQuery.First;
+  DataSource.Enabled:= true;
+  FrmPrincipal.ProgressBarAtualizar;
+  actInterromper.Enabled:= false;
+  actLimparFiltros.Execute;
+end;
+
+procedure TFrmImportacao.ComboBoxEmpresaCloseUp(Sender: TObject);
+begin
+  StringGridND.Cells[3,StringGridND.Row]:= (ComboBoxEmpresa.Text);
+  ComboBoxEmpresa.Visible := False;
+end;
+
+procedure TFrmImportacao.ComboBoxFuncaoCloseUp(Sender: TObject);
+begin
+  StringGridND.Cells[2,StringGridND.Row]:= (ComboBoxFuncao.Text);
+  ComboBoxFuncao.Visible := False;
+end;
+
+procedure TFrmImportacao.ComboBoxTipoEtapaServicoCloseUp(Sender: TObject);
+begin
+  StringGridND.Cells[1,StringGridND.Row]:= (ComboBoxTipoEtapaServico.Text);
+  ComboBoxTipoEtapaServico.Visible := False;
+end;
+
+procedure TFrmImportacao.WMMDIACTIVATE(var msg: TWMMDIACTIVATE);
+ var
+  active: TWinControl;
+  idx: Integer;
+begin
+  active := FindControl(msg.ActiveWnd) ;
+
+  if Assigned(active) then
+  begin
+    idx := FrmPrincipal.mdiChildrenTabs.Tabs.IndexOfObject(TObject(msg.ActiveWnd));
+    FrmPrincipal.mdiChildrenTabs.Tag := -1;
+    FrmPrincipal.mdiChildrenTabs.TabIndex := idx;
+    FrmPrincipal.mdiChildrenTabs.Tag := 0;
+  end;
+end;
+
+end.

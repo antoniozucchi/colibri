@@ -1,0 +1,299 @@
+unit untNotaManutencao;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Data.DB, Vcl.ExtCtrls, Vcl.StdCtrls,
+  Vcl.Buttons, Vcl.ToolWin, Vcl.ComCtrls, Vcl.Grids, Vcl.DBGrids,
+  System.Actions, Vcl.ActnList, Vcl.PlatformDefaultStyleActnCtrls, Vcl.ActnMan,
+  Vcl.CheckLst,Data.Win.ADODB;
+
+type
+  TFrmNotaManutencao = class(TForm)
+    DBGridNotaManutencao: TDBGrid;
+    ColunasLayoutNotaManutencao: TStringGrid;
+    ToolBar1: TToolBar;
+    BitBtn2: TBitBtn;
+    BitBtn1: TBitBtn;
+    BitBtn6: TBitBtn;
+    PanelTitulo: TPanel;
+    ActionManager1: TActionManager;
+    actProcurarNotaManutencao: TAction;
+    StatusBarNotaManutencao: TStatusBar;
+    actExcel: TAction;
+    actFiltroInserir: TAction;
+    actGridASC: TAction;
+    actGridDESC: TAction;
+    actLimparFiltros: TAction;
+    actFiltrosTabela: TAction;
+    actProcuraFiltrosTabela: TAction;
+    Splitter1: TSplitter;
+    PageControl1: TPageControl;
+    TabSheet1: TTabSheet;
+    TabSheet2: TTabSheet;
+    RadioGroupSistema: TRadioGroup;
+    CheckListBoxPlataforma: TCheckListBox;
+    TabSheet3: TTabSheet;
+    CheckListBoxTipoEtapaServico: TCheckListBox;
+    actFiltros: TAction;
+    ToolBar2: TToolBar;
+    ToolButton1: TToolButton;
+    ToolButton2: TToolButton;
+    actSelTudoPlataforma: TAction;
+    actSelLimpaPlataforma: TAction;
+    actSelTudoTipoEtapaServico: TAction;
+    actSelLimpaTipoEtapaServico: TAction;
+    ToolBar3: TToolBar;
+    ToolButton3: TToolButton;
+    ToolButton4: TToolButton;
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure FormCreate(Sender: TObject);
+    procedure FormDestroy(Sender: TObject);
+    procedure actProcurarNotaManutencaoExecute(Sender: TObject);
+    procedure actExcelExecute(Sender: TObject);
+    procedure actFiltroInserirExecute(Sender: TObject);
+    procedure actGridASCExecute(Sender: TObject);
+    procedure actGridDESCExecute(Sender: TObject);
+    procedure actLimparFiltrosExecute(Sender: TObject);
+    procedure actFiltrosTabelaExecute(Sender: TObject);
+    procedure actProcuraFiltrosTabelaExecute(Sender: TObject);
+    procedure DBGridNotaManutencaoTitleClick(Column: TColumn);
+    procedure DBGridNotaManutencaoDrawColumnCell(Sender: TObject;
+      const Rect: TRect; DataCol: Integer; Column: TColumn;
+      State: TGridDrawState);
+    procedure actFiltrosExecute(Sender: TObject);
+    procedure actSelTudoPlataformaExecute(Sender: TObject);
+    procedure actSelLimpaPlataformaExecute(Sender: TObject);
+    procedure actSelTudoTipoEtapaServicoExecute(Sender: TObject);
+    procedure actSelLimpaTipoEtapaServicoExecute(Sender: TObject);
+  private
+    { Private declarations }
+    procedure WMMDIACTIVATE(var msg: TWMMDIACTIVATE);message WM_MDIACTIVATE;
+  public
+    { Public declarations }
+  end;
+
+var
+  FrmNotaManutencao: TFrmNotaManutencao;
+
+implementation
+  uses untDataModule,untPrincipal;
+{$R *.dfm}
+
+procedure TFrmNotaManutencao.actExcelExecute(Sender: TObject);
+begin
+  FrmPrincipal.GerarExcel(DBGridNotaManutencao,'RTI');
+end;
+
+procedure TFrmNotaManutencao.actFiltroInserirExecute(Sender: TObject);
+begin
+  FrmPrincipal.inserirProcura(DBGridNotaManutencao,ColunasLayoutNotaManutencao);
+  actProcurarNotaManutencao.Execute;
+  if (FrmPrincipal.PanelFiltrosTabela.Visible)AND(FrmPrincipal.PanelAjuda1.Visible) then
+    actFiltrosTabela.Execute;
+end;
+
+procedure TFrmNotaManutencao.actFiltrosExecute(Sender: TObject);
+  var
+    PalavraLista,PalavraBusca: String;
+    i: Integer;
+begin
+  //Sistemas
+  FrmPrincipal.configurarRadioGroup(RadioGroupSistema,DBGridNotaManutencao,ColunasLayoutNotaManutencao,true);
+  //Plataformas
+  PalavraBusca:= '';
+  for I := 0 to CheckListBoxPlataforma.Count-1 do
+  begin
+    if CheckListBoxPlataforma.Checked[i] then
+    begin
+      PalavraLista:= CheckListBoxPlataforma.Items[i];
+      if PalavraBusca <> '' then
+        PalavraBusca:= PalavraBusca+';'+PalavraLista
+      else
+        PalavraBusca:= PalavraLista;
+    end;
+  end;
+  FrmPrincipal.buscaFiledGrid1('Plataforma',PalavraBusca,'Contem',ColunasLayoutNotaManutencao,4,false);
+  //Tipo Etapa Serviço
+  PalavraBusca:= '';
+  for I := 0 to CheckListBoxTipoEtapaServico.Count-1 do
+  begin
+    if CheckListBoxTipoEtapaServico.Checked[i] then
+    begin
+      PalavraLista:= CheckListBoxTipoEtapaServico.Items[i];
+      if PalavraBusca <> '' then
+        PalavraBusca:= PalavraBusca+';'+PalavraLista
+      else
+        PalavraBusca:= PalavraLista;
+    end;
+  end;
+  FrmPrincipal.buscaFiledGrid1('txtTipoEtapaServico',PalavraBusca,'Contem',ColunasLayoutNotaManutencao,4,false);
+  actProcurarNotaManutencao.Execute;
+end;
+
+procedure TFrmNotaManutencao.actFiltrosTabelaExecute(Sender: TObject);
+begin
+  FrmPrincipal.btnProcurarFiltrosTabela.Action:= actProcuraFiltrosTabela;
+  FrmPrincipal.FiltrosTabela(DBGridNotaManutencao,ColunasLayoutNotaManutencao);
+end;
+
+procedure TFrmNotaManutencao.actGridASCExecute(Sender: TObject);
+begin
+  FrmPrincipal.ClassificaDBGrid(DBGridNotaManutencao,
+  FrmDataModule.ADOQueryNotaManutencao,0);
+end;
+
+procedure TFrmNotaManutencao.actGridDESCExecute(Sender: TObject);
+begin
+  FrmPrincipal.ClassificaDBGrid(DBGridNotaManutencao,
+  FrmDataModule.ADOQueryNotaManutencao,1);
+end;
+
+procedure TFrmNotaManutencao.actLimparFiltrosExecute(Sender: TObject);
+begin
+  FrmPrincipal.LimparColunasFiltro(DBGridNotaManutencao,ColunasLayoutNotaManutencao);
+  actProcurarNotaManutencao.Execute;
+  if (FrmPrincipal.PanelFiltrosTabela.Visible)AND(FrmPrincipal.PanelAjuda1.Visible) then
+    actFiltrosTabela.Execute;
+end;
+
+procedure TFrmNotaManutencao.actProcuraFiltrosTabelaExecute(Sender: TObject);
+begin
+  frmPrincipal.CarregaFiltrosProcura(ColunasLayoutNotaManutencao);
+  actProcurarNotaManutencao.Execute;
+end;
+
+procedure TFrmNotaManutencao.actProcurarNotaManutencaoExecute(Sender: TObject);
+    var
+    SQLString,SQLBase: String;
+begin
+  SQLString:= frmPrincipal.SQLStringFiltroTabela(ColunasLayoutNotaManutencao,true);
+  SQLBase:= 'SELECT tblNotaManutencao.* FROM tblNotaManutencao '+
+  SQLString+' ORDER BY DenominacaoLocalInstalacao,Plataforma;';
+  FrmPrincipal.ProcuraQuery(SQLBase,FrmDataModule.ADOQueryNotaManutencao,
+  StatusBarNotaManutencao);
+end;
+
+procedure TFrmNotaManutencao.actSelLimpaPlataformaExecute(Sender: TObject);
+var
+  I: Integer;
+begin
+  for I := 0 to CheckListBoxPlataforma.Count-1 do
+    CheckListBoxPlataforma.Checked[i]:= false;
+
+  actFiltros.Execute;
+end;
+
+procedure TFrmNotaManutencao.actSelLimpaTipoEtapaServicoExecute(
+  Sender: TObject);
+var
+  I: Integer;
+begin
+  for I := 0 to CheckListBoxTipoEtapaServico.Count-1 do
+    CheckListBoxTipoEtapaServico.Checked[i]:= false;
+  actFiltros.Execute;
+end;
+
+procedure TFrmNotaManutencao.actSelTudoPlataformaExecute(Sender: TObject);
+var
+  I: Integer;
+begin
+  for I := 0 to CheckListBoxPlataforma.Count-1 do
+    CheckListBoxPlataforma.Checked[i]:= true;
+
+  actFiltros.Execute;
+end;
+
+procedure TFrmNotaManutencao.actSelTudoTipoEtapaServicoExecute(Sender: TObject);
+var
+  I: Integer;
+begin
+  for I := 0 to CheckListBoxTipoEtapaServico.Count-1 do
+    CheckListBoxTipoEtapaServico.Checked[i]:= true;
+
+  actFiltros.Execute;
+end;
+
+procedure TFrmNotaManutencao.DBGridNotaManutencaoDrawColumnCell(Sender: TObject;
+  const Rect: TRect; DataCol: Integer; Column: TColumn; State: TGridDrawState);
+begin
+  FrmPrincipal.GridZebrado(DBGridNotaManutencao,ColunasLayoutNotaManutencao,State,Rect,DataCol,Column);
+  if (Column.Field.FieldName = 'BooleanCritico') then
+  begin
+    if (FrmDataModule.DataSourceNotaManutencao.DataSet.
+    FieldByName('BooleanCritico').AsBoolean) then
+    begin
+      TDBGrid(Sender).Canvas.FillRect(Rect);
+      FrmPrincipal.ImageList1.Draw(TDBGrid(Sender).Canvas, Rect.Left +10,Rect.Top + 1, 154);
+    end
+    else
+    begin
+      TDBGrid(Sender).Canvas.FillRect(Rect);
+      FrmPrincipal.ImageList1.Draw(TDBGrid(Sender).Canvas, Rect.Left +10,Rect.Top + 1, 155);
+    end;
+  end;
+end;
+
+procedure TFrmNotaManutencao.DBGridNotaManutencaoTitleClick(Column: TColumn);
+begin
+  FrmPrincipal.configurarFiltro(0,Column.FieldName,IntToStr(Column.Index),
+  Column.ReadOnly,actFiltroInserir,actGridASC,actGridDESC,actGridDESC);
+  //======================================================
+  FrmPrincipal.titleGrid(ColunasLayoutNotaManutencao,'Memoria',
+  FrmDataModule.ADOQueryNotaManutencao.SQL.Text);
+end;
+
+procedure TFrmNotaManutencao.FormClose(Sender: TObject;
+  var Action: TCloseAction);
+begin
+  Action:= caFree;
+  FrmNotaManutencao:=nil;
+end;
+
+procedure TFrmNotaManutencao.FormCreate(Sender: TObject);
+  var
+    QueryPlataforma: TADOQuery;
+    SQLBase: String;
+begin
+  FrmPrincipal.MDIChildCreated(self.Handle);
+  FrmPrincipal.SetUpColunasLayout(DBGridNotaManutencao,
+  ColunasLayoutNotaManutencao);
+  actProcurarNotaManutencao.Execute;
+  SQLBase:= 'SELECT tblPlataforma.* FROM tblPlataforma '+
+  'WHERE (BooleanPlataforma = True) ORDER BY Plataforma;';
+  QueryPlataforma := TADOQuery.Create(self);
+  QueryPlataforma.Connection := FrmDataModule.ADOConnectionConsulta;
+  QueryPlataforma.Close;
+  QueryPlataforma.SQL.Clear;
+  QueryPlataforma.SQL.Add(SQLBase);
+  QueryPlataforma.Open;
+  FrmPrincipal.carregarCheckListBox(QueryPlataforma,
+  CheckListBoxPlataforma,'Plataforma');
+  FrmPrincipal.carregarCheckListBox(FrmDataModule.ADOQueryTipoEtapaServico_Carteira,
+  CheckListBoxTipoEtapaServico,'TipoEtapaServico');
+  FrmPrincipal.carregarFiltroSistema(RadioGroupSistema,DBGridNotaManutencao);
+end;
+
+procedure TFrmNotaManutencao.FormDestroy(Sender: TObject);
+begin
+  FrmPrincipal.MDIChildDestroyed(self.Handle);
+end;
+
+procedure TFrmNotaManutencao.WMMDIACTIVATE(var msg: TWMMDIACTIVATE);
+var
+  active: TWinControl;
+  idx: Integer;
+begin
+  active := FindControl(msg.ActiveWnd) ;
+
+  if Assigned(active) then
+  begin
+    idx := FrmPrincipal.mdiChildrenTabs.Tabs.IndexOfObject(TObject(msg.ActiveWnd));
+    FrmPrincipal.mdiChildrenTabs.Tag := -1;
+    FrmPrincipal.mdiChildrenTabs.TabIndex := idx;
+    FrmPrincipal.mdiChildrenTabs.Tag := 0;
+  end;
+end;
+
+end.

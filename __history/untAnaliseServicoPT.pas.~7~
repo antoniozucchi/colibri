@@ -1,0 +1,389 @@
+unit untAnaliseServicoPT;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Data.DB, Vcl.StdCtrls, Vcl.DBCtrls,
+  Vcl.Grids, Vcl.ExtCtrls, Vcl.DBGrids, Vcl.Mask, Vcl.Buttons, Vcl.ToolWin,
+  Vcl.ComCtrls, System.Actions, Vcl.ActnList, Vcl.PlatformDefaultStyleActnCtrls,
+  Vcl.ActnMan, DBDateTimePicker, Vcl.CheckLst;
+
+type
+  TFrmAnaliseServicoPT = class(TForm)
+    PanelTitulo: TPanel;
+    ToolBar1: TToolBar;
+    DBNavigator1: TDBNavigator;
+    BitBtn2: TBitBtn;
+    BitBtn4: TBitBtn;
+    BitBtn1: TBitBtn;
+    DBGridAnaliseServicoPT: TDBGrid;
+    Splitter1: TSplitter;
+    ColunasLayout: TStringGrid;
+    Panel1: TPanel;
+    Panel2: TPanel;
+    DBMemoDescricaoEtapa: TDBMemo;
+    ActionManager1: TActionManager;
+    actProcurar: TAction;
+    actFiltroInserir: TAction;
+    actGridASC: TAction;
+    actGridDESC: TAction;
+    StatusBar1: TStatusBar;
+    actLimparFiltros: TAction;
+    actFiltrosTabela: TAction;
+    actProcuraFiltrosTabela: TAction;
+    actSubstituirPor: TAction;
+    actExcel: TAction;
+    DBDateTimePrevisaoExecucao: TDBDateTimePicker;
+    actResponsavel: TAction;
+    PanelResponsavel: TPanel;
+    PanelTituloMagic: TPanel;
+    SpeedButton1: TSpeedButton;
+    CheckListBoxResposavel: TCheckListBox;
+    Panel3: TPanel;
+    btnInserir: TBitBtn;
+    btnCancelar: TBitBtn;
+    actCarregar: TAction;
+    actCancelar: TAction;
+    BitBtn3: TBitBtn;
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure FormCreate(Sender: TObject);
+    procedure FormDestroy(Sender: TObject);
+    procedure actProcurarExecute(Sender: TObject);
+    procedure DBGridAnaliseServicoPTDrawColumnCell(Sender: TObject;
+      const Rect: TRect; DataCol: Integer; Column: TColumn;
+      State: TGridDrawState);
+    procedure DBGridAnaliseServicoPTTitleClick(Column: TColumn);
+    procedure actFiltroInserirExecute(Sender: TObject);
+    procedure actGridASCExecute(Sender: TObject);
+    procedure actGridDESCExecute(Sender: TObject);
+    procedure actSubstituirPorExecute(Sender: TObject);
+    procedure actLimparFiltrosExecute(Sender: TObject);
+    procedure actFiltrosTabelaExecute(Sender: TObject);
+    procedure actProcuraFiltrosTabelaExecute(Sender: TObject);
+    procedure actExcelExecute(Sender: TObject);
+    procedure DBGridAnaliseServicoPTKeyPress(Sender: TObject; var Key: Char);
+    procedure PanelTituloMagicMouseDown(Sender: TObject; Button: TMouseButton;
+      Shift: TShiftState; X, Y: Integer);
+    procedure PanelTituloMagicMouseMove(Sender: TObject; Shift: TShiftState; X,
+      Y: Integer);
+    procedure PanelTituloMagicMouseUp(Sender: TObject; Button: TMouseButton;
+      Shift: TShiftState; X, Y: Integer);
+    procedure SpeedButton1Click(Sender: TObject);
+    procedure actCancelarExecute(Sender: TObject);
+    procedure actResponsavelExecute(Sender: TObject);
+    procedure actCarregarExecute(Sender: TObject);
+  private
+    { Private declarations }
+    procedure WMMDIACTIVATE(var msg: TWMMDIACTIVATE);message WM_MDIACTIVATE;
+  public
+    { Public declarations }
+  end;
+
+var
+  FrmAnaliseServicoPT: TFrmAnaliseServicoPT;
+
+implementation
+    uses untDataModule,untPrincipal;
+{$R *.dfm}
+
+procedure TFrmAnaliseServicoPT.actCancelarExecute(Sender: TObject);
+begin
+  PanelResponsavel.Visible:= false;
+end;
+
+procedure TFrmAnaliseServicoPT.actCarregarExecute(Sender: TObject);
+  var
+    i: Integer;
+    Responsavel: String;
+begin
+  Responsavel:= '';
+  for i := 0 to CheckListBoxResposavel.Count-1 do
+  begin
+    if CheckListBoxResposavel.Checked[i] then
+    begin
+      if Responsavel = '' then
+        Responsavel:= CheckListBoxResposavel.Items[i]
+      else
+        Responsavel:= Responsavel+';'+CheckListBoxResposavel.Items[i];
+    end;
+  end;
+  FrmDataModule.ADOQueryAnaliseServicoPT.Edit;
+  FrmDataModule.DataSourceAnaliseServicoPT.DataSet.
+  FieldByName('Responsavel').AsString:= Responsavel;
+  FrmDataModule.ADOQueryAnaliseServicoPT.Post;
+  PanelResponsavel.Visible:= false;
+end;
+
+procedure TFrmAnaliseServicoPT.actExcelExecute(Sender: TObject);
+begin
+  FrmPrincipal.GerarExcel(DBGridAnaliseServicoPT,'Analise Serviços PT');
+end;
+
+procedure TFrmAnaliseServicoPT.actFiltroInserirExecute(Sender: TObject);
+begin
+  FrmPrincipal.inserirProcura(DBGridAnaliseServicoPT,ColunasLayout);
+  actProcurar.Execute;
+  if (FrmPrincipal.PanelFiltrosTabela.Visible)AND(FrmPrincipal.PanelAjuda1.Visible) then
+    actFiltrosTabela.Execute;
+end;
+
+procedure TFrmAnaliseServicoPT.actFiltrosTabelaExecute(Sender: TObject);
+begin
+  FrmPrincipal.btnProcurarFiltrosTabela.Action:= actProcuraFiltrosTabela;
+  FrmPrincipal.FiltrosTabela(DBGridAnaliseServicoPT,ColunasLayout);
+end;
+
+procedure TFrmAnaliseServicoPT.actGridASCExecute(Sender: TObject);
+begin
+  FrmPrincipal.ClassificaDBGrid(DBGridAnaliseServicoPT,
+  FrmDataModule.ADOQueryAnaliseServicoPT,0);
+end;
+
+procedure TFrmAnaliseServicoPT.actGridDESCExecute(Sender: TObject);
+begin
+  FrmPrincipal.ClassificaDBGrid(DBGridAnaliseServicoPT,
+  FrmDataModule.ADOQueryAnaliseServicoPT,1);
+end;
+
+procedure TFrmAnaliseServicoPT.actLimparFiltrosExecute(Sender: TObject);
+begin
+  FrmPrincipal.LimparColunasFiltro(DBGridAnaliseServicoPT,ColunasLayout);
+  actProcurar.Execute;
+  if (FrmPrincipal.PanelFiltrosTabela.Visible)AND(FrmPrincipal.PanelAjuda1.Visible) then
+    actFiltrosTabela.Execute;
+end;
+
+procedure TFrmAnaliseServicoPT.actSubstituirPorExecute(Sender: TObject);
+begin
+  FrmPrincipal.SubstituirPor(DBGridAnaliseServicoPT,FrmDataModule.ADOQueryAnaliseServicoPT,
+  FrmDataModule.DataSourceAnaliseServicoPT);
+end;
+
+procedure TFrmAnaliseServicoPT.actProcuraFiltrosTabelaExecute(Sender: TObject);
+begin
+  frmPrincipal.CarregaFiltrosProcura(ColunasLayout);
+  actProcurar.Execute;
+end;
+
+procedure TFrmAnaliseServicoPT.actProcurarExecute(Sender: TObject);
+  var
+    SQLString,SQLBase: String;
+begin
+  SQLString:= frmPrincipal.SQLStringFiltroTabela(ColunasLayout,true);
+  SQLBase:= 'SELECT tblAnaliseServicoPT.* FROM tblAnaliseServicoPT '+
+  SQLString+' ORDER BY PrevisaoExecucao;';
+  FrmPrincipal.ProcuraQuery(SQLBase,FrmDataModule.ADOQueryAnaliseServicoPT,StatusBar1);
+end;
+
+procedure TFrmAnaliseServicoPT.actResponsavelExecute(Sender: TObject);
+begin
+  PanelResponsavel.Width:= 270;
+  PanelResponsavel.Height:= 145;
+  PanelResponsavel.Top:= 200;
+  PanelResponsavel.Left:= 400;
+  PanelResponsavel.Visible:= true;
+end;
+
+procedure TFrmAnaliseServicoPT.DBGridAnaliseServicoPTDrawColumnCell(
+  Sender: TObject; const Rect: TRect; DataCol: Integer; Column: TColumn;
+  State: TGridDrawState);
+begin
+  FrmPrincipal.GridZebrado(DBGridAnaliseServicoPT,ColunasLayout,State,Rect,DataCol,Column);
+  if (Column.Field.FieldName = 'Analisado') then
+  begin
+    if FrmDataModule.DataSourceAnaliseServicoPT.DataSet.
+    FieldByName('Analisado').AsString = 'SIM' then
+    begin
+      DBGridAnaliseServicoPT.Canvas.Brush.Color:= clLime;
+      DBGridAnaliseServicoPT.Font.Color:= clBlack;
+      DBGridAnaliseServicoPT.Canvas.FillRect(Rect);
+      DBGridAnaliseServicoPT.DefaultDrawColumnCell(Rect, DataCol,Column, State);
+    end
+    else if FrmDataModule.DataSourceAnaliseServicoPT.DataSet.
+    FieldByName('Analisado').AsString = 'NÃO' then
+    begin
+      DBGridAnaliseServicoPT.Canvas.Brush.Color:= clRed;
+      DBGridAnaliseServicoPT.Font.Color:= clBlack;
+      DBGridAnaliseServicoPT.Canvas.FillRect(Rect);
+      DBGridAnaliseServicoPT.DefaultDrawColumnCell(Rect, DataCol,Column, State);
+    end;
+  end
+  else if (Column.Field.FieldName = 'ServicoCopiado') then
+  begin
+    if FrmDataModule.DataSourceAnaliseServicoPT.DataSet.
+    FieldByName('ServicoCopiado').AsString = 'SIM' then
+    begin
+      DBGridAnaliseServicoPT.Canvas.Brush.Color:= clLime;
+      DBGridAnaliseServicoPT.Font.Color:= clBlack;
+      DBGridAnaliseServicoPT.Canvas.FillRect(Rect);
+      DBGridAnaliseServicoPT.DefaultDrawColumnCell(Rect, DataCol,Column, State);
+    end
+    else if FrmDataModule.DataSourceAnaliseServicoPT.DataSet.
+    FieldByName('ServicoCopiado').AsString = 'NÃO' then
+    begin
+      DBGridAnaliseServicoPT.Canvas.Brush.Color:= clRed;
+      DBGridAnaliseServicoPT.Font.Color:= clBlack;
+      DBGridAnaliseServicoPT.Canvas.FillRect(Rect);
+      DBGridAnaliseServicoPT.DefaultDrawColumnCell(Rect, DataCol,Column, State);
+    end;
+  end
+  else if (Column.Field.FieldName = 'PossivelAnalisar') then
+  begin
+    if FrmDataModule.DataSourceAnaliseServicoPT.DataSet.
+    FieldByName('PossivelAnalisar').AsString = 'SIM' then
+    begin
+      DBGridAnaliseServicoPT.Canvas.Brush.Color:= clLime;
+      DBGridAnaliseServicoPT.Font.Color:= clBlack;
+      DBGridAnaliseServicoPT.Canvas.FillRect(Rect);
+      DBGridAnaliseServicoPT.DefaultDrawColumnCell(Rect, DataCol,Column, State);
+    end
+    else if FrmDataModule.DataSourceAnaliseServicoPT.DataSet.
+    FieldByName('PossivelAnalisar').AsString = 'NÃO' then
+    begin
+      DBGridAnaliseServicoPT.Canvas.Brush.Color:= clRed;
+      DBGridAnaliseServicoPT.Font.Color:= clBlack;
+      DBGridAnaliseServicoPT.Canvas.FillRect(Rect);
+      DBGridAnaliseServicoPT.DefaultDrawColumnCell(Rect, DataCol,Column, State);
+    end;
+  end;
+  if (gdFocused in State) then
+  begin
+    //=============================================================
+    if (DBGridAnaliseServicoPT.SelectedField.FieldName= 'PrevisaoExecucao')AND
+    ((FrmPrincipal.logPerfil = 'Administrador')OR
+    (FrmPrincipal.logPerfil = 'Supervisor')OR
+    (FrmPrincipal.logPerfil = 'PIOP')) then
+    begin
+      with DBDateTimePrevisaoExecucao do
+      begin
+        Left := Rect.Left + DBGridAnaliseServicoPT.Left + 1;
+        Top := Rect.Top + DBGridAnaliseServicoPT.Top + 1;
+        Width := Rect.Right - Rect.Left + 2;
+        Width := Rect.Right - Rect.Left + 2;
+        Height := Rect.Bottom - Rect.Top + 2;
+        Visible := True;
+      end;
+    end
+    else
+      DBDateTimePrevisaoExecucao.Visible := False;
+  end;
+end;
+
+procedure TFrmAnaliseServicoPT.DBGridAnaliseServicoPTKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+  if ((DBGridAnaliseServicoPT.SelectedField.FieldName = 'Plataforma')OR
+  (DBGridAnaliseServicoPT.SelectedField.FieldName = 'TipoEtapaServico')OR
+  (DBGridAnaliseServicoPT.SelectedField.FieldName = 'Analisado')OR
+  (DBGridAnaliseServicoPT.SelectedField.FieldName = 'ServicoCopiado')OR
+  (DBGridAnaliseServicoPT.SelectedField.FieldName = 'Responsavel')) then
+    Key:= #0
+end;
+
+procedure TFrmAnaliseServicoPT.DBGridAnaliseServicoPTTitleClick(
+  Column: TColumn);
+begin
+  FrmPrincipal.configurarFiltro(1,Column.FieldName,IntToStr(Column.Index),
+  Column.ReadOnly,actFiltroInserir,actGridASC,actGridDESC,actGridDESC);
+  //======================================================
+  FrmPrincipal.titleGrid(ColunasLayout,FrmDataModule.ADOQueryAnaliseServicoPT,
+  StatusBar1,'Operacao');
+end;
+
+procedure TFrmAnaliseServicoPT.FormClose(Sender: TObject;
+  var Action: TCloseAction);
+begin
+  Action:= caFree;
+  FrmAnaliseServicoPT:=nil;
+end;
+
+procedure TFrmAnaliseServicoPT.FormCreate(Sender: TObject);
+begin
+  FrmPrincipal.MDIChildCreated(self.Handle);
+  FrmDataModule.ADOQueryTipoEtapaServico.Active:= false;
+  FrmDataModule.ADOQueryTipoEtapaServico.Active:= true;
+  FrmPrincipal.SetUpColunasLayout(DBGridAnaliseServicoPT,ColunasLayout);
+  FrmPrincipal.SetupGridPickListSQL(FrmDataModule.ADOConnectionConsulta,'Plataforma',
+  'SELECT Plataforma FROM tblPlataforma ORDER BY Plataforma;',DBGridAnaliseServicoPT,0);
+  FrmPrincipal.SetupGridPickListSQL(FrmDataModule.ADOConnectionConsulta,'TipoEtapaServico',
+  'SELECT TipoEtapaServico FROM tblTipoEtapaServico ORDER BY TipoEtapaServico;',DBGridAnaliseServicoPT,0);
+  FrmPrincipal.buscaFiledGrid1('Analisado','NÃO','Contem',ColunasLayout,4,false);
+
+  if ((FrmPrincipal.logPerfil = 'Administrador')OR
+  (FrmPrincipal.logPerfil = 'Supervisor')OR
+  (FrmPrincipal.logPerfil = 'Operação')OR
+  (FrmPrincipal.logPerfil = 'PIOP')OR
+  (FrmPrincipal.logPerfil = 'SEG-PIOP')) then
+  begin
+    DBNavigator1.Enabled:= true;
+    DBGridAnaliseServicoPT.ReadOnly:= false;
+    actResponsavel.Enabled:= true;
+    DBMemoDescricaoEtapa.ReadOnly:= false;
+  end
+  else
+  begin
+    DBNavigator1.Enabled:= false;
+    DBGridAnaliseServicoPT.ReadOnly:= true;
+    actResponsavel.Enabled:= false;
+    DBMemoDescricaoEtapa.ReadOnly:= true;
+  end;
+  actProcurar.Execute;
+end;
+
+procedure TFrmAnaliseServicoPT.FormDestroy(Sender: TObject);
+begin
+  FrmPrincipal.MDIChildDestroyed(self.Handle);
+end;
+
+procedure TFrmAnaliseServicoPT.PanelTituloMagicMouseDown(Sender: TObject;
+  Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
+begin
+  FrmPrincipal.Capturing := true;
+  FrmPrincipal.MouseDownSpot.X := X;
+  FrmPrincipal.MouseDownSpot.Y := Y;
+end;
+
+procedure TFrmAnaliseServicoPT.PanelTituloMagicMouseMove(Sender: TObject;
+  Shift: TShiftState; X, Y: Integer);
+begin
+  if FrmPrincipal.Capturing then
+  begin
+    PanelResponsavel.Left := PanelResponsavel.Left - (FrmPrincipal.MouseDownSpot.X - X);
+    PanelResponsavel.Top := PanelResponsavel.Top - (FrmPrincipal.MouseDownSpot.Y - Y);
+  end;
+end;
+
+procedure TFrmAnaliseServicoPT.PanelTituloMagicMouseUp(Sender: TObject;
+  Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
+begin
+  if FrmPrincipal.Capturing then
+  begin
+    FrmPrincipal.Capturing := false;
+    PanelResponsavel.Left := PanelResponsavel.Left - (FrmPrincipal.MouseDownSpot.X - X);
+    PanelResponsavel.Top := PanelResponsavel.Top - (FrmPrincipal.MouseDownSpot.Y - Y);
+  end;
+end;
+
+procedure TFrmAnaliseServicoPT.SpeedButton1Click(Sender: TObject);
+begin
+  PanelResponsavel.Visible:= false;
+end;
+
+procedure TFrmAnaliseServicoPT.WMMDIACTIVATE(var msg: TWMMDIACTIVATE);
+var
+  active: TWinControl;
+  idx: Integer;
+begin
+  active := FindControl(msg.ActiveWnd) ;
+
+  if Assigned(active) then
+  begin
+    idx := FrmPrincipal.mdiChildrenTabs.Tabs.IndexOfObject(TObject(msg.ActiveWnd));
+    FrmPrincipal.mdiChildrenTabs.Tag := -1;
+    FrmPrincipal.mdiChildrenTabs.TabIndex := idx;
+    FrmPrincipal.mdiChildrenTabs.Tag := 0;
+  end;
+end;
+
+end.

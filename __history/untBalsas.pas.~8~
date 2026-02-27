@@ -1,0 +1,161 @@
+unit untBalsas;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ExtCtrls, Vcl.ComCtrls, Data.DB,
+  System.Actions, Vcl.ActnList, Vcl.PlatformDefaultStyleActnCtrls, Vcl.ActnMan,
+  Vcl.Grids, Vcl.DBGrids, Vcl.DBCtrls, Vcl.ToolWin, Vcl.StdCtrls, Vcl.Buttons;
+
+type
+  TFrmBalsas = class(TForm)
+    PanelTitulo: TPanel;
+    ToolBar1: TToolBar;
+    DBNavigatorBalsas: TDBNavigator;
+    DBGridBalsas: TDBGrid;
+    ColunasLayout: TStringGrid;
+    StatusBar1: TStatusBar;
+    ActionManager1: TActionManager;
+    actFiltroInserir: TAction;
+    actGridASC: TAction;
+    actGridDESC: TAction;
+    actSubstituirPor: TAction;
+    actLimparFiltros: TAction;
+    actFiltrosTabela: TAction;
+    actProcuraFiltrosTabela: TAction;
+    actProcurar: TAction;
+    BitBtn2: TBitBtn;
+    BitBtn1: TBitBtn;
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure FormCreate(Sender: TObject);
+    procedure FormDestroy(Sender: TObject);
+    procedure actFiltroInserirExecute(Sender: TObject);
+    procedure actGridASCExecute(Sender: TObject);
+    procedure actGridDESCExecute(Sender: TObject);
+    procedure actSubstituirPorExecute(Sender: TObject);
+    procedure actLimparFiltrosExecute(Sender: TObject);
+    procedure actFiltrosTabelaExecute(Sender: TObject);
+    procedure actProcuraFiltrosTabelaExecute(Sender: TObject);
+    procedure actProcurarExecute(Sender: TObject);
+    procedure DBGridBalsasDrawColumnCell(Sender: TObject; const Rect: TRect;
+      DataCol: Integer; Column: TColumn; State: TGridDrawState);
+    procedure DBGridBalsasTitleClick(Column: TColumn);
+  private
+    { Private declarations }
+    procedure WMMDIACTIVATE(var msg: TWMMDIACTIVATE);message WM_MDIACTIVATE;
+  public
+    { Public declarations }
+  end;
+
+var
+  FrmBalsas: TFrmBalsas;
+
+implementation
+  uses untDataModule,untPrincipal;
+{$R *.dfm}
+
+procedure TFrmBalsas.actFiltroInserirExecute(Sender: TObject);
+begin
+  FrmPrincipal.inserirProcura(DBGridBalsas,ColunasLayout);
+  actProcurar.Execute;
+  if (FrmPrincipal.PanelFiltrosTabela.Visible)AND(FrmPrincipal.PanelAjuda1.Visible) then
+    actFiltrosTabela.Execute;
+end;
+
+procedure TFrmBalsas.actFiltrosTabelaExecute(Sender: TObject);
+begin
+  FrmPrincipal.btnProcurarFiltrosTabela.Action:= actProcuraFiltrosTabela;
+  FrmPrincipal.FiltrosTabela(DBGridBalsas,ColunasLayout);
+end;
+
+procedure TFrmBalsas.actGridASCExecute(Sender: TObject);
+begin
+  FrmPrincipal.ClassificaDBGrid(DBGridBalsas,FrmDataModule.ADOQueryBalsas,0);
+end;
+
+procedure TFrmBalsas.actGridDESCExecute(Sender: TObject);
+begin
+  FrmPrincipal.ClassificaDBGrid(DBGridBalsas,FrmDataModule.ADOQueryBalsas,1);
+end;
+
+procedure TFrmBalsas.actLimparFiltrosExecute(Sender: TObject);
+begin
+  FrmPrincipal.LimparColunasFiltro(DBGridBalsas,ColunasLayout);
+  actProcurar.Execute;
+  if (FrmPrincipal.PanelFiltrosTabela.Visible)AND(FrmPrincipal.PanelAjuda1.Visible) then
+    actFiltrosTabela.Execute;
+end;
+
+procedure TFrmBalsas.actProcuraFiltrosTabelaExecute(Sender: TObject);
+begin
+  frmPrincipal.CarregaFiltrosProcura(ColunasLayout);
+  actProcurar.Execute;
+end;
+
+procedure TFrmBalsas.actProcurarExecute(Sender: TObject);
+  var
+    SQLString,SQLBase: String;
+begin
+  SQLString:= frmPrincipal.SQLStringFiltroTabela(ColunasLayout,true);
+  SQLBase:= 'SELECT tblBalsas.* FROM tblBalsas '+
+  SQLString+' ORDER BY Plataforma;';
+  FrmPrincipal.ProcuraQuery(SQLBase,FrmDataModule.ADOQueryBalsas,StatusBar1);
+end;
+
+procedure TFrmBalsas.actSubstituirPorExecute(Sender: TObject);
+begin
+  FrmPrincipal.SubstituirPor(DBGridBalsas,FrmDataModule.ADOQueryBalsas,
+  FrmDataModule.DataSourceGeradores);
+end;
+
+procedure TFrmBalsas.DBGridBalsasDrawColumnCell(Sender: TObject;
+  const Rect: TRect; DataCol: Integer; Column: TColumn; State: TGridDrawState);
+begin
+  FrmPrincipal.GridZebrado(DBGridBalsas,ColunasLayout,State,Rect,DataCol,Column);
+end;
+
+procedure TFrmBalsas.DBGridBalsasTitleClick(Column: TColumn);
+begin
+  FrmPrincipal.configurarFiltro(1,Column.FieldName,IntToStr(Column.Index),
+  Column.ReadOnly,actFiltroInserir,actGridASC,actGridDESC,actSubstituirPor);
+  //======================================================
+  FrmPrincipal.titleGrid(ColunasLayout,'Consulta',FrmDataModule.ADOQueryBalsas.SQL.Text);
+end;
+
+procedure TFrmBalsas.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+  Action:= caFree;
+  FrmBalsas:=nil;
+end;
+
+procedure TFrmBalsas.FormCreate(Sender: TObject);
+begin
+  FrmPrincipal.MDIChildCreated(self.Handle);
+  //Incicialização
+  FrmPrincipal.SetUpColunasLayout(DBGridBalsas, ColunasLayout);
+  actProcurar.Execute;
+end;
+
+procedure TFrmBalsas.FormDestroy(Sender: TObject);
+begin
+  FrmPrincipal.MDIChildDestroyed(self.Handle);
+end;
+
+procedure TFrmBalsas.WMMDIACTIVATE(var msg: TWMMDIACTIVATE);
+ var
+  active: TWinControl;
+  idx: Integer;
+begin
+  active := FindControl(msg.ActiveWnd) ;
+
+  if Assigned(active) then
+  begin
+    idx := FrmPrincipal.mdiChildrenTabs.Tabs.IndexOfObject(TObject(msg.ActiveWnd));
+    FrmPrincipal.mdiChildrenTabs.Tag := -1;
+    FrmPrincipal.mdiChildrenTabs.TabIndex := idx;
+    FrmPrincipal.mdiChildrenTabs.Tag := 0;
+  end;
+end;
+
+end.

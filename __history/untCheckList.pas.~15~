@@ -1,0 +1,1924 @@
+unit untCheckList;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ExtCtrls, Vcl.ComCtrls, Vcl.ToolWin,
+  Data.DB, Vcl.Grids, Vcl.DBGrids, Vcl.DBCtrls, Vcl.StdCtrls, Vcl.Buttons,
+  System.Actions, Vcl.ActnList, Vcl.PlatformDefaultStyleActnCtrls, Vcl.ActnMan,
+  Vcl.Mask,ComOBJ,Math, Vcl.Menus;
+
+type
+  TFrmCheckList = class(TForm)
+    PanelTitulo: TPanel;
+    PageControl1: TPageControl;
+    TabSheet1: TTabSheet;
+    TabSheet5: TTabSheet;
+    TabSheet6: TTabSheet;
+    ToolBar2: TToolBar;
+    TabSheet7: TTabSheet;
+    ToolBar6: TToolBar;
+    DBGridLimiteOperacional: TDBGrid;
+    DBGridCadastroPI: TDBGrid;
+    ColunasLayoutLimites: TStringGrid;
+    ColunasLayoutCadastroPI: TStringGrid;
+    StatusBarLimiteOperacional: TStatusBar;
+    StatusBarCadastroPI: TStatusBar;
+    ActionManager1: TActionManager;
+    actFiltroInserir: TAction;
+    actGridASC: TAction;
+    actGridDESC: TAction;
+    actSubstituirPor: TAction;
+    actLimparFiltros: TAction;
+    actFiltrosTabela: TAction;
+    actProcuraFiltrosTabela: TAction;
+    BitBtn4: TBitBtn;
+    BitBtn1: TBitBtn;
+    BitBtn2: TBitBtn;
+    actProcurarLimiteOperacional: TAction;
+    actProcurarCadastroPI: TAction;
+    actImportarGeralPI: TAction;
+    ToolBar3: TToolBar;
+    BitBtn8: TBitBtn;
+    actAtualizarPI: TAction;
+    DBEditDataAtualizacao: TDBEdit;
+    DBEditAtualizadoPor: TDBEdit;
+    DBEdit2: TDBEdit;
+    DBLookupComboBox_Limite: TDBLookupComboBox;
+    OpenDialog1: TOpenDialog;
+    actAtualizarLimiteVinculado: TAction;
+    BitBtn7: TBitBtn;
+    DBNavigatorLimiteOperacional: TDBNavigator;
+    actExcelLimiteOperacional: TAction;
+    actExcelGeralPI: TAction;
+    BitBtn10: TBitBtn;
+    BitBtn11: TBitBtn;
+    actCalcularPI: TAction;
+    PopupMenuImportar: TPopupMenu;
+    ImportarVariaveis1: TMenuItem;
+    ImportarLimiteseVariaveis1: TMenuItem;
+    actSincronizar_PI: TAction;
+    DBEditComputador: TDBEdit;
+    BitBtn13: TBitBtn;
+    actFecharConexao: TAction;
+    actExcelCheckList: TAction;
+    Panel2: TPanel;
+    ColunasLayoutCheckList: TStringGrid;
+    ToolBar1: TToolBar;
+    BitBtn14: TBitBtn;
+    BitBtn15: TBitBtn;
+    BitBtn16: TBitBtn;
+    actProcurarCheckList: TAction;
+    StatusBarCheckList: TStatusBar;
+    DBGridCheckList: TDBGrid;
+    actCimaTudo: TAction;
+    actBaixoTudo: TAction;
+    actBaixo: TAction;
+    actCima: TAction;
+    actSalvarLayout: TAction;
+    actLayoutJanela: TAction;
+    BitBtn17: TBitBtn;
+    edtTitulo2: TEdit;
+    edtTitulo1: TEdit;
+    actAbrirCheckList: TAction;
+    BitBtn5: TBitBtn;
+    actGravarCheck: TAction;
+    MemoCheck: TMemo;
+    PanelRegistros: TPanel;
+    Splitter1: TSplitter;
+    ToolBar4: TToolBar;
+    DBGridRegistros: TDBGrid;
+    ToolButton1: TToolButton;
+    actImprimirCheck: TAction;
+    StatusBarImpressao: TStatusBar;
+    ToolButton2: TToolButton;
+    actExcluir: TAction;
+    ColunasLayoutRegistros: TStringGrid;
+    actProcurarRegistros: TAction;
+    StatusBarRegistros: TStatusBar;
+    PanelRelatorio: TPanel;
+    RLImpressao: TStringGrid;
+    DBMemoOBS: TDBMemo;
+    DBNavigatorRegisros: TDBNavigator;
+    Splitter2: TSplitter;
+    ToolButton3: TToolButton;
+    ToolButton4: TToolButton;
+    actAualizaPlanilhas: TAction;
+    DBNavigatorCadastroPI: TDBNavigator;
+    BitBtn6: TBitBtn;
+    BitBtn9: TBitBtn;
+    BitBtn12: TBitBtn;
+    actSAPSelecionado: TAction;
+    ToolButton5: TToolButton;
+    PopupMenuSAP: TPopupMenu;
+    actSalvarLayout1: TMenuItem;
+    actSAPFiltrados: TAction;
+    LocaldeInstalaoSAPFiltrados1: TMenuItem;
+    actAjustar: TAction;
+    BitBtn3: TBitBtn;
+    TabSheet2: TTabSheet;
+    ToolBar5: TToolBar;
+    DBGridPendenciaSAP: TDBGrid;
+    MemoTextoLongoOM: TMemo;
+    actPendenciaSAP: TAction;
+    BitBtn19: TBitBtn;
+    ColunasLayoutPendenciaSAP: TStringGrid;
+    actProcurarPendenciaSAP: TAction;
+    StatusBarPendenciaSAP: TStatusBar;
+    BitBtn20: TBitBtn;
+    BitBtn21: TBitBtn;
+    BitBtn22: TBitBtn;
+    DBEdit1: TDBEdit;
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure FormCreate(Sender: TObject);
+    procedure FormDestroy(Sender: TObject);
+    procedure DBGridLimiteOperacionalDrawColumnCell(Sender: TObject;
+      const Rect: TRect; DataCol: Integer; Column: TColumn;
+      State: TGridDrawState);
+    procedure DBGridCadastroPIDrawColumnCell(Sender: TObject; const Rect: TRect;
+      DataCol: Integer; Column: TColumn; State: TGridDrawState);
+    procedure DBGridLimiteOperacionalTitleClick(Column: TColumn);
+    procedure actGridASCExecute(Sender: TObject);
+    procedure actGridDESCExecute(Sender: TObject);
+    procedure actSubstituirPorExecute(Sender: TObject);
+    procedure actLimparFiltrosExecute(Sender: TObject);
+    procedure actFiltrosTabelaExecute(Sender: TObject);
+    procedure actProcuraFiltrosTabelaExecute(Sender: TObject);
+    procedure DBGridCadastroPITitleClick(Column: TColumn);
+    procedure actProcurarLimiteOperacionalExecute(Sender: TObject);
+    procedure actProcurarCadastroPIExecute(Sender: TObject);
+    procedure DBLookupComboBox_LimiteCloseUp(Sender: TObject);
+    procedure actImportarGeralPIExecute(Sender: TObject);
+    procedure actAtualizarLimiteVinculadoExecute(Sender: TObject);
+    procedure DBGridCadastroPIKeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure actExcelLimiteOperacionalExecute(Sender: TObject);
+    procedure actExcelGeralPIExecute(Sender: TObject);
+    procedure actAtualizarPIExecute(Sender: TObject);
+    procedure actCalcularPIExecute(Sender: TObject);
+    procedure actFiltroInserirExecute(Sender: TObject);
+    procedure actSincronizar_PIExecute(Sender: TObject);
+    procedure actFecharConexaoExecute(Sender: TObject);
+    procedure actExcelCheckListExecute(Sender: TObject);
+    procedure actProcurarCheckListExecute(Sender: TObject);
+    procedure DBGridCheckListDrawColumnCell(Sender: TObject; const Rect: TRect;
+      DataCol: Integer; Column: TColumn; State: TGridDrawState);
+    procedure DBGridCheckListKeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure DBGridCheckListTitleClick(Column: TColumn);
+    procedure DBGridCheckListCellClick(Column: TColumn);
+    procedure actCimaTudoExecute(Sender: TObject);
+    procedure actBaixoTudoExecute(Sender: TObject);
+    procedure actBaixoExecute(Sender: TObject);
+    procedure actCimaExecute(Sender: TObject);
+    procedure actSalvarLayoutExecute(Sender: TObject);
+    procedure actLayoutJanelaExecute(Sender: TObject);
+    procedure actGravarCheckExecute(Sender: TObject);
+    procedure actAbrirCheckListExecute(Sender: TObject);
+    procedure actImprimirCheckExecute(Sender: TObject);
+    procedure actExcluirExecute(Sender: TObject);
+    procedure actProcurarRegistrosExecute(Sender: TObject);
+    procedure DBGridRegistrosDrawColumnCell(Sender: TObject; const Rect: TRect;
+      DataCol: Integer; Column: TColumn; State: TGridDrawState);
+    procedure DBGridRegistrosTitleClick(Column: TColumn);
+    procedure DBGridCheckListColumnMoved(Sender: TObject; FromIndex,
+      ToIndex: Integer);
+    procedure actAualizaPlanilhasExecute(Sender: TObject);
+    procedure actSAPSelecionadoExecute(Sender: TObject);
+    procedure actSAPFiltradosExecute(Sender: TObject);
+    procedure actAjustarExecute(Sender: TObject);
+    procedure DBGridCheckListKeyPress(Sender: TObject; var Key: Char);
+    procedure actProcurarPendenciaSAPExecute(Sender: TObject);
+    procedure DBGridPendenciaSAPDrawColumnCell(Sender: TObject;
+      const Rect: TRect; DataCol: Integer; Column: TColumn;
+      State: TGridDrawState);
+    procedure DBGridPendenciaSAPTitleClick(Column: TColumn);
+    procedure actPendenciaSAPExecute(Sender: TObject);
+    procedure DBEdit1Change(Sender: TObject);
+    procedure DBGridCadastroPICellClick(Column: TColumn);
+    procedure RLImpressaoFixedCellClick(Sender: TObject; ACol, ARow: Integer);
+    type
+      TRECLocalSAP = record
+        LocalInstalacao,DenominacaoLocalInstalacao: String;
+    end;
+
+
+  private
+    { Private declarations }
+    procedure WMMDIACTIVATE(var msg: TWMMDIACTIVATE);message WM_MDIACTIVATE;
+    procedure ImportarGeralPI(ExcelImportar: Variant);
+    procedure REGAtualizacaoPI;
+
+
+  public
+    { Public declarations }
+    ExcelPI,SheetCadastroPI: Variant;
+    function IncSincronizar: Integer;
+    procedure GravarSincronizar_PI;
+    function RecLocalSAP(Plataforma,TAG: String): TRECLocalSAP;
+  end;
+
+var
+  FrmCheckList: TFrmCheckList;
+
+implementation
+  uses untDataModule,untPrincipal,untFrmPreview;
+{$R *.dfm}
+
+procedure TFrmCheckList.actAbrirCheckListExecute(Sender: TObject);
+  var
+    ListaRegistro: TStringLIst;
+    i,j,numLinhas: Integer;
+    DataRegistro,AvaliadoPor,Computador,PI_AtualizadoPor,PI_DataAtualizacao,
+    PI_Computador: String;
+begin
+  ListaRegistro:= TStringList.Create;
+  ListaRegistro.delimiter:= ';';
+  ListaRegistro.StrictDelimiter:=true;
+  DataRegistro:= FrmDataModule.DataSourcePIRegistros.DataSet.FieldByName('DataRegistro').AsString;
+  AvaliadoPor:= FrmDataModule.DataSourcePIRegistros.DataSet.FieldByName('AvaliadoPor').AsString;
+  Computador:= FrmDataModule.DataSourcePIRegistros.DataSet.FieldByName('Computador').AsString;
+  PI_AtualizadoPor:= FrmDataModule.DataSourcePIRegistros.DataSet.FieldByName('PI_AtualizadoPor').AsString;
+  PI_DataAtualizacao:= FrmDataModule.DataSourcePIRegistros.DataSet.FieldByName('PI_DataAtualizacao').AsString;
+  PI_Computador:= FrmDataModule.DataSourcePIRegistros.DataSet.FieldByName('PI_Computador').AsString;
+  //Preencher dados
+  edtTitulo1.Text:= 'Check-List: '+
+  AvaliadoPor+', '+DataRegistro+', '+Computador;
+  edtTitulo2.Text:= 'Atualização do PI: '+
+  PI_AtualizadoPor+', '+PI_DataAtualizacao+', '+PI_Computador;
+  RLImpressao.FixedRows:= 0;
+  RLImpressao.RowCount:= 1;
+  RLImpressao.ColCount:= 9;
+  RLImpressao.Cells[0,0]:= 'Plataf.';
+  RLImpressao.Cells[1,0]:= 'Descrição Variavel';
+  RLImpressao.Cells[2,0]:= 'TAG';
+  RLImpressao.Cells[3,0]:= 'Valor Médio';
+  RLImpressao.Cells[4,0]:= 'Tipo Variavel';
+  RLImpressao.Cells[5,0]:= 'Unidade';
+  RLImpressao.Cells[6,0]:= 'Limite Inferior';
+  RLImpressao.Cells[7,0]:= 'Limite Superior';
+  RLImpressao.Cells[8,0]:= 'Valor Atual';
+  MemoCheck.Text:= FrmDataModule.DataSourcePIRegistros.DataSet.
+  FieldByName('Resultados').AsString;
+  FrmPrincipal.ProgressBarIncializa(MemoCheck.Lines.Count,
+  'Carregando Check-List...');
+  for i := 0 to MemoCheck.Lines.Count-1 do
+  begin
+    numLinhas:= RLImpressao.RowCount;
+    RLImpressao.RowCount:= numLinhas+1;
+    ListaRegistro.DelimitedText:= MemoCheck.Lines[i];
+    //Preencher valores
+    for j := 0 to RLImpressao.ColCount-1 do
+    begin
+      RLImpressao.Cells[j,numLinhas]:= ListaRegistro[j];
+    end;
+    //====================================
+    FrmPrincipal.ProgressBarIncremento(1);
+  end;
+  StatusBarImpressao.Panels[0].Text:= 'N° registros: '+
+  intToStr(RLImpressao.RowCount-1);
+  FrmPrincipal.AutoFitGrade(RLImpressao);
+  FrmPrincipal.ProgressBarAtualizar;
+  try
+    RLImpressao.FixedRows:= 1;
+  except
+  end;
+end;
+
+procedure TFrmCheckList.actAjustarExecute(Sender: TObject);
+begin
+  case PageControl1.TabIndex of
+    0: FrmPrincipal.AutoSizeDBGrid(DBGridCheckList);
+    1: FrmPrincipal.AutoSizeDBGrid(DBGridCadastroPI);
+  end;
+end;
+
+procedure TFrmCheckList.actAtualizarLimiteVinculadoExecute(Sender: TObject);
+  var
+    CodigoLimiteOperacional,SelRegistro: Integer;
+begin
+  FrmDataModule.naoGravar:= true;
+  SelRegistro:= FrmDataModule.ADOQueryCadastroPI.RecNo;
+  FrmDataModule.DataSourceCadastroPI.Enabled:= false;
+  FrmDataModule.ADOQueryCadastroPI.First;
+  FrmPrincipal.ProgressBarIncializa(FrmDataModule.ADOQueryCadastroPI.RecordCount,
+  'Atualizando texto do Limite Operacional vinculado...');
+  while not FrmDataModule.ADOQueryCadastroPI.Eof do
+  begin
+    try
+      CodigoLimiteOperacional:= FrmDataModule.DataSourceCadastroPI.
+      DataSet.FieldByName('CodigoLimiteOperacional').AsInteger;
+      //SELECIONAR
+      FrmDataModule.ADOQueryConsultaLimiteOperacional_ID.Active := false;
+      FrmDataModule.ADOQueryConsultaLimiteOperacional_ID.Parameters.Items[0].Value:=
+      CodigoLimiteOperacional;
+      FrmDataModule.ADOQueryConsultaLimiteOperacional_ID.Active := true;
+      //CARREGAR O SISTEMA NA TABELA
+      FrmDataModule.ADOQueryCadastroPI.Edit;
+      FrmDataModule.DataSourceCadastroPI.DataSet.FieldByName('LimiteVinculado').AsString:=
+      FrmDataModule.DataSourceConsultaLimiteOperacional_ID.DataSet.
+      FieldByName('DescricaoLimite').AsString;
+      FrmDataModule.ADOQueryCadastroPI.Post;
+      FrmDataModule.ADOQueryCadastroPI.Next;
+      FrmPrincipal.ProgressBarIncremento(1);
+    except
+      FrmDataModule.ADOQueryCadastroPI.Cancel;
+    end;
+  end;
+  FrmPrincipal.ProgressBarAtualizar;
+  FrmDataModule.DataSourceCadastroPI.Enabled:= true;
+  FrmDataModule.ADOQueryCadastroPI.RecNo:= SelRegistro;
+  FrmDataModule.naoGravar:= false;
+end;
+
+procedure TFrmCheckList.actExcelLimiteOperacionalExecute(Sender: TObject);
+begin
+  FrmPrincipal.GerarExcel(DBGridLimiteOperacional,'Limite Operacioanal');
+end;
+
+procedure TFrmCheckList.actExcluirExecute(Sender: TObject);
+begin
+  if Application.MessageBox(PChar(
+  'Deseja realmente excluir o registro selecionado?'),'.::ATENÇÃO::.',36) = 6 then
+  begin
+    FrmDataModule.ADOQueryPIRegistros.Delete;
+  end;
+end;
+
+procedure TFrmCheckList.actFecharConexaoExecute(Sender: TObject);
+begin
+  try
+    if (FrmPrincipal.logPerfil = 'Administrador')OR
+    (FrmPrincipal.logPerfil = 'CIC-Mar')OR
+    (FrmPrincipal.logPerfil = 'Supervisor') then
+    begin
+      FrmPrincipal.ProgressBarIncializa(6,'Fechando conexão com o PI');
+      Screen.Cursor := crDefault;
+      //Fechar Excel
+      ExcelPI.ActiveWorkbook.Save;
+      FrmPrincipal.ProgressBarIncremento(1);
+      ExcelPI.Application.DisplayAlerts := False;
+      FrmPrincipal.ProgressBarIncremento(1);
+      ExcelPI.Quit;
+      FrmPrincipal.ProgressBarIncremento(1);
+      ExcelPI := Unassigned;
+      FrmPrincipal.ProgressBarIncremento(1);
+      FreeAndNil(ExcelPI);
+      FrmPrincipal.ProgressBarIncremento(1);
+      ExcelPI := 0;
+      FrmPrincipal.ProgressBarAtualizar;
+    end;
+  except
+  end;
+end;
+
+procedure TFrmCheckList.actFiltroInserirExecute(Sender: TObject);
+begin
+  case PageControl1.TabIndex of
+    0://Check-List
+    begin
+      FrmPrincipal.inserirProcura(DBGridCheckList,ColunasLayoutCheckList);
+      actProcurarCheckList.Execute;
+    end;
+    1://Cadastro
+    begin
+      FrmPrincipal.inserirProcura(DBGridCadastroPI,ColunasLayoutCadastroPI);
+      actProcurarCadastroPI.Execute;
+    end;
+    2://Limite Operacional
+    begin
+      FrmPrincipal.inserirProcura(DBGridLimiteOperacional,ColunasLayoutLimites);
+      actProcurarLimiteOperacional.Execute;
+    end;
+    3://Registros
+    begin
+      FrmPrincipal.inserirProcura(DBGridRegistros,ColunasLayoutRegistros);
+      actProcurarRegistros.Execute;
+    end;
+    4://Pendencias SAP
+    begin
+      FrmPrincipal.inserirProcura(DBGridPendenciaSAP,ColunasLayoutPendenciaSAP);
+      actProcurarPendenciaSAP.Execute;
+    end;
+  end;
+  if (FrmPrincipal.PanelFiltrosTabela.Visible)AND(FrmPrincipal.PanelAjuda1.Visible) then
+    actFiltrosTabela.Execute;
+end;
+
+procedure TFrmCheckList.actFiltrosTabelaExecute(Sender: TObject);
+begin
+  FrmPrincipal.btnProcurarFiltrosTabela.Action:= actProcuraFiltrosTabela;
+  case PageControl1.TabIndex of
+    0: FrmPrincipal.FiltrosTabela(DBGridCheckList,ColunasLayoutCheckList);
+    1: FrmPrincipal.FiltrosTabela(DBGridCadastroPI,ColunasLayoutCadastroPI);
+    2: FrmPrincipal.FiltrosTabela(DBGridLimiteOperacional,ColunasLayoutLimites);
+    3: FrmPrincipal.FiltrosTabela(DBGridRegistros,ColunasLayoutRegistros);
+    4: FrmPrincipal.FiltrosTabela(DBGridPendenciaSAP,ColunasLayoutPendenciaSAP);
+  end;
+end;
+
+procedure TFrmCheckList.actGravarCheckExecute(Sender: TObject);
+  var
+    Plataforma,NomeVariavel,TAG,ValorMedio,ValorAtual,
+    Unidade,LimiteInferior,LimiteSuperior,TipoVariavel: String;
+begin
+  actLimparFiltros.Execute;
+  FrmPrincipal.buscaFiledGrid1('Ciente','Pendente',
+  'Exato',ColunasLayoutCheckList,4,false);
+  actProcurarCheckList.Execute;
+  if FrmDataModule.ADOQueryCheckList.IsEmpty then
+  begin
+    actLimparFiltros.Execute;
+    FrmPrincipal.buscaFiledGrid1('Ciente','Ciente',
+    'Exato',ColunasLayoutCheckList,4,false);
+    actProcurarCheckList.Execute;
+    MemoCheck.Lines.Clear;
+    FrmPrincipal.ProgressBarIncializa(FrmDataModule.ADOQueryCheckList.RecordCount,
+    'Gravar Check-List...');
+    FrmDataModule.DataSourceCheckList.Enabled:= false;
+    while not FrmDataModule.ADOQueryCheckList.Eof do
+    begin
+      Plataforma:= FrmDataModule.DataSourceCheckList.DataSet.FieldByName
+      ('Plataforma').AsString;
+      NomeVariavel:= FrmDataModule.DataSourceCheckList.DataSet.FieldByName
+      ('NomeVariavel').AsString;
+      TAG:= FrmDataModule.DataSourceCheckList.DataSet.FieldByName
+      ('TAG').AsString;
+      ValorMedio:= FrmDataModule.DataSourceCheckList.DataSet.FieldByName
+      ('ValorMedio').AsString;
+      TipoVariavel:= FrmDataModule.DataSourceCheckList.DataSet.FieldByName
+      ('TipoVariavel').AsString;
+      Unidade:= FrmDataModule.DataSourceCheckList.DataSet.FieldByName
+      ('Unidade').AsString;
+      LimiteInferior:= FrmDataModule.DataSourceCheckList.DataSet.FieldByName
+      ('LimiteInferior').AsString;
+      LimiteSuperior:= FrmDataModule.DataSourceCheckList.DataSet.FieldByName
+      ('LimiteSuperior').AsString;
+      ValorAtual:= FrmDataModule.DataSourceCheckList.DataSet.FieldByName
+      ('ValorAtual').AsString;
+      MemoCheck.Lines.Add(Plataforma+';'+NomeVariavel+';'+TAG+';'+ValorMedio+';'+
+      TipoVariavel+';'+ValorAtual+';'+
+      Unidade+';'+LimiteInferior+';'+LimiteSuperior+';'+TipoVariavel);
+      FrmDataModule.ADOQueryCheckList.Next;
+      FrmPrincipal.ProgressBarIncremento(1);
+    end;
+    FrmDataModule.DataSourceCheckList.Enabled:= true;
+    FrmDataModule.ADOQueryPIRegistros.Active:= false;
+    FrmDataModule.ADOQueryPIRegistros.Active:= true;
+    FrmDataModule.ADOQueryPIRegistros.Insert;
+    FrmDataModule.DataSourcePIRegistros.DataSet.FieldByName
+    ('Resultados').AsString:= MemoCheck.Text;
+    //=================================================
+    FrmDataModule.DataSourcePIRegistros.DataSet.FieldByName
+    ('AvaliadoPor').AsString:= FrmPrincipal.logChave;
+    FrmDataModule.DataSourcePIRegistros.DataSet.FieldByName
+    ('DataRegistro').AsDateTime:= now;
+    FrmDataModule.DataSourcePIRegistros.DataSet.FieldByName
+    ('Computador').AsString:= FrmPrincipal.logMaquina;
+    //=================================================
+    FrmDataModule.DataSourcePIRegistros.DataSet.FieldByName
+    ('PI_AtualizadoPor').AsString:= DBEditAtualizadoPor.Text;
+    FrmDataModule.DataSourcePIRegistros.DataSet.FieldByName
+    ('PI_DataAtualizacao').AsString:= DBEditDataAtualizacao.Text;
+    FrmDataModule.DataSourcePIRegistros.DataSet.FieldByName
+    ('PI_Computador').AsString:= DBEditComputador.Text;
+    //=================================================
+    FrmDataModule.ADOQueryPIRegistros.Post;
+    FrmPrincipal.ProgressBarAtualizar;
+  end
+  else
+  begin
+    MessageBox(0, PChar('Necessário validar itens listados antes de gravar Check-List!'),
+    'Gravar Check-List', MB_ICONINFORMATION);
+  end;
+end;
+
+procedure TFrmCheckList.actGridASCExecute(Sender: TObject);
+begin
+  case PageControl1.TabIndex of
+    0: FrmPrincipal.ClassificaDBGrid(DBGridCheckList,
+    FrmDataModule.ADOQueryCheckList,0);
+    1: FrmPrincipal.ClassificaDBGrid(DBGridCadastroPI,
+    FrmDataModule.ADOQueryCadastroPI,0);
+    2: FrmPrincipal.ClassificaDBGrid(DBGridLimiteOperacional,
+    FrmDataModule.ADOQueryLimiteOperacional,0);
+    3: FrmPrincipal.ClassificaDBGrid(DBGridRegistros,
+    FrmDataModule.ADOQueryPIRegistros,0);
+    4: FrmPrincipal.ClassificaDBGrid(DBGridPendenciaSAP,
+    FrmDataModule.ADOQueryPendenciaSAP,0);
+  end;
+end;
+
+procedure TFrmCheckList.actGridDESCExecute(Sender: TObject);
+begin
+  case PageControl1.TabIndex of
+    0: FrmPrincipal.ClassificaDBGrid(DBGridCheckList,
+    FrmDataModule.ADOQueryCheckList,1);
+    1: FrmPrincipal.ClassificaDBGrid(DBGridCadastroPI,
+    FrmDataModule.ADOQueryCadastroPI,1);
+    2: FrmPrincipal.ClassificaDBGrid(DBGridLimiteOperacional,
+    FrmDataModule.ADOQueryLimiteOperacional,1);
+    3: FrmPrincipal.ClassificaDBGrid(DBGridRegistros,
+    FrmDataModule.ADOQueryPIRegistros,1);
+    4: FrmPrincipal.ClassificaDBGrid(DBGridPendenciaSAP,
+    FrmDataModule.ADOQueryPendenciaSAP,1);
+  end;
+end;
+
+procedure TFrmCheckList.actImportarGeralPIExecute(Sender: TObject);
+  var
+    ExcelImportacao: Variant;
+begin
+  OpenDialog1.Filter := 'Microsoft Excel|*.xlsx|Microsoft Excel 97-2003|*.xls';
+  OpenDialog1.DefaultExt:= '*.xlsx';
+  if OpenDialog1.Execute then
+  begin
+    ExcelImportacao := CreateOleObject('Excel.Application');
+    // Abrir o arquivo
+    ExcelImportacao.Workbooks.Open(OpenDialog1.FileName);
+    try
+      //Importar planilha Geral PI
+      ImportarGeralPI(ExcelImportacao);
+      //Incrementar Sincronizar
+      IncSincronizar;
+      GravarSincronizar_PI;
+    finally
+      //Fechar Excel
+      ExcelImportacao.Application.DisplayAlerts := False;
+      ExcelImportacao.Quit;
+      ExcelImportacao := Unassigned;
+      FreeAndNil(ExcelImportacao);
+      ExcelImportacao := 0;
+    end;
+  end;
+end;
+
+procedure TFrmCheckList.actImprimirCheckExecute(Sender: TObject);
+begin
+  if not Assigned(FrmPreview) then
+    FrmPreview:=TFrmPreview.Create(Application)
+  else
+    FrmPreview.Show;
+
+  FrmPreview.ListaTituloRelatorio:= TStringList.Create;
+  FrmPreview.ListaTituloRelatorio.Add(edtTitulo1.Text);
+  FrmPreview.ListaTituloRelatorio.Add(edtTitulo2.Text);
+  FrmPreview.RadioGroupRelatorio.ItemIndex:= 4;
+  FrmPreview.PrintPreview.PrintJobTitle:= 'Check-List';
+  FrmPreview.GeneratePages;
+end;
+
+procedure TFrmCheckList.actAtualizarPIExecute(Sender: TObject);
+  var
+    i: Integer;
+    ListaErro: TStringList;
+    Endereco,TAGPI,ValorMedio,ValorAtual,UnidadePI,DescricaoPI,TipoVarPI: String;
+    BooleanErro: Boolean;
+begin
+  try
+    ListaErro:= TStringList.Create;
+    ListaErro.Clear;
+    // Inicializar ProgressBar
+    FrmDataModule.ADOQueryAtualizaCadastroPI.Active:= false;
+    FrmDataModule.ADOQueryAtualizaCadastroPI.Active:= true;
+    FrmPrincipal.ProgressBarIncializa(FrmDataModule.ADOQueryAtualizaCadastroPI.RecordCount,
+    'Atualizando dados do PI...');
+    // ============================================
+    i:= 2;
+    while not FrmDataModule.ADOQueryAtualizaCadastroPI.Eof do
+    begin
+      FrmDataModule.ADOQueryAtualizaCadastroPI.Edit;
+      TipoVarPI:= ExcelPI.Workbooks[1].Sheets[1].Cells[i,5];
+      if TipoVarPI = 'Float32' then
+      begin
+        try
+          ValorMedio:= FormatFloat('0.0000',ExcelPI.Workbooks[1].Sheets[1].Cells[i,1]);
+          ValorAtual:= FormatFloat('0.0000',ExcelPI.Workbooks[1].Sheets[1].Cells[i,2]);
+          UnidadePI:= ExcelPI.Workbooks[1].Sheets[1].Cells[i,3];
+          DescricaoPI:= ExcelPI.Workbooks[1].Sheets[1].Cells[i,4];
+          BooleanErro:= false;
+        except
+          ValorMedio:= ExcelPI.Workbooks[1].Sheets[1].Cells[i,1];
+          ValorAtual:= ExcelPI.Workbooks[1].Sheets[1].Cells[i,2];
+          UnidadePI:= ExcelPI.Workbooks[1].Sheets[1].Cells[i,3];
+          DescricaoPI:= ExcelPI.Workbooks[1].Sheets[1].Cells[i,4];
+          ListaErro.Add(ExcelPI.Workbooks[1].Sheets[1].Cells[i,6]);
+          BooleanErro:= true;
+        end;
+      end
+      else
+      begin
+        ValorMedio:= 'Digital';
+        try
+          ValorAtual:= FormatFloat('0',ExcelPI.Workbooks[1].Sheets[1].Cells[i,2]);
+          UnidadePI:= ExcelPI.Workbooks[1].Sheets[1].Cells[i,3];
+          DescricaoPI:= ExcelPI.Workbooks[1].Sheets[1].Cells[i,4];
+          BooleanErro:= false;
+        except
+          ValorAtual:= ExcelPI.Workbooks[1].Sheets[1].Cells[i,2];
+          UnidadePI:= ExcelPI.Workbooks[1].Sheets[1].Cells[i,3];
+          DescricaoPI:= ExcelPI.Workbooks[1].Sheets[1].Cells[i,4];
+          ListaErro.Add(ExcelPI.Workbooks[1].Sheets[1].Cells[i,6]);
+          BooleanErro:= true;
+        end;
+      end;
+      FrmDataModule.DataSourceAtualizaCadastroPI.DataSet.FieldByName
+      ('ValorMedio').AsString:= ValorMedio;
+      FrmDataModule.DataSourceAtualizaCadastroPI.DataSet.FieldByName
+      ('ValorAtual').AsString:= ValorAtual;
+      FrmDataModule.DataSourceAtualizaCadastroPI.DataSet.FieldByName
+      ('UnidadePI').AsString:= UnidadePI;
+      FrmDataModule.DataSourceAtualizaCadastroPI.DataSet.FieldByName
+      ('DescricaoPI').AsString:= DescricaoPI;
+      FrmDataModule.DataSourceAtualizaCadastroPI.DataSet.FieldByName
+      ('TipoVarPI').AsString:= TipoVarPI;
+      FrmDataModule.DataSourceAtualizaCadastroPI.DataSet.FieldByName
+      ('BooleanErro').AsBoolean:= BooleanErro;
+      FrmDataModule.ADOQueryAtualizaCadastroPI.Post;
+      // Incremento ProgressBar
+      FrmPrincipal.ProgressBarIncremento(1);
+      i:= i+1;
+      FrmDataModule.ADOQueryAtualizaCadastroPI.Next;
+    end;
+    // Atualizar ProgressBar
+    FrmPrincipal.ProgressBarAtualizar;
+    if ListaErro.Count > 0 then
+    begin
+      TAGPI:= '';
+      for I := 0 to ListaErro.Count -1 do
+        TAGPI:= TAGPI+#13+ListaErro[i];
+
+      ShowMessage('Lista de erros durante atualização com planilha de conexão com o PI:'+#13+TAGPI);
+    end;
+    //VERIFICAÇÃO E PREENCHIMENTO DE CÁLCULO
+    REGAtualizacaoPI;
+    actCalcularPI.Execute;
+    actAualizaPlanilhas.Execute;
+  except
+    Endereco:= ExtractFilePath(Application.ExeName)+'Arquivos\ConexaoPI.xlsx';
+    MessageBox(0, PChar('Erro de conexão com o Excel [PI]' + #13 + #10 +
+    'Possibilidades:' + #13 + #10 +
+    '1. Verifique você tem acesso ao PI via Excel.'+ #13 + #10 +
+    '2. Verifique se existe o arquivo no endereço: '+Endereco+ #13 + #10 +
+    '3. Verifique se o Microsoft Office Excel esta instalado na sua máquina.'),
+    'Conexão com o PI', MB_ICONERROR);
+    // Atualizar ProgressBar
+    FrmPrincipal.ProgressBarAtualizar;
+  end;
+end;
+
+procedure TFrmCheckList.actAualizaPlanilhasExecute(Sender: TObject);
+begin
+  case PageControl1.TabIndex of
+    0: actProcurarCheckList.Execute;
+    1:
+    begin
+      actProcurarCadastroPI.Execute;
+      FrmDataModule.ADOQueryLimiteOperacional.Active:= false;
+      FrmDataModule.ADOQueryLimiteOperacional.Active:= true;
+    end;
+    2: actProcurarLimiteOperacional.Execute;
+    3: actProcurarRegistros.Execute;
+    4: actProcurarPendenciaSAP.Execute;
+  end;
+end;
+
+procedure TFrmCheckList.actBaixoExecute(Sender: TObject);
+begin
+  FrmPrincipal.moveBaixo(DBGridCheckList, ColunasLayoutCheckList);
+  actLimparFiltros.Execute;
+end;
+
+procedure TFrmCheckList.actBaixoTudoExecute(Sender: TObject);
+begin
+  FrmPrincipal.botaoMoveTudo(FrmDataModule.ADOConnectionOperacao,
+  'CheckList.txt','tblPICadastro','TAB2;',
+  DBGridCheckList,ColunasLayoutCheckList);
+  actLimparFiltros.Execute;
+end;
+
+procedure TFrmCheckList.actExcelCheckListExecute(Sender: TObject);
+begin
+  FrmPrincipal.GerarExcel(DBGridCheckList,'Check-List');
+end;
+
+procedure TFrmCheckList.actExcelGeralPIExecute(Sender: TObject);
+begin
+  FrmPrincipal.GerarExcel(DBGridPendenciaSAP,'Pendências SAP');
+end;
+
+procedure TFrmCheckList.actLayoutJanelaExecute(Sender: TObject);
+begin
+  FrmPrincipal.btnCima.Action:= actCima;
+  FrmPrincipal.btnBaixo.Action:= actBaixo;
+  FrmPrincipal.btnBaixoTudo.Action:= actBaixoTudo;
+  FrmPrincipal.btnCimaTudo.Action:= actCimaTudo;
+  FrmPrincipal.btnSalvarLayout.Action:= actSalvarLayout;
+  FrmPrincipal.btnSalvarLayout.Visible:= false;
+  FrmPrincipal.CarregarRLColunas('CheckList.txt',ColunasLayoutCheckList);
+  FrmPrincipal.actConfigPanelLayout.Execute;
+end;
+
+procedure TFrmCheckList.actLimparFiltrosExecute(Sender: TObject);
+begin
+  case PageControl1.TabIndex of
+    0:
+    begin
+      FrmPrincipal.LimparColunasFiltro(DBGridCheckList,ColunasLayoutCheckList);
+      actProcurarCheckList.Execute;
+    end;
+    1:
+    begin
+      FrmPrincipal.LimparColunasFiltro(DBGridCadastroPI,ColunasLayoutCadastroPI);
+      actProcurarCadastroPI.Execute;
+    end;
+    2:
+    begin
+      FrmPrincipal.LimparColunasFiltro(DBGridLimiteOperacional,ColunasLayoutLimites);
+      actProcurarLimiteOperacional.Execute;
+    end;
+    3:
+    begin
+      FrmPrincipal.LimparColunasFiltro(DBGridRegistros,ColunasLayoutRegistros);
+      actProcurarRegistros.Execute;
+    end;
+    4:
+    begin
+      FrmPrincipal.LimparColunasFiltro(DBGridPendenciaSAP,ColunasLayoutPendenciaSAP);
+      actProcurarPendenciaSAP.Execute;
+    end;
+  end;
+  if (FrmPrincipal.PanelFiltrosTabela.Visible)AND(FrmPrincipal.PanelAjuda1.Visible) then
+    actFiltrosTabela.Execute;
+end;
+
+procedure TFrmCheckList.actPendenciaSAPExecute(Sender: TObject);
+  var
+    Plataforma,TAGBusca: String;
+begin
+  Plataforma:= FrmDataModule.DataSourceCheckList.DataSet.FieldByName('Plataforma').AsString;
+  TAGBusca:= FrmDataModule.DataSourceCheckList.DataSet.FieldByName('TAG').AsString;
+  FrmPrincipal.buscaFiledGrid1('Plataforma',Plataforma,'Contem',ColunasLayoutPendenciaSAP,4,false);
+  FrmPrincipal.buscaFiledGrid1('DenominacaoLocalInstalacao',TAGBusca,'Contem',ColunasLayoutPendenciaSAP,4,false);
+  PageControl1.TabIndex:= 4;
+  actProcurarPendenciaSAP.Execute;
+end;
+
+procedure TFrmCheckList.actProcuraFiltrosTabelaExecute(Sender: TObject);
+begin
+  case PageControl1.TabIndex of
+    0:
+    begin
+      frmPrincipal.CarregaFiltrosProcura(ColunasLayoutCheckList);
+      actProcurarCheckList.Execute;
+    end;
+    1:
+    begin
+      frmPrincipal.CarregaFiltrosProcura(ColunasLayoutCadastroPI);
+      actProcurarCadastroPI.Execute;
+    end;
+    2:
+    begin
+      frmPrincipal.CarregaFiltrosProcura(ColunasLayoutLimites);
+      actProcurarLimiteOperacional.Execute;
+    end;
+    3:
+    begin
+      frmPrincipal.CarregaFiltrosProcura(ColunasLayoutRegistros);
+      actProcurarRegistros.Execute;
+    end;
+    4:
+    begin
+      frmPrincipal.CarregaFiltrosProcura(ColunasLayoutPendenciaSAP);
+      actProcurarPendenciaSAP.Execute;
+    end;
+  end;
+end;
+
+procedure TFrmCheckList.actProcurarCadastroPIExecute(Sender: TObject);
+  var
+    SQLString,SQLBase: String;
+begin
+  SQLString:= frmPrincipal.SQLStringFiltroTabela(ColunasLayoutCadastroPI,true);
+  SQLBase:= 'SELECT tblPICadastro.* FROM tblPICadastro '+
+  SQLString+' ORDER BY Plataforma, Sistema;';
+  FrmPrincipal.ProcuraQuery(SQLBase,FrmDataModule.ADOQueryCadastroPI,
+  StatusBarCadastroPI);
+end;
+
+procedure TFrmCheckList.actProcurarCheckListExecute(Sender: TObject);
+  var
+    SQLString,SQLBase: String;
+begin
+  SQLString:= frmPrincipal.SQLStringFiltroTabela(ColunasLayoutCheckList,false);
+  if SQLString <> '' then
+    SQLString:= 'AND'+SQLString;
+  SQLBase:= 'SELECT tblPICadastro.*, tblPILimiteOperacional.* '+
+  'FROM tblPILimiteOperacional INNER JOIN tblPICadastro ON '+
+  'tblPILimiteOperacional.idPILimiteOperacional = tblPICadastro.CodigoLimiteOperacional '+
+  'WHERE((BooleanChekList = True))'+SQLString+
+  ' ORDER BY tblPICadastro.Plataforma, tblPICadastro.Sistema;';
+  FrmPrincipal.ProcuraQuery(SQLBase,FrmDataModule.ADOQueryCheckList,
+  StatusBarCheckList);
+end;
+
+procedure TFrmCheckList.actProcurarLimiteOperacionalExecute(Sender: TObject);
+  var
+    SQLString,SQLBase: String;
+begin
+  SQLString:= frmPrincipal.SQLStringFiltroTabela(ColunasLayoutLimites,true);
+  SQLBase:= 'SELECT tblPILimiteOperacional.* FROM tblPILimiteOperacional '+
+  SQLString+' ORDER BY DescricaoLimite, TipoVariavel;';
+  FrmPrincipal.ProcuraQuery(SQLBase,FrmDataModule.ADOQueryLimiteOperacional,
+  StatusBarLimiteOperacional);
+end;
+
+procedure TFrmCheckList.actProcurarPendenciaSAPExecute(Sender: TObject);
+  var
+    SQLString,SQLBase: String;
+begin
+  SQLString:= frmPrincipal.SQLStringFiltroTabela(ColunasLayoutPendenciaSAP,false);
+  if SQLString <> '' then
+    SQLString:= ' HAVING '+SQLString;
+  SQLBase:= 'SELECT tblCarteiraTrabalho.OrdemManutencao, tblCarteiraTrabalho.Plataforma, '+
+  'tblCarteiraTrabalho.txtTipoEtapaServicoOM, tblCarteiraTrabalho.LocalInstalacao, '+
+  'tblCarteiraTrabalho.DenominacaoLocalInstalacao, tblCarteiraTrabalho.TextoBreveOM, '+
+  'tblCarteiraTrabalho.CentroTrabalhoOM, tblCarteiraTrabalho.DataReferencia, '+
+  'tblCarteiraTrabalho.DataBaseInicio, tblCarteiraTrabalho.DataBaseFim, '+
+  'tblCarteiraTrabalho.StatusUsuarioOM,tblCarteiraTrabalho.StatusSistemaOM, '+
+  'tblCarteiraTrabalho.Sala, tblCarteiraTrabalho.CampoSelecao, '+
+  'tblCarteiraTrabalho.PlanoManutencao, tblCarteiraTrabalho.NotaManutencao, '+
+  'tblCarteiraTrabalho.Equipamento,'+
+  'tblCarteiraTrabalho.TipoAtvMnt,'+
+  'tblCarteiraTrabalho.CriadoPor, tblCarteiraTrabalho.DataEntrada, '+
+  'tblCarteiraTrabalho.GrupoPlanejamento '+
+  'FROM tblCarteiraTrabalho '+
+
+  'GROUP BY tblCarteiraTrabalho.OrdemManutencao, tblCarteiraTrabalho.Plataforma, '+
+  'tblCarteiraTrabalho.txtTipoEtapaServicoOM, tblCarteiraTrabalho.LocalInstalacao, '+
+  'tblCarteiraTrabalho.DenominacaoLocalInstalacao, tblCarteiraTrabalho.TextoBreveOM, '+
+  'tblCarteiraTrabalho.CentroTrabalhoOM, tblCarteiraTrabalho.DataReferencia, '+
+  'tblCarteiraTrabalho.DataBaseInicio, tblCarteiraTrabalho.DataBaseFim, '+
+  'tblCarteiraTrabalho.StatusUsuarioOM,tblCarteiraTrabalho.StatusSistemaOM, '+
+  'tblCarteiraTrabalho.Sala, tblCarteiraTrabalho.CampoSelecao, '+
+  'tblCarteiraTrabalho.PlanoManutencao, tblCarteiraTrabalho.NotaManutencao, '+
+  'tblCarteiraTrabalho.Equipamento,'+
+  'tblCarteiraTrabalho.TipoAtvMnt,'+
+  'tblCarteiraTrabalho.CriadoPor, tblCarteiraTrabalho.DataEntrada, '+
+  'tblCarteiraTrabalho.GrupoPlanejamento ';
+  SQLBase:= SQLBase+SQLString+' ORDER BY tblCarteiraTrabalho.Plataforma;';
+  FrmPrincipal.ProcuraQuery(SQLBase,FrmDataModule.ADOQueryPendenciaSAP,
+  StatusBarPendenciaSAP);
+end;
+
+procedure TFrmCheckList.actProcurarRegistrosExecute(Sender: TObject);
+  var
+    SQLString,SQLBase: String;
+begin
+  SQLString:= frmPrincipal.SQLStringFiltroTabela(ColunasLayoutRegistros,true);
+  SQLBase:= 'SELECT tblPIRegistros.* FROM tblPIRegistros '+
+  SQLString+' ORDER BY DataRegistro DESC;';
+  FrmPrincipal.ProcuraQuery(SQLBase,FrmDataModule.ADOQueryPIRegistros,
+  StatusBarRegistros);
+end;
+
+procedure TFrmCheckList.actSalvarLayoutExecute(Sender: TObject);
+begin
+  FrmPrincipal.SalvarRLColunasCarregaGRID(FrmDataModule.ADOConnectionOperacao,
+  'CheckList.txt','tblPICadastro',
+  DBGridCheckList,ColunasLayoutCheckList);
+  actLimparFiltros.Execute;
+end;
+
+procedure TFrmCheckList.actSAPFiltradosExecute(Sender: TObject);
+begin
+  try
+    FrmDataModule.ADOQueryCadastroPI.First;
+    FrmPrincipal.ProgressBarIncializa(FrmDataModule.ADOQueryCadastroPI.RecordCount,
+    'Carregando Local de Instalação do SAP');
+    FrmDataModule.DataSourceCadastroPI.Enabled:= false;
+    while not FrmDataModule.ADOQueryCadastroPI.Eof do
+    begin
+      actSAPSelecionado.Execute;
+      FrmDataModule.ADOQueryCadastroPI.Next;
+      FrmPrincipal.ProgressBarIncremento(1);
+    end;
+  finally
+    FrmPrincipal.ProgressBarAtualizar;
+    FrmDataModule.ADOQueryCadastroPI.First;
+    FrmDataModule.DataSourceCadastroPI.Enabled:= true;
+  end;
+end;
+
+procedure TFrmCheckList.actSAPSelecionadoExecute(Sender: TObject);
+  var
+    Plataforma,TAGPI: String;
+    RECLocal: TRECLocalSAP;
+begin
+  Plataforma:= FrmDataModule.DataSourceCadastroPI.
+  DataSet.FieldByName('Plataforma').AsString;
+  TAGPI:= FrmDataModule.DataSourceCadastroPI.
+  DataSet.FieldByName('TAG').AsString;
+  RECLocal:= RecLocalSAP(Plataforma,TAGPI);
+  FrmDataModule.ADOQueryCadastroPI.Edit;
+  FrmDataModule.DataSourceCadastroPI.
+  DataSet.FieldByName('LocalInstalacao').AsString:= RECLocal.LocalInstalacao;
+  FrmDataModule.DataSourceCadastroPI.
+  DataSet.FieldByName('DenominacaoLocalInstalacao').AsString:= RECLocal.DenominacaoLocalInstalacao;
+  FrmDataModule.ADOQueryCadastroPI.Post;
+end;
+
+procedure TFrmCheckList.actSincronizar_PIExecute(Sender: TObject);
+  var
+    i,NumLinhas: Integer;
+    LimiteVinculado,Plataforma,Sistema,NomeVariavel,TAG,TAGPI,RootPath,
+    LocalInstalacao,DenominacaoLocalInstalacao,
+    CodigoLimiteOperacional,DiasHistorico,idPICadastro: String;
+begin
+  try
+    ExcelPI.Visible := false;
+    i:= 2;
+    FrmDataModule.ADOQueryAtualizaCadastroPI.Active:= false;
+    FrmDataModule.ADOQueryAtualizaCadastroPI.Active:= true;
+    FrmPrincipal.ProgressBarIncializa(FrmDataModule.ADOQueryAtualizaCadastroPI.RecordCount,
+    'Atualizando a planilha Excel de conexão com o PI...');
+    //Configuração Incial
+    SheetCadastroPI.Range['F1','Q1500'].ClearContents;
+    ExcelPI.Workbooks[1].Sheets[1].Cells[1,1] := 'Valor Médio (Histórico)';
+    ExcelPI.Workbooks[1].Sheets[1].Cells[1,2] := 'Valor Atual [PI]';
+    ExcelPI.Workbooks[1].Sheets[1].Cells[1,3] := 'Unidade [PI]';
+    ExcelPI.Workbooks[1].Sheets[1].Cells[1,4] := 'Descrição [PI]';
+    ExcelPI.Workbooks[1].Sheets[1].Cells[1,5] := 'Tipo Var. [PI]';
+    ExcelPI.Workbooks[1].Sheets[1].Cells[1,6] := 'TAG [PI]';
+    ExcelPI.Workbooks[1].Sheets[1].Cells[1,7] := 'Root Path [PI]';
+    ExcelPI.Workbooks[1].Sheets[1].Cells[1,8] := 'Plataforma';
+    ExcelPI.Workbooks[1].Sheets[1].Cells[1,9] := 'Sistema';
+    ExcelPI.Workbooks[1].Sheets[1].Cells[1,10] := 'Descrição da Variavel';
+    ExcelPI.Workbooks[1].Sheets[1].Cells[1,11] := 'TAG';
+    ExcelPI.Workbooks[1].Sheets[1].Cells[1,12] := 'Histórico (Dias)';
+    ExcelPI.Workbooks[1].Sheets[1].Cells[1,13] := 'Local de Instalação [SAP]';
+    ExcelPI.Workbooks[1].Sheets[1].Cells[1,14] := 'Denomi. Local de Instalação [SAP]';
+    ExcelPI.Workbooks[1].Sheets[1].Cells[1,15] := 'Código';
+    ExcelPI.Workbooks[1].Sheets[1].Cells[1,16] := 'idLimite';
+    ExcelPI.Workbooks[1].Sheets[1].Cells[1,17] := 'Limite Vinculado';
+    //Letras do cabeçalho
+    SheetCadastroPI.Rows[1].Font.Bold := true;
+    SheetCadastroPI.Rows[1].Font.Italic := true;
+    SheetCadastroPI.Rows[1].VerticalAlignment := 2; // 1=Top - 2=Center - 3=Bottom
+    SheetCadastroPI.Rows[1].HorizontalAlignment := 3; // 3=Center
+    //Desenha as grades da tabela
+    NumLinhas:= FrmDataModule.ADOQueryAtualizaCadastroPI.RecordCount+1;
+    SheetCadastroPI.Range['A1','Q'+IntToStr(NumLinhas)].Borders.LineStyle := 1;
+    SheetCadastroPI.Range['A1','Q'+IntToStr(NumLinhas)].Borders.Weight := 2;
+    SheetCadastroPI.Range['A1','Q'+IntToStr(NumLinhas)].Borders.ColorIndex := 1;
+    SheetCadastroPI.Range['A1','Q1'].Interior.Color := clYellow;
+    //===========================================================
+    while not FrmDataModule.ADOQueryAtualizaCadastroPI.Eof do
+    begin
+      //Integer
+      idPICadastro:= FrmDataModule.DataSourceAtualizaCadastroPI.DataSet.
+      FieldByName('idPICadastro').AsString;
+      CodigoLimiteOperacional:= FrmDataModule.DataSourceAtualizaCadastroPI.DataSet.
+      FieldByName('CodigoLimiteOperacional').AsString;
+      DiasHistorico:= FrmDataModule.DataSourceAtualizaCadastroPI.DataSet.
+      FieldByName('DiasHistorico').AsString;
+      //String
+      LimiteVinculado:= FrmDataModule.DataSourceAtualizaCadastroPI.DataSet.
+      FieldByName('LimiteVinculado').AsString;
+      Plataforma:= FrmDataModule.DataSourceAtualizaCadastroPI.DataSet.
+      FieldByName('Plataforma').AsString;
+      Sistema:= FrmDataModule.DataSourceAtualizaCadastroPI.DataSet.
+      FieldByName('Sistema').AsString;
+      NomeVariavel:= FrmDataModule.DataSourceAtualizaCadastroPI.DataSet.
+      FieldByName('NomeVariavel').AsString;
+      TAG:= FrmDataModule.DataSourceAtualizaCadastroPI.DataSet.
+      FieldByName('TAG').AsString;
+      TAGPI:= FrmDataModule.DataSourceAtualizaCadastroPI.DataSet.
+      FieldByName('TAGPI').AsString;
+      RootPath:= FrmDataModule.DataSourceAtualizaCadastroPI.DataSet.
+      FieldByName('RootPath').AsString;
+      LocalInstalacao:= FrmDataModule.DataSourceAtualizaCadastroPI.DataSet.
+      FieldByName('LocalInstalacao').AsString;
+      DenominacaoLocalInstalacao:= FrmDataModule.DataSourceAtualizaCadastroPI.DataSet.
+      FieldByName('DenominacaoLocalInstalacao').AsString;
+      //===========================================================
+      ExcelPI.Workbooks[1].Sheets[1].Cells[i,6] := TAGPI;
+      ExcelPI.Workbooks[1].Sheets[1].Cells[i,7] := RootPath;
+      ExcelPI.Workbooks[1].Sheets[1].Cells[i,8] := Plataforma;
+      ExcelPI.Workbooks[1].Sheets[1].Cells[i,9] := Sistema;
+      ExcelPI.Workbooks[1].Sheets[1].Cells[i,10] := NomeVariavel;
+      ExcelPI.Workbooks[1].Sheets[1].Cells[i,11] := TAG;
+      ExcelPI.Workbooks[1].Sheets[1].Cells[i,12] := DiasHistorico;
+      ExcelPI.Workbooks[1].Sheets[1].Cells[i,13] := LocalInstalacao;
+      ExcelPI.Workbooks[1].Sheets[1].Cells[i,14] := DenominacaoLocalInstalacao;
+      ExcelPI.Workbooks[1].Sheets[1].Cells[i,15] := idPICadastro;
+      ExcelPI.Workbooks[1].Sheets[1].Cells[i,16] := CodigoLimiteOperacional;
+      ExcelPI.Workbooks[1].Sheets[1].Cells[i,17] := LimiteVinculado;
+      //===========================================================
+      FrmDataModule.ADOQueryAtualizaCadastroPI.Next;
+      FrmPrincipal.ProgressBarIncremento(1);
+      i:= i+1;
+    end;
+    FrmPrincipal.ProgressBarAtualizar;
+    GravarSincronizar_PI;
+    actSincronizar_PI.Enabled:= false;
+    actAtualizarPI.Enabled:= true;
+    ExcelPI.Visible := true;
+    actAualizaPlanilhas.Execute;
+  except
+    FrmPrincipal.ProgressBarAtualizar;
+    ExcelPI.Visible := true;
+  end;
+end;
+
+procedure TFrmCheckList.actSubstituirPorExecute(Sender: TObject);
+begin
+  case PageControl1.TabIndex of
+    0: FrmPrincipal.SubstituirPor(DBGridCheckList,
+    FrmDataModule.ADOQueryCheckList,
+    FrmDataModule.DataSourceCheckList);
+    1: FrmPrincipal.SubstituirPor(DBGridCadastroPI,
+    FrmDataModule.ADOQueryCadastroPI,
+    FrmDataModule.DataSourceCadastroPI);
+    2: FrmPrincipal.SubstituirPor(DBGridLimiteOperacional,
+    FrmDataModule.ADOQueryLimiteOperacional,
+    FrmDataModule.DataSourceLimiteOperacional);
+    3: FrmPrincipal.SubstituirPor(DBGridRegistros,
+    FrmDataModule.ADOQueryPIRegistros,
+    FrmDataModule.DataSourcePIRegistros);
+    4: FrmPrincipal.SubstituirPor(DBGridPendenciaSAP,
+    FrmDataModule.ADOQueryPendenciaSAP,
+    FrmDataModule.DataSourcePendenciaSAP);
+  end;
+end;
+
+procedure TFrmCheckList.actCalcularPIExecute(Sender: TObject);
+  var
+    ToleranciaInferior,ToleranciaSuperior: Double;
+    BooleanErro: Boolean;
+    ListaErro: TStringList;
+    TAGPI,ValorAtual,ValorMedio,LimiteInferior,LimiteSuperior,TipoVarPI: String;
+    i: Integer;
+begin
+  ListaErro:= TStringList.Create;
+  ListaErro.Clear;
+  // Inicializar ProgressBar
+  FrmDataModule.ADOQueryCheckList.Active:= false;
+  FrmDataModule.ADOQueryCheckList.Active:= true;
+  FrmPrincipal.ProgressBarIncializa(FrmDataModule.ADOQueryCheckList.RecordCount,
+  'Calculando Limites Inferior/Superior...');
+  // ============================================
+  FrmDataModule.DataSourceCheckList.Enabled:= false;
+  while not FrmDataModule.ADOQueryCheckList.Eof do
+  begin
+    try
+      TipoVarPI:= FrmDataModule.DataSourceCheckList.DataSet.FieldByName
+      ('TipoVarPI').AsString;
+      //Float32
+      if TipoVarPI = 'Float32' then
+      begin
+        BooleanErro:= FrmDataModule.DataSourceCheckList.DataSet.FieldByName
+        ('BooleanErro').AsBoolean;
+        ValorMedio:= FrmDataModule.DataSourceCheckList.DataSet.FieldByName
+        ('ValorMedio').AsString;
+        ValorAtual:= FrmDataModule.DataSourceCheckList.DataSet.FieldByName
+        ('ValorAtual').AsString;
+        ToleranciaInferior:= FrmDataModule.DataSourceCheckList.DataSet.FieldByName
+        ('ToleranciaInferior').AsFloat;
+        ToleranciaSuperior:= FrmDataModule.DataSourceCheckList.DataSet.FieldByName
+        ('ToleranciaSuperior').AsFloat;
+        try
+          LimiteInferior:= FormatFloat('0.0000',StrToFloat(ValorMedio)+(ToleranciaInferior));
+          LimiteSuperior:= FormatFloat('0.0000',StrToFloat(ValorMedio)+(ToleranciaSuperior));
+        except
+          LimiteInferior:= '0,0000';
+          LimiteSuperior:= '0,0000';
+        end;
+        //================================================
+        FrmDataModule.ADOQueryCheckList.Edit;
+        if (FrmDataModule.DataSourceCheckList.DataSet.FieldByName
+        ('BooleanChekList').AsBoolean = true) then
+        begin
+          if (BooleanErro = true) then
+          begin
+            FrmDataModule.DataSourceCheckList.DataSet.FieldByName
+            ('Ciente').AsString:= 'Pendente';
+          end
+          else if ((StrToFloat(ValorAtual)<StrToFloat(LimiteSuperior))
+          AND(StrToFloat(ValorAtual)>StrToFloat(LimiteInferior))) then
+          begin
+            FrmDataModule.DataSourceCheckList.DataSet.FieldByName
+            ('Ciente').AsString:= 'OK';
+          end
+          else
+          begin
+            FrmDataModule.DataSourceCheckList.DataSet.FieldByName
+            ('Ciente').AsString:= 'Pendente';
+          end;
+        end;
+      end
+      else//Digital
+      begin
+        FrmDataModule.ADOQueryCheckList.Edit;
+        if (FrmDataModule.DataSourceCheckList.DataSet.FieldByName
+        ('BooleanChekList').AsBoolean = true) then
+        begin
+          LimiteInferior:= 'NA';
+          LimiteSuperior:= 'NA';
+          ValorAtual:= FrmDataModule.DataSourceCheckList.DataSet.FieldByName
+          ('ValorAtual').AsString;
+          if ((ValorAtual = '0')OR(ValorAtual = 'LIBERADO')OR
+          (ValorAtual = 'OPERANDO')) then
+          begin
+            FrmDataModule.DataSourceCheckList.DataSet.FieldByName
+            ('Ciente').AsString:= 'OK';
+          end
+          else
+          begin
+            FrmDataModule.DataSourceCheckList.DataSet.FieldByName
+            ('Ciente').AsString:= 'Pendente';
+          end;
+        end;
+      end;
+      //================================================
+      FrmDataModule.DataSourceCheckList.DataSet.FieldByName
+      ('LimiteInferior').AsString:= LimiteInferior;
+      FrmDataModule.DataSourceCheckList.DataSet.FieldByName
+      ('LimiteSuperior').AsString:= LimiteSuperior;
+      FrmDataModule.DataSourceCheckList.DataSet.FieldByName
+      ('AtualizadoPorPI').AsString:= FrmPrincipal.logChave;
+      FrmDataModule.DataSourceCheckList.DataSet.FieldByName
+      ('DataAtualizacaoPI').AsDateTime:= now;
+      FrmDataModule.DataSourceCheckList.DataSet.FieldByName
+      ('ComputadorAtualizacaoPI').AsString:= FrmPrincipal.logMaquina;
+      FrmDataModule.DataSourceCheckList.DataSet.FieldByName
+      ('CheckPor').AsString:= '';
+      FrmDataModule.DataSourceCheckList.DataSet.FieldByName
+      ('DataCheck').AsString:= '';
+      FrmDataModule.DataSourceCheckList.DataSet.FieldByName
+      ('ComputadorCheck').AsString:= '';
+      FrmDataModule.ADOQueryCheckList.Post;
+      //=================================
+    except
+      FrmDataModule.ADOQueryCheckList.Cancel;
+      ListaErro.Add(FrmDataModule.DataSourceCheckList.DataSet.FieldByName
+      ('TAGPI').AsString);
+    end;
+    // Incremento ProgressBar
+    FrmPrincipal.ProgressBarIncremento(1);
+    FrmDataModule.ADOQueryCheckList.Next;
+  end;
+  FrmPrincipal.ProgressBarAtualizar;
+  if ListaErro.Count > 0 then
+  begin
+    TAGPI:= '';
+    for i := 0 to ListaErro.Count -1 do
+      TAGPI:= TAGPI+#13+ListaErro[i];
+
+    ShowMessage('Lista de erros durante cálculo de tolerâncias Inferior/Superior:'+#13+TAGPI);
+  end;
+  FrmDataModule.DataSourceCheckList.Enabled:= true;
+end;
+
+procedure TFrmCheckList.actCimaExecute(Sender: TObject);
+begin
+  FrmPrincipal.moveCima(DBGridCheckList, ColunasLayoutCheckList);
+  actLimparFiltros.Execute;
+end;
+
+procedure TFrmCheckList.actCimaTudoExecute(Sender: TObject);
+begin
+  FrmPrincipal.botaoMoveTudo(FrmDataModule.ADOConnectionOperacao,
+  'CheckList.txt','tblPICadastro','TAB1;',
+  DBGridCheckList,ColunasLayoutCheckList);
+  actLimparFiltros.Execute;
+end;
+
+procedure TFrmCheckList.DBEdit1Change(Sender: TObject);
+begin
+  MemoTextoLongoOM.Text:= FrmPrincipal.verificaTextoLongoCarteira(FrmDataModule.
+  DataSourcePendenciaSAP.DataSet.FieldByName('OrdemManutencao').asString);
+end;
+
+procedure TFrmCheckList.DBGridCadastroPICellClick(Column: TColumn);
+begin
+  try
+  if (Self.DBGridCadastroPI.SelectedField.DataType = ftBoolean)AND
+  (Column.Field.FieldName = 'BooleanChekList') then
+  begin
+    DBGridCadastroPI.Options:=
+    [dgTitles,dgIndicator,dgColumnResize,dgColLines,dgRowLines,dgTabs,dgAlwaysShowSelection,dgTitleClick,dgTitleHotTrack];
+    FrmDataModule.ADOQueryCadastroPI.Edit;
+    FrmDataModule.DataSourceCadastroPI.DataSet.
+    FieldByName('BooleanChekList').AsBoolean:= not Self.DBGridCadastroPI.SelectedField.AsBoolean;
+    FrmDataModule.ADOQueryCadastroPI.Post;
+  end
+  else
+    DBGridCadastroPI.Options:=
+    [dgEditing,dgTitles,dgIndicator,dgColumnResize,dgColLines,dgRowLines,dgTabs,dgAlwaysShowSelection,dgTitleClick,dgTitleHotTrack];
+  except
+  end;
+end;
+
+procedure TFrmCheckList.DBGridCadastroPIDrawColumnCell(Sender: TObject;
+  const Rect: TRect; DataCol: Integer; Column: TColumn; State: TGridDrawState);
+  var
+    ValorAtualFloat,LimiteInferior,LimiteSuperior: Double;
+    TipoVarPI,ValorAtual: String;
+    CheckBoxRectangle : TRect;
+  Const
+    CtrlState : array[Boolean] of Integer = (DFCS_BUTTONCHECK,
+    DFCS_BUTTONCHECK or DFCS_CHECKED);
+begin
+    if (gdFocused in State) then
+  begin
+    if (DBGridCadastroPI.SelectedField.FieldName= 'LimiteVinculado') then
+    begin
+      with DBLookupComboBox_Limite do
+      begin
+        Left := Rect.Left + DBGridCadastroPI.Left + 1;
+        Top := Rect.Top + DBGridCadastroPI.Top + 1;
+        Width := Rect.Right - Rect.Left + 2;
+        Width := Rect.Right - Rect.Left + 2;
+        Height := Rect.Bottom - Rect.Top + 2;
+        Visible := True;
+      end;
+    end
+    else
+      DBLookupComboBox_Limite.Visible := False;
+  end;
+  FrmPrincipal.GridZebrado(DBGridCadastroPI,ColunasLayoutCadastroPI,
+  State,Rect,DataCol,Column);
+  if (Column.Field.FieldName = 'BooleanChekList') then
+  begin
+    Self.DBGridCadastroPI.Canvas.FillRect(Rect);
+    CheckBoxRectangle.Left := Rect.Left + 2;
+    CheckBoxRectangle.Right := Rect.Right - 2;
+    CheckBoxRectangle.Top := Rect.Top + 2;
+    CheckBoxRectangle.Bottom := Rect.Bottom - 2;
+    DrawFrameControl(Self.DBGridCadastroPI.Canvas.Handle,
+    CheckBoxRectangle, DFC_BUTTON,
+    CtrlState[Column.Field.AsBoolean]);
+  end
+  else if (Column.Field.FieldName = 'BooleanErro') then
+  begin
+    if FrmDataModule.DataSourceCadastroPI.DataSet.
+    FieldByName('BooleanErro').AsBoolean then
+    begin
+      TDBGrid(Sender).Canvas.FillRect(Rect);
+      FrmPrincipal.ImageList1.Draw(TDBGrid(Sender).Canvas, Rect.Left +10,Rect.Top + 1, 391);
+    end
+    else
+    begin
+      TDBGrid(Sender).Canvas.FillRect(Rect);
+      FrmPrincipal.ImageList1.Draw(TDBGrid(Sender).Canvas, Rect.Left +10,Rect.Top + 1, 477);
+    end;
+  end
+  else if (Column.Field.FieldName = 'Ciente') then
+  begin
+    if FrmDataModule.DataSourceCadastroPI.DataSet.
+    FieldByName('Ciente').AsString = 'Pendente' then
+    begin
+      DBGridCadastroPI.Canvas.Brush.Color:= clYellow;
+      DBGridCadastroPI.Font.Color:= clBlack;
+      DBGridCadastroPI.Canvas.FillRect(Rect);
+      DBGridCadastroPI.DefaultDrawColumnCell(Rect, DataCol,Column, State);
+    end
+    else if FrmDataModule.DataSourceCadastroPI.DataSet.
+    FieldByName('Ciente').AsString = 'Ciente' then
+    begin
+      DBGridCadastroPI.Canvas.Brush.Color:= clLime;
+      DBGridCadastroPI.Font.Color:= clBlack;
+      DBGridCadastroPI.Canvas.FillRect(Rect);
+      DBGridCadastroPI.DefaultDrawColumnCell(Rect, DataCol,Column, State);
+    end
+    else
+    begin
+      DBGridCadastroPI.Canvas.Brush.Color:= clSilver;
+      DBGridCadastroPI.Font.Color:= clBlack;
+      DBGridCadastroPI.Canvas.FillRect(Rect);
+      DBGridCadastroPI.DefaultDrawColumnCell(Rect, DataCol,Column, State);
+    end;
+  end
+  else if (Column.Field.FieldName = 'ValorAtual') then
+  begin
+    TipoVarPI:= FrmDataModule.DataSourceCadastroPI.DataSet.FieldByName
+    ('TipoVarPI').AsString;
+    ValorAtual:= FrmDataModule.DataSourceCadastroPI.DataSet.FieldByName
+    ('ValorAtual').AsString;
+    if (TipoVarPI = 'Digital') then
+    begin
+      if ((ValorAtual='0')OR(ValorAtual='LIBERADO')OR(ValorAtual='OPERANDO')) then
+      begin
+        DBGridCadastroPI.Canvas.Brush.Color:= clLime;
+        DBGridCadastroPI.Font.Color:= clBlack;
+        DBGridCadastroPI.Canvas.FillRect(Rect);
+        DBGridCadastroPI.DefaultDrawColumnCell(Rect, DataCol,Column, State);
+      end
+      else
+      begin
+        DBGridCadastroPI.Canvas.Brush.Color:= clRed;
+        DBGridCadastroPI.Font.Color:= clBlack;
+        DBGridCadastroPI.Canvas.FillRect(Rect);
+        DBGridCadastroPI.DefaultDrawColumnCell(Rect, DataCol,Column, State);
+      end;
+    end
+    else
+    begin
+      try
+        ValorAtualFloat:= StrToFloat(ValorAtual);
+        LimiteInferior:= FrmDataModule.DataSourceCadastroPI.DataSet.FieldByName
+        ('LimiteInferior').AsFloat;
+        LimiteSuperior:= FrmDataModule.DataSourceCadastroPI.DataSet.FieldByName
+        ('LimiteSuperior').AsFloat;
+        if ((ValorAtualFloat<LimiteSuperior)AND(ValorAtualFloat>LimiteInferior)) then
+        begin
+          DBGridCadastroPI.Canvas.Brush.Color:= clLime;
+          DBGridCadastroPI.Font.Color:= clBlack;
+          DBGridCadastroPI.Canvas.FillRect(Rect);
+          DBGridCadastroPI.DefaultDrawColumnCell(Rect, DataCol,Column, State);
+        end
+        else
+        begin
+          DBGridCadastroPI.Canvas.Brush.Color:= clRed;
+          DBGridCadastroPI.Font.Color:= clBlack;
+          DBGridCadastroPI.Canvas.FillRect(Rect);
+          DBGridCadastroPI.DefaultDrawColumnCell(Rect, DataCol,Column, State);
+        end;
+      except
+        DBGridCadastroPI.Canvas.Brush.Color:= clRed;
+        DBGridCadastroPI.Font.Color:= clBlack;
+        DBGridCadastroPI.Canvas.FillRect(Rect);
+        DBGridCadastroPI.DefaultDrawColumnCell(Rect, DataCol,Column, State);
+      end;
+    end;
+  end
+  else if (Column.Field.FieldName = 'LocalInstalacao') then
+  begin
+    if FrmDataModule.DataSourceCadastroPI.DataSet.FieldByName
+    ('LocalInstalacao').AsString = 'Não encontrado' then
+    begin
+      DBGridCadastroPI.Canvas.Brush.Color:= clRed;
+      DBGridCadastroPI.Font.Color:= clBlack;
+      DBGridCadastroPI.Canvas.FillRect(Rect);
+      DBGridCadastroPI.DefaultDrawColumnCell(Rect, DataCol,Column, State);
+    end;
+  end
+  else if (Column.Field.FieldName = 'DenominacaoLocalInstalacao') then
+  begin
+    if FrmDataModule.DataSourceCadastroPI.DataSet.FieldByName
+    ('DenominacaoLocalInstalacao').AsString = 'Não encontrado' then
+    begin
+      DBGridCadastroPI.Canvas.Brush.Color:= clRed;
+      DBGridCadastroPI.Font.Color:= clBlack;
+      DBGridCadastroPI.Canvas.FillRect(Rect);
+      DBGridCadastroPI.DefaultDrawColumnCell(Rect, DataCol,Column, State);
+    end;
+  end;
+end;
+
+procedure TFrmCheckList.DBGridCadastroPIKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+  if (Key in [VK_DOWN]) AND (DBGridCadastroPI.DataSource.DataSet.RecNo=
+  DBGridCadastroPI.DataSource.DataSet.RecordCount) then
+    Abort;
+end;
+
+procedure TFrmCheckList.DBGridCadastroPITitleClick(Column: TColumn);
+begin
+  FrmPrincipal.configurarFiltro(1,Column.FieldName,IntToStr(Column.Index),
+  Column.ReadOnly,actFiltroInserir,actGridASC,actGridDESC,actSubstituirPor);
+  //======================================================
+  FrmPrincipal.titleGrid(ColunasLayoutCadastroPI,
+  StatusBarCadastroPI,'Operacao',FrmDataModule.ADOQueryCadastroPI.SQL.Text);
+end;
+
+procedure TFrmCheckList.DBGridCheckListCellClick(Column: TColumn);
+begin
+  if (Column.Field.FieldName = 'Ciente') then
+  begin
+    FrmDataModule.ADOQueryCheckList.Edit;
+    if FrmDataModule.DataSourceCheckList.DataSet.
+    FieldByName('Ciente').AsString = 'Pendente' then
+    begin
+      FrmDataModule.DataSourceCheckList.DataSet.
+      FieldByName('Ciente').AsString:= 'Ciente';
+      FrmDataModule.DataSourceCheckList.DataSet.
+      FieldByName('CheckPor').AsString:= FrmPrincipal.logChave;
+      FrmDataModule.DataSourceCheckList.DataSet.
+      FieldByName('DataCheck').AsDateTime:= now;
+      FrmDataModule.DataSourceCheckList.DataSet.
+      FieldByName('ComputadorCheck').AsString:= FrmPrincipal.logMaquina;
+    end
+    else if FrmDataModule.DataSourceCheckList.DataSet.
+    FieldByName('Ciente').AsString = 'Ciente' then
+    begin
+      FrmDataModule.DataSourceCheckList.DataSet.
+      FieldByName('Ciente').AsString:= 'Pendente';
+      FrmDataModule.DataSourceCheckList.DataSet.
+      FieldByName('CheckPor').AsString:= FrmPrincipal.logChave;
+      FrmDataModule.DataSourceCheckList.DataSet.
+      FieldByName('DataCheck').AsDateTime:= now;
+      FrmDataModule.DataSourceCheckList.DataSet.
+      FieldByName('ComputadorCheck').AsString:= FrmPrincipal.logMaquina;
+    end;
+    FrmDataModule.ADOQueryCheckList.Post;
+  end;
+end;
+
+procedure TFrmCheckList.DBGridCheckListColumnMoved(Sender: TObject; FromIndex,
+  ToIndex: Integer);
+begin
+  FrmPrincipal.CarregarRLColunasAtivasGRID(DBGridCheckList);
+  FrmPrincipal.GravarRLColunas('CheckList.txt');
+end;
+
+procedure TFrmCheckList.DBGridCheckListDrawColumnCell(Sender: TObject;
+  const Rect: TRect; DataCol: Integer; Column: TColumn; State: TGridDrawState);
+  var
+    LimiteInferior,LimiteSuperior,ValorAtualFloat: Double;
+    TipoVarPI,ValorAtual: String;
+begin
+  FrmPrincipal.GridZebrado(DBGridCheckList,ColunasLayoutCheckList,
+  State,Rect,DataCol,Column);
+  if (Column.Field.FieldName = 'BooleanErro') then
+  begin
+    if FrmDataModule.DataSourceCheckList.DataSet.
+    FieldByName('BooleanErro').AsBoolean then
+    begin
+      TDBGrid(Sender).Canvas.FillRect(Rect);
+      FrmPrincipal.ImageList1.Draw(TDBGrid(Sender).Canvas, Rect.Left +10,Rect.Top + 1, 391);
+    end
+    else
+    begin
+      TDBGrid(Sender).Canvas.FillRect(Rect);
+      FrmPrincipal.ImageList1.Draw(TDBGrid(Sender).Canvas, Rect.Left +10,Rect.Top + 1, 477);
+    end;
+  end
+  else if (Column.Field.FieldName = 'LocalInstalacao') then
+  begin
+    if FrmDataModule.DataSourceCheckList.DataSet.FieldByName
+    ('LocalInstalacao').AsString = 'Não encontrado' then
+    begin
+      DBGridCheckList.Canvas.Brush.Color:= clRed;
+      DBGridCheckList.Font.Color:= clBlack;
+      DBGridCheckList.Canvas.FillRect(Rect);
+      DBGridCheckList.DefaultDrawColumnCell(Rect, DataCol,Column, State);
+    end;
+  end
+  else if (Column.Field.FieldName = 'DenominacaoLocalInstalacao') then
+  begin
+    if FrmDataModule.DataSourceCheckList.DataSet.FieldByName
+    ('DenominacaoLocalInstalacao').AsString = 'Não encontrado' then
+    begin
+      DBGridCheckList.Canvas.Brush.Color:= clRed;
+      DBGridCheckList.Font.Color:= clBlack;
+      DBGridCheckList.Canvas.FillRect(Rect);
+      DBGridCheckList.DefaultDrawColumnCell(Rect, DataCol,Column, State);
+    end;
+  end
+  else if (Column.Field.FieldName = 'Ciente') then
+  begin
+    if FrmDataModule.DataSourceCheckList.DataSet.
+    FieldByName('Ciente').AsString = 'Pendente' then
+    begin
+      DBGridCheckList.Canvas.Brush.Color:= clYellow;
+      DBGridCheckList.Font.Color:= clBlack;
+      DBGridCheckList.Canvas.FillRect(Rect);
+      DBGridCheckList.DefaultDrawColumnCell(Rect, DataCol,Column, State);
+    end
+    else if FrmDataModule.DataSourceCheckList.DataSet.
+    FieldByName('Ciente').AsString = 'Ciente' then
+    begin
+      DBGridCheckList.Canvas.Brush.Color:= clLime;
+      DBGridCheckList.Font.Color:= clBlack;
+      DBGridCheckList.Canvas.FillRect(Rect);
+      DBGridCheckList.DefaultDrawColumnCell(Rect, DataCol,Column, State);
+    end
+    else
+    begin
+      DBGridCheckList.Canvas.Brush.Color:= clSilver;
+      DBGridCheckList.Font.Color:= clBlack;
+      DBGridCheckList.Canvas.FillRect(Rect);
+      DBGridCheckList.DefaultDrawColumnCell(Rect, DataCol,Column, State);
+    end;
+  end
+  else if (Column.Field.FieldName = 'ValorAtual') then
+  begin
+    TipoVarPI:= FrmDataModule.DataSourceCheckList.DataSet.FieldByName
+    ('TipoVarPI').AsString;
+    ValorAtual:= FrmDataModule.DataSourceCheckList.DataSet.FieldByName
+    ('ValorAtual').AsString;
+    if (TipoVarPI = 'Digital') then
+    begin
+      if ((ValorAtual='0')OR(ValorAtual='LIBERADO')OR(ValorAtual='OPERANDO')) then
+      begin
+        DBGridCheckList.Canvas.Brush.Color:= clLime;
+        DBGridCheckList.Font.Color:= clBlack;
+        DBGridCheckList.Canvas.FillRect(Rect);
+        DBGridCheckList.DefaultDrawColumnCell(Rect, DataCol,Column, State);
+      end
+      else
+      begin
+        DBGridCheckList.Canvas.Brush.Color:= clRed;
+        DBGridCheckList.Font.Color:= clBlack;
+        DBGridCheckList.Canvas.FillRect(Rect);
+        DBGridCheckList.DefaultDrawColumnCell(Rect, DataCol,Column, State);
+      end;
+    end
+    else
+    begin
+      try
+        ValorAtualFloat:= StrToFloat(ValorAtual);
+        LimiteInferior:= FrmDataModule.DataSourceCheckList.DataSet.FieldByName
+        ('LimiteInferior').AsFloat;
+        LimiteSuperior:= FrmDataModule.DataSourceCheckList.DataSet.FieldByName
+        ('LimiteSuperior').AsFloat;
+        if ((ValorAtualFloat<LimiteSuperior)AND(ValorAtualFloat>LimiteInferior)) then
+        begin
+          DBGridCheckList.Canvas.Brush.Color:= clLime;
+          DBGridCheckList.Font.Color:= clBlack;
+          DBGridCheckList.Canvas.FillRect(Rect);
+          DBGridCheckList.DefaultDrawColumnCell(Rect, DataCol,Column, State);
+        end
+        else
+        begin
+          DBGridCheckList.Canvas.Brush.Color:= clRed;
+          DBGridCheckList.Font.Color:= clBlack;
+          DBGridCheckList.Canvas.FillRect(Rect);
+          DBGridCheckList.DefaultDrawColumnCell(Rect, DataCol,Column, State);
+        end;
+      except
+        DBGridCheckList.Canvas.Brush.Color:= clRed;
+        DBGridCheckList.Font.Color:= clBlack;
+        DBGridCheckList.Canvas.FillRect(Rect);
+        DBGridCheckList.DefaultDrawColumnCell(Rect, DataCol,Column, State);
+      end;
+    end;
+  end;
+end;
+
+procedure TFrmCheckList.DBGridCheckListKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+  if (Key in [VK_DOWN]) AND (DBGridCheckList.DataSource.DataSet.RecNo=
+  DBGridCheckList.DataSource.DataSet.RecordCount) then
+    Abort;
+end;
+
+procedure TFrmCheckList.DBGridCheckListKeyPress(Sender: TObject; var Key: Char);
+begin
+  if (DBGridCheckList.SelectedField.FieldName = 'Ciente') then
+    Key := #0;
+end;
+
+procedure TFrmCheckList.DBGridCheckListTitleClick(Column: TColumn);
+begin
+  FrmPrincipal.configurarFiltro(1,Column.FieldName,IntToStr(Column.Index),
+  Column.ReadOnly,actFiltroInserir,actGridASC,actGridDESC,actSubstituirPor);
+  //======================================================
+  FrmPrincipal.titleGrid(ColunasLayoutCheckList,
+  StatusBarCheckList,'Operacao',FrmDataModule.ADOQueryCheckList.SQL.Text);
+end;
+
+procedure TFrmCheckList.DBGridLimiteOperacionalDrawColumnCell(Sender: TObject;
+  const Rect: TRect; DataCol: Integer; Column: TColumn; State: TGridDrawState);
+begin
+  FrmPrincipal.GridZebrado(DBGridLimiteOperacional,ColunasLayoutLimites,
+  State,Rect,DataCol,Column);
+end;
+
+procedure TFrmCheckList.DBGridLimiteOperacionalTitleClick(Column: TColumn);
+begin
+  FrmPrincipal.configurarFiltro(1,Column.FieldName,IntToStr(Column.Index),
+  Column.ReadOnly,actFiltroInserir,actGridASC,actGridDESC,actSubstituirPor);
+  //======================================================
+  FrmPrincipal.titleGrid(ColunasLayoutLimites,
+  StatusBarLimiteOperacional,'Operacao',FrmDataModule.ADOQueryLimiteOperacional.SQL.Text);
+end;
+
+procedure TFrmCheckList.DBGridPendenciaSAPDrawColumnCell(Sender: TObject;
+  const Rect: TRect; DataCol: Integer; Column: TColumn; State: TGridDrawState);
+begin
+  FrmPrincipal.GridZebrado(DBGridPendenciaSAP,ColunasLayoutPendenciaSAP,
+  State,Rect,DataCol,Column);
+end;
+
+procedure TFrmCheckList.DBGridPendenciaSAPTitleClick(Column: TColumn);
+begin
+  FrmPrincipal.configurarFiltro(0,Column.FieldName,IntToStr(Column.Index),
+  Column.ReadOnly,actFiltroInserir,actGridASC,actGridDESC,actSubstituirPor);
+  //======================================================
+  FrmPrincipal.titleGrid(ColunasLayoutPendenciaSAP,
+  StatusBarPendenciaSAP,'Memoria',FrmDataModule.ADOQueryPendenciaSAP.SQL.Text);
+end;
+
+procedure TFrmCheckList.DBGridRegistrosDrawColumnCell(Sender: TObject;
+  const Rect: TRect; DataCol: Integer; Column: TColumn; State: TGridDrawState);
+begin
+  FrmPrincipal.GridZebrado(DBGridRegistros,ColunasLayoutRegistros,
+  State,Rect,DataCol,Column);
+end;
+
+procedure TFrmCheckList.DBGridRegistrosTitleClick(Column: TColumn);
+begin
+  FrmPrincipal.configurarFiltro(0,Column.FieldName,IntToStr(Column.Index),
+  Column.ReadOnly,actFiltroInserir,actGridASC,actGridDESC,actSubstituirPor);
+  //======================================================
+  FrmPrincipal.titleGrid(ColunasLayoutRegistros,
+  StatusBarRegistros,'Operacao',FrmDataModule.ADOQueryPIRegistros.SQL.Text);
+end;
+
+procedure TFrmCheckList.DBLookupComboBox_LimiteCloseUp(Sender: TObject);
+begin
+  try
+    if not (DBGridCadastroPI.DataSource.State in [dsEdit, dsInsert]) then
+      DBGridCadastroPI.DataSource.Edit;
+
+    FrmDataModule.DataSourceCadastroPI.DataSet.
+    FieldByName('LimiteVinculado').AsString:= DBLookupComboBox_Limite.Text;
+    FrmDataModule.ADOQueryCadastroPI.Post;
+  except
+  end;
+end;
+
+procedure TFrmCheckList.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+  actFecharConexao.Execute;
+  //Fechar janela
+  Action:= caFree;
+  FrmCheckList:=nil;
+end;
+
+procedure TFrmCheckList.FormCreate(Sender: TObject);
+  var
+    Endereco,PI_Sincronizar,PI_SincronizarExcel: String;
+begin
+  PageControl1.TabIndex:= 0;
+  FrmPrincipal.ProgressBarIncializa(6,'Iniciando conexão com o PI...');
+  FrmPrincipal.MDIChildCreated(self.Handle);
+  FrmPrincipal.ProgressBarIncremento(1);
+  //Incicialização
+  FrmPrincipal.SetUpColunasLayout(DBGridCheckList, ColunasLayoutCheckList);
+  FrmPrincipal.SetUpColunasLayout(DBGridLimiteOperacional, ColunasLayoutLimites);
+  FrmPrincipal.SetUpColunasLayout(DBGridRegistros, ColunasLayoutRegistros);
+  FrmPrincipal.SetUpColunasLayout(DBGridCadastroPI, ColunasLayoutCadastroPI);
+  FrmPrincipal.SetUpColunasLayout(DBGridPendenciaSAP, ColunasLayoutPendenciaSAP);
+  FrmPrincipal.CarregarRLColunas('CheckList.txt', ColunasLayoutCheckList);
+  FrmPrincipal.CarregarColunasGRID(FrmDataModule.ADOConnectionOperacao,
+  'tblPICadastro',DBGridCheckList,ColunasLayoutCheckList);
+  FrmPrincipal.ProgressBarIncremento(2);
+  //Perfil de acesso
+  if ((FrmPrincipal.logPerfil = 'Administrador')OR
+  (FrmPrincipal.logPerfil = 'Operação')OR
+  (FrmPrincipal.logPerfil = 'Supervisor')) then
+  begin
+    actSAPSelecionado.Enabled:= true;
+    actSAPFiltrados.Enabled:= true;
+    actImportarGeralPI.Enabled:= true;
+    actCalcularPI.Enabled:= true;
+    actAtualizarLimiteVinculado.Enabled:= true;
+    DBNavigatorLimiteOperacional.Enabled:= true;
+    DBNavigatorCadastroPI.Enabled:= true;
+    DBNavigatorRegisros.Enabled:= true;
+    DBGridCheckList.ReadOnly:= false;
+    DBGridLimiteOperacional.ReadOnly:= false;
+    DBGridCadastroPI.ReadOnly:= false;
+    actGravarCheck.Enabled:= true;
+    //Conexão com a planilha do PI
+    ExcelPI := CreateOleObject('Excel.Application');
+    FrmPrincipal.ProgressBarIncremento(3);
+    // Abrir o arquivo
+    Endereco:= ExtractFilePath(Application.ExeName)+'Arquivos\ConexaoPI.xlsx';
+    ExcelPI.Workbooks.Open(Endereco);
+    FrmPrincipal.ProgressBarIncremento(4);
+    // Abrir a primeira planilha do arquivo
+    SheetCadastroPI := ExcelPI.WorkSheets[1];
+    ExcelPI.Visible := true;
+    ExcelPI.columns.Autofit;
+    ExcelPI.ActiveWorkbook.Save;
+    FrmPrincipal.ProgressBarIncremento(5);
+    // Verificar necessiade de soncronismo
+    PI_Sincronizar:= FrmDataModule.DataSourceColibri.DataSet.
+    FieldByName('PI_Sincronizar').AsString;
+    PI_SincronizarExcel:= ExcelPI.Workbooks[1].Sheets[1].Cells[1,26];
+    if (PI_SincronizarExcel<>PI_Sincronizar) then
+    begin
+      actSincronizar_PI.Enabled:= true;
+      actAtualizarPI.Enabled:= false;
+    end
+    else
+    begin
+      actSincronizar_PI.Enabled:= false;
+      actAtualizarPI.Enabled:= true;
+    end;
+  end
+  else
+  begin
+    actSAPSelecionado.Enabled:= false;
+    actSAPFiltrados.Enabled:= false;
+    actSincronizar_PI.Enabled:= false;
+    actAtualizarPI.Enabled:= false;
+    actImportarGeralPI.Enabled:= false;
+    actCalcularPI.Enabled:= false;
+    actAtualizarLimiteVinculado.Enabled:= false;
+    DBNavigatorLimiteOperacional.Enabled:= false;
+    DBNavigatorCadastroPI.Enabled:= false;
+    DBNavigatorRegisros.Enabled:= false;
+    DBGridLimiteOperacional.ReadOnly:= true;
+    DBGridCadastroPI.ReadOnly:= true;
+    DBGridCheckList.ReadOnly:= true;
+    actGravarCheck.Enabled:= false;
+  end;
+  actProcurarCheckList.Execute;
+  FrmPrincipal.ProgressBarAtualizar;
+end;
+
+procedure TFrmCheckList.FormDestroy(Sender: TObject);
+begin
+  actFecharConexao.Execute;
+  //Destruir aba
+  FrmPrincipal.MDIChildDestroyed(self.Handle);
+end;
+
+procedure TFrmCheckList.GravarSincronizar_PI;
+begin
+  ExcelPI.Workbooks[1].Sheets[1].Cells[1,26]:=
+  FrmDataModule.DataSourceColibri.DataSet.
+  FieldByName('PI_Sincronizar').AsString;
+  ExcelPI.ActiveWorkbook.Save;
+end;
+
+procedure TFrmCheckList.ImportarGeralPI(ExcelImportar: Variant);
+  var
+    i, matrizLinha,naoBranco,ARow: Integer;
+    TAGPI: String;
+    ListaErro: TStringList;
+begin
+  try
+    ARow:= 2;
+    ListaErro:= TStringList.Create;
+    ListaErro.Clear;
+    // ============================================
+    //Excluir todos os registros atuais
+    FrmPrincipal.deleteQuery(FrmDataModule.ADOQueryCadastroPI,'Cadastro PI');
+    //Verificar a ultima Linha
+    i:= 1;
+    matrizLinha:= i;
+    naoBranco:= Length(ExcelImportar.Workbooks[1].Sheets[1].Cells[ARow, 6]);
+    while (naoBranco <> 0) do
+    begin
+      matrizLinha:= ARow + i;
+      naoBranco:= Length(ExcelImportar.Workbooks[1].Sheets[1].Cells[ARow+i,6]);
+      i:= i + 1;
+    end;
+    matrizLinha:= matrizLinha - 1;
+    FrmDataModule.DataSourceCadastroPI.Enabled := false;
+    // Inicializar ProgressBar
+    FrmPrincipal.ProgressBarIncializa(matrizLinha,
+    'Importar Excel: Cadastro PI...');
+    // ============================================
+    for i := ARow to matrizLinha do
+    begin
+      try
+        // Inserir novo registro na tabela de dados
+        FrmDataModule.ADOQueryCadastroPI.Insert;
+        // Preencher dados
+        FrmDataModule.DataSourceCadastroPI.DataSet.FieldByName
+        ('TAGPI').AsString:= ExcelImportar.Workbooks[1].Sheets[1].Cells[i,6];
+        FrmDataModule.DataSourceCadastroPI.DataSet.FieldByName
+        ('RootPath').AsString:= ExcelImportar.Workbooks[1].Sheets[1].Cells[i,7];
+        FrmDataModule.DataSourceCadastroPI.DataSet.FieldByName
+        ('Plataforma').AsString:= ExcelImportar.Workbooks[1].Sheets[1].Cells[i,8];
+        FrmDataModule.DataSourceCadastroPI.DataSet.FieldByName
+        ('Sistema').AsString:= ExcelImportar.Workbooks[1].Sheets[1].Cells[i,9];
+        FrmDataModule.DataSourceCadastroPI.DataSet.FieldByName
+        ('NomeVariavel').AsString:= ExcelImportar.Workbooks[1].Sheets[1].Cells[i,10];
+        FrmDataModule.DataSourceCadastroPI.DataSet.FieldByName
+        ('TAG').AsString:= ExcelImportar.Workbooks[1].Sheets[1].Cells[i,11];
+        FrmDataModule.DataSourceCadastroPI.DataSet.FieldByName
+        ('DiasHistorico').AsString:= ExcelImportar.Workbooks[1].Sheets[1].Cells[i,12];
+        FrmDataModule.DataSourceCadastroPI.DataSet.FieldByName
+        ('LocalInstalacao').AsString:= ExcelImportar.Workbooks[1].Sheets[1].Cells[i,13];
+        FrmDataModule.DataSourceCadastroPI.DataSet.FieldByName
+        ('DenominacaoLocalInstalacao').AsString:= ExcelImportar.Workbooks[1].Sheets[1].Cells[i,14];
+        FrmDataModule.DataSourceCadastroPI.DataSet.FieldByName
+        ('CodigoLimiteOperacional').AsInteger:= ExcelImportar.Workbooks[1].Sheets[1].Cells[i,16];
+        FrmDataModule.DataSourceCadastroPI.DataSet.FieldByName
+        ('LimiteVinculado').AsString:= ExcelImportar.Workbooks[1].Sheets[1].Cells[i,17];
+        //====================================================
+        FrmDataModule.ADOQueryCadastroPI.Post;
+        ExcelImportar.Workbooks[1].Sheets[1].Cells[i,15]:= FrmDataModule.DataSourceCadastroPI.
+        DataSet.FieldByName('idPICadastro').AsString;
+      except
+        FrmDataModule.ADOQueryCadastroPI.Cancel;
+        ListaErro.Add(ExcelImportar.Workbooks[1].Sheets[1].Cells[i,6]);
+      end;
+      // Incremento ProgressBar
+      FrmPrincipal.ProgressBarIncremento(1);
+    end;
+    FrmDataModule.ADOQueryCadastroPI.First;
+    FrmDataModule.DataSourceCadastroPI.Enabled := true;
+    // Atualizar ProgressBar
+    FrmPrincipal.ProgressBarAtualizar;
+    if ListaErro.Count > 0 then
+    begin
+      TAGPI:= '';
+      for I := 0 to ListaErro.Count -1 do
+        TAGPI:= TAGPI+#13+ListaErro[i];
+
+      ShowMessage('Registros não importados com erro:'+#13+TAGPI);
+    end;
+  except
+    MessageBox(0, 'Erro de conexão com o Excel' + #13 + #10 +
+    'Verifique se o Microsoft Office Excel esta instalado na sua máquina.',
+    'Excel', MB_ICONERROR);
+    // ==========================================================================
+    FrmDataModule.ADOQueryCadastroPI.First;
+    FrmDataModule.DataSourceCadastroPI.Enabled := true;
+    // Atualizar ProgressBar
+    FrmPrincipal.ProgressBarAtualizar;
+  end;
+end;
+
+function TFrmCheckList.IncSincronizar: Integer;
+  var
+    PI_Sincronizar: Integer;
+begin
+  try
+    FrmDataModule.ADOQueryColibri.Active:= false;
+    FrmDataModule.ADOQueryColibri.Active:= true;
+    PI_Sincronizar:= FrmDataModule.DataSourceColibri.DataSet.
+    FieldByName('PI_Sincronizar').AsInteger+1;
+    FrmDataModule.ADOQueryColibri.Edit;
+    FrmDataModule.DataSourceColibri.DataSet.
+    FieldByName('PI_Sincronizar').AsInteger:= PI_Sincronizar;
+    FrmDataModule.ADOQueryColibri.Post;
+    Result:= PI_Sincronizar;
+    FrmDataModule.ADOQueryColibri.Active:= false;
+    FrmDataModule.ADOQueryColibri.Active:= true;
+  except
+    Result:= 0;
+  end;
+end;
+
+function TFrmCheckList.RecLocalSAP(Plataforma, TAG: String): TRECLocalSAP;
+begin
+  FrmDataModule.ADOQueryRECLocalSAP.Active := false;
+  FrmDataModule.ADOQueryRECLocalSAP.Parameters.Items[0].Value:= '%'+Plataforma+'%';
+  FrmDataModule.ADOQueryRECLocalSAP.Parameters.Items[1].Value:= '%'+TAG+'%';
+  FrmDataModule.ADOQueryRECLocalSAP.Active := true;
+  if not FrmDataModule.ADOQueryRECLocalSAP.IsEmpty then
+  begin
+    Result.LocalInstalacao:= FrmDataModule.DataSourceRECLocalSAP.
+    DataSet.FieldByName('LocalInstalacao').AsString;
+    Result.DenominacaoLocalInstalacao:= FrmDataModule.DataSourceRECLocalSAP.
+    DataSet.FieldByName('DenominacaoLocalInstalacao').AsString;
+  end
+  else
+  begin
+    Result.LocalInstalacao:= 'Não encontrado';
+    Result.DenominacaoLocalInstalacao:= 'Não encontrado';
+  end;
+end;
+
+procedure TFrmCheckList.REGAtualizacaoPI;
+begin
+  try
+    FrmDataModule.ADOQueryColibri.Edit;
+    FrmDataModule.DataSourceColibri.DataSet.
+    FieldByName('PI_AtualizadoPor').AsString:= FrmPrincipal.logChave;
+    FrmDataModule.DataSourceColibri.DataSet.
+    FieldByName('PI_DataAtualizacao').AsDateTime:= now;
+    FrmDataModule.DataSourceColibri.DataSet.
+    FieldByName('PI_Computador').AsString:= FrmPrincipal.logMaquina;
+    FrmDataModule.ADOQueryColibri.Post;
+  except
+  end;
+end;
+
+procedure TFrmCheckList.RLImpressaoFixedCellClick(Sender: TObject; ACol,
+  ARow: Integer);
+begin
+  FrmPrincipal.clasifica(RLImpressao,ACol,true);
+end;
+
+procedure TFrmCheckList.WMMDIACTIVATE(var msg: TWMMDIACTIVATE);
+ var
+  active: TWinControl;
+  idx: Integer;
+begin
+  active := FindControl(msg.ActiveWnd) ;
+
+  if Assigned(active) then
+  begin
+    idx := FrmPrincipal.mdiChildrenTabs.Tabs.IndexOfObject(TObject(msg.ActiveWnd));
+    FrmPrincipal.mdiChildrenTabs.Tag := -1;
+    FrmPrincipal.mdiChildrenTabs.TabIndex := idx;
+    FrmPrincipal.mdiChildrenTabs.Tag := 0;
+  end;
+end;
+
+end.

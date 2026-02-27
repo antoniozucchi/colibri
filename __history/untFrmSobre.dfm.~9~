@@ -1,0 +1,483 @@
+object FrmSobre: TFrmSobre
+  Left = 0
+  Top = 0
+  Caption = 'Sobre'
+  ClientHeight = 741
+  ClientWidth = 934
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  FormStyle = fsMDIChild
+  OldCreateOrder = False
+  Visible = True
+  WindowState = wsMaximized
+  OnClose = FormClose
+  OnCreate = FormCreate
+  OnDestroy = FormDestroy
+  PixelsPerInch = 96
+  TextHeight = 13
+  object Splitter1: TSplitter
+    Left = 0
+    Top = 337
+    Width = 934
+    Height = 3
+    Cursor = crVSplit
+    Align = alTop
+    ExplicitTop = 329
+    ExplicitWidth = 417
+  end
+  object Panel3: TPanel
+    Left = 0
+    Top = 0
+    Width = 934
+    Height = 25
+    Align = alTop
+    Caption = 'Sobre o programa'
+    Color = clGradientActiveCaption
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -13
+    Font.Name = 'Tahoma'
+    Font.Style = [fsBold]
+    ParentBackground = False
+    ParentFont = False
+    TabOrder = 0
+    ExplicitWidth = 1282
+    object DBNavigatorVersao: TDBNavigator
+      Left = 1
+      Top = 1
+      Width = 96
+      Height = 23
+      DataSource = FrmDataModule.DataSourceColibri
+      VisibleButtons = [nbEdit, nbPost, nbCancel, nbRefresh]
+      Align = alLeft
+      TabOrder = 0
+      ExplicitTop = -1
+    end
+  end
+  object MemoInformacoes: TMemo
+    Left = 0
+    Top = 105
+    Width = 934
+    Height = 232
+    Align = alTop
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clBlack
+    Font.Height = -13
+    Font.Name = 'Tahoma'
+    Font.Style = []
+    ParentFont = False
+    ReadOnly = True
+    ScrollBars = ssVertical
+    TabOrder = 1
+    ExplicitTop = 100
+    ExplicitWidth = 1282
+  end
+  object Memo2: TMemo
+    Left = 0
+    Top = 340
+    Width = 934
+    Height = 401
+    Align = alClient
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -13
+    Font.Name = 'Tahoma'
+    Font.Style = []
+    Lines.Strings = (
+      
+        'O Colibri '#233' um programa de computador do tipo execut'#225'vel que tra' +
+        'balha na plataforma Windows, desenvolvido em linguagem de progra' +
+        'ma'#231#227'o orientada '
+      'objeto Delphi'#174' com um banco de dados Microsoft Office '
+      'Access'#174' e possui as seguintes caracter'#237'sticas:'
+      ''
+      
+        '1.  Programa de computador do tipo FreeWare, ou seja, o usu'#225'rio ' +
+        'est'#225' livre de qualquer compromisso para us'#225'-lo, entretanto, nem ' +
+        'o autor, nem a '
+      
+        'Petrobras, nem qualquer outra institui'#231#227'o relacionada s'#227'o respon' +
+        's'#225'veis pelo uso ou o mau uso do programa e de seus resultados.'
+      ''
+      
+        '2.  O banco de dados (Microsoft Office Access) utilizado pelo pr' +
+        'ograma n'#227'o precisa estar instalado no computador hospedeiro, poi' +
+        's a comunica'#231#227'o com o '
+      
+        'banco de dados '#233' feito via c'#243'digo SQL'#174' (Structured Query Languag' +
+        'e);'
+      ''
+      
+        '3.  O programa trabalha em plataforma multiusu'#225'rio, ou seja, v'#225'r' +
+        'ios usu'#225'rios podem acessar o banco de dados ao mesmo tempo, por'#233 +
+        'm o banco de dados '
+      
+        'deve estar em local na rede onde todos os usu'#225'rios possam acessa' +
+        'r. As regras de acesso ao banco de dados por multiusu'#225'rios s'#227'o a' +
+        'dministradas pelo '
+      'pr'#243'prio banco de dados (Microsoft Office Access);'
+      ''
+      
+        '4.  O programa pode ser instalado em um computador ou at'#233' mesmo ' +
+        'em um HD port'#225'til;'
+      ''
+      
+        '5.  O endere'#231'o do banco de dados *.colibri (Microsoft Office Acc' +
+        'ess) a ser aberto '#233' definido pelo usu'#225'rio. Este arquivo *.colibr' +
+        'i pode ser aberto tamb'#233'm pelo '
+      'Microsoft Office Access;'
+      ''
+      
+        '6.  Os bancos de dados s'#227'o totalmente abertos para que usu'#225'rio p' +
+        'ossa trabalhar com as tabelas de dados utilizando os recursos do' +
+        ' Microsoft Office Access, '
+      
+        'por'#233'm '#233' importante lembrar que os nomes das tabelas ou o relacio' +
+        'namento entre elas afetara diretamente no comportamento do progr' +
+        'ama e o bom '
+      'funcionamento do programa n'#227'o ser'#225' garantido;'
+      ''
+      
+        '7.  O programa identifica automaticamente o usu'#225'rio (CHAVE) loga' +
+        'do no sistema operacional Windows e libera o perfil pertinente d' +
+        'e acesso ao programa '
+      
+        '(Perfil de aceso determinado/liberado por um Administrador do pr' +
+        'ograma). Ainda '#233' poss'#237'vel acessar o programa com usu'#225'rio diferen' +
+        'te do logado no sistema '
+      'operacional Windows, basta entrar no menu "Arquivo > Login".'
+      ''
+      
+        '8.  O tipo de acesso ao programa depende do perfil do usu'#225'rio, v' +
+        'er "Arquivo > Cadastro de Usu'#225'rios", cadastrado por um usu'#225'rio c' +
+        'om perfil de '
+      'Administrador;'
+      ''
+      
+        '9.  O programa trabalha com uma janela principal e janelas secun' +
+        'd'#225'rias que podem ser abertas pelo menu principal do programa. A ' +
+        'navega'#231#227'o entre as '
+      
+        'janelas secund'#225'rias abertas deve ser realizada atrav'#233's das abas ' +
+        'pertinentes a cada janela na parte superior do programa.'
+      ''
+      
+        '10. O programa trabalha com tr'#234's bancos de dados: *.colibri, dbC' +
+        'onsulta.mdb e dbMemoria.mdb. O arquivo que deve ser aberto '#233' o *' +
+        '.colibri e os outros '
+      
+        'tr'#234's bancos de dados (dbConsulta.mdb, dbMemoria.mdb e dbOperacao' +
+        '.mdb) devem estar na pasta do arquivo *.colibri.'
+      ''
+      '11. Tabelas para cada banco de dados:'
+      
+        '*.colibri: tabelas da programa'#231#227'o diaria de servi'#231'os, tabela de ' +
+        'programa'#231#227'o de embarca'#231#245'es.'
+      
+        'dbConsulta: cadastro de cenrto de trabalho, documentos Marinha, ' +
+        'per'#237'cia de Marinha, cadastro de embarca'#231#245'es, cadastro de executa' +
+        'ntes, geradores, '
+      'cadastro de plataformas, cadastro de tipo de etapa de servi'#231'o.'
+      
+        'dbMemoria: tabelas de importa'#231#227'o (mem'#243'ria vol'#225'til): executantes ' +
+        'APLAT, executantes SAP, notas de manuten'#231#227'o SAP, ordens de manut' +
+        'en'#231#227'o SAP, local de '
+      'instala'#231#227'o SAP e itens de manuten'#231#227'o SAP.')
+    ParentFont = False
+    ReadOnly = True
+    ScrollBars = ssVertical
+    TabOrder = 2
+  end
+  object PanelEntrada: TPanel
+    Left = 0
+    Top = 25
+    Width = 934
+    Height = 80
+    Align = alTop
+    TabOrder = 3
+    ExplicitWidth = 707
+    object DBRadioGroupPetrobras: TDBRadioGroup
+      Left = 748
+      Top = 1
+      Width = 185
+      Height = 78
+      Align = alRight
+      Caption = 'Unidade Petrobras'
+      DataField = 'UnidadePetrobras'
+      DataSource = FrmDataModule.DataSourceColibri
+      Items.Strings = (
+        'UO-SEAL'
+        'UO-RNCE')
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 0
+      Values.Strings = (
+        '0'
+        '1')
+      ExplicitLeft = 751
+      ExplicitTop = -4
+    end
+    object PanelSuperior: TPanel
+      Left = 1
+      Top = 1
+      Width = 747
+      Height = 78
+      Align = alClient
+      TabOrder = 1
+      ExplicitLeft = 2
+      ExplicitTop = 9
+      ExplicitWidth = 1280
+      ExplicitHeight = 96
+      object PanelVersaoDB: TPanel
+        Left = 1
+        Top = 1
+        Width = 745
+        Height = 25
+        Align = alTop
+        TabOrder = 0
+        ExplicitWidth = 1278
+        object Panel6: TPanel
+          Left = 1
+          Top = 1
+          Width = 180
+          Height = 23
+          Align = alLeft
+          Alignment = taLeftJustify
+          Caption = ' Vers'#227'o do banco de dados:'
+          TabOrder = 0
+        end
+        object Panel7: TPanel
+          Left = 181
+          Top = 1
+          Width = 563
+          Height = 23
+          Align = alClient
+          TabOrder = 1
+          ExplicitWidth = 1096
+          object DBEditVersao: TDBEdit
+            Left = 1
+            Top = 1
+            Width = 561
+            Height = 24
+            Hint = 'Alterar a vers'#227'o do programa'
+            Align = alTop
+            DataField = 'versao'
+            DataSource = FrmDataModule.DataSourceColibri
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -13
+            Font.Name = 'Tahoma'
+            Font.Style = []
+            ParentFont = False
+            ParentShowHint = False
+            ShowHint = True
+            TabOrder = 0
+            ExplicitWidth = 1094
+          end
+        end
+      end
+      object PanelRelatorioMarinha: TPanel
+        Left = 1
+        Top = 26
+        Width = 745
+        Height = 25
+        Align = alTop
+        TabOrder = 1
+        ExplicitWidth = 1278
+        object Panel5: TPanel
+          Left = 1
+          Top = 1
+          Width = 180
+          Height = 23
+          Align = alLeft
+          Alignment = taLeftJustify
+          Caption = 'Endere'#231'o Relat'#243'rio Marinha:'
+          TabOrder = 0
+          object btnMarinha: TSpeedButton
+            Left = 156
+            Top = 1
+            Width = 23
+            Height = 21
+            Align = alRight
+            Glyph.Data = {
+              36040000424D3604000000000000360000002800000010000000100000000100
+              2000000000000004000000000000000000000000000000000000FF00FF00FF00
+              FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
+              FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00000000000000
+              0000000000000000000000000000000000000000000000000000000000000000
+              000000000000FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00000000000000
+              0000008080000080800000808000008080000080800000808000008080000080
+              80000080800000000000FF00FF00FF00FF00FF00FF00FF00FF000000000000FF
+              FF00000000000080800000808000008080000080800000808000008080000080
+              8000008080000080800000000000FF00FF00FF00FF00FF00FF0000000000FFFF
+              FF0000FFFF000000000000808000008080000080800000808000008080000080
+              800000808000008080000080800000000000FF00FF00FF00FF000000000000FF
+              FF00FFFFFF0000FFFF0000000000008080000080800000808000008080000080
+              80000080800000808000008080000080800000000000FF00FF0000000000FFFF
+              FF0000FFFF00FFFFFF0000FFFF00000000000000000000000000000000000000
+              00000000000000000000000000000000000000000000000000000000000000FF
+              FF00FFFFFF0000FFFF00FFFFFF0000FFFF00FFFFFF0000FFFF00FFFFFF0000FF
+              FF0000000000FF00FF00FF00FF00FF00FF00FF00FF00FF00FF0000000000FFFF
+              FF0000FFFF00FFFFFF0000FFFF00FFFFFF0000FFFF00FFFFFF0000FFFF00FFFF
+              FF0000000000FF00FF00FF00FF00FF00FF00FF00FF00FF00FF000000000000FF
+              FF00FFFFFF0000FFFF0000000000000000000000000000000000000000000000
+              000000000000FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF000000
+              00000000000000000000FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
+              FF00FF00FF00FF00FF00000000000000000000000000FF00FF00FF00FF00FF00
+              FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
+              FF00FF00FF00FF00FF00FF00FF000000000000000000FF00FF00FF00FF00FF00
+              FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF0000000000FF00
+              FF00FF00FF00FF00FF0000000000FF00FF0000000000FF00FF00FF00FF00FF00
+              FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF000000
+              00000000000000000000FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
+              FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
+              FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
+              FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
+              FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00}
+            ParentShowHint = False
+            ShowHint = True
+            OnClick = btnMarinhaClick
+            ExplicitLeft = 152
+            ExplicitTop = 4
+          end
+        end
+        object Panel8: TPanel
+          Left = 181
+          Top = 1
+          Width = 563
+          Height = 23
+          Align = alClient
+          TabOrder = 1
+          ExplicitWidth = 1096
+          object DBEditMarinha: TDBEdit
+            Left = 1
+            Top = 1
+            Width = 561
+            Height = 24
+            Hint = 
+              'Alterar o endere'#231'o do banco de dados com todas as opera'#231#245'es do S' +
+              'AP atrav'#233's da transa'#231#227'o IW37N'
+            Align = alTop
+            DataField = 'enderecoMarinha'
+            DataSource = FrmDataModule.DataSourceColibri
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -13
+            Font.Name = 'Tahoma'
+            Font.Style = []
+            ParentFont = False
+            ParentShowHint = False
+            ShowHint = True
+            TabOrder = 0
+            ExplicitWidth = 1094
+          end
+        end
+      end
+      object PanelInstalador: TPanel
+        Left = 1
+        Top = 51
+        Width = 745
+        Height = 25
+        Align = alTop
+        TabOrder = 2
+        ExplicitWidth = 1278
+        object Panel2: TPanel
+          Left = 1
+          Top = 1
+          Width = 180
+          Height = 23
+          Align = alLeft
+          Alignment = taLeftJustify
+          Caption = ' Endere'#231'o do instalador:'
+          TabOrder = 0
+          object btnInstalador: TSpeedButton
+            Left = 156
+            Top = 1
+            Width = 23
+            Height = 21
+            Align = alRight
+            Glyph.Data = {
+              36040000424D3604000000000000360000002800000010000000100000000100
+              2000000000000004000000000000000000000000000000000000FF00FF00FF00
+              FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
+              FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00000000000000
+              0000000000000000000000000000000000000000000000000000000000000000
+              000000000000FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00000000000000
+              0000008080000080800000808000008080000080800000808000008080000080
+              80000080800000000000FF00FF00FF00FF00FF00FF00FF00FF000000000000FF
+              FF00000000000080800000808000008080000080800000808000008080000080
+              8000008080000080800000000000FF00FF00FF00FF00FF00FF0000000000FFFF
+              FF0000FFFF000000000000808000008080000080800000808000008080000080
+              800000808000008080000080800000000000FF00FF00FF00FF000000000000FF
+              FF00FFFFFF0000FFFF0000000000008080000080800000808000008080000080
+              80000080800000808000008080000080800000000000FF00FF0000000000FFFF
+              FF0000FFFF00FFFFFF0000FFFF00000000000000000000000000000000000000
+              00000000000000000000000000000000000000000000000000000000000000FF
+              FF00FFFFFF0000FFFF00FFFFFF0000FFFF00FFFFFF0000FFFF00FFFFFF0000FF
+              FF0000000000FF00FF00FF00FF00FF00FF00FF00FF00FF00FF0000000000FFFF
+              FF0000FFFF00FFFFFF0000FFFF00FFFFFF0000FFFF00FFFFFF0000FFFF00FFFF
+              FF0000000000FF00FF00FF00FF00FF00FF00FF00FF00FF00FF000000000000FF
+              FF00FFFFFF0000FFFF0000000000000000000000000000000000000000000000
+              000000000000FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF000000
+              00000000000000000000FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
+              FF00FF00FF00FF00FF00000000000000000000000000FF00FF00FF00FF00FF00
+              FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
+              FF00FF00FF00FF00FF00FF00FF000000000000000000FF00FF00FF00FF00FF00
+              FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF0000000000FF00
+              FF00FF00FF00FF00FF0000000000FF00FF0000000000FF00FF00FF00FF00FF00
+              FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF000000
+              00000000000000000000FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
+              FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
+              FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
+              FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
+              FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00}
+            ParentShowHint = False
+            ShowHint = True
+            OnClick = btnInstaladorClick
+            ExplicitLeft = 152
+            ExplicitTop = 3
+          end
+        end
+        object Panel4: TPanel
+          Left = 181
+          Top = 1
+          Width = 563
+          Height = 23
+          Align = alClient
+          TabOrder = 1
+          ExplicitWidth = 1096
+          object DBEditInstalador: TDBEdit
+            Left = 1
+            Top = 1
+            Width = 561
+            Height = 24
+            Hint = 
+              'Alterar o endere'#231'o do instalador, caso necess'#225'rio atualiza'#231#227'o au' +
+              'tom'#225'tica'
+            Align = alTop
+            DataField = 'enderecoInstalador'
+            DataSource = FrmDataModule.DataSourceColibri
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -13
+            Font.Name = 'Tahoma'
+            Font.Style = []
+            ParentFont = False
+            ParentShowHint = False
+            ShowHint = True
+            TabOrder = 0
+            ExplicitWidth = 1094
+          end
+        end
+      end
+    end
+  end
+  object OpenDialog1: TOpenDialog
+    Left = 312
+    Top = 216
+  end
+end

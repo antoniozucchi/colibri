@@ -1,0 +1,432 @@
+unit untRTI;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Data.DB, Vcl.ExtCtrls, Vcl.StdCtrls,
+  Vcl.Buttons, Vcl.ToolWin, Vcl.ComCtrls, Vcl.Grids, Vcl.DBGrids,
+  System.Actions, Vcl.ActnList, Vcl.PlatformDefaultStyleActnCtrls, Vcl.ActnMan,
+  Vcl.CheckLst, Vcl.DBCtrls,Data.Win.ADODB,System.DateUtils;
+
+type
+  TFrmRTI = class(TForm)
+    DBGridRTI: TDBGrid;
+    ColunasLayoutRTI: TStringGrid;
+    PanelTitulo: TPanel;
+    ActionManager1: TActionManager;
+    actProcurarRTI: TAction;
+    StatusBarRTI: TStatusBar;
+    actExcel: TAction;
+    actFiltroInserir: TAction;
+    actGridASC: TAction;
+    actGridDESC: TAction;
+    actLimparFiltros: TAction;
+    actFiltrosTabela: TAction;
+    actProcuraFiltrosTabela: TAction;
+    Splitter1: TSplitter;
+    PageControl1: TPageControl;
+    TabSheet1: TTabSheet;
+    TabSheet2: TTabSheet;
+    CheckListBoxPlataforma: TCheckListBox;
+    TabSheet3: TTabSheet;
+    CheckListBoxTipoEtapaServico: TCheckListBox;
+    actFiltros: TAction;
+    ToolBar2: TToolBar;
+    ToolButton1: TToolButton;
+    ToolButton2: TToolButton;
+    actSelTudoPlataforma: TAction;
+    actSelLimpaPlataforma: TAction;
+    actSelTudoTipoEtapaServico: TAction;
+    actSelLimpaTipoEtapaServico: TAction;
+    ToolBar3: TToolBar;
+    ToolButton3: TToolButton;
+    ToolButton4: TToolButton;
+    DBMemo1: TDBMemo;
+    Splitter2: TSplitter;
+    CheckListBoxSistemaFiltro: TCheckListBox;
+    Panel3: TPanel;
+    dataInicio: TDateTimePicker;
+    Panel4: TPanel;
+    dataFim: TDateTimePicker;
+    Panel8: TPanel;
+    BitBtn2: TBitBtn;
+    BitBtn1: TBitBtn;
+    BitBtn6: TBitBtn;
+    BitBtn3: TBitBtn;
+    actTudoFiltroUsuario: TAction;
+    actLimpaFiltroUsuario: TAction;
+    ToolBar4: TToolBar;
+    ToolButton5: TToolButton;
+    ToolButton6: TToolButton;
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure FormCreate(Sender: TObject);
+    procedure FormDestroy(Sender: TObject);
+    procedure actProcurarRTIExecute(Sender: TObject);
+    procedure actExcelExecute(Sender: TObject);
+    procedure actFiltroInserirExecute(Sender: TObject);
+    procedure actGridASCExecute(Sender: TObject);
+    procedure actGridDESCExecute(Sender: TObject);
+    procedure actLimparFiltrosExecute(Sender: TObject);
+    procedure actFiltrosTabelaExecute(Sender: TObject);
+    procedure actProcuraFiltrosTabelaExecute(Sender: TObject);
+    procedure DBGridRTITitleClick(Column: TColumn);
+    procedure DBGridRTIDrawColumnCell(Sender: TObject;
+      const Rect: TRect; DataCol: Integer; Column: TColumn;
+      State: TGridDrawState);
+    procedure actFiltrosExecute(Sender: TObject);
+    procedure actSelTudoPlataformaExecute(Sender: TObject);
+    procedure actSelLimpaPlataformaExecute(Sender: TObject);
+    procedure actSelTudoTipoEtapaServicoExecute(Sender: TObject);
+    procedure actSelLimpaTipoEtapaServicoExecute(Sender: TObject);
+    procedure actTudoFiltroUsuarioExecute(Sender: TObject);
+    procedure actLimpaFiltroUsuarioExecute(Sender: TObject);
+    procedure DBGridRTIKeyPress(Sender: TObject; var Key: Char);
+  private
+    { Private declarations }
+    procedure WMMDIACTIVATE(var msg: TWMMDIACTIVATE);message WM_MDIACTIVATE;
+  public
+    { Public declarations }
+  end;
+
+var
+  FrmRTI: TFrmRTI;
+
+implementation
+  uses untDataModule,untPrincipal, untNotaManutencao;
+{$R *.dfm}
+
+procedure TFrmRTI.actExcelExecute(Sender: TObject);
+begin
+  FrmPrincipal.GerarExcel(DBGridRTI,'RTI');
+end;
+
+procedure TFrmRTI.actFiltroInserirExecute(Sender: TObject);
+begin
+  FrmPrincipal.inserirProcura(DBGridRTI,ColunasLayoutRTI);
+  actProcurarRTI.Execute;
+  if (FrmPrincipal.PanelFiltrosTabela.Visible)AND(FrmPrincipal.PanelAjuda1.Visible) then
+    actFiltrosTabela.Execute;
+end;
+
+procedure TFrmRTI.actFiltrosExecute(Sender: TObject);
+  var
+    PalavraLista,PalavraBusca: String;
+    i: Integer;
+begin
+  //Sistemas
+  FrmPrincipal.configurarCheckListBox(CheckListBoxSistemaFiltro,DBGridRTI,ColunasLayoutRTI,true);
+  //Plataformas
+  PalavraBusca:= '';
+  for I := 0 to CheckListBoxPlataforma.Count-1 do
+  begin
+    if CheckListBoxPlataforma.Checked[i] then
+    begin
+      PalavraLista:= CheckListBoxPlataforma.Items[i];
+      if PalavraBusca <> '' then
+        PalavraBusca:= PalavraBusca+';'+PalavraLista
+      else
+        PalavraBusca:= PalavraLista;
+    end;
+  end;
+  FrmPrincipal.buscaFiledGrid1('Plataforma',PalavraBusca,'Contem',ColunasLayoutRTI,4,false);
+  //Tipo Etapa Serviço
+  PalavraBusca:= '';
+  for I := 0 to CheckListBoxTipoEtapaServico.Count-1 do
+  begin
+    if CheckListBoxTipoEtapaServico.Checked[i] then
+    begin
+      PalavraLista:= CheckListBoxTipoEtapaServico.Items[i];
+      if PalavraBusca <> '' then
+        PalavraBusca:= PalavraBusca+';'+PalavraLista
+      else
+        PalavraBusca:= PalavraLista;
+    end;
+  end;
+  FrmPrincipal.buscaFiledGrid1('txtTipoEtapaServico',PalavraBusca,'Contem',ColunasLayoutRTI,4,false);
+  actProcurarRTI.Execute;
+end;
+
+procedure TFrmRTI.actFiltrosTabelaExecute(Sender: TObject);
+begin
+  FrmPrincipal.btnProcurarFiltrosTabela.Action:= actProcuraFiltrosTabela;
+  FrmPrincipal.FiltrosTabela(DBGridRTI,ColunasLayoutRTI);
+end;
+
+procedure TFrmRTI.actGridASCExecute(Sender: TObject);
+begin
+  FrmPrincipal.ClassificaDBGrid(DBGridRTI,
+  FrmDataModule.ADOQueryRTI,0);
+end;
+
+procedure TFrmRTI.actGridDESCExecute(Sender: TObject);
+begin
+  FrmPrincipal.ClassificaDBGrid(DBGridRTI,
+  FrmDataModule.ADOQueryRTI,1);
+end;
+
+procedure TFrmRTI.actLimpaFiltroUsuarioExecute(Sender: TObject);
+var
+  I: Integer;
+begin
+  for I := 0 to CheckListBoxSistemaFiltro.Count-1 do
+    CheckListBoxSistemaFiltro.Checked[i]:= false;
+
+  actFiltros.Execute;
+end;
+
+procedure TFrmRTI.actLimparFiltrosExecute(Sender: TObject);
+begin
+  FrmPrincipal.LimparColunasFiltro(DBGridRTI,ColunasLayoutRTI);
+  actProcurarRTI.Execute;
+  if (FrmPrincipal.PanelFiltrosTabela.Visible)AND(FrmPrincipal.PanelAjuda1.Visible) then
+    actFiltrosTabela.Execute;
+end;
+
+procedure TFrmRTI.actProcuraFiltrosTabelaExecute(Sender: TObject);
+begin
+  frmPrincipal.CarregaFiltrosProcura(ColunasLayoutRTI);
+  actProcurarRTI.Execute;
+end;
+
+procedure TFrmRTI.actProcurarRTIExecute(Sender: TObject);
+    var
+    SQLString,SQLBase,DataProcuraIncio,DataProcuraFim,ProcuraDatas: String;
+begin
+  DataProcuraIncio:= (FormatDateTime('mm/dd/yyyy',dataInicio.Date));
+  DataProcuraFim:= (FormatDateTime('mm/dd/yyyy',dataFim.Date));
+
+
+  if ((dataInicio.Checked)AND(dataFim.Checked)) then
+    ProcuraDatas:= 'WHERE (DataVencimento BETWEEN #'+DataProcuraIncio+'# and #'+DataProcuraFim+'#)'
+  else if ((dataInicio.Checked)AND(dataFim.Checked=false)) then
+    ProcuraDatas:= 'WHERE (DataVencimento > #'+DataProcuraIncio+'#)'
+  else if ((dataInicio.Checked=false)AND(dataFim.Checked)) then
+    ProcuraDatas:= 'WHERE (DataVencimento < #'+DataProcuraFim+'#)'
+  else
+    ProcuraDatas:= '';
+
+  if ProcuraDatas <> '' then
+  begin
+    SQLString:= frmPrincipal.SQLStringFiltroTabela(ColunasLayoutRTI,false);
+    if SQLString <> '' then
+      SQLString:= ' AND '+SQLString;
+  end
+  else
+    SQLString:= frmPrincipal.SQLStringFiltroTabela(ColunasLayoutRTI,true);
+  //===============================================
+  SQLBase:= 'SELECT tblRTI.* FROM tblRTI '+ProcuraDatas+
+  SQLString+' ORDER BY DataVencimento,Plataforma;';
+  FrmPrincipal.ProcuraQuery(SQLBase,FrmDataModule.ADOQueryRTI,StatusBarRTI);
+end;
+
+procedure TFrmRTI.actSelLimpaPlataformaExecute(Sender: TObject);
+var
+  I: Integer;
+begin
+  for I := 0 to CheckListBoxPlataforma.Count-1 do
+    CheckListBoxPlataforma.Checked[i]:= false;
+
+  actFiltros.Execute;
+end;
+
+procedure TFrmRTI.actSelLimpaTipoEtapaServicoExecute(
+  Sender: TObject);
+var
+  I: Integer;
+begin
+  for I := 0 to CheckListBoxTipoEtapaServico.Count-1 do
+    CheckListBoxTipoEtapaServico.Checked[i]:= false;
+  actFiltros.Execute;
+end;
+
+procedure TFrmRTI.actSelTudoPlataformaExecute(Sender: TObject);
+var
+  I: Integer;
+begin
+  for I := 0 to CheckListBoxPlataforma.Count-1 do
+    CheckListBoxPlataforma.Checked[i]:= true;
+
+  actFiltros.Execute;
+end;
+
+procedure TFrmRTI.actSelTudoTipoEtapaServicoExecute(Sender: TObject);
+var
+  I: Integer;
+begin
+  for I := 0 to CheckListBoxTipoEtapaServico.Count-1 do
+    CheckListBoxTipoEtapaServico.Checked[i]:= true;
+
+  actFiltros.Execute;
+end;
+
+procedure TFrmRTI.actTudoFiltroUsuarioExecute(Sender: TObject);
+var
+  I: Integer;
+begin
+  for I := 0 to CheckListBoxSistemaFiltro.Count-1 do
+    CheckListBoxSistemaFiltro.Checked[i]:= true;
+
+  actFiltros.Execute;
+end;
+
+procedure TFrmRTI.DBGridRTIDrawColumnCell(Sender: TObject;
+  const Rect: TRect; DataCol: Integer; Column: TColumn; State: TGridDrawState);
+    var
+      DataVencimento: TDateTime;
+      StatusProgramacao: String;
+begin
+  FrmPrincipal.GridZebrado(DBGridRTI,
+  ColunasLayoutRTI,State,Rect,DataCol,Column);
+  if (Column.Field.FieldName = 'BooleanCritico') then
+  begin
+    if (FrmDataModule.DataSourceRTI.DataSet.
+    FieldByName('BooleanCritico').AsBoolean) then
+    begin
+      TDBGrid(Sender).Canvas.FillRect(Rect);
+      FrmPrincipal.ImageList1.Draw(TDBGrid(Sender).Canvas, Rect.Left +10,Rect.Top + 1, 154);
+    end
+    else
+    begin
+      TDBGrid(Sender).Canvas.FillRect(Rect);
+      FrmPrincipal.ImageList1.Draw(TDBGrid(Sender).Canvas, Rect.Left +10,Rect.Top + 1, 155);
+    end;
+  end
+  else if (Column.Field.FieldName = 'BCVT') then
+  begin
+    if (FrmDataModule.DataSourceRTI.DataSet.
+    FieldByName('BCVT').AsBoolean) then
+    begin
+      TDBGrid(Sender).Canvas.FillRect(Rect);
+      FrmPrincipal.ImageList1.Draw(TDBGrid(Sender).Canvas, Rect.Left +10,Rect.Top + 1, 154);
+    end
+    else
+    begin
+      TDBGrid(Sender).Canvas.FillRect(Rect);
+      FrmPrincipal.ImageList1.Draw(TDBGrid(Sender).Canvas, Rect.Left +10,Rect.Top + 1, 155);
+    end;
+  end
+  else if (Column.Field.FieldName = 'DataVencimento') then
+  begin
+    DataVencimento:= FrmDataModule.DataSourceRTI.DataSet.
+    FieldByName('DataVencimento').AsDateTime;
+    if (DataVencimento > now) then
+    begin
+      DBGridRTI.Canvas.Brush.Color:= clLime;
+      DBGridRTI.Font.Color:= clBlack;
+      DBGridRTI.Canvas.FillRect(Rect);
+      DBGridRTI.DefaultDrawColumnCell(Rect, DataCol,Column, State);
+    end
+    else
+    begin
+      DBGridRTI.Canvas.Brush.Color:= clRed;
+      DBGridRTI.Font.Color:= clBlack;
+      DBGridRTI.Canvas.FillRect(Rect);
+      DBGridRTI.DefaultDrawColumnCell(Rect, DataCol,Column, State);
+    end;
+  end
+  else if (Column.Field.FieldName = 'StatusProgramacao') then
+  begin
+    StatusProgramacao:= FrmDataModule.DataSourceRTI.DataSet.
+    FieldByName('StatusProgramacao').AsString;
+    if (StatusProgramacao = 'Pendente') then
+    begin
+      DBGridRTI.Canvas.Brush.Color:= clSilver;
+      DBGridRTI.Font.Color:= clBlack;
+      DBGridRTI.Canvas.FillRect(Rect);
+      DBGridRTI.DefaultDrawColumnCell(Rect, DataCol,Column, State);
+    end
+    else if (StatusProgramacao = 'Planejado') then
+    begin
+      DBGridRTI.Canvas.Brush.Color:= clAqua;
+      DBGridRTI.Font.Color:= clBlack;
+      DBGridRTI.Canvas.FillRect(Rect);
+      DBGridRTI.DefaultDrawColumnCell(Rect, DataCol,Column, State);
+    end
+    else if (StatusProgramacao = 'Realizado') then
+    begin
+      DBGridRTI.Canvas.Brush.Color:= clLime;
+      DBGridRTI.Font.Color:= clBlack;
+      DBGridRTI.Canvas.FillRect(Rect);
+      DBGridRTI.DefaultDrawColumnCell(Rect, DataCol,Column, State);
+    end;
+  end;
+end;
+
+procedure TFrmRTI.DBGridRTIKeyPress(Sender: TObject; var Key: Char);
+begin
+  if not (DBGridRTI.SelectedField.FieldName = 'Observacao') then
+    Key:= #0;
+end;
+
+procedure TFrmRTI.DBGridRTITitleClick(Column: TColumn);
+begin
+  FrmPrincipal.configurarFiltro(0,Column.FieldName,IntToStr(Column.Index),
+  Column.ReadOnly,actFiltroInserir,actGridASC,actGridDESC,actGridDESC);
+  //======================================================
+  FrmPrincipal.titleGrid(ColunasLayoutRTI,'Memoria',
+  FrmDataModule.ADOQueryRTI.SQL.Text);
+end;
+
+procedure TFrmRTI.FormClose(Sender: TObject;
+  var Action: TCloseAction);
+begin
+  Action:= caFree;
+  FrmRTI:=nil;
+end;
+
+procedure TFrmRTI.FormCreate(Sender: TObject);
+  var
+    Inicio,Fim,Ano: String;
+begin
+  FrmPrincipal.MDIChildCreated(self.Handle);
+  FrmPrincipal.SetUpColunasLayout(DBGridRTI,
+  ColunasLayoutRTI);
+  Ano:= IntToStr(YearOf(now));
+  Inicio:= '01/01/'+Ano;
+  Fim:= '31/12/'+Ano;
+  dataInicio.DateTime:= StrToDate(Inicio);
+  dataFim.DateTime:= StrToDate(Fim);
+  dataInicio.Checked:= false;
+  dataFim.Checked:= false;
+  actProcurarRTI.Execute;
+  FrmDataModule.ADOQueryPlataformaControle.Active:= false;
+  FrmDataModule.ADOQueryPlataformaControle.Active:= true;
+  FrmPrincipal.carregarCheckListBox(FrmDataModule.ADOQueryPlataformaControle,
+  CheckListBoxPlataforma,'Plataforma');
+  FrmPrincipal.carregarCheckListBox(FrmDataModule.ADOQueryTipoEtapaServico_Carteira,
+  CheckListBoxTipoEtapaServico,'TipoEtapaServico');
+  FrmPrincipal.carregarFiltroSistemaCheckList(CheckListBoxSistemaFiltro,DBGridRTI);
+  if ((FrmPrincipal.logPerfil = 'PCM')OR
+  (FrmPrincipal.logPerfil = 'Administrador')) then
+  begin
+    DBGridRTI.ReadOnly:= false;
+  end
+  else
+  begin
+    DBGridRTI.ReadOnly:= true;
+  end;
+end;
+
+procedure TFrmRTI.FormDestroy(Sender: TObject);
+begin
+  FrmPrincipal.MDIChildDestroyed(self.Handle);
+end;
+
+procedure TFrmRTI.WMMDIACTIVATE(var msg: TWMMDIACTIVATE);
+var
+  active: TWinControl;
+  idx: Integer;
+begin
+  active := FindControl(msg.ActiveWnd) ;
+
+  if Assigned(active) then
+  begin
+    idx := FrmPrincipal.mdiChildrenTabs.Tabs.IndexOfObject(TObject(msg.ActiveWnd));
+    FrmPrincipal.mdiChildrenTabs.Tag := -1;
+    FrmPrincipal.mdiChildrenTabs.TabIndex := idx;
+    FrmPrincipal.mdiChildrenTabs.Tag := 0;
+  end;
+end;
+
+end.

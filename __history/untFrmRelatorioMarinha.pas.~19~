@@ -1,0 +1,369 @@
+unit untFrmRelatorioMarinha;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, ExtCtrls, Grids, DBGrids, StdCtrls, ToolWin, ComCtrls, DB, ADODB,
+  PlatformDefaultStyleActnCtrls, ActnList, ActnMan, Buttons, Mask, DBCtrls,
+  ExtDlgs, OleCtrls, AcroPDFLib_TLB, System.Actions,System.UITypes,
+  DBDateTimePicker;
+
+type
+  TFrmRelatorioMarinha = class(TForm)
+    PanelCabeca: TPanel;
+    PanelPDF: TPanel;
+    Splitter1: TSplitter;
+    ToolBar1: TToolBar;
+    ActionManager1: TActionManager;
+    actProcurar: TAction;
+    AcroPDF1: TAcroPDF;
+    actAbrir: TAction;
+    actAnexar: TAction;
+    actExcluir: TAction;
+    StatusBar1: TStatusBar;
+    actFiltroInserir: TAction;
+    actGridASC: TAction;
+    actGridDESC: TAction;
+    actLimparFiltros: TAction;
+    actFiltrosTabela: TAction;
+    actProcuraFiltrosTabela: TAction;
+    BitBtn3: TBitBtn;
+    btnAnexar: TBitBtn;
+    btnExcluir: TBitBtn;
+    BitBtn4: TBitBtn;
+    BitBtn5: TBitBtn;
+    PanelTopo: TPanel;
+    DBGridRelatorioMarinha: TDBGrid;
+    ColunasLayout: TStringGrid;
+    btnInserir: TBitBtn;
+    actInserirRegistro: TAction;
+    PanelAjuda: TPanel;
+    PanelTituloAjuda: TPanel;
+    SpeedButton4: TSpeedButton;
+    PanelInserir: TPanel;
+    ToolBarPrioridadeForcada: TToolBar;
+    Panel1: TPanel;
+    Panel2: TPanel;
+    Panel3: TPanel;
+    Panel4: TPanel;
+    Panel5: TPanel;
+    Panel6: TPanel;
+    Panel7: TPanel;
+    Panel8: TPanel;
+    DBEdit1: TDBEdit;
+    DBDateTimeData: TDBDateTimePicker;
+    DBComboBox1: TDBComboBox;
+    BitBtn2: TBitBtn;
+    actGravarRegistro: TAction;
+    BitBtn1: TBitBtn;
+    actExcel: TAction;
+    actCancelar: TAction;
+    BitBtn6: TBitBtn;
+    DBEdit2: TDBEdit;
+    actEditar: TAction;
+    BitBtn7: TBitBtn;
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure FormCreate(Sender: TObject);
+    procedure FormDestroy(Sender: TObject);
+    procedure DBGridAtestadosDrawColumnCell(Sender: TObject; const Rect: TRect;
+      DataCol: Integer; Column: TColumn; State: TGridDrawState);
+    procedure actAnexarExecute(Sender: TObject);
+    procedure actExcluirExecute(Sender: TObject);
+    procedure actAbrirExecute(Sender: TObject);
+    procedure DBGridAtestadosKeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure DBGridRelatorioMarinhaDrawColumnCell(Sender: TObject;
+      const Rect: TRect; DataCol: Integer; Column: TColumn;
+      State: TGridDrawState);
+    procedure actProcurarExecute(Sender: TObject);
+    procedure actFiltroInserirExecute(Sender: TObject);
+    procedure actGridASCExecute(Sender: TObject);
+    procedure actGridDESCExecute(Sender: TObject);
+    procedure actLimparFiltrosExecute(Sender: TObject);
+    procedure actFiltrosTabelaExecute(Sender: TObject);
+    procedure actProcuraFiltrosTabelaExecute(Sender: TObject);
+    procedure DBGridRelatorioMarinhaTitleClick(Column: TColumn);
+    procedure DBGridRelatorioMarinhaKeyPress(Sender: TObject; var Key: Char);
+    procedure actInserirRegistroExecute(Sender: TObject);
+    procedure actGravarRegistroExecute(Sender: TObject);
+    procedure actExcelExecute(Sender: TObject);
+    procedure DBGridRelatorioMarinhaKeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure SpeedButton4Click(Sender: TObject);
+    procedure actCancelarExecute(Sender: TObject);
+    procedure DBComboBox1KeyPress(Sender: TObject; var Key: Char);
+    procedure actEditarExecute(Sender: TObject);
+    procedure PanelTituloAjudaMouseDown(Sender: TObject; Button: TMouseButton;
+      Shift: TShiftState; X, Y: Integer);
+  private
+    { Private declarations }
+    procedure WMMDIACTIVATE(var msg: TWMMDIACTIVATE);message WM_MDIACTIVATE;
+  public
+    { Public declarations }
+  end;
+
+var
+  FrmRelatorioMarinha: TFrmRelatorioMarinha;
+
+implementation
+  uses untPrincipal,untDataModule;
+{$R *.dfm}
+
+procedure TFrmRelatorioMarinha.actAbrirExecute(Sender: TObject);
+  var
+    NumDOC,TipoDOC,NomeArquivo: String;
+begin
+  TipoDOC:=FrmDataModule.DataSourceDocumentosMarinha.DataSet.
+  FieldByName('TipoDOC').AsString;
+  NumDOC:=FrmDataModule.DataSourceDocumentosMarinha.DataSet.
+  FieldByName('NumDOC').AsString;
+  NomeArquivo:= FrmDataModule.DataSourceDocumentosMarinha.DataSet.
+  FieldByName('idDocumentosMarinha').AsString;
+  FrmPrincipal.PDFAbrir(AcroPDF1,PanelPDF,NomeArquivo);
+end;
+
+procedure TFrmRelatorioMarinha.actAnexarExecute(Sender: TObject);
+  var
+    NomeArquivo,TipoDOC,NumDOC,Texto1,Texto2,Texto3: String;
+begin
+  TipoDOC:=FrmDataModule.DataSourceDocumentosMarinha.DataSet.
+  FieldByName('TipoDOC').AsString;
+  NumDOC:=FrmDataModule.DataSourceDocumentosMarinha.DataSet.
+  FieldByName('NumDOC').AsString;
+  NomeArquivo:= FrmDataModule.DataSourceDocumentosMarinha.DataSet.
+  FieldByName('idDocumentosMarinha').AsString;
+  //Perguntar primeiro
+  Texto1:= 'Tipo de Documento: '+ TipoDOC;
+  Texto2:= 'Número: '+ NumDOC;
+  Texto3:= 'Data: '+ FrmDataModule.DataSourceDocumentosMarinha.DataSet.
+  FieldByName('DataDOC').AsString;
+  //=============================================================
+  FrmPrincipal.PDFAnexar(AcroPDF1,PanelPDF,NomeArquivo,Texto1,Texto2,Texto3);
+end;
+
+procedure TFrmRelatorioMarinha.actCancelarExecute(Sender: TObject);
+begin
+  PanelAjuda.Visible:= false;
+  FrmDataModule.ADOQueryDocumentosMarinha.Cancel;
+end;
+
+procedure TFrmRelatorioMarinha.actEditarExecute(Sender: TObject);
+begin
+  FrmDataModule.ADOQueryDocumentosMarinha.Edit;
+  PanelAjuda.Width:= 400;
+  PanelAjuda.Height:= 166;
+  PanelInserir.Align:= alClient;
+  PanelInserir.Visible:= true;
+  PanelAjuda.Visible:= true;
+end;
+
+procedure TFrmRelatorioMarinha.actExcelExecute(Sender: TObject);
+begin
+  FrmPrincipal.GerarExcel(DBGridRelatorioMarinha,'Marinha');
+end;
+
+procedure TFrmRelatorioMarinha.actExcluirExecute(Sender: TObject);
+begin
+  FrmDataModule.ADOQueryDocumentosMarinha.Delete;
+end;
+
+procedure TFrmRelatorioMarinha.actFiltroInserirExecute(Sender: TObject);
+begin
+  FrmPrincipal.inserirProcura(DBGridRelatorioMarinha,ColunasLayout);
+  actProcurar.Execute;
+  if (FrmPrincipal.PanelFiltrosTabela.Visible)AND(FrmPrincipal.PanelAjuda1.Visible) then
+    actFiltrosTabela.Execute;
+end;
+
+procedure TFrmRelatorioMarinha.actFiltrosTabelaExecute(Sender: TObject);
+begin
+  FrmPrincipal.btnProcurarFiltrosTabela.Action:= actProcuraFiltrosTabela;
+  FrmPrincipal.FiltrosTabela(DBGridRelatorioMarinha,ColunasLayout);
+end;
+
+procedure TFrmRelatorioMarinha.actGravarRegistroExecute(Sender: TObject);
+begin
+  FrmDataModule.ADOQueryDocumentosMarinha.Post;
+  PanelAjuda.Visible:= false;
+  FrmDataModule.ADOQueryDocumentosMarinha.Active:= false;
+  FrmDataModule.ADOQueryDocumentosMarinha.Active:= true;
+end;
+
+procedure TFrmRelatorioMarinha.actGridASCExecute(Sender: TObject);
+begin
+  FrmPrincipal.ClassificaDBGrid(DBGridRelatorioMarinha,FrmDataModule.ADOQueryDocumentosMarinha,0);
+end;
+
+procedure TFrmRelatorioMarinha.actGridDESCExecute(Sender: TObject);
+begin
+  FrmPrincipal.ClassificaDBGrid(DBGridRelatorioMarinha,FrmDataModule.ADOQueryDocumentosMarinha,1);
+end;
+
+procedure TFrmRelatorioMarinha.actInserirRegistroExecute(Sender: TObject);
+begin
+  FrmDataModule.ADOQueryDocumentosMarinha.Insert;
+  PanelAjuda.Width:= 400;
+  PanelAjuda.Height:= 166;
+  PanelInserir.Align:= alClient;
+  PanelInserir.Visible:= true;
+  PanelAjuda.Visible:= true;
+end;
+
+procedure TFrmRelatorioMarinha.actLimparFiltrosExecute(Sender: TObject);
+begin
+  FrmPrincipal.LimparColunasFiltro(DBGridRelatorioMarinha,ColunasLayout);
+  actProcurar.Execute;
+  if (FrmPrincipal.PanelFiltrosTabela.Visible)AND(FrmPrincipal.PanelAjuda1.Visible) then
+    actFiltrosTabela.Execute;
+end;
+
+procedure TFrmRelatorioMarinha.actProcuraFiltrosTabelaExecute(Sender: TObject);
+begin
+  frmPrincipal.CarregaFiltrosProcura(ColunasLayout);
+  actProcurar.Execute;
+end;
+
+procedure TFrmRelatorioMarinha.actProcurarExecute(Sender: TObject);
+  var
+    SQLString,SQLBase: String;
+begin
+  SQLString:= frmPrincipal.SQLStringFiltroTabela(ColunasLayout,true);
+  SQLBase:=   'SELECT tblDocumentosMarinha.* FROM tblDocumentosMarinha '+
+  SQLString+' ORDER BY DataDOC DESC,TipoDOC,NumDOC;';
+  FrmPrincipal.ProcuraQuery(SQLBase,FrmDataModule.ADOQueryDocumentosMarinha,StatusBar1);
+end;
+
+procedure TFrmRelatorioMarinha.DBComboBox1KeyPress(Sender: TObject;
+  var Key: Char);
+begin
+  Key:= #0;
+end;
+
+procedure TFrmRelatorioMarinha.DBGridAtestadosDrawColumnCell(Sender: TObject;
+  const Rect: TRect; DataCol: Integer; Column: TColumn; State: TGridDrawState);
+begin
+FrmPrincipal.GridZebrado(DBGridRelatorioMarinha,ColunasLayout,State,Rect,DataCol,Column);
+end;
+
+procedure TFrmRelatorioMarinha.DBGridAtestadosKeyDown(Sender: TObject;
+  var Key: Word; Shift: TShiftState);
+begin
+  if (Key in [VK_DOWN]) AND (DBGridRelatorioMarinha.DataSource.DataSet.RecNo=
+  DBGridRelatorioMarinha.DataSource.DataSet.RecordCount) then
+    Abort;
+end;
+
+procedure TFrmRelatorioMarinha.DBGridRelatorioMarinhaDrawColumnCell(
+  Sender: TObject; const Rect: TRect; DataCol: Integer; Column: TColumn;
+  State: TGridDrawState);
+begin
+  FrmPrincipal.GridZebrado(DBGridRelatorioMarinha,ColunasLayout,State,Rect,DataCol,Column);
+end;
+
+procedure TFrmRelatorioMarinha.DBGridRelatorioMarinhaKeyDown(Sender: TObject;
+  var Key: Word; Shift: TShiftState);
+begin
+  if (Key in [VK_DOWN]) AND (DBGridRelatorioMarinha.DataSource.DataSet.RecNo=
+  DBGridRelatorioMarinha.DataSource.DataSet.RecordCount) then
+    Abort;
+end;
+
+procedure TFrmRelatorioMarinha.DBGridRelatorioMarinhaKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+  if (DBGridRelatorioMarinha.SelectedField.FieldName = 'TipoDOC') then
+  begin
+    Key:= #0;
+  end;
+end;
+
+procedure TFrmRelatorioMarinha.DBGridRelatorioMarinhaTitleClick(
+  Column: TColumn);
+begin
+  FrmPrincipal.configurarFiltro(0,Column.FieldName,IntToStr(Column.Index),
+  Column.ReadOnly,actFiltroInserir,actGridASC,actGridDESC,actGridDESC);
+  //======================================================
+  FrmPrincipal.titleGrid(ColunasLayout,'Consulta',FrmDataModule.ADOQueryDocumentosMarinha.SQL.Text);
+end;
+
+procedure TFrmRelatorioMarinha.FormClose(Sender: TObject;
+  var Action: TCloseAction);
+begin
+  AcroPDF1.Free;
+  AcroPDF1:=TAcroPDF.Create(nil);
+  AcroPDF1.Parent:= PanelPDF;
+  AcroPDF1.Align:=alClient;
+  AcroPDF1.src:= '';
+  Action:= caFree;
+  FrmRelatorioMarinha:=nil;
+end;
+
+procedure TFrmRelatorioMarinha.FormCreate(Sender: TObject);
+begin
+  //======ADICIONAR TABSET DO FOMRMDI=======
+  FrmPrincipal.MDIChildCreated(self.Handle);
+  //Perfil de acesso
+  if FrmPrincipal.logPerfil = 'Administrador' then //Administrador
+  begin
+    btnAnexar.Enabled:= true;
+    btnExcluir.Enabled:= true;
+    btnInserir.Enabled:= true;
+    DBGridRelatorioMarinha.ReadOnly:= false;
+  end
+  else if ((FrmPrincipal.logPerfil = 'SEG')OR
+  (FrmPrincipal.logPerfil = 'SEG-PIOP')) then
+  begin
+    btnAnexar.Enabled:= true;
+    btnExcluir.Enabled:= true;
+    btnInserir.Enabled:= true;
+    DBGridRelatorioMarinha.ReadOnly:= false;
+  end
+  else
+  begin
+    btnAnexar.Enabled:= false;
+    btnExcluir.Enabled:= false;
+    btnInserir.Enabled:= false;
+    DBGridRelatorioMarinha.ReadOnly:= true;
+  end;
+  //Incicialização
+  FrmPrincipal.SetUpColunasLayout(DBGridRelatorioMarinha, ColunasLayout);
+  actProcurar.Execute;
+end;
+
+procedure TFrmRelatorioMarinha.FormDestroy(Sender: TObject);
+begin
+  FrmPrincipal.MDIChildDestroyed(self.Handle);
+end;
+
+procedure TFrmRelatorioMarinha.PanelTituloAjudaMouseDown(Sender: TObject;
+  Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
+begin
+  FrmPrincipal.Capturing := true;
+  FrmPrincipal.MouseDownSpot.X := X;
+  FrmPrincipal.MouseDownSpot.Y := Y;
+end;
+
+procedure TFrmRelatorioMarinha.SpeedButton4Click(Sender: TObject);
+begin
+  PanelAjuda.Visible:= false;
+  FrmDataModule.ADOQueryDocumentosMarinha.Cancel;
+end;
+
+procedure TFrmRelatorioMarinha.WMMDIACTIVATE(var msg: TWMMDIACTIVATE);
+var
+  active: TWinControl;
+  idx: Integer;
+begin
+  active := FindControl(msg.ActiveWnd) ;
+
+  if Assigned(active) then
+  begin
+    idx := FrmPrincipal.mdiChildrenTabs.Tabs.IndexOfObject(TObject(msg.ActiveWnd));
+    FrmPrincipal.mdiChildrenTabs.Tag := -1;
+    FrmPrincipal.mdiChildrenTabs.TabIndex := idx;
+    FrmPrincipal.mdiChildrenTabs.Tag := 0;
+  end;
+end;
+
+end.

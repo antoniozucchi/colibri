@@ -1,0 +1,1251 @@
+unit untCarteiraTrabalho;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Data.DB, Vcl.Grids, Vcl.DBGrids,
+  Vcl.ExtCtrls, Vcl.StdCtrls, Vcl.ToolWin, System.Actions,
+  Vcl.ActnList, Vcl.Buttons, Vcl.PlatformDefaultStyleActnCtrls, Vcl.ActnMan,
+  Vcl.DBCtrls, Vcl.Menus,Math,DateUtils, Vcl.CheckLst,Data.Win.ADODB,
+  SDL_ColorScale, SDL_vector, VCLTee.TeeProcs, VCLTee.Chart, VCLTee.Series, Vcl.ExtDlgs,
+  VclTee.TeeGDIPlus, VCLTee.TeEngine,System.UITypes, SDL_NumIO, Vcl.Mask,comOBJ,
+  VCLTee.GanttCh, ganttcolumns, ganttconsts, ganttrows, ganttsuite, ComCtrls,gantttaskbars,
+  ganttbasebars, ganttprintpreview,ganttresources;
+
+type
+  TFrmCarteiraTrabalho = class(TForm)
+    ActionManager1: TActionManager;
+    actExcel: TAction;
+    actExcelAndaimeMontado: TAction;
+    ActAndaimeERRO: TAction;
+    actConfigPlanilha: TAction;
+    actVisualizarPor: TAction;
+    PageControlPrincipal: TPageControl;
+    TabSheet1: TTabSheet;
+    PanelTudo: TPanel;
+    PanelResultado: TPanel;
+    SplitterTextoLongo: TSplitter;
+    DBGridCarteiraOP: TDBGrid;
+    DBGridCarteiraOM: TDBGrid;
+    PanelTitulo: TPanel;
+    StatusBar1: TStatusBar;
+    SavePictureDialog1: TSavePictureDialog;
+    ColunasOP: TStringGrid;
+    ColunasOM: TStringGrid;
+    actCima: TAction;
+    actBaixo: TAction;
+    actCimaTudo: TAction;
+    actBaixoTudo: TAction;
+    MemoLayout: TMemo;
+    actSalvarLayout: TAction;
+    actCongelarPainel: TAction;
+    actFiltroInserir: TAction;
+    actGridASC: TAction;
+    actGridDESC: TAction;
+    actLimparFiltros: TAction;
+    actFiltroCheckList: TAction;
+    actFiltrosTabela: TAction;
+    actAjudaLimpar: TAction;
+    actLayoutJanela: TAction;
+    actProcuraFiltrosTabela: TAction;
+    PanelTextoLongoOM: TPanel;
+    ToolBar5: TToolBar;
+    MemoTextoLongoOM: TMemo;
+    edtProcuraTextoLongoOM: TEdit;
+    actExcelOM: TAction;
+    actExcelOP: TAction;
+    OpenDialog1: TOpenDialog;
+    PanelFerramentas: TPanel;
+    PageControlFiltros: TPageControl;
+    ToolBar7: TToolBar;
+    TabSheet4: TTabSheet;
+    PanelLateral: TPanel;
+    RadioGroupVisualizar: TRadioGroup;
+    Panel18: TPanel;
+    CheckListBoxStatusSistemaOM: TCheckListBox;
+    Panel53: TPanel;
+    CheckListBoxStatusUsuarioOM: TCheckListBox;
+    Panel24: TPanel;
+    CheckListBoxTextoBreveOM: TCheckListBox;
+    TabSheet7: TTabSheet;
+    TabSheet8: TTabSheet;
+    Splitter1: TSplitter;
+    btnFiltro: TToolButton;
+    ToolBar8: TToolBar;
+    CheckListBoxPlataforma: TCheckListBox;
+    ToolBar9: TToolBar;
+    CheckListBoxTipoEtapaServico: TCheckListBox;
+    ToolButton14: TToolButton;
+    ToolButton15: TToolButton;
+    ToolButton16: TToolButton;
+    ToolButton17: TToolButton;
+    actSelTudoPlataforma: TAction;
+    actSelLimpaPlataforma: TAction;
+    actSelTudoTipoEtapaServico: TAction;
+    actSelLimpaTipoEtapaServico: TAction;
+    actOcultarFiltro: TAction;
+    actMostrarFiltro: TAction;
+    TabSheet5: TTabSheet;
+    actFiltros: TAction;
+    ToolBar10: TToolBar;
+    BitBtn20: TBitBtn;
+    BitBtn21: TBitBtn;
+    BitBtn22: TBitBtn;
+    BitBtn23: TBitBtn;
+    BitBtn24: TBitBtn;
+    DBEdit3: TDBEdit;
+    DBEdit4: TDBEdit;
+    CheckListBoxSistemaFiltro: TCheckListBox;
+    ToolBar11: TToolBar;
+    ToolButton20: TToolButton;
+    ToolButton21: TToolButton;
+    DateBaseFimPicker: TDateTimePicker;
+    DateBaseInicioPicker: TDateTimePicker;
+    actProcurar: TAction;
+    procedure actProcurarExecute(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure FormCreate(Sender: TObject);
+    procedure FormDestroy(Sender: TObject);
+    procedure DBGridCarteiraOMDrawColumnCell(Sender: TObject;
+      const Rect: TRect; DataCol: Integer; Column: TColumn;
+      State: TGridDrawState);
+    procedure DBGridCarteiraOMTitleClick(Column: TColumn);
+    procedure edtPlataformaKeyPress(Sender: TObject; var Key: Char);
+    procedure actExcelExecute(Sender: TObject);
+    procedure actConfigPlanilhaExecute(Sender: TObject);
+    procedure DBGridCarteiraOPDrawColumnCell(Sender: TObject; const Rect: TRect;
+      DataCol: Integer; Column: TColumn; State: TGridDrawState);
+    procedure DBGridCarteiraOPTitleClick(Column: TColumn);
+    procedure actVisualizarPorExecute(Sender: TObject);
+    procedure PanelTituloAjudaMouseDown(Sender: TObject; Button: TMouseButton;
+      Shift: TShiftState; X, Y: Integer);
+    procedure BitBtn8Click(Sender: TObject);
+    procedure DBGridCarteiraOPCellClick(Column: TColumn);
+    procedure actCimaExecute(Sender: TObject);
+    procedure RLColunasAtivasRowMoved(Sender: TObject; FromIndex,
+      ToIndex: Integer);
+    procedure actCimaTudoExecute(Sender: TObject);
+    procedure actBaixoTudoExecute(Sender: TObject);
+    procedure actFiltroInserirExecute(Sender: TObject);
+    procedure actGridASCExecute(Sender: TObject);
+    procedure actGridDESCExecute(Sender: TObject);
+    procedure actLimparFiltrosExecute(Sender: TObject);
+    procedure actFiltroCheckListExecute(Sender: TObject);
+    procedure actBaixoExecute(Sender: TObject);
+    procedure actLayoutJanelaExecute(Sender: TObject);
+    procedure DBGridCarteiraOPColumnMoved(Sender: TObject; FromIndex,
+      ToIndex: Integer);
+    procedure DBGridCarteiraOMColumnMoved(Sender: TObject; FromIndex,
+      ToIndex: Integer);
+    procedure actSalvarLayoutExecute(Sender: TObject);
+    procedure actFiltrosTabelaExecute(Sender: TObject);
+    procedure actProcuraFiltrosTabelaExecute(Sender: TObject);
+    procedure DBEdit1Change(Sender: TObject);
+    procedure DBEdit2Change(Sender: TObject);
+    procedure edtProcuraTextoLongoOMKeyPress(Sender: TObject; var Key: Char);
+    procedure actExcelOMExecute(Sender: TObject);
+    procedure actExcelOPExecute(Sender: TObject);
+    procedure GanttChart1AfterBarAdd(Bar: TGanttBaseBar);
+    procedure actSelTudoPlataformaExecute(Sender: TObject);
+    procedure actSelLimpaPlataformaExecute(Sender: TObject);
+    procedure actSelTudoTipoEtapaServicoExecute(Sender: TObject);
+    procedure actSelLimpaTipoEtapaServicoExecute(Sender: TObject);
+    procedure actOcultarFiltroExecute(Sender: TObject);
+    procedure actMostrarFiltroExecute(Sender: TObject);
+    procedure CheckBoxOperacaoSelecionadaClick(Sender: TObject);
+    procedure actFiltrosExecute(Sender: TObject);
+  private
+    type
+      TRECPrioridade = record
+      //Double
+      PontoPreventiva,PontoCorretiva,PontoInspecao,PontoMergulho,
+      PontoFO,PontoRO,PontoMarinha,PontoRTIA,PontoRTIB,PontoRTIC,PontoRTID,
+      PontoATM,PontoANP,PontoICPMA,PontoIBAMA,PontoEquipCritico,PontoANVISA,PontoNR10,
+      PontoINSPLAN,CustoValorMinimo,CustoValorMaximo,CustoPontoMinimo,
+      CustoPontoMaximo: Double;
+      //Integer
+      RelacaoPreventiva,RelacaoCorretiva,RelacaoInspecao,
+      RelacaoMergulho,RelacaoFO,RelacaoRO,RelacaoMarinha,
+      RelacaoRTIA,RelacaoRTIB,RelacaoRTIC,RelacaoRTID,RelacaoATM,RelacaoANP,RelacaoICPMA,
+      RelacaoIBAMA,RelacaoEquipCritico,
+      RelacaoANVISA,RelacaoNR10,RelacaoINSPLAN,
+      //LimiteDias
+      LimiteDiasPreventiva,LimiteDiasCorretiva,LimiteDiasInspecao,
+      LimiteDiasMergulho,LimiteDiasFO,LimiteDiasRO,LimiteDiasMarinha,
+      LimiteDiasRTIA,LimiteDiasRTIB,LimiteDiasRTIC,LimiteDiasRTID,
+      LimiteDiasATM,LimiteDiasANP,LimiteDiasICPMA,LimiteDiasIBAMA,
+      LimiteDiasEquipCritico,
+      LimiteDiasANVISA,LimiteDiasNR10,LimiteDiasINSPLAN,
+      //ValorMaximo
+      ValorMaxPreventiva,ValorMaxCorretiva,ValorMaxInspecao,
+      ValorMaxMergulho,ValorMaxFO,ValorMaxRO,ValorMaxMarinha,
+      ValorMaxRTIA,ValorMaxRTIB,ValorMaxRTIC,ValorMaxRTID,
+      ValorMaxATM,ValorMaxANP,ValorMaxICPMA,ValorMaxIBAMA,
+      ValorMaxEquipCritico,i,TotalDias,
+      ValorMaxANVISA,ValorMaxNR10,ValorMaxINSPLAN: Integer;
+      //Boolean
+      BooleanPreventiva,BooleanCorretiva,BooleanInspecao,
+      BooleanMergulho,BooleanFO,BooleanRO,BooleanMarinha,
+      BooleanRTIA,BooleanRTIB,BooleanRTIC,BooleanRTID,
+      BooleanATM,BooleanANP,BooleanICPMA,BooleanIBAMA,
+      BooleanEquipCritico,BooleanCusto,
+      BooleanANVISA,BooleanNR10,BooleanINSPLAN: Boolean;
+
+    end;
+    type
+      TRECDisponibilidade = record
+          ValorTotal: Double;
+          ListaHHPlanejados,ListaCentroTrabalhoOP: TStringList;
+      end;
+    Type
+      THack = class(TDBGrid);
+    { Private declarations }
+
+    procedure WMMDIACTIVATE(var msg: TWMMDIACTIVATE);message WM_MDIACTIVATE;
+    function filtroStatus: String;
+
+  public
+    //String
+    TextoBreveGantt: String;
+    { Public declarations }
+  end;
+
+var
+  FrmCarteiraTrabalho: TFrmCarteiraTrabalho;
+
+implementation
+  uses untPrincipal,untDataModule,untFrmPreview;
+{$R *.dfm}
+
+procedure TFrmCarteiraTrabalho.actCimaExecute(Sender: TObject);
+begin
+  case RadioGroupVisualizar.ItemIndex of
+    0: FrmPrincipal.moveCima(DBGridCarteiraOM,ColunasOM);
+    else FrmPrincipal.moveCima(DBGridCarteiraOP,ColunasOP);
+  end;
+  actLimparFiltros.Execute;
+end;
+
+procedure TFrmCarteiraTrabalho.actCimaTudoExecute(Sender: TObject);
+begin
+  case RadioGroupVisualizar.ItemIndex of
+    0:
+    begin
+      FrmPrincipal.botaoMoveTudo(FrmDataModule.ADOConnectionMemoria,
+      'Carteira_OM.txt','Carteira_OM','TAB1;',
+      DBGridCarteiraOM,ColunasOM);
+      actLimparFiltros.Execute;
+    end
+    else
+    begin
+      FrmPrincipal.botaoMoveTudo(FrmDataModule.ADOConnectionMemoria,
+      'Carteira_OP.txt','Carteira_OP','TAB1;',
+      DBGridCarteiraOP,ColunasOP);
+      actLimparFiltros.Execute;
+    end
+  end;
+end;
+
+procedure TFrmCarteiraTrabalho.actConfigPlanilhaExecute(Sender: TObject);
+begin
+  case RadioGroupVisualizar.ItemIndex of
+    0:
+    begin
+      DBGridCarteiraOM.Visible:= true;
+      DBGridCarteiraOP.Visible:= false;
+      DBGridCarteiraOM.Align:= alClient;
+    end;
+    else
+    begin
+      DBGridCarteiraOM.Visible:= false;
+      DBGridCarteiraOP.Visible:= true;
+      DBGridCarteiraOP.Align:= alClient;
+      if FrmPrincipal.logPerfil = 'Administrador' then
+        DBGridCarteiraOP.ReadOnly:= false
+      else
+        DBGridCarteiraOP.ReadOnly:= true;
+    end;
+  end;
+end;
+
+procedure TFrmCarteiraTrabalho.actExcelExecute(Sender: TObject);
+begin
+  case RadioGroupVisualizar.ItemIndex of
+    0: actExcelOM.Execute;
+    else actExcelOP.Execute;
+  end;
+end;
+
+procedure TFrmCarteiraTrabalho.actExcelOMExecute(Sender: TObject);
+var
+  Excel, Sheet: Variant;
+  i,j,matrizLinha,matrizColuna,selRegistro,tipoNumero: Integer;
+  Celula, Titulo,campoProcura: String;
+begin
+  selRegistro:= 0;
+  try
+    try
+      Excel := CreateOleObject('Excel.Application');
+      Excel.Workbooks.Add;
+      Excel.Workbooks[1].WorkSheets[1].Name := 'Carteira OM';
+      Sheet := Excel.Workbooks[1].WorkSheets['Carteira OM'];
+      Excel.Caption := 'Carteira OM';
+      //============================================
+      selRegistro:= DBGridCarteiraOM.DataSource.DataSet.RecNo;
+      matrizColuna := DBGridCarteiraOM.Columns.Count;
+      matrizLinha :=  DBGridCarteiraOM.DataSource.DataSet.RecordCount;
+      DBGridCarteiraOM.DataSource.Enabled:=false;
+      // CONFIGURAÇÃO DO PROGRESSBAR
+      FrmPrincipal.ProgressBarIncializa(matrizColuna*matrizLinha,'Gerando Excel...');
+      //============================================
+      for j := 0 to matrizColuna - 1 do
+      begin
+        Titulo:= DBGridCarteiraOM.Columns.Items[j].Title.Caption;
+        campoProcura:= DBGridCarteiraOM.Columns.Items[j].FieldName;
+        // Preencher os titulos
+        Excel.Workbooks[1].Sheets[1].Cells[1, j+1] := Titulo;
+        for i := 1 to matrizLinha do
+        begin
+          // Preencher as linhas
+          DBGridCarteiraOM.DataSource.DataSet.RecNo:= i;
+          tipoNumero:= FrmPrincipal.isNumeric(DBGridCarteiraOM.DataSource.DataSet.FieldByName(campoProcura).AsString);
+          case tipoNumero of
+            0://texto
+            begin
+              Excel.Workbooks[1].Sheets[1].Cells[i+1, j+1].NumberFormat:= '@';
+              Excel.Workbooks[1].Sheets[1].Cells[i+1, j+1] :=
+              DBGridCarteiraOM.DataSource.DataSet.FieldByName(campoProcura).AsString;
+            end;
+            1://Inteiro
+            begin
+              Excel.Workbooks[1].Sheets[1].Cells[i+1, j+1].NumberFormat:= '0';
+              Excel.Workbooks[1].Sheets[1].Cells[i+1, j+1] :=
+              DBGridCarteiraOM.DataSource.DataSet.FieldByName(campoProcura).AsInteger;
+            end;
+            2://Float
+            begin
+              Excel.Workbooks[1].Sheets[1].Cells[i+1, j+1].NumberFormat:= '0,00';
+              Excel.Workbooks[1].Sheets[1].Cells[i+1, j+1] :=
+              DBGridCarteiraOM.DataSource.DataSet.FieldByName(campoProcura).AsFloat;
+            end;
+            3://Data
+            begin
+              Excel.Workbooks[1].Sheets[1].Cells[i+1, j+1].NumberFormat:= 'dd/mm/aaaa';
+              Excel.Workbooks[1].Sheets[1].Cells[i+1, j+1] :=
+              DBGridCarteiraOM.DataSource.DataSet.FieldByName(campoProcura).AsDateTime;
+            end;
+          end;
+          // CONFIGURAÇÃO DAS CÉLULAS DAS LINHAS
+          Sheet.Rows[i+1].VerticalAlignment := 2;
+          // 1=Top - 2=Center - 3=Bottom
+          Sheet.Rows[i+1].HorizontalAlignment := 3; // 3=Center }
+          // Atualizar ProgressBar
+          FrmPrincipal.ProgressBarIncremento(1);
+        end;
+      end;
+      //Coluna do texto longo
+      Excel.Workbooks[1].Sheets[1].Cells[1, matrizColuna+1] := 'Texto Longo';
+      for i := 1 to matrizLinha do
+      begin
+        DBGridCarteiraOM.DataSource.DataSet.RecNo:= i;
+        Excel.Workbooks[1].Sheets[1].Cells[i+1, matrizColuna+1].NumberFormat:= '@';
+        Excel.Workbooks[1].Sheets[1].Cells[i+1, matrizColuna+1] :=
+        FrmPrincipal.verificaTextoLongoCarteira(FrmDataModule.
+        DataSourceCarteiraOM.DataSet.FieldByName('OrdemManutencao').asString);
+      end;
+      // letras do cabeçalho
+      Sheet.Rows[1].Font.Bold := true;
+      Sheet.Rows[1].Font.Italic := true;
+      Sheet.Rows[1].VerticalAlignment := 2; // 1=Top - 2=Center - 3=Bottom
+      Sheet.Rows[1].HorizontalAlignment := 3; // 3=Center
+      // desenha as grades da tabela
+      Celula := FrmPrincipal.RefToCell(matrizColuna+1, matrizLinha+1);
+      Sheet.Range['A1', Celula].Borders.LineStyle := 1;
+      Sheet.Range['A1', Celula].Borders.Weight := 2;
+      Sheet.Range['A1', Celula].Borders.ColorIndex := 1;
+      Sheet.Range['A1', FrmPrincipal.RefToCell(matrizColuna+1, 1)].Interior.Color := clSilver;
+      // Cor da Célula
+      Excel.Visible := true;
+      Excel.columns.Autofit;
+    finally
+      DBGridCarteiraOM.DataSource.Enabled:=true;
+      DBGridCarteiraOM.DataSource.DataSet.RecNo:= selRegistro;
+      // Atualizar ProgressBar
+      FrmPrincipal.ProgressBarAtualizar;
+    end;
+  except
+    MessageBox(0, 'Erro de conexão com o Excel' + #13 + #10 +
+    'Verifique se o Microsoft Office Excel esta instalado na sua máquina.',
+    'Excel', MB_ICONERROR);
+    // Atualizar ProgressBar
+    FrmPrincipal.ProgressBarAtualizar;
+  end;
+end;
+
+procedure TFrmCarteiraTrabalho.actExcelOPExecute(Sender: TObject);
+var
+  Excel, Sheet: Variant;
+  i,j,matrizLinha,matrizColuna,selRegistro,tipoNumero: Integer;
+  Celula, Titulo,campoProcura: String;
+begin
+  selRegistro:= 0;
+  try
+    try
+      Excel := CreateOleObject('Excel.Application');
+      Excel.Workbooks.Add;
+      Excel.Workbooks[1].WorkSheets[1].Name := 'Carteira OP';
+      Sheet := Excel.Workbooks[1].WorkSheets['Carteira OP'];
+      Excel.Caption := 'Carteira OP';
+      //============================================
+      selRegistro:= DBGridCarteiraOP.DataSource.DataSet.RecNo;
+      matrizColuna := DBGridCarteiraOP.Columns.Count;
+      matrizLinha :=  DBGridCarteiraOP.DataSource.DataSet.RecordCount;
+      DBGridCarteiraOP.DataSource.Enabled:=false;
+      // CONFIGURAÇÃO DO PROGRESSBAR
+      FrmPrincipal.ProgressBarIncializa(matrizColuna*matrizLinha,'Gerando Excel...');
+      //============================================
+      for j := 0 to matrizColuna - 1 do
+      begin
+        Titulo:= DBGridCarteiraOP.Columns.Items[j].Title.Caption;
+        campoProcura:= DBGridCarteiraOP.Columns.Items[j].FieldName;
+        // Preencher os titulos
+        Excel.Workbooks[1].Sheets[1].Cells[1, j+1] := Titulo;
+        for i := 1 to matrizLinha do
+        begin
+          // Preencher as linhas
+          DBGridCarteiraOP.DataSource.DataSet.RecNo:= i;
+          tipoNumero:= FrmPrincipal.isNumeric(DBGridCarteiraOP.DataSource.
+          DataSet.FieldByName(campoProcura).AsString);
+          case tipoNumero of
+            0://texto
+            begin
+              Excel.Workbooks[1].Sheets[1].Cells[i+1, j+1].NumberFormat:= '@';
+              Excel.Workbooks[1].Sheets[1].Cells[i+1, j+1] :=
+              DBGridCarteiraOP.DataSource.DataSet.FieldByName(campoProcura).AsString;
+            end;
+            1://Inteiro
+            begin
+              Excel.Workbooks[1].Sheets[1].Cells[i+1, j+1].NumberFormat:= '0';
+              Excel.Workbooks[1].Sheets[1].Cells[i+1, j+1] :=
+              DBGridCarteiraOP.DataSource.DataSet.FieldByName(campoProcura).AsInteger;
+            end;
+            2://Float
+            begin
+              Excel.Workbooks[1].Sheets[1].Cells[i+1, j+1].NumberFormat:= '0,00';
+              Excel.Workbooks[1].Sheets[1].Cells[i+1, j+1] :=
+              DBGridCarteiraOP.DataSource.DataSet.FieldByName(campoProcura).AsFloat;
+            end;
+            3://Data
+            begin
+              Excel.Workbooks[1].Sheets[1].Cells[i+1, j+1].NumberFormat:= 'dd/mm/aaaa';
+              Excel.Workbooks[1].Sheets[1].Cells[i+1, j+1] :=
+              DBGridCarteiraOP.DataSource.DataSet.FieldByName(campoProcura).AsDateTime;
+            end;
+          end;
+          // CONFIGURAÇÃO DAS CÉLULAS DAS LINHAS
+          Sheet.Rows[i+1].VerticalAlignment := 2;
+          // 1=Top - 2=Center - 3=Bottom
+          Sheet.Rows[i+1].HorizontalAlignment := 3; // 3=Center }
+          // Atualizar ProgressBar
+          FrmPrincipal.ProgressBarIncremento(1);
+        end;
+      end;
+      //Coluna do texto longo
+      Excel.Workbooks[1].Sheets[1].Cells[1, matrizColuna+1] := 'Texto Longo';
+      for i := 1 to matrizLinha do
+      begin
+        DBGridCarteiraOP.DataSource.DataSet.RecNo:= i;
+        Excel.Workbooks[1].Sheets[1].Cells[i+1, matrizColuna+1].NumberFormat:= '@';
+        Excel.Workbooks[1].Sheets[1].Cells[i+1, matrizColuna+1] :=
+        FrmPrincipal.verificaTextoLongoCarteira(FrmDataModule.
+        DataSourceCarteiraOP.DataSet.FieldByName('OrdemManutencao').asString);
+      end;
+      // letras do cabeçalho
+      Sheet.Rows[1].Font.Bold := true;
+      Sheet.Rows[1].Font.Italic := true;
+      Sheet.Rows[1].VerticalAlignment := 2; // 1=Top - 2=Center - 3=Bottom
+      Sheet.Rows[1].HorizontalAlignment := 3; // 3=Center
+      // desenha as grades da tabela
+      Celula := FrmPrincipal.RefToCell(matrizColuna+1, matrizLinha+1);
+      Sheet.Range['A1', Celula].Borders.LineStyle := 1;
+      Sheet.Range['A1', Celula].Borders.Weight := 2;
+      Sheet.Range['A1', Celula].Borders.ColorIndex := 1;
+      Sheet.Range['A1', FrmPrincipal.RefToCell(matrizColuna+1, 1)].Interior.Color := clSilver;
+      // Cor da Célula
+      Excel.Visible := true;
+      Excel.columns.Autofit;
+    finally
+      DBGridCarteiraOP.DataSource.Enabled:=true;
+      DBGridCarteiraOP.DataSource.DataSet.RecNo:= selRegistro;
+      // Atualizar ProgressBar
+      FrmPrincipal.ProgressBarAtualizar;
+    end;
+  except
+    MessageBox(0, 'Erro de conexão com o Excel' + #13 + #10 +
+    'Verifique se o Microsoft Office Excel esta instalado na sua máquina.',
+    'Excel', MB_ICONERROR);
+    // Atualizar ProgressBar
+    FrmPrincipal.ProgressBarAtualizar;
+  end;
+end;
+
+procedure TFrmCarteiraTrabalho.actFiltroCheckListExecute(Sender: TObject);
+  var
+    ListaBusca: TStringList;
+    PalavraLista,PalavraBusca: String;
+    i: Integer;
+begin
+  case RadioGroupVisualizar.ItemIndex of
+    0: FrmPrincipal.LimparColunasFiltro(DBGridCarteiraOM,ColunasOM);
+    else FrmPrincipal.LimparColunasFiltro(DBGridCarteiraOP,ColunasOP);
+  end;
+  ListaBusca:= TStringList.Create;
+  ListaBusca.delimiter:= ':';
+  ListaBusca.StrictDelimiter:= False;
+  PalavraBusca:= '';
+  for I := 0 to CheckListBoxStatusUsuarioOM.Count-1 do
+  begin
+    if CheckListBoxStatusUsuarioOM.Checked[i] then
+    begin
+      ListaBusca.DelimitedText:= CheckListBoxStatusUsuarioOM.Items[i];
+      PalavraLista:= ListaBusca[0];
+      if PalavraBusca <> '' then
+        PalavraBusca:= PalavraBusca+';'+PalavraLista
+      else
+        PalavraBusca:= PalavraLista;
+    end;
+  end;
+  case RadioGroupVisualizar.ItemIndex of
+    0: FrmPrincipal.buscaFiledGrid1('StatusUsuarioOM',PalavraBusca,'Contem',ColunasOM,4,false);
+    else FrmPrincipal.buscaFiledGrid1('StatusUsuarioOM',PalavraBusca,'Contem',ColunasOP,4,false);
+  end;
+  //==================================================
+  PalavraBusca:= '';
+  for I := 0 to CheckListBoxStatusSistemaOM.Count-1 do
+  begin
+    if CheckListBoxStatusSistemaOM.Checked[i] then
+    begin
+      ListaBusca.DelimitedText:= CheckListBoxStatusSistemaOM.Items[i];
+      PalavraLista:= ListaBusca[0];
+      if PalavraBusca <> '' then
+        PalavraBusca:= PalavraBusca+';'+PalavraLista
+      else
+        PalavraBusca:= PalavraLista;
+    end;
+  end;
+  case RadioGroupVisualizar.ItemIndex of
+    0: FrmPrincipal.buscaFiledGrid1('StatusSistemaOM',PalavraBusca,'Contem',ColunasOM,4,false);
+    else FrmPrincipal.buscaFiledGrid1('StatusSistemaOM',PalavraBusca,'Contem',ColunasOP,4,false);
+  end;
+  //==================================================
+  PalavraBusca:= '';
+  if CheckListBoxTextoBreveOM.Checked[0] then//Fora de Operação
+    PalavraBusca:= 'FO:';
+  if CheckListBoxTextoBreveOM.Checked[1] then//Restrição operacional
+  begin
+    if PalavraBusca <> '' then
+      PalavraBusca:= PalavraBusca+';RO:'
+    else
+      PalavraBusca:= 'RO:'
+  end;
+  case RadioGroupVisualizar.ItemIndex of
+    0: FrmPrincipal.buscaFiledGrid1('TextoBreveOM',PalavraBusca,'Contem',ColunasOM,4,false);
+    else FrmPrincipal.buscaFiledGrid1('TextoBreveOM',PalavraBusca,'Contem',ColunasOP,4,false);
+  end;
+  //==================================================
+    //Plataformas
+  PalavraBusca:= '';
+  for I := 0 to CheckListBoxPlataforma.Count-1 do
+  begin
+    if CheckListBoxPlataforma.Checked[i] then
+    begin
+      PalavraLista:= CheckListBoxPlataforma.Items[i];
+      if PalavraBusca <> '' then
+        PalavraBusca:= PalavraBusca+';'+PalavraLista
+      else
+        PalavraBusca:= PalavraLista;
+    end;
+  end;
+  case RadioGroupVisualizar.ItemIndex of
+    0: FrmPrincipal.buscaFiledGrid1('Plataforma',PalavraBusca,'Contem',ColunasOM,4,false);
+    else FrmPrincipal.buscaFiledGrid1('Plataforma',PalavraBusca,'Contem',ColunasOP,4,false);
+  end;
+  //Tipo Etapa Serviço
+  PalavraBusca:= '';
+  for I := 0 to CheckListBoxTipoEtapaServico.Count-1 do
+  begin
+    if CheckListBoxTipoEtapaServico.Checked[i] then
+    begin
+      PalavraLista:= CheckListBoxTipoEtapaServico.Items[i];
+      if PalavraBusca <> '' then
+        PalavraBusca:= PalavraBusca+';'+PalavraLista
+      else
+        PalavraBusca:= PalavraLista;
+    end;
+  end;
+  //Tipo de Etapa de Serviço
+  case RadioGroupVisualizar.ItemIndex of
+    0: FrmPrincipal.buscaFiledGrid1('txtTipoEtapaServicoOM',PalavraBusca,'Contem',ColunasOM,4,false);
+    else FrmPrincipal.buscaFiledGrid1('txtTipoEtapaServicoOP',PalavraBusca,'Contem',ColunasOP,4,false);
+  end;
+  //Sistemas
+  case RadioGroupVisualizar.ItemIndex of
+    0: FrmPrincipal.configurarCheckListBox(CheckListBoxSistemaFiltro,DBGridCarteiraOM,ColunasOM,false);
+    1: FrmPrincipal.configurarCheckListBox(CheckListBoxSistemaFiltro,DBGridCarteiraOP,ColunasOP,false);
+  end;
+  if (FrmPrincipal.PanelFiltrosTabela.Visible)AND(FrmPrincipal.PanelAjuda1.Visible) then
+    actFiltrosTabela.Execute;
+end;
+
+procedure TFrmCarteiraTrabalho.actGridASCExecute(Sender: TObject);
+begin
+  case RadioGroupVisualizar.ItemIndex of
+    0: FrmPrincipal.ClassificaDBGrid(DBGridCarteiraOM,FrmDataModule.ADOQueryCarteiraOM,0);
+    else FrmPrincipal.ClassificaDBGrid(DBGridCarteiraOP,FrmDataModule.ADOQueryCarteiraOP,0);
+  end;
+end;
+
+procedure TFrmCarteiraTrabalho.actGridDESCExecute(Sender: TObject);
+begin
+  case RadioGroupVisualizar.ItemIndex of
+    0: FrmPrincipal.ClassificaDBGrid(DBGridCarteiraOM,FrmDataModule.ADOQueryCarteiraOM,1);
+    else FrmPrincipal.ClassificaDBGrid(DBGridCarteiraOP,FrmDataModule.ADOQueryCarteiraOP,1);
+  end;
+end;
+
+procedure TFrmCarteiraTrabalho.actFiltroInserirExecute(Sender: TObject);
+begin
+  case RadioGroupVisualizar.ItemIndex of
+    0: FrmPrincipal.inserirProcura(DBGridCarteiraOM,ColunasOM);
+    else FrmPrincipal.inserirProcura(DBGridCarteiraOP,ColunasOP);
+  end;
+  actProcurar.Execute;
+  if (FrmPrincipal.PanelFiltrosTabela.Visible)AND(FrmPrincipal.PanelAjuda1.Visible) then
+    actFiltrosTabela.Execute;
+end;
+
+procedure TFrmCarteiraTrabalho.actFiltrosExecute(Sender: TObject);
+begin
+  actFiltroCheckList.Execute;
+  actProcurar.Execute;
+end;
+
+procedure TFrmCarteiraTrabalho.actFiltrosTabelaExecute(Sender: TObject);
+begin
+  FrmPrincipal.btnProcurarFiltrosTabela.Action:= actProcuraFiltrosTabela;
+  case RadioGroupVisualizar.ItemIndex of
+    0: FrmPrincipal.FiltrosTabela(DBGridCarteiraOM,ColunasOM);
+    else FrmPrincipal.FiltrosTabela(DBGridCarteiraOP,ColunasOP);
+  end;
+end;
+
+procedure TFrmCarteiraTrabalho.actLayoutJanelaExecute(Sender: TObject);
+begin
+  FrmPrincipal.btnCima.Action:= actCima;
+  FrmPrincipal.btnBaixo.Action:= actBaixo;
+  FrmPrincipal.btnBaixoTudo.Action:= actBaixoTudo;
+  FrmPrincipal.btnCimaTudo.Action:= actCimaTudo;
+  FrmPrincipal.btnSalvarLayout.Action:= actSalvarLayout;
+  FrmPrincipal.btnSalvarLayout.Visible:= false;
+  case RadioGroupVisualizar.ItemIndex of
+    0: FrmPrincipal.CarregarRLColunas('Carteira_OM.txt',ColunasOM);
+    else FrmPrincipal.CarregarRLColunas('Carteira_OP.txt',ColunasOP);
+  end;
+  FrmPrincipal.actConfigPanelLayout.Execute;
+end;
+
+procedure TFrmCarteiraTrabalho.actLimparFiltrosExecute(Sender: TObject);
+begin
+  //Limpar simbolo de classificação ASC DESC
+  case RadioGroupVisualizar.ItemIndex of
+    0: FrmPrincipal.LimparColunasFiltro(DBGridCarteiraOM,ColunasOM)
+    else FrmPrincipal.LimparColunasFiltro(DBGridCarteiraOP,ColunasOP);
+  end;
+  actProcurar.Execute;
+  if (FrmPrincipal.PanelFiltrosTabela.Visible)AND(FrmPrincipal.PanelAjuda1.Visible) then
+    actFiltrosTabela.Execute;
+end;
+
+procedure TFrmCarteiraTrabalho.actMostrarFiltroExecute(Sender: TObject);
+begin
+  PanelFerramentas.Width:= 300;
+  PageControlFiltros.Visible:= true;
+  btnFiltro.Action:= actOcultarFiltro;
+end;
+
+procedure TFrmCarteiraTrabalho.actOcultarFiltroExecute(Sender: TObject);
+begin
+  PanelFerramentas.Width:= 28;
+  PageControlFiltros.Visible:= false;
+  btnFiltro.Action:= actMostrarFiltro;
+end;
+
+procedure TFrmCarteiraTrabalho.actBaixoExecute(Sender: TObject);
+begin
+  case RadioGroupVisualizar.ItemIndex of
+    0: FrmPrincipal.moveBaixo(DBGridCarteiraOM,ColunasOM);
+    else FrmPrincipal.moveBaixo(DBGridCarteiraOP,ColunasOP);
+  end;
+  actLimparFiltros.Execute;
+end;
+
+procedure TFrmCarteiraTrabalho.actBaixoTudoExecute(Sender: TObject);
+begin
+  case RadioGroupVisualizar.ItemIndex of
+    0:
+    begin
+      FrmPrincipal.botaoMoveTudo(FrmDataModule.ADOConnectionMemoria,
+      'Carteira_OM.txt','Carteira_OM','TAB2;',
+      DBGridCarteiraOM,ColunasOM);
+      actLimparFiltros.Execute;
+    end
+    else
+    begin
+      FrmPrincipal.botaoMoveTudo(FrmDataModule.ADOConnectionMemoria,
+      'Carteira_OP.txt','Carteira_OP','TAB2;',
+      DBGridCarteiraOP,ColunasOP);
+      actLimparFiltros.Execute;
+    end
+  end;
+end;
+
+procedure TFrmCarteiraTrabalho.actSalvarLayoutExecute(Sender: TObject);
+begin
+  case RadioGroupVisualizar.ItemIndex of
+    0:
+    begin
+      FrmPrincipal.GravarRLColunas('Carteira_OM.txt');
+      FrmPrincipal.CarregarColunasGRID(FrmDataModule.ADOConnectionMemoria,'',DBGridCarteiraOM,ColunasOM);
+    end;
+    else
+    begin
+      FrmPrincipal.GravarRLColunas('Carteira_OP.txt');
+      FrmPrincipal.CarregarColunasGRID(FrmDataModule.ADOConnectionMemoria,'',DBGridCarteiraOP,ColunasOP);
+    end;
+  end;
+  actLimparFiltros.Execute;
+end;
+
+procedure TFrmCarteiraTrabalho.actSelLimpaPlataformaExecute(Sender: TObject);
+var
+  I: Integer;
+begin
+  for I := 0 to CheckListBoxPlataforma.Count-1 do
+    CheckListBoxPlataforma.Checked[i]:= false;
+
+  actFiltros.Execute;
+end;
+
+procedure TFrmCarteiraTrabalho.actSelLimpaTipoEtapaServicoExecute(
+  Sender: TObject);
+var
+  I: Integer;
+begin
+  for I := 0 to CheckListBoxTipoEtapaServico.Count-1 do
+    CheckListBoxTipoEtapaServico.Checked[i]:= false;
+
+  actFiltros.Execute;
+end;
+
+procedure TFrmCarteiraTrabalho.actSelTudoPlataformaExecute(Sender: TObject);
+var
+  I: Integer;
+begin
+  for I := 0 to CheckListBoxPlataforma.Count-1 do
+    CheckListBoxPlataforma.Checked[i]:= true;
+
+  actFiltros.Execute;
+end;
+
+procedure TFrmCarteiraTrabalho.actSelTudoTipoEtapaServicoExecute(
+  Sender: TObject);
+var
+  I: Integer;
+begin
+  for I := 0 to CheckListBoxTipoEtapaServico.Count-1 do
+    CheckListBoxTipoEtapaServico.Checked[i]:= true;
+
+  actFiltros.Execute;
+end;
+
+procedure TFrmCarteiraTrabalho.actVisualizarPorExecute(Sender: TObject);
+begin
+  case RadioGroupVisualizar.ItemIndex of
+    0: //Ordem de Manutenção
+    begin
+      PanelTitulo.Caption:=
+      'Carteira de Trabalho [ORDEM DE MANUTENÇÃO]';
+      FrmPrincipal.carregarFiltroSistemaCheckList(CheckListBoxSistemaFiltro,DBGridCarteiraOM);
+    end;
+    else
+    begin
+      PanelTitulo.Caption:=
+      'Carteira de Trabalho [OPERAÇÕES] (SAP = Transação: IW37N, Variante: /COLIBRI)';
+      FrmPrincipal.carregarFiltroSistemaCheckList(CheckListBoxSistemaFiltro,DBGridCarteiraOP);
+    end;
+  end;
+  edtProcuraTextoLongoOM.Text:= '';
+  FrmPrincipal.actAjudaLimpar.Execute;
+  actConfigPlanilha.Execute;
+  actFiltroCheckList.Execute;
+  actProcurar.Execute;
+end;
+
+procedure TFrmCarteiraTrabalho.BitBtn8Click(Sender: TObject);
+begin
+  actProcurar.Execute;
+end;
+
+
+procedure TFrmCarteiraTrabalho.actProcuraFiltrosTabelaExecute(Sender: TObject);
+begin
+  case RadioGroupVisualizar.ItemIndex of
+    0: frmPrincipal.CarregaFiltrosProcura(ColunasOM);
+    else frmPrincipal.CarregaFiltrosProcura(ColunasOP);
+  end;
+  actProcurar.Execute;
+end;
+
+procedure TFrmCarteiraTrabalho.actProcurarExecute(Sender: TObject);
+  var
+    SQLString,SQLBase: String;
+begin
+  SQLString:= filtroStatus;
+  try
+    case RadioGroupVisualizar.ItemIndex of
+      0:
+      begin
+        SQLBase:= 'SELECT tblCarteiraTrabalho.OrdemManutencao, tblCarteiraTrabalho.Plataforma, '+
+        'tblCarteiraTrabalho.txtTipoEtapaServicoOM, tblCarteiraTrabalho.LocalInstalacao, '+
+        'tblCarteiraTrabalho.DenominacaoLocalInstalacao, tblCarteiraTrabalho.TextoBreveOM, '+
+        'tblCarteiraTrabalho.CentroTrabalhoOM, tblCarteiraTrabalho.DataReferencia, '+
+        'tblCarteiraTrabalho.DataBaseInicio, tblCarteiraTrabalho.DataBaseFim, '+
+        'tblCarteiraTrabalho.StatusUsuarioOM,tblCarteiraTrabalho.StatusSistemaOM, '+
+        'tblCarteiraTrabalho.Sala, tblCarteiraTrabalho.CampoSelecao, '+
+        'tblCarteiraTrabalho.PlanoManutencao, tblCarteiraTrabalho.NotaManutencao, '+
+        'tblCarteiraTrabalho.Equipamento, tblCarteiraTrabalho.Prioridade, tblCarteiraTrabalho.ImpactoFalha, '+
+        'tblCarteiraTrabalho.TotalReal, tblCarteiraTrabalho.TotalPlanejado, '+
+        'tblCarteiraTrabalho.TipoAtvMnt,InicioProgramadoOM,FimProgramadoOM,'+
+        'tblCarteiraTrabalho.CriadoPor, tblCarteiraTrabalho.DataEntrada, '+
+        'tblCarteiraTrabalho.GrupoPlanejamento, '+
+        'tblCarteiraTrabalho.BooleanCritico, tblCarteiraTrabalho.CPO FROM tblCarteiraTrabalho '+
+
+        'GROUP BY tblCarteiraTrabalho.OrdemManutencao, tblCarteiraTrabalho.Plataforma, '+
+        'tblCarteiraTrabalho.txtTipoEtapaServicoOM, tblCarteiraTrabalho.LocalInstalacao, '+
+        'tblCarteiraTrabalho.DenominacaoLocalInstalacao, tblCarteiraTrabalho.TextoBreveOM, '+
+        'tblCarteiraTrabalho.CentroTrabalhoOM, tblCarteiraTrabalho.DataReferencia, '+
+        'tblCarteiraTrabalho.DataBaseInicio, tblCarteiraTrabalho.DataBaseFim, '+
+        'tblCarteiraTrabalho.StatusUsuarioOM,tblCarteiraTrabalho.StatusSistemaOM, '+
+        'tblCarteiraTrabalho.Sala, tblCarteiraTrabalho.CampoSelecao, '+
+        'tblCarteiraTrabalho.PlanoManutencao, tblCarteiraTrabalho.NotaManutencao, '+
+        'tblCarteiraTrabalho.Equipamento, tblCarteiraTrabalho.Prioridade, tblCarteiraTrabalho.ImpactoFalha, '+
+        'tblCarteiraTrabalho.TotalReal, tblCarteiraTrabalho.TotalPlanejado, '+
+        'tblCarteiraTrabalho.TipoAtvMnt,InicioProgramadoOM,FimProgramadoOM,'+
+        'tblCarteiraTrabalho.CriadoPor, tblCarteiraTrabalho.DataEntrada, '+
+        'tblCarteiraTrabalho.GrupoPlanejamento, '+
+        'tblCarteiraTrabalho.BooleanCritico, tblCarteiraTrabalho.CPO ';
+        SQLBase:= SQLBase+SQLString+' ORDER BY tblCarteiraTrabalho.Prioridade DESC;';
+        FrmPrincipal.ProcuraQuery(SQLBase,FrmDataModule.ADOQueryCarteiraOM,StatusBar1);
+      end;
+      else
+      begin
+        SQLBase:= 'SELECT tblCarteiraTrabalho.*,(Trabalho-TrabalhoReal) as HHPrevisto FROM tblCarteiraTrabalho'+
+
+        SQLString+' ORDER BY Prioridade DESC, Operacao ASC;';
+        FrmPrincipal.ProcuraQuery(SQLBase,FrmDataModule.ADOQueryCarteiraOP,StatusBar1);
+      end;
+    end;
+    FrmPrincipal.AutoFitStatusBar(StatusBar1);
+    actConfigPlanilha.Execute;
+  Except
+    FrmDataModule.ADOQueryCarteiraOM.Active:= false;
+    FrmDataModule.ADOQueryCarteiraOM.Active:= TRUE;
+    FrmDataModule.ADOQueryCarteiraOP.Active:= false;
+    FrmDataModule.ADOQueryCarteiraOP.Active:= TRUE;
+    FrmPrincipal.AutoFitStatusBar(StatusBar1);
+    actConfigPlanilha.Execute;
+  end;
+end;
+
+procedure TFrmCarteiraTrabalho.CheckBoxOperacaoSelecionadaClick(
+  Sender: TObject);
+begin
+  actFiltroCheckList.Execute;
+  actProcurar.Execute;
+end;
+
+procedure TFrmCarteiraTrabalho.DBEdit1Change(Sender: TObject);
+begin
+  MemoTextoLongoOM.Text:= FrmPrincipal.verificaTextoLongoCarteira(FrmDataModule.
+  DataSourceCarteiraOM.DataSet.FieldByName('OrdemManutencao').asString);
+end;
+
+procedure TFrmCarteiraTrabalho.DBEdit2Change(Sender: TObject);
+begin
+  MemoTextoLongoOM.Text:= FrmPrincipal.verificaTextoLongoCarteira(FrmDataModule.
+  DataSourceCarteiraOP.DataSet.FieldByName('OrdemManutencao').asString);
+end;
+
+procedure TFrmCarteiraTrabalho.DBGridCarteiraOMColumnMoved(Sender: TObject;
+  FromIndex, ToIndex: Integer);
+begin
+  FrmPrincipal.CarregarRLColunasAtivasGRID(DBGridCarteiraOM);
+  FrmPrincipal.GravarRLColunas('Carteira_OM.txt');
+end;
+
+procedure TFrmCarteiraTrabalho.DBGridCarteiraOMDrawColumnCell(
+  Sender: TObject; const Rect: TRect; DataCol: Integer; Column: TColumn;
+  State: TGridDrawState);
+begin
+  FrmPrincipal.GridZebrado(DBGridCarteiraOM,ColunasOM,State,Rect,DataCol,Column);
+  if (Column.Field.FieldName = 'BooleanCritico') then
+  begin
+    if FrmDataModule.DataSourceCarteiraOM.DataSet.
+    FieldByName('BooleanCritico').AsBoolean then
+    begin
+      TDBGrid(Sender).Canvas.FillRect(Rect);
+      FrmPrincipal.ImageList1.Draw(TDBGrid(Sender).Canvas, Rect.Left +10,Rect.Top + 1, 474);
+    end
+    else
+    begin
+      TDBGrid(Sender).Canvas.FillRect(Rect);
+      FrmPrincipal.ImageList1.Draw(TDBGrid(Sender).Canvas, Rect.Left +10,Rect.Top + 1, 477);
+    end;
+  end;
+end;
+
+procedure TFrmCarteiraTrabalho.DBGridCarteiraOMTitleClick(Column: TColumn);
+begin
+  FrmPrincipal.configurarFiltro(0,Column.FieldName,IntToStr(Column.Index),
+  Column.ReadOnly,actFiltroInserir,actGridASC,actGridDESC,actGridDESC);
+  //======================================================
+  FrmPrincipal.titleGrid(ColunasOM,'Memoria',FrmDataModule.ADOQueryCarteiraOM.SQL.Text);
+end;
+
+procedure TFrmCarteiraTrabalho.DBGridCarteiraOPCellClick(Column: TColumn);
+begin
+  if (Self.DBGridCarteiraOP.SelectedField.DataType = ftBoolean)AND
+  (Column.Field.FieldName = 'BooleanSelecao') then
+  begin
+    DBGridCarteiraOP.Options:=
+    [dgTitles,dgIndicator,dgColumnResize,dgColLines,
+    dgRowLines,dgTabs,dgAlwaysShowSelection,dgTitleClick,dgTitleHotTrack];
+    FrmDataModule.ADOQueryCarteiraOP.Edit;
+    FrmDataModule.DataSourceCarteiraOP.DataSet.
+    FieldByName('booleanSelecao').AsBoolean:= not Self.DBGridCarteiraOP.SelectedField.AsBoolean;
+    FrmDataModule.ADOQueryCarteiraOP.Post;
+  end
+  else
+    DBGridCarteiraOP.Options:=[dgEditing,dgTitles,dgIndicator,dgColumnResize,dgColLines,
+    dgRowLines,dgTabs,dgConfirmDelete,dgCancelOnExit,dgTitleClick,dgTitleHotTrack];
+end;
+
+procedure TFrmCarteiraTrabalho.DBGridCarteiraOPColumnMoved(Sender: TObject;
+  FromIndex, ToIndex: Integer);
+begin
+  FrmPrincipal.CarregarRLColunasAtivasGRID(DBGridCarteiraOP);
+  FrmPrincipal.GravarRLColunas('Carteira_OP.txt');
+end;
+
+procedure TFrmCarteiraTrabalho.DBGridCarteiraOPDrawColumnCell(
+  Sender: TObject; const Rect: TRect; DataCol: Integer; Column: TColumn;
+  State: TGridDrawState);
+    Const
+    CtrlState : array[Boolean] of Integer = (DFCS_BUTTONCHECK,
+    DFCS_BUTTONCHECK or DFCS_CHECKED);
+begin
+  FrmPrincipal.GridZebrado(DBGridCarteiraOP,ColunasOP,State,Rect,DataCol,Column);
+  if (Column.Field.FieldName = 'BooleanCritico') then
+  begin
+    if FrmDataModule.DataSourceCarteiraOP.DataSet.
+    FieldByName('BooleanCritico').AsBoolean then
+    begin
+      TDBGrid(Sender).Canvas.FillRect(Rect);
+      FrmPrincipal.ImageList1.Draw(TDBGrid(Sender).Canvas, Rect.Left +10,Rect.Top + 1, 474);
+    end
+    else
+    begin
+      TDBGrid(Sender).Canvas.FillRect(Rect);
+      FrmPrincipal.ImageList1.Draw(TDBGrid(Sender).Canvas, Rect.Left +10,Rect.Top + 1, 477);
+    end;
+  end
+  else if (Column.Field.FieldName = 'HHPrevisto') then
+  begin
+    if FrmDataModule.DataSourceCarteiraOP.DataSet.
+    FieldByName('HHPrevisto').AsFloat < 0 then
+    begin
+      DBGridCarteiraOP.Canvas.Brush.Color:= clRed;
+      DBGridCarteiraOP.Font.Color:= clBlack;
+      DBGridCarteiraOP.Canvas.FillRect(Rect);
+      DBGridCarteiraOP.DefaultDrawColumnCell(Rect, DataCol,Column, State);
+    end
+    else
+    begin
+      DBGridCarteiraOP.Canvas.Brush.Color:= clSilver;
+      DBGridCarteiraOP.Font.Color:= clBlack;
+      DBGridCarteiraOP.Canvas.FillRect(Rect);
+      DBGridCarteiraOP.DefaultDrawColumnCell(Rect, DataCol,Column, State);
+    end;
+  end
+  else if (Column.Field.FieldName = 'TipoOperacao') then
+  begin
+    if FrmDataModule.DataSourceCarteiraOP.DataSet.
+    FieldByName('TipoOperacao').AsString = 'ABER' then
+    begin
+      DBGridCarteiraOP.Canvas.Brush.Color:= clLime;
+      DBGridCarteiraOP.Font.Color:= clBlack;
+      DBGridCarteiraOP.Canvas.FillRect(Rect);
+      DBGridCarteiraOP.DefaultDrawColumnCell(Rect, DataCol,Column, State);
+    end
+    else if FrmDataModule.DataSourceCarteiraOP.DataSet.
+    FieldByName('TipoOperacao').AsString = 'LIB' then
+    begin
+      DBGridCarteiraOP.Canvas.Brush.Color:= clGreen;
+      DBGridCarteiraOP.Font.Color:= clBlack;
+      DBGridCarteiraOP.Canvas.FillRect(Rect);
+      DBGridCarteiraOP.DefaultDrawColumnCell(Rect, DataCol,Column, State);
+    end
+    else if FrmDataModule.DataSourceCarteiraOP.DataSet.
+    FieldByName('TipoOperacao').AsString = 'IMPR' then
+    begin
+      DBGridCarteiraOP.Canvas.Brush.Color:= clAqua;
+      DBGridCarteiraOP.Font.Color:= clBlack;
+      DBGridCarteiraOP.Canvas.FillRect(Rect);
+      DBGridCarteiraOP.DefaultDrawColumnCell(Rect, DataCol,Column, State);
+    end
+    else if FrmDataModule.DataSourceCarteiraOP.DataSet.
+    FieldByName('TipoOperacao').AsString = 'CNPA' then
+    begin
+      DBGridCarteiraOP.Canvas.Brush.Color:= clYellow;
+      DBGridCarteiraOP.Font.Color:= clBlack;
+      DBGridCarteiraOP.Canvas.FillRect(Rect);
+      DBGridCarteiraOP.DefaultDrawColumnCell(Rect, DataCol,Column, State);
+    end
+    else if FrmDataModule.DataSourceCarteiraOP.DataSet.
+    FieldByName('TipoOperacao').AsString = 'CONF' then
+    begin
+      DBGridCarteiraOP.Canvas.Brush.Color:= clSkyBlue;
+      DBGridCarteiraOP.Font.Color:= clBlack;
+      DBGridCarteiraOP.Canvas.FillRect(Rect);
+      DBGridCarteiraOP.DefaultDrawColumnCell(Rect, DataCol,Column, State);
+    end
+    else if FrmDataModule.DataSourceCarteiraOP.DataSet.
+    FieldByName('TipoOperacao').AsString = 'CCTA' then
+    begin
+      DBGridCarteiraOP.Canvas.Brush.Color:= clSilver;
+      DBGridCarteiraOP.Font.Color:= clBlack;
+      DBGridCarteiraOP.Canvas.FillRect(Rect);
+      DBGridCarteiraOP.DefaultDrawColumnCell(Rect, DataCol,Column, State);
+    end;
+  end;
+end;
+
+procedure TFrmCarteiraTrabalho.DBGridCarteiraOPTitleClick(Column: TColumn);
+begin
+  FrmPrincipal.configurarFiltro(0,Column.FieldName,IntToStr(Column.Index),
+  Column.ReadOnly,actFiltroInserir,actGridASC,actGridDESC,actGridDESC);
+  //======================================================
+  FrmPrincipal.titleGrid(ColunasOP,'Memoria',FrmDataModule.ADOQueryCarteiraOP.SQL.Text);
+end;
+
+procedure TFrmCarteiraTrabalho.edtPlataformaKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+  if Key = #13 then
+    actProcurar.Execute;
+end;
+
+procedure TFrmCarteiraTrabalho.edtProcuraTextoLongoOMKeyPress(Sender: TObject;
+  var Key: Char);
+  var
+    SQLBase,SQLString,palavraBusca: String;
+begin
+  if (Key = #13) then
+  begin
+    if (edtProcuraTextoLongoOM.Text = '') then
+      actLimparFiltros.Execute
+    else
+    begin
+      SQLString:= '';
+      SQLString:= FrmPrincipal.palavraBusca(SQLString,'TextoLongoCarteira',
+      'Contem',edtProcuraTextoLongoOM.Text,'AND');
+      if SQLString <> '' then
+      begin
+        SQLString:= 'WHERE'+SQLString;
+      end;
+      SQLBase:= 'SELECT tblTextoLongoCarteira.* FROM tblTextoLongoCarteira '+
+      SQLString+';';
+      FrmPrincipal.ProcuraQuery(SQLBase,FrmDataModule.ADOQueryTemporarioDBMemoria,StatusBar1);
+      if not FrmDataModule.ADOQueryTemporarioDBMemoria.IsEmpty then
+      begin
+        PalavraBusca:= '';
+        FrmDataModule.ADOQueryTemporarioDBMemoria.First;
+        while not FrmDataModule.ADOQueryTemporarioDBMemoria.Eof do
+        begin
+          if PalavraBusca <> '' then
+          PalavraBusca:= PalavraBusca+';'+FrmDataModule.DataSourceTemporarioDBMemoria.
+          DataSet.FieldByName('OrdemManutencao').AsString
+        else
+          PalavraBusca:= FrmDataModule.DataSourceTemporarioDBMemoria.
+          DataSet.FieldByName('OrdemManutencao').AsString;
+          FrmDataModule.ADOQueryTemporarioDBMemoria.Next;
+        end;
+      end;
+      actLimparFiltros.Execute;
+      case RadioGroupVisualizar.ItemIndex of
+        0: FrmPrincipal.buscaFiledGrid1('OrdemManutencao',palavraBusca,'Exato',ColunasOM,4,false);
+        1: FrmPrincipal.buscaFiledGrid1('OrdemManutencao',palavraBusca,'Exato',ColunasOP,4,false);
+      end;
+      actProcurar.Execute;
+    end;
+  end;
+end;
+
+function TFrmCarteiraTrabalho.filtroStatus: String;
+  var
+    SQLString,DataProcuraIncio,DataProcuraFim: String;
+begin
+  DataProcuraIncio:= FrmPrincipal.corrigirData(DateBaseInicioPicker.Date);
+  DataProcuraFim:= FrmPrincipal.corrigirData(DateBaseFimPicker.Date);
+  SQLString:= '';
+  case RadioGroupVisualizar.ItemIndex of
+    0: SQLString:= frmPrincipal.SQLStringFiltroTabela(ColunasOM,false);
+    else SQLString:= frmPrincipal.SQLStringFiltroTabela(ColunasOP,false);
+  end;
+  if DateBaseInicioPicker.Checked then
+  begin
+    if (SQLString <> '') then
+      SQLString:= SQLString+'AND';
+    SQLString:= SQLString+'((DataBaseInicio >= #'+DataProcuraIncio+'#))';
+  end;
+  if DateBaseFimPicker.Checked then
+  begin
+    if (SQLString <> '') then
+      SQLString:= SQLString+'AND';
+    SQLString:= SQLString+'((DataBaseFim <= #'+DataProcuraFim+'#))';
+  end;
+  //teste de query
+  if (SQLString <> '')AND(RadioGroupVisualizar.ItemIndex = 1) then
+    SQLString:= ' WHERE '+SQLString
+  else if (SQLString <> '')AND(RadioGroupVisualizar.ItemIndex=0) then
+    SQLString:= ' HAVING '+SQLString;
+  Result:= SQLString;
+end;
+
+procedure TFrmCarteiraTrabalho.FormClose(Sender: TObject;
+  var Action: TCloseAction);
+begin
+  Action:= caFree;
+  FrmCarteiraTrabalho:=nil;
+end;
+
+procedure TFrmCarteiraTrabalho.FormCreate(Sender: TObject);
+begin
+  //======ADICIONAR TABSET DO FOMRMDI=======
+  FrmPrincipal.MDIChildCreated(self.Handle);
+  CreateDefaultRessources_ENG;
+  //Incicialização
+  FrmPrincipal.SetUpColunasLayout(DBGridCarteiraOP, ColunasOP);
+  FrmPrincipal.SetUpColunasLayout(DBGridCarteiraOM, ColunasOM);
+  //=======================================
+  FrmDataModule.ADOQueryPlataformaControle.Active:= false;
+  FrmDataModule.ADOQueryPlataformaControle.Active:= true;
+  DateBaseInicioPicker.DateTime:= StartOfTheYear(now);
+  DateBaseFimPicker.DateTime:= EndOfTheYear(now);
+  DateBaseFimPicker.Checked:= false;
+  DateBaseInicioPicker.Checked:= false;
+  //===============================================
+  if (FrmPrincipal.logPerfil = 'Administrador') then
+  begin
+    FrmPrincipal.PanelPrioridade1.Enabled:= true;
+    FrmPrincipal.btnConfigPadrao.Enabled:= true;
+  end
+  else if ((FrmPrincipal.logPerfil = 'PIOP')OR
+  (FrmPrincipal.logPerfil = 'SEG-PIOP')) then
+  begin
+    FrmPrincipal.PanelPrioridade1.Enabled:= false;
+    FrmPrincipal.btnConfigPadrao.Enabled:= false;
+  end
+  else
+  begin
+    FrmPrincipal.PanelPrioridade1.Enabled:= false;
+    FrmPrincipal.btnConfigPadrao.Enabled:= false;
+  end;
+  case RadioGroupVisualizar.ItemIndex of
+    0: //Ordem de Manutenção
+    begin
+      PanelTitulo.Caption:='Carteira de Trabalho [ORDEM DE MANUTENÇÃO]';
+    end;
+    else
+    begin
+      PanelTitulo.Caption:=
+      'Carteira de Trabalho [OPERAÇÕES] (SAP = Transação: IW37N, Variante: /COLIBRI)';
+    end;
+  end;
+  FrmPrincipal.CarregarRLColunas('Carteira_OM.txt',ColunasOM);
+  FrmPrincipal.CarregarRLColunas('Carteira_OP.txt',ColunasOP);
+  FrmPrincipal.CarregarColunasGRID(FrmDataModule.ADOConnectionMemoria,
+  'tblCarteiraTrabalho',DBGridCarteiraOM,ColunasOM);
+  FrmPrincipal.CarregarColunasGRID(FrmDataModule.ADOConnectionMemoria,
+  'tblCarteiraTrabalho',DBGridCarteiraOP,ColunasOP);
+  actProcurar.Execute;
+  FrmDataModule.ADOQueryConsultaPlataforma.Active:= false;
+  FrmDataModule.ADOQueryConsultaPlataforma.Active:= true;
+  PageControlPrincipal.TabIndex:=0;
+  PageControlFiltros.TabIndex:=0;
+  FrmPrincipal.carregarCheckListBox(FrmDataModule.ADOQueryPlataformaControle,
+  CheckListBoxPlataforma,'Plataforma');
+  FrmPrincipal.carregarCheckListBox(FrmDataModule.ADOQueryTipoEtapaServico_Carteira,
+  CheckListBoxTipoEtapaServico,'TipoEtapaServico');
+  case RadioGroupVisualizar.ItemIndex of
+    0:FrmPrincipal.carregarFiltroSistemaCheckList(CheckListBoxSistemaFiltro,DBGridCarteiraOM);
+    1: FrmPrincipal.carregarFiltroSistemaCheckList(CheckListBoxSistemaFiltro,DBGridCarteiraOP);
+  end;
+
+end;
+
+procedure TFrmCarteiraTrabalho.FormDestroy(Sender: TObject);
+begin
+  FrmPrincipal.MDIChildDestroyed(self.Handle);
+end;
+
+procedure TFrmCarteiraTrabalho.GanttChart1AfterBarAdd(Bar: TGanttBaseBar);
+begin
+ Bar.TextSettings.TextLeft := TextoBreveGantt;
+ if Bar.Row <> nil then
+    TGanttRow(Bar.Row).Cells[0].Text := TextoBreveGantt+
+    IntToStr(TGanttRow(Bar.Row).AbsoluteIndex);
+end;
+
+procedure TFrmCarteiraTrabalho.PanelTituloAjudaMouseDown(Sender: TObject;
+  Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
+begin
+  FrmPrincipal.Capturing := true;
+  FrmPrincipal.MouseDownSpot.X := X;
+  FrmPrincipal.MouseDownSpot.Y := Y;
+end;
+
+procedure TFrmCarteiraTrabalho.RLColunasAtivasRowMoved(Sender: TObject;
+  FromIndex, ToIndex: Integer);
+begin
+  actSalvarLayout.Execute;
+end;
+
+procedure TFrmCarteiraTrabalho.WMMDIACTIVATE(var msg: TWMMDIACTIVATE);
+var
+  active: TWinControl;
+  idx: Integer;
+begin
+  active := FindControl(msg.ActiveWnd) ;
+
+  if Assigned(active) then
+  begin
+    idx := FrmPrincipal.mdiChildrenTabs.Tabs.IndexOfObject(TObject(msg.ActiveWnd));
+    FrmPrincipal.mdiChildrenTabs.Tag := -1;
+    FrmPrincipal.mdiChildrenTabs.TabIndex := idx;
+    FrmPrincipal.mdiChildrenTabs.Tag := 0;
+  end;
+end;
+
+end.

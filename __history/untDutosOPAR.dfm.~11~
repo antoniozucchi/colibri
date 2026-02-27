@@ -1,0 +1,599 @@
+object FrmDutosOPAR: TFrmDutosOPAR
+  Left = 0
+  Top = 0
+  Caption = 'Lista de dutos do ATP-ALSM/OP-AR'
+  ClientHeight = 534
+  ClientWidth = 805
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  FormStyle = fsMDIChild
+  OldCreateOrder = False
+  Visible = True
+  WindowState = wsMaximized
+  OnClose = FormClose
+  OnCreate = FormCreate
+  OnDestroy = FormDestroy
+  PixelsPerInch = 96
+  TextHeight = 13
+  object PanelTitulo: TPanel
+    Left = 0
+    Top = 0
+    Width = 805
+    Height = 25
+    Align = alTop
+    Caption = 'Lista de dutos do ATP-ALSM/OP-AR'
+    Color = clGradientActiveCaption
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -13
+    Font.Name = 'Tahoma'
+    Font.Style = [fsBold]
+    ParentBackground = False
+    ParentFont = False
+    TabOrder = 0
+  end
+  object ToolBar1: TToolBar
+    Left = 0
+    Top = 25
+    Width = 805
+    Height = 29
+    Caption = 'ToolBar1'
+    DrawingStyle = dsGradient
+    EdgeBorders = [ebLeft, ebTop, ebRight, ebBottom]
+    Images = FrmPrincipal.ImageList1
+    TabOrder = 1
+    object DBNavigator1: TDBNavigator
+      Left = 0
+      Top = 0
+      Width = 138
+      Height = 22
+      DataSource = FrmDataModule.DataSourceDutosOPAR
+      VisibleButtons = [nbInsert, nbDelete, nbEdit, nbPost, nbCancel, nbRefresh]
+      Hints.Strings = (
+        'Primeiro'
+        'Anterior'
+        'Pr'#243'ximo'
+        #218'ltimo'
+        'Inserir'
+        'Excluir'
+        'Editar'
+        'Gravar'
+        'Cancelar'
+        'Atualizar'
+        'Aplicar atualiza'#231#245'es'
+        'Calcelar atualiza'#231#245'es')
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 0
+    end
+    object BitBtn2: TBitBtn
+      Left = 138
+      Top = 0
+      Width = 80
+      Height = 22
+      Action = actExcel
+      Align = alLeft
+      Caption = 'Exportar'
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 1
+    end
+    object BitBtn4: TBitBtn
+      Left = 218
+      Top = 0
+      Width = 64
+      Height = 22
+      Action = actLimparFiltros
+      Align = alLeft
+      Caption = 'Limpar'
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 2
+    end
+    object BitBtn1: TBitBtn
+      Left = 282
+      Top = 0
+      Width = 64
+      Height = 22
+      Action = actFiltrosTabela
+      Align = alLeft
+      Caption = 'Filtros'
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 3
+    end
+  end
+  object DBGridDutosOPAR: TDBGrid
+    Left = 0
+    Top = 54
+    Width = 805
+    Height = 461
+    Align = alClient
+    DataSource = FrmDataModule.DataSourceDutosOPAR
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Tahoma'
+    Font.Style = []
+    ParentFont = False
+    TabOrder = 2
+    TitleFont.Charset = DEFAULT_CHARSET
+    TitleFont.Color = clWindowText
+    TitleFont.Height = -11
+    TitleFont.Name = 'Tahoma'
+    TitleFont.Style = []
+    OnDrawColumnCell = DBGridDutosOPARDrawColumnCell
+    OnKeyDown = DBGridDutosOPARKeyDown
+    OnTitleClick = DBGridDutosOPARTitleClick
+    Columns = <
+      item
+        Alignment = taCenter
+        Expanded = False
+        FieldName = 'idDutosOPAR'
+        Title.Alignment = taCenter
+        Title.Caption = 'C'#243'digo'
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'X1'
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'Y1'
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'X2'
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'Y2'
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'Ligacao'
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'TipoDuto'
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'Funcao'
+        Title.Alignment = taCenter
+        Width = 120
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'TAG_DUTO'
+        Title.Alignment = taCenter
+        Title.Caption = 'TAG DUTO'
+        Width = 120
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'TAG_PSH'
+        Title.Alignment = taCenter
+        Title.Caption = 'TAG PSH'
+        Width = 120
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'Inst_Origem'
+        Title.Alignment = taCenter
+        Title.Caption = 'Inst.Origem'
+        Width = 120
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'Inst_Destino'
+        Title.Alignment = taCenter
+        Title.Caption = 'Inst.Destino'
+        Width = 120
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'Inst_Resp'
+        Title.Alignment = taCenter
+        Title.Caption = 'Inst.Resp'
+        Width = 120
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'Classe'
+        Title.Alignment = taCenter
+        Width = 120
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'AnoConstrucao'
+        Title.Alignment = taCenter
+        Title.Caption = 'Ano Constru'#231#227'o'
+        Width = 120
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'AnoEntradaOperacao'
+        Title.Alignment = taCenter
+        Title.Caption = 'Ano Entrada Opera'#231#227'o'
+        Width = 120
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'AtestadoDescomissionamento'
+        Title.Alignment = taCenter
+        Title.Caption = 'Atestado Descomissionamento'
+        Width = 120
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'CapacidadeNominal'
+        Title.Alignment = taCenter
+        Title.Caption = 'Capacidade Nominal'
+        Width = 120
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'CaracteristicaFluido'
+        Title.Alignment = taCenter
+        Title.Caption = 'Caracteristica Flu'#237'do'
+        Width = 120
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'Cenario'
+        Title.Alignment = taCenter
+        Title.Caption = 'Cen'#225'rio'
+        Width = 120
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'ClassePress'#227'o'
+        Title.Alignment = taCenter
+        Title.Caption = 'Classe Press'#227'o'
+        Width = 120
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'ClassificacaoDuto'
+        Title.Alignment = taCenter
+        Title.Caption = 'Classificac'#227'o Duto'
+        Width = 120
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'ClassificacaoSistema'
+        Title.Alignment = taCenter
+        Title.Caption = 'Classifica'#231#227'o Sistema'
+        Width = 120
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'CodigoDuto'
+        Title.Alignment = taCenter
+        Title.Caption = 'C'#243'digo Duto'
+        Width = 120
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'CodSIGM'
+        Title.Alignment = taCenter
+        Title.Caption = 'Cod. SIGM'
+        Width = 120
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'Comprimento'
+        Title.Alignment = taCenter
+        Width = 120
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'Configuracao'
+        Title.Alignment = taCenter
+        Title.Caption = 'Configura'#231#227'o'
+        Width = 120
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'Construtor'
+        Title.Alignment = taCenter
+        Width = 120
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'Desinvestimento'
+        Title.Alignment = taCenter
+        Width = 120
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'DiametroInterno'
+        Title.Alignment = taCenter
+        Width = 120
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'Espessura'
+        Title.Alignment = taCenter
+        Width = 120
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'Fluido'
+        Title.Alignment = taCenter
+        Width = 120
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'Inibidor'
+        Title.Alignment = taCenter
+        Width = 120
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'JustificativaPMO'
+        Title.Alignment = taCenter
+        Title.Caption = 'Justificativa PMO'
+        Width = 120
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'JustificativaPMOA'
+        Title.Alignment = taCenter
+        Title.Caption = 'Justificativa PMOA'
+        Width = 120
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'Material'
+        Title.Alignment = taCenter
+        Width = 120
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'MotivoNaoPigabilidadeInspe'#231#227'o'
+        Title.Alignment = taCenter
+        Title.Caption = 'Motivo N'#227'o Pigabilidade Inspe'#231#227'o'
+        Width = 120
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'MotivoNaoPigabilidadeLimpeza'
+        Title.Alignment = taCenter
+        Title.Caption = 'Motivo N'#227'o Pigabilidade Limpeza'
+        Width = 120
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'NormaProjeto'
+        Title.Alignment = taCenter
+        Title.Caption = 'Norma Projeto'
+        Width = 120
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'PDID'
+        Title.Alignment = taCenter
+        Width = 120
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'PigabilidadeInspecao'
+        Title.Alignment = taCenter
+        Title.Caption = 'Pigabilidade Inspe'#231#227'o'
+        Width = 120
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'PigabilidadeLimpeza'
+        Title.Alignment = taCenter
+        Title.Caption = 'Pigabilidade Limpeza'
+        Width = 120
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'PMO'
+        Title.Alignment = taCenter
+        Width = 120
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'PMOA'
+        Title.Alignment = taCenter
+        Width = 120
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'Relatorios'
+        Title.Alignment = taCenter
+        Width = 120
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'RotinaPiglimpeza'
+        Title.Alignment = taCenter
+        Title.Caption = 'Rotina Pig Limpeza'
+        Width = 120
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'RotinaPiglimpeza'
+        Title.Alignment = taCenter
+        Title.Caption = 'Rotina Pig Limpeza'
+        Width = 120
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'RTDT'
+        Title.Alignment = taCenter
+        Width = 120
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'SGSS'
+        Title.Alignment = taCenter
+        Width = 120
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'Situacao'
+        Title.Alignment = taCenter
+        Width = 120
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'SPIE'
+        Title.Alignment = taCenter
+        Width = 120
+        Visible = True
+      end>
+  end
+  object ColunasLayout: TStringGrid
+    Left = 96
+    Top = 112
+    Width = 89
+    Height = 97
+    FixedCols = 0
+    Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goDrawFocusSelected, goRowSizing, goColSizing, goEditing]
+    TabOrder = 3
+    Visible = False
+    RowHeights = (
+      24
+      24
+      21
+      24
+      24)
+  end
+  object StatusBar1: TStatusBar
+    Left = 0
+    Top = 515
+    Width = 805
+    Height = 19
+    Panels = <
+      item
+        Width = 50
+      end
+      item
+        Width = 50
+      end
+      item
+        Width = 50
+      end
+      item
+        Width = 50
+      end
+      item
+        Width = 50
+      end>
+  end
+  object ActionManager1: TActionManager
+    Images = FrmPrincipal.ImageList1
+    Left = 344
+    Top = 176
+    StyleName = 'Platform Default'
+    object actProcurar: TAction
+      Caption = 'actProcurar'
+      OnExecute = actProcurarExecute
+    end
+    object actExcel: TAction
+      Caption = 'Exportar'
+      Hint = 'Exportar para o Excel'
+      ImageIndex = 54
+      OnExecute = actExcelExecute
+    end
+    object actFiltroInserir: TAction
+      Category = 'Tabela'
+      Caption = 'Inserir'
+      OnExecute = actFiltroInserirExecute
+    end
+    object actGridASC: TAction
+      Category = 'Tabela'
+      Caption = 'actGridASC'
+      OnExecute = actGridASCExecute
+    end
+    object actGridDESC: TAction
+      Category = 'Tabela'
+      Caption = 'actGridDESC'
+      OnExecute = actGridDESCExecute
+    end
+    object actSubstituirPor: TAction
+      Category = 'Tabela'
+      Caption = 'actSubstituirPor'
+      OnExecute = actSubstituirPorExecute
+    end
+    object actLimparFiltros: TAction
+      Category = 'Tabela'
+      Caption = 'Limpar'
+      Hint = 'Limpar Filtros'
+      ImageIndex = 469
+      OnExecute = actLimparFiltrosExecute
+    end
+    object actFiltrosTabela: TAction
+      Category = 'Tabela'
+      Caption = 'Filtros'
+      Hint = 'Visualizar tabela de filtros'
+      ImageIndex = 470
+      OnExecute = actFiltrosTabelaExecute
+    end
+    object actProcuraFiltrosTabela: TAction
+      Category = 'Tabela'
+      Caption = 'actProcuraFiltrosTabela'
+      OnExecute = actProcuraFiltrosTabelaExecute
+    end
+  end
+end

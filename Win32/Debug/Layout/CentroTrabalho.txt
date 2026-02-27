@@ -1,0 +1,14 @@
+TAB1;Centro de Trabalho
+TAB1;Grp.Plnj.PM
+TAB1;Denominação Breve
+TAB1;Tipo de  Etapa de Serviço
+TAB1;Grau Utilização (%)
+TAB1;N° Capac. Indivi. (Pessoas)
+TAB1;Tempo/Dia (Horas)
+TAB1;Total HH/dia Disponível
+TAB1;Chave Controle
+TAB1;Tipo Atv. Pessoal
+TAB1;Avaliado Por
+TAB1;Data Atualização
+TAB1;Computador
+TAB1;Código Tipo de Etapa de Servico

@@ -1,0 +1,1312 @@
+unit untFrmPreview;
+
+{$I DELPHIAREA.INC}
+
+interface
+
+uses
+  Windows, Messages, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, ExtCtrls, Tabs, ComCtrls, Menus, ToolWin,
+  Vcl.ImgList, ExtDlgs, Preview, Vcl.ActnList,
+  Vcl.PlatformDefaultStyleActnCtrls, Vcl.ActnMan, Vcl.TabNotBk, Vcl.Buttons,
+  Vcl.DBCtrls, Vcl.Mask, Data.DB, Data.Win.ADODB, Vcl.Grids, Vcl.DBGrids,
+  System.Actions,SysUtils,SDL_rchart, Vcl.Imaging.jpeg, System.ImageList,
+  VclTee.TeeGDIPlus, VCLTee.TeEngine, VCLTee.TeeProcs, VCLTee.Chart, SDL_NumLab,
+  SDL_NumIO;
+  //{$IFDEF COMPILER4_UP} Vcl.ImgList, {$ENDIF} Preview
+
+type
+  TFrmPreview = class(TForm)
+    PrinterSetupDialog: TPrinterSetupDialog;
+    OpenDialog: TOpenDialog;
+    SaveDialog: TSaveDialog;
+    GrayscaleOptionsPanel: TPanel;
+    Bevel3: TBevel;
+    Label4: TLabel;
+    Contrast: TTrackBar;
+    Brightness: TTrackBar;
+    Label5: TLabel;
+    btnGrayReset: TButton;
+    ThumbViewerPopupMenu: TPopupMenu;
+    PagePopupMenu: TPopupMenu;
+    DeleteCurrent: TMenuItem;
+    ReduceThumbnailSizeMenuItem: TMenuItem;
+    EnlargeThumbnailSizeMenuItem: TMenuItem;
+    N3: TMenuItem;
+    MoveCurrentUpMenuItem: TMenuItem;
+    MoveCurrentDownMenuItem: TMenuItem;
+    N4: TMenuItem;
+    MoveCurrentFirstMenuItem: TMenuItem;
+    MoveCurrentLastMenuItem: TMenuItem;
+    DeleteAllMenuItem: TMenuItem;
+    N5: TMenuItem;
+    HotTrackMenuItem: TMenuItem;
+    MultiSelectMenuItem: TMenuItem;
+    N6: TMenuItem;
+    ArrangeLeftMenuItem: TMenuItem;
+    ArrangeTopMenuItem: TMenuItem;
+    ToolBar: TToolBar;
+    btnOpen: TToolButton;
+    btnSave: TToolButton;
+    btnPrint: TToolButton;
+    btnZoomOut: TToolButton;
+    btnZoom: TToolButton;
+    btnZoomIn: TToolButton;
+    btnPageSetup: TToolButton;
+    ImageList: TImageList;
+    ZoomPopupMenu: TPopupMenu;
+    btnGrayscale: TToolButton;
+    btnFirstPage: TToolButton;
+    btnPriorPage: TToolButton;
+    btnNextPage: TToolButton;
+    btnLastPage: TToolButton;
+    ZoomActualSize: TMenuItem;
+    ZoomPageWidth: TMenuItem;
+    ZoomPageHeight: TMenuItem;
+    ZoomWholePage: TMenuItem;
+    StatusBar: TStatusBar;
+    Bevel1: TBevel;
+    Grayscale1: TMenuItem;
+    ThumbGrayPreview: TMenuItem;
+    ThumbGrayNever: TMenuItem;
+    ThumbGrayAlways: TMenuItem;
+    PreviewPopupMenu: TPopupMenu;
+    Clear1: TMenuItem;
+    ExportCurrent: TMenuItem;
+    N7: TMenuItem;
+    CopyCurrent: TMenuItem;
+    SavePictureDialog: TSavePictureDialog;
+    ActionManager1: TActionManager;
+    edtPage: TEdit;
+    PanelTitulo: TPanel;
+    actPrintMapaRotas: TAction;
+    btnPageNumber: TToolButton;
+    actPrintPageRelatorio: TAction;
+    btnExcluirAntes: TToolButton;
+    Splitter: TSplitter;
+    ThumbnailPreview: TThumbnailPreview;
+    actPrintConsultaExecutante: TAction;
+    actPrintMapaPlataforma: TAction;
+    PageSetupDialog: TPageSetupDialog;
+    actProgramacaoEmbarcacao: TAction;
+    actPainelEquipamentos: TAction;
+    actPrintExtrato: TAction;
+    actPrintSIGM: TAction;
+    PrintPreview: TPrintPreview;
+    Panel2: TPanel;
+    ImageLogo: TImage;
+    RadioGroupRelatorio: TRadioGroup;
+    ToolBar1: TToolBar;
+    edtFontTitulo1: TNumIO2;
+    edtFontTitulo3: TNumIO2;
+    edtFontTitulo2: TNumIO2;
+    ToolButton1: TToolButton;
+    actGeneratePage: TAction;
+    procedure FormCreate(Sender: TObject);
+    procedure FormActivate(Sender: TObject);
+    procedure btnPrintClick(Sender: TObject);
+    procedure btnSaveClick(Sender: TObject);
+    procedure btnOpenClick(Sender: TObject);
+    procedure PrintPreviewChange(Sender: TObject);
+    procedure PrintPreviewProgress(Sender: TObject; Done, Total: Integer);
+    procedure PrintPreviewNewPage(Sender: TObject);
+    procedure PrintPreviewZoomChange(Sender: TObject);
+    procedure btnGrayscaleClick(Sender: TObject);
+    procedure ContrastChange(Sender: TObject);
+    procedure BrightnessChange(Sender: TObject);
+    procedure btnGrayResetClick(Sender: TObject);
+    procedure DeleteCurrentClick(Sender: TObject);
+    procedure ReduceThumbnailSizeMenuItemClick(Sender: TObject);
+    procedure EnlargeThumbnailSizeMenuItemClick(Sender: TObject);
+    procedure MoveCurrentUpMenuItemClick(Sender: TObject);
+    procedure MoveCurrentDownMenuItemClick(Sender: TObject);
+    procedure MoveCurrentFirstMenuItemClick(Sender: TObject);
+    procedure MoveCurrentLastMenuItemClick(Sender: TObject);
+    procedure PagePopupMenuPopup(Sender: TObject);
+    procedure PrintPreviewStateChange(Sender: TObject);
+    procedure DeleteAllMenuItemClick(Sender: TObject);
+    procedure ThumbViewerPopupMenuPopup(Sender: TObject);
+    procedure HotTrackMenuItemClick(Sender: TObject);
+    procedure MultiSelectMenuItemClick(Sender: TObject);
+    procedure ArrangeLeftMenuItemClick(Sender: TObject);
+    procedure ArrangeTopMenuItemClick(Sender: TObject);
+    procedure btnPageSetupClick(Sender: TObject);
+    procedure btnZoomOutClick(Sender: TObject);
+    procedure btnZoomInClick(Sender: TObject);
+    procedure btnZoomClick(Sender: TObject);
+    procedure btnFirstPageClick(Sender: TObject);
+    procedure btnPriorPageClick(Sender: TObject);
+    procedure btnNextPageClick(Sender: TObject);
+    procedure btnLastPageClick(Sender: TObject);
+    procedure ZoomActualSizeClick(Sender: TObject);
+    procedure ZoomPageWidthClick(Sender: TObject);
+    procedure ZoomPageHeightClick(Sender: TObject);
+    procedure ZoomWholePageClick(Sender: TObject);
+    procedure ThumbGrayNeverClick(Sender: TObject);
+    procedure ThumbGrayAlwaysClick(Sender: TObject);
+    procedure ThumbGrayPreviewClick(Sender: TObject);
+    procedure ExportCurrentClick(Sender: TObject);
+    procedure CopyCurrentClick(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure FormDestroy(Sender: TObject);
+    procedure actEstaqueamentoRelatorioExecute(Sender: TObject);
+    procedure actPrintMapaRotasExecute(Sender: TObject);
+    procedure btnPageNumberClick(Sender: TObject);
+    procedure actPrintPageRelatorioExecute(Sender: TObject);
+    procedure actPrintConsultaExecutanteExecute(Sender: TObject);
+    procedure actPrintMapaPlataformaExecute(Sender: TObject);
+    procedure actProgramacaoEmbarcacaoExecute(Sender: TObject);
+    procedure actPainelEquipamentosExecute(Sender: TObject);
+    procedure actPrintExtratoExecute(Sender: TObject);
+    procedure actPrintSIGMExecute(Sender: TObject);
+    procedure actGeneratePageExecute(Sender: TObject);
+    procedure edtFontTitulo1KeyPress(Sender: TObject; var Key: Char);
+  private
+    PageBoundsAfterMargin: TRect;
+    procedure WMMDIACTIVATE(var msg : TWMMDIACTIVATE);message WM_MDIACTIVATE;
+    //===========FONTES=================
+    procedure fontNormal(fonte: Integer);
+    procedure fontTitulo2(fonte: Integer);
+    //===========LINHAS=================
+    procedure linhaSolida(espessura: Integer; linhaCor: TColor);
+    //===========TABELAS==================
+    procedure celula(XCelula,YCelula,largura,altura,fonte,alinhamento: Integer;
+    Texto: String; CelulaColor: TColor);
+
+    procedure tabelaStrGrid(Grid: TStringGrid;
+    XTabela, YTabela, fonte, alturaLinha,alinhamento: Integer);
+    //===========GRÁFICOS==================
+    procedure graficoTChart(grafico: TChart;graficoHeight,graficoWidth,posYgrafico: Integer);
+    procedure graticoTRChartCentral(grafico: TRChart; graficoHeight,posYgrafico: Integer);
+
+  public
+    ListaTituloRelatorio1: TStringList;
+    procedure GeneratePages;
+    procedure paginaRChart(grafico: TRChart; booleanClear: Boolean);
+    procedure paginaTChart(grafico: TChart; booleanClear: Boolean);
+    procedure tabelaStringGrid(Grid: TStringGrid;
+    XTabela, YTabela, fonte, alturaLinha,alinhamento: Integer);
+
+  end;
+
+var
+  FrmPreview: TFrmPreview;
+  M_Resultados: array of array of String;
+  FonteTitulo1,FonteTitulo2,FonteTitulo3: Integer;
+  Abertura: boolean;
+  //RECT
+  Pagina,Cabecalho: TRect;
+                                    
+implementation
+uses
+  untDataModule,{$IFDEF COMPILER7_UP} XPMan, {$ENDIF} Math, Printers,
+  Clipbrd,untPrincipal,untGerenciarEmbarcacoes,untConsultaExecutantesProgramados,
+  untPlataforma,untProgramacaoEmbarcacao,untPainelEquipamentos,
+  untCondicaoOperacional;
+
+  {$R *.DFM}
+
+procedure TFrmPreview.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+  Action:= caFree;
+  FrmPreview:=nil;
+end;
+
+procedure TFrmPreview.FormCreate(Sender: TObject);
+begin
+  //======ADICIONAR TABSET DO FOMRMDI=======
+  FrmPrincipal.MDIChildCreated(self.Handle);
+  //========================================
+  PrintPreview.Zoom := 100;
+  PrintPreview.Grayscale := [];
+  {$IFDEF COMPILER7_UP}
+  PrintPreview.Orientation:= poLandscape;
+  PrintPreview.SetPageSetupParameters(PageSetupDialog);
+
+  {$ENDIF}
+  Brightness.Position := PrintPreview.GrayBrightness;
+  Contrast.Position := PrintPreview.GrayContrast;
+  Abertura:= true;
+end;
+
+procedure TFrmPreview.FormDestroy(Sender: TObject);
+begin
+  FrmPrincipal.MDIChildDestroyed(self.Handle);
+end;
+
+procedure TFrmPreview.GeneratePages;
+begin
+  with PrintPreview do
+  begin
+    {if Abertura then
+    begin
+      PageBoundsAfterMargin := PageBounds;
+      with PointFrom(mmLoMetric, 100, 100) do
+        InflateRect(PageBoundsAfterMargin, -X, -Y);
+
+      //Abertura:= true;
+    end
+    else
+    begin
+      //{$IFDEF COMPILER7_UP}
+       // PageBoundsAfterMargin := GetPageSetupParameters(PageSetupDialog);
+      //{$ELSE}
+       // PageBoundsAfterMargin := PageBounds;
+       // with PointFrom(mmLoMetric, 100, 100) do
+       //   InflateRect(PageBoundsAfterMargin, -X, -Y);
+      //{$ENDIF}
+    //end;}
+    PageBoundsAfterMargin := PageBounds;
+    with PointFrom(mmLoMetric, 100, 100) do
+      InflateRect(PageBoundsAfterMargin, -X, -Y);
+    //======================================================================
+    BeginDoc(btnExcluirAntes.Down);
+    try
+    begin
+      case RadioGroupRelatorio.ItemIndex of
+        0: actPrintMapaRotas.Execute;
+        1: actPrintPageRelatorio.Execute;
+        2: actPrintConsultaExecutante.Execute;
+        3: actPrintMapaPlataforma.Execute;
+        5: actProgramacaoEmbarcacao.Execute;
+        6: actPainelEquipamentos.Execute;
+        7: actPrintExtrato.Execute;
+        8: actPrintSIGM.Execute;
+      end;
+    end;
+    finally
+      EndDoc;
+    end;
+  end;
+end;
+
+procedure TFrmPreview.graficoTChart(grafico: TChart; graficoHeight,
+  graficoWidth, posYgrafico: Integer);
+  var
+    graficoRect: TRect;
+    graficoImage: TMetaFile;
+begin
+  with PrintPreview do
+  begin
+    try
+      //GRÁFICO PROVA DE CARGA
+      SetRect(graficoRect,
+      Cabecalho.Left,
+      posYgrafico,
+      Cabecalho.Right,
+      YFrom(mmLoMetric, 1600)+posYgrafico);
+      //CARREGAR IMAGEM
+      graficoImage := grafico.TeeCreateMetafile
+      (False, Rect(0, 0,
+      graficoWidth,
+      graficoHeight));
+      //IMPRIMIR IMAGEM
+      PaintGraphicEx(graficoRect, graficoImage, true, true, true);
+    except
+      MessageBox(0, 'Não foi possivel imprimir o gráfico!',
+      'Impressão de relatórios', MB_ICONERROR);
+    end;
+  end;
+end;
+
+procedure TFrmPreview.graticoTRChartCentral(grafico: TRChart; graficoHeight,
+  posYgrafico: Integer);
+  var
+    graficoRect: TRect;
+    graficoImage: TMetaFile;
+    GRFWindColor: TColor;
+begin
+  with PrintPreview do
+  begin
+    try
+      GRFWindColor:= grafico.WindColor;
+      grafico.WindColor:= clWhite;
+      //GRÁFICO PROVA DE CARGA
+      SetRect(graficoRect,
+      Cabecalho.Left,
+      posYgrafico,
+      Cabecalho.Right,
+      graficoHeight+ posYgrafico);
+      //CARREGAR IMAGEM
+      grafico.CopyToClipboardWMF(false);
+      graficoImage:= TMetafile.Create;
+      graficoImage.Assign(ClipBoard);
+      //IMPRIMIR IMAGEM
+      PaintGraphicEx(graficoRect, graficoImage, true, true, true);
+      //
+      grafico.WindColor:= GRFWindColor;
+    except
+      MessageBox(0, 'Não foi possivel imprimir o gráfico!',
+      'Impressão de relatórios', MB_ICONERROR);
+    end;
+  end;
+end;
+
+procedure TFrmPreview.FormActivate(Sender: TObject);
+begin
+  Update;
+end;
+
+procedure TFrmPreview.btnPageNumberClick(Sender: TObject);
+begin
+  GeneratePages;
+end;
+
+procedure TFrmPreview.btnPageSetupClick(Sender: TObject);
+begin
+  {$IFDEF COMPILER7_UP}
+  PageSetupDialog.MarginLeft:= 1000;
+  PageSetupDialog.MarginTop:= 1000;
+  PageSetupDialog.MarginRight:= 1000;
+  PageSetupDialog.MarginBottom:= 1000;
+  if PageSetupDialog.Execute then
+  begin
+    GeneratePages;
+  end;
+  {$ENDIF}
+end;
+
+procedure TFrmPreview.btnPrintClick(Sender: TObject);
+begin
+  PrintPreview.SetPrinterOptions;
+  if PrinterSetupDialog.Execute then
+    PrintPreview.Print;
+end;
+
+procedure TFrmPreview.btnFirstPageClick(Sender: TObject);
+begin
+  PrintPreview.CurrentPage := 1;
+end;
+
+procedure TFrmPreview.btnPriorPageClick(Sender: TObject);
+begin
+  with PrintPreview do CurrentPage := CurrentPage - 1;
+end;
+
+procedure TFrmPreview.btnNextPageClick(Sender: TObject);
+begin
+  with PrintPreview do CurrentPage := CurrentPage + 1;
+end;
+
+procedure TFrmPreview.btnLastPageClick(Sender: TObject);
+begin
+  with PrintPreview do CurrentPage := TotalPages;
+end;
+
+procedure TFrmPreview.btnSaveClick(Sender: TObject);
+begin
+  SaveDialog.FileName:= PrintPreview.PrintJobTitle;
+  if SaveDialog.Execute then
+    PrintPreview.SaveToFile(SaveDialog.FileName);
+end;
+
+procedure TFrmPreview.btnZoomClick(Sender: TObject);
+begin
+  case PrintPreview.ZoomState of
+    zsZoomOther:
+      if PrintPreview.Zoom = 100 then
+        PrintPreview.ZoomState := zsZoomToWidth
+      else
+        PrintPreview.Zoom := 100;
+    zsZoomToWidth:
+      PrintPreview.ZoomState := zsZoomToHeight;
+    zsZoomToHeight:
+      PrintPreview.ZoomState := zsZoomToFit;
+    zsZoomToFit:
+      PrintPreview.Zoom := 100;
+  end;
+end;
+
+procedure TFrmPreview.btnZoomInClick(Sender: TObject);
+begin
+  with PrintPreview do Zoom := Zoom + ZoomStep;
+end;
+
+procedure TFrmPreview.btnZoomOutClick(Sender: TObject);
+begin
+  with PrintPreview do Zoom := Zoom - ZoomStep;
+end;
+
+procedure TFrmPreview.celula(XCelula,YCelula,largura,altura,fonte,alinhamento: Integer;
+  Texto: String; CelulaColor: TColor);
+  var
+  TextoSizeX,TextoSizeY,XFont,YFont: Integer;
+begin
+  with PrintPreview do
+  begin
+    linhaSolida(1,clBlack);
+    fontNormal(fonte);
+    Canvas.Brush.Color:= CelulaColor;
+    Canvas.Brush.Style:= bsSolid;
+    Canvas.Rectangle(XCelula,YCelula,XCelula+largura,YCelula+altura);
+    TextoSizeX:=Canvas.TextWidth(Texto);
+    TextoSizeY:=Canvas.TextHeight(Texto);
+    {for i := 0 to fonte - 1 do
+    begin
+      if  (TextoSizeX + XFrom(mmLoMetric, 10)) >= largura then
+      begin
+        menorFonte:= fonte-i;
+        Canvas.Font.Size:= menorFonte;
+        TextoSizeX:=Canvas.TextWidth(Texto);
+        TextoSizeY:=Canvas.TextHeight(Texto);
+      end;
+      if  (TextoSizeY + XFrom(mmLoMetric, 8)) >= altura then
+      begin
+        menorFonte:= fonte-i;
+        Canvas.Font.Size:= menorFonte;
+        TextoSizeX:=Canvas.TextWidth(Texto);
+        TextoSizeY:=Canvas.TextHeight(Texto);
+      end;
+    end;}
+    XFont:= TRUNC(XCelula+(largura-TextoSizeX)/2);
+    YFont:= TRUNC(YCelula+(altura-TextoSizeY)/2);
+    case alinhamento of
+      0://Centralizado
+      begin
+        XFont:= TRUNC(XCelula+(largura-TextoSizeX)/2);
+        YFont:= TRUNC(YCelula+(altura-TextoSizeY)/2);
+      end;
+      1://Esquerda
+      begin
+        XFont:= XCelula+ XFrom(mmLoMetric, 8);
+        YFont:= YCelula+ YFrom(mmLoMetric, 8);
+      end;
+    end;
+    Canvas.TextOut(XFont,YFont,Texto);
+  end;
+end;
+
+procedure TFrmPreview.btnOpenClick(Sender: TObject);
+begin
+  OpenDialog.FileName:= PrintPreview.PrintJobTitle;
+  if OpenDialog.Execute then
+    PrintPreview.LoadFromFile(OpenDialog.FileName);
+end;
+
+procedure TFrmPreview.btnGrayscaleClick(Sender: TObject);
+begin
+  if PrintPreview.Grayscale = [] then
+  begin
+    btnGrayscale.ImageIndex := 22;
+    GrayscaleOptionsPanel.Visible := True;
+    PrintPreview.Grayscale := [gsPreview, gsPrint]
+  end
+  else
+  begin
+    btnGrayscale.ImageIndex := 23;
+    GrayscaleOptionsPanel.Visible := False;
+    PrintPreview.Grayscale := [];
+  end;
+end;
+
+procedure TFrmPreview.ContrastChange(Sender: TObject);
+begin
+  PrintPreview.GrayContrast := Contrast.Position;
+end;
+
+procedure TFrmPreview.BrightnessChange(Sender: TObject);
+begin
+  PrintPreview.GrayBrightness := Brightness.Position;
+end;
+
+procedure TFrmPreview.btnGrayResetClick(Sender: TObject);
+begin
+  Brightness.Position := 0;
+  Contrast.Position := 0;
+end;
+
+// PrintPreview event handlers start here
+
+procedure TFrmPreview.PrintPreviewStateChange(Sender: TObject);
+begin
+  if PrintPreview.State = psReady then
+  begin
+    Screen.Cursor := crDefault;
+    btnOpen.Enabled := True;
+    btnSave.Enabled := (PrintPreview.TotalPages > 0);
+    btnPrint.Enabled := PrintPreview.PrinterInstalled and (PrintPreview.TotalPages > 0);
+    btnPageSetup.Enabled := {$IFDEF COMPILER7_UP} True {$ELSE} False {$ENDIF};
+    StatusBar.Panels[0].Text := Format('Página %d de %d',
+      [PrintPreview.CurrentPage, PrintPreview.TotalPages]);
+    edtPage.Text:= Format('Página %d de %d',
+      [PrintPreview.CurrentPage, PrintPreview.TotalPages]);
+    StatusBar.Panels[5].Text := '';
+    StatusBar.Panels[6].Text := '';
+  end
+  else if not (PrintPreview.State in [psInserting, psEditing, psReplacing]) then
+  begin
+    if PrintPreview.State = psCreating then
+      Screen.Cursor := crAppStart
+    else
+      Screen.Cursor := crHourGlass;
+    btnOpen.Enabled := False;
+    btnSave.Enabled := False;
+    btnPrint.Enabled := False;
+    btnPageSetup.Enabled := False;
+    PrintPreview.Units:= mmHiMetric;
+    case PrintPreview.State of
+      psCreating:
+      begin
+        StatusBar.Panels[2].Text := PrintPreview.FormName;
+        if PrintPreview.IsPaperRotated then
+          StatusBar.Panels[3].Text := 'Paisagem'
+        else
+          StatusBar.Panels[3].Text := 'Retrato';
+        case PrintPreview.Units of
+          mmPixel:
+            StatusBar.Panels[4].Text := 'Pixels';
+          mmLoMetric:
+            StatusBar.Panels[4].Text := '1/10 mm';
+          mmHiMetric:
+            StatusBar.Panels[4].Text := '1/100 mm';
+          mmLoEnglish:
+            StatusBar.Panels[4].Text := '1/100"';
+          mmHiEnglish:
+            StatusBar.Panels[4].Text := '1/1000"';
+          mmTWIPS:
+            StatusBar.Panels[4].Text := 'TWIPS (1/1440")';
+          mmPoints:
+            StatusBar.Panels[4].Text := 'Points (1/72")';
+        end;
+        StatusBar.Panels[6].Text := 'Criando páginas...';
+      end;
+      psLoading:
+        StatusBar.Panels[6].Text := 'Carregando páginas do arquivo...';
+      psSaving:
+        StatusBar.Panels[6].Text := 'Salvando páginas para arquivo...';
+      psPrinting:
+        StatusBar.Panels[6].Text := 'Imprimindo páginas...';
+    end;
+  end;
+  Update;
+end;
+
+procedure TFrmPreview.PrintPreviewChange(Sender: TObject);
+begin
+  StatusBar.Panels[0].Text := Format('Página %d de %d',
+    [PrintPreview.CurrentPage, PrintPreview.TotalPages]);
+  edtPage.Text:= Format('Página %d de %d',
+      [PrintPreview.CurrentPage, PrintPreview.TotalPages]);
+  btnFirstPage.Enabled := (PrintPreview.CurrentPage > 1);
+  btnPriorPage.Enabled := (PrintPreview.CurrentPage > 1);
+  btnNextPage.Enabled := (PrintPreview.CurrentPage < PrintPreview.TotalPages);
+  btnLastPage.Enabled := (PrintPreview.CurrentPage < PrintPreview.TotalPages);
+  if PrintPreview.State in [psCreating, psInserting] then
+  begin
+    // allow user to navigate generated pages while other pages are stil in progress to generate
+    Application.ProcessMessages;
+  end;
+end;
+
+procedure TFrmPreview.PrintPreviewZoomChange(Sender: TObject);
+begin
+  StatusBar.Panels[1].Text := Format('%%%d', [PrintPreview.Zoom]);
+  btnZoomOut.Enabled := (PrintPreview.Zoom > PrintPreview.ZoomMin);
+  btnZoomIn.Enabled := (PrintPreview.Zoom < PrintPreview.ZoomMax);
+  case PrintPreview.ZoomState of
+    zsZoomToWidth:
+    begin
+      ZoomPageWidth.Checked := True;
+      btnZoom.ImageIndex := ZoomPageHeight.ImageIndex;
+      btnZoom.Hint := 'Zoom para altura da página';
+    end;
+    zsZoomToHeight:
+    begin
+      ZoomPageHeight.Checked := True;
+      btnZoom.ImageIndex := ZoomWholePage.ImageIndex;
+      btnZoom.Hint := 'Zoom para página inteira';
+    end;
+    zsZoomToFit:
+    begin
+      ZoomWholePage.Checked := True;
+      btnZoom.ImageIndex := ZoomActualSize.ImageIndex;
+      btnZoom.Hint := 'Zoom para o tamanho atual';
+    end;
+  else
+    if PrintPreview.Zoom = 100 then
+    begin
+      ZoomActualSize.Checked := True;
+      btnZoom.ImageIndex := ZoomPageWidth.ImageIndex;
+      btnZoom.Hint := 'Zoom para largura da página';
+    end
+    else
+    begin
+      ZoomActualSize.Checked := False;
+      ZoomPageWidth.Checked := False;
+      ZoomPageHeight.Checked := False;
+      ZoomWholePage.Checked := False;
+      btnZoom.ImageIndex := ZoomActualSize.ImageIndex;
+      btnZoom.Hint := 'Zoom para o tamanho atual';
+    end;
+  end;
+end;
+
+procedure TFrmPreview.PrintPreviewProgress(Sender: TObject;
+  Done, Total: Integer);
+begin
+  StatusBar.Panels[5].Text := FormatFloat('#,##0.0%', Done / Total * 100);
+  StatusBar.Update;
+end;
+
+procedure TFrmPreview.PrintPreviewNewPage(Sender: TObject);
+  var
+    MaxSize: TSize;
+    rectLogoTipo: TRect;
+    posX,posY,SizeTexto,NumLinhas: Integer;
+    Texto: String;
+begin
+  with PrintPreview do
+  begin
+    linhaSolida(3,clBlack);
+    // We are going to draw a rectangle on the page to distinguish the page's
+    // margin. The margin is already calculated in the GeneratePages function.
+    with PageBoundsAfterMargin do
+    begin
+      Pagina := PageBoundsAfterMargin;
+      //LINHAS DE DIVISÃO DO RELATÓRIO
+      SetRect(Cabecalho,Pagina.Left,Pagina.Top,Pagina.Right,Pagina.Top+YFrom(mmLoMetric, 200));
+      //LOGOTIPO NO CABEÇALHO
+      SetRect(rectLogoTipo,Pagina.Left+ XFrom(mmLoMetric, 20),Pagina.Top,
+      Pagina.Left + XFrom(mmLoMetric, 250),Pagina.Top +YFrom(mmLoMetric, 200));
+      //Retangulo do cabeçalho
+      Canvas.Rectangle(
+      Cabecalho.Left,
+      Cabecalho.Top,
+      Cabecalho.Right,
+      Cabecalho.Bottom);
+      Canvas.MoveTo(rectLogoTipo.Right+ XFrom(mmLoMetric, 20),Cabecalho.Top);
+      Canvas.LineTo(rectLogoTipo.Right+ XFrom(mmLoMetric, 20),Pagina.Top+YFrom(mmLoMetric, 195));
+      //LogoTipo do cabeçalho
+      PaintGraphicEx(rectLogoTipo, ImageLogo.Picture.Graphic, True, True, True);
+      //=====================CABEÇALHO========================
+      NumLinhas:= ListaTituloRelatorio1.Count;
+      case NumLinhas of
+        1:
+        begin
+          fontTitulo2(TRUNC(edtFontTitulo1.Value));
+          Texto:= ListaTituloRelatorio1[0];
+          SizeTexto:= PrintPreview.Canvas.TextWidth(Texto);
+          posX:= ROUND(((Pagina.Right-
+          (rectLogoTipo.Right+ XFrom(mmLoMetric, 20))-SizeTexto)/2)+
+          (rectLogoTipo.Right+ XFrom(mmLoMetric, 20)));
+          posY:= Cabecalho.Top + YFrom(mmLoMetric, 90);
+          Canvas.TextOut(posX,posY,Texto);
+          edtFontTitulo1.Visible:= true;
+          edtFontTitulo2.Visible:= false;
+          edtFontTitulo3.Visible:= false;
+        end;
+        2:
+        begin
+          fontTitulo2(TRUNC(edtFontTitulo1.Value));
+          Texto:= ListaTituloRelatorio1[0];
+          SizeTexto:= PrintPreview.Canvas.TextWidth(Texto);
+          posX:= ROUND(((Pagina.Right-
+          (rectLogoTipo.Right+ XFrom(mmLoMetric, 20))-SizeTexto)/2)+
+          (rectLogoTipo.Right+ XFrom(mmLoMetric, 20)));
+          posY:= Cabecalho.Top + YFrom(mmLoMetric, 40);
+          Canvas.TextOut(posX,posY,Texto);
+          fontTitulo2(TRUNC(edtFontTitulo2.Value));
+          Texto:= ListaTituloRelatorio1[1];
+          SizeTexto:= PrintPreview.Canvas.TextWidth(Texto);
+          posX:= ROUND(((Pagina.Right-
+          (rectLogoTipo.Right+ XFrom(mmLoMetric, 20))-SizeTexto)/2)+
+          (rectLogoTipo.Right+ XFrom(mmLoMetric, 20)));
+          posY:= Cabecalho.Top + YFrom(mmLoMetric, 120);
+          Canvas.TextOut(posX,posY,Texto);
+          edtFontTitulo1.Visible:= true;
+          edtFontTitulo2.Visible:= true;
+          edtFontTitulo3.Visible:= false;
+        end;
+        3:
+        begin
+          fontTitulo2(TRUNC(edtFontTitulo2.Value));
+          Texto:= ListaTituloRelatorio1[0];
+          SizeTexto:= PrintPreview.Canvas.TextWidth(Texto);
+          posX:= ROUND(((Pagina.Right-
+          (rectLogoTipo.Right+ XFrom(mmLoMetric, 20))-SizeTexto)/2)+
+          (rectLogoTipo.Right+ XFrom(mmLoMetric, 20)));
+          posY:= Cabecalho.Top + YFrom(mmLoMetric, 20);
+          Canvas.TextOut(posX,posY,Texto);
+          fontTitulo2(TRUNC(edtFontTitulo3.Value));
+          Texto:= ListaTituloRelatorio1[1];
+          SizeTexto:= PrintPreview.Canvas.TextWidth(Texto);
+          posX:= ROUND(((Pagina.Right-
+          (rectLogoTipo.Right+ XFrom(mmLoMetric, 20))-SizeTexto)/2)+
+          (rectLogoTipo.Right+ XFrom(mmLoMetric, 20)));
+          posY:= Cabecalho.Top + YFrom(mmLoMetric, 80);
+          Canvas.TextOut(posX,posY,Texto);
+          fontTitulo2(TRUNC(edtFontTitulo3.Value));
+          Texto:= ListaTituloRelatorio1[2];
+          SizeTexto:= PrintPreview.Canvas.TextWidth(Texto);
+          posX:= ROUND(((Pagina.Right-
+          (rectLogoTipo.Right+ XFrom(mmLoMetric, 20))-SizeTexto)/2)+
+          (rectLogoTipo.Right+ XFrom(mmLoMetric, 20)));
+          posY:= Cabecalho.Top + YFrom(mmLoMetric, 140);
+          Canvas.TextOut(posX,posY,Texto);
+          edtFontTitulo1.Visible:= true;
+          edtFontTitulo2.Visible:= true;
+          edtFontTitulo3.Visible:= true;
+        end;
+      end;
+      //=========================INFLATERECT DA PÁGINA========================
+      with PointFrom(mmLoMetric, 20, 20) do
+        InflateRect(Pagina, -X, -Y);
+      MaxSize.cx := Pagina.Right - Pagina.Left;
+      MaxSize.cy := Pagina.Bottom - Pagina.Top;
+      //=========================NÚMERO DA PÁGINA==============================
+      if btnPageNumber.Down=true then
+      begin
+        fontNormal(10);
+        SizeTexto := Canvas.TextWidth(Format('Página %d', [TotalPages + 1]));
+        Canvas.TextOut(Pagina.Right - SizeTexto, Pagina.Top,
+          Format('Página %d', [TotalPages + 1]));
+      end;
+    end;
+  end;
+end;
+
+// functions creating pages start here
+
+procedure TFrmPreview.ReduceThumbnailSizeMenuItemClick(Sender: TObject);
+begin
+  ThumbnailPreview.Zoom := ThumbnailPreview.Zoom - 1;
+end;
+
+procedure TFrmPreview.tabelaStrGrid(Grid: TStringGrid; XTabela, YTabela, fonte,
+  alturaLinha, alinhamento: Integer);
+  var
+    i,j,XTitulo,YCel,LarguraColuna: Integer;
+    contLinha: Integer;
+    CelColor: TColor;
+begin
+  XTitulo:= XTabela;
+  with FrmPreview.PrintPreview do
+  begin
+    Canvas.Font.Size:= fonte;
+    for j := 0 to Grid.ColCount-1 do
+    begin
+      LarguraColuna:= XFrom(mmLoEnglish,Grid.ColWidths[j]+25);
+      //Preencher o titulo da tabela
+      celula(XTitulo,YTabela,LarguraColuna,
+      alturaLinha,fonte,0,String(Grid.Cells[j,0]),clSilver);
+      //Preencher as linhas da tabela
+      contLinha:=1;
+      for i := 1 to Grid.RowCount-1 do
+      begin
+        Grid.Row:= i;
+        CelColor:= clWhite;
+        YCel:= YTabela+(contLinha*alturaLinha);
+        celula(XTitulo,YCel,LarguraColuna,alturaLinha,fonte,alinhamento,
+        String(Grid.Cells[j,i]),CelColor);
+        contLinha:= contLinha+1;
+      end;
+      XTitulo:= XTitulo+LarguraColuna;
+    end;
+  end;
+end;
+
+procedure TFrmPreview.tabelaStringGrid(Grid: TStringGrid; XTabela, YTabela,
+  fonte, alturaLinha, alinhamento: Integer);
+  var
+    i,j,XTitulo,YCel,LarguraColuna: Integer;
+    comecarLinha1,comecarLinha2,contLinha: Integer;
+    CelColor: TColor;
+    passouPagina: Boolean;
+begin
+  XTitulo:= XTabela;
+  passouPagina:= false;
+  comecarLinha1:= 1;
+  with FrmPreview.PrintPreview do
+  begin
+    Canvas.Font.Size:= fonte;
+    for j := 0 to Grid.ColCount-1 do
+    begin
+      if j <> Grid.ColCount-1 then
+        LarguraColuna:= XFrom(mmLoEnglish,Grid.ColWidths[j]+25)
+      else
+        LarguraColuna:= Cabecalho.Right-XTitulo;
+      //Preencher o titulo da tabela
+      celula(XTitulo,YTabela,LarguraColuna,
+      alturaLinha,fonte,0,String(Grid.Cells[j,0]),clSilver);
+      //Preencher as linhas da tabela
+      contLinha:=1;
+      for i := 1 to Grid.RowCount-1 do
+      begin
+        Grid.Row:= i;
+        CelColor:= clWhite;
+        YCel:= YTabela+(contLinha*alturaLinha);
+        if YCel < Pagina.Bottom then
+          celula(XTitulo,YCel,LarguraColuna,alturaLinha,fonte,alinhamento,
+          String(Grid.Cells[j,i]),CelColor)
+        else
+        begin
+          passouPagina:= true;
+          comecarLinha1:= i;
+          break;
+        end;
+        contLinha:= contLinha+1;
+      end;
+      XTitulo:= XTitulo+LarguraColuna;
+    end;
+    //=========================================================================
+    comecarLinha2:= comecarLinha1;
+    while passouPagina = true do
+    begin
+      NewPage;
+      XTitulo:= XTabela;
+      YTabela:= Cabecalho.Bottom + YFrom(mmLoMetric,30);
+      passouPagina:= false;
+      comecarLinha1:= comecarLinha2;
+      Canvas.Font.Size:= fonte;
+      for j := 0 to Grid.ColCount-1 do
+      begin
+        if j <> Grid.ColCount-1 then
+          LarguraColuna:= XFrom(mmLoEnglish,Grid.ColWidths[j]+25)
+        else
+          LarguraColuna:= Cabecalho.Right-XTitulo;
+        //Preencher o titulo da tabela
+        celula(XTitulo,YTabela,LarguraColuna,alturaLinha,fonte,0,
+        (Grid.Cells[j,0]),clSilver);
+        //Preencher as linhas da tabela
+        contLinha:= 1;
+        for i := comecarLinha1 to Grid.RowCount-1 do
+        begin
+          Grid.Row:= i;
+          CelColor:= clWhite;
+          YCel:= YTabela+(contLinha*alturaLinha);
+          if YCel < Pagina.Bottom then
+            celula(XTitulo,YCel,LarguraColuna,alturaLinha,fonte,alinhamento,
+            (Grid.Cells[j,i]),CelColor)
+          else
+          begin
+            passouPagina:= true;
+            comecarLinha2:= i;
+            break;
+          end;
+          contLinha:= contLinha+1;
+        end;
+        XTitulo:= XTitulo+LarguraColuna;
+      end;
+    end;
+  end;
+end;
+
+procedure TFrmPreview.EnlargeThumbnailSizeMenuItemClick(Sender: TObject);
+begin
+  ThumbnailPreview.Zoom := ThumbnailPreview.Zoom + 1;
+end;
+
+procedure TFrmPreview.HotTrackMenuItemClick(Sender: TObject);
+begin
+  ThumbnailPreview.HotTrack := not ThumbnailPreview.HotTrack;
+end;
+
+procedure TFrmPreview.linhaSolida(espessura: Integer; linhaCor: TColor);
+begin
+  with PrintPreview do
+  begin
+    Canvas.Pen.Width := XFrom(mmLoMetric, espessura);
+    Canvas.Pen.Color:= linhaCor;
+    Canvas.Pen.Style := psSolid;
+  end;
+end;
+
+procedure TFrmPreview.MultiSelectMenuItemClick(Sender: TObject);
+begin
+  ThumbnailPreview.MultiSelect := not ThumbnailPreview.MultiSelect;
+end;
+
+procedure TFrmPreview.actGeneratePageExecute(Sender: TObject);
+begin
+  GeneratePages;
+end;
+
+procedure TFrmPreview.actPainelEquipamentosExecute(Sender: TObject);
+begin
+  //Mapa de Plataformas
+  with PrintPreview do
+  begin
+    case FrmPainelEquipamentos.PageControl1.TabIndex of
+      0:
+      begin
+        FrmPainelEquipamentos.RChartDesenho.Align:= alNone;
+        FrmPainelEquipamentos.RChartDesenho.Width:= TRUNC(PrintPreview.Width*0.95);
+        FrmPainelEquipamentos.RChartDesenho.Height:= TRUNC(PrintPreview.Width*0.55);
+        graticoTRChartCentral(FrmPainelEquipamentos.RChartDesenho,YFrom(mmLoMetric,1600),
+        Cabecalho.Bottom+YFrom(mmLoMetric,100));
+        FrmPainelEquipamentos.RChartDesenho.Align:= alClient;
+      end;
+      1:
+      begin
+        FrmPainelEquipamentos.RChartDutos.Align:= alNone;
+        FrmPainelEquipamentos.RChartDutos.Width:= TRUNC(PrintPreview.Width*0.95);
+        FrmPainelEquipamentos.RChartDutos.Height:= TRUNC(PrintPreview.Width*0.55);
+        graticoTRChartCentral(FrmPainelEquipamentos.RChartDutos,YFrom(mmLoMetric,1600),
+        Cabecalho.Bottom+YFrom(mmLoMetric,100));
+        FrmPainelEquipamentos.RChartDutos.Align:= alClient;
+      end;
+    end;
+  end;
+end;
+
+procedure TFrmPreview.actEstaqueamentoRelatorioExecute(Sender: TObject);
+begin
+  GeneratePages;
+end;
+
+procedure TFrmPreview.actPrintConsultaExecutanteExecute(Sender: TObject);
+begin
+  with PrintPreview do
+  begin
+    //Impressao
+    tabelaStringGrid(FrmConsultaExecutantesProgramados.StringGridImpressao,
+    Pagina.Left-YFrom(mmLoMetric,20),
+    Cabecalho.Bottom+YFrom(mmLoMetric,30),
+    8,YFrom(mmLoMetric, 50),1);
+  end;
+end;
+
+procedure TFrmPreview.actPrintExtratoExecute(Sender: TObject);
+  var
+    alturaLinha,Fonte: Integer;
+begin
+  with PrintPreview do
+  begin
+    //RLimpressao
+    Fonte:= 12;
+    alturaLinha:= YFrom(mmLoMetric,TRUNC(Fonte*6.50));
+    tabelaStrGrid(FrmGerenciarEmbarcacoes.StrGridResumo,
+    Pagina.Left-XFrom(mmLoMetric,20),
+    Cabecalho.Bottom+YFrom(mmLoMetric,30),Fonte,alturaLinha,0);
+  end;
+end;
+
+procedure TFrmPreview.actPrintPageRelatorioExecute(Sender: TObject);
+  var
+    contLinhas,alturaLinha,i,largura,altura: Integer;
+    TextoSizeX,TextoSizeY,XFont,YFont,XCelula,YCelula: Integer;
+    Texto: String;
+begin
+  with PrintPreview do
+  begin
+    //RLimpressao
+    alturaLinha:= YFrom(mmLoMetric,TRUNC(FrmGerenciarEmbarcacoes.SpinEditFonte.Value*6.25));
+    tabelaStringGrid(FrmGerenciarEmbarcacoes.RLImpressao,
+    Pagina.Left-YFrom(mmLoMetric,20),
+    Cabecalho.Bottom+YFrom(mmLoMetric,30),
+    FrmGerenciarEmbarcacoes.SpinEditFonte.Value,alturaLinha,1);
+    //===================================================================
+    if FrmGerenciarEmbarcacoes.RadioGroupImpressao.ItemIndex = 0 then
+    begin
+      fontTitulo2(10);
+      linhaSolida(1,clBlack);
+      Canvas.Brush.Color:= clWhite;
+      Canvas.Brush.Style:= bsSolid;
+      Canvas.Font.Color:= clRed;
+      Texto:= 'HORÁRIO';
+      largura:= XFrom(mmLoMetric,200);
+      altura:= Cabecalho.Bottom-Cabecalho.Top;
+      XCelula:= Cabecalho.Right-largura;
+      YCelula:= Cabecalho.Top;
+      Canvas.MoveTo(XCelula,YCelula);
+      Canvas.LineTo(XCelula,YCelula+altura);
+      TextoSizeX:=Canvas.TextWidth(Texto);
+      TextoSizeY:=Canvas.TextHeight(Texto);
+      XFont:= TRUNC(XCelula+(largura-TextoSizeX)/2);
+      YFont:= TRUNC(YCelula+TextoSizeY);
+      Canvas.TextOut(XFont,YFont,Texto);
+    end;
+    //===================================================================
+    //Observações
+    contLinhas:= FrmGerenciarEmbarcacoes.Memo1.Lines.Count;
+    if contLinhas > 0 then
+    begin
+      fontTitulo2(10);
+      Canvas.TextOut(Pagina.Left,Pagina.Bottom-((contLinhas+1)*alturaLinha),'Notas:');
+      fontNormal(FrmGerenciarEmbarcacoes.SpinEditFonte.Value);
+      for i := 0 to contLinhas - 1 do
+      begin
+        Canvas.TextOut(Pagina.Left,Pagina.Bottom-(contLinhas*alturaLinha),
+        FrmGerenciarEmbarcacoes.Memo1.Lines[i]);
+        contLinhas:= contLinhas-1;
+      end;
+    end;
+  end;
+end;
+
+procedure TFrmPreview.actPrintSIGMExecute(Sender: TObject);
+begin
+  with PrintPreview do
+  begin
+    //RLimpressao
+    tabelaStringGrid(FrmCondicaoOperacional.RLImpressao,
+    Pagina.Left-YFrom(mmLoMetric,20),
+    Cabecalho.Bottom+YFrom(mmLoMetric,30),9,YFrom(mmLoMetric,55),1);
+  end;
+end;
+
+procedure TFrmPreview.actProgramacaoEmbarcacaoExecute(Sender: TObject);
+  var
+    alturaLinha: Integer;
+begin
+  with PrintPreview do
+  begin
+    //Impressao
+    alturaLinha:= YFrom(mmLoMetric,55);
+    tabelaStringGrid(FrmProgramacaoEmbarcacao.StringGridImpressao,
+    Pagina.Left-YFrom(mmLoMetric,20),
+    Cabecalho.Bottom+YFrom(mmLoMetric,30),10,alturaLinha,1);
+  end;
+end;
+
+procedure TFrmPreview.actPrintMapaPlataformaExecute(Sender: TObject);
+begin
+  //Mapa de Plataformas
+  with PrintPreview do
+  begin
+    FrmPlataforma.RChartMapa.Align:= alNone;
+    FrmPlataforma.RChartMapa.Width:= TRUNC(PrintPreview.Width*0.95);
+    FrmPlataforma.RChartMapa.Height:= TRUNC(PrintPreview.Width*0.55);
+    FrmPlataforma.RChartMapa.ChartColor:= clWhite;
+    graticoTRChartCentral(FrmPlataforma.RChartMapa,YFrom(mmLoMetric,1600),
+    Cabecalho.Bottom+YFrom(mmLoMetric,100));
+    FrmPlataforma.RChartMapa.Align:= alClient;
+    FrmPlataforma.RChartMapa.ChartColor:= clGradientInactiveCaption;
+  end;
+end;
+
+procedure TFrmPreview.actPrintMapaRotasExecute(Sender: TObject);
+begin
+  //Mapa de Roteamento
+  with PrintPreview do
+  begin
+    FrmGerenciarEmbarcacoes.RChartMapa.Align:= alNone;
+    FrmGerenciarEmbarcacoes.RChartMapa.Width:= TRUNC(PrintPreview.Width*0.95);
+    FrmGerenciarEmbarcacoes.RChartMapa.Height:= TRUNC(PrintPreview.Width*0.55);
+    FrmGerenciarEmbarcacoes.RChartMapa.ChartColor:= clWhite;
+    graticoTRChartCentral(FrmGerenciarEmbarcacoes.RChartMapa,YFrom(mmLoMetric,1600),
+    Cabecalho.Bottom+YFrom(mmLoMetric,100));
+    FrmGerenciarEmbarcacoes.RChartMapa.Align:= alClient;
+    FrmGerenciarEmbarcacoes.RChartMapa.ChartColor:= clGradientInactiveCaption;
+  end;
+end;
+
+procedure TFrmPreview.ArrangeLeftMenuItemClick(Sender: TObject);
+begin
+  ThumbnailPreview.IconOptions.Arrangement := iaLeft;
+end;
+
+procedure TFrmPreview.ArrangeTopMenuItemClick(Sender: TObject);
+begin
+  ThumbnailPreview.IconOptions.Arrangement := iaTop;
+end;
+
+procedure TFrmPreview.DeleteAllMenuItemClick(Sender: TObject);
+begin
+  PrintPreview.Clear;
+end;
+
+procedure TFrmPreview.ThumbGrayAlwaysClick(Sender: TObject);
+begin
+  ThumbnailPreview.Grayscale := tgsAlways;
+end;
+
+procedure TFrmPreview.ThumbGrayNeverClick(Sender: TObject);
+begin
+  ThumbnailPreview.Grayscale := tgsNever;
+end;
+
+procedure TFrmPreview.ThumbGrayPreviewClick(Sender: TObject);
+begin
+  ThumbnailPreview.Grayscale := tgsPreview;
+end;
+
+procedure TFrmPreview.ThumbViewerPopupMenuPopup(Sender: TObject);
+begin
+  ReduceThumbnailSizeMenuItem.Enabled := (ThumbnailPreview.Zoom > 1);
+  HotTrackMenuItem.Checked := ThumbnailPreview.HotTrack;
+  MultiSelectMenuItem.Checked := ThumbnailPreview.MultiSelect;
+  if ThumbnailPreview.IconOptions.Arrangement = iaTop then
+    ArrangeTopMenuItem.Checked := True
+  else
+    ArrangeLeftMenuItem.Checked := True;
+  DeleteAllMenuItem.Enabled := (PrintPreview.TotalPages > 0);
+  ThumbGrayPreview.Checked := (ThumbnailPreview.Grayscale = tgsPreview);
+  ThumbGrayAlways.Checked := (ThumbnailPreview.Grayscale = tgsAlways);
+  ThumbGrayNever.Checked := (ThumbnailPreview.Grayscale = tgsNever);
+end;
+
+// PagePopupMenu starts here
+
+procedure TFrmPreview.DeleteCurrentClick(Sender: TObject);
+begin
+  PrintPreview.Delete(PrintPreview.CurrentPage);
+end;
+
+procedure TFrmPreview.edtFontTitulo1KeyPress(Sender: TObject; var Key: Char);
+begin
+  if key = #13 then
+    actGeneratePage.Execute;
+end;
+
+procedure TFrmPreview.MoveCurrentUpMenuItemClick(Sender: TObject);
+begin
+  PrintPreview.Exchange(PrintPreview.CurrentPage, PrintPreview.CurrentPage - 1);
+end;
+
+procedure TFrmPreview.MoveCurrentDownMenuItemClick(Sender: TObject);
+begin
+  PrintPreview.Exchange(PrintPreview.CurrentPage, PrintPreview.CurrentPage + 1);
+end;
+
+procedure TFrmPreview.MoveCurrentFirstMenuItemClick(Sender: TObject);
+begin
+  PrintPreview.Move(PrintPreview.CurrentPage, 1);
+end;
+
+procedure TFrmPreview.MoveCurrentLastMenuItemClick(Sender: TObject);
+begin
+  PrintPreview.Move(PrintPreview.CurrentPage, PrintPreview.TotalPages);
+end;
+
+procedure TFrmPreview.ExportCurrentClick(Sender: TObject);
+begin
+  if SavePictureDialog.Execute then
+    PrintPreview.Pages[PrintPreview.CurrentPage].SaveToFile(SavePictureDialog.FileName);
+end;
+
+procedure TFrmPreview.fontNormal(fonte: Integer);
+begin
+  with PrintPreview do
+  begin
+    Canvas.Font.Size:= fonte;
+    Canvas.Font.Style:= [];
+    Canvas.Font.Color:= clBlack;
+    Canvas.Font.Name := 'Tahoma';
+    Canvas.Brush.Style:= bsSolid;
+    Canvas.Brush.Color:= clWhite;
+  end;
+end;
+
+procedure TFrmPreview.fontTitulo2(fonte: Integer);
+begin
+  with PrintPreview do
+  begin
+    Canvas.Font.Size:= fonte;
+    Canvas.Font.Style:= [fsBold];
+    Canvas.Font.Color:= clBlack;
+    Canvas.Font.Name := 'Tahoma';
+    Canvas.Brush.Style:= bsSolid;
+    Canvas.Brush.Color:= clWhite;
+  end;
+end;
+
+procedure TFrmPreview.CopyCurrentClick(Sender: TObject);
+begin
+  Clipboard.Assign(PrintPreview.Pages[PrintPreview.CurrentPage]);
+end;
+
+procedure TFrmPreview.PagePopupMenuPopup(Sender: TObject);
+begin
+  with PrintPreview do
+  begin
+    MoveCurrentFirstMenuItem.Enabled := (CurrentPage > 1);
+    MoveCurrentUpMenuItem.Enabled := (CurrentPage > 1);
+    MoveCurrentDownMenuItem.Enabled := (CurrentPage < TotalPages);
+    MoveCurrentLastMenuItem.Enabled := (CurrentPage < TotalPages);
+  end;
+end;
+
+procedure TFrmPreview.paginaRChart(grafico: TRChart; booleanClear: Boolean);
+begin
+  with PrintPreview do
+  begin
+    {$IFDEF COMPILER7_UP}
+    PageBoundsAfterMargin := GetPageSetupParameters(PageSetupDialog);
+    {$ELSE}
+    PageBoundsAfterMargin := PageBounds;
+    with PointFrom(mmLoMetric, 100, 100) do
+      InflateRect(PageBoundsAfterMargin, -X, -Y);
+    {$ENDIF}
+    BeginDoc(booleanClear);
+    try
+    begin
+      grafico.Align:= alNone;
+      grafico.Width:= 1000;
+      grafico.Height:= 500;
+      graticoTRChartCentral(grafico,YFrom(mmLoMetric,900),
+      Cabecalho.Bottom+YFrom(mmLoMetric,10));
+      grafico.Align:= alClient;
+    end;
+    finally
+      EndDoc;
+    end;
+  end;
+end;
+
+procedure TFrmPreview.paginaTChart(grafico: TChart; booleanClear: Boolean);
+begin
+  with PrintPreview do
+  begin
+    {$IFDEF COMPILER7_UP}
+    PageBoundsAfterMargin := GetPageSetupParameters(PageSetupDialog);
+    {$ELSE}
+    PageBoundsAfterMargin := PageBounds;
+    with PointFrom(mmLoMetric, 100, 100) do
+      InflateRect(PageBoundsAfterMargin, -X, -Y);
+    {$ENDIF}
+    BeginDoc(booleanClear);
+    try
+    begin
+      grafico.Legend.CheckBoxes:= false;
+      graficoTChart(grafico,600,1050,Cabecalho.Bottom+
+      YFrom(mmLoMetric,50));
+      grafico.Legend.CheckBoxes:= true;
+    end;
+    finally
+      EndDoc;
+    end;
+  end;
+end;
+
+// ZoomPopupMenu starts here
+
+procedure TFrmPreview.ZoomActualSizeClick(Sender: TObject);
+begin
+  PrintPreview.Zoom := 100;
+end;
+
+procedure TFrmPreview.ZoomPageWidthClick(Sender: TObject);
+begin
+  PrintPreview.ZoomState := zsZoomToWidth;
+end;
+
+procedure TFrmPreview.ZoomPageHeightClick(Sender: TObject);
+begin
+  PrintPreview.ZoomState := zsZoomToHeight;
+end;
+
+procedure TFrmPreview.ZoomWholePageClick(Sender: TObject);
+begin
+  PrintPreview.ZoomState := zsZoomToFit;
+end;
+
+// UnitsPopupMenu starts here
+
+procedure TFrmPreview.WMMDIACTIVATE(var msg: TWMMDIACTIVATE);
+var
+  active: TWinControl;
+  idx: Integer;
+begin
+  active := FindControl(msg.ActiveWnd) ;
+
+  if Assigned(active) then
+  begin
+    idx := FrmPrincipal.mdiChildrenTabs.Tabs.IndexOfObject(TObject(msg.ActiveWnd));
+    FrmPrincipal.mdiChildrenTabs.Tag := -1;
+    FrmPrincipal.mdiChildrenTabs.TabIndex := idx;
+    FrmPrincipal.mdiChildrenTabs.Tag := 0;
+  end;
+end;
+
+end.

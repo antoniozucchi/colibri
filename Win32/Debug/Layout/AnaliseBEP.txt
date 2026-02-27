@@ -1,0 +1,15 @@
+TAB1;Plataforma
+TAB1;Duto
+TAB1;Poço
+TAB1;Tarefa
+TAB1;Dias
+TAB1;Realização
+TAB1;Vencimento
+TAB1;Responsável
+TAB1;Ordem Manutenção
+TAB1;Nota Manutenção
+TAB1;Cor Coluna
+TAB1;Importado Por
+TAB1;Data Importação
+TAB1;Computador
+TAB1;Pendência

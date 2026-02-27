@@ -1,0 +1,676 @@
+unit untConsultaLEC;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Data.DB, Vcl.Grids, Vcl.DBGrids,
+  Vcl.StdCtrls, Vcl.Buttons, Vcl.ToolWin, Vcl.ComCtrls, Vcl.ExtCtrls,
+  System.Actions, Vcl.ActnList, Vcl.PlatformDefaultStyleActnCtrls, Vcl.ActnMan,
+  Vcl.CheckLst, Data.Win.ADODB, Vcl.Mask, Vcl.DBCtrls, Vcl.Menus,ShellAPI;
+
+type
+  TFrmConsultaLEC = class(TForm)
+    ActionManager1: TActionManager;
+    actProcurarSAP: TAction;
+    actFiltroInserir: TAction;
+    actGridASC: TAction;
+    actGridDESC: TAction;
+    actLimparFiltros: TAction;
+    actFiltrosTabela: TAction;
+    actProcuraFiltrosTabela: TAction;
+    actFiltros: TAction;
+    actSelTudoLocalInstalacao: TAction;
+    actSelLimpaLocalInstalacao: TAction;
+    actArvore: TAction;
+    PageControlGeral: TPageControl;
+    TabSheet4: TTabSheet;
+    PanelTitulo: TPanel;
+    PanelResultados: TPanel;
+    ColunasLayoutSAP: TStringGrid;
+    ToolBar1: TToolBar;
+    BitBtn3: TBitBtn;
+    BitBtn1: TBitBtn;
+    PageControl1: TPageControl;
+    TabSheet1: TTabSheet;
+    TabSheet2: TTabSheet;
+    CheckListBoxPlataforma: TCheckListBox;
+    ToolBar2: TToolBar;
+    ToolButton1: TToolButton;
+    ToolButton2: TToolButton;
+    TabSheet3: TTabSheet;
+    ToolBar3: TToolBar;
+    ToolButton3: TToolButton;
+    TreeView: TTreeView;
+    Splitter1: TSplitter;
+    PopupMenuExcel: TPopupMenu;
+    Exportar1: TMenuItem;
+    Importar1: TMenuItem;
+    actSubstituirPor: TAction;
+    actExcelSAP: TAction;
+    BitBtn4: TBitBtn;
+    edtLocalInstalacao: TEdit;
+    ToolButton4: TToolButton;
+    actInterromper: TAction;
+    CheckListBoxSistemaFiltro: TCheckListBox;
+    actTudoFiltroUsuario: TAction;
+    actLimpaFiltroUsuario: TAction;
+    ToolBar10: TToolBar;
+    ToolButton5: TToolButton;
+    ToolButton7: TToolButton;
+    PanelItemManutencao: TPanel;
+    RLItemManutencao: TStringGrid;
+    ToolBar11: TToolBar;
+    DBEdit3: TDBEdit;
+    Splitter7: TSplitter;
+    btnMostrarOcultar: TToolButton;
+    BitBtn14: TBitBtn;
+    actOcultar: TAction;
+    actMostrar: TAction;
+    Panel8: TPanel;
+    DBGridSAP: TDBGrid;
+    StatusBarSAP: TStatusBar;
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure FormDestroy(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+    procedure actProcurarSAPExecute(Sender: TObject);
+    procedure DBGridSAPDrawColumnCell(Sender: TObject; const Rect: TRect;
+      DataCol: Integer; Column: TColumn; State: TGridDrawState);
+    procedure actFiltroInserirExecute(Sender: TObject);
+    procedure actGridASCExecute(Sender: TObject);
+    procedure actGridDESCExecute(Sender: TObject);
+    procedure actLimparFiltrosExecute(Sender: TObject);
+    procedure actFiltrosTabelaExecute(Sender: TObject);
+    procedure actProcuraFiltrosTabelaExecute(Sender: TObject);
+    procedure DBGridSAPTitleClick(Column: TColumn);
+    procedure actFiltrosExecute(Sender: TObject);
+    procedure actSelTudoLocalInstalacaoExecute(Sender: TObject);
+    procedure actSelLimpaLocalInstalacaoExecute(Sender: TObject);
+    procedure actArvoreExecute(Sender: TObject);
+    procedure actSubstituirPorExecute(Sender: TObject);
+    procedure actExcelSAPExecute(Sender: TObject);
+    procedure TreeViewChange(Sender: TObject; Node: TTreeNode);
+    procedure edtLocalInstalacaoChange(Sender: TObject);
+    procedure actInterromperExecute(Sender: TObject);
+    procedure actTudoFiltroUsuarioExecute(Sender: TObject);
+    procedure actLimpaFiltroUsuarioExecute(Sender: TObject);
+    procedure actOcultarExecute(Sender: TObject);
+    procedure actMostrarExecute(Sender: TObject);
+  private
+    { Private declarations }
+    TabIndex: Integer;
+    Interromper: Boolean;
+    procedure WMMDIACTIVATE(var msg: TWMMDIACTIVATE);message WM_MDIACTIVATE;
+    function CriarLECItemManutncao(idLECLista: Integer; BuscaLocal: String): Boolean;
+  public
+    { Public declarations }
+  end;
+
+var
+  FrmConsultaLEC: TFrmConsultaLEC;
+
+implementation
+  uses untDataModule,untPrincipal;
+{$R *.dfm}
+
+procedure TFrmConsultaLEC.actArvoreExecute(Sender: TObject);
+  var
+    NodePai,NodeFilho1,NodeFilho2,NodeFilho3: TTreeNode;
+    SQLBase,LocalInstalacao,DenominacaoLocalInstalacao,SQLString: String;
+    QueryNivel0,QueryNivel1,QueryNivel2,QueryNivel3,QueryNivel4: TADOQuery;
+    i: Integer;
+    cancelado: Boolean;
+begin
+  TreeView.Items.Clear;
+  Interromper := False;
+  actInterromper.Enabled:= true;
+  Cancelado:= false;
+  SQLString:= frmPrincipal.SQLStringFiltroTabela(ColunasLayoutSAP,false);
+  if SQLString <> '' then
+    SQLString:= 'AND'+SQLString;
+  //=========================================================
+  for I := 1 to 4 do
+  begin
+    SQLBase:= 'SELECT tblLocalInstalacao.* FROM tblLocalInstalacao '+
+    'WHERE (Hierarquia = '+IntToStr(i)+')'+SQLString+' ORDER BY LocalInstalacao;';
+    QueryNivel0 := TADOQuery.Create(self);
+    QueryNivel0.Connection := FrmDataModule.ADOConnectionMemoria;
+    QueryNivel0.Close;
+    QueryNivel0.SQL.Clear;
+    QueryNivel0.SQL.Add(SQLBase);
+    QueryNivel0.Open;
+    if not QueryNivel0.IsEmpty then
+    begin
+       break;
+    end;
+  end;
+  FrmPrincipal.ProgressBarIncializa(QueryNivel0.RecordCount,'Carregando...');
+  while not QueryNivel0.Eof do
+  begin
+    //Interromper Processo
+    Application.ProcessMessages;
+    if Cancelado then
+      break
+    else if Interromper and (Application.MessageBox(PChar('Deseja realmente cancelar o processo?'),
+    '.::ATENÇÃO::.',36) = 6) then
+    begin
+      Interromper := true;
+      break;
+    end
+    else
+      Interromper := False;
+    //=========================================
+    LocalInstalacao:= QueryNivel0.FieldByName('LocalInstalacao').AsString;
+    DenominacaoLocalInstalacao:= QueryNivel0.FieldByName('DenominacaoLocalInstalacao').AsString;
+    NodePai:= TreeView.Items.Add(nil,DenominacaoLocalInstalacao);
+    SQLBase:= 'SELECT tblLocalInstalacao.* FROM tblLocalInstalacao '+
+    'WHERE ((Hierarquia = '+IntToStr(i+1)+')AND(LocalInstalacao LIKE '+QuotedStr(LocalInstalacao+'%')+
+    ')'+SQLString+') ORDER BY LocalInstalacao;';
+    QueryNivel1 := TADOQuery.Create(self);
+    QueryNivel1.Connection := FrmDataModule.ADOConnectionMemoria;
+    QueryNivel1.Close;
+    QueryNivel1.SQL.Clear;
+    QueryNivel1.SQL.Add(SQLBase);
+    QueryNivel1.Open;
+    QueryNivel1.Active:= true;
+    while not QueryNivel1.Eof do
+    begin
+      //Interromper Processo
+      Application.ProcessMessages;
+      if Cancelado then
+        break
+      else if Interromper and (Application.MessageBox(PChar('Deseja realmente cancelar o processo?'),
+      '.::ATENÇÃO::.',36) = 6) then
+      begin
+        Interromper := true;
+        Cancelado:= true;
+        break;
+      end
+      else
+        Interromper := False;
+      //============================================================
+      LocalInstalacao:= QueryNivel1.FieldByName('LocalInstalacao').AsString;
+      NodeFilho1:= TreeView.Items.AddChild(NodePai,QueryNivel1.FieldByName
+      ('LocalInstalacao').AsString+' = '+QueryNivel1.FieldByName
+      ('DenominacaoLocalInstalacao').AsString);
+      SQLBase:= 'SELECT tblLocalInstalacao.* FROM tblLocalInstalacao '+
+      'WHERE ((Hierarquia = '+IntToStr(i+2)+')AND(LocalInstalacao LIKE '+QuotedStr(LocalInstalacao+'%')+
+      ')'+SQLString+') ORDER BY LocalInstalacao;';
+      QueryNivel2 := TADOQuery.Create(self);
+      QueryNivel2.Connection := FrmDataModule.ADOConnectionMemoria;
+      QueryNivel2.Close;
+      QueryNivel2.SQL.Clear;
+      QueryNivel2.SQL.Add(SQLBase);
+      QueryNivel2.Open;
+      QueryNivel2.Active:= true;
+      while not QueryNivel2.Eof do
+      begin
+        //Interromper Processo
+        Application.ProcessMessages;
+        if Cancelado then
+          break
+        else if Interromper and (Application.MessageBox(PChar('Deseja realmente cancelar o processo?'),
+        '.::ATENÇÃO::.',36) = 6) then
+        begin
+          Interromper := true;
+          Cancelado:= true;
+          break;
+        end
+        else
+          Interromper := False;
+        //============================================================
+        LocalInstalacao:= QueryNivel2.FieldByName('LocalInstalacao').AsString;
+        NodeFilho2:= TreeView.Items.AddChild(NodeFilho1,QueryNivel2.FieldByName
+        ('LocalInstalacao').AsString+' = '+QueryNivel2.FieldByName
+        ('DenominacaoLocalInstalacao').AsString);
+        //=================================================================
+        SQLBase:= 'SELECT tblLocalInstalacao.* FROM tblLocalInstalacao '+
+        'WHERE ((Hierarquia = '+IntToStr(i+3)+')AND(LocalInstalacao LIKE '+QuotedStr(LocalInstalacao+'%')+
+        ')'+SQLString+') ORDER BY LocalInstalacao;';
+        QueryNivel3 := TADOQuery.Create(self);
+        QueryNivel3.Connection := FrmDataModule.ADOConnectionMemoria;
+        QueryNivel3.Close;
+        QueryNivel3.SQL.Clear;
+        QueryNivel3.SQL.Add(SQLBase);
+        QueryNivel3.Open;
+        QueryNivel3.Active:= true;
+        while not QueryNivel3.Eof do
+        begin
+          //Interromper Processo
+          Application.ProcessMessages;
+          if Cancelado then
+            break
+          else if Interromper and (Application.MessageBox(PChar('Deseja realmente cancelar o processo?'),
+          '.::ATENÇÃO::.',36) = 6) then
+          begin
+            Interromper := true;
+            Cancelado:= true;
+            break;
+          end
+          else
+            Interromper := False;
+          //============================================================
+          LocalInstalacao:= QueryNivel3.FieldByName('LocalInstalacao').AsString;
+          NodeFilho3:= TreeView.Items.AddChild(NodeFilho2,QueryNivel3.FieldByName
+          ('LocalInstalacao').AsString+' = '+QueryNivel3.FieldByName
+          ('DenominacaoLocalInstalacao').AsString);
+          SQLBase:= 'SELECT tblLocalInstalacao.* FROM tblLocalInstalacao '+
+          'WHERE ((Hierarquia = '+IntToStr(i+4)+')AND(LocalInstalacao LIKE '+QuotedStr(LocalInstalacao+'%')+
+          ')'+SQLString+') ORDER BY LocalInstalacao;';
+          QueryNivel4 := TADOQuery.Create(self);
+          QueryNivel4.Connection := FrmDataModule.ADOConnectionMemoria;
+          QueryNivel4.Close;
+          QueryNivel4.SQL.Clear;
+          QueryNivel4.SQL.Add(SQLBase);
+          QueryNivel4.Open;
+          QueryNivel4.Active:= true;
+          while not QueryNivel4.Eof do
+          begin
+            //Interromper Processo
+            Application.ProcessMessages;
+            if Cancelado then
+              break
+            else if Interromper and (Application.MessageBox(PChar('Deseja realmente cancelar o processo?'),
+            '.::ATENÇÃO::.',36) = 6) then
+            begin
+              Interromper := true;
+              Cancelado:= true;
+              break;
+            end
+            else
+              Interromper := False;
+            //============================================================
+            LocalInstalacao:= QueryNivel4.FieldByName('LocalInstalacao').AsString;
+            TreeView.Items.AddChild(NodeFilho3,QueryNivel4.FieldByName
+            ('LocalInstalacao').AsString+' = '+QueryNivel4.FieldByName
+            ('DenominacaoLocalInstalacao').AsString);
+            QueryNivel4.Next;
+          end;
+          QueryNivel3.Next;
+
+        end;
+        QueryNivel2.Next;
+      end;
+      QueryNivel1.Next;
+    end;
+    QueryNivel0.Next;
+    FrmPrincipal.ProgressBarIncremento(1);
+  end;
+  FrmPrincipal.ProgressBarAtualizar;
+  actInterromper.Enabled:= false;
+  Interromper := False;
+end;
+
+procedure TFrmConsultaLEC.actExcelSAPExecute(Sender: TObject);
+begin
+  FrmPrincipal.GerarExcel(DBGridSAP,'Local SAP');
+end;
+
+procedure TFrmConsultaLEC.actFiltroInserirExecute(Sender: TObject);
+begin
+  case PageControlGeral.TabIndex of
+    0:
+    begin
+      FrmPrincipal.inserirProcura(DBGridSAP,ColunasLayoutSAP);
+      actProcurarSAP.Execute;
+    end;
+  end;
+
+  if (FrmPrincipal.PanelFiltrosTabela.Visible)AND(FrmPrincipal.PanelAjuda1.Visible) then
+    actFiltrosTabela.Execute;
+end;
+
+procedure TFrmConsultaLEC.actFiltrosExecute(Sender: TObject);
+  var
+    PalavraLista,PalavraBusca: String;
+    i: Integer;
+begin
+  //Sistemas
+  FrmPrincipal.configurarCheckListBox(CheckListBoxSistemaFiltro,DBGridSAP,ColunasLayoutSAP,true);
+  //Plataformas
+  PalavraBusca:= '';
+  for I := 0 to CheckListBoxPlataforma.Count-1 do
+  begin
+    if CheckListBoxPlataforma.Checked[i] then
+    begin
+      PalavraLista:= CheckListBoxPlataforma.Items[i];
+      if PalavraBusca <> '' then
+        PalavraBusca:= PalavraBusca+';'+PalavraLista
+      else
+        PalavraBusca:= PalavraLista;
+    end;
+  end;
+  FrmPrincipal.buscaFiledGrid1('Plataforma',PalavraBusca,'Contem',ColunasLayoutSAP,4,false);
+  actProcurarSAP.Execute;
+end;
+
+procedure TFrmConsultaLEC.actFiltrosTabelaExecute(Sender: TObject);
+begin
+  FrmPrincipal.btnProcurarFiltrosTabela.Action:= actProcuraFiltrosTabela;
+  case PageControlGeral.TabIndex of
+    0: FrmPrincipal.FiltrosTabela(DBGridSAP,ColunasLayoutSAP);
+  end;
+end;
+
+procedure TFrmConsultaLEC.actGridASCExecute(Sender: TObject);
+begin
+  case PageControlGeral.TabIndex of
+    0: FrmPrincipal.ClassificaDBGrid(DBGridSAP,FrmDataModule.ADOQueryLocalInstalacaoSAP,0);
+  end;
+end;
+
+procedure TFrmConsultaLEC.actGridDESCExecute(Sender: TObject);
+begin
+  case PageControlGeral.TabIndex of
+    0: FrmPrincipal.ClassificaDBGrid(DBGridSAP,FrmDataModule.ADOQueryLocalInstalacaoSAP,1);
+  end;
+end;
+
+procedure TFrmConsultaLEC.actInterromperExecute(Sender: TObject);
+begin
+  Interromper:= true;
+end;
+
+procedure TFrmConsultaLEC.actSubstituirPorExecute(Sender: TObject);
+begin
+  case PageControlGeral.TabIndex of
+    0: FrmPrincipal.SubstituirPor(DBGridSAP,FrmDataModule.ADOQueryLocalInstalacaoSAP,
+    FrmDataModule.DataSourceLocalInstalacaoSAP);
+  end;
+end;
+
+procedure TFrmConsultaLEC.actTudoFiltroUsuarioExecute(Sender: TObject);
+var
+  I: Integer;
+begin
+  for I := 0 to CheckListBoxSistemaFiltro.Count-1 do
+    CheckListBoxSistemaFiltro.Checked[i]:= true;
+
+  actFiltros.Execute;
+end;
+
+function TFrmConsultaLEC.CriarLECItemManutncao(idLECLista: Integer; BuscaLocal: String): Boolean;
+  var
+    SQLString,SQLBase: string;
+begin
+  Result:= false;
+  //ITEM DE MANUTENÇÃO
+  SQLString:= FrmPrincipal.palavraBusca('','LocalInstalacao','Exato',BuscaLocal,'AND');
+  if SQLString <> '' then
+  begin
+    SQLBase:= 'SELECT tblItemManutencao.* FROM tblItemManutencao '+
+    'WHERE '+SQLString+';';
+    FrmDataModule.ADOQueryTemporarioDBMemoria.Close;
+    FrmDataModule.ADOQueryTemporarioDBMemoria.SQL.Clear;
+    FrmDataModule.ADOQueryTemporarioDBMemoria.SQL.Add(SQLBase);
+    FrmDataModule.ADOQueryTemporarioDBMemoria.Open;
+    //=========================================================
+    FrmDataModule.ADOQueryLECItemManutencao.Active:= false;
+    FrmDataModule.ADOQueryLECItemManutencao.Parameters.Items[0].Value:= idLECLista;
+    FrmDataModule.ADOQueryLECItemManutencao.Active:= true;
+    while not FrmDataModule.ADOQueryLECItemManutencao.Eof do
+      FrmDataModule.ADOQueryLECItemManutencao.Delete;
+    //=========================================================
+    while not FrmDataModule.ADOQueryTemporarioDBMemoria.Eof do
+    begin
+      FrmDataModule.ADOQueryLECItemManutencao.Insert;
+      FrmDataModule.ADOQueryLECItemManutencao.FieldByName('PlanoManutencao').AsString:=
+      FrmDataModule.ADOQueryTemporarioDBMemoria.FieldByName('PlanoManutencao').AsString;
+      FrmDataModule.ADOQueryLECItemManutencao.FieldByName('ItemManutencao').AsString:=
+      FrmDataModule.ADOQueryTemporarioDBMemoria.FieldByName('ItemManutencao').AsString;
+      FrmDataModule.ADOQueryLECItemManutencao.FieldByName('DescricaoItem').AsString:=
+      FrmDataModule.ADOQueryTemporarioDBMemoria.FieldByName('DescricaoItem').AsString;
+      FrmDataModule.ADOQueryLECItemManutencao.FieldByName('LocalInstalacao').AsString:=
+      FrmDataModule.ADOQueryTemporarioDBMemoria.FieldByName('LocalInstalacao').AsString;
+      FrmDataModule.ADOQueryLECItemManutencao.FieldByName('DenominacaoLocalInstalacao').AsString:=
+      FrmDataModule.ADOQueryTemporarioDBMemoria.FieldByName('DenominacaoLocalInstalacao').AsString;
+      FrmDataModule.ADOQueryLECItemManutencao.FieldByName('CentroTrabalho').AsString:=
+      FrmDataModule.ADOQueryTemporarioDBMemoria.FieldByName('CentroTrabalho').AsString;
+      FrmDataModule.ADOQueryLECItemManutencao.FieldByName('TipoEtapaServico').AsString:=
+      FrmDataModule.ADOQueryTemporarioDBMemoria.FieldByName('TipoEtapaServico').AsString;
+      FrmDataModule.ADOQueryLECItemManutencao.Post;
+      //=============================================================
+      Result:= true;
+      FrmDataModule.ADOQueryTemporarioDBMemoria.Next;
+    end;
+  end
+  else
+  begin
+    FrmDataModule.ADOQueryLECItemManutencao.Active:= false;
+    FrmDataModule.ADOQueryLECItemManutencao.Parameters.Items[0].Value:= idLECLista;
+    FrmDataModule.ADOQueryLECItemManutencao.Active:= true;
+    while not FrmDataModule.ADOQueryLECItemManutencao.Eof do
+      FrmDataModule.ADOQueryLECItemManutencao.Delete;
+  end;
+end;
+
+procedure TFrmConsultaLEC.actSelLimpaLocalInstalacaoExecute(Sender: TObject);
+var
+  I: Integer;
+begin
+  for I := 0 to CheckListBoxPlataforma.Count-1 do
+    CheckListBoxPlataforma.Checked[i]:= false;
+
+  actFiltros.Execute;
+end;
+
+procedure TFrmConsultaLEC.actSelTudoLocalInstalacaoExecute(Sender: TObject);
+var
+  I: Integer;
+begin
+  for I := 0 to CheckListBoxPlataforma.Count-1 do
+    CheckListBoxPlataforma.Checked[i]:= true;
+
+  actFiltros.Execute;
+end;
+
+procedure TFrmConsultaLEC.actLimpaFiltroUsuarioExecute(Sender: TObject);
+var
+  I: Integer;
+begin
+  for I := 0 to CheckListBoxSistemaFiltro.Count-1 do
+    CheckListBoxSistemaFiltro.Checked[i]:= false;
+
+  actFiltros.Execute;
+end;
+
+procedure TFrmConsultaLEC.actLimparFiltrosExecute(Sender: TObject);
+begin
+  case PageControlGeral.TabIndex of
+    0:
+    begin
+      FrmPrincipal.LimparColunasFiltro(DBGridSAP,ColunasLayoutSAP);
+      actProcurarSAP.Execute;
+    end;
+  end;
+  if (FrmPrincipal.PanelFiltrosTabela.Visible)AND(FrmPrincipal.PanelAjuda1.Visible) then
+    actFiltrosTabela.Execute;
+end;
+
+procedure TFrmConsultaLEC.actMostrarExecute(Sender: TObject);
+begin
+  btnMostrarOcultar.Action:= actOcultar;
+  PanelItemManutencao.Height:= 25;
+  RLItemManutencao.Visible:= false;
+end;
+
+procedure TFrmConsultaLEC.actOcultarExecute(Sender: TObject);
+begin
+  btnMostrarOcultar.Action:= actMostrar;
+  PanelItemManutencao.Height:= 150;
+  RLItemManutencao.Visible:= true;
+end;
+
+procedure TFrmConsultaLEC.actProcuraFiltrosTabelaExecute(Sender: TObject);
+begin
+  case PageControlGeral.TabIndex of
+    0:
+    begin
+      FrmPrincipal.CarregaFiltrosProcura(ColunasLayoutSAP);
+      actProcurarSAP.Execute;
+    end;
+  end;
+end;
+
+procedure TFrmConsultaLEC.actProcurarSAPExecute(Sender: TObject);
+  var
+    SQLString,SQLBase: String;
+begin
+  SQLString:= frmPrincipal.SQLStringFiltroTabela(ColunasLayoutSAP,true);
+  SQLBase:= 'SELECT tblLocalInstalacao.* FROM tblLocalInstalacao '
+  +SQLString+' ORDER BY LocalInstalacao;';
+  FrmPrincipal.ProcuraQuery(SQLBase,FrmDataModule.ADOQueryLocalInstalacaoSAP,StatusBarSAP);
+end;
+
+procedure TFrmConsultaLEC.DBGridSAPDrawColumnCell(Sender: TObject;
+  const Rect: TRect; DataCol: Integer; Column: TColumn; State: TGridDrawState);
+  var
+    BooleanCritico,BooleanLEC:Boolean;
+begin
+  FrmPrincipal.GridZebrado(DBGridSAP,ColunasLayoutSAP,State,Rect,DataCol,Column);
+  if (Column.Field.FieldName = 'BooleanCritico') then
+  begin
+    if (FrmDataModule.DataSourceLocalInstalacaoSAP.DataSet.
+    FieldByName('BooleanCritico').AsBoolean) then
+    begin
+      TDBGrid(Sender).Canvas.FillRect(Rect);
+      FrmPrincipal.ImageList1.Draw(TDBGrid(Sender).Canvas, Rect.Left +10,Rect.Top + 1, 154);
+    end
+    else
+    begin
+      TDBGrid(Sender).Canvas.FillRect(Rect);
+      FrmPrincipal.ImageList1.Draw(TDBGrid(Sender).Canvas, Rect.Left +10,Rect.Top + 1, 155);
+    end;
+  end
+  else if (Column.Field.FieldName = 'ImpactoFalha') then
+  begin
+    BooleanCritico:= FrmDataModule.DataSourceLocalInstalacaoSAP.DataSet.FieldByName('BooleanCritico').AsBoolean;
+    BooleanLEC:= FrmDataModule.DataSourceLocalInstalacaoSAP.DataSet.FieldByName('BooleanLEC').AsBoolean;
+    if (BooleanCritico=true)AND(BooleanLEC=true) then
+    begin
+      DBGridSAP.Canvas.Brush.Color:= clLime;
+      DBGridSAP.Font.Color:= clBlack;
+      DBGridSAP.Canvas.FillRect(Rect);
+      DBGridSAP.DefaultDrawColumnCell(Rect, DataCol,Column, State);
+    end
+    else if (BooleanCritico=true)AND(BooleanLEC=false) then
+    begin
+      DBGridSAP.Canvas.Brush.Color:= clRed;
+      DBGridSAP.Font.Color:= clBlack;
+      DBGridSAP.Canvas.FillRect(Rect);
+      DBGridSAP.DefaultDrawColumnCell(Rect, DataCol,Column, State);
+    end
+    else if (BooleanCritico=false)AND(BooleanLEC=true) then
+    begin
+      DBGridSAP.Canvas.Brush.Color:= clFuchsia;
+      DBGridSAP.Font.Color:= clBlack;
+      DBGridSAP.Canvas.FillRect(Rect);
+      DBGridSAP.DefaultDrawColumnCell(Rect, DataCol,Column, State);
+    end
+    else
+    begin
+      DBGridSAP.Canvas.Brush.Color:= clSilver;
+      DBGridSAP.Font.Color:= clBlack;
+      DBGridSAP.Canvas.FillRect(Rect);
+      DBGridSAP.DefaultDrawColumnCell(Rect, DataCol,Column, State);
+    end;
+  end;
+end;
+
+procedure TFrmConsultaLEC.DBGridSAPTitleClick(Column: TColumn);
+begin
+  TabIndex:= 0;
+  FrmPrincipal.configurarFiltro(0,Column.FieldName,IntToStr(Column.Index),
+  Column.ReadOnly,actFiltroInserir,actGridASC,actGridDESC,actSubstituirPor);
+  //======================================================
+  FrmPrincipal.titleGrid(ColunasLayoutSAP,'Memoria',
+  FrmDataModule.ADOQueryLocalInstalacaoSAP.SQL.Text);
+end;
+
+procedure TFrmConsultaLEC.edtLocalInstalacaoChange(Sender: TObject);
+begin
+  FrmPrincipal.buscaFiledGrid1('LocalInstalacao',edtLocalInstalacao.Text,
+  'Contem',ColunasLayoutSAP,4,false);
+  actProcurarSAP.Execute;
+end;
+
+procedure TFrmConsultaLEC.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+  TreeView.Destroy;
+  TreeView.Free;
+  Action:= caFree;
+  FrmConsultaLEC:=nil;
+end;
+
+procedure TFrmConsultaLEC.FormCreate(Sender: TObject);
+begin
+  FrmPrincipal.MDIChildCreated(self.Handle);
+  PageControlGeral.TabIndex:= 0;
+  Interromper:= false;
+  actInterromper.Enabled:= false;
+  //Incicialização
+  FrmPrincipal.SetUpColunasLayout(DBGridSAP, ColunasLayoutSAP);
+  FrmDataModule.ADOQueryPlataformaControle.Active:= false;
+  FrmDataModule.ADOQueryPlataformaControle.Active:= true;
+  FrmPrincipal.carregarCheckListBox(FrmDataModule.ADOQueryPlataformaControle,
+  CheckListBoxPlataforma,'Plataforma');
+  actProcurarSAP.Execute;
+  actProcurarLECControle.Execute;
+  //==============================================
+  if ((FrmPrincipal.logPerfil = 'Administrador')OR
+  (FrmPrincipal.logPerfil = 'Supervisor')OR
+  (FrmPrincipal.logPerfil = 'PCM')OR
+  (FrmPrincipal.logPerfil = 'PIOP')OR
+  (FrmPrincipal.logPerfil = 'Operação')) then
+  begin
+    actBooleanLEC.Enabled:= true;
+    actSAPTodos.Enabled:= true;
+    actSAPItem.Enabled:= true;
+    actExcelImportar.Enabled:= true;
+  end
+  else
+  begin
+    actBooleanLEC.Enabled:= false;
+    actSAPTodos.Enabled:= false;
+    actSAPItem.Enabled:= false;
+    actExcelImportar.Enabled:= false;
+  end;
+  FrmPrincipal.carregarFiltroSistemaCheckList(CheckListBoxSistemaFiltro,DBGridSAP);
+end;
+
+procedure TFrmConsultaLEC.FormDestroy(Sender: TObject);
+begin
+  FrmPrincipal.MDIChildDestroyed(self.Handle);
+end;
+
+procedure TFrmConsultaLEC.TreeViewChange(Sender: TObject; Node: TTreeNode);
+  var
+    Lista: TStringList;
+begin
+  try
+    Lista:= TStringList.Create;
+    Lista.delimiter:= '=';
+    Lista.StrictDelimiter:= false;
+    Lista.DelimitedText:=Node.Text;
+    edtLocalInstalacao.Text:= Lista[0];
+  except
+  end;
+end;
+
+procedure TFrmConsultaLEC.WMMDIACTIVATE(var msg: TWMMDIACTIVATE);
+ var
+  active: TWinControl;
+  idx: Integer;
+begin
+  active := FindControl(msg.ActiveWnd) ;
+
+  if Assigned(active) then
+  begin
+    idx := FrmPrincipal.mdiChildrenTabs.Tabs.IndexOfObject(TObject(msg.ActiveWnd));
+    FrmPrincipal.mdiChildrenTabs.Tag := -1;
+    FrmPrincipal.mdiChildrenTabs.TabIndex := idx;
+    FrmPrincipal.mdiChildrenTabs.Tag := 0;
+  end;
+end;
+
+end.

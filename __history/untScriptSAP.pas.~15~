@@ -1,0 +1,1516 @@
+unit untScriptSAP;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs,COMOBJ, Vcl.ToolWin, Vcl.ComCtrls,
+  Vcl.StdCtrls, Vcl.Buttons, Vcl.ExtCtrls, System.Actions, Vcl.ActnList,
+  Vcl.PlatformDefaultStyleActnCtrls, Vcl.ActnMan, System.ImageList, Vcl.ImgList,
+  SDL_ProgBar, Vcl.Grids,System.UITypes;
+
+type
+  TFrmScriptSAP = class(TForm)
+    ActionManager1: TActionManager;
+    OpenDialog1: TOpenDialog;
+    PanelTitulo: TPanel;
+    PageControl1: TPageControl;
+    TabSheet1: TTabSheet;
+    TabSheet2: TTabSheet;
+    ToolBar1: TToolBar;
+    MemoScript: TMemo;
+    ToolBar2: TToolBar;
+    actSalvar: TAction;
+    SaveDialog1: TSaveDialog;
+    StringGridTabela: TStringGrid;
+    actInterromper: TAction;
+    actExcelResultado: TAction;
+    BitBtn1: TBitBtn;
+    BitBtn2: TBitBtn;
+    BitBtn3: TBitBtn;
+    BitBtn4: TBitBtn;
+    StatusBarResultado: TStatusBar;
+    actScriptSAP: TAction;
+    actInfoScript: TAction;
+    actInfoTabela: TAction;
+    BitBtn5: TBitBtn;
+    BitBtn6: TBitBtn;
+    RadioGroupSAP: TRadioGroup;
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure FormCreate(Sender: TObject);
+    procedure FormDestroy(Sender: TObject);
+    procedure actSalvarExecute(Sender: TObject);
+    procedure actInterromperExecute(Sender: TObject);
+    procedure actExcelResultadoExecute(Sender: TObject);
+    procedure StringGridTabelaFixedCellClick(Sender: TObject; ACol,
+      ARow: Integer);
+    procedure actInfoScriptExecute(Sender: TObject);
+    procedure actInfoTabelaExecute(Sender: TObject);
+    procedure actScriptSAPExecute(Sender: TObject);
+  private
+    { Private declarations }
+    Interromper: Boolean;
+    procedure WMMDIACTIVATE(var msg: TWMMDIACTIVATE);message WM_MDIACTIVATE;
+    procedure introducao;
+    function LimitarStrRight(S : string; Len : Integer) : string;
+    function RemoveSujeira(str: String): String;
+    function criarLinha(Texto: String; ACol,ARow,LimiteCaracter,TipoNumTxt: Integer; testeBoolean: Boolean): String;
+    procedure preencherScript(Excel: Variant; i,Inicio,Fim: Integer);
+    function getElementoPEP(LocalInstalacao: String): String;
+  public
+    { Public declarations }
+  end;
+
+var
+  FrmScriptSAP: TFrmScriptSAP;
+
+implementation
+  uses untPrincipal,untDataModule;
+{$R *.dfm}
+
+procedure TFrmScriptSAP.actExcelResultadoExecute(Sender: TObject);
+begin
+  FrmPrincipal.ExcelStringGrid(StringGridTabela,'Resultado Script SAP','','',1);
+end;
+
+procedure TFrmScriptSAP.actScriptSAPExecute(Sender: TObject);
+  var
+    Excel, Sheet: Variant;
+    Ordem1,Ordem2: String;
+    i,matrizLinha,naoBranco,ARow,ACol,Inicio: Integer;
+begin
+  OpenDialog1.Filter := 'Microsoft Excel |*.xlsx|Microsoft Excel 97-2003|*.xls';
+  OpenDialog1.DefaultExt := '*.xlsx';
+  if OpenDialog1.Execute then
+  begin
+    try
+      ARow:= 2;
+      ACol:= 1;
+      try
+        Excel := CreateOleObject('Excel.Application');
+      except
+        MessageBox(0,'Verifique se o Microsoft Office Excel esta instalado na sua máquina.',
+        'Excel', MB_ICONERROR);
+      end;
+      // Abrir o arquivo
+      try
+        Excel.Workbooks.Open(OpenDialog1.FileName);
+      except
+        MessageBox(0,'Arquivo não encontrado, verifique o endereço do arquivo!',
+        'Excel', MB_ICONERROR);
+      end;
+      // Abrir a primeira planilha do arquivo
+      Sheet := Excel.WorkSheets[1];
+      //Verificar a ultima Linha
+      // ============================================
+      i:= 1;
+      matrizLinha:= i;
+      naoBranco:= Length(Excel.Workbooks[1].Sheets[1].Cells[ARow, ACol]);
+      while (naoBranco <> 0) do
+      begin
+        matrizLinha:= ARow + i;
+        naoBranco:= Length(Excel.Workbooks[1].Sheets[1].Cells[ARow+i,ACol]);
+        i:= i + 1;
+      end;
+      matrizLinha:= matrizLinha-1;
+      // Inicializar ProgressBar
+      MemoScript.Lines.Clear;
+      FrmPrincipal.ProgressBarIncializa(matrizLinha,'Gerando Script SAP, N° total de Linhas: '+
+      IntToStr(matrizLinha));
+      introducao;
+      actInfoTabela.Execute;
+      i:= ARow;
+      Inicio:= ARow;
+      Ordem1:= Excel.Workbooks[1].Sheets[1].Cells[2,1];
+      while i <= matrizLinha do
+      begin
+        if Interromper and (Application.MessageBox(PChar('Deseja realmente cancelar o processo?'),
+        '.::ATENÇÃO::.',36) = 6) then
+        begin
+          FrmPrincipal.ProgressBarAtualizar;
+          Excel.Application.DisplayAlerts := False;
+          Excel.Quit;
+          Excel := Unassigned;
+          FreeAndNil(Excel);
+          Excel := 0;
+          Interromper := False;
+          actInterromper.Enabled:= false;
+          break;
+        end
+        else
+        begin
+          Interromper := False;
+          actInterromper.Enabled:= true;
+        end;
+        //==================================================================
+        //GERAR LINHA
+        if RadioGroupSAP.ItemIndex = 6 then
+        begin
+          Ordem2:= Excel.Workbooks[1].Sheets[1].Cells[i,1];
+          if Ordem1 <> Ordem2 then
+          begin
+            preencherScript(Excel,i,Inicio,i-1);
+            Inicio:= i;
+            Ordem1:= Ordem2;
+          end
+          else if ((i = matrizLinha)and(Ordem1 = Ordem2)) then
+            preencherScript(Excel,i,Inicio,i);
+        end
+        else
+          preencherScript(Excel,i,0,0);
+        StringGridTabela.RowCount:= StringGridTabela.RowCount+1;
+        i:= i+1;
+        FrmPrincipal.ProgressBarIncremento(1);
+        Application.ProcessMessages;
+        //==================================================================
+      end;
+      // Atualizar ProgressBar
+      FrmPrincipal.ProgressBarAtualizar;
+      StatusBarResultado.Panels[0].Text:= 'N° Registros: '+IntToStr(StringGridTabela.RowCount-1);
+      try
+        StringGridTabela.FixedRows:= 1;
+      except
+      end;
+      //Fechar Excel
+      Excel.Application.DisplayAlerts := False; // Alle Rückfragen ausstellen
+      Excel.Quit;
+      Excel := Unassigned;
+      FreeAndNil(Excel);
+      Excel := 0;
+      actInterromper.Enabled:= false;
+      FrmPrincipal.AutoFitStatusBar(StatusBarResultado);
+    except
+      MessageBox(0,'Operação cancelada!','Script SAP', MB_ICONERROR);
+      StatusBarResultado.Panels[0].Text:= 'N° Registros: '+IntToStr(StringGridTabela.RowCount-1);
+      try
+        Excel.Application.DisplayAlerts := False;
+        Excel.Quit;
+        Excel := Unassigned;
+        FreeAndNil(Excel);
+        Excel := 0;
+      except
+      end;
+    end;
+  end;
+end;
+
+procedure TFrmScriptSAP.actInfoScriptExecute(Sender: TObject);
+begin
+  MemoScript.Lines.Clear;
+  case RadioGroupSAP.ItemIndex of
+    0: //IP05
+    begin
+      MemoScript.Lines.Add('Criar Script SAP para transação IP05 para modificar Item de Manutenção.');
+      MemoScript.Lines.Add('Passo a Passo:');
+      MemoScript.Lines.Add('1. Clicar no botão "Script SAP" e apontar para uma planilha Excel. (ver Notas)');
+      MemoScript.Lines.Add('2. Após conclusão do Script, clicar no botão "Salvar" e apontar o endereço destino.');
+      MemoScript.Lines.Add('3. Abrir o SAP [PEP - ECC Produção Petrobras] e rodar o Script.');
+      MemoScript.Lines.Add('Notas:');
+      MemoScript.Lines.Add('1. O usuário deve possuir perfil de SCRIPT no SAP');
+      MemoScript.Lines.Add('2. A planilha Excel pode ser criada no SAP com a Transação: IP18 com Layout: /SCRIPT.');
+      MemoScript.Lines.Add('3. O layout da planilha pode ser consultado na aba "Resultado Tabela" e clicar no botão Info.');
+    end;
+    1: //IP02
+    begin
+      MemoScript.Lines.Add('Criar Script SAP para transação IP02 para modificar Plano de Instalação.');
+      MemoScript.Lines.Add('Passo a Passo:');
+      MemoScript.Lines.Add('1. Clicar no botão "Script SAP" e apontar para uma planilha Excel. (ver Notas)');
+      MemoScript.Lines.Add('2. Após conclusão do Script, clicar no botão "Salvar" e apontar o endereço destino.');
+      MemoScript.Lines.Add('3. Abrir o SAP [PEP - ECC Produção Petrobras] e rodar o Script.');
+      MemoScript.Lines.Add('Notas:');
+      MemoScript.Lines.Add('1. O usuário deve possuir perfil de SCRIPT no SAP');
+      MemoScript.Lines.Add('2. A planilha Excel pode ser criada no SAP com a Transação: IP16 com Layout: /SCRIPT.');
+      MemoScript.Lines.Add('3. O layout da planilha pode ser consultado na aba "Resultado Tabela" e clicar no botão Info.');
+    end;
+    2: //IL02
+    begin
+      MemoScript.Lines.Add('Criar Script SAP para transação IL02 para modificar Local de Instalação.');
+      MemoScript.Lines.Add('Passo a Passo:');
+      MemoScript.Lines.Add('1. Clicar no botão "Script SAP" e apontar para uma planilha Excel. (ver Notas)');
+      MemoScript.Lines.Add('2. Após conclusão do Script, clicar no botão "Salvar" e apontar o endereço destino.');
+      MemoScript.Lines.Add('3. Abrir o SAP [PEP - ECC Produção Petrobras] e rodar o Script.');
+      MemoScript.Lines.Add('Notas:');
+      MemoScript.Lines.Add('1. O usuário deve possuir perfil de SCRIPT no SAP');
+      MemoScript.Lines.Add('2. A planilha Excel pode ser criada no SAP com a Transação: IH06 com Layout: /SCRIPT.');
+      MemoScript.Lines.Add('3. O layout da planilha pode ser consultado na aba "Resultado Tabela" e clicar no botão Info.');
+    end;
+    3: //IW21
+    begin
+      MemoScript.Lines.Add('Criar Script SAP para transação IW21 para criar Nota de Manutenação.');
+      MemoScript.Lines.Add('Passo a Passo:');
+      MemoScript.Lines.Add('1. Clicar no botão "Script SAP" e apontar para uma planilha Excel. (ver Notas)');
+      MemoScript.Lines.Add('2. Após conclusão do Script, clicar no botão "Salvar" e apontar o endereço destino.');
+      MemoScript.Lines.Add('3. Abrir o SAP [PEP - ECC Produção Petrobras] e rodar o Script.');
+      MemoScript.Lines.Add('Notas:');
+      MemoScript.Lines.Add('1. O usuário deve possuir perfil de SCRIPT no SAP');
+      MemoScript.Lines.Add('2. A planilha Excel pode ser criada no SAP com a Transação: IW28 com Layout: /SCRIPT-IW21.');
+      MemoScript.Lines.Add('3. O layout da planilha pode ser consultado na aba "Resultado Tabela" e clicar no botão Info.');
+    end;
+    4: //IW22
+    begin
+      MemoScript.Lines.Add('Criar Script SAP para transação IW22 para modificar Nota de Manutenação.');
+      MemoScript.Lines.Add('Passo a Passo:');
+      MemoScript.Lines.Add('1. Clicar no botão "Script SAP" e apontar para uma planilha Excel. (ver Notas)');
+      MemoScript.Lines.Add('2. Após conclusão do Script, clicar no botão "Salvar" e apontar o endereço destino.');
+      MemoScript.Lines.Add('3. Abrir o SAP [PEP - ECC Produção Petrobras] e rodar o Script.');
+      MemoScript.Lines.Add('Notas:');
+      MemoScript.Lines.Add('1. O usuário deve possuir perfil de SCRIPT no SAP');
+      MemoScript.Lines.Add('2. A planilha Excel pode ser criada no SAP com a Transação: IW28 com Layout: /SCRIPT-IW22. e incluir na última coluna o Tipo Atv. Mant. da Ordem de Manutenção');
+      MemoScript.Lines.Add('3. O layout da planilha pode ser consultado na aba "Resultado Tabela" e clicar no botão Info.');
+    end;
+    5: //IW32
+    begin
+      MemoScript.Lines.Add('Criar Script SAP para transação IW32 para modificar Ordem de Manutenção.');
+      MemoScript.Lines.Add('Passo a Passo:');
+      MemoScript.Lines.Add('1. Clicar no botão "Script SAP" e apontar para uma planilha Excel. (ver Notas)');
+      MemoScript.Lines.Add('2. Após conclusão do Script, clicar no botão "Salvar" e apontar o endereço destino.');
+      MemoScript.Lines.Add('3. Abrir o SAP [PEP - ECC Produção Petrobras] e rodar o Script.');
+      MemoScript.Lines.Add('Notas:');
+      MemoScript.Lines.Add('1. O usuário deve possuir perfil de SCRIPT no SAP');
+      MemoScript.Lines.Add('2. A planilha Excel pode ser criada no SAP com a Transação: IW38 com Layout: /SCRIPT.');
+      MemoScript.Lines.Add('3. O layout da planilha pode ser consultado na aba "Resultado Tabela" e clicar no botão Info.');
+      MemoScript.Lines.Add('4. Para alterar o status do usuário é necessário que a coluna "Alterar Status Usuário" esteja '+
+      'marcada com "X" e então o status do usuário será configurado conforme preenchimento das demais colunas:');
+      MemoScript.Lines.Add('SIMP, IMPD, TRIA, AEGE, AENT, EXCL, FMAT, MPMI, MPOP, OPER, APLT, FAND, FPMT com "X" para '+
+      'TRUE ou vazio "" para FALSE.');
+    end;
+    6: //IW32
+    begin
+      MemoScript.Lines.Add('Criar Script SAP para transação IW32 para modificar Ordem de Manutenção.');
+      MemoScript.Lines.Add('Passo a Passo:');
+      MemoScript.Lines.Add('1. Clicar no botão "Script SAP" e apontar para uma planilha Excel. (ver Notas)');
+      MemoScript.Lines.Add('2. Após conclusão do Script, clicar no botão "Salvar" e apontar o endereço destino.');
+      MemoScript.Lines.Add('3. Abrir o SAP [PEP - ECC Produção Petrobras] e rodar o Script.');
+      MemoScript.Lines.Add('Notas:');
+      MemoScript.Lines.Add('1. O usuário deve possuir perfil de SCRIPT no SAP');
+      MemoScript.Lines.Add('2. A planilha Excel pode ser criada no SAP com a Transação: IW37N com Layout: /SCRIPT.');
+      MemoScript.Lines.Add('3. O layout da planilha pode ser consultado na aba "Resultado Tabela" e clicar no botão Info.');
+      MemoScript.Lines.Add('4. Classificar em ordem crescente pela primeira coluna com o número da Ordem de Manutenção ');
+    end;
+    7: //IW32
+    begin
+      MemoScript.Lines.Add('Criar Script SAP para transação IW32 para modificar Elemento PEP de Ordem de Manutenção.');
+      MemoScript.Lines.Add('Passo a Passo:');
+      MemoScript.Lines.Add('1. Clicar no botão "Script SAP" e apontar para uma planilha Excel. (ver Notas)');
+      MemoScript.Lines.Add('2. Após conclusão do Script, clicar no botão "Salvar" e apontar o endereço destino.');
+      MemoScript.Lines.Add('3. Abrir o SAP [PEP - ECC Produção Petrobras] e rodar o Script.');
+      MemoScript.Lines.Add('Notas:');
+      MemoScript.Lines.Add('1. O usuário deve possuir perfil de SCRIPT no SAP');
+      MemoScript.Lines.Add('2. A planilha Excel pode ser criada no SAP com a Transação: IW32 com Layout: /PEP2620.');
+      MemoScript.Lines.Add('3. O layout da planilha pode ser consultado na aba "Resultado Tabela" e clicar no botão Info.');
+      MemoScript.Lines.Add('4. Classificar em ordem crescente pela primeira coluna com o número da Ordem de Manutenção ');
+    end;
+  end;
+end;
+
+procedure TFrmScriptSAP.actInfoTabelaExecute(Sender: TObject);
+begin
+  case RadioGroupSAP.ItemIndex of
+    0: //IP05
+    begin
+      StringGridTabela.RowCount:= 1;
+      StringGridTabela.ColCount:= 13;
+      StringGridTabela.Cells[0,0]:= 'Item manutenção (16)';
+      StringGridTabela.Cells[1,0]:= 'Descrição item de manutenção (37)';
+      StringGridTabela.Cells[2,0]:= 'Centro planejamento (4)';
+      StringGridTabela.Cells[3,0]:= 'Tipo de ordem (4)';
+      StringGridTabela.Cells[4,0]:= 'Centro trab.respons. (8)';
+      StringGridTabela.Cells[5,0]:= 'Prioridade (1)';
+      StringGridTabela.Cells[6,0]:= 'Grp.plnj.PM (3)';
+      StringGridTabela.Cells[7,0]:= 'Tipo atividad.manut. (3)';
+      StringGridTabela.Cells[8,0]:= 'Tipo lista tarefas (1)';
+      StringGridTabela.Cells[9,0]:= 'Grupo roteiros (10)';
+      StringGridTabela.Cells[10,0]:= 'Numerador de grupos (2)';
+      StringGridTabela.Cells[11,0]:= 'Equipamento (18)';
+      StringGridTabela.Cells[12,0]:= 'Local de instalação (30)';
+    end;
+    1: //IP02
+    begin
+      StringGridTabela.RowCount:= 1;
+      StringGridTabela.ColCount:= 13;
+      StringGridTabela.Cells[0,0]:= 'Plano de manutenção (16)';
+      StringGridTabela.Cells[1,0]:= 'Texto plano manut. (40)';
+      StringGridTabela.Cells[2,0]:= 'Fator de modificação ciclo (4)';
+      StringGridTabela.Cells[3,0]:= 'Horizonte d/abertura (3)';
+      StringGridTabela.Cells[4,0]:= 'Interv.solicits. (3)';
+      StringGridTabela.Cells[5,0]:= 'Unid.interv.solicit. (3)';
+      StringGridTabela.Cells[6,0]:= 'Cmp.sel.plano manutenção (16)';
+      StringGridTabela.Cells[7,0]:= 'Confirmação Obrigatória [X] (1)';
+      StringGridTabela.Cells[8,0]:= 'FD confirm.atrasada (3)';
+      StringGridTabela.Cells[9,0]:= 'FD confirm.antecipada (3)';
+      StringGridTabela.Cells[10,0]:= 'Tolerância confirm.atrasada (%) (2)';
+      StringGridTabela.Cells[11,0]:= 'Tolerância confirm.antecipada (%) (2)';
+      StringGridTabela.Cells[12,0]:= 'Grp. Autorizações (4)';
+    end;
+    2: //IL02
+    begin
+      StringGridTabela.RowCount:= 1;
+      StringGridTabela.ColCount:= 25;
+      StringGridTabela.Cells[0,0]:= 'Local de instalação (30)';
+      StringGridTabela.Cells[1,0]:= 'Denominação do loc.instalação (40)';
+      StringGridTabela.Cells[2,0]:= 'Grp.plnj.PM (3)';
+      StringGridTabela.Cells[3,0]:= 'Fabricante do imobilizado (28)';
+      StringGridTabela.Cells[4,0]:= 'Denominação do tipo (20)';
+      StringGridTabela.Cells[5,0]:= 'Nº peça d/fabricante (28)';
+      StringGridTabela.Cells[6,0]:= 'Nº série fabricante (28)';
+      StringGridTabela.Cells[7,0]:= 'Peso bruto (17)';
+      StringGridTabela.Cells[8,0]:= 'Unidade de peso (3)';
+      StringGridTabela.Cells[9,0]:= 'Em serviço desde (10)';
+      StringGridTabela.Cells[10,0]:= 'Valor de aquisição (15)';
+      StringGridTabela.Cells[11,0]:= 'Moeda (3)';
+      StringGridTabela.Cells[12,0]:= 'Data de aquisição (10)';
+      StringGridTabela.Cells[13,0]:= 'Localização (10)';
+      StringGridTabela.Cells[14,0]:= 'Sala (8)';
+      StringGridTabela.Cells[15,0]:= 'Área operacional (3)';
+      StringGridTabela.Cells[16,0]:= 'Centro de trabalho (10)';
+      StringGridTabela.Cells[17,0]:= 'Código ABC (1)';
+      StringGridTabela.Cells[18,0]:= 'Campo de seleção (30)';
+      StringGridTabela.Cells[19,0]:= 'Centro trab.respons. (10)';
+      StringGridTabela.Cells[20,0]:= 'Centro localização (4)';
+      StringGridTabela.Cells[21,0]:= 'Perfil do catálogo (9)';
+      StringGridTabela.Cells[22,0]:= 'Centro custo (10)';
+      StringGridTabela.Cells[23,0]:= 'Impacto da Falha (1)';
+      StringGridTabela.Cells[24,0]:= 'N° Inventário (25)';
+    end;
+    3: //IW21
+    begin
+      StringGridTabela.RowCount:= 1;
+      StringGridTabela.ColCount:= 25;
+      StringGridTabela.Cells[0,0]:= 'Nota (16)';
+      StringGridTabela.Cells[0,0]:= 'Tipo Nota (2)';
+      StringGridTabela.Cells[1,0]:= 'Equipamento (18)';
+      StringGridTabela.Cells[2,0]:= 'Local de instalação (30)';
+      StringGridTabela.Cells[3,0]:= 'Autor da Nota (12)';
+      StringGridTabela.Cells[4,0]:= 'Descrição (16)';
+      StringGridTabela.Cells[5,0]:= 'Início desejado (10)';
+      StringGridTabela.Cells[6,0]:= 'Conlusão desejada (10)';
+      StringGridTabela.Cells[7,0]:= 'Início avaria (10)';
+      StringGridTabela.Cells[8,0]:= 'Fim da avaria (10)';
+      StringGridTabela.Cells[9,0]:= 'Parada (1)';
+      StringGridTabela.Cells[10,0]:= 'Sala (8)';
+      StringGridTabela.Cells[11,0]:= 'Grp.plnj.PM (3)';
+      StringGridTabela.Cells[12,0]:= 'Centro planejamento (4)';
+      StringGridTabela.Cells[13,0]:= 'Centro trab.respons. (10)';
+      StringGridTabela.Cells[14,0]:= 'Centro para CenTrab (4)';
+      StringGridTabela.Cells[15,0]:= 'Tipo de Intervenção (1)';
+      StringGridTabela.Cells[16,0]:= 'Severidade  Meio Ambiente (2)';
+      StringGridTabela.Cells[17,0]:= 'Severidade Segurança (2)';
+      StringGridTabela.Cells[18,0]:= 'Severidade Produção (2)';
+      StringGridTabela.Cells[19,0]:= 'Origem Falha (4)';
+      StringGridTabela.Cells[20,0]:= 'Ordem Origem (10)';
+      StringGridTabela.Cells[21,0]:= 'Área de aplicação (2)';
+      StringGridTabela.Cells[22,0]:= 'Objetivo Setorial (2)';
+      StringGridTabela.Cells[23,0]:= 'Sub-tipo de Ordem (2)';
+      StringGridTabela.Cells[24,0]:= 'Efeito da Falha (6)';
+      StringGridTabela.Cells[25,0]:= 'Tipo Atv. Mant. (3)';
+    end;
+    4: //IW22
+    begin
+      StringGridTabela.RowCount:= 1;
+      StringGridTabela.ColCount:= 19;
+      StringGridTabela.Cells[0,0]:= 'Nota (16)';
+      StringGridTabela.Cells[1,0]:= 'Equipamento (18)';
+      StringGridTabela.Cells[2,0]:= 'Local de instalação (30)';
+      StringGridTabela.Cells[3,0]:= 'Autor da Nota (12)';
+      StringGridTabela.Cells[4,0]:= 'Descrição (16)';
+      StringGridTabela.Cells[5,0]:= 'Início desejado (10)';
+      StringGridTabela.Cells[6,0]:= 'Conlusão desejada (10)';
+      StringGridTabela.Cells[7,0]:= 'Início avaria (10)';
+      StringGridTabela.Cells[8,0]:= 'Fim da avaria (10)';
+      StringGridTabela.Cells[9,0]:= 'Parada (1)';
+      StringGridTabela.Cells[10,0]:= 'Sala (8)';
+      StringGridTabela.Cells[11,0]:= 'Grp.plnj.PM (3)';
+      StringGridTabela.Cells[12,0]:= 'Centro planejamento (4)';
+      StringGridTabela.Cells[13,0]:= 'Centro trab.respons. (10)';
+      StringGridTabela.Cells[14,0]:= 'Centro para CenTrab (4)';
+      StringGridTabela.Cells[15,0]:= 'Tipo de Intervenção (1)';
+      StringGridTabela.Cells[16,0]:= 'Origem Falha (4)';
+      StringGridTabela.Cells[17,0]:= 'Ordem Origem (10)';
+      StringGridTabela.Cells[18,0]:= 'Efeito da Falha (6)';
+    end;
+    5: //IW32
+    begin
+      StringGridTabela.RowCount:= 1;
+      StringGridTabela.ColCount:= 26;
+      StringGridTabela.Cells[0,0]:= 'Ordem (12)';
+      StringGridTabela.Cells[1,0]:= 'Sala (8)';
+      StringGridTabela.Cells[2,0]:= 'Campo de seleção (30)';
+      StringGridTabela.Cells[3,0]:= 'Local de instalação (30)';
+      StringGridTabela.Cells[4,0]:= 'Equipamento (18)';
+      StringGridTabela.Cells[5,0]:= 'Texto breve OM (40)';
+      StringGridTabela.Cells[6,0]:= 'Data-base início (10)';
+      StringGridTabela.Cells[7,0]:= 'Data-base fim (10)';
+      StringGridTabela.Cells[8,0]:= 'Centro trab.OM (10)';
+      StringGridTabela.Cells[9,0]:= 'Grupo Planej. (3)';
+      StringGridTabela.Cells[10,0]:= 'Centro Planej. (4)';
+      StringGridTabela.Cells[11,0]:= 'Tipo Atv. Mant. (3)';
+      StringGridTabela.Cells[12,0]:= 'Alterar Status Usuário';
+      StringGridTabela.Cells[13,0]:= 'SIMP';
+      StringGridTabela.Cells[14,0]:= 'IMPD';
+      StringGridTabela.Cells[15,0]:= 'TRIA';
+      StringGridTabela.Cells[16,0]:= 'AEGE';
+      StringGridTabela.Cells[17,0]:= 'AENT';
+      StringGridTabela.Cells[18,0]:= 'EXCL';
+      StringGridTabela.Cells[19,0]:= 'FMAT';
+      StringGridTabela.Cells[20,0]:= 'MPMI';
+      StringGridTabela.Cells[21,0]:= 'MPOP';
+      StringGridTabela.Cells[22,0]:= 'OPER';
+      StringGridTabela.Cells[23,0]:= 'APLT';
+      StringGridTabela.Cells[24,0]:= 'FAND';
+      StringGridTabela.Cells[25,0]:= 'FPMT';
+    end;
+    6: //IW32
+    begin
+      StringGridTabela.RowCount:= 1;
+      StringGridTabela.ColCount:= 8;
+      StringGridTabela.Cells[0,0]:= 'Ordem (12)';
+      StringGridTabela.Cells[1,0]:= 'N° Oper. (4)';
+      StringGridTabela.Cells[2,0]:= 'Texto breve OP (40)';
+      StringGridTabela.Cells[3,0]:= 'Centro trab.OP (10)';
+      StringGridTabela.Cells[4,0]:= 'Chave Controle (4)';
+      StringGridTabela.Cells[5,0]:= 'Numero (3)';
+      StringGridTabela.Cells[6,0]:= 'Duração normal (7)';
+      StringGridTabela.Cells[7,0]:= 'Un.duração normal (2)';
+    end;
+    7: //IW32
+    begin
+      StringGridTabela.RowCount:= 1;
+      StringGridTabela.ColCount:= 7;
+      StringGridTabela.Cells[0,0]:= 'Ordem (12)';
+      StringGridTabela.Cells[1,0]:= 'PEP cabeçalho da ordem (22)';
+      StringGridTabela.Cells[2,0]:= 'Texto breve OP (40)';
+      StringGridTabela.Cells[3,0]:= 'Centro trab.OP (10)';
+      StringGridTabela.Cells[4,0]:= 'Local de instalação (30)';
+      StringGridTabela.Cells[5,0]:= 'Denominação do loc.instalação (40)';
+      StringGridTabela.Cells[6,0]:= 'Data-base início (10)';
+    end;
+  end;
+  FrmPrincipal.AutoFitGrade(StringGridTabela);
+end;
+
+procedure TFrmScriptSAP.actInterromperExecute(Sender: TObject);
+begin
+  Interromper:= true;
+  actInterromper.Enabled:= false;
+end;
+
+procedure TFrmScriptSAP.actSalvarExecute(Sender: TObject);
+begin
+  case RadioGroupSAP.ItemIndex of
+    0: SaveDialog1.FileName:= 'IP05';
+    1: SaveDialog1.FileName:= 'IP02';
+    2: SaveDialog1.FileName:= 'IL02';
+    3: SaveDialog1.FileName:= 'IW21';
+    4: SaveDialog1.FileName:= 'IW22';
+    5: SaveDialog1.FileName:= 'IW32';
+    6: SaveDialog1.FileName:= 'IW37N';
+    7: SaveDialog1.FileName:= 'IW32';
+  end;
+  SaveDialog1.DefaultExt:= '*.vbs';
+  SaveDialog1.Filter:= 'Arquivo de texto (*.vbs)|*.vbs';
+  if (SaveDialog1.Execute) then
+    MemoScript.Lines.SaveToFile(SaveDialog1.FileName);
+end;
+
+function TFrmScriptSAP.criarLinha(Texto: String; ACol,ARow,LimiteCaracter,TipoNumTxt: Integer; testeBoolean: Boolean): String;
+  var
+    TextoCorrigido: String;
+    NumTxt: Integer;
+begin
+  if testeBoolean then
+  begin
+    if AnsiUpperCase(Texto) = 'X' then
+    begin
+      Result:= 'X';
+      StringGridTabela.Cells[ACol,ARow]:= Result;
+    end
+    else
+    begin
+      Result:= '';
+      StringGridTabela.Cells[ACol,ARow]:= '';
+    end;
+  end
+  else
+  begin
+    NumTxt:= FrmPrincipal.isNumeric(Texto);
+    if (NumTxt >= TipoNumTxt)or(TipoNumTxt=0) then
+    begin
+      TextoCorrigido:= RemoveSujeira(Texto);
+      Result:= LimitarStrRight(TextoCorrigido,LimiteCaracter);
+      StringGridTabela.Cells[ACol,ARow]:= Result;
+    end
+    else
+      Result:= '';
+  end;
+end;
+
+function TFrmScriptSAP.LimitarStrRight(S: string; Len: Integer): string;
+var
+  L : Integer;
+begin
+  L := Length(S);
+  if L <= Len then
+    Result := S
+  else
+    Result := Copy(S, L + 1 - Len, Len);
+end;
+
+procedure TFrmScriptSAP.preencherScript(Excel: Variant; i,Inicio,Fim: Integer);
+  var
+    PlanoManut,TextoPlano,FatorModifcacao,
+    HorizontAbertura,IntervSolic,UnidInterv,CmpSelePlano,Confirmacao,FDAtraso,FDAntecipado,
+    TolerAtraso,TolerAntecipa,GrupoAutor,CentroTrabalho,TextoBreve,Prioridade,
+    ItemManut,LocalInstalacao,Equipamento,GrupoRoteiro,NumGrupo,TipoGrupo,TipoAtvManut,
+    TipoOrdem,CentroPlanej,GrupoPlanej,DenominLocInstal,GrpPlnjPM,
+    Fabricante,DenominacaoTipo,NPecaFabricante,NSerie,NInventario,
+    Peso,UnidadePeso,ServicoDesde,ValorAquisicao,Moeda,
+    DataAquisicao,Localizacao,Sala,AreaOperacional,CodigoABC,
+    CampoSelecao,CentroTrabRespons,CentroLocalizacao,PerfilCatalogo,
+    CentroCusto,ImpactoFalha,Nota,AutorNota,Descricao,DataBaseInicio,DataBaseFim,
+    InicioAvaria,FimAvaria,Parada,TipoIntervencao,OrigemFalha,OrdemOrigem,EfeitoFalha: String;
+    Ordem,SIMP,IMPD,TRIA,AEGE,AENT,EXCL,FMAT,MPMI,MPOP,OPER,APLT,FAND,FPMT,AlterarStatus: String;
+    NumOperacao,TextoBreveOperacao,CentroTrabOperacao,Numero,DuracaoNormal,ChaveControle: String;
+
+    incScroll: Integer;
+begin
+
+  case RadioGroupSAP.ItemIndex of
+    0://IP05
+    begin
+      ItemManut:= criarLinha(Excel.Workbooks[1].Sheets[1].Cells[i,1],0,i-1,16,1,false);
+      if ItemManut <> '' then //0 texto, 1 integer, 2 float
+      begin
+        TextoBreve:= criarLinha(Excel.Workbooks[1].Sheets[1].Cells[i,2],1,i-1,37,0,false);
+        CentroPlanej:= criarLinha(Excel.Workbooks[1].Sheets[1].Cells[i,3],2,i-1,4,1,false);
+        TipoOrdem:= criarLinha(Excel.Workbooks[1].Sheets[1].Cells[i,4],3,i-1,4,0,false);
+        CentroTrabalho:= criarLinha(Excel.Workbooks[1].Sheets[1].Cells[i,5],4,i-1,8,0,false);
+        Prioridade:= criarLinha(Excel.Workbooks[1].Sheets[1].Cells[i,6],5,i-1,1,1,false);
+        GrupoPlanej:= criarLinha(Excel.Workbooks[1].Sheets[1].Cells[i,7],6,i-1,3,0,false);
+        TipoAtvManut:= criarLinha(Excel.Workbooks[1].Sheets[1].Cells[i,8],7,i-1,3,0,false);
+        TipoGrupo:= criarLinha(Excel.Workbooks[1].Sheets[1].Cells[i,9],8,i-1,1,0,false);
+        GrupoRoteiro:= criarLinha(Excel.Workbooks[1].Sheets[1].Cells[i,10],9,i-1,10,0,false);
+        NumGrupo:= criarLinha(Excel.Workbooks[1].Sheets[1].Cells[i,11],10,i-1,2,1,false);
+        Equipamento:= criarLinha(Excel.Workbooks[1].Sheets[1].Cells[i,12],11,i-1,18,1,false);
+        LocalInstalacao:= criarLinha(Excel.Workbooks[1].Sheets[1].Cells[i,13],12,i-1,30,0,false);
+        //==============================================================================
+        MemoScript.Lines.Add
+        ('session.findById("wnd[0]/tbar[0]/okcd").text = "/NIP05"');
+        MemoScript.Lines.Add
+        ('session.findById("wnd[0]").sendVKey 0');
+        MemoScript.Lines.Add
+        ('session.findById("wnd[0]/usr/ctxtRMIPM-WAPOS").text = "'+ItemManut+'"');
+        MemoScript.Lines.Add
+        ('session.findById("wnd[0]").sendVKey 0');
+        //======================================================================
+        if TextoBreve <> '' then
+          MemoScript.Lines.Add
+          ('session.findById("wnd[0]/usr/subSUBSCREEN_HEAD:SAPLIWP3:6001/txtRMIPM-PSTXT").text = "'+TextoBreve+'"');
+        if LocalInstalacao <> '' then
+          MemoScript.Lines.Add
+          ('session.findById("wnd[0]/usr/subSUBSCREEN_MITEM:SAPLIWP3:8002/tabsTABSTRIP_ITEM/tabpT'+
+          '\11/ssubSUBSCREEN_BODY2:SAPLIWP3:8022/subSUBSCREEN_ITEM_1:SAPLIWO1:0140/ctxtRIWO1-TPLNR").text = "'+LocalInstalacao+'"');
+        if Equipamento <> '' then
+          MemoScript.Lines.Add
+          ('session.findById("wnd[0]/usr/subSUBSCREEN_MITEM:SAPLIWP3:8002/tabsTABSTRIP_ITEM/tabpT\'+
+          '11/ssubSUBSCREEN_BODY2:SAPLIWP3:8022/subSUBSCREEN_ITEM_1:SAPLIWO1:0140/ctxtRIWO1-EQUNR").text = "'+Equipamento+'"');
+        if CentroPlanej <> '' then
+          MemoScript.Lines.Add
+          ('session.findById("wnd[0]/usr/subSUBSCREEN_MITEM:SAPLIWP3:8002/tabsTABSTRIP_ITEM/tabpT'+
+          '\11/ssubSUBSCREEN_BODY2:SAPLIWP3:8022/subSUBSCREEN_ITEM_2:SAPLIWP3:0500/ctxtRMIPM-IWERK").text = "'+CentroPlanej+'"');
+        if GrupoPlanej <> '' then
+          MemoScript.Lines.Add
+          ('session.findById("wnd[0]/usr/subSUBSCREEN_MITEM:SAPLIWP3:8002/tabsTABSTRIP_ITEM/tabpT'+
+          '\11/ssubSUBSCREEN_BODY2:SAPLIWP3:8022/subSUBSCREEN_ITEM_2:SAPLIWP3:0500/ctxtRMIPM-WPGRP").text = "'+GrupoPlanej+'"');
+        if TipoOrdem <> '' then
+          MemoScript.Lines.Add
+          ('session.findById("wnd[0]/usr/subSUBSCREEN_MITEM:SAPLIWP3:8002/tabsTABSTRIP_ITEM/tabpT'+
+          '\11/ssubSUBSCREEN_BODY2:SAPLIWP3:8022/subSUBSCREEN_ITEM_2:SAPLIWP3:0500/ctxtRMIPM-AUART").text = "'+TipoOrdem+'"');
+        if TipoAtvManut <> '' then
+          MemoScript.Lines.Add
+          ('session.findById("wnd[0]/usr/subSUBSCREEN_MITEM:SAPLIWP3:8002/tabsTABSTRIP_ITEM/tabpT'+
+          '\11/ssubSUBSCREEN_BODY2:SAPLIWP3:8022/subSUBSCREEN_ITEM_2:SAPLIWP3:0500/ctxtRMIPM-ILART").text = "'+TipoAtvManut+'"');
+        if CentroTrabalho <> '' then
+          MemoScript.Lines.Add
+          ('session.findById("wnd[0]/usr/subSUBSCREEN_MITEM:SAPLIWP3:8002/tabsTABSTRIP_ITEM/tabpT'+
+          '\11/ssubSUBSCREEN_BODY2:SAPLIWP3:8022/subSUBSCREEN_ITEM_2:SAPLIWP3:0500/ctxtRMIPM-GEWERK").text = "'+CentroTrabalho+'"');
+        if CentroPlanej <> '' then
+          MemoScript.Lines.Add
+          ('session.findById("wnd[0]/usr/subSUBSCREEN_MITEM:SAPLIWP3:8002/tabsTABSTRIP_ITEM/tabpT'+
+          '\11/ssubSUBSCREEN_BODY2:SAPLIWP3:8022/subSUBSCREEN_ITEM_2:SAPLIWP3:0500/ctxtRMIPM-WERGW").text = "'+CentroPlanej+'"');
+        if Prioridade <> '' then
+          MemoScript.Lines.Add
+          ('session.findById("wnd[0]/usr/subSUBSCREEN_MITEM:SAPLIWP3:8002/tabsTABSTRIP_ITEM/tabpT'+
+          '\11/ssubSUBSCREEN_BODY2:SAPLIWP3:8022/subSUBSCREEN_ITEM_2:SAPLIWP3:0500/cmbRMIPM-PRIOK").key = "'+Prioridade+'"');
+        if TipoGrupo <> '' then
+          MemoScript.Lines.Add
+          ('session.findById("wnd[0]/usr/subSUBSCREEN_MITEM:SAPLIWP3:8002/tabsTABSTRIP_ITEM/tabpT'+
+          '\11/ssubSUBSCREEN_BODY2:SAPLIWP3:8022/subSUBSCREEN_ITEM_2:SAPLIWP3:0500/txtRMIPM-PLNTY").text = "'+TipoGrupo+'"');
+        if GrupoRoteiro <> '' then
+          MemoScript.Lines.Add
+          ('session.findById("wnd[0]/usr/subSUBSCREEN_MITEM:SAPLIWP3:8002/tabsTABSTRIP_ITEM/tabpT'+
+          '\11/ssubSUBSCREEN_BODY2:SAPLIWP3:8022/subSUBSCREEN_ITEM_2:SAPLIWP3:0500/txtRMIPM-PLNNR").text = "'+GrupoRoteiro+'"');
+        if NumGrupo <> '' then
+          MemoScript.Lines.Add
+          ('session.findById("wnd[0]/usr/subSUBSCREEN_MITEM:SAPLIWP3:8002/tabsTABSTRIP_ITEM/tabpT'+
+          '\11/ssubSUBSCREEN_BODY2:SAPLIWP3:8022/subSUBSCREEN_ITEM_2:SAPLIWP3:0500/txtRMIPM-PLNAL").text = "'+NumGrupo+'"');
+
+        MemoScript.Lines.Add('session.findById("wnd[0]/tbar[0]/btn[11]").press');
+      end;
+    end;
+    1://IP02
+    begin
+      PlanoManut:= criarLinha(Excel.Workbooks[1].Sheets[1].Cells[i,1],0,i-1,16,1,false);
+      if PlanoManut <> '' then
+      begin
+        TextoPlano:= criarLinha(Excel.Workbooks[1].Sheets[1].Cells[i,2],1,i-1,40,0,false);
+        FatorModifcacao:= criarLinha(Excel.Workbooks[1].Sheets[1].Cells[i,3],2,i-1,4,1,false);
+        HorizontAbertura:= criarLinha(Excel.Workbooks[1].Sheets[1].Cells[i,4],3,i-1,3,1,false);
+        IntervSolic:= criarLinha(Excel.Workbooks[1].Sheets[1].Cells[i,5],4,i-1,3,1,false);
+        UnidInterv:= criarLinha(Excel.Workbooks[1].Sheets[1].Cells[i,6],5,i-1,3,0,false);
+        CmpSelePlano:= criarLinha(Excel.Workbooks[1].Sheets[1].Cells[i,7],6,i-1,16,0,false);
+        Confirmacao:= criarLinha(Excel.Workbooks[1].Sheets[1].Cells[i,8],7,i-1,1,0,false);
+        FDAtraso:= criarLinha(Excel.Workbooks[1].Sheets[1].Cells[i,9],8,i-1,3,1,false);
+        FDAntecipado:= criarLinha(Excel.Workbooks[1].Sheets[1].Cells[i,10],9,i-1,3,1,false);
+        TolerAtraso:= criarLinha(Excel.Workbooks[1].Sheets[1].Cells[i,11],10,i-1,2,1,false);
+        TolerAntecipa:= criarLinha(Excel.Workbooks[1].Sheets[1].Cells[i,12],11,i-1,2,1,false);
+        GrupoAutor:= criarLinha(Excel.Workbooks[1].Sheets[1].Cells[i,13],12,i-1,4,0,false);
+        //==============================================================================
+        MemoScript.Lines.Add
+        ('session.findById("wnd[0]/tbar[0]/okcd").text = "/NIP02"');
+        MemoScript.Lines.Add
+        ('session.findById("wnd[0]").sendVKey 0');
+        MemoScript.Lines.Add
+        ('session.findById("wnd[0]/usr/ctxtRMIPM-WARPL").text = "'+PlanoManut+'"');
+        MemoScript.Lines.Add
+        ('session.findById("wnd[0]").sendVKey 0');
+        MemoScript.Lines.Add
+        ('session.findById("wnd[0]/usr/subSUBSCREEN_MPLAN:SAPLIWP3:8001/tabsTABSTRIP_HEAD/tabpT\02").select');
+        //======================================================================
+        if AnsiUpperCase(Confirmacao) = 'X' then
+        begin
+          MemoScript.Lines.Add
+          ('session.findById("wnd[0]/usr/subSUBSCREEN_MPLAN:SAPLIWP3:8001/tabsTABSTRIP_HEAD/tabpT'+
+          '\02/ssubSUBSCREEN_BODY1:SAPLIWP3:8012/subSUBSCREEN_PARAMETER:SAPLIWP3:0115/chkRMIPM-CALL_CONFIRM").selected = true');
+        end;
+        if TextoPlano <> '' then
+          MemoScript.Lines.Add('session.findById("wnd[0]/usr/subSUBSCREEN_HEAD:SAPLIWP3:6000/txtRMIPM-WPTXT").text = "'+TextoPlano+'"');
+        if FDAtraso <> '' then
+          MemoScript.Lines.Add('session.findById("wnd[0]/usr/subSUBSCREEN_MPLAN:SAPLIWP3:8001/tabsTABSTRIP_HEAD/tabpT'+
+          '\02/ssubSUBSCREEN_BODY1:SAPLIWP3:8012/subSUBSCREEN_PARAMETER:SAPLIWP3:0115/txtRMIPM-VSPOS").text = "'+FDAtraso+'"');
+        if TolerAtraso <> '' then
+          MemoScript.Lines.Add('session.findById("wnd[0]/usr/subSUBSCREEN_MPLAN:SAPLIWP3:8001/tabsTABSTRIP_HEAD/tabpT'+
+          '\02/ssubSUBSCREEN_BODY1:SAPLIWP3:8012/subSUBSCREEN_PARAMETER:SAPLIWP3:0115/txtRMIPM-TOPOS").text = "'+TolerAtraso+'"');
+        if FDAntecipado <> '' then
+          MemoScript.Lines.Add('session.findById("wnd[0]/usr/subSUBSCREEN_MPLAN:SAPLIWP3:8001/tabsTABSTRIP_HEAD/tabpT'+
+          '\02/ssubSUBSCREEN_BODY1:SAPLIWP3:8012/subSUBSCREEN_PARAMETER:SAPLIWP3:0115/txtRMIPM-VSNEG").text = "'+FDAntecipado+'"');
+        if TolerAntecipa <> '' then
+          MemoScript.Lines.Add('session.findById("wnd[0]/usr/subSUBSCREEN_MPLAN:SAPLIWP3:8001/tabsTABSTRIP_HEAD/tabpT'+
+          '\02/ssubSUBSCREEN_BODY1:SAPLIWP3:8012/subSUBSCREEN_PARAMETER:SAPLIWP3:0115/txtRMIPM-TONEG").text = "'+TolerAntecipa+'"');
+        if FatorModifcacao <> '' then
+          MemoScript.Lines.Add('session.findById("wnd[0]/usr/subSUBSCREEN_MPLAN:SAPLIWP3:8001/tabsTABSTRIP_HEAD/tabpT'+
+          '\02/ssubSUBSCREEN_BODY1:SAPLIWP3:8012/subSUBSCREEN_PARAMETER:SAPLIWP3:0115/txtRMIPM-SFAKT").text = "'+FatorModifcacao+'"');
+        if HorizontAbertura <> '' then
+          MemoScript.Lines.Add('session.findById("wnd[0]/usr/subSUBSCREEN_MPLAN:SAPLIWP3:8001/tabsTABSTRIP_HEAD/tabpT'+
+          '\02/ssubSUBSCREEN_BODY1:SAPLIWP3:8012/subSUBSCREEN_PARAMETER:SAPLIWP3:0115/txtRMIPM-HORIZ").text = "'+HorizontAbertura+'"');
+        if IntervSolic <> '' then
+          MemoScript.Lines.Add('session.findById("wnd[0]/usr/subSUBSCREEN_MPLAN:SAPLIWP3:8001/tabsTABSTRIP_HEAD/tabpT'+
+          '\02/ssubSUBSCREEN_BODY1:SAPLIWP3:8012/subSUBSCREEN_PARAMETER:SAPLIWP3:0115/txtRMIPM-ABRHO").text = "'+IntervSolic+'"');
+        if UnidInterv <> '' then
+          MemoScript.Lines.Add('session.findById("wnd[0]/usr/subSUBSCREEN_MPLAN:SAPLIWP3:8001/tabsTABSTRIP_HEAD/tabpT'+
+          '\02/ssubSUBSCREEN_BODY1:SAPLIWP3:8012/subSUBSCREEN_PARAMETER:SAPLIWP3:0115/ctxtRMIPM-HUNIT").text = "'+UnidInterv+'"');
+        if CmpSelePlano <> '' then
+          MemoScript.Lines.Add('session.findById("wnd[0]/usr/subSUBSCREEN_MPLAN:SAPLIWP3:8001/tabsTABSTRIP_HEAD/tabpT'+
+          '\03/ssubSUBSCREEN_BODY1:SAPLIWP3:8012/subSUBSCREEN_PARAMETER:SAPLIWP3:0113/cmbRMIPM-PLAN_SORT").key = "'+CmpSelePlano+'"');
+        if GrupoAutor <> '' then
+          MemoScript.Lines.Add('session.findById("wnd[0]/usr/subSUBSCREEN_MPLAN:SAPLIWP3:8001/tabsTABSTRIP_HEAD/tabpT'+
+          '\03/ssubSUBSCREEN_BODY1:SAPLIWP3:8012/subSUBSCREEN_PARAMETER:SAPLIWP3:0113/ctxtRMIPM-BEGRU").text = "'+GrupoAutor+'"');
+        //====================================================================
+        MemoScript.Lines.Add('session.findById("wnd[0]/usr/subSUBSCREEN_MPLAN:SAPLIWP3:8001/tabsTABSTRIP_HEAD/tabpT'+
+        '\03/ssubSUBSCREEN_BODY1:SAPLIWP3:8012/subSUBSCREEN_PARAMETER:SAPLIWP3:0113/ctxtRMIPM-BEGRU").setFocus');
+        MemoScript.Lines.Add('session.findById("wnd[0]/usr/subSUBSCREEN_MPLAN:SAPLIWP3:8001/tabsTABSTRIP_HEAD/tabpT'+
+        '\03/ssubSUBSCREEN_BODY1:SAPLIWP3:8012/subSUBSCREEN_PARAMETER:SAPLIWP3:0113/ctxtRMIPM-BEGRU").caretPosition = 4');
+        MemoScript.Lines.Add('session.findById("wnd[0]").sendVKey 0');
+        MemoScript.Lines.Add('session.findById("wnd[0]/tbar[0]/btn[11]").press');
+      end;
+    end;
+    2: //IL02
+    begin
+      Localinstalacao:= criarLinha(Excel.Workbooks[1].Sheets[1].Cells[i,1],0,i-1,30,0,false);
+      if Localinstalacao <> '' then
+      begin
+        DenominLocInstal:= criarLinha(Excel.Workbooks[1].Sheets[1].Cells[i,2],1,i-1,40,0,false);
+        GrpPlnjPM:= criarLinha(Excel.Workbooks[1].Sheets[1].Cells[i,3],2,i-1,3,0,false);
+        Fabricante:= criarLinha(Excel.Workbooks[1].Sheets[1].Cells[i,4],3,i-1,28,0,false);
+        DenominacaoTipo:= criarLinha(Excel.Workbooks[1].Sheets[1].Cells[i,5],4,i-1,20,0,false);
+        NPecaFabricante:= criarLinha(Excel.Workbooks[1].Sheets[1].Cells[i,6],5,i-1,28,0,false);
+        NSerie:= criarLinha(Excel.Workbooks[1].Sheets[1].Cells[i,7],6,i-1,28,0,false);
+        Peso:= criarLinha(Excel.Workbooks[1].Sheets[1].Cells[i,8],7,i-1,17,1,false);
+        UnidadePeso:= criarLinha(Excel.Workbooks[1].Sheets[1].Cells[i,9],8,i-1,3,0,false);
+        ServicoDesde:= FrmPrincipal.dataSAP(criarLinha(Excel.Workbooks[1].Sheets[1].Cells[i,10],9,i-1,10,0,false));
+        UnidadePeso:= criarLinha(Excel.Workbooks[1].Sheets[1].Cells[i,11],10,i-1,15,1,false);
+        Moeda:= criarLinha(Excel.Workbooks[1].Sheets[1].Cells[i,12],11,i-1,3,0,false);
+        DataAquisicao:= FrmPrincipal.dataSAP(criarLinha(Excel.Workbooks[1].Sheets[1].Cells[i,13],12,i-1,10,0,false));
+        Localizacao:= criarLinha(Excel.Workbooks[1].Sheets[1].Cells[i,14],13,i-1,10,0,false);
+        Sala:= criarLinha(Excel.Workbooks[1].Sheets[1].Cells[i,15],14,i-1,8,0,false);
+        AreaOperacional:= criarLinha(Excel.Workbooks[1].Sheets[1].Cells[i,16],15,i-1,3,0,false);
+        CentroTrabalho:= criarLinha(Excel.Workbooks[1].Sheets[1].Cells[i,17],16,i-1,8,0,false);
+        CodigoABC:= criarLinha(Excel.Workbooks[1].Sheets[1].Cells[i,18],17,i-1,1,0,false);
+        CampoSelecao:= criarLinha(Excel.Workbooks[1].Sheets[1].Cells[i,19],18,i-1,30,0,false);
+        CentroTrabRespons:= criarLinha(Excel.Workbooks[1].Sheets[1].Cells[i,20],19,i-1,8,0,false);
+        CentroLocalizacao:= criarLinha(Excel.Workbooks[1].Sheets[1].Cells[i,21],20,i-1,4,1,false);
+        PerfilCatalogo:= criarLinha(Excel.Workbooks[1].Sheets[1].Cells[i,22],21,i-1,9,0,false);
+        CentroCusto:= criarLinha(Excel.Workbooks[1].Sheets[1].Cells[i,23],22,i-1,10,0,false);
+        ImpactoFalha:= criarLinha(Excel.Workbooks[1].Sheets[1].Cells[i,24],23,i-1,1,1,false);
+        NInventario:= criarLinha(Excel.Workbooks[1].Sheets[1].Cells[i,25],24,i-1,1,1,false);
+        //================================================
+        MemoScript.Lines.Add
+        ('session.findById("wnd[0]/tbar[0]/okcd").text = "/NIL02"');
+        MemoScript.Lines.Add
+        ('session.findById("wnd[0]").sendVKey 0');
+        MemoScript.Lines.Add
+        ('session.findById("wnd[0]/usr/ctxtIFLO-TPLNR").text = "'+Localinstalacao+'"');
+        MemoScript.Lines.Add
+        ('session.findById("wnd[0]/usr/ctxtRILO0-TPLKZ").text = "E02"');
+        MemoScript.Lines.Add
+        ('session.findById("wnd[0]").sendVKey 0');
+        //======================================================================
+        if DenominLocInstal <> '' then
+          MemoScript.Lines.Add
+          ('session.findById("wnd[0]/usr/txtIFLO-PLTXT").text = "'+DenominLocInstal+'"');
+        if ServicoDesde <> '' then
+          MemoScript.Lines.Add
+          ('session.findById("wnd[0]/usr/tabsTABSTRIP/tabpT\01/ssubSUB_DATA:SAPLITO0:0102/subSUB_0102A:SAPLITO0:'+
+          '1020/ctxtITOB-INBDT").text = "'+ServicoDesde+'"');
+        if Fabricante <> '' then
+          MemoScript.Lines.Add
+          ('session.findById("wnd[0]/usr/tabsTABSTRIP/tabpT\01/ssubSUB_DATA:SAPLITO0:0102/subSUB_0102C:SAPLITO0:'+
+          '1022/ctxtITOB-HERST").text = "'+Fabricante+'"');
+        if DenominacaoTipo <> '' then
+          MemoScript.Lines.Add
+          ('session.findById("wnd[0]/usr/tabsTABSTRIP/tabpT\01/ssubSUB_DATA:SAPLITO0:0102/subSUB_0102C:SAPLITO0:'+
+          '1022/txtITOB-TYPBZ").text = "'+DenominacaoTipo+'"');
+        if NPecaFabricante <> '' then
+          MemoScript.Lines.Add
+          ('session.findById("wnd[0]/usr/tabsTABSTRIP/tabpT\01/ssubSUB_DATA:SAPLITO0:0102/subSUB_0102C:SAPLITO0:'+
+          '1022/txtITOB-MAPAR").text = "'+NPecaFabricante+'"');
+        if NSerie <> '' then
+          MemoScript.Lines.Add
+          ('session.findById("wnd[0]/usr/tabsTABSTRIP/tabpT\01/ssubSUB_DATA:SAPLITO0:0102/subSUB_0102C:SAPLITO0:'+
+          '1022/txtITOB-SERGE").text = "'+NSerie+'"');
+        if ValorAquisicao <> '' then
+          MemoScript.Lines.Add
+          ('session.findById("wnd[0]/usr/tabsTABSTRIP/tabpT\01/ssubSUB_DATA:SAPLITO0:0102/subSUB_0102B:SAPLITO0:'+
+          '1021/txtITOB-ANSWT").text = "'+ValorAquisicao+'"');
+        if Moeda <> '' then
+          MemoScript.Lines.Add
+          ('session.findById("wnd[0]/usr/tabsTABSTRIP/tabpT\01/ssubSUB_DATA:SAPLITO0:0102/subSUB_0102B:SAPLITO0:'+
+          '1021/ctxtITOB-WAERS").text = "'+Moeda+'"');
+        if DataAquisicao <> '' then
+          MemoScript.Lines.Add
+          ('session.findById("wnd[0]/usr/tabsTABSTRIP/tabpT\01/ssubSUB_DATA:SAPLITO0:0102/subSUB_0102B:SAPLITO0:'+
+          '1021/ctxtITOB-ANSDT").text = "'+DataAquisicao+'"');
+        if NInventario <> '' then
+          MemoScript.Lines.Add
+          ('session.findById("wnd[0]/usr/tabsTABSTRIP/tabpT\01/ssubSUB_DATA:SAPLITO0:0102/subSUB_0102A:SAPLITO0:'+
+          '1020/txtITOB-INVNR").text = "'+NInventario+'"');
+        //======================================================================
+        if ((Sala<>'')OR(AreaOperacional<>'')OR(Localizacao<>'')OR(CentroTrabalho<>'')OR
+        (CodigoABC<>'')OR(CampoSelecao<>'')) then
+        begin
+          MemoScript.Lines.Add('session.findById("wnd[0]/usr/tabsTABSTRIP/tabpT\02").select');
+          if Sala <> '' then
+            MemoScript.Lines.Add
+            ('session.findById("wnd[0]/usr/tabsTABSTRIP/tabpT\02/ssubSUB_DATA:SAPLITO0:0102/subSUB_0102A:SAPLITO0:'+
+            '1050/txtITOB-MSGRP").text = "'+Sala+'"');
+          if AreaOperacional <> '' then
+            MemoScript.Lines.Add
+            ('session.findById("wnd[0]/usr/tabsTABSTRIP/tabpT\02/ssubSUB_DATA:SAPLITO0:0102/subSUB_0102A:SAPLITO0:'+
+            '1050/ctxtITOB-BEBER").text = "'+AreaOperacional+'"');
+          if Localizacao <> '' then
+            MemoScript.Lines.Add
+            ('session.findById("wnd[0]/usr/tabsTABSTRIP/tabpT\02/ssubSUB_DATA:SAPLITO0:0102/subSUB_0102A:SAPLITO0:'+
+            '1050/ctxtITOB-STORT").text = "'+Localizacao+'"');
+          if CentroTrabalho <> '' then
+            MemoScript.Lines.Add
+            ('session.findById("wnd[0]/usr/tabsTABSTRIP/tabpT\02/ssubSUB_DATA:SAPLITO0:0102/subSUB_0102A:SAPLITO0:'+
+            '1050/ctxtITOBATTR-ARBPL").text = "'+CentroTrabalho+'"');
+          if CodigoABC <> '' then
+            MemoScript.Lines.Add
+            ('session.findById("wnd[0]/usr/tabsTABSTRIP/tabpT\02/ssubSUB_DATA:SAPLITO0:0102/subSUB_0102A:SAPLITO0:'+
+            '1050/ctxtITOB-ABCKZ").text = "'+CodigoABC+'"');
+          if CampoSelecao <> '' then
+            MemoScript.Lines.Add
+            ('session.findById("wnd[0]/usr/tabsTABSTRIP/tabpT\02/ssubSUB_DATA:SAPLITO0:0102/subSUB_0102A:SAPLITO0:'+
+            '1050/txtITOB-EQFNR").text = "'+CampoSelecao+'"');
+        end;
+        //======================================================================
+        if ((CentroLocalizacao<>'')OR(GrpPlnjPM<>'')OR(CentroCusto<>'')OR(CentroTrabRespons<>'')OR
+        (PerfilCatalogo<>'')OR(ImpactoFalha<>'')) then
+        begin
+          MemoScript.Lines.Add
+          ('session.findById("wnd[0]/usr/tabsTABSTRIP/tabpT\03").select');
+          if CentroLocalizacao <> '' then
+            MemoScript.Lines.Add
+            ('session.findById("wnd[0]/usr/tabsTABSTRIP/tabpT\03/ssubSUB_DATA:SAPLITO0:0102/subSUB_0102B:SAPLITO0:'+
+            '1062/ctxtITOB-IWERK").text = "'+CentroLocalizacao+'"');
+          if GrpPlnjPM <> '' then
+            MemoScript.Lines.Add
+            ('session.findById("wnd[0]/usr/tabsTABSTRIP/tabpT\03/ssubSUB_DATA:SAPLITO0:0102/subSUB_0102B:SAPLITO0:'+
+            '1062/ctxtITOB-INGRP").text = "'+GrpPlnjPM+'"');
+          if CentroCusto <> '' then
+            MemoScript.Lines.Add
+            ('session.findById("wnd[0]/usr/tabsTABSTRIP/tabpT\03/ssubSUB_DATA:SAPLITO0:0102/subSUB_0102A:SAPLITO0:'+
+            '1052/ctxtITOB-KOSTL").text = "'+CentroCusto+'"');
+          if CentroTrabRespons <> '' then
+            MemoScript.Lines.Add
+            ('session.findById("wnd[0]/usr/tabsTABSTRIP/tabpT\03/ssubSUB_DATA:SAPLITO0:0102/subSUB_0102B:SAPLITO0:'+
+            '1062/ctxtITOBATTR-GEWRK").text = "'+CentroTrabRespons+'"');
+          if CentroLocalizacao <> '' then
+            MemoScript.Lines.Add
+            ('session.findById("wnd[0]/usr/tabsTABSTRIP/tabpT\03/ssubSUB_DATA:SAPLITO0:0102/subSUB_0102B:SAPLITO0:'+
+            '1062/txtITOBATTR-WERGW").text = "'+CentroLocalizacao+'"');
+          if PerfilCatalogo <> '' then
+            MemoScript.Lines.Add
+            ('session.findById("wnd[0]/usr/tabsTABSTRIP/tabpT\03/ssubSUB_DATA:SAPLITO0:0102/subSUB_0102B:SAPLITO0:'+
+            '1062/ctxtITOB-RBNR").text = "'+PerfilCatalogo+'"');
+          if ImpactoFalha <> '' then
+            MemoScript.Lines.Add
+            ('session.findById("wnd[0]/usr/tabsTABSTRIP/tabpT\03/ssubSUB_DATA:SAPLITO0:0102/subSUB_0102C:SAPLITO0:1080'+
+            '/subXUSR1080:SAPLXTOB:1000/ctxtCI_IFLOT-YYIMPACTO_FALHA").text = "'+ImpactoFalha+'"');
+          if NInventario <> '' then
+            MemoScript.Lines.Add
+            ('session.findById("wnd[0]/usr/tabsTABSTRIP/tabpT\03/ssubSUB_DATA:SAPLITO0:0102/subSUB_0102C:SAPLITO0:1080'+
+            '/subXUSR1080:SAPLXTOB:1000/ctxtCI_IFLOT-YYIMPACTO_FALHA").text = "'+ImpactoFalha+'"');
+        end;
+        MemoScript.Lines.Add('session.findById("wnd[0]/tbar[0]/btn[11]").press');
+      end;
+    end;
+    3: //IW21
+    begin
+      Nota:= criarLinha(Excel.Workbooks[1].Sheets[1].Cells[i,1],1,i-1,2,0,false);
+      Equipamento:= criarLinha(Excel.Workbooks[1].Sheets[1].Cells[i,2],1,i-1,18,1,false);
+      LocalInstalacao:= criarLinha(Excel.Workbooks[1].Sheets[1].Cells[i,3],2,i-1,30,0,false);
+      AutorNota:= criarLinha(Excel.Workbooks[1].Sheets[1].Cells[i,4],3,i-1,12,0,false);
+      TextoBreve:= criarLinha(Excel.Workbooks[1].Sheets[1].Cells[i,5],4,i-1,40,0,false);
+      DataBaseInicio:= FrmPrincipal.dataSAP(criarLinha(Excel.Workbooks[1].Sheets[1].Cells[i,6],5,i-1,10,0,false));
+      DataBaseFim:= FrmPrincipal.dataSAP(criarLinha(Excel.Workbooks[1].Sheets[1].Cells[i,7],6,i-1,10,0,false));
+      InicioAvaria:= FrmPrincipal.dataSAP(criarLinha(Excel.Workbooks[1].Sheets[1].Cells[i,8],7,i-1,10,0,false));
+      FimAvaria:= FrmPrincipal.dataSAP(criarLinha(Excel.Workbooks[1].Sheets[1].Cells[i,9],8,i-1,10,0,false));
+      Parada:= criarLinha(Excel.Workbooks[1].Sheets[1].Cells[i,10],9,i-1,1,0,false);
+      Sala:= criarLinha(Excel.Workbooks[1].Sheets[1].Cells[i,11],10,i-1,8,0,false);
+      GrpPlnjPM:= criarLinha(Excel.Workbooks[1].Sheets[1].Cells[i,12],11,i-1,3,0,false);
+      CentroPlanej:= criarLinha(Excel.Workbooks[1].Sheets[1].Cells[i,13],12,i-1,4,0,false);
+      CentroTrabRespons:= criarLinha(Excel.Workbooks[1].Sheets[1].Cells[i,14],13,i-1,8,0,false);
+      TipoIntervencao:= criarLinha(Excel.Workbooks[1].Sheets[1].Cells[i,16],15,i-1,1,1,false);
+      TipoAtvManut:= criarLinha(Excel.Workbooks[1].Sheets[1].Cells[i,26],25,i-1,3,0,false);
+      OrigemFalha:= criarLinha(Excel.Workbooks[1].Sheets[1].Cells[i,16],15,i-1,4,0,false);
+      OrdemOrigem:= criarLinha(Excel.Workbooks[1].Sheets[1].Cells[i,17],16,i-1,12,1,false);
+      EfeitoFalha:= criarLinha(Excel.Workbooks[1].Sheets[1].Cells[i,18],17,i-1,6,0,false);
+      //================================================
+      MemoScript.Lines.Add
+      ('session.findById("wnd[0]/tbar[0]/okcd").text = "/NIW21"');
+      MemoScript.Lines.Add
+      ('session.findById("wnd[0]").sendVKey 0');
+      MemoScript.Lines.Add
+      ('session.findById("wnd[0]/usr/ctxtRIWO00-QMART").text = "'+Nota+'"');
+      MemoScript.Lines.Add
+      ('session.findById("wnd[0]").sendVKey 0');
+      if TextoBreve <> '' then
+      MemoScript.Lines.Add
+      ('session.findById("wnd[0]/usr/subSCREEN_1:SAPLIQS0:1050/txtVIQMEL-QMTXT").text = "'+TextoBreve+'"');
+      if LocalInstalacao <> '' then
+      MemoScript.Lines.Add
+      ('session.findById("wnd[0]/usr/tabsTAB_GROUP_10/tabp10\TAB01/ssubSUB_GROUP_10:SAPLIQS0:7235/subCUSTOM_SCREEN:'+
+      'SAPLIQS0:7212/subSUBSCREEN_1:SAPLIQS0:7322/subOBJEKT:SAPLIWO1:0140/ctxtRIWO1-TPLNR").text = "'+LocalInstalacao+'"');
+      if GrupoPlanej <> '' then
+      MemoScript.Lines.Add
+        ('session.findById("wnd[0]/usr/tabsTAB_GROUP_10/tabp10\TAB01/ssubSUB_GROUP_10:SAPLIQS0:7235/subCUSTOM_SCREEN:SAPLIQS0'+
+        ':7212/subSUBSCREEN_2:SAPLIQS0:7326/ctxtVIQMEL-INGRP").text = "'+GrupoPlanej+'"');
+      if CentroPlanej <> '' then
+      MemoScript.Lines.Add
+        ('session.findById("wnd[0]/usr/tabsTAB_GROUP_10/tabp10\TAB01/ssubSUB_GROUP_10:SAPLIQS0:7235/subCUSTOM_SCREEN:SAPLIQS0:'+
+        '7212/subSUBSCREEN_2:SAPLIQS0:7326/ctxtRIWO00-SWERK").text = "'+CentroPlanej+'"');
+      if CentroTrabRespons <> '' then
+        MemoScript.Lines.Add
+        ('session.findById("wnd[0]/usr/tabsTAB_GROUP_10/tabp10\TAB01/ssubSUB_GROUP_10:SAPLIQS0:7235/subCUSTOM_SCREEN:SAPLIQS0:'+
+        '7212/subSUBSCREEN_2:SAPLIQS0:7326/ctxtRIWO00-GEWRK").text = "'+CentroTrabRespons+'"');
+      if AutorNota <> '' then
+        MemoScript.Lines.Add
+        ('session.findById("wnd[0]/usr/tabsTAB_GROUP_10/tabp10\TAB01/ssubSUB_GROUP_10:SAPLIQS0:7235/subCUSTOM_SCREEN:SAPLIQS0:'+
+        '7212/subSUBSCREEN_2:SAPLIQS0:7326/ctxtVIQMEL-QMNAM").text = "'+AutorNota+'"');
+      if DataBaseInicio <> '' then
+        MemoScript.Lines.Add
+        ('session.findById("wnd[0]/usr/tabsTAB_GROUP_10/tabp10\TAB01/ssubSUB_GROUP_10:SAPLIQS0:7235/subCUSTOM_SCREEN:'+
+        'SAPLIQS0:7212/subSUBSCREEN_3:SAPLIQS0:7330/ctxtVIQMEL-STRMN").text = "'+DataBaseInicio+'"');
+      if DataBaseFim <> '' then
+        MemoScript.Lines.Add
+        ('session.findById("wnd[0]/usr/tabsTAB_GROUP_10/tabp10\TAB01/ssubSUB_GROUP_10:SAPLIQS0:7235/subCUSTOM_SCREEN:'+
+        'SAPLIQS0:7212/subSUBSCREEN_3:SAPLIQS0:7330/ctxtVIQMEL-LTRMN").text = "'+DataBaseFim+'"');
+        MemoScript.Lines.Add
+        ('session.findById("wnd[0]/usr/tabsTAB_GROUP_10/tabp10\TAB01/ssubSUB_GROUP_10:SAPLIQS0:7235/subCUSTOM_SCREEN:SAPLIQS0:'+
+        '7212/subSUBSCREEN_2:SAPLIQS0:7326/ctxtRIWO00-SWERK").setFocus');
+        MemoScript.Lines.Add
+        ('session.findById("wnd[0]/usr/tabsTAB_GROUP_10/tabp10\TAB01/ssubSUB_GROUP_10:SAPLIQS0:7235/subCUSTOM_SCREEN:SAPLIQS0:'+
+        '7212/subSUBSCREEN_2:SAPLIQS0:7326/ctxtRIWO00-SWERK").caretPosition = 4');
+        MemoScript.Lines.Add
+        ('session.findById("wnd[0]/usr/tabsTAB_GROUP_10/tabp10\TAB02").select');
+        MemoScript.Lines.Add
+        ('session.findById("wnd[1]/tbar[0]/btn[0]").press');
+        MemoScript.Lines.Add
+        ('session.findById("wnd[0]/usr/tabsTAB_GROUP_10/tabp10\TAB02/ssubSUB_GROUP_10:SAPLIQS0:7235/subCUSTOM_SCREEN:SAPLIQS0:'+
+        '7212/subSUBSCREEN_1:SAPLIQS0:7790/subUSER0001:SAPLXQQM:0102/ctxtZAQMEL-YYTIPO_INTERV").text = "'+TipoIntervencao+'"');
+        MemoScript.Lines.Add
+        ('session.findById("wnd[0]/usr/tabsTAB_GROUP_10/tabp10\TAB02/ssubSUB_GROUP_10:SAPLIQS0:7235/subCUSTOM_SCREEN:SAPLIQS0:'+
+        '7212/subSUBSCREEN_1:SAPLIQS0:7790/subUSER0001:SAPLXQQM:0102/ctxtZAQMEL-YYAREA_AP").text = "90"');
+        MemoScript.Lines.Add
+        ('session.findById("wnd[0]/usr/tabsTAB_GROUP_10/tabp10\TAB02/ssubSUB_GROUP_10:SAPLIQS0:7235/subCUSTOM_SCREEN:SAPLIQS0:'+
+        '7212/subSUBSCREEN_1:SAPLIQS0:7790/subUSER0001:SAPLXQQM:0102/ctxtZAQMEL-YYGRP_ORD").text = "MI003"');
+        MemoScript.Lines.Add
+        ('session.findById("wnd[0]/usr/tabsTAB_GROUP_10/tabp10\TAB02/ssubSUB_GROUP_10:SAPLIQS0:7235/subCUSTOM_SCREEN:SAPLIQS0:'+
+        '7212/subSUBSCREEN_1:SAPLIQS0:7790/subUSER0001:SAPLXQQM:0102/ctxtZAQMEL-YYGRP_ORD").setFocus');
+        MemoScript.Lines.Add
+        ('session.findById("wnd[0]/usr/tabsTAB_GROUP_10/tabp10\TAB02/ssubSUB_GROUP_10:SAPLIQS0:7235/subCUSTOM_SCREEN:SAPLIQS0:'+
+        '7212/subSUBSCREEN_1:SAPLIQS0:7790/subUSER0001:SAPLXQQM:0102/ctxtZAQMEL-YYGRP_ORD").caretPosition = 5');
+        MemoScript.Lines.Add
+        ('session.findById("wnd[0]").sendVKey 0');
+        MemoScript.Lines.Add
+        ('session.findById("wnd[0]/usr/tabsTAB_GROUP_10/tabp10\TAB02/ssubSUB_GROUP_10:SAPLIQS0:7235/subCUSTOM_SCREEN:SAPLIQS0:'+
+        '7212/subSUBSCREEN_1:SAPLIQS0:7790/subUSER0001:SAPLXQQM:0102/ctxtZAQMEL-YYOBJ_SET").text = "999"');
+        MemoScript.Lines.Add
+        ('session.findById("wnd[0]/usr/tabsTAB_GROUP_10/tabp10\TAB02/ssubSUB_GROUP_10:SAPLIQS0:7235/subCUSTOM_SCREEN:SAPLIQS0:'+
+        '7212/subSUBSCREEN_1:SAPLIQS0:7790/subUSER0001:SAPLXQQM:0102/ctxtZAQMEL-YYOBJ_SET").setFocus');
+        MemoScript.Lines.Add
+        ('session.findById("wnd[0]/usr/tabsTAB_GROUP_10/tabp10\TAB02/ssubSUB_GROUP_10:SAPLIQS0:7235/subCUSTOM_SCREEN:SAPLIQS0:'+
+        '7212/subSUBSCREEN_1:SAPLIQS0:7790/subUSER0001:SAPLXQQM:0102/ctxtZAQMEL-YYOBJ_SET").caretPosition = 3');
+        MemoScript.Lines.Add
+        ('session.findById("wnd[0]").sendVKey 0');
+        MemoScript.Lines.Add
+        ('session.findById("wnd[0]/usr/subSCREEN_1:SAPLIQS0:1050/btnXICON_ORDER").press');
+        MemoScript.Lines.Add
+        ('session.findById("wnd[1]/tbar[0]/btn[0]").press');
+        if TipoAtvManut <> '' then
+        MemoScript.Lines.Add
+        ('session.findById("wnd[0]/usr/subSUB_ALL:SAPLCOIH:3001/ssubSUB_LEVEL:SAPLCOIH:1100/tabsTS_1100/tabpIHKZ/ssubSUB_AUFTRAG:'+
+        'SAPLCOIH:1120/subHEADER:SAPLCOIH:0154/ctxtCAUFVD-ILART").text = "'+TipoAtvManut+'"');
+        MemoScript.Lines.Add
+        ('session.findById("wnd[0]/usr/subSUB_ALL:SAPLCOIH:3001/ssubSUB_LEVEL:SAPLCOIH:1100/tabsTS_1100/tabpIHKZ/ssubSUB_AUFTRAG:'+
+        'SAPLCOIH:1120/subHEADER:SAPLCOIH:0154/ctxtCAUFVD-ILART").setFocus');
+        MemoScript.Lines.Add
+        ('session.findById("wnd[0]/usr/subSUB_ALL:SAPLCOIH:3001/ssubSUB_LEVEL:SAPLCOIH:1100/tabsTS_1100/tabpIHKZ/ssubSUB_AUFTRAG:'+
+        'SAPLCOIH:1120/subHEADER:SAPLCOIH:0154/ctxtCAUFVD-ILART").caretPosition = 3');
+        MemoScript.Lines.Add
+        ('session.findById("wnd[0]").sendVKey 0');
+        MemoScript.Lines.Add
+        ('session.findById("wnd[0]/usr/subSUB_ALL:SAPLCOIH:3001/ssubSUB_LEVEL:SAPLCOIH:1100/tabsTS_1100/tabp+CUK").select');
+        MemoScript.Lines.Add
+        ('session.findById("wnd[0]/tbar[0]/btn[11]").press');
+    end;
+    4: //IW22
+    begin
+      Nota:= criarLinha(Excel.Workbooks[1].Sheets[1].Cells[i,1],0,i-1,12,0,false);
+      if Nota <> '' then
+      begin
+        Equipamento:= criarLinha(Excel.Workbooks[1].Sheets[1].Cells[i,2],1,i-1,18,1,false);
+        LocalInstalacao:= criarLinha(Excel.Workbooks[1].Sheets[1].Cells[i,3],2,i-1,30,0,false);
+        AutorNota:= criarLinha(Excel.Workbooks[1].Sheets[1].Cells[i,4],3,i-1,12,0,false);
+        TextoBreve:= criarLinha(Excel.Workbooks[1].Sheets[1].Cells[i,5],4,i-1,40,0,false);
+        DataBaseInicio:= FrmPrincipal.dataSAP(criarLinha(Excel.Workbooks[1].Sheets[1].Cells[i,6],5,i-1,10,0,false));
+        DataBaseFim:= FrmPrincipal.dataSAP(criarLinha(Excel.Workbooks[1].Sheets[1].Cells[i,7],6,i-1,10,0,false));
+        InicioAvaria:= FrmPrincipal.dataSAP(criarLinha(Excel.Workbooks[1].Sheets[1].Cells[i,8],7,i-1,10,0,false));
+        FimAvaria:= FrmPrincipal.dataSAP(criarLinha(Excel.Workbooks[1].Sheets[1].Cells[i,9],8,i-1,10,0,false));
+        Parada:= criarLinha(Excel.Workbooks[1].Sheets[1].Cells[i,10],9,i-1,1,0,false);
+        Sala:= criarLinha(Excel.Workbooks[1].Sheets[1].Cells[i,11],10,i-1,8,0,false);
+        GrpPlnjPM:= criarLinha(Excel.Workbooks[1].Sheets[1].Cells[i,12],11,i-1,3,0,false);
+        CentroPlanej:= criarLinha(Excel.Workbooks[1].Sheets[1].Cells[i,13],12,i-1,4,0,false);
+        CentroTrabRespons:= criarLinha(Excel.Workbooks[1].Sheets[1].Cells[i,14],13,i-1,8,0,false);
+        TipoIntervencao:= criarLinha(Excel.Workbooks[1].Sheets[1].Cells[i,15],14,i-1,1,0,false);
+        OrigemFalha:= criarLinha(Excel.Workbooks[1].Sheets[1].Cells[i,16],15,i-1,4,0,false);
+        OrdemOrigem:= criarLinha(Excel.Workbooks[1].Sheets[1].Cells[i,17],16,i-1,12,1,false);
+        EfeitoFalha:= criarLinha(Excel.Workbooks[1].Sheets[1].Cells[i,18],17,i-1,6,0,false);
+        //================================================
+        MemoScript.Lines.Add
+        ('session.findById("wnd[0]/tbar[0]/okcd").text = "/NIW22"');
+        MemoScript.Lines.Add
+        ('session.findById("wnd[0]").sendVKey 0');
+        MemoScript.Lines.Add
+        ('session.findById("wnd[0]/usr/ctxtRIWO00-QMNUM").text = "'+Nota+'"');
+        MemoScript.Lines.Add
+        ('session.findById("wnd[0]").sendVKey 0');
+        //======================================================================
+        if TextoBreve <> '' then
+          MemoScript.Lines.Add
+          ('session.findById("wnd[0]/usr/subSCREEN_1:SAPLIQS0:1050/txtVIQMEL-QMTXT").text = "'+Descricao+'"');
+        if LocalInstalacao <> '' then
+          MemoScript.Lines.Add
+          ('session.findById("wnd[0]/usr/tabsTAB_GROUP_10/tabp10\TAB01/ssubSUB_GROUP_10:SAPLIQS0:7235/subCUSTOM_SCREEN'+
+          ':SAPLIQS0:7212/subSUBSCREEN_1:SAPLIQS0:7322/subOBJEKT:SAPLIWO1:0140/ctxtRIWO1-TPLNR").text = "'+LocalInstalacao+'"');
+        if Equipamento <> '' then
+          MemoScript.Lines.Add
+          ('session.findById("wnd[0]/usr/tabsTAB_GROUP_10/tabp10\TAB01/ssubSUB_GROUP_10:SAPLIQS0:7235/subCUSTOM_SCREEN'+
+          ':SAPLIQS0:7212/subSUBSCREEN_1:SAPLIQS0:7322/subOBJEKT:SAPLIWO1:0140/ctxtRIWO1-EQUNR").text = "'+Equipamento+'"');
+        if GrpPlnjPM <> '' then
+          MemoScript.Lines.Add
+          ('session.findById("wnd[0]/usr/tabsTAB_GROUP_10/tabp10\TAB01/ssubSUB_GROUP_10:SAPLIQS0:7235/subCUSTOM_SCREEN:'+
+          'SAPLIQS0:7212/subSUBSCREEN_2:SAPLIQS0:7326/ctxtVIQMEL-INGRP").text = "'+GrpPlnjPM+'"');
+        if CentroPlanej <> '' then
+          MemoScript.Lines.Add
+          ('session.findById("wnd[0]/usr/tabsTAB_GROUP_10/tabp10\TAB01/ssubSUB_GROUP_10:SAPLIQS0:7235/subCUSTOM_SCREEN:'+
+          'SAPLIQS0:7212/subSUBSCREEN_2:SAPLIQS0:7326/ctxtVIQMEL-IWERK").text = "'+CentroPlanej+'"');
+        if CentroTrabRespons <> '' then
+          MemoScript.Lines.Add
+          ('session.findById("wnd[0]/usr/tabsTAB_GROUP_10/tabp10\TAB01/ssubSUB_GROUP_10:SAPLIQS0:7235/subCUSTOM_SCREEN:'+
+          'SAPLIQS0:7212/subSUBSCREEN_2:SAPLIQS0:7326/ctxtRIWO00-GEWRK").text = "'+CentroTrabRespons+'"');
+        if CentroPlanej <> '' then
+          MemoScript.Lines.Add
+          ('session.findById("wnd[0]/usr/tabsTAB_GROUP_10/tabp10\TAB01/ssubSUB_GROUP_10:SAPLIQS0:7235/subCUSTOM_SCREEN:'+
+          'SAPLIQS0:7212/subSUBSCREEN_2:SAPLIQS0:7326/ctxtRIWO00-SWERK").text = "'+CentroPlanej+'"');
+        if AutorNota <> '' then
+          MemoScript.Lines.Add
+          ('session.findById("wnd[0]/usr/tabsTAB_GROUP_10/tabp10\TAB01/ssubSUB_GROUP_10:SAPLIQS0:7235/subCUSTOM_SCREEN:'+
+          'SAPLIQS0:7212/subSUBSCREEN_2:SAPLIQS0:7326/ctxtVIQMEL-QMNAM").text = "'+AutorNota+'"');
+        if DataBaseInicio <> '' then
+          MemoScript.Lines.Add
+          ('session.findById("wnd[0]/usr/tabsTAB_GROUP_10/tabp10\TAB01/ssubSUB_GROUP_10:SAPLIQS0:7235/subCUSTOM_SCREEN:'+
+          'SAPLIQS0:7212/subSUBSCREEN_3:SAPLIQS0:7330/ctxtVIQMEL-STRMN").text = "'+DataBaseInicio+'"');
+        if DataBaseFim <> '' then
+          MemoScript.Lines.Add
+          ('session.findById("wnd[0]/usr/tabsTAB_GROUP_10/tabp10\TAB01/ssubSUB_GROUP_10:SAPLIQS0:7235/subCUSTOM_SCREEN:'+
+          'SAPLIQS0:7212/subSUBSCREEN_3:SAPLIQS0:7330/ctxtVIQMEL-LTRMN").text = "'+DataBaseFim+'"');
+        //======================================================================
+        if ((EfeitoFalha <> '')OR(OrigemFalha <> '')OR(OrdemOrigem <> '')) then
+        begin
+          MemoScript.Lines.Add('session.findById("wnd[0]/usr/tabsTAB_GROUP_10/tabp10\TAB02").select');
+          if EfeitoFalha <> '' then
+            MemoScript.Lines.Add
+            ('session.findById("wnd[0]/usr/tabsTAB_GROUP_10/tabp10\TAB02/ssubSUB_GROUP_10:SAPLIQS0:7235/subCUSTOM_SCREEN:'+
+            'SAPLIQS0:7212/subSUBSCREEN_1:SAPLIQS0:7790/subUSER0001:SAPLXQQM:0102/ctxtZAQMEL-YYEFEITO_FALHA").text = "'+EfeitoFalha+'"');
+          if OrigemFalha <> '' then
+            MemoScript.Lines.Add
+            ('session.findById("wnd[0]/usr/tabsTAB_GROUP_10/tabp10\TAB02/ssubSUB_GROUP_10:SAPLIQS0:7235/subCUSTOM_SCREEN:'+
+            'SAPLIQS0:7212/subSUBSCREEN_1:SAPLIQS0:7790/subUSER0001:SAPLXQQM:0102/ctxtZAQMEL-YYORIGEM_FALHA").text = "'+OrigemFalha+'"');
+          if OrdemOrigem <> '' then
+            MemoScript.Lines.Add
+            ('session.findById("wnd[0]/usr/tabsTAB_GROUP_10/tabp10\TAB02/ssubSUB_GROUP_10:SAPLIQS0:7235/subCUSTOM_SCREEN:'+
+            'SAPLIQS0:7212/subSUBSCREEN_1:SAPLIQS0:7790/subUSER0001:SAPLXQQM:0102/ctxtZAQMEL-YYORDEM_ORIGEM").text = "'+OrdemOrigem+'"');
+        end;
+        MemoScript.Lines.Add('session.findById("wnd[0]/tbar[0]/btn[11]").press');
+      end;
+    end;
+    5: //IW32
+    begin
+      Ordem:= criarLinha(Excel.Workbooks[1].Sheets[1].Cells[i,1],0,i-1,12,0,false);
+      if Ordem <> '' then
+      begin
+        Sala:= criarLinha(Excel.Workbooks[1].Sheets[1].Cells[i,2],1,i-1,8,0,false);
+        CampoSelecao:= criarLinha(Excel.Workbooks[1].Sheets[1].Cells[i,3],2,i-1,30,0,false);
+        LocalInstalacao:= criarLinha(Excel.Workbooks[1].Sheets[1].Cells[i,4],3,i-1,30,0,false);
+        Equipamento:= criarLinha(Excel.Workbooks[1].Sheets[1].Cells[i,5],4,i-1,18,1,false);
+        TextoBreve:= criarLinha(Excel.Workbooks[1].Sheets[1].Cells[i,6],5,i-1,40,0,false);
+        DataBaseInicio:= FrmPrincipal.dataSAP(criarLinha(Excel.Workbooks[1].Sheets[1].Cells[i,7],6,i-1,10,0,false));
+        DataBaseFim:= FrmPrincipal.dataSAP(criarLinha(Excel.Workbooks[1].Sheets[1].Cells[i,8],7,i-1,10,0,false));
+        CentroTrabRespons:= criarLinha(Excel.Workbooks[1].Sheets[1].Cells[i,9],8,i-1,8,0,false);
+        GrupoPlanej:= criarLinha(Excel.Workbooks[1].Sheets[1].Cells[i,10],9,i-1,3,0,false);
+        CentroPlanej:= criarLinha(Excel.Workbooks[1].Sheets[1].Cells[i,11],10,i-1,4,1,false);
+        TipoAtvManut:= criarLinha(Excel.Workbooks[1].Sheets[1].Cells[i,12],11,i-1,3,0,false);
+        //Status Ususário
+        AlterarStatus:= AnsiUpperCase(criarLinha(Excel.Workbooks[1].Sheets[1].Cells[i,13],12,i-1,1,0,true));
+        SIMP:= AnsiUpperCase(criarLinha(Excel.Workbooks[1].Sheets[1].Cells[i,14],13,i-1,1,0,true));
+        IMPD:= AnsiUpperCase(criarLinha(Excel.Workbooks[1].Sheets[1].Cells[i,15],14,i-1,1,0,true));
+        TRIA:= AnsiUpperCase(criarLinha(Excel.Workbooks[1].Sheets[1].Cells[i,16],15,i-1,1,0,true));
+        AEGE:= AnsiUpperCase(criarLinha(Excel.Workbooks[1].Sheets[1].Cells[i,17],16,i-1,1,0,true));
+        AENT:= AnsiUpperCase(criarLinha(Excel.Workbooks[1].Sheets[1].Cells[i,18],17,i-1,1,0,true));
+        EXCL:= AnsiUpperCase(criarLinha(Excel.Workbooks[1].Sheets[1].Cells[i,19],18,i-1,1,0,true));
+        FMAT:= AnsiUpperCase(criarLinha(Excel.Workbooks[1].Sheets[1].Cells[i,20],19,i-1,1,0,true));
+        MPMI:= AnsiUpperCase(criarLinha(Excel.Workbooks[1].Sheets[1].Cells[i,21],20,i-1,1,0,true));
+        MPOP:= AnsiUpperCase(criarLinha(Excel.Workbooks[1].Sheets[1].Cells[i,22],21,i-1,1,0,true));
+        OPER:= AnsiUpperCase(criarLinha(Excel.Workbooks[1].Sheets[1].Cells[i,23],22,i-1,1,0,true));
+        APLT:= AnsiUpperCase(criarLinha(Excel.Workbooks[1].Sheets[1].Cells[i,24],23,i-1,1,0,true));
+        FAND:= AnsiUpperCase(criarLinha(Excel.Workbooks[1].Sheets[1].Cells[i,25],24,i-1,1,0,true));
+        FPMT:= AnsiUpperCase(criarLinha(Excel.Workbooks[1].Sheets[1].Cells[i,26],25,i-1,1,0,true));
+        //================================================
+        MemoScript.Lines.Add
+        ('session.findById("wnd[0]/tbar[0]/okcd").text = "/NIW32"');
+        MemoScript.Lines.Add
+        ('session.findById("wnd[0]").sendVKey 0');
+        MemoScript.Lines.Add
+        ('session.findById("wnd[0]/usr/ctxtCAUFVD-AUFNR").text = "'+Ordem+'"');
+        MemoScript.Lines.Add
+        ('session.findById("wnd[0]").sendVKey 0');
+        //======================================================================
+        if (AlterarStatus = 'X') then
+        begin
+          MemoScript.Lines.Add
+          ('session.findById("wnd[0]/usr/subSUB_ALL:SAPLCOIH:3001/ssubSUB_LEVEL:SAPLCOIH:1100/subSUB_KOPF:SAPLCOIH:1102/btn%#AUTOTEXT001").press');
+          if SIMP = 'X' then
+            MemoScript.Lines.Add('session.findById("wnd[1]/usr/tblSAPLBSVATC_E/radJ_STMAINT-ANWS[0,0]").selected = true')
+          else
+            MemoScript.Lines.Add('session.findById("wnd[1]/usr/tblSAPLBSVATC_E/radJ_STMAINT-ANWS[0,0]").selected = false');
+          //======================================================================
+          if IMPD = 'X' then
+            MemoScript.Lines.Add('session.findById("wnd[1]/usr/tblSAPLBSVATC_E/radJ_STMAINT-ANWS[0,1]").selected = true')
+          else
+            MemoScript.Lines.Add('session.findById("wnd[1]/usr/tblSAPLBSVATC_E/radJ_STMAINT-ANWS[0,1]").selected = false');
+          //======================================================================
+          if TRIA = 'X' then
+            MemoScript.Lines.Add('session.findById("wnd[1]/usr/tblSAPLBSVATC_EO/chkJ_STMAINT-ANWSO[0,0]").selected = true')
+          else
+            MemoScript.Lines.Add('session.findById("wnd[1]/usr/tblSAPLBSVATC_EO/chkJ_STMAINT-ANWSO[0,0]").selected = false');
+          //======================================================================
+          if AEGE = 'X' then
+            MemoScript.Lines.Add('session.findById("wnd[1]/usr/tblSAPLBSVATC_EO/chkJ_STMAINT-ANWSO[0,1]").selected = true')
+          else
+            MemoScript.Lines.Add('session.findById("wnd[1]/usr/tblSAPLBSVATC_EO/chkJ_STMAINT-ANWSO[0,1]").selected = false');
+          //======================================================================
+          if AENT = 'X' then
+            MemoScript.Lines.Add('session.findById("wnd[1]/usr/tblSAPLBSVATC_EO/chkJ_STMAINT-ANWSO[0,4]").selected = true')
+          else
+            MemoScript.Lines.Add('session.findById("wnd[1]/usr/tblSAPLBSVATC_EO/chkJ_STMAINT-ANWSO[0,4]").selected = false');
+          //======================================================================
+          if EXCL = 'X' then
+          begin
+            MemoScript.Lines.Add('session.findById("wnd[1]/usr/tblSAPLBSVATC_EO").verticalScrollbar.position = 10');
+            MemoScript.Lines.Add('session.findById("wnd[1]/usr/tblSAPLBSVATC_EO/chkJ_STMAINT-ANWSO[0,1]").selected = true');
+          end
+          else
+          begin
+            MemoScript.Lines.Add('session.findById("wnd[1]/usr/tblSAPLBSVATC_EO").verticalScrollbar.position = 10');
+            MemoScript.Lines.Add('session.findById("wnd[1]/usr/tblSAPLBSVATC_EO/chkJ_STMAINT-ANWSO[0,1]").selected = false');
+          end;
+          //======================================================================
+          if FMAT = 'X' then
+          begin
+            MemoScript.Lines.Add('session.findById("wnd[1]/usr/tblSAPLBSVATC_EO").verticalScrollbar.position = 16');
+            MemoScript.Lines.Add('session.findById("wnd[1]/usr/tblSAPLBSVATC_EO/chkJ_STMAINT-ANWSO[0,1]").selected = true');
+          end
+          else
+          begin
+            MemoScript.Lines.Add('session.findById("wnd[1]/usr/tblSAPLBSVATC_EO").verticalScrollbar.position = 16');
+            MemoScript.Lines.Add('session.findById("wnd[1]/usr/tblSAPLBSVATC_EO/chkJ_STMAINT-ANWSO[0,1]").selected = false');
+          end;
+          //======================================================================
+          if MPMI = 'X' then
+          begin
+            MemoScript.Lines.Add('session.findById("wnd[1]/usr/tblSAPLBSVATC_EO").verticalScrollbar.position = 22');
+            MemoScript.Lines.Add('session.findById("wnd[1]/usr/tblSAPLBSVATC_EO/chkJ_STMAINT-ANWSO[0,2]").selected = true');
+          end
+          else
+          begin
+            MemoScript.Lines.Add('session.findById("wnd[1]/usr/tblSAPLBSVATC_EO").verticalScrollbar.position = 22');
+            MemoScript.Lines.Add('session.findById("wnd[1]/usr/tblSAPLBSVATC_EO/chkJ_STMAINT-ANWSO[0,2]").selected = false');
+          end;
+          //======================================================================
+          if MPOP = 'X' then
+          begin
+            MemoScript.Lines.Add('session.findById("wnd[1]/usr/tblSAPLBSVATC_EO").verticalScrollbar.position = 22');
+            MemoScript.Lines.Add('session.findById("wnd[1]/usr/tblSAPLBSVATC_EO/chkJ_STMAINT-ANWSO[0,3]").selected = true');
+          end
+          else
+          begin
+            MemoScript.Lines.Add('session.findById("wnd[1]/usr/tblSAPLBSVATC_EO").verticalScrollbar.position = 22');
+            MemoScript.Lines.Add('session.findById("wnd[1]/usr/tblSAPLBSVATC_EO/chkJ_STMAINT-ANWSO[0,3]").selected = false');
+          end;
+          //======================================================================
+          if OPER = 'X' then
+          begin
+            MemoScript.Lines.Add('session.findById("wnd[1]/usr/tblSAPLBSVATC_EO").verticalScrollbar.position = 27');
+            MemoScript.Lines.Add('session.findById("wnd[1]/usr/tblSAPLBSVATC_EO/chkJ_STMAINT-ANWSO[0,1]").selected = true');
+          end
+          else
+          begin
+            MemoScript.Lines.Add('session.findById("wnd[1]/usr/tblSAPLBSVATC_EO").verticalScrollbar.position = 27');
+            MemoScript.Lines.Add('session.findById("wnd[1]/usr/tblSAPLBSVATC_EO/chkJ_STMAINT-ANWSO[0,1]").selected = false');
+          end;
+          //======================================================================
+          if APLT = 'X' then
+          begin
+            MemoScript.Lines.Add('session.findById("wnd[1]/usr/tblSAPLBSVATC_EO").verticalScrollbar.position = 49');
+            MemoScript.Lines.Add('session.findById("wnd[1]/usr/tblSAPLBSVATC_EO/chkJ_STMAINT-ANWSO[0,1]").selected = true');
+          end
+          else
+          begin
+            MemoScript.Lines.Add('session.findById("wnd[1]/usr/tblSAPLBSVATC_EO").verticalScrollbar.position = 49');
+            MemoScript.Lines.Add('session.findById("wnd[1]/usr/tblSAPLBSVATC_EO/chkJ_STMAINT-ANWSO[0,1]").selected = false');
+          end;
+          //======================================================================
+          if FAND = 'X' then
+          begin
+            MemoScript.Lines.Add('session.findById("wnd[1]/usr/tblSAPLBSVATC_EO").verticalScrollbar.position = 62');
+            MemoScript.Lines.Add('session.findById("wnd[1]/usr/tblSAPLBSVATC_EO/chkJ_STMAINT-ANWSO[0,1]").selected = true');
+          end
+          else
+          begin
+            MemoScript.Lines.Add('session.findById("wnd[1]/usr/tblSAPLBSVATC_EO").verticalScrollbar.position = 62');
+            MemoScript.Lines.Add('session.findById("wnd[1]/usr/tblSAPLBSVATC_EO/chkJ_STMAINT-ANWSO[0,1]").selected = false');
+          end;
+          //======================================================================
+          if FPMT = 'X' then
+          begin
+            MemoScript.Lines.Add('session.findById("wnd[1]/usr/tblSAPLBSVATC_EO").verticalScrollbar.position = 79');
+            MemoScript.Lines.Add('session.findById("wnd[1]/usr/tblSAPLBSVATC_EO/chkJ_STMAINT-ANWSO[0,0]").selected = true');
+          end
+          else
+          begin
+            MemoScript.Lines.Add('session.findById("wnd[1]/usr/tblSAPLBSVATC_EO").verticalScrollbar.position = 79');
+            MemoScript.Lines.Add('session.findById("wnd[1]/usr/tblSAPLBSVATC_EO/chkJ_STMAINT-ANWSO[0,0]").selected = false');
+          end;
+          MemoScript.Lines.Add('session.findById("wnd[1]/usr/tblSAPLBSVATC_EO/chkJ_STMAINT-ANWSO[0,0]").setFocus');
+          MemoScript.Lines.Add('session.findById("wnd[1]/tbar[0]/btn[0]").press');
+        end;
+        //======================================================================
+        if TextoBreve <> '' then
+          MemoScript.Lines.Add
+          ('session.findById("wnd[0]/usr/subSUB_ALL:SAPLCOIH:3001/ssubSUB_LEVEL:SAPLCOIH:1100/subSUB_KOPF:'+
+          'SAPLCOIH:1102/txtCAUFVD-KTEXT").text = "'+TextoBreve+'"');
+        if LocalInstalacao <> '' then
+          MemoScript.Lines.Add
+          ('session.findById("wnd[0]/usr/subSUB_ALL:SAPLCOIH:3001/ssubSUB_LEVEL:SAPLCOIH:1100/tabsTS_1100/tabpIHKZ/ssubSUB_AUFTRAG:'+
+          'SAPLCOIH:1120/subOBJECT:SAPLCOIH:7180/ctxtCAUFVD-TPLNR").text = "'+LocalInstalacao+'"');
+        if Equipamento <> '' then
+          MemoScript.Lines.Add
+          ('session.findById("wnd[0]/usr/subSUB_ALL:SAPLCOIH:3001/ssubSUB_LEVEL:SAPLCOIH:1100/tabsTS_1100/tabpIHKZ/ssubSUB_AUFTRAG:'+
+          'SAPLCOIH:1120/subOBJECT:SAPLCOIH:7180/ctxtCAUFVD-EQUNR").text = "'+Equipamento+'"');
+        if GrupoPlanej <> '' then
+          MemoScript.Lines.Add
+          ('session.findById("wnd[0]/usr/subSUB_ALL:SAPLCOIH:3001/ssubSUB_LEVEL:SAPLCOIH:1100/tabsTS_1100/tabpIHKZ/ssubSUB_AUFTRAG:'+
+          'SAPLCOIH:1120/subHEADER:SAPLCOIH:0154/ctxtCAUFVD-INGPR").text = "'+GrupoPlanej+'"');
+        if CentroTrabRespons <> '' then
+          MemoScript.Lines.Add
+          ('session.findById("wnd[0]/usr/subSUB_ALL:SAPLCOIH:3001/ssubSUB_LEVEL:SAPLCOIH:1100/tabsTS_1100/tabpIHKZ/ssubSUB_AUFTRAG:'+
+          'SAPLCOIH:1120/subHEADER:SAPLCOIH:0154/ctxtCAUFVD-VAPLZ").text = "'+CentroTrabRespons+'"');
+        if CentroPlanej <> '' then
+          MemoScript.Lines.Add
+          ('session.findById("wnd[0]/usr/subSUB_ALL:SAPLCOIH:3001/ssubSUB_LEVEL:SAPLCOIH:1100/tabsTS_1100/tabpIHKZ/ssubSUB_AUFTRAG:'+
+          'SAPLCOIH:1120/subHEADER:SAPLCOIH:0154/ctxtCAUFVD-VAWRK").text = "'+CentroPlanej+'"');
+        if TipoAtvManut <> '' then
+          MemoScript.Lines.Add
+          ('session.findById("wnd[0]/usr/subSUB_ALL:SAPLCOIH:3001/ssubSUB_LEVEL:SAPLCOIH:1100/tabsTS_1100/tabpIHKZ/ssubSUB_AUFTRAG:'+
+          'SAPLCOIH:1120/subHEADER:SAPLCOIH:0154/ctxtCAUFVD-ILART").text = "'+TipoAtvManut+'"');
+        if DataBaseInicio <> '' then
+          MemoScript.Lines.Add
+          ('session.findById("wnd[0]/usr/subSUB_ALL:SAPLCOIH:3001/ssubSUB_LEVEL:SAPLCOIH:1100/tabsTS_1100/tabpIHKZ/ssubSUB_AUFTRAG:'+
+          'SAPLCOIH:1120/subTERM:SAPLCOIH:7300/ctxtCAUFVD-GSTRP").text = "'+DataBaseInicio+'"');
+        if DataBaseFim <> '' then
+          MemoScript.Lines.Add
+          ('session.findById("wnd[0]/usr/subSUB_ALL:SAPLCOIH:3001/ssubSUB_LEVEL:SAPLCOIH:1100/tabsTS_1100/tabpIHKZ/ssubSUB_AUFTRAG:'+
+          'SAPLCOIH:1120/subTERM:SAPLCOIH:7300/ctxtCAUFVD-GLTRP").text = "'+DataBaseFim+'"');
+        //=====================================================================
+        if ((Sala <> '')OR(CampoSelecao <> '')) then
+        begin
+        MemoScript.Lines.Add
+        ('session.findById("wnd[0]/usr/subSUB_ALL:SAPLCOIH:3001/ssubSUB_LEVEL:SAPLCOIH:1100/tabsTS_1100/tabpILOA").select');
+        if Sala <> '' then
+          MemoScript.Lines.Add
+          ('session.findById("wnd[0]/usr/subSUB_ALL:SAPLCOIH:3001/ssubSUB_LEVEL:SAPLCOIH:1100/tabsTS_1100/tabpILOA/ssubSUB_AUFTRAG:'+
+          'SAPLCOIH:1150/subILOA:SAPMILA0:7000/txtILOA-MSGRP").text = "'+Sala+'"');
+        if CampoSelecao <> '' then
+          MemoScript.Lines.Add
+          ('session.findById("wnd[0]/usr/subSUB_ALL:SAPLCOIH:3001/ssubSUB_LEVEL:SAPLCOIH:1100/tabsTS_1100/tabpILOA/ssubSUB_AUFTRAG:'+
+          'SAPLCOIH:1150/subILOA:SAPMILA0:7000/txtILOA-EQFNR").text = "'+CampoSelecao+'"');
+        end;
+        //=====================================================================
+        MemoScript.Lines.Add('session.findById("wnd[0]/tbar[0]/btn[11]").press');
+      end;
+    end;
+    6://IW37N
+    begin
+      Ordem:= criarLinha(Excel.Workbooks[1].Sheets[1].Cells[Inicio,1],0,Inicio-1,12,0,false);
+      if Ordem <> '' then
+      begin
+        MemoScript.Lines.Add
+        ('session.findById("wnd[0]/tbar[0]/okcd").text = "/NIW32"');
+        MemoScript.Lines.Add
+        ('session.findById("wnd[0]").sendVKey 0');
+        MemoScript.Lines.Add
+        ('session.findById("wnd[0]/usr/ctxtCAUFVD-AUFNR").text = "'+Ordem+'"');
+        MemoScript.Lines.Add
+        ('session.findById("wnd[0]").sendVKey 0');
+        MemoScript.Lines.Add
+        ('session.findById("wnd[0]/usr/subSUB_ALL:SAPLCOIH:3001/ssubSUB_LEVEL:SAPLCOIH:1100/tabsTS_1100/tabpVGUE").select');
+        incScroll:= 1;
+        for I := Inicio to Fim do
+        begin
+          NumOperacao:= criarLinha(Excel.Workbooks[1].Sheets[1].Cells[i,2],1,i-1,3,1,false);
+          if NumOperacao <> '' then
+          begin
+            NumOperacao:= IntToStr((TRUNC(StrToInt(NumOperacao)/10))-1);
+            if StrToInt(NumOperacao) > 12 then
+            begin
+              MemoScript.Lines.Add
+              ('session.findById("wnd[0]/usr/subSUB_ALL:SAPLCOIH:3001/ssubSUB_LEVEL:SAPLCOIH:1107/tabsTS_1100/'+
+              'tabpVGUE/ssubSUB_AUFTRAG:SAPLCOVG:3010/tblSAPLCOVGTCTRL_3010").verticalScrollbar.position = '+
+              IntToStr(incScroll));
+              incScroll:= incScroll+1;
+              NumOperacao:= '12';
+            end;
+            TextoBreveOperacao:= criarLinha(Excel.Workbooks[1].Sheets[1].Cells[i,3],2,i-1,40,0,false);
+            CentroTrabOperacao:= criarLinha(Excel.Workbooks[1].Sheets[1].Cells[i,4],3,i-1,8,0,false);
+            ChaveControle:= criarLinha(Excel.Workbooks[1].Sheets[1].Cells[i,5],4,i-1,4,0,false);
+            Numero:= criarLinha(Excel.Workbooks[1].Sheets[1].Cells[i,6],5,i-1,3,1,false);
+            DuracaoNormal:= criarLinha(Excel.Workbooks[1].Sheets[1].Cells[i,7],6,i-1,3,1,false);
+            UnidInterv:= criarLinha(Excel.Workbooks[1].Sheets[1].Cells[i,8],7,i-1,2,0,false);
+            StringGridTabela.Cells[0,i-1]:= Ordem;
+            //===================================================================
+            if CentroTrabOperacao<>'' then
+              MemoScript.Lines.Add
+              ('session.findById("wnd[0]/usr/subSUB_ALL:SAPLCOIH:3001/ssubSUB_LEVEL:SAPLCOIH:1107/tabsTS_1100/'+
+              'tabpVGUE/ssubSUB_AUFTRAG:SAPLCOVG:3010/tblSAPLCOVGTCTRL_3010/ctxtAFVGD-ARBPL[2,'+NumOperacao+
+              ']").text = "'+CentroTrabOperacao+'"');
+            if TextoBreveOperacao<>'' then
+              MemoScript.Lines.Add
+              ('session.findById("wnd[0]/usr/subSUB_ALL:SAPLCOIH:3001/ssubSUB_LEVEL:SAPLCOIH:1107/tabsTS_1100/'+
+              'tabpVGUE/ssubSUB_AUFTRAG:SAPLCOVG:3010/tblSAPLCOVGTCTRL_3010/txtAFVGD-LTXA1[7,'+NumOperacao+
+              ']").text = "'+TextoBreveOperacao+'"');
+            if ChaveControle<>'' then
+              MemoScript.Lines.Add
+              ('session.findById("wnd[0]/usr/subSUB_ALL:SAPLCOIH:3001/ssubSUB_LEVEL:SAPLCOIH:1107/tabsTS_1100/'+
+              '/tabpVGUE/ssubSUB_AUFTRAG:SAPLCOVG:3010/tblSAPLCOVGTCTRL_3010/ctxtAFVGD-STEUS[4,'+NumOperacao+
+              ']").text = "'+ChaveControle+'"');
+            if Numero<>'' then
+              MemoScript.Lines.Add
+              ('session.findById("wnd[0]/usr/subSUB_ALL:SAPLCOIH:3001/ssubSUB_LEVEL:SAPLCOIH:1107/tabsTS_1100/'+
+              'tabpVGUE/ssubSUB_AUFTRAG:SAPLCOVG:3010/tblSAPLCOVGTCTRL_3010/txtAFVGD-ANZZL[12,'+NumOperacao+
+              ']").text = "'+Numero+'"');
+            if DuracaoNormal<>'' then
+              MemoScript.Lines.Add
+              ('session.findById("wnd[0]/usr/subSUB_ALL:SAPLCOIH:3001/ssubSUB_LEVEL:SAPLCOIH:1107/tabsTS_1100/'+
+              'tabpVGUE/ssubSUB_AUFTRAG:SAPLCOVG:3010/tblSAPLCOVGTCTRL_3010/txtAFVGD-DAUNO[13,'+NumOperacao+
+              ']").text = "'+DuracaoNormal+'"');
+            if UnidInterv<>'' then
+              MemoScript.Lines.Add
+              ('session.findById("wnd[0]/usr/subSUB_ALL:SAPLCOIH:3001/ssubSUB_LEVEL:SAPLCOIH:1107/tabsTS_1100/'+
+              'tabpVGUE/ssubSUB_AUFTRAG:SAPLCOVG:3010/tblSAPLCOVGTCTRL_3010/ctxtAFVGD-DAUNE[14,'+NumOperacao+
+              ']").text = "'+UnidInterv+'"');
+          end
+          else
+          begin
+            ShowMessage('ERRO! Obrigatório o número da operação, na linha '+IntToStr(I));
+            Interromper:= true;
+            actInterromper.Enabled:= false;
+          end;
+        end;
+        //=====================================================================
+        MemoScript.Lines.Add
+        ('session.findById("wnd[0]/tbar[0]/btn[11]").press');
+      end;
+    end;
+    7://IW32
+    begin
+      Ordem:= criarLinha(Excel.Workbooks[1].Sheets[1].Cells[i,1],0,i-1,12,0,false);
+      if Ordem <> '' then
+      begin
+        PEP:= criarLinha(Excel.Workbooks[1].Sheets[1].Cells[i,2],1,i-1,8,0,false);
+        LocalInstalacao:= criarLinha(Excel.Workbooks[1].Sheets[1].Cells[i,4],3,i-1,30,0,false);
+
+        //================================================
+        MemoScript.Lines.Add
+        ('session.findById("wnd[0]/tbar[0]/okcd").text = "/NIW32"');
+        MemoScript.Lines.Add
+        ('session.findById("wnd[0]").sendVKey 0');
+        MemoScript.Lines.Add
+        ('session.findById("wnd[0]/usr/ctxtCAUFVD-AUFNR").text = "'+Ordem+'"');
+        MemoScript.Lines.Add
+        ('session.findById("wnd[0]").sendVKey 0');
+        MemoScript.Lines.Add
+        ('session.findById("wnd[0]/usr/subSUB_ALL:SAPLCOIH:3001/ssubSUB_LEVEL:SAPLCOIH:1100/tabsTS_1100/tabpIHKD").select');
+        MemoScript.Lines.Add
+        ('ssession.findById("wnd[0]/usr/subSUB_ALL:SAPLCOIH:3001/ssubSUB_LEVEL:SAPLCOIH:1100/tabsTS_1100/tabpIHKD/ssubSUB_AUFTRAG:SAPLCOIH:1130/ctxtCAUFVD-PSPEL").text = "'+PEP+'"');
+      end;
+    end;
+  end;
+end;
+
+function TFrmScriptSAP.RemoveSujeira(str: String): String;
+  var
+    i: Integer;
+    st: String;
+begin
+  st:= '';
+  for I := 1 to length(str) do
+  begin
+    if (str[i] <> '"') then
+    begin
+      st:= st+str[i];
+    end;
+  end;
+  Result:= st;
+end;
+
+procedure TFrmScriptSAP.StringGridTabelaFixedCellClick(Sender: TObject; ACol,
+  ARow: Integer);
+begin
+  FrmPrincipal.clasifica(StringGridTabela,ACol,true);
+end;
+
+procedure TFrmScriptSAP.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+  Action:= caFree;
+  FrmScriptSAP:=nil;
+end;
+
+procedure TFrmScriptSAP.FormCreate(Sender: TObject);
+begin
+  //======ADICIONAR TABSET DO FOMRMDI=======
+  FrmPrincipal.MDIChildCreated(self.Handle);
+  Interromper:= false;
+  actInterromper.Enabled:= false;
+end;
+
+procedure TFrmScriptSAP.FormDestroy(Sender: TObject);
+begin
+  FrmPrincipal.MDIChildDestroyed(self.Handle);
+end;
+
+function TFrmScriptSAP.getElementoPEP(LocalInstalacao: String): String;
+  var
+    ListaLocal: TStringList;
+begin
+  ListaLocal:= TStringList.Create;
+  ListaLocal.delimiter:= '.';
+  ListaLocal.StrictDelimiter:=true;
+
+  ListaLocal.Clear;
+  ListaLocal.DelimitedText:= LocalInstalacao;
+  LocalInstalacao:= ListaLocal[0];
+
+
+end;
+
+procedure TFrmScriptSAP.introducao;
+begin
+  MemoScript.Lines.Add('If Not IsObject(application) Then');
+  MemoScript.Lines.Add('   Set SapGuiAuto  = GetObject("SAPGUI")');
+  MemoScript.Lines.Add('   Set application = SapGuiAuto.GetScriptingEngine');
+  MemoScript.Lines.Add('End If');
+  MemoScript.Lines.Add('If Not IsObject(connection) Then');
+  MemoScript.Lines.Add('   Set connection = application.Children(0)');
+  MemoScript.Lines.Add('End If');
+  MemoScript.Lines.Add('If Not IsObject(session) Then');
+  MemoScript.Lines.Add('   Set session    = connection.Children(0)');
+  MemoScript.Lines.Add('End If');
+  MemoScript.Lines.Add('If IsObject(WScript) Then');
+  MemoScript.Lines.Add('   WScript.ConnectObject session,     "on"');
+  MemoScript.Lines.Add('   WScript.ConnectObject application, "on"');
+  MemoScript.Lines.Add('End If');
+  MemoScript.Lines.Add('session.findById("wnd[0]").maximize');
+
+end;
+
+procedure TFrmScriptSAP.WMMDIACTIVATE(var msg: TWMMDIACTIVATE);
+var
+  active: TWinControl;
+  idx: Integer;
+begin
+  active := FindControl(msg.ActiveWnd) ;
+
+  if Assigned(active) then
+  begin
+    idx := FrmPrincipal.mdiChildrenTabs.Tabs.IndexOfObject(TObject(msg.ActiveWnd));
+    FrmPrincipal.mdiChildrenTabs.Tag := -1;
+    FrmPrincipal.mdiChildrenTabs.TabIndex := idx;
+    FrmPrincipal.mdiChildrenTabs.Tag := 0;
+  end;
+end;
+
+End.
+
+

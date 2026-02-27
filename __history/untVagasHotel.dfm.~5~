@@ -1,0 +1,41 @@
+object FrmVagasHotel: TFrmVagasHotel
+  Left = 0
+  Top = 0
+  Caption = 'Solicita'#231#227'o de Vagas no Hotel'
+  ClientHeight = 421
+  ClientWidth = 953
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  FormStyle = fsMDIChild
+  OldCreateOrder = False
+  Visible = True
+  WindowState = wsMaximized
+  OnClose = FormClose
+  OnCreate = FormCreate
+  OnDestroy = FormDestroy
+  PixelsPerInch = 96
+  TextHeight = 13
+  object PanelTitulo: TPanel
+    Left = 0
+    Top = 0
+    Width = 953
+    Height = 25
+    Align = alTop
+    Caption = 'Solicita'#231#227'o de Vagas no Hotel'
+    Color = clGradientActiveCaption
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -13
+    Font.Name = 'Tahoma'
+    Font.Style = [fsBold]
+    ParentBackground = False
+    ParentFont = False
+    TabOrder = 0
+    ExplicitLeft = -409
+    ExplicitWidth = 1362
+  end
+end

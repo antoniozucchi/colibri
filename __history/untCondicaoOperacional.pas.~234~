@@ -1,0 +1,1764 @@
+unit untCondicaoOperacional;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ExtCtrls, Vcl.ComCtrls, Vcl.ToolWin,
+  Data.DB, Vcl.Grids, Vcl.DBGrids, Vcl.DBCtrls, DBDateTimePicker,
+  System.Actions, Vcl.ActnList, Vcl.PlatformDefaultStyleActnCtrls, Vcl.ActnMan,
+  Vcl.StdCtrls, Vcl.Buttons, ComOBJ,UITYPES, VclTee.TeeGDIPlus, VCLTee.TeEngine,
+  VCLTee.Series, VCLTee.TeeProcs, VCLTee.Chart, Vcl.ExtDlgs,DateUtils, Vcl.Mask,
+  Vcl.CheckLst, Vcl.Menus;
+
+type
+  TFrmCondicaoOperacional = class(TForm)
+    ActionManager1: TActionManager;
+    actExcelForaOperacao: TAction;
+    OpenDialog1: TOpenDialog;
+    actProcurarFO: TAction;
+    PageControl1: TPageControl;
+    TabSheet1: TTabSheet;
+    TabSheet2: TTabSheet;
+    PanelTitulo: TPanel;
+    StatusBarFO: TStatusBar;
+    ToolBar1: TToolBar;
+    BitBtn1: TBitBtn;
+    BitBtn2: TBitBtn;
+    ChartGrafico: TChart;
+    Panel54: TPanel;
+    RadioGroupEixoX: TRadioGroup;
+    Splitter5: TSplitter;
+    ToolBar4: TToolBar;
+    ToolButton3: TToolButton;
+    ToolButton7: TToolButton;
+    ToolButton5: TToolButton;
+    ToolButton4: TToolButton;
+    ToolButton1: TToolButton;
+    ToolButton2: TToolButton;
+    btnMark: TToolButton;
+    ToolButton9: TToolButton;
+    actGrafico: TAction;
+    actGRFSalvarImagem: TAction;
+    actZoomMais: TAction;
+    actZoomMenos: TAction;
+    actGRFTitulo: TAction;
+    actGRFImprimir: TAction;
+    actGRFSalvarTXT: TAction;
+    actEtiqueta: TAction;
+    SavePictureDialog1: TSavePictureDialog;
+    actGraficoTempo: TAction;
+    actGraficoPlataforma: TAction;
+    actGraficoTipoEtapaServico: TAction;
+    PanelResultados: TPanel;
+    DBGridForaOperacao: TDBGrid;
+    actTempoCriticos: TAction;
+    actExcelTempoCriticos: TAction;
+    actSalvarTempoCriticos: TAction;
+    Series1: TBarSeries;
+    ColunasLayoutFO: TStringGrid;
+    actFiltroInserir: TAction;
+    actGridASC: TAction;
+    actGridDESC: TAction;
+    actLimparFiltros: TAction;
+    actProcuraFiltrosTabela: TAction;
+    actFiltrosTabela: TAction;
+    BitBtn6: TBitBtn;
+    TabSheet4: TTabSheet;
+    Panel1: TPanel;
+    ToolBar2: TToolBar;
+    BitBtn5: TBitBtn;
+    BitBtn7: TBitBtn;
+    BitBtn8: TBitBtn;
+    Splitter2: TSplitter;
+    DBGridRestricaoOperacional: TDBGrid;
+    ColunasLayoutRO: TStringGrid;
+    actProcurarRO: TAction;
+    StatusBarRO: TStatusBar;
+    actExcelRestricaoOperacao: TAction;
+    DBEdit2: TDBEdit;
+    MemoRO: TMemo;
+    TabSheet5: TTabSheet;
+    MemoPreventivaAtrasada: TMemo;
+    Splitter3: TSplitter;
+    DBGridPreventivaAtrasada: TDBGrid;
+    ColunasLayoutPreventivaAtrasada: TStringGrid;
+    ToolBar3: TToolBar;
+    BitBtn9: TBitBtn;
+    BitBtn10: TBitBtn;
+    BitBtn11: TBitBtn;
+    DBEdit3: TDBEdit;
+    Panel2: TPanel;
+    actExcelSIGM: TAction;
+    StatusBarPreventivaAtrasada: TStatusBar;
+    DBEdit1: TDBEdit;
+    PageControl2: TPageControl;
+    TabSheet6: TTabSheet;
+    TabSheet7: TTabSheet;
+    CheckListBoxPlataforma: TCheckListBox;
+    ToolBar6: TToolBar;
+    ToolButton6: TToolButton;
+    ToolButton8: TToolButton;
+    TabSheet8: TTabSheet;
+    CheckListBoxTipoEtapaServico: TCheckListBox;
+    ToolBar7: TToolBar;
+    ToolButton10: TToolButton;
+    ToolButton11: TToolButton;
+    actFiltros: TAction;
+    actSelTudoPlataforma: TAction;
+    actSelLimpaPlataforma: TAction;
+    actSelTudoTipoEtapaServico: TAction;
+    actSelLimpaTipoEtapaServico: TAction;
+    TabSheet9: TTabSheet;
+    actProcurarAnaliseGM: TAction;
+    actSIGM: TAction;
+    PanelAjuda: TPanel;
+    PanelTituloAjuda1: TPanel;
+    SpeedButton4: TSpeedButton;
+    PanelSIGM: TPanel;
+    actLimparAjuda: TAction;
+    actGravarSIGM: TAction;
+    actSIGMLimpar: TAction;
+    PageControl3: TPageControl;
+    TabSheet10: TTabSheet;
+    TabSheet11: TTabSheet;
+    DBGridAnaliseGM: TDBGrid;
+    Panel3: TPanel;
+    StatusBarAnaliseGM: TStatusBar;
+    ToolBar8: TToolBar;
+    BitBtn14: TBitBtn;
+    BitBtn15: TBitBtn;
+    BitBtn16: TBitBtn;
+    DBEdit6: TDBEdit;
+    PanelRegistros: TPanel;
+    ToolBar9: TToolBar;
+    ToolButton12: TToolButton;
+    ToolButton13: TToolButton;
+    DBNavigatorRegisros: TDBNavigator;
+    DBGridRegistros: TDBGrid;
+    ColunasLayoutRegistros: TStringGrid;
+    StatusBarRegistros: TStatusBar;
+    Splitter4: TSplitter;
+    Panel5: TPanel;
+    ToolBar11: TToolBar;
+    RLImpressao: TStringGrid;
+    actGravarSIGMRegistros: TAction;
+    MemoRegistros: TMemo;
+    actAbrirSIGMRegistros: TAction;
+    StatusBarImpressao: TStatusBar;
+    actSIGMLista: TAction;
+    Panel15: TPanel;
+    Panel16: TPanel;
+    Panel17: TPanel;
+    DBEdit4: TDBEdit;
+    Panel7: TPanel;
+    Panel8: TPanel;
+    Panel14: TPanel;
+    DBEdit5: TDBEdit;
+    Panel9: TPanel;
+    Panel10: TPanel;
+    Panel11: TPanel;
+    ToolBar10: TToolBar;
+    BitBtn19: TBitBtn;
+    BitBtn18: TBitBtn;
+    PanelListaSIGM: TPanel;
+    ToolBar12: TToolBar;
+    DBGridListaSIGM: TDBGrid;
+    BitBtn22: TBitBtn;
+    actExcelListaSIGM: TAction;
+    BitBtn23: TBitBtn;
+    actExcelRelatorio: TAction;
+    actImprimirRelatorio: TAction;
+    ToolButton17: TToolButton;
+    ColunasLayoutListaSIGM: TStringGrid;
+    StatusBarListaSIGM: TStatusBar;
+    actProcurarRegistros: TAction;
+    actProcurarListaSIGM: TAction;
+    ColunasLayoutAnaliseGM: TStringGrid;
+    actSubstituirPor: TAction;
+    ToolButton14: TToolButton;
+    PopupMenuSIGM: TPopupMenu;
+    VincularNotadeManutenoaGM1: TMenuItem;
+    ListadeGestodeMudana1: TMenuItem;
+    actSIGMCarregar: TAction;
+    CarregarListadeGestodeMudana1: TMenuItem;
+    DateTimePickerPrazoGM: TDateTimePicker;
+    CheckBoxPrazoGM: TCheckBox;
+    BitBtn20: TBitBtn;
+    Splitter6: TSplitter;
+    CheckListBoxSistemaFiltro: TCheckListBox;
+    actTudoFiltroUsuario: TAction;
+    actLimpaFiltroUsuario: TAction;
+    ToolBar5: TToolBar;
+    ToolButton15: TToolButton;
+    ToolButton16: TToolButton;
+    Splitter7: TSplitter;
+    Panel12: TPanel;
+    MemoTextoLongoCarteira: TMemo;
+    Panel13: TPanel;
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure FormCreate(Sender: TObject);
+    procedure FormDestroy(Sender: TObject);
+    procedure DBGridForaOperacaoDrawColumnCell(Sender: TObject; const Rect: TRect;
+      DataCol: Integer; Column: TColumn; State: TGridDrawState);
+    procedure actExcelForaOperacaoExecute(Sender: TObject);
+    procedure actProcurarFOExecute(Sender: TObject);
+    procedure PageControl1Change(Sender: TObject);
+    procedure actGRFSalvarImagemExecute(Sender: TObject);
+    procedure actZoomMaisExecute(Sender: TObject);
+    procedure actZoomMenosExecute(Sender: TObject);
+    procedure actGRFTituloExecute(Sender: TObject);
+    procedure actGRFImprimirExecute(Sender: TObject);
+    procedure actGRFSalvarTXTExecute(Sender: TObject);
+    procedure actEtiquetaExecute(Sender: TObject);
+    procedure actGraficoExecute(Sender: TObject);
+    procedure actGraficoPlataformaExecute(Sender: TObject);
+    procedure actGraficoTipoEtapaServicoExecute(Sender: TObject);
+    procedure actGraficoTempoExecute(Sender: TObject);
+    procedure DBGridForaOperacaoTitleClick(Column: TColumn);
+    procedure actFiltroInserirExecute(Sender: TObject);
+    procedure actGridASCExecute(Sender: TObject);
+    procedure actLimparFiltrosExecute(Sender: TObject);
+    procedure actGridDESCExecute(Sender: TObject);
+    procedure actProcuraFiltrosTabelaExecute(Sender: TObject);
+    procedure actFiltrosTabelaExecute(Sender: TObject);
+    procedure actProcurarROExecute(Sender: TObject);
+    procedure DBGridRestricaoOperacionalDrawColumnCell(Sender: TObject;
+      const Rect: TRect; DataCol: Integer; Column: TColumn;
+      State: TGridDrawState);
+    procedure DBGridRestricaoOperacionalTitleClick(Column: TColumn);
+    procedure actExcelRestricaoOperacaoExecute(Sender: TObject);
+    procedure DBEdit2Change(Sender: TObject);
+    procedure actExcelSIGMExecute(Sender: TObject);
+    procedure DBEdit3Change(Sender: TObject);
+    procedure DBGridPreventivaAtrasadaDrawColumnCell(Sender: TObject;
+      const Rect: TRect; DataCol: Integer; Column: TColumn;
+      State: TGridDrawState);
+    procedure DBEdit1Change(Sender: TObject);
+    procedure actFiltrosExecute(Sender: TObject);
+    procedure actSelTudoPlataformaExecute(Sender: TObject);
+    procedure actSelLimpaPlataformaExecute(Sender: TObject);
+    procedure actSelTudoTipoEtapaServicoExecute(Sender: TObject);
+    procedure actSelLimpaTipoEtapaServicoExecute(Sender: TObject);
+    procedure actProcurarAnaliseGMExecute(Sender: TObject);
+    procedure DBGridAnaliseGMDrawColumnCell(Sender: TObject; const Rect: TRect;
+      DataCol: Integer; Column: TColumn; State: TGridDrawState);
+    procedure DBGridAnaliseGMTitleClick(Column: TColumn);
+    procedure actSIGMExecute(Sender: TObject);
+    procedure actLimparAjudaExecute(Sender: TObject);
+    procedure PanelTituloAjuda1MouseDown(Sender: TObject; Button: TMouseButton;
+      Shift: TShiftState; X, Y: Integer);
+    procedure PanelTituloAjuda1MouseMove(Sender: TObject; Shift: TShiftState; X,
+      Y: Integer);
+    procedure PanelTituloAjuda1MouseUp(Sender: TObject; Button: TMouseButton;
+      Shift: TShiftState; X, Y: Integer);
+    procedure actGravarSIGMExecute(Sender: TObject);
+    procedure actSIGMLimparExecute(Sender: TObject);
+    procedure DBEdit6Change(Sender: TObject);
+    procedure actGravarSIGMRegistrosExecute(Sender: TObject);
+    procedure actAbrirSIGMRegistrosExecute(Sender: TObject);
+    procedure actSIGMListaExecute(Sender: TObject);
+    procedure actExcelListaSIGMExecute(Sender: TObject);
+    procedure actExcelRelatorioExecute(Sender: TObject);
+    procedure actImprimirRelatorioExecute(Sender: TObject);
+    procedure RLImpressaoFixedCellClick(Sender: TObject; ACol, ARow: Integer);
+    procedure DBGridListaSIGMDrawColumnCell(Sender: TObject; const Rect: TRect;
+      DataCol: Integer; Column: TColumn; State: TGridDrawState);
+    procedure DBGridRegistrosDrawColumnCell(Sender: TObject; const Rect: TRect;
+      DataCol: Integer; Column: TColumn; State: TGridDrawState);
+    procedure DBGridListaSIGMTitleClick(Column: TColumn);
+    procedure DBGridRegistrosTitleClick(Column: TColumn);
+    procedure actProcurarRegistrosExecute(Sender: TObject);
+    procedure actProcurarListaSIGMExecute(Sender: TObject);
+    procedure actSubstituirPorExecute(Sender: TObject);
+    procedure actSIGMCarregarExecute(Sender: TObject);
+    procedure actTudoFiltroUsuarioExecute(Sender: TObject);
+    procedure actLimpaFiltroUsuarioExecute(Sender: TObject);
+    procedure DBGridForaOperacaoKeyPress(Sender: TObject; var Key: Char);
+    procedure DBGridForaOperacaoKeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+  private
+    { Private declarations }
+    TabelaIndex: Integer;
+    procedure WMMDIACTIVATE(var msg: TWMMDIACTIVATE);message WM_MDIACTIVATE;
+    function carregaSerie: TBarSeries;
+    function carregaSerieLine(color: TColor; Pointer: Integer; Titulo: String): TLineSeries;
+  public
+    { Public declarations }
+  end;
+
+var
+  FrmCondicaoOperacional: TFrmCondicaoOperacional;
+
+implementation
+  uses untPrincipal,untDataModule, untFrmPreview;
+{$R *.dfm}
+
+procedure TFrmCondicaoOperacional.actAbrirSIGMRegistrosExecute(Sender: TObject);
+  var
+    ListaRegistro: TStringLIst;
+    i,j,numLinhas: Integer;
+    DataRegistro,AvaliadoPor,Computador: String;
+begin
+  ListaRegistro:= TStringList.Create;
+  ListaRegistro.delimiter:= '#';
+  ListaRegistro.StrictDelimiter:=true;
+  DataRegistro:= FrmDataModule.DataSourceSIGMRegistros.DataSet.FieldByName('DataRegistro').AsString;
+  AvaliadoPor:= FrmDataModule.DataSourceSIGMRegistros.DataSet.FieldByName('AvaliadoPor').AsString;
+  Computador:= FrmDataModule.DataSourceSIGMRegistros.DataSet.FieldByName('Computador').AsString;
+  //Preencher dados
+  RLImpressao.FixedRows:= 0;
+  RLImpressao.RowCount:= 1;
+  RLImpressao.ColCount:= 14;
+  RLImpressao.Cells[0,0]:= 'Plataforma';
+  RLImpressao.Cells[1,0]:= 'Denomin. Local Instalação';
+  RLImpressao.Cells[2,0]:= 'Nota de Manutenção';
+  RLImpressao.Cells[3,0]:= 'Texto Breve [Nota]';
+  RLImpressao.Cells[4,0]:= 'Tipo Etapa Serviço [Nota]';
+  RLImpressao.Cells[5,0]:= 'Início da Avaria';
+  RLImpressao.Cells[6,0]:= 'Salvaguarda';
+  RLImpressao.Cells[7,0]:= 'Ação Adotada Durante Indisponibilidade';
+  RLImpressao.Cells[8,0]:= 'Prazo TolerÁvel (Dias)';
+  RLImpressao.Cells[9,0]:= 'Validade';
+  RLImpressao.Cells[10,0]:= 'GIM/FAM';
+  RLImpressao.Cells[11,0]:= 'Descrição GM';
+  RLImpressao.Cells[12,0]:= 'Prazo GM';
+  RLImpressao.Cells[13,0]:= 'Autor Nota';
+  MemoRegistros.Text:= FrmDataModule.DataSourceSIGMRegistros.DataSet.
+  FieldByName('Resultados').AsString;
+  FrmPrincipal.ProgressBarIncializa(MemoRegistros.Lines.Count,
+  'Carregando Registros...');
+  for i := 0 to MemoRegistros.Lines.Count-1 do
+  begin
+    numLinhas:= RLImpressao.RowCount;
+    RLImpressao.RowCount:= numLinhas+1;
+    ListaRegistro.DelimitedText:= MemoRegistros.Lines[i];
+    //Preencher valores
+    for j := 0 to RLImpressao.ColCount-1 do
+    begin
+      RLImpressao.Cells[j,numLinhas]:= ListaRegistro[j];
+    end;
+    //====================================
+    FrmPrincipal.ProgressBarIncremento(1);
+  end;
+  StatusBarImpressao.Panels[0].Text:= 'N° registros: '+
+  intToStr(RLImpressao.RowCount-1);
+  FrmPrincipal.AutoFitGrade(RLImpressao);
+  FrmPrincipal.ProgressBarAtualizar;
+  try
+    RLImpressao.FixedRows:= 1;
+  except
+  end;
+end;
+
+procedure TFrmCondicaoOperacional.actEtiquetaExecute(Sender: TObject);
+begin
+  if btnMark.Down then
+  begin
+    ChartGrafico.Series[0].Marks.Style:= smsLabelValue;
+    ChartGrafico.Series[0].Marks.MultiLine:= true;
+    ChartGrafico.Series[0].Marks.Arrow.Visible:= true;
+    ChartGrafico.Series[0].Marks.Arrow.Color:= clBlack;
+    ChartGrafico.Series[0].Marks.Margins.Left:= 2;
+    ChartGrafico.Series[0].Marks.Margins.Right:= 2;
+    ChartGrafico.Series[0].Marks.Margins.Top:= 1;
+    ChartGrafico.Series[0].Marks.Margins.Bottom:= 1;
+    ChartGrafico.Series[0].Marks.Visible:= true;
+  end
+  else
+    ChartGrafico.Series[0].Marks.Visible:= false;
+end;
+
+procedure TFrmCondicaoOperacional.actExcelForaOperacaoExecute(Sender: TObject);
+begin
+  FrmPrincipal.GerarExcel(DBGridForaOperacao,'Fora Operação');
+end;
+
+procedure TFrmCondicaoOperacional.actExcelListaSIGMExecute(Sender: TObject);
+begin
+  FrmPrincipal.GerarExcel(DBGridListaSIGM,'Lista SIGM');
+end;
+
+procedure TFrmCondicaoOperacional.actExcelRelatorioExecute(Sender: TObject);
+  var
+    DataRegistro,AvaliadoPor,Computador: String;
+begin
+  DataRegistro:= FrmDataModule.DataSourceSIGMRegistros.DataSet.FieldByName('DataRegistro').AsString;
+  AvaliadoPor:= FrmDataModule.DataSourceSIGMRegistros.DataSet.FieldByName('AvaliadoPor').AsString;
+  Computador:= FrmDataModule.DataSourceSIGMRegistros.DataSet.FieldByName('Computador').AsString;
+
+
+  FrmPrincipal.ExcelStringGrid(RLImpressao,'Análise Fora Operação (LEC)',
+  'Data do registro: '+DataRegistro,'Criado por: ['+AvaliadoPor+'] - Computador: ['+Computador+']',3);
+end;
+
+procedure TFrmCondicaoOperacional.actExcelRestricaoOperacaoExecute(
+  Sender: TObject);
+begin
+  FrmPrincipal.GerarExcel(DBGridRestricaoOperacional,'Restrição Operacional');
+end;
+
+procedure TFrmCondicaoOperacional.actFiltroInserirExecute(Sender: TObject);
+begin
+  case TabelaIndex of
+    0:
+    begin
+      FrmPrincipal.inserirProcura(DBGridForaOperacao,ColunasLayoutFO);
+      actProcurarFO.Execute;
+    end;
+    1:
+    begin
+      FrmPrincipal.inserirProcura(DBGridRestricaoOperacional,ColunasLayoutRO);
+      actProcurarRO.Execute;
+    end;
+    2:
+    begin
+      FrmPrincipal.inserirProcura(DBGridAnaliseGM,ColunasLayoutAnaliseGM);
+      actProcurarAnaliseGM.Execute;
+    end;
+    3:
+    begin
+      FrmPrincipal.inserirProcura(DBGridListaSIGM,ColunasLayoutListaSIGM);
+      actProcurarListaSIGM.Execute;
+    end;
+    4:
+    begin
+      FrmPrincipal.inserirProcura(DBGridRegistros,ColunasLayoutRegistros);
+      actProcurarRegistros.Execute;
+    end;
+  end;
+  if (FrmPrincipal.PanelFiltrosTabela.Visible)AND(FrmPrincipal.PanelAjuda1.Visible) then
+    actFiltrosTabela.Execute;
+end;
+
+procedure TFrmCondicaoOperacional.actFiltrosExecute(Sender: TObject);
+  var
+    PalavraLista,PalavraBusca: String;
+    i: Integer;
+begin
+  //Sistemas
+  FrmPrincipal.configurarCheckListBox(CheckListBoxSistemaFiltro,DBGridForaOperacao,ColunasLayoutFO,true);
+  //Plataformas
+  PalavraBusca:= '';
+  for I := 0 to CheckListBoxPlataforma.Count-1 do
+  begin
+    if CheckListBoxPlataforma.Checked[i] then
+    begin
+      PalavraLista:= CheckListBoxPlataforma.Items[i];
+      if PalavraBusca <> '' then
+        PalavraBusca:= PalavraBusca+';'+PalavraLista
+      else
+        PalavraBusca:= PalavraLista;
+    end;
+  end;
+  FrmPrincipal.buscaFiledGrid1('Plataforma',PalavraBusca,'Contem',ColunasLayoutFO,4,false);
+  //Tipo Etapa Serviço
+  PalavraBusca:= '';
+  for I := 0 to CheckListBoxTipoEtapaServico.Count-1 do
+  begin
+    if CheckListBoxTipoEtapaServico.Checked[i] then
+    begin
+      PalavraLista:= CheckListBoxTipoEtapaServico.Items[i];
+      if PalavraBusca <> '' then
+        PalavraBusca:= PalavraBusca+';'+PalavraLista
+      else
+        PalavraBusca:= PalavraLista;
+    end;
+  end;
+  FrmPrincipal.buscaFiledGrid1('txtTipoEtapaServico',PalavraBusca,'Contem',ColunasLayoutFO,4,false);
+  actProcurarFO.Execute;
+end;
+
+procedure TFrmCondicaoOperacional.actFiltrosTabelaExecute(Sender: TObject);
+begin
+  case TabelaIndex of
+    0:
+    begin
+      FrmPrincipal.btnProcurarFiltrosTabela.Action:= actProcuraFiltrosTabela;
+      FrmPrincipal.FiltrosTabela(DBGridForaOperacao,ColunasLayoutFO);
+    end;
+    1:
+    begin
+      FrmPrincipal.btnProcurarFiltrosTabela.Action:= actProcuraFiltrosTabela;
+      FrmPrincipal.FiltrosTabela(DBGridRestricaoOperacional,ColunasLayoutRO);
+    end;
+    2:
+    begin
+      FrmPrincipal.btnProcurarFiltrosTabela.Action:= actProcurarAnaliseGM;
+      FrmPrincipal.FiltrosTabela(DBGridAnaliseGM,ColunasLayoutAnaliseGM);
+    end;
+    3:
+    begin
+      FrmPrincipal.btnProcurarFiltrosTabela.Action:= actProcurarListaSIGM;
+      FrmPrincipal.FiltrosTabela(DBGridListaSIGM,ColunasLayoutListaSIGM);
+    end;
+    4:
+    begin
+      FrmPrincipal.btnProcurarFiltrosTabela.Action:= actProcurarRegistros;
+      FrmPrincipal.FiltrosTabela(DBGridRegistros,ColunasLayoutRegistros);
+    end;
+  end;
+end;
+
+procedure TFrmCondicaoOperacional.actGraficoExecute(Sender: TObject);
+begin
+  case RadioGroupEixoX.ItemIndex of
+    0: actGraficoTempo.Execute;
+    1: actGraficoPlataforma.Execute;
+    2: actGraficoTipoEtapaServico.Execute;
+  end;
+end;
+
+procedure TFrmCondicaoOperacional.actGraficoPlataformaExecute(Sender: TObject);
+  var
+    BarSeriesGRF: TBarSeries;
+    NumRegistros,i,EixoX: Integer;
+    Plataforma,SQLString,SQLBase: String;
+begin
+  ChartGrafico.RemoveAllSeries;
+  ChartGrafico.BottomAxis.Visible:= false;
+  ChartGrafico.Legend.CheckBoxes:= false;
+  ChartGrafico.Legend.LegendStyle:= lsAuto;
+  ChartGrafico.Title.Caption:= 'Filtro por Instalação';
+  ChartGrafico.Axes.Left.Title.Caption:= 'N° Ordens de Manutenção';
+  BarSeriesGRF:= carregaSerie;
+  FrmDataModule.ADOQueryConsultaPlataforma.Active:= false;
+  FrmDataModule.ADOQueryConsultaPlataforma.Active:= true;
+  EixoX:= 0;
+  SQLString:= frmPrincipal.SQLStringFiltroTabela(ColunasLayoutFO,false);
+  if SQLString <>'' then
+    SQLString:= 'AND'+SQLString;
+  i:= 0;
+  FrmPrincipal.ProgressBarIncializa(FrmDataModule.ADOQueryConsultaPlataforma.RecordCount,
+  'Gerando gráfico...');
+  while not FrmDataModule.ADOQueryConsultaPlataforma.Eof do
+  begin
+    Plataforma:= FrmDataModule.DataSourceConsultaPlataforma.
+    DataSet.FieldByName('Plataforma').AsString;
+    FrmDataModule.ADOQueryTemporarioDBMemoria.Close;
+    FrmDataModule.ADOQueryTemporarioDBMemoria.SQL.Clear;
+    SQLBase:= 'SELECT tblNotaManutencao.* FROM tblNotaManutencao '+
+    FrmPrincipal.filtroFO+SQLString+
+    'AND((Plataforma LIKE '+QuotedStr('%'+Plataforma+'%')+'));';
+    FrmDataModule.ADOQueryTemporarioDBMemoria.SQL.Add(SQLBase);
+    FrmDataModule.ADOQueryTemporarioDBMemoria.Open;
+    NumRegistros:= FrmDataModule.ADOQueryTemporarioDBMemoria.RecordCount;
+    //=============================================================
+    if (NumRegistros > 0) then
+    begin
+      BarSeriesGRF.AddXY(EixoX,NumRegistros,Plataforma,
+      FrmPrincipal.CoresAuto[i]);
+      if i <= 13 then
+        i:= i+1
+      else
+        i:= 0;
+      EixoX:= EixoX+1;
+    end;
+    FrmDataModule.ADOQueryConsultaPlataforma.Next;
+    FrmPrincipal.ProgressBarIncremento(1);
+  end;
+  ChartGrafico.AddSeries(BarSeriesGRF);
+  FrmPrincipal.ProgressBarAtualizar;
+end;
+
+procedure TFrmCondicaoOperacional.actGraficoTempoExecute(Sender: TObject);
+  var
+    BarSeriesGRF: TBarSeries;
+    NumRegistros,i: Integer;
+    Plataforma,DenominacaoLocalInstalacao,SQLString: String;
+    InicioAvaria,Hoje: TDateTime;
+begin
+  ChartGrafico.RemoveAllSeries;
+  ChartGrafico.BottomAxis.Visible:= true;
+  ChartGrafico.Legend.CheckBoxes:= false;
+  ChartGrafico.Legend.LegendStyle:= lsAuto;
+  ChartGrafico.Title.Caption:= 'Filtro por tempo';
+  ChartGrafico.Axes.Left.Title.Caption:= 'N° Dias indisponível';
+  //===========================================================
+  BarSeriesGRF:= carregaSerie;
+  i:= 0;
+  Hoje:= now;
+  SQLString:= frmPrincipal.SQLStringFiltroTabela(ColunasLayoutFO,false);
+  if SQLString <>'' then
+    SQLString:= 'AND'+SQLString;
+  FrmDataModule.ADOQueryTemporarioDBMemoria.Close;
+  FrmDataModule.ADOQueryTemporarioDBMemoria.SQL.Clear;
+  FrmDataModule.ADOQueryTemporarioDBMemoria.SQL.Add(
+  'SELECT tblNotaManutencao.* FROM tblNotaManutencao '+
+  FrmPrincipal.filtroFO+SQLString+' ORDER BY Plataforma;');
+  FrmDataModule.ADOQueryTemporarioDBMemoria.Open;
+  FrmPrincipal.ProgressBarIncializa(FrmDataModule.ADOQueryTemporarioDBMemoria.RecordCount,
+  'Gerando gráfico...');
+  while not FrmDataModule.ADOQueryTemporarioDBMemoria.Eof do
+  begin
+    InicioAvaria:= FrmDataModule.DataSourceTemporarioDBMemoria.
+    DataSet.FieldByName('InicioAvaria').AsDateTime;
+    Plataforma:= FrmDataModule.DataSourceTemporarioDBMemoria.
+    DataSet.FieldByName('Plataforma').AsString;
+    DenominacaoLocalInstalacao:= FrmDataModule.DataSourceTemporarioDBMemoria.
+    DataSet.FieldByName('DenominacaoLocalInstalacao').AsString;
+
+    NumRegistros:= DaysBetween(InicioAvaria,Hoje);
+    //=============================================================
+    if (NumRegistros > 0) then
+    begin
+      BarSeriesGRF.AddXY(InicioAvaria,NumRegistros,Plataforma+'-'+DenominacaoLocalInstalacao,
+      FrmPrincipal.CoresAuto[i]);
+      if i <= 13 then
+        i:= i+1
+      else
+        i:= 0;
+    end;
+    FrmDataModule.ADOQueryTemporarioDBMemoria.Next;
+    FrmPrincipal.ProgressBarIncremento(1);
+  end;
+  ChartGrafico.AddSeries(BarSeriesGRF);
+  FrmPrincipal.ProgressBarAtualizar;
+end;
+
+procedure TFrmCondicaoOperacional.actGraficoTipoEtapaServicoExecute(
+  Sender: TObject);
+  var
+    BarSeriesGRF: TBarSeries;
+    NumRegistros,i,EixoX: Integer;
+    TipoEtapaServico,SQLString: String;
+begin
+  ChartGrafico.RemoveAllSeries;
+  ChartGrafico.BottomAxis.Visible:= false;
+  ChartGrafico.Legend.CheckBoxes:= false;
+  ChartGrafico.Legend.LegendStyle:= lsAuto;
+  ChartGrafico.Title.Caption:= 'Filtro por Tipo de Etapa de Serviço';
+  ChartGrafico.Axes.Left.Title.Caption:= 'N° Ordens de Manutenção';
+  BarSeriesGRF:= carregaSerie;
+  FrmDataModule.ADOQueryTipoEtapaServico.Active:= false;
+  FrmDataModule.ADOQueryTipoEtapaServico.Active:= true;
+  EixoX:= 0;
+  SQLString:= frmPrincipal.SQLStringFiltroTabela(ColunasLayoutFO,false);
+  if SQLString <>'' then
+    SQLString:= 'AND'+SQLString;
+  i:= 0;
+  FrmPrincipal.ProgressBarIncializa(FrmDataModule.ADOQueryTipoEtapaServico.RecordCount,
+  'Gerando gráfico...');
+  while not FrmDataModule.ADOQueryTipoEtapaServico.Eof do
+  begin
+    TipoEtapaServico:= FrmDataModule.DataSourceTipoEtapaServico.
+    DataSet.FieldByName('TipoEtapaServico').AsString;
+    //Sigla:= FrmDataModule.DataSourceTipoEtapaServico.
+    //DataSet.FieldByName('Sigla').AsString;
+    FrmDataModule.ADOQueryTemporarioDBMemoria.Close;
+    FrmDataModule.ADOQueryTemporarioDBMemoria.SQL.Clear;
+    FrmDataModule.ADOQueryTemporarioDBMemoria.SQL.Add(
+    'SELECT tblNotaManutencao.* FROM tblNotaManutencao '+FrmPrincipal.filtroFO+SQLString+
+    'AND((txtTipoEtapaServico LIKE '+QuotedStr('%'+TipoEtapaServico+'%')+')) ORDER BY Plataforma;');
+    FrmDataModule.ADOQueryTemporarioDBMemoria.Open;
+    NumRegistros:= FrmDataModule.ADOQueryTemporarioDBMemoria.RecordCount;
+    //=============================================================
+    if (NumRegistros > 0) then
+    begin
+      BarSeriesGRF.AddXY(EixoX,NumRegistros,TipoEtapaServico,
+      FrmPrincipal.CoresAuto[i]);
+      if i <= 13 then
+        i:= i+1
+      else
+        i:= 0;
+      EixoX:= EixoX+1;
+    end;
+    FrmDataModule.ADOQueryTipoEtapaServico.Next;
+    FrmPrincipal.ProgressBarIncremento(1);
+  end;
+  ChartGrafico.AddSeries(BarSeriesGRF);
+  FrmPrincipal.ProgressBarAtualizar;
+end;
+
+procedure TFrmCondicaoOperacional.actGravarSIGMExecute(Sender: TObject);
+begin
+  FrmDataModule.ADOQuerySIGM.Edit;
+  FrmDataModule.DatasourceSIGM.DataSet.FieldByName('NotaManutencao').AsString:=
+  FrmDataModule.DataSourceAnaliseGM.DataSet.FieldByName('NotaManutencao').AsString;
+  if CheckBoxPrazoGM.Checked then
+    FrmDataModule.DatasourceSIGM.DataSet.FieldByName('PrazoGM').AsString:= 'N/A'
+  else
+    FrmDataModule.DatasourceSIGM.DataSet.FieldByName('PrazoGM').AsString:=
+    DateToStr(DateTimePickerPrazoGM.Date);
+  FrmDataModule.ADOQuerySIGM.Post;
+  //=====================================
+  actProcurarAnaliseGM.Execute;
+  actProcurarListaSIGM.Execute;
+  actProcurarRegistros.Execute;
+  actSIGMCarregar.Execute;
+  actLimparAjuda.Execute;
+end;
+
+procedure TFrmCondicaoOperacional.actGravarSIGMRegistrosExecute(
+  Sender: TObject);
+  var
+    Plataforma,DenominacaoLocalInstalacao,NotaManutencao,TextoBreveNOTA,txtTipoEtapaServico,
+    InicioAvaria,Salvaguarda,AcaoAdotadaIndisponibilidade,PrazoToleravel,
+    VencimentoAvaria,GIM_FAM,DescricaoGM,PrazoGM,AutorNota: String;
+begin
+  actLimparFiltros.Execute;
+  if not FrmDataModule.ADOQueryAnaliseGM.IsEmpty then
+  begin
+    FrmDataModule.ADOQueryAnaliseGM.First;
+    FrmPrincipal.ProgressBarIncializa(FrmDataModule.ADOQueryAnaliseGM.RecordCount,
+    'Gravar Registros...');
+    FrmDataModule.DataSourceAnaliseGM.Enabled:= false;
+    while not FrmDataModule.ADOQueryAnaliseGM.Eof do
+    begin
+      Plataforma:= FrmDataModule.DataSourceAnaliseGM.DataSet.FieldByName
+      ('Plataforma').AsString;
+      DenominacaoLocalInstalacao:= FrmDataModule.DataSourceAnaliseGM.DataSet.FieldByName
+      ('DenominacaoLocalInstalacao').AsString;
+      NotaManutencao:= FrmDataModule.DataSourceAnaliseGM.DataSet.FieldByName
+      ('NotaManutencao').AsString;
+      TextoBreveNOTA:= FrmDataModule.DataSourceAnaliseGM.DataSet.FieldByName
+      ('TextoBreveNOTA').AsString;
+      txtTipoEtapaServico:= FrmDataModule.DataSourceAnaliseGM.DataSet.FieldByName
+      ('txtTipoEtapaServico').AsString;
+      InicioAvaria:= FrmDataModule.DataSourceAnaliseGM.DataSet.FieldByName
+      ('InicioAvaria').AsString;
+      Salvaguarda:= FrmDataModule.DataSourceAnaliseGM.DataSet.FieldByName
+      ('Salvaguarda').AsString;
+      AcaoAdotadaIndisponibilidade:= FrmDataModule.DataSourceAnaliseGM.DataSet.FieldByName
+      ('AcaoAdotadaIndisponibilidade').AsString;
+      PrazoToleravel:= FrmDataModule.DataSourceAnaliseGM.DataSet.FieldByName
+      ('PrazoToleravel').AsString;
+      VencimentoAvaria:= FrmDataModule.DataSourceAnaliseGM.DataSet.FieldByName
+      ('VencimentoAvaria').AsString;
+      GIM_FAM:= FrmDataModule.DataSourceAnaliseGM.DataSet.FieldByName
+      ('GIM_FAM').AsString;
+      DescricaoGM:= FrmDataModule.DataSourceAnaliseGM.DataSet.FieldByName
+      ('DescricaoGM').AsString;
+      PrazoGM:= FrmDataModule.DataSourceAnaliseGM.DataSet.FieldByName
+      ('PrazoGM').AsString;
+      AutorNota:= FrmDataModule.DataSourceAnaliseGM.DataSet.FieldByName
+      ('AutorNota').AsString;
+      MemoRegistros.Lines.Add(Plataforma+'#'+DenominacaoLocalInstalacao+'#'+NotaManutencao+'#'+
+      TextoBreveNOTA+'#'+txtTipoEtapaServico+'#'+InicioAvaria+'#'+
+      Salvaguarda+'#'+AcaoAdotadaIndisponibilidade+'#'+PrazoToleravel+'#'+
+      VencimentoAvaria+'#'+GIM_FAM+'#'+DescricaoGM+'#'+PrazoGM+'#'+AutorNota);
+      //=====================================================================
+      FrmDataModule.ADOQueryAnaliseGM.Next;
+      FrmPrincipal.ProgressBarIncremento(1);
+    end;
+    FrmDataModule.DataSourceAnaliseGM.Enabled:= true;
+    FrmDataModule.ADOQueryAnaliseGM.First;
+    FrmDataModule.ADOQuerySIGMRegistros.Active:= false;
+    FrmDataModule.ADOQuerySIGMRegistros.Active:= true;
+    FrmDataModule.ADOQuerySIGMRegistros.Insert;
+    FrmDataModule.DataSourceSIGMRegistros.DataSet.FieldByName
+    ('Resultados').AsString:= MemoRegistros.Text;
+    //=================================================
+    FrmDataModule.DataSourceSIGMRegistros.DataSet.FieldByName
+    ('AvaliadoPor').AsString:= FrmPrincipal.logChave;
+    FrmDataModule.DataSourceSIGMRegistros.DataSet.FieldByName
+    ('DataRegistro').AsDateTime:= now;
+    FrmDataModule.DataSourceSIGMRegistros.DataSet.FieldByName
+    ('Computador').AsString:= FrmPrincipal.logMaquina;
+    //=================================================
+    FrmDataModule.ADOQuerySIGMRegistros.Post;
+    FrmPrincipal.ProgressBarAtualizar;
+  end
+  else
+  begin
+    MessageBox(0, PChar('Não existem registros para gravar!'),
+    'Análise de Gestão de Mudança', MB_ICONINFORMATION);
+  end;
+end;
+
+procedure TFrmCondicaoOperacional.actGRFImprimirExecute(Sender: TObject);
+begin
+  if not Assigned(FrmPreview) then
+    FrmPreview:=TFrmPreview.Create(Application)
+  else
+    FrmPreview.Show;
+
+  FrmPreview.ListaTituloRelatorio:= TStringList.Create;
+  FrmPreview.ListaTituloRelatorio.Add(ChartGrafico.Title.Caption);
+  //FrmPreview.ListaTituloRelatorio.Add('Data: '+FormatDateTime('dd/mm/yyyy',now));
+  FrmPreview.paginaTChart(ChartGrafico,FrmPreview.btnExcluirAntes.Down);
+  ChartGrafico.Legend.CheckBoxes:= false;
+end;
+
+procedure TFrmCondicaoOperacional.actGRFSalvarImagemExecute(Sender: TObject);
+begin
+  SavePictureDialog1.FileName:= ChartGrafico.Title.Caption+'.wmf';
+  if(SavePictureDialog1.Execute) then
+    ChartGrafico.SaveToMetafile(SavePictureDialog1.FileName);
+end;
+
+procedure TFrmCondicaoOperacional.actGRFSalvarTXTExecute(Sender: TObject);
+begin
+  FrmPrincipal.salvarGrafico(ChartGrafico);
+end;
+
+procedure TFrmCondicaoOperacional.actGRFTituloExecute(Sender: TObject);
+  var
+    Titulo: String;
+begin
+  Titulo:= ChartGrafico.Title.Caption;
+  ChartGrafico.Title.Text.Clear;
+  ChartGrafico.Title.Text.Add(InputBox('Titulo da tabela de carga',
+  'Descrição',Titulo));
+end;
+
+procedure TFrmCondicaoOperacional.actGridASCExecute(Sender: TObject);
+begin
+  case TabelaIndex of
+    0:
+    begin
+      FrmPrincipal.ClassificaDBGrid(DBGridForaOperacao,
+      FrmDataModule.ADOQueryForaOperacao,0);
+    end;
+    1:
+    begin
+      FrmPrincipal.ClassificaDBGrid(DBGridRestricaoOperacional,
+      FrmDataModule.ADOQueryRestricaoOperacional,0);
+    end;
+    2:
+    begin
+      FrmPrincipal.ClassificaDBGrid(DBGridAnaliseGM,
+      FrmDataModule.ADOQueryAnaliseGM,0);
+    end;
+    3:
+    begin
+      FrmPrincipal.ClassificaDBGrid(DBGridListaSIGM,
+      FrmDataModule.ADOQueryListaSIGM,0);
+    end;
+    4:
+    begin
+      FrmPrincipal.ClassificaDBGrid(DBGridRegistros,
+      FrmDataModule.ADOQuerySIGMRegistros,0);
+    end;
+  end;
+end;
+
+procedure TFrmCondicaoOperacional.actGridDESCExecute(Sender: TObject);
+begin
+  case TabelaIndex of
+    0:
+    begin
+      FrmPrincipal.ClassificaDBGrid(DBGridForaOperacao,
+      FrmDataModule.ADOQueryForaOperacao,1);
+    end;
+    1:
+    begin
+      FrmPrincipal.ClassificaDBGrid(DBGridRestricaoOperacional,
+      FrmDataModule.ADOQueryRestricaoOperacional,1);
+    end;
+    2:
+    begin
+      FrmPrincipal.ClassificaDBGrid(DBGridAnaliseGM,
+      FrmDataModule.ADOQueryAnaliseGM,1);
+    end;
+    3:
+    begin
+      FrmPrincipal.ClassificaDBGrid(DBGridListaSIGM,
+      FrmDataModule.ADOQueryListaSIGM,1);
+    end;
+    4:
+    begin
+      FrmPrincipal.ClassificaDBGrid(DBGridRegistros,
+      FrmDataModule.ADOQuerySIGMRegistros,1);
+    end;
+  end;
+end;
+
+procedure TFrmCondicaoOperacional.actImprimirRelatorioExecute(Sender: TObject);
+begin
+  if not Assigned(FrmPreview) then
+    FrmPreview:=TFrmPreview.Create(Application)
+  else
+    FrmPreview.Show;
+
+  FrmPreview.ListaTituloRelatorio:= TStringList.Create;
+  FrmPreview.ListaTituloRelatorio.Add('Data do Registro: '+
+  FrmDataModule.DataSourceSIGMRegistros.DataSet.FieldByName('DataRegistro').AsString);
+  FrmPreview.ListaTituloRelatorio.Add(
+  'Criado por: ['+
+  FrmDataModule.DataSourceSIGMRegistros.DataSet.FieldByName('AvaliadoPor').AsString+
+  '] - Computador: ['+
+  FrmDataModule.DataSourceSIGMRegistros.DataSet.FieldByName('Computador').AsString+']');
+  FrmPreview.RadioGroupRelatorio.ItemIndex:= 8;
+  FrmPreview.PrintPreview.PrintJobTitle:= 'Análise Fora de Operação (LEC)';
+  FrmPreview.GeneratePages;
+end;
+
+procedure TFrmCondicaoOperacional.actExcelSIGMExecute(Sender: TObject);
+begin
+  FrmPrincipal.GerarExcel(DBGridAnaliseGM,'Análise Fora Operação (LEC)');
+end;
+
+procedure TFrmCondicaoOperacional.actLimpaFiltroUsuarioExecute(Sender: TObject);
+var
+  I: Integer;
+begin
+  for I := 0 to CheckListBoxSistemaFiltro.Count-1 do
+    CheckListBoxSistemaFiltro.Checked[i]:= false;
+
+  actFiltros.Execute;
+end;
+
+procedure TFrmCondicaoOperacional.actLimparAjudaExecute(Sender: TObject);
+begin
+  PanelAjuda.Visible:= false;
+  PanelSIGM.Visible:= false;
+  PanelListaSIGM.Visible:= false;
+end;
+
+procedure TFrmCondicaoOperacional.actLimparFiltrosExecute(Sender: TObject);
+begin
+  case TabelaIndex of
+    0:
+    begin
+      FrmPrincipal.LimparColunasFiltro(DBGridForaOperacao,ColunasLayoutFO);
+      actProcurarFO.Execute;
+    end;
+    1:
+    begin
+      FrmPrincipal.LimparColunasFiltro(DBGridRestricaoOperacional,ColunasLayoutRO);
+      actProcurarRO.Execute;
+    end;
+    2:
+    begin
+      FrmPrincipal.LimparColunasFiltro(DBGridAnaliseGM,ColunasLayoutAnaliseGM);
+      actProcurarAnaliseGM.Execute;
+    end;
+    3:
+    begin
+      FrmPrincipal.LimparColunasFiltro(DBGridListaSIGM,ColunasLayoutListaSIGM);
+      actProcurarListaSIGM.Execute;
+    end;
+    4:
+    begin
+      FrmPrincipal.LimparColunasFiltro(DBGridRegistros,ColunasLayoutRegistros);
+      actProcurarRegistros.Execute;
+    end;
+  end;
+  if (FrmPrincipal.PanelFiltrosTabela.Visible)AND(FrmPrincipal.PanelAjuda1.Visible) then
+    actFiltrosTabela.Execute;
+end;
+
+procedure TFrmCondicaoOperacional.actProcuraFiltrosTabelaExecute(
+  Sender: TObject);
+begin
+  case TabelaIndex of
+    0:
+    begin
+      FrmPrincipal.CarregaFiltrosProcura(ColunasLayoutFO);
+      actProcurarFO.Execute;
+    end;
+    1:
+    begin
+      FrmPrincipal.CarregaFiltrosProcura(ColunasLayoutRO);
+      actProcurarRO.Execute;
+    end;
+    2:
+    begin
+      FrmPrincipal.CarregaFiltrosProcura(ColunasLayoutAnaliseGM);
+      actProcurarAnaliseGM.Execute;
+    end;
+    3:
+    begin
+      FrmPrincipal.CarregaFiltrosProcura(ColunasLayoutListaSIGM);
+      actProcurarListaSIGM.Execute;
+    end;
+    4:
+    begin
+      FrmPrincipal.CarregaFiltrosProcura(ColunasLayoutRegistros);
+      actProcurarRegistros.Execute;
+    end;
+  end;
+end;
+
+procedure TFrmCondicaoOperacional.actProcurarFOExecute(Sender: TObject);
+    var
+    SQLString,SQLBase: String;
+begin
+  SQLString:= frmPrincipal.SQLStringFiltroTabela(ColunasLayoutFO,false);
+  if SQLString <>'' then
+    SQLString:= 'AND'+SQLString;
+  SQLBase:= 'SELECT tblNotaManutencao.* FROM tblNotaManutencao '+
+  FrmPrincipal.filtroFO+SQLString+' ORDER BY DenominacaoLocalInstalacao,Plataforma;';
+  FrmPrincipal.ProcuraQuery(SQLBase,FrmDataModule.ADOQueryForaOperacao,StatusBarFO);
+end;
+
+procedure TFrmCondicaoOperacional.actProcurarListaSIGMExecute(Sender: TObject);
+    var
+    SQLString,SQLBase: String;
+begin
+  SQLString:= frmPrincipal.SQLStringFiltroTabela(ColunasLayoutListaSIGM,true);
+  SQLBase:= 'SELECT tblSIGM.* FROM tblSIGM '+
+  SQLString+' ORDER BY PrazoGM DESC;';
+  FrmPrincipal.ProcuraQuery(SQLBase,FrmDataModule.ADOQueryListaSIGM,StatusBarListaSIGM);
+end;
+
+procedure TFrmCondicaoOperacional.actProcurarRegistrosExecute(Sender: TObject);
+    var
+    SQLString,SQLBase: String;
+begin
+  SQLString:= frmPrincipal.SQLStringFiltroTabela(ColunasLayoutRegistros,true);
+  SQLBase:= 'SELECT tblSIGMRegistros.* FROM tblSIGMRegistros '+
+  SQLString+' ORDER BY DataRegistro DESC;';
+  FrmPrincipal.ProcuraQuery(SQLBase,FrmDataModule.ADOQuerySIGMRegistros,StatusBarRegistros);
+end;
+
+procedure TFrmCondicaoOperacional.actProcurarROExecute(Sender: TObject);
+  var
+    SQLString,SQLBase: String;
+begin
+  SQLString:= frmPrincipal.SQLStringFiltroTabela(ColunasLayoutRO,false);
+  if SQLString <> '' then
+    SQLString:= 'AND'+SQLString;
+  SQLBase:= 'SELECT tblCarteiraTrabalho.Plataforma, tblCarteiraTrabalho.txtTipoEtapaServicoOM, '+
+  'tblCarteiraTrabalho.OrdemManutencao, tblCarteiraTrabalho.LocalInstalacao, '+
+  'tblCarteiraTrabalho.DenominacaoLocalInstalacao, tblCarteiraTrabalho.TextoBreveOM, '+
+  'tblCarteiraTrabalho.CentroTrabalhoOM, tblCarteiraTrabalho.DataBaseInicio, '+
+  'tblCarteiraTrabalho.DataBaseFim, tblCarteiraTrabalho.StatusUsuarioOM, '+
+  'tblCarteiraTrabalho.StatusSistemaOM, tblCarteiraTrabalho.Sala, '+
+  'tblCarteiraTrabalho.CampoSelecao, tblCarteiraTrabalho.NotaManutencao, '+
+  'tblCarteiraTrabalho.Equipamento, tblCarteiraTrabalho.BooleanCritico '+
+  'FROM tblCarteiraTrabalho '+
+  'GROUP BY tblCarteiraTrabalho.Plataforma, tblCarteiraTrabalho.txtTipoEtapaServicoOM, '+
+  'tblCarteiraTrabalho.OrdemManutencao, tblCarteiraTrabalho.LocalInstalacao, '+
+  'tblCarteiraTrabalho.DenominacaoLocalInstalacao, tblCarteiraTrabalho.TextoBreveOM, '+
+  'tblCarteiraTrabalho.CentroTrabalhoOM, tblCarteiraTrabalho.DataBaseInicio, '+
+  'tblCarteiraTrabalho.DataBaseFim, tblCarteiraTrabalho.StatusUsuarioOM, '+
+  'tblCarteiraTrabalho.StatusSistemaOM, tblCarteiraTrabalho.Sala, '+
+  'tblCarteiraTrabalho.CampoSelecao, tblCarteiraTrabalho.NotaManutencao, '+
+  'tblCarteiraTrabalho.Equipamento, tblCarteiraTrabalho.BooleanCritico '+
+  'HAVING ((TextoBreveOM LIKE "RO:%")AND(StatusUsuarioOM NOT LIKE "%AENT%"))'+
+  SQLString+' ORDER BY DenominacaoLocalInstalacao, Plataforma;';
+  FrmPrincipal.ProcuraQuery(SQLBase,FrmDataModule.ADOQueryRestricaoOperacional,StatusBarRO);
+end;
+
+procedure TFrmCondicaoOperacional.actProcurarAnaliseGMExecute(Sender: TObject);
+    var
+    SQLString,SQLBase: String;
+begin
+  SQLString:= frmPrincipal.SQLStringFiltroTabela(ColunasLayoutAnaliseGM,false);
+  if SQLString <>'' then
+    SQLString:= 'AND'+SQLString;
+  SQLBase:= 'SELECT tblNotaManutencao.* FROM tblNotaManutencao '+ FrmPrincipal.filtroFO+
+  'AND((BooleanSIGM = True))'+SQLString+' ORDER BY Plataforma;';
+  FrmPrincipal.ProcuraQuery(SQLBase,FrmDataModule.ADOQueryAnaliseGM,StatusBarAnaliseGM);
+end;
+
+procedure TFrmCondicaoOperacional.actSelLimpaPlataformaExecute(Sender: TObject);
+var
+  I: Integer;
+begin
+  for I := 0 to CheckListBoxPlataforma.Count-1 do
+    CheckListBoxPlataforma.Checked[i]:= false;
+  actFiltros.Execute;
+end;
+
+procedure TFrmCondicaoOperacional.actSelLimpaTipoEtapaServicoExecute(
+  Sender: TObject);
+var
+  I: Integer;
+begin
+  for I := 0 to CheckListBoxTipoEtapaServico.Count-1 do
+    CheckListBoxTipoEtapaServico.Checked[i]:= false;
+  actFiltros.Execute;
+end;
+
+procedure TFrmCondicaoOperacional.actSelTudoPlataformaExecute(Sender: TObject);
+var
+  I: Integer;
+begin
+  for I := 0 to CheckListBoxPlataforma.Count-1 do
+    CheckListBoxPlataforma.Checked[i]:= true;
+
+  actFiltros.Execute;
+end;
+
+procedure TFrmCondicaoOperacional.actSelTudoTipoEtapaServicoExecute(
+  Sender: TObject);
+var
+  I: Integer;
+begin
+  for I := 0 to CheckListBoxTipoEtapaServico.Count-1 do
+    CheckListBoxTipoEtapaServico.Checked[i]:= true;
+
+  actFiltros.Execute;
+end;
+
+procedure TFrmCondicaoOperacional.actSIGMCarregarExecute(Sender: TObject);
+  var
+    NotaManutencao: Integer;
+    SQLBase: String;
+begin
+  SQLBase:= 'SELECT tblNotaManutencao.* FROM tblNotaManutencao WHERE (BooleanSIGM = True);';
+  FrmDataModule.ADOQueryTemporarioDBMemoria.Close;
+  FrmDataModule.ADOQueryTemporarioDBMemoria.SQL.Clear;
+  FrmDataModule.ADOQueryTemporarioDBMemoria.SQL.Add(SQLBase);
+  FrmDataModule.ADOQueryTemporarioDBMemoria.Open;
+  FrmPrincipal.ProgressBarIncializa(FrmDataModule.ADOQueryTemporarioDBMemoria.RecordCount,
+  'Carregar lista de GIM/FAM');
+  while not FrmDataModule.ADOQueryTemporarioDBMemoria.Eof do
+  begin
+    NotaManutencao:= FrmDataModule.DataSourceTemporarioDBMemoria.DataSet.FieldByName('NotaManutencao').AsInteger;
+    //Abre pesquisa na tabela SIGM com o numero da Nota de Manutenção e Grava na Tabela de Notas.
+    SQLBase:= 'SELECT tblSIGM.* FROM tblSIGM WHERE (NotaManutencao = "'+IntToStr(NotaManutencao)+'");';
+    FrmDataModule.ADOQueryTemporarioDBOperacao.Close;
+    FrmDataModule.ADOQueryTemporarioDBOperacao.SQL.Clear;
+    FrmDataModule.ADOQueryTemporarioDBOperacao.SQL.Add(SQLBase);
+    FrmDataModule.ADOQueryTemporarioDBOperacao.Open;
+    //============================================================
+    FrmDataModule.ADOQueryTemporarioDBMemoria.Edit;
+    FrmDataModule.DataSourceTemporarioDBMemoria.DataSet.FieldByName('CodigoSIGM').AsInteger:=
+    FrmDataModule.DataSourceTemporarioDBOperacao.DataSet.FieldByName('idSIGM').AsInteger;
+    FrmDataModule.DataSourceTemporarioDBMemoria.DataSet.FieldByName('GIM_FAM').AsString:=
+    FrmDataModule.DataSourceTemporarioDBOperacao.DataSet.FieldByName('GIM_FAM').AsString;
+    FrmDataModule.DataSourceTemporarioDBMemoria.DataSet.FieldByName('DescricaoGM').AsString:=
+    FrmDataModule.DataSourceTemporarioDBOperacao.DataSet.FieldByName('DescricaoGM').AsString;
+    FrmDataModule.DataSourceTemporarioDBMemoria.DataSet.FieldByName('PrazoGM').AsString:=
+    FrmDataModule.DataSourceTemporarioDBOperacao.DataSet.FieldByName('PrazoGM').AsString;
+
+    FrmDataModule.DataSourceTemporarioDBMemoria.DataSet.
+    FieldByName('AtualizadoPor').AsString:= FrmPrincipal.logChave;
+    FrmDataModule.DataSourceTemporarioDBMemoria.DataSet.
+    FieldByName('DataAtualizacao').AsDateTime:= now;
+    FrmDataModule.DataSourceTemporarioDBMemoria.DataSet.
+    FieldByName('ComputadorAtualizacao').AsString:= FrmPrincipal.logMaquina;
+    FrmDataModule.ADOQueryTemporarioDBMemoria.Post;
+    //============================================================
+    FrmDataModule.ADOQueryTemporarioDBMemoria.Next;
+    FrmPrincipal.ProgressBarIncremento(1);
+  end;
+  FrmDataModule.ADOQueryAnaliseGM.Active:= false;
+  FrmDataModule.ADOQueryAnaliseGM.Active:= true;
+  FrmPrincipal.ProgressBarAtualizar;
+  actProcurarAnaliseGM.Execute;
+  actProcurarListaSIGM.Execute;
+  actProcurarRegistros.Execute;
+end;
+
+procedure TFrmCondicaoOperacional.actSIGMExecute(Sender: TObject);
+  var
+    CodigoSIGM: Integer;
+begin
+  CodigoSIGM:= FrmDataModule.DataSourceAnaliseGM.DataSet.FieldByName('CodigoSIGM').AsInteger;
+  FrmDataModule.ADOQuerySIGM.Active:= false;
+  FrmDataModule.ADOQuerySIGM.Parameters.Items[0].Value:= CodigoSIGM;
+  FrmDataModule.ADOQuerySIGM.Active:= true;
+  try
+    DateTimePickerPrazoGM.DateTime:= StrToDate(FrmDataModule.ADOQuerySIGM.FieldByName('PrazoGM').AsString);
+  except
+    DateTimePickerPrazoGM.DateTime:= now;
+  end;
+  actLimparAjuda.Execute;
+  PanelTituloAjuda1.Caption:= 'Inserir Dados GIM/FAM';
+  PanelListaSIGM.Visible:= false;
+  PanelSIGM.Visible:= true;
+  PanelSIGM.Align:= alClient;
+  PanelAjuda.Left:= 220;
+  PanelAjuda.Top:= 200;
+  PanelAjuda.Width:= 500;
+  PanelAjuda.Height:= 140;
+  PanelAjuda.Visible:= true;
+end;
+
+procedure TFrmCondicaoOperacional.actSIGMLimparExecute(Sender: TObject);
+begin
+  try
+    FrmDataModule.ADOQuerySIGM.Delete;
+  except
+  end;
+  actProcurarAnaliseGM.Execute;
+  actProcurarListaSIGM.Execute;
+  actProcurarRegistros.Execute;
+  actSIGMCarregar.Execute;
+  actLimparAjuda.Execute;
+end;
+
+procedure TFrmCondicaoOperacional.actSIGMListaExecute(Sender: TObject);
+begin
+  FrmDataModule.ADOQueryListaSIGM.Active:= false;
+  FrmDataModule.ADOQueryListaSIGM.Active:= true;
+  actLimparAjuda.Execute;
+  PanelTituloAjuda1.Caption:= 'Lista de GIM/FAM';
+  PanelSIGM.Visible:= false;
+  PanelListaSIGM.Visible:= true;
+  PanelListaSIGM.Align:= alClient;
+  PanelAjuda.Left:= 220;
+  PanelAjuda.Top:= 200;
+  PanelAjuda.Width:= 900;
+  PanelAjuda.Height:= 360;
+  PanelAjuda.Visible:= true;
+end;
+
+procedure TFrmCondicaoOperacional.actSubstituirPorExecute(Sender: TObject);
+begin
+  case TabelaIndex of
+    0:
+    begin
+      FrmPrincipal.SubstituirPor(DBGridForaOperacao,FrmDataModule.ADOQueryForaOperacao,
+      FrmDataModule.DataSourceForaOperacao);
+    end;
+    1:
+    begin
+      FrmPrincipal.SubstituirPor(DBGridRestricaoOperacional,FrmDataModule.ADOQueryRestricaoOperacional,
+      FrmDataModule.DataSourceRestricaoOperacional);
+    end;
+    2:
+    begin
+      FrmPrincipal.SubstituirPor(DBGridAnaliseGM,FrmDataModule.ADOQueryAnaliseGM,
+      FrmDataModule.DataSourceAnaliseGM);
+    end;
+    3:
+    begin
+      FrmPrincipal.SubstituirPor(DBGridListaSIGM,FrmDataModule.ADOQueryListaSIGM,
+      FrmDataModule.DataSourceLimiteOperacional);
+    end;
+    4:
+    begin
+      FrmPrincipal.SubstituirPor(DBGridRegistros,FrmDataModule.ADOQuerySIGMRegistros,
+      FrmDataModule.DataSourceSIGMRegistros);
+    end;
+  end;
+end;
+
+procedure TFrmCondicaoOperacional.actTudoFiltroUsuarioExecute(Sender: TObject);
+var
+  I: Integer;
+begin
+  for I := 0 to CheckListBoxSistemaFiltro.Count-1 do
+    CheckListBoxSistemaFiltro.Checked[i]:= true;
+
+  actFiltros.Execute;
+end;
+
+procedure TFrmCondicaoOperacional.actZoomMaisExecute(Sender: TObject);
+begin
+  ChartGrafico.ZoomPercent(110);
+end;
+
+procedure TFrmCondicaoOperacional.actZoomMenosExecute(Sender: TObject);
+begin
+  ChartGrafico.ZoomPercent(90);
+end;
+
+function TFrmCondicaoOperacional.carregaSerie: TBarSeries;
+begin
+  Result:= TBarSeries.Create(ChartGrafico);
+  Result.MultiBar:= mbSide;
+  Result.AutoBarSize:= true;
+  if RadioGroupEixoX.ItemIndex=0 then
+    Result.XValues.DateTime:= true
+  else
+    Result.XValues.DateTime:= false;
+  Result.CustomBarWidth:= 20;
+  if btnMark.Down then
+  begin
+    Result.Marks.Style:= smsLabelValue;
+    Result.Marks.MultiLine:= true;
+    Result.Marks.Arrow.Visible:= true;
+    Result.Marks.Arrow.Color:= clBlack;
+    Result.Marks.Margins.Left:= 4;
+    Result.Marks.Margins.Right:= 4;
+    Result.Marks.Margins.Top:= 1;
+    Result.Marks.Margins.Bottom:= 1;
+    Result.Marks.Visible:= true;
+  end
+  else
+    Result.Marks.Visible:= false;
+end;
+
+function TFrmCondicaoOperacional.carregaSerieLine(color: TColor; Pointer: Integer; Titulo: String): TLineSeries;
+begin
+  Result:= TLineSeries.Create(ChartGrafico);
+  Result.XValues.DateTime:= true;
+  Result.Title:= Titulo;
+  Result.Color:= color;
+  Result.Marks.Visible:= false;
+  Result.Pointer.Size:= 4;
+  Result.Pointer.Visible:= true;
+  Result.Pointer.Style:= TSeriesPointerStyle(Pointer);
+end;
+
+procedure TFrmCondicaoOperacional.DBEdit1Change(Sender: TObject);
+begin
+  {try
+    FrmDataModule.ADOQueryTextoLongoOM.Active:= false;
+    FrmDataModule.ADOQueryTextoLongoOM.Parameters.Items[0].Value:=
+    FrmDataModule.DataSourceForaOperacao.DataSet.FieldByName('OrdemManutencao').asString;
+    FrmDataModule.ADOQueryTextoLongoOM.Active:= true;
+  except
+    FrmDataModule.ADOQueryTextoLongoOM.Active:= false;
+  end;}
+  MemoTextoLongoCarteira.Text:= FrmPrincipal.verificaTextoLongoCarteira(
+  FrmDataModule.DataSourceForaOperacao.DataSet.FieldByName('OrdemManutencao').asString);
+end;
+
+procedure TFrmCondicaoOperacional.DBEdit2Change(Sender: TObject);
+begin
+  MemoRO.Text:= FrmPrincipal.verificaTextoLongoCarteira(FrmDataModule.
+  DataSourceRestricaoOperacional.DataSet.FieldByName('OrdemManutencao').asString);
+end;
+
+procedure TFrmCondicaoOperacional.DBEdit3Change(Sender: TObject);
+begin
+  MemoPreventivaAtrasada.Text:= FrmPrincipal.verificaTextoLongoCarteira(FrmDataModule.
+  DataSourcePreventivaAtrasada.DataSet.FieldByName('OrdemManutencao').asString);
+end;
+
+procedure TFrmCondicaoOperacional.DBEdit6Change(Sender: TObject);
+  var
+    CodigoSIGM: Integer;
+    PrazoGM: String;
+    PrazoGMDate: TDateTime;
+begin
+  if PanelSIGM.Visible then
+  begin
+    CodigoSIGM:= FrmDataModule.DataSourceAnaliseGM.DataSet.FieldByName('CodigoSIGM').AsInteger;
+    FrmDataModule.ADOQuerySIGM.Active:= false;
+    FrmDataModule.ADOQuerySIGM.Parameters.Items[0].Value:= CodigoSIGM;
+    FrmDataModule.ADOQuerySIGM.Active:= true;
+    PrazoGM:= FrmDataModule.DataSourceSIGM.DataSet.FieldByName('PrazoGM').AsString;
+    if PrazoGM = 'N/A' then
+      CheckBoxPrazoGM.Checked:= true
+    else
+      CheckBoxPrazoGM.Checked:= false;
+    try
+      PrazoGMDate:= StrToDate(PrazoGM);
+      DateTimePickerPrazoGM.DateTime:= PrazoGMDate;
+    Except
+      DateTimePickerPrazoGM.DateTime:= now;
+    end;
+  end;
+end;
+
+procedure TFrmCondicaoOperacional.DBGridForaOperacaoDrawColumnCell(Sender: TObject;
+  const Rect: TRect; DataCol: Integer; Column: TColumn; State: TGridDrawState);
+  var
+    DataFimDesejado,Dias5,Dias30: TDateTime;
+begin
+  FrmPrincipal.GridZebrado(DBGridForaOperacao,ColunasLayoutFO,State,Rect,DataCol,Column);
+  if (Column.Field.FieldName = 'BooleanCritico') then
+  begin
+    if (FrmDataModule.DataSourceForaOperacao.DataSet.
+    FieldByName('BooleanCritico').AsBoolean) then
+    begin
+      TDBGrid(Sender).Canvas.FillRect(Rect);
+      FrmPrincipal.ImageList1.Draw(TDBGrid(Sender).Canvas, Rect.Left +10,Rect.Top + 1, 154);
+    end
+    else
+    begin
+      TDBGrid(Sender).Canvas.FillRect(Rect);
+      FrmPrincipal.ImageList1.Draw(TDBGrid(Sender).Canvas, Rect.Left +10,Rect.Top + 1, 155);
+    end;
+  end
+  else if (Column.Field.FieldName = 'DataFimDesejado') then
+  begin
+    if FrmDataModule.DataSourceForaOperacao.DataSet.
+    FieldByName('DataFimDesejado').AsString <> '' then
+    begin
+      DataFimDesejado:= FrmDataModule.DataSourceForaOperacao.DataSet.
+      FieldByName('DataFimDesejado').AsDateTime;
+      Dias5:= IncDay(now,+5);
+      Dias30:= IncDay(now,+30);
+      if (DataFimDesejado >= Dias30) then
+      begin
+        DBGridForaOperacao.Canvas.Brush.Color:= clLime;
+        DBGridForaOperacao.Font.Color:= clBlack;
+        DBGridForaOperacao.Canvas.FillRect(Rect);
+        DBGridForaOperacao.DefaultDrawColumnCell(Rect, DataCol,Column, State);
+      end
+      else if ((DataFimDesejado >= Dias5)AND(DataFimDesejado < Dias30)) then
+      begin
+        DBGridForaOperacao.Canvas.Brush.Color:= clYellow;
+        DBGridForaOperacao.Font.Color:= clBlack;
+        DBGridForaOperacao.Canvas.FillRect(Rect);
+        DBGridForaOperacao.DefaultDrawColumnCell(Rect, DataCol,Column, State);
+      end
+      else if (DataFimDesejado < Dias5) then
+      begin
+        DBGridForaOperacao.Canvas.Brush.Color:= clRed;
+        DBGridForaOperacao.Font.Color:= clBlack;
+        DBGridForaOperacao.Canvas.FillRect(Rect);
+        DBGridForaOperacao.DefaultDrawColumnCell(Rect, DataCol,Column, State);
+      end;
+    end
+    else
+    begin
+      DBGridForaOperacao.Canvas.Brush.Color:= clSilver;
+      DBGridForaOperacao.Font.Color:= clBlack;
+      DBGridForaOperacao.Canvas.FillRect(Rect);
+      DBGridForaOperacao.DefaultDrawColumnCell(Rect, DataCol,Column, State);
+    end;
+  end;
+end;
+
+procedure TFrmCondicaoOperacional.DBGridForaOperacaoKeyDown(Sender: TObject;
+  var Key: Word; Shift: TShiftState);
+begin
+  if (Key in [VK_DOWN]) AND (DBGridForaOperacao.DataSource.DataSet.RecNo=
+  DBGridForaOperacao.DataSource.DataSet.RecordCount) then
+    Abort;
+end;
+
+procedure TFrmCondicaoOperacional.DBGridForaOperacaoKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+  if not (DBGridForaOperacao.SelectedField.FieldName = 'Comentario') then
+    Key:= #0;
+end;
+
+procedure TFrmCondicaoOperacional.DBGridForaOperacaoTitleClick(Column: TColumn);
+begin
+  TabelaIndex:= 0;
+  FrmPrincipal.configurarFiltro(0,Column.FieldName,IntToStr(Column.Index),
+  Column.ReadOnly,actFiltroInserir,actGridASC,actGridDESC,actSubstituirPor);
+  //======================================================
+  FrmPrincipal.titleGrid(ColunasLayoutFO,'Memoria',
+  FrmDataModule.ADOQueryForaOperacao.SQL.Text);
+end;
+
+procedure TFrmCondicaoOperacional.DBGridListaSIGMDrawColumnCell(Sender: TObject;
+  const Rect: TRect; DataCol: Integer; Column: TColumn; State: TGridDrawState);
+begin
+  FrmPrincipal.GridZebrado(DBGridListaSIGM,ColunasLayoutListaSIGM,State,Rect,DataCol,Column);
+end;
+
+procedure TFrmCondicaoOperacional.DBGridListaSIGMTitleClick(Column: TColumn);
+begin
+  TabelaIndex:= 3;
+  FrmPrincipal.configurarFiltro(1,Column.FieldName,IntToStr(Column.Index),
+  Column.ReadOnly,actFiltroInserir,actGridASC,actGridDESC,actSubstituirPor);
+  //======================================================
+  FrmPrincipal.titleGrid(ColunasLayoutListaSIGM,'Operacao',
+  FrmDataModule.ADOQueryListaSIGM.SQL.Text);
+end;
+
+procedure TFrmCondicaoOperacional.DBGridPreventivaAtrasadaDrawColumnCell(
+  Sender: TObject; const Rect: TRect; DataCol: Integer; Column: TColumn;
+  State: TGridDrawState);
+begin
+  FrmPrincipal.GridZebrado(DBGridPreventivaAtrasada,
+  ColunasLayoutPreventivaAtrasada,State,Rect,DataCol,Column);
+end;
+
+procedure TFrmCondicaoOperacional.DBGridRegistrosDrawColumnCell(Sender: TObject;
+  const Rect: TRect; DataCol: Integer; Column: TColumn; State: TGridDrawState);
+begin
+  FrmPrincipal.GridZebrado(DBGridRegistros,ColunasLayoutRegistros,State,Rect,DataCol,Column);
+end;
+
+procedure TFrmCondicaoOperacional.DBGridRegistrosTitleClick(Column: TColumn);
+begin
+  TabelaIndex:= 4;
+  FrmPrincipal.configurarFiltro(1,Column.FieldName,IntToStr(Column.Index),
+  Column.ReadOnly,actFiltroInserir,actGridASC,actGridDESC,actSubstituirPor);
+  //======================================================
+  FrmPrincipal.titleGrid(ColunasLayoutRegistros,'Operacao',FrmDataModule.ADOQuerySIGMRegistros.SQL.Text);
+end;
+
+procedure TFrmCondicaoOperacional.DBGridRestricaoOperacionalDrawColumnCell(
+  Sender: TObject; const Rect: TRect; DataCol: Integer; Column: TColumn;
+  State: TGridDrawState);
+begin
+  FrmPrincipal.GridZebrado(DBGridRestricaoOperacional,ColunasLayoutRO,State,Rect,DataCol,Column);
+  if (Column.Field.FieldName = 'BooleanCritico') then
+  begin
+    if (FrmDataModule.DataSourceRestricaoOperacional.DataSet.
+    FieldByName('BooleanCritico').AsBoolean) then
+    begin
+      TDBGrid(Sender).Canvas.FillRect(Rect);
+      FrmPrincipal.ImageList1.Draw(TDBGrid(Sender).Canvas, Rect.Left +15,Rect.Top + 1, 474);
+    end
+    else
+    begin
+      TDBGrid(Sender).Canvas.FillRect(Rect);
+      FrmPrincipal.ImageList1.Draw(TDBGrid(Sender).Canvas, Rect.Left +15,Rect.Top + 1, 477);
+    end;
+  end;
+end;
+
+procedure TFrmCondicaoOperacional.DBGridRestricaoOperacionalTitleClick(
+  Column: TColumn);
+begin
+  TabelaIndex:= 1;
+  FrmPrincipal.configurarFiltro(0,Column.FieldName,IntToStr(Column.Index),
+  Column.ReadOnly,actFiltroInserir,actGridASC,actGridDESC,actSubstituirPor);
+  //======================================================
+  FrmPrincipal.titleGrid(ColunasLayoutRO,'Memoria',
+  FrmDataModule.ADOQueryRestricaoOperacional.SQL.Text);
+end;
+
+procedure TFrmCondicaoOperacional.DBGridAnaliseGMDrawColumnCell(Sender: TObject;
+  const Rect: TRect; DataCol: Integer; Column: TColumn; State: TGridDrawState);
+    var
+      VencimentoAvaria,PrazoGM,Prazo_10Dias,DataFimDesejado,Dias5,Dias30: TDateTime;
+begin
+  FrmPrincipal.GridZebrado(DBGridAnaliseGM,ColunasLayoutAnaliseGM,State,Rect,DataCol,Column);
+  if (Column.Field.FieldName = 'VencimentoAvaria') then
+  begin
+    if FrmDataModule.DataSourceAnaliseGM.DataSet.
+    FieldByName('PrazoGM').AsString <> '' then
+    begin
+      DBGridAnaliseGM.Canvas.Brush.Color:= clSilver;
+      DBGridAnaliseGM.Font.Color:= clBlack;
+      DBGridAnaliseGM.Canvas.FillRect(Rect);
+      DBGridAnaliseGM.DefaultDrawColumnCell(Rect, DataCol,Column, State);
+    end
+    else
+    begin
+      if FrmDataModule.DataSourceAnaliseGM.DataSet.
+      FieldByName('VencimentoAvaria').AsString <> '' then
+      begin
+        try
+          VencimentoAvaria:= StrToDate(FrmDataModule.DataSourceAnaliseGM.DataSet.
+          FieldByName('VencimentoAvaria').AsString);
+          Prazo_10Dias:= IncDay(now,+10);
+          if (VencimentoAvaria > Prazo_10Dias) then
+          begin
+            DBGridAnaliseGM.Canvas.Brush.Color:= clLime;
+            DBGridAnaliseGM.Font.Color:= clBlack;
+            DBGridAnaliseGM.Canvas.FillRect(Rect);
+            DBGridAnaliseGM.DefaultDrawColumnCell(Rect, DataCol,Column, State);
+          end
+          else if ((VencimentoAvaria <= Prazo_10Dias)AND(VencimentoAvaria > now)) then
+          begin
+            DBGridAnaliseGM.Canvas.Brush.Color:= clYellow;
+            DBGridAnaliseGM.Font.Color:= clBlack;
+            DBGridAnaliseGM.Canvas.FillRect(Rect);
+            DBGridAnaliseGM.DefaultDrawColumnCell(Rect, DataCol,Column, State);
+          end
+          else
+          begin
+            DBGridAnaliseGM.Canvas.Brush.Color:= clRed;
+            DBGridAnaliseGM.Font.Color:= clBlack;
+            DBGridAnaliseGM.Canvas.FillRect(Rect);
+            DBGridAnaliseGM.DefaultDrawColumnCell(Rect, DataCol,Column, State);
+          end;
+        except
+          DBGridAnaliseGM.Canvas.Brush.Color:= clSilver;
+          DBGridAnaliseGM.Font.Color:= clBlack;
+          DBGridAnaliseGM.Canvas.FillRect(Rect);
+          DBGridAnaliseGM.DefaultDrawColumnCell(Rect, DataCol,Column, State);
+        end;
+      end;
+    end;
+  end
+  else if (Column.Field.FieldName = 'PrazoGM') then
+  begin
+    if FrmDataModule.DataSourceAnaliseGM.DataSet.
+    FieldByName('PrazoGM').AsString <> '' then
+    begin
+      try
+        PrazoGM:= StrToDate(FrmDataModule.DataSourceAnaliseGM.DataSet.
+        FieldByName('PrazoGM').AsString);
+        Prazo_10Dias:= IncDay(now,+10);
+        if (PrazoGM > Prazo_10Dias) then
+        begin
+          DBGridAnaliseGM.Canvas.Brush.Color:= clLime;
+          DBGridAnaliseGM.Font.Color:= clBlack;
+          DBGridAnaliseGM.Canvas.FillRect(Rect);
+          DBGridAnaliseGM.DefaultDrawColumnCell(Rect, DataCol,Column, State);
+        end
+        else if ((PrazoGM <= Prazo_10Dias)AND(PrazoGM > now)) then
+        begin
+          DBGridAnaliseGM.Canvas.Brush.Color:= clYellow;
+          DBGridAnaliseGM.Font.Color:= clBlack;
+          DBGridAnaliseGM.Canvas.FillRect(Rect);
+          DBGridAnaliseGM.DefaultDrawColumnCell(Rect, DataCol,Column, State);
+        end
+        else
+        begin
+          DBGridAnaliseGM.Canvas.Brush.Color:= clRed;
+          DBGridAnaliseGM.Font.Color:= clBlack;
+          DBGridAnaliseGM.Canvas.FillRect(Rect);
+          DBGridAnaliseGM.DefaultDrawColumnCell(Rect, DataCol,Column, State);
+        end;
+      except
+        DBGridAnaliseGM.Canvas.Brush.Color:= clSilver;
+        DBGridAnaliseGM.Font.Color:= clBlack;
+        DBGridAnaliseGM.Canvas.FillRect(Rect);
+        DBGridAnaliseGM.DefaultDrawColumnCell(Rect, DataCol,Column, State);
+      end;
+    end
+    else
+    begin
+      DBGridAnaliseGM.Canvas.Brush.Color:= clInfoBk;
+      DBGridAnaliseGM.Font.Color:= clBlack;
+      DBGridAnaliseGM.Canvas.FillRect(Rect);
+      DBGridAnaliseGM.DefaultDrawColumnCell(Rect, DataCol,Column, State);
+    end;
+  end
+  else if (Column.Field.FieldName = 'DataFimDesejado') then
+  begin
+    if FrmDataModule.DataSourceAnaliseGM.DataSet.
+    FieldByName('DataFimDesejado').AsString <> '' then
+    begin
+      DataFimDesejado:= FrmDataModule.DataSourceAnaliseGM.DataSet.
+      FieldByName('DataFimDesejado').AsDateTime;
+      Dias5:= IncDay(now,+5);
+      Dias30:= IncDay(now,+30);
+      if (DataFimDesejado >= Dias30) then
+      begin
+        DBGridAnaliseGM.Canvas.Brush.Color:= clLime;
+        DBGridAnaliseGM.Font.Color:= clBlack;
+        DBGridAnaliseGM.Canvas.FillRect(Rect);
+        DBGridAnaliseGM.DefaultDrawColumnCell(Rect, DataCol,Column, State);
+      end
+      else if ((DataFimDesejado >= Dias5)AND(DataFimDesejado < Dias30)) then
+      begin
+        DBGridAnaliseGM.Canvas.Brush.Color:= clYellow;
+        DBGridAnaliseGM.Font.Color:= clBlack;
+        DBGridAnaliseGM.Canvas.FillRect(Rect);
+        DBGridAnaliseGM.DefaultDrawColumnCell(Rect, DataCol,Column, State);
+      end
+      else if (DataFimDesejado < Dias5) then
+      begin
+        DBGridAnaliseGM.Canvas.Brush.Color:= clRed;
+        DBGridAnaliseGM.Font.Color:= clBlack;
+        DBGridAnaliseGM.Canvas.FillRect(Rect);
+        DBGridAnaliseGM.DefaultDrawColumnCell(Rect, DataCol,Column, State);
+      end;
+    end
+    else
+    begin
+      DBGridAnaliseGM.Canvas.Brush.Color:= clSilver;
+      DBGridAnaliseGM.Font.Color:= clBlack;
+      DBGridAnaliseGM.Canvas.FillRect(Rect);
+      DBGridAnaliseGM.DefaultDrawColumnCell(Rect, DataCol,Column, State);
+    end;
+  end;
+
+end;
+
+procedure TFrmCondicaoOperacional.DBGridAnaliseGMTitleClick(Column: TColumn);
+begin
+  TabelaIndex:= 2;
+  FrmPrincipal.configurarFiltro(0,Column.FieldName,IntToStr(Column.Index),
+  Column.ReadOnly,actFiltroInserir,actGridASC,actGridDESC,actSubstituirPor);
+  //======================================================
+  FrmPrincipal.titleGrid(ColunasLayoutAnaliseGM,'Memoria',FrmDataModule.ADOQueryAnaliseGM.SQL.Text);
+end;
+
+procedure TFrmCondicaoOperacional.FormClose(Sender: TObject;
+  var Action: TCloseAction);
+begin
+  Action:= caFree;
+  FrmCondicaoOperacional:=nil;
+end;
+
+procedure TFrmCondicaoOperacional.FormCreate(Sender: TObject);
+begin
+  FrmPrincipal.MDIChildCreated(self.Handle);
+  if ((FrmPrincipal.logPerfil = 'Administrador')OR
+  (FrmPrincipal.logPerfil = 'PCM')) then
+  begin
+    actGravarSIGMRegistros.Enabled:= true;
+    actSIGM.Enabled:= true;
+  end
+  else if (FrmPrincipal.logPerfil = 'Operação') then
+  begin
+    actGravarSIGMRegistros.Enabled:= true;
+    actSIGM.Enabled:= true;
+  end
+  else
+  if (FrmPrincipal.logPerfil = 'PIOP')OR
+  (FrmPrincipal.logPerfil = 'SEG-PIOP') then
+  begin
+    actGravarSIGMRegistros.Enabled:= true;
+    actSIGM.Enabled:= false;
+  end
+  else
+  begin
+    actGravarSIGMRegistros.Enabled:= false;
+    actSIGM.Enabled:= false;
+  end;
+  //Incicialização
+  PageControl1.TabIndex:=0;
+  FrmPrincipal.SetUpColunasLayout(DBGridForaOperacao, ColunasLayoutFO);
+  FrmPrincipal.SetUpColunasLayout(DBGridRestricaoOperacional, ColunasLayoutRO);
+  FrmPrincipal.SetUpColunasLayout(DBGridPreventivaAtrasada, ColunasLayoutPreventivaAtrasada);
+  FrmPrincipal.SetUpColunasLayout(DBGridAnaliseGM, ColunasLayoutAnaliseGM);
+  FrmPrincipal.SetUpColunasLayout(DBGridListaSIGM, ColunasLayoutListaSIGM);
+  FrmPrincipal.SetUpColunasLayout(DBGridRegistros, ColunasLayoutRegistros);
+
+  actProcurarFO.Execute;
+  FrmDataModule.ADOQueryPlataformaControle.Active:= false;
+  FrmDataModule.ADOQueryPlataformaControle.Active:= true;
+  FrmPrincipal.carregarCheckListBox(FrmDataModule.ADOQueryPlataformaControle,
+  CheckListBoxPlataforma,'Plataforma');
+  FrmPrincipal.carregarCheckListBox(FrmDataModule.ADOQueryTipoEtapaServico_Carteira,
+  CheckListBoxTipoEtapaServico,'TipoEtapaServico');
+  FrmPrincipal.carregarFiltroSistemaCheckList(CheckListBoxSistemaFiltro,DBGridForaOperacao);
+end;
+
+procedure TFrmCondicaoOperacional.FormDestroy(Sender: TObject);
+begin
+  FrmPrincipal.MDIChildDestroyed(self.Handle);
+end;
+
+procedure TFrmCondicaoOperacional.PageControl1Change(Sender: TObject);
+begin
+  case PageControl1.TabIndex of
+    0: actProcurarFO.Execute;
+    1: actProcurarRO.Execute;
+    2: actGrafico.Execute;
+    3:
+    begin
+      actProcurarAnaliseGM.Execute;
+      actProcurarListaSIGM.Execute;
+      actProcurarRegistros.Execute;
+    end;
+  end;
+end;
+
+procedure TFrmCondicaoOperacional.PanelTituloAjuda1MouseDown(Sender: TObject;
+  Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
+begin
+  FrmPrincipal.Capturing := true;
+  FrmPrincipal.MouseDownSpot.X := X;
+  FrmPrincipal.MouseDownSpot.Y := Y;
+end;
+
+procedure TFrmCondicaoOperacional.PanelTituloAjuda1MouseMove(Sender: TObject;
+  Shift: TShiftState; X, Y: Integer);
+begin
+  if FrmPrincipal.Capturing then
+  begin
+    PanelAjuda.Left := PanelAjuda.Left - (FrmPrincipal.MouseDownSpot.X - X);
+    PanelAjuda.Top := PanelAjuda.Top - (FrmPrincipal.MouseDownSpot.Y - Y);
+  end;
+end;
+
+procedure TFrmCondicaoOperacional.PanelTituloAjuda1MouseUp(Sender: TObject;
+  Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
+begin
+  if FrmPrincipal.Capturing then
+  begin
+    FrmPrincipal.Capturing := false;
+    PanelAjuda.Left := PanelAjuda.Left - (FrmPrincipal.MouseDownSpot.X - X);
+    PanelAjuda.Top := PanelAjuda.Top - (FrmPrincipal.MouseDownSpot.Y - Y);
+  end;
+end;
+
+procedure TFrmCondicaoOperacional.RLImpressaoFixedCellClick(Sender: TObject;
+  ACol, ARow: Integer);
+begin
+  FrmPrincipal.clasifica(RLImpressao,ACol,true);
+end;
+
+procedure TFrmCondicaoOperacional.WMMDIACTIVATE(var msg: TWMMDIACTIVATE);
+var
+  active: TWinControl;
+  idx: Integer;
+begin
+  active := FindControl(msg.ActiveWnd) ;
+
+  if Assigned(active) then
+  begin
+    idx := FrmPrincipal.mdiChildrenTabs.Tabs.IndexOfObject(TObject(msg.ActiveWnd));
+    FrmPrincipal.mdiChildrenTabs.Tag := -1;
+    FrmPrincipal.mdiChildrenTabs.TabIndex := idx;
+    FrmPrincipal.mdiChildrenTabs.Tag := 0;
+  end;
+end;
+
+end.

@@ -1,0 +1,2960 @@
+﻿unit untPericiaMarinha;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ExtCtrls, Vcl.ComCtrls,
+  VclTee.TeeGDIPlus, VCLTee.TeEngine, VCLTee.Series, VCLTee.TeeProcs,
+  VCLTee.Chart, Vcl.ToolWin, Vcl.StdCtrls, Data.DB, Vcl.Grids, Vcl.DBGrids,
+  System.Actions, Vcl.ActnList, Vcl.PlatformDefaultStyleActnCtrls, Vcl.ActnMan,
+  Vcl.Buttons, Vcl.DBCtrls, Vcl.CheckLst, Vcl.ExtDlgs, Vcl.Mask, Vcl.Menus,System.DateUtils,
+  DBDateTimePicker, SDL_NumIO,ComOBJ,ActiveX, SDL_Thumbnails;
+
+type
+  TFrmPericiaMarinha = class(TForm)
+    PageControlMarinha: TPageControl;
+    TabSheet1: TTabSheet;
+    TabSheet2: TTabSheet;
+    Splitter5: TSplitter;
+    Panel54: TPanel;
+    ToolBar4: TToolBar;
+    ToolButton3: TToolButton;
+    ToolButton7: TToolButton;
+    ToolButton5: TToolButton;
+    ToolButton4: TToolButton;
+    ToolButton1: TToolButton;
+    ToolButton2: TToolButton;
+    btnMark: TToolButton;
+    ChartGrafico: TChart;
+    ActionManager1: TActionManager;
+    actCimaTudo: TAction;
+    actBaixoTudo: TAction;
+    actExcel: TAction;
+    actProcurar: TAction;
+    actCongelarPainel: TAction;
+    actGrafico: TAction;
+    actGRFSalvarImagem: TAction;
+    actZoomMais: TAction;
+    actZoomMenos: TAction;
+    actGRFTitulo: TAction;
+    actGRFImprimir: TAction;
+    actGRFSalvarTXT: TAction;
+    actEtiqueta: TAction;
+    SaveDialog1: TSaveDialog;
+    SavePictureDialog1: TSavePictureDialog;
+    RadioGroupEixoX: TRadioGroup;
+    actGRFPlataforma: TAction;
+    actGRFTipoEtapaServico: TAction;
+    actGRFVencimento: TAction;
+    actOrdemManutencao: TAction;
+    actCarregarOrdemManutencao: TAction;
+    PopupMenuOM: TPopupMenu;
+    SAPOM1: TMenuItem;
+    actOrdemManutencaoTodos: TAction;
+    SAPOMTodos1: TMenuItem;
+    actFiltroInserir: TAction;
+    actGridASC: TAction;
+    actGridDESC: TAction;
+    actSubstituirPor: TAction;
+    actLimparFiltros: TAction;
+    PanelTudo: TPanel;
+    Splitter2: TSplitter;
+    ToolBar1: TToolBar;
+    ToolButton11: TToolButton;
+    BitBtn6: TBitBtn;
+    DBEdit1: TDBEdit;
+    PanelTitulo: TPanel;
+    DBGridPericiaMarinha: TDBGrid;
+    ColunasLayout: TStringGrid;
+    StatusBarPericiaMarinha: TStatusBar;
+    actLayoutJanela: TAction;
+    actBaixo: TAction;
+    actCima: TAction;
+    BitBtn2: TBitBtn;
+    actSalvarLayout: TAction;
+    DBNavigatorMarinha: TDBNavigator;
+    ToolButton6: TToolButton;
+    actFiltrosTabela: TAction;
+    BitBtn4: TBitBtn;
+    actSalvarProrrogacaoData: TAction;
+    actInserirLinha: TAction;
+    actExcluirLinha: TAction;
+    MemoMarinha: TMemo;
+    actProcuraFiltrosTabela: TAction;
+    DBDateTimeDataPericia: TDBDateTimePicker;
+    MaskEditRelatorio: TMaskEdit;
+    actRelatorioMarinha: TAction;
+    BitBtn1: TBitBtn;
+    actGRFPericiaRetificado: TAction;
+    actGRFVencimentoRetificado: TAction;
+    edtPrazoCores1: TNumIO2;
+    edtPrazoCores2: TNumIO2;
+    ToolButton14: TToolButton;
+    actConfigPickList: TAction;
+    actMACLetter: TAction;
+    TabSheet13: TTabSheet;
+    actCartaSalvar: TAction;
+    actCartaCopiar: TAction;
+    actCartaSelTudo: TAction;
+    actExcelResumoCarta: TAction;
+    actFiltroInserirResumo: TAction;
+    actGridASCResumo: TAction;
+    actGridDESCResumo: TAction;
+    actLimparFiltrosResumo: TAction;
+    actFiltrosTabelaResumo: TAction;
+    actProcuraFiltrosTabelaResumo: TAction;
+    actProcurarResumoCarta: TAction;
+    actAjudaLimpar: TAction;
+    actExcelControleCarta: TAction;
+    PageControleCarta: TPageControl;
+    TabSheet16: TTabSheet;
+    TabSheet17: TTabSheet;
+    ToolBar2: TToolBar;
+    BitBtn9: TBitBtn;
+    MemoCarta: TMemo;
+    ToolBarPrioridadeForcada: TToolBar;
+    BitBtn7: TBitBtn;
+    BitBtn11: TBitBtn;
+    BitBtn10: TBitBtn;
+    DBGridResumoCarta: TDBGrid;
+    ColunasLayoutResumoCarta: TStringGrid;
+    StatusBarResumoCarta: TStatusBar;
+    BitBtn15: TBitBtn;
+    BitBtn16: TBitBtn;
+    actGRFVencimentoCarta: TAction;
+    actGRFControleCarta: TAction;
+    BitBtn18: TBitBtn;
+    DBEdit2: TDBEdit;
+    actPIEProrrogacao: TAction;
+    actPIEVencimento: TAction;
+    actGRFPrazoAtendimento: TAction;
+    Series1: TLineSeries;
+    actBarraProrrogacao: TAction;
+    actBarraVencimento: TAction;
+    actPIEPrazoAtendimento: TAction;
+    actPIEControleCarta: TAction;
+    actOrdemManutencaoLimpar: TAction;
+    SAPOMLimpardadosselecionado1: TMenuItem;
+    acrExcelTabelaAccess: TAction;
+    ToolButton9: TToolButton;
+    PopupMenuExcel: TPopupMenu;
+    Exportartabeladobancodedados1: TMenuItem;
+    ExportarFILTRADOSformatado1: TMenuItem;
+    actExcelTexto: TAction;
+    PageControlTipos: TPageControl;
+    TabSheet5: TTabSheet;
+    DBMemoDescricao: TDBMemo;
+    TabSheet3: TTabSheet;
+    ToolBarProrrogacao: TToolBar;
+    ToolButton8: TToolButton;
+    ToolButton10: TToolButton;
+    ToolButton12: TToolButton;
+    StrGridProrrogacaoData: TStringGrid;
+    TabSheet7: TTabSheet;
+    PageControlOrdem: TPageControl;
+    TabSheet9: TTabSheet;
+    StrGridOrdemManutencao: TStringGrid;
+    TabSheet10: TTabSheet;
+    DBMemoTextolongoOM: TDBMemo;
+    TabSheet6: TTabSheet;
+    PageCartaDados: TPageControl;
+    TabSheet8: TTabSheet;
+    DBMemoMotivoNaoAtendimento: TDBMemo;
+    TabSheet14: TTabSheet;
+    DBMemoOQueFoiFeito: TDBMemo;
+    TabSheet11: TTabSheet;
+    DBMemoMitigacao: TDBMemo;
+    TabSheet12: TTabSheet;
+    DBMemoObservacaoCarta: TDBMemo;
+    TabSheet15: TTabSheet;
+    ToolBar3: TToolBar;
+    DBDateTimePicker1: TDBDateTimePicker;
+    TabSheet4: TTabSheet;
+    DBMemoObservacao: TDBMemo;
+    TabSheet18: TTabSheet;
+    Panel2: TPanel;
+    actAnexarFoto: TAction;
+    OpenPictureDialog1: TOpenPictureDialog;
+    Panel1: TPanel;
+    Splitter1: TSplitter;
+    DBGridPericiaMarinhaFotos: TDBGrid;
+    ToolBar6: TToolBar;
+    DBGridFotosMarinha: TDBGrid;
+    BitBtn3: TBitBtn;
+    ToolBar5: TToolBar;
+    BitBtn5: TBitBtn;
+    BitBtn8: TBitBtn;
+    DBEditPericiaMarinha: TDBEdit;
+    DBEdit3: TDBEdit;
+    BitBtn14: TBitBtn;
+    actFotosExcluir: TAction;
+    Panel3: TPanel;
+    Splitter4: TSplitter;
+    ImageFoto: TImage;
+    actSalvarFoto: TAction;
+    BitBtn12: TBitBtn;
+    btnStretch: TToolButton;
+    DBMemo1: TDBMemo;
+    BitBtn13: TBitBtn;
+    Carta: TAction;
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure FormCreate(Sender: TObject);
+    procedure FormDestroy(Sender: TObject);
+    procedure actCimaTudoExecute(Sender: TObject);
+    procedure actBaixoTudoExecute(Sender: TObject);
+    procedure DBGridPericiaMarinhaColumnMoved(Sender: TObject; FromIndex,
+      ToIndex: Integer);
+    procedure actExcelExecute(Sender: TObject);
+    procedure actProcurarExecute(Sender: TObject);
+    procedure DBGridPericiaMarinhaDrawColumnCell(Sender: TObject;
+      const Rect: TRect; DataCol: Integer; Column: TColumn;
+      State: TGridDrawState);
+    procedure DBGridPericiaMarinhaTitleClick(Column: TColumn);
+    procedure edtPlataformaKeyPress(Sender: TObject; var Key: Char);
+    procedure actCongelarPainelExecute(Sender: TObject);
+    procedure actGRFSalvarImagemExecute(Sender: TObject);
+    procedure actZoomMaisExecute(Sender: TObject);
+    procedure actZoomMenosExecute(Sender: TObject);
+    procedure actGRFTituloExecute(Sender: TObject);
+    procedure actGRFImprimirExecute(Sender: TObject);
+    procedure actGRFSalvarTXTExecute(Sender: TObject);
+    procedure actEtiquetaExecute(Sender: TObject);
+    procedure actGraficoExecute(Sender: TObject);
+    procedure actGRFPlataformaExecute(Sender: TObject);
+    procedure actGRFTipoEtapaServicoExecute(Sender: TObject);
+    procedure actOrdemManutencaoExecute(Sender: TObject);
+    procedure actCarregarOrdemManutencaoExecute(Sender: TObject);
+    procedure StrGridOrdemManutencaoFixedCellClick(Sender: TObject; ACol,
+      ARow: Integer);
+    procedure SAPOM1Click(Sender: TObject);
+    procedure actOrdemManutencaoTodosExecute(Sender: TObject);
+    procedure PanelTituloAjuda1MouseDown(Sender: TObject; Button: TMouseButton;
+      Shift: TShiftState; X, Y: Integer);
+    procedure actFiltroInserirExecute(Sender: TObject);
+    procedure actGridASCExecute(Sender: TObject);
+    procedure actGridDESCExecute(Sender: TObject);
+    procedure actSubstituirPorExecute(Sender: TObject);
+    procedure actLimparFiltrosExecute(Sender: TObject);
+    procedure actCimaExecute(Sender: TObject);
+    procedure actLayoutJanelaExecute(Sender: TObject);
+    procedure actSalvarLayoutExecute(Sender: TObject);
+    procedure actBaixoExecute(Sender: TObject);
+    procedure actFiltrosTabelaExecute(Sender: TObject);
+    procedure StrGridProrrogacaoDataFixedCellClick(Sender: TObject; ACol,
+      ARow: Integer);
+    procedure actInserirLinhaExecute(Sender: TObject);
+    procedure actExcluirLinhaExecute(Sender: TObject);
+    procedure actSalvarProrrogacaoDataExecute(Sender: TObject);
+    procedure StrGridProrrogacaoDataKeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure actProcuraFiltrosTabelaExecute(Sender: TObject);
+    procedure DBGridPericiaMarinhaKeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure MaskEditRelatorioChange(Sender: TObject);
+    procedure actRelatorioMarinhaExecute(Sender: TObject);
+    procedure actGRFPericiaRetificadoExecute(Sender: TObject);
+    procedure actGRFVencimentoRetificadoExecute(Sender: TObject);
+    procedure edtPrazoCores1Change(Sender: TObject);
+    procedure edtPrazoCores2Change(Sender: TObject);
+    procedure ToolButton14Click(Sender: TObject);
+    procedure actConfigPickListExecute(Sender: TObject);
+    procedure DBGridPericiaMarinhaKeyPress(Sender: TObject; var Key: Char);
+    procedure actMACLetterExecute(Sender: TObject);
+    procedure actCartaSelTudoExecute(Sender: TObject);
+    procedure actCartaCopiarExecute(Sender: TObject);
+    procedure actCartaSalvarExecute(Sender: TObject);
+    procedure DBGridResumoCartaKeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure DBGridResumoCartaTitleClick(Column: TColumn);
+    procedure PanelTituloAjudaMouseDown(Sender: TObject; Button: TMouseButton;
+      Shift: TShiftState; X, Y: Integer);
+    procedure DBGridResumoCartaDrawColumnCell(Sender: TObject;
+      const Rect: TRect; DataCol: Integer; Column: TColumn;
+      State: TGridDrawState);
+    procedure actExcelResumoCartaExecute(Sender: TObject);
+    procedure actFiltroInserirResumoExecute(Sender: TObject);
+    procedure actProcurarResumoCartaExecute(Sender: TObject);
+    procedure actGridASCResumoExecute(Sender: TObject);
+    procedure actGridDESCResumoExecute(Sender: TObject);
+    procedure actLimparFiltrosResumoExecute(Sender: TObject);
+    procedure actFiltrosTabelaResumoExecute(Sender: TObject);
+    procedure actProcuraFiltrosTabelaResumoExecute(Sender: TObject);
+    procedure PageControleCartaChange(Sender: TObject);
+    procedure actCarregarMinutaExecute(Sender: TObject);
+    procedure actGRFVencimentoExecute(Sender: TObject);
+    procedure actGRFVencimentoCartaExecute(Sender: TObject);
+    procedure actGRFControleCartaExecute(Sender: TObject);
+    procedure actPIEProrrogacaoExecute(Sender: TObject);
+    procedure actPIEVencimentoExecute(Sender: TObject);
+    procedure actGRFPrazoAtendimentoExecute(Sender: TObject);
+    procedure actBarraProrrogacaoExecute(Sender: TObject);
+    procedure actBarraVencimentoExecute(Sender: TObject);
+    procedure actPIEPrazoAtendimentoExecute(Sender: TObject);
+    procedure actOrdemManutencaoLimparExecute(Sender: TObject);
+    procedure acrExcelTabelaAccessExecute(Sender: TObject);
+    procedure actExcelTextoExecute(Sender: TObject);
+    procedure actAnexarFotoExecute(Sender: TObject);
+    procedure DBEditPericiaMarinhaChange(Sender: TObject);
+    procedure actFotosExcluirExecute(Sender: TObject);
+    procedure DBGridPericiaMarinhaFotosDrawColumnCell(Sender: TObject; const Rect: TRect;
+      DataCol: Integer; Column: TColumn; State: TGridDrawState);
+    procedure DBGridFotosMarinhaDrawColumnCell(Sender: TObject;
+      const Rect: TRect; DataCol: Integer; Column: TColumn;
+      State: TGridDrawState);
+    procedure actSalvarFotoExecute(Sender: TObject);
+    procedure btnStretchClick(Sender: TObject);
+    procedure CartaExecute(Sender: TObject);
+  private
+    PermiteAlterar: Boolean;
+    PrazoCores1,PrazoCores2: Integer;
+    { Private declarations }
+    Type
+      THack = class(TDBGrid);
+    procedure WMMDIACTIVATE(var msg: TWMMDIACTIVATE);message WM_MDIACTIVATE;
+    function carregaSerie: TBarSeries;
+    procedure GRFAnalise(DataTipo: String);
+    procedure GRFVencimento(Tipo: INteger);
+  public
+    { Public declarations }
+  end;
+
+var
+  FrmPericiaMarinha: TFrmPericiaMarinha;
+
+implementation
+  uses untPrincipal,untDataModule,untFrmPreview,untFrmRelatorioMarinha;
+{$R *.dfm}
+
+procedure TFrmPericiaMarinha.actOrdemManutencaoExecute(Sender: TObject);
+  var
+    Relatorio,SQLBase,txtProcura,txtItem,TextoLongoCarteira,CentroTrabalhoOP,CentroTrabalhoOM,
+    Sala,OrdemManutencao1,OrdemManutencao2,Operacao,TextoBreveOM,TextoBreveOP,Trabalho,TrabalhoReal: String;
+    Item: Integer;
+    SQLString,palavraBusca: String;
+begin
+  try
+    Relatorio:= FrmDataModule.DataSourcePericiaMarinha.DataSet.FieldByName('Relatorio').AsString;
+    Item:= FrmDataModule.DataSourcePericiaMarinha.DataSet.FieldByName('Item').AsInteger;
+    txtItem:= FormatFloat('00',Item);
+    txtProcura:= Relatorio+'.'+txtItem;
+    SQLBase:= 'SELECT tblCarteiraTrabalho.* FROM tblCarteiraTrabalho '+
+    'WHERE ((Sala LIKE '+QuotedStr('%'+txtProcura+'%')+
+    ')OR(TextoBreveOM LIKE '+QuotedStr('%'+txtProcura+'%')+'))'+
+    ' ORDER BY OrdemManutencao,Operacao;';
+    FrmDataModule.ADOQueryIW37N.Close;
+    FrmDataModule.ADOQueryIW37N.SQL.Clear;
+    FrmDataModule.ADOQueryIW37N.SQL.Add(SQLBase);
+    FrmDataModule.ADOQueryIW37N.Open;
+    if not FrmDataModule.ADOQueryIW37N.IsEmpty then
+    begin
+      FrmPrincipal.MemoLayout.Lines.Clear;
+      MemoMarinha.Lines.Clear;
+      OrdemManutencao1:='111111111';
+      while not FrmDataModule.ADOQueryIW37N.Eof do
+      begin
+        Sala:= FrmDataModule.DataSourceIW37N.DataSet.FieldByName('Sala').AsString;
+        OrdemManutencao2:= FrmDataModule.DataSourceIW37N.DataSet.FieldByName('OrdemManutencao').AsString;
+        Operacao:= FrmDataModule.DataSourceIW37N.DataSet.FieldByName('Operacao').AsString;
+        TextoBreveOM:= FrmDataModule.DataSourceIW37N.DataSet.FieldByName('TextoBreveOM').AsString;
+        TextoBreveOP:= FrmDataModule.DataSourceIW37N.DataSet.FieldByName('TextoBreveOP').AsString;
+        Trabalho:= FrmDataModule.DataSourceIW37N.DataSet.FieldByName('Trabalho').AsString;
+        TrabalhoReal:= FrmDataModule.DataSourceIW37N.DataSet.FieldByName('TrabalhoReal').AsString;
+        CentroTrabalhoOP:= FrmDataModule.DataSourceIW37N.DataSet.FieldByName('CentroTrabalhoOP').AsString;
+        CentroTrabalhoOM:= FrmDataModule.DataSourceIW37N.DataSet.FieldByName('CentroTrabalhoOM').AsString;
+        //=======================================
+        FrmPrincipal.MemoLayout.Lines.Add(Sala+';'+
+        OrdemManutencao2+';'+
+        CentroTrabalhoOM+';'+
+        TextoBreveOM+';'+
+        Operacao+';'+
+        CentroTrabalhoOP+';'+
+        TextoBreveOP+';'+
+        Trabalho+';'+
+        TrabalhoReal);
+        //========================================
+        if OrdemManutencao1<>OrdemManutencao2 then
+        begin
+          TextoLongoCarteira:=  FrmPrincipal.verificaTextoLongoCarteira(OrdemManutencao2);
+          MemoMarinha.Lines.Add('======== (Ordem de Manutenção: '+OrdemManutencao2+') ========');
+          MemoMarinha.Lines.Add(TextoLongoCarteira);
+          MemoMarinha.Lines.Add('');
+          FrmDataModule.ADOQueryPericiaMarinha.Edit;
+          FrmDataModule.DataSourcePericiaMarinha.DataSet.
+          FieldByName('TextoLongoOM').AsString:= MemoMarinha.Lines.Text;
+          FrmDataModule.ADOQueryPericiaMarinha.Post;
+          OrdemManutencao1:=OrdemManutencao2;
+        end;
+        //========================================
+        FrmDataModule.ADOQueryIW37N.Next;
+      end;
+      FrmDataModule.ADOQueryPericiaMarinha.Edit;
+      FrmDataModule.DataSourcePericiaMarinha.DataSet.
+      FieldByName('OrdemManutencao').AsString:=
+      FrmPrincipal.MemoLayout.Lines.Text;
+      FrmDataModule.ADOQueryPericiaMarinha.Post;
+    end;
+    //Busca pelo texto longo da OM
+    SQLString:= '';
+    SQLString:= FrmPrincipal.palavraBusca(SQLString,'TextoLongoCarteira','Contem',txtProcura);
+    if SQLString <> '' then
+    begin
+      SQLString:= 'WHERE'+SQLString;
+    end;
+    SQLBase:= 'SELECT tblTextoLongoCarteira.* FROM tblTextoLongoCarteira '+
+    SQLString+';';
+    FrmPrincipal.ProcuraQuery(SQLBase,FrmDataModule.ADOQueryTemporarioDBMemoria,
+    StatusBarPericiaMarinha);
+    if not FrmDataModule.ADOQueryTemporarioDBMemoria.IsEmpty then
+    begin
+      PalavraBusca:= '';
+      FrmDataModule.ADOQueryTemporarioDBMemoria.First;
+      while not FrmDataModule.ADOQueryTemporarioDBMemoria.Eof do
+      begin
+        if PalavraBusca <> '' then
+        PalavraBusca:= PalavraBusca+';'+FrmDataModule.DataSourceTemporarioDBMemoria.
+        DataSet.FieldByName('OrdemManutencao').AsString
+      else
+        PalavraBusca:= FrmDataModule.DataSourceTemporarioDBMemoria.
+        DataSet.FieldByName('OrdemManutencao').AsString;
+        FrmDataModule.ADOQueryTemporarioDBMemoria.Next;
+      end;
+    end;
+    SQLString:= '';
+    SQLString:= FrmPrincipal.palavraBusca(SQLString,'OrdemManutencao','Contem',PalavraBusca);
+    SQLString:= 'WHERE'+SQLString;
+    SQLBase:= 'SELECT tblCarteiraTrabalho.* FROM tblCarteiraTrabalho '+
+    SQLString+' ORDER BY OrdemManutencao,Operacao;';
+    FrmDataModule.ADOQueryIW37N.Close;
+    FrmDataModule.ADOQueryIW37N.SQL.Clear;
+    FrmDataModule.ADOQueryIW37N.SQL.Add(SQLBase);
+    FrmDataModule.ADOQueryIW37N.Open;
+    if not FrmDataModule.ADOQueryIW37N.IsEmpty then
+    begin
+      FrmPrincipal.MemoLayout.Lines.Clear;
+      MemoMarinha.Lines.Clear;
+      OrdemManutencao1:='111111111';
+      while not FrmDataModule.ADOQueryIW37N.Eof do
+      begin
+        Sala:= FrmDataModule.DataSourceIW37N.DataSet.FieldByName('Sala').AsString;
+        OrdemManutencao2:= FrmDataModule.DataSourceIW37N.DataSet.FieldByName('OrdemManutencao').AsString;
+        Operacao:= FrmDataModule.DataSourceIW37N.DataSet.FieldByName('Operacao').AsString;
+        TextoBreveOM:= FrmDataModule.DataSourceIW37N.DataSet.FieldByName('TextoBreveOM').AsString;
+        TextoBreveOP:= FrmDataModule.DataSourceIW37N.DataSet.FieldByName('TextoBreveOP').AsString;
+        Trabalho:= FrmDataModule.DataSourceIW37N.DataSet.FieldByName('Trabalho').AsString;
+        TrabalhoReal:= FrmDataModule.DataSourceIW37N.DataSet.FieldByName('TrabalhoReal').AsString;
+        CentroTrabalhoOP:= FrmDataModule.DataSourceIW37N.DataSet.FieldByName('CentroTrabalhoOP').AsString;
+        CentroTrabalhoOM:= FrmDataModule.DataSourceIW37N.DataSet.FieldByName('CentroTrabalhoOM').AsString;
+        //=======================================
+        FrmPrincipal.MemoLayout.Lines.Add(Sala+';'+
+        OrdemManutencao2+';'+
+        CentroTrabalhoOM+';'+
+        TextoBreveOM+';'+
+        Operacao+';'+
+        CentroTrabalhoOP+';'+
+        TextoBreveOP+';'+
+        Trabalho+';'+
+        TrabalhoReal);
+        //========================================
+        if OrdemManutencao1<>OrdemManutencao2 then
+        begin
+          TextoLongoCarteira:=  FrmPrincipal.verificaTextoLongoCarteira(OrdemManutencao2);
+          MemoMarinha.Lines.Add('================= (Ordem de Manutenção: '+OrdemManutencao2+') =================');
+          MemoMarinha.Lines.Add(TextoLongoCarteira);
+          MemoMarinha.Lines.Add('');
+          FrmDataModule.ADOQueryPericiaMarinha.Edit;
+          FrmDataModule.DataSourcePericiaMarinha.DataSet.
+          FieldByName('TextoLongoOM').AsString:=
+          MemoMarinha.Lines.Text;
+          FrmDataModule.ADOQueryPericiaMarinha.Post;
+          OrdemManutencao1:=OrdemManutencao2;
+        end;
+        //========================================
+        FrmDataModule.ADOQueryIW37N.Next;
+      end;
+      FrmDataModule.ADOQueryPericiaMarinha.Edit;
+      FrmDataModule.DataSourcePericiaMarinha.DataSet.
+      FieldByName('OrdemManutencao').AsString:=
+      FrmPrincipal.MemoLayout.Lines.Text;
+      FrmDataModule.ADOQueryPericiaMarinha.Post;
+    end;
+  except
+  end;
+end;
+
+procedure TFrmPericiaMarinha.actOrdemManutencaoLimparExecute(Sender: TObject);
+begin
+  FrmDataModule.ADOQueryPericiaMarinha.Edit;
+  FrmDataModule.DataSourcePericiaMarinha.DataSet.FieldByName('TextoLongoOM').AsString:= '';
+  FrmDataModule.DataSourcePericiaMarinha.DataSet.FieldByName('OrdemManutencao').AsString:= '';
+  FrmDataModule.ADOQueryPericiaMarinha.Post;
+  actCarregarOrdemManutencao.Execute;
+end;
+
+procedure TFrmPericiaMarinha.actOrdemManutencaoTodosExecute(Sender: TObject);
+begin
+  try
+    FrmDataModule.DataSourcePericiaMarinha.Enabled:= false;
+    FrmDataModule.ADOQueryPericiaMarinha.First;
+    FrmPrincipal.ProgressBarIncializa(FrmDataModule.ADOQueryPericiaMarinha.RecordCount,
+    'Carregando Ordens de Manutenção');
+    while not FrmDataModule.ADOQueryPericiaMarinha.Eof do
+    begin
+      actOrdemManutencao.Execute;
+      FrmDataModule.ADOQueryPericiaMarinha.Next;
+      FrmPrincipal.ProgressBarIncremento(1);
+    end;
+    FrmPrincipal.ProgressBarAtualizar;
+    FrmDataModule.DataSourcePericiaMarinha.Enabled:= true;
+    FrmDataModule.ADOQueryPericiaMarinha.First;
+  except
+    ShowMessage('Não foi possível conectar com o banco de dados');
+  end;
+end;
+
+procedure TFrmPericiaMarinha.acrExcelTabelaAccessExecute(Sender: TObject);
+begin
+  Frmprincipal.ExportarExcel('tblPericiaMarinha',2);
+end;
+
+procedure TFrmPericiaMarinha.actAnexarFotoExecute(Sender: TObject);
+  var
+    i,CodigoPericiaMarinha,Tamanho: Integer;
+    Origem,Destino,Extensao,NomeArquivo,Diretorio: String;
+    Figura: file of Byte;
+begin
+  CodigoPericiaMarinha:= FrmDataModule.DataSourcePericiaMarinha.DataSet.
+  FieldByName('idPericiaMarinha').AsInteger;
+  Diretorio:= FrmDataModule.DataSourceColibri.DataSet.FieldByName
+  ('enderecoMarinha').AsString;
+  if OpenPictureDialog1.Execute then
+  begin
+    for I := 0 to OpenPictureDialog1.Files.Count-1 do
+    begin
+      Origem:= OpenPictureDialog1.Files.Strings[i];
+      assignFile(Figura,Origem);
+      Reset(Figura);
+      Tamanho:= FileSize(Figura);
+      FrmDataModule.ADOQueryFotosMarinha.Insert;
+      FrmDataModule.DataSourceFotosMarinha.DataSet.
+      FieldByName('CodigoPericiaMarinha').AsInteger:=CodigoPericiaMarinha;
+      FrmDataModule.ADOQueryFotosMarinha.Post;
+      NomeArquivo:= FrmDataModule.ADOQueryFotosMarinha.FieldByName('idFotosMarinha').AsString;
+      Extensao:= ExtractFileExt(Origem);
+      Destino:= Diretorio+'\Fotos\'+NomeArquivo+Extensao;
+      //======================================================
+      if CopyFile(PChar(Origem), PChar(Destino), false) then
+      begin
+        FrmDataModule.ADOQueryFotosMarinha.Edit;
+        FrmDataModule.ADOQueryFotosMarinha.FieldByName('Fotos').AsString:= 'Arquivado-'+IntToStr(i);
+        FrmDataModule.ADOQueryFotosMarinha.FieldByName('Tamanho').AsInteger:= Tamanho;
+        FrmDataModule.ADOQueryFotosMarinha.FieldByName('Extensao').AsString:= Extensao;
+        FrmDataModule.ADOQueryFotosMarinha.Post;
+        ImageFoto.Free;
+      end
+      else
+      begin
+        FrmDataModule.ADOQueryFotosMarinha.Delete;
+      end;
+    end;
+  end;
+end;
+
+procedure TFrmPericiaMarinha.actBaixoExecute(Sender: TObject);
+begin
+  FrmPrincipal.moveBaixo(DBGridPericiaMarinha, ColunasLayout);
+  actLimparFiltros.Execute;
+end;
+
+procedure TFrmPericiaMarinha.actBaixoTudoExecute(Sender: TObject);
+begin
+  FrmPrincipal.botaoMoveTudo(FrmDataModule.ADOConnectionConsulta,
+  'Marinha.txt','tblPericiaMarinha','TAB2;',
+  DBGridPericiaMarinha,ColunasLayout);
+  actLimparFiltros.Execute;
+  actConfigPickList.Execute;
+end;
+
+procedure TFrmPericiaMarinha.actBarraProrrogacaoExecute(Sender: TObject);
+  var
+    BarSeriesGRF: TBarSeries;
+    TotalDiasProrrogacao,ProrroRed,ProrroOrange,
+    ProrroYellow,ProrroGreen,i: Integer;
+    Gerencia1,Gerencia2: String;
+begin
+  BarSeriesGRF:= carregaSerie;
+  ChartGrafico.Title.Caption:= RadioGroupEixoX.Items.Strings[RadioGroupEixoX.ItemIndex];
+  ChartGrafico.Legend.Visible:= true;
+  ChartGrafico.Axes.Left.Title.Caption:= 'Prorrogação Declaração';
+  ChartGrafico.RemoveAllSeries;
+  ChartGrafico.BottomAxis.Visible:= false;
+  ChartGrafico.Legend.CheckBoxes:= false;
+  //=================================================
+  ProrroRed:= 0;
+  ProrroOrange:= 0;
+  ProrroYellow:= 0;
+  ProrroGreen:= 0;
+  i:= 0;
+  FrmDataModule.ADOQueryPericiaMarinha.Sort := 'Gerencia ASC';
+  Gerencia1:= FrmDataModule.DataSourcePericiaMarinha.DataSet.
+  FieldByName('Gerencia').AsString;
+  FrmPrincipal.ProgressBarIncializa(FrmDataModule.ADOQueryPericiaMarinha.
+  RecordCount,'Gerando gráfico...');
+  while not FrmDataModule.ADOQueryPericiaMarinha.Eof do
+  begin
+    Gerencia2:= FrmDataModule.DataSourcePericiaMarinha.DataSet.
+    FieldByName('Gerencia').AsString;
+    if Gerencia1 = Gerencia2 then
+    begin
+      TotalDiasProrrogacao:= FrmDataModule.DataSourcePericiaMarinha.DataSet.
+      FieldByName('TotalDiasProrrogacao').AsInteger;
+      if (TotalDiasProrrogacao >= 365) then
+        ProrroRed:= ProrroRed+1
+      else if ((TotalDiasProrrogacao >= 275)AND(TotalDiasProrrogacao < 365)) then
+        ProrroOrange:= ProrroOrange+1
+      else if ((TotalDiasProrrogacao >= 185)AND(TotalDiasProrrogacao < 275)) then
+        ProrroYellow:= ProrroYellow+1
+      else if (TotalDiasProrrogacao < 185) then
+        ProrroGreen:= ProrroGreen+1;
+    end
+    else
+    begin
+      if ProrroGreen<>0 then
+      begin
+        BarSeriesGRF.AddXY(i,ProrroGreen,Gerencia1,clLime);
+        i:= i+1;
+      end;
+      if ProrroYellow<>0 then
+      begin
+        BarSeriesGRF.AddXY(i,ProrroYellow,Gerencia1,clYellow);
+        i:= i+1;
+      end;
+      if ProrroOrange<>0 then
+      begin
+        BarSeriesGRF.AddXY(i,ProrroOrange,Gerencia1,clFuchsia);
+        i:= i+1;
+      end;
+      if ProrroRed<>0 then
+      begin
+        BarSeriesGRF.AddXY(i,ProrroRed,Gerencia1,clRed);
+        i:= i+1;
+      end;
+      Gerencia1 := Gerencia2;
+      TotalDiasProrrogacao:= FrmDataModule.DataSourcePericiaMarinha.DataSet.
+      FieldByName('TotalDiasProrrogacao').AsInteger;
+      ProrroRed:= 0;
+      ProrroOrange:= 0;
+      ProrroYellow:= 0;
+      ProrroGreen:= 0;
+      if (TotalDiasProrrogacao >= 365) then
+        ProrroRed:= ProrroRed+1
+      else if ((TotalDiasProrrogacao >= 275)AND(TotalDiasProrrogacao < 365)) then
+        ProrroOrange:= ProrroOrange+1
+      else if ((TotalDiasProrrogacao >= 185)AND(TotalDiasProrrogacao < 275)) then
+        ProrroYellow:= ProrroYellow+1
+      else if (TotalDiasProrrogacao < 185) then
+        ProrroGreen:= ProrroGreen+1;
+    end;
+    FrmDataModule.ADOQueryPericiaMarinha.Next;
+    FrmPrincipal.ProgressBarIncremento(1);
+  end;
+  if ProrroGreen<>0 then
+  begin
+    BarSeriesGRF.AddXY(i,ProrroGreen,Gerencia1,clLime);
+    i:= i+1;
+  end;
+  if ProrroYellow<>0 then
+  begin
+    BarSeriesGRF.AddXY(i,ProrroYellow,Gerencia1,clYellow);
+    i:= i+1;
+  end;
+  if ProrroOrange<>0 then
+  begin
+    BarSeriesGRF.AddXY(i,ProrroOrange,Gerencia1,clFuchsia);
+    i:= i+1;
+  end;
+  if ProrroRed<>0 then
+  begin
+    BarSeriesGRF.AddXY(i,ProrroRed,Gerencia1,clRed);
+  end;
+  FrmDataModule.ADOQueryPericiaMarinha.First;
+  //=======================================================================
+  ChartGrafico.AddSeries(BarSeriesGRF);
+  FrmPrincipal.ProgressBarAtualizar;
+end;
+
+procedure TFrmPericiaMarinha.actBarraVencimentoExecute(Sender: TObject);
+  var
+    BarSeriesGRF: TBarSeries;
+    Gerencia1,Gerencia2: String;
+    Retificado,Verde,Amarelo,Vermelho,i: Integer;
+    DataVencimento,Data1,Data2: TDateTime;
+begin
+  BarSeriesGRF:= carregaSerie;
+  ChartGrafico.Title.Caption:= RadioGroupEixoX.Items.Strings[RadioGroupEixoX.ItemIndex];
+  ChartGrafico.Legend.Visible:= true;
+  ChartGrafico.Axes.Left.Title.Caption:= 'Data de Vencimento';
+  ChartGrafico.RemoveAllSeries;
+  ChartGrafico.BottomAxis.Visible:= false;
+  ChartGrafico.Legend.CheckBoxes:= false;
+  //=================================================
+  Retificado:= 0;
+  Verde:= 0;
+  Amarelo:= 0;
+  Vermelho:= 0;
+  Data1:= FrmPrincipal.DiasFinalCorridos(Now,PrazoCores1);
+  Data2:= FrmPrincipal.DiasFinalCorridos(Now,PrazoCores2);
+  i:= 0;
+  FrmDataModule.ADOQueryPericiaMarinha.Sort := 'Gerencia ASC';
+  Gerencia1:= FrmDataModule.DataSourcePericiaMarinha.DataSet.
+  FieldByName('Gerencia').AsString;
+  FrmPrincipal.ProgressBarIncializa(FrmDataModule.ADOQueryPericiaMarinha.
+  RecordCount,'Gerando gráfico...');
+  while not FrmDataModule.ADOQueryPericiaMarinha.Eof do
+  begin
+    Gerencia2:= FrmDataModule.DataSourcePericiaMarinha.DataSet.
+    FieldByName('Gerencia').AsString;
+    if Gerencia1 = Gerencia2 then
+    begin
+      if (FrmDataModule.DataSourcePericiaMarinha.DataSet.
+      FieldByName('Retificado').AsString = 'Retificado') then
+      begin
+        Retificado:= Retificado+1;
+      end
+      else
+      begin
+        DataVencimento:= FrmDataModule.DataSourcePericiaMarinha.DataSet.
+        FieldByName('DataVencimento').AsDateTime;
+        if (DataVencimento >= Data2) then
+          Verde:= Verde+1
+        else if ((DataVencimento < Data2)AND(DataVencimento > Data1)) then
+          Amarelo:= Amarelo+1
+        else if (DataVencimento <= Data1) then
+          Vermelho:= Vermelho+1;
+      end;
+    end
+    else
+    begin
+      if Retificado<>0 then
+      begin
+        BarSeriesGRF.AddXY(i,Retificado,Gerencia1,clSilver);
+        i:= i+1;
+      end;
+      if Verde<>0 then
+      begin
+        BarSeriesGRF.AddXY(i,Verde,Gerencia1,clLime);
+        i:= i+1;
+      end;
+      if Amarelo<>0 then
+      begin
+        BarSeriesGRF.AddXY(i,Amarelo,Gerencia1,clYellow);
+        i:= i+1;
+      end;
+      if Vermelho<>0 then
+      begin
+        BarSeriesGRF.AddXY(i,Vermelho,Gerencia1,clRed);
+        i:= i+1;
+      end;
+      Gerencia1 := Gerencia2;
+      Retificado:= 0;
+      Verde:= 0;
+      Amarelo:= 0;
+      Vermelho:= 0;
+      if (FrmDataModule.DataSourcePericiaMarinha.DataSet.
+      FieldByName('Retificado').AsString = 'Retificado') then
+      begin
+        Retificado:= Retificado+1;
+      end
+      else
+      begin
+        DataVencimento:= FrmDataModule.DataSourcePericiaMarinha.DataSet.
+        FieldByName('DataVencimento').AsDateTime;
+        if (DataVencimento >= Data2) then
+          Verde:= Verde+1
+        else if ((DataVencimento < Data2)AND(DataVencimento > Data1)) then
+          Amarelo:= Amarelo+1
+        else if (DataVencimento <= Data1) then
+          Vermelho:= Vermelho+1;
+      end;
+    end;
+    FrmDataModule.ADOQueryPericiaMarinha.Next;
+    FrmPrincipal.ProgressBarIncremento(1);
+  end;
+  if Retificado<>0 then
+  begin
+    BarSeriesGRF.AddXY(i,Retificado,Gerencia1,clSilver);
+    i:= i+1;
+  end;
+  if Verde<>0 then
+  begin
+    BarSeriesGRF.AddXY(i,Verde,Gerencia1,clLime);
+    i:= i+1;
+  end;
+  if Amarelo<>0 then
+  begin
+    BarSeriesGRF.AddXY(i,Amarelo,Gerencia1,clYellow);
+    i:= i+1;
+  end;
+  if Vermelho<>0 then
+  begin
+    BarSeriesGRF.AddXY(i,Vermelho,Gerencia1,clRed);
+  end;
+  FrmDataModule.ADOQueryPericiaMarinha.First;
+  //=======================================================================
+  ChartGrafico.AddSeries(BarSeriesGRF);
+  FrmPrincipal.ProgressBarAtualizar;
+end;
+
+procedure TFrmPericiaMarinha.actCarregarMinutaExecute(Sender: TObject);
+  var
+    Relatorio, Item: String;
+begin
+  Relatorio:= FrmDataModule.DataSourceControleCarta.DataSet.
+  FieldByName('Relatorio').AsString;
+  Item:= FrmDataModule.DataSourceControleCarta.DataSet.
+  FieldByName('Item').AsString;
+  FrmPrincipal.buscaFiledGrid1('Relatorio',Relatorio,'Contem',ColunasLayout,4,false);
+  FrmPrincipal.buscaFiledGrid1('Item',Item,'Contem',ColunasLayout,4,false);
+  actProcurar.Execute;
+  actMACLetter.Execute;
+end;
+
+procedure TFrmPericiaMarinha.actCarregarOrdemManutencaoExecute(Sender: TObject);
+  var
+    i: integer;
+    ListaOM,ListaProrrogacaoData: TStringList;
+begin
+  try
+    MaskEditRelatorio.Visible:= false;
+    FrmPrincipal.MemoLayout.Lines.Text:= FrmDataModule.DataSourcePericiaMarinha.
+    DataSet.FieldByName('OrdemManutencao').AsString;
+    if ((FrmDataModule.DataSourcePericiaMarinha.DataSet.
+    FieldByName('DeclaracaoPlataforma').AsString = 'Sem Declaração')AND
+    ((FrmPrincipal.logPerfil = 'SEG')OR(FrmPrincipal.logPerfil = 'Administrador'))) then
+    begin
+      try
+        FrmDataModule.ADOQueryPericiaMarinha.Edit;
+        FrmDataModule.DataSourcePericiaMarinha.DataSet.
+        FieldByName('DataDeclaracaoPlataforma').AsString:= '';
+        FrmDataModule.ADOQueryPericiaMarinha.Post;
+      except
+        FrmDataModule.ADOQueryPericiaMarinha.Cancel;
+        FrmDataModule.ADOQueryPericiaMarinha.Refresh;
+      end;
+    end;
+    //==================================================================
+    if FrmPrincipal.MemoLayout.Lines.Count > 0 then
+    begin
+      ListaOM:= TStringList.Create;
+      ListaOM.delimiter:= ';';
+      ListaOM.StrictDelimiter:= true;
+      StrGridOrdemManutencao.RowCount:= FrmPrincipal.MemoLayout.Lines.Count+1;
+      for i := 0 to FrmPrincipal.MemoLayout.Lines.Count-1 do
+      begin
+        ListaOM.DelimitedText:= FrmPrincipal.MemoLayout.Lines[i];
+        StrGridOrdemManutencao.Cells[0,i+1]:= ListaOM[0];
+        StrGridOrdemManutencao.Cells[1,i+1]:= ListaOM[1];
+        StrGridOrdemManutencao.Cells[2,i+1]:= ListaOM[2];
+        StrGridOrdemManutencao.Cells[3,i+1]:= ListaOM[3];
+        StrGridOrdemManutencao.Cells[4,i+1]:= ListaOM[4];
+        StrGridOrdemManutencao.Cells[5,i+1]:= ListaOM[5];
+        StrGridOrdemManutencao.Cells[6,i+1]:= ListaOM[6];
+        StrGridOrdemManutencao.Cells[7,i+1]:= ListaOM[7];
+        StrGridOrdemManutencao.Cells[8,i+1]:= ListaOM[8];
+      end;
+      FrmPrincipal.AutoFitGrade(StrGridOrdemManutencao);
+      try
+        StrGridOrdemManutencao.FixedRows:=1;
+      except
+      end;
+    end
+    else
+    begin
+      StrGridOrdemManutencao.RowCount:= 1;
+    end;
+  except
+  end;
+  //========================================================
+  try
+    FrmPrincipal.MemoLayout.Lines.Text:= FrmDataModule.DataSourcePericiaMarinha.
+    DataSet.FieldByName('ProrrogacaoData').AsString;
+    if FrmPrincipal.MemoLayout.Lines.Count > 0 then
+    begin
+      ListaProrrogacaoData:= TStringList.Create;
+      ListaProrrogacaoData.delimiter:= ';';
+      ListaProrrogacaoData.StrictDelimiter:= true;
+      StrGridProrrogacaoData.RowCount:= FrmPrincipal.MemoLayout.Lines.Count+1;
+      for i := 0 to FrmPrincipal.MemoLayout.Lines.Count-1 do
+      begin
+        ListaProrrogacaoData.DelimitedText:= FrmPrincipal.MemoLayout.Lines[i];
+        StrGridProrrogacaoData.Cells[1,i+1]:= ListaProrrogacaoData[0];
+        StrGridProrrogacaoData.Cells[2,i+1]:= ListaProrrogacaoData[1];
+      end;
+      FrmPrincipal.AutoFitGrade(StrGridProrrogacaoData);
+      StrGridProrrogacaoData.ColWidths[0]:= 20;
+      try
+        StrGridProrrogacaoData.FixedRows:=1;
+      except
+      end;
+    end
+    else
+    begin
+      StrGridProrrogacaoData.RowCount:= 1;
+    end;
+  except
+  end;
+end;
+
+procedure TFrmPericiaMarinha.actCartaCopiarExecute(Sender: TObject);
+begin
+  MemoCarta.SelectAll;
+  MemoCarta.CopyToClipboard;
+end;
+
+procedure TFrmPericiaMarinha.actCartaSalvarExecute(Sender: TObject);
+begin
+  SaveDialog1.DefaultExt:= '*.txt';
+  SaveDialog1.Filter:= 'Notepad|*.txt';
+  if SaveDialog1.Execute then
+  begin
+
+    MemoCarta.Lines.SaveToFile(SaveDialog1.FileName);
+  end;
+end;
+
+procedure TFrmPericiaMarinha.actCartaSelTudoExecute(Sender: TObject);
+begin
+  MemoCarta.SelectAll;
+end;
+
+procedure TFrmPericiaMarinha.actCimaExecute(Sender: TObject);
+begin
+  FrmPrincipal.moveCima(DBGridPericiaMarinha, ColunasLayout);
+  actLimparFiltros.Execute;
+end;
+
+procedure TFrmPericiaMarinha.actCimaTudoExecute(Sender: TObject);
+begin
+  FrmPrincipal.botaoMoveTudo(FrmDataModule.ADOConnectionConsulta,
+  'Marinha.txt','tblPericiaMarinha','TAB1;',
+  DBGridPericiaMarinha,ColunasLayout);
+  actLimparFiltros.Execute;
+  actConfigPickList.Execute;
+end;
+
+procedure TFrmPericiaMarinha.actConfigPickListExecute(Sender: TObject);
+  var
+    Lista: TStringList;
+begin
+  Lista:= TStringList.Create;
+  Lista.Add('Sem Declaração');
+  Lista.Add('Provisória');
+  Lista.Add('Definitiva');
+	FrmPrincipal.SetupGridPickListLista('DeclaracaoPlataforma',Lista,DBGridPericiaMarinha);
+  Lista.Clear;
+  Lista.Add('Sim');
+  Lista.Add('Não');
+  Lista.Add('Vistoriado');
+  Lista.Add('Parcial');
+  FrmPrincipal.SetupGridPickListLista('Atendido',Lista,DBGridPericiaMarinha);
+  Lista.Clear;
+  Lista.Add('Retificado');
+  Lista.Add('Em aberto');
+  FrmPrincipal.SetupGridPickListLista('Retificado',Lista,DBGridPericiaMarinha);
+  Lista.Clear;
+  Lista.Add('Operacional');
+  Lista.Add('Fora Operação');
+  FrmPrincipal.SetupGridPickListLista('Operacional',Lista,DBGridPericiaMarinha);
+  Lista.Clear;
+  Lista.Add('CM');
+  Lista.Add('MI');
+  Lista.Add('OP-AR');
+  Lista.Add('SEG');
+  Lista.Add('SG');
+  FrmPrincipal.SetupGridPickListLista('Gerencia',Lista,DBGridPericiaMarinha);
+  Lista.Clear;
+  Lista.Add('Perícia inical');
+  Lista.Add('Flag state');
+  Lista.Add('Inicial Flag');
+  FrmPrincipal.SetupGridPickListLista('TipoRelatorio',Lista,DBGridPericiaMarinha);
+
+  FrmPrincipal.SetupGridPickListSQL(FrmDataModule.ADOConnectionConsulta,'TipoEtapaServico',
+  'SELECT TipoEtapaServico FROM tblTipoEtapaServico ORDER BY TipoEtapaServico;',DBGridPericiaMarinha,false);
+  FrmPrincipal.SetupGridPickListSQL(FrmDataModule.ADOConnectionConsulta,'Plataforma',
+  'SELECT Plataforma FROM tblPlataforma ORDER BY Plataforma;',DBGridPericiaMarinha,false);
+  FrmPrincipal.SetupGridPickListSQL(FrmDataModule.ADOConnectionConsulta,'Responsavel',
+  'SELECT Responsavel FROM tblPericiaMarinha ORDER BY Responsavel;',DBGridPericiaMarinha,true);
+end;
+
+procedure TFrmPericiaMarinha.actCongelarPainelExecute(Sender: TObject);
+begin
+  THack(DBGridPericiaMarinha).FixedCols := DBGridPericiaMarinha.SelectedIndex+1
+end;
+
+procedure TFrmPericiaMarinha.actEtiquetaExecute(Sender: TObject);
+  var
+    i: Integer;
+begin
+  if btnMark.Down then
+  begin
+    for I := 0 to ChartGrafico.SeriesCount-1 do
+    begin
+      ChartGrafico.Series[i].Marks.Style:= smsLabelValue;
+      ChartGrafico.Series[i].Marks.MultiLine:= true;
+      ChartGrafico.Series[i].Marks.Arrow.Visible:= true;
+      ChartGrafico.Series[i].Marks.Arrow.Color:= clBlack;
+      ChartGrafico.Series[i].Marks.Margins.Left:= 2;
+      ChartGrafico.Series[i].Marks.Margins.Right:= 2;
+      ChartGrafico.Series[i].Marks.Margins.Top:= 1;
+      ChartGrafico.Series[i].Marks.Margins.Bottom:= 1;
+      ChartGrafico.Series[i].Marks.Visible:= true;
+    end;
+    if RadioGroupEixoX.ItemIndex = 6 then
+      ChartGrafico.Series[0].Marks.Visible:= false;
+  end
+  else
+  begin
+    for I := 0 to ChartGrafico.SeriesCount-1 do
+      ChartGrafico.Series[i].Marks.Visible:= false;
+  end;
+end;
+
+procedure TFrmPericiaMarinha.actExcelExecute(Sender: TObject);
+begin
+  FrmPrincipal.GerarExcel(DBGridPericiaMarinha,'Marinha');
+end;
+
+procedure TFrmPericiaMarinha.actExcelResumoCartaExecute(Sender: TObject);
+begin
+  FrmPrincipal.GerarExcel(DBGridResumoCarta,'Resumo de Cartas');
+end;
+
+procedure TFrmPericiaMarinha.actExcelTextoExecute(Sender: TObject);
+begin
+  FrmPrincipal.GeraTexto(FrmDataModule.DataSourcePericiaMarinha,'@','Marinha');
+end;
+
+procedure TFrmPericiaMarinha.actExcluirLinhaExecute(Sender: TObject);
+begin
+  FrmPrincipal.DeleteRow(StrGridProrrogacaoData,StrGridProrrogacaoData.Row);
+  FrmPrincipal.AutoFitGrade(StrGridProrrogacaoData);
+  StrGridProrrogacaoData.ColWidths[0]:= 20;
+  actSalvarProrrogacaoData.Execute;
+end;
+
+procedure TFrmPericiaMarinha.actFiltroInserirExecute(Sender: TObject);
+begin
+  FrmPrincipal.inserirProcura(DBGridPericiaMarinha,ColunasLayout);
+  actProcurar.Execute;
+  if (FrmPrincipal.PanelFiltrosTabela.Visible)AND(FrmPrincipal.PanelAjuda1.Visible) then
+    actFiltrosTabela.Execute;
+end;
+
+procedure TFrmPericiaMarinha.actFiltroInserirResumoExecute(Sender: TObject);
+begin
+  FrmPrincipal.inserirProcura(DBGridResumoCarta,ColunasLayoutResumoCarta);
+  actProcurarResumoCarta.Execute;
+  if (FrmPrincipal.PanelFiltrosTabela.Visible)AND(FrmPrincipal.PanelAjuda1.Visible) then
+    actFiltrosTabelaResumo.Execute;
+end;
+
+procedure TFrmPericiaMarinha.actFiltrosTabelaExecute(Sender: TObject);
+begin
+  FrmPrincipal.btnProcurarFiltrosTabela.Action:= actProcuraFiltrosTabela;
+  FrmPrincipal.FiltrosTabela(DBGridPericiaMarinha,ColunasLayout);
+end;
+
+procedure TFrmPericiaMarinha.actFiltrosTabelaResumoExecute(Sender: TObject);
+begin
+  FrmPrincipal.btnProcurarFiltrosTabela.Action:= actProcuraFiltrosTabela;
+  FrmPrincipal.FiltrosTabela(DBGridResumoCarta,ColunasLayoutResumoCarta);
+end;
+
+procedure TFrmPericiaMarinha.actFotosExcluirExecute(Sender: TObject);
+begin
+  try
+    FrmDataModule.ADOQueryFotosMarinha.Delete;
+  except
+  end;
+end;
+
+procedure TFrmPericiaMarinha.actGraficoExecute(Sender: TObject);
+begin
+  case RadioGroupEixoX.ItemIndex of
+    0: actGRFPlataforma.Execute;
+    1: actGRFTipoEtapaServico.Execute;
+    2: actGRFVencimento.Execute;
+    3: actGRFVencimentoCarta.Execute;
+    4: actGRFPericiaRetificado.Execute;
+    5: actGRFVencimentoRetificado.Execute;
+    6: actPIEProrrogacao.Execute;
+    7: actBarraProrrogacao.Execute;
+    8: actPIEVencimento.Execute;
+    9: actBarraVencimento.Execute;
+    10: actGRFPrazoAtendimento.Execute;
+    11: actPIEPrazoAtendimento.Execute;
+  end;
+end;
+
+procedure TFrmPericiaMarinha.actGRFPericiaRetificadoExecute(Sender: TObject);
+begin
+  GRFAnalise('DataPericia');
+end;
+
+procedure TFrmPericiaMarinha.actGRFImprimirExecute(Sender: TObject);
+begin
+  if not Assigned(FrmPreview) then
+    FrmPreview:=TFrmPreview.Create(Application)
+  else
+    FrmPreview.Show;
+
+  FrmPreview.ListaTituloRelatorio:= TStringList.Create;
+  FrmPreview.ListaTituloRelatorio.Add(ChartGrafico.Title.Caption);
+  //FrmPreview.ListaTituloRelatorio.Add('Data: '+FormatDateTime('dd/mm/yyyy',now));
+  FrmPreview.paginaTChart(ChartGrafico,FrmPreview.btnExcluirAntes.Down);
+  ChartGrafico.Legend.CheckBoxes:= false;
+end;
+
+procedure TFrmPericiaMarinha.actGRFPlataformaExecute(Sender: TObject);
+  var
+    BarSeriesGRF: TBarSeries;
+    NumRegistros,i,EixoX: Integer;
+    Plataforma,SQLString,SQLBase: String;
+begin
+  BarSeriesGRF:= carregaSerie;
+  ChartGrafico.Legend.Visible:= true;
+  ChartGrafico.Legend.CheckBoxes:= false;
+  ChartGrafico.Axes.Left.Title.Caption:= 'N° de Pendências';
+  SQLString:= frmPrincipal.SQLStringFiltroTabela(ColunasLayout,true);
+  if SQLString<>'' then
+    SQLString:= SQLString+'AND'
+  else
+    SQLString:= 'WHERE ';
+  //=================================================
+  FrmDataModule.ADOQueryConsultaPlataforma.Active:= false;
+  FrmDataModule.ADOQueryConsultaPlataforma.Active:= true;
+  EixoX:= 0;
+  i:= 0;
+  FrmPrincipal.ProgressBarIncializa(FrmDataModule.ADOQueryConsultaPlataforma.RecordCount,
+  'Gerando gráfico...');
+  while not FrmDataModule.ADOQueryConsultaPlataforma.Eof do
+  begin
+    Plataforma:= FrmDataModule.DataSourceConsultaPlataforma.
+    DataSet.FieldByName('Plataforma').AsString;
+    SQLBase:= 'SELECT tblPericiaMarinha.* FROM tblPericiaMarinha '+
+    SQLString+'((Plataforma LIKE '+QuotedStr('%'+Plataforma+'%')+'));';
+    FrmDataModule.ADOQueryTemporarioDBConsulta1.Close;
+    FrmDataModule.ADOQueryTemporarioDBConsulta1.SQL.Clear;
+    FrmDataModule.ADOQueryTemporarioDBConsulta1.SQL.Add(SQLBase);
+    FrmDataModule.ADOQueryTemporarioDBConsulta1.Open;
+    NumRegistros:= FrmDataModule.ADOQueryTemporarioDBConsulta1.RecordCount;
+    //=============================================================
+    if (NumRegistros > 0) then
+    begin
+      BarSeriesGRF.AddXY(EixoX,NumRegistros,Plataforma,
+      FrmPrincipal.CoresAuto[i]);
+      if i <= 13 then
+        i:= i+1
+      else
+        i:= 0;
+      EixoX:= EixoX+1;
+    end;
+    FrmDataModule.ADOQueryConsultaPlataforma.Next;
+    FrmPrincipal.ProgressBarIncremento(1);
+  end;
+  ChartGrafico.AddSeries(BarSeriesGRF);
+  FrmPrincipal.ProgressBarAtualizar;
+end;
+
+procedure TFrmPericiaMarinha.actGRFControleCartaExecute(Sender: TObject);
+  var
+    LinePIOPGRF,LineSEGPGRF,LineSeriesZERO: TLineSeries;
+    PrazoPIOP,PrazoSEG: Integer;
+    Plataforma: String;
+begin
+  ChartGrafico.Title.Caption:= RadioGroupEixoX.Items.Strings[RadioGroupEixoX.ItemIndex];
+  ChartGrafico.Legend.Visible:= true;
+  ChartGrafico.Axes.Left.Title.Caption:= 'Prazo Envio';
+  ChartGrafico.RemoveAllSeries;
+  ChartGrafico.BottomAxis.Visible:= false;
+  ChartGrafico.Legend.CheckBoxes:= false;
+  //=================================================
+  LinePIOPGRF:= TLineSeries.Create(ChartGrafico);
+  LinePIOPGRF.Pointer.Size:= 4;
+  LinePIOPGRF.Pointer.Visible:= true;
+  LinePIOPGRF.Pointer.Style:= TSeriesPointerStyle(1);
+  LinePIOPGRF.Color:= clBlue;
+  LinePIOPGRF.Title:= 'Prazo PIOp';
+  //=================================================
+  LineSEGPGRF:= TLineSeries.Create(ChartGrafico);
+  LineSEGPGRF.Pointer.Size:= 4;
+  LineSEGPGRF.Pointer.Visible:= true;
+  LineSEGPGRF.Pointer.Style:= TSeriesPointerStyle(2);
+  LineSEGPGRF.Color:= clGreen;
+  LineSEGPGRF.Title:= 'Prazo SEG';
+  //=================================================
+  FrmDataModule.ADOQueryControleCarta.First;
+  FrmPrincipal.ProgressBarIncializa(FrmDataModule.ADOQueryControleCarta.RecordCount,
+  'Gerando gráfico...');
+  while not FrmDataModule.ADOQueryControleCarta.Eof do
+  begin
+    PrazoPIOP:= FrmDataModule.DataSourceControleCarta.DataSet.FieldByName('PrazoPIOP').AsInteger;
+    PrazoSEG:= FrmDataModule.DataSourceControleCarta.DataSet.FieldByName('PrazoSEG').AsInteger;
+    Plataforma:= FrmDataModule.DataSourceControleCarta.DataSet.FieldByName('Plataforma').AsString;
+    LinePIOPGRF.AddY(PrazoPIOP,Plataforma,clBlue);
+    LineSEGPGRF.AddY(PrazoSEG,Plataforma,clGreen);
+    FrmDataModule.ADOQueryControleCarta.Next;
+    FrmPrincipal.ProgressBarIncremento(1);
+  end;
+  FrmDataModule.ADOQueryControleCarta.First;
+  //Linha do ZERO
+  LineSeriesZERO:= TLineSeries.Create(ChartGrafico);
+  LineSeriesZERO.Pointer.Size:= 0;
+  LineSeriesZERO.Pointer.Visible:= false;
+  LineSeriesZERO.Pointer.Style:= TSeriesPointerStyle(1);
+  LineSeriesZERO.Color:= clRed;
+  LineSeriesZERO.Marks.Visible:= false;
+  LineSeriesZERO.AddXY(-1,0,'',clRed);
+  LineSeriesZERO.AddXY(FrmDataModule.ADOQueryControleCarta.RecordCount,0,'',clRed);
+  LineSeriesZERO.Title:= 'Zero';
+  //=======================================================================
+  ChartGrafico.AddSeries(LineSeriesZERO);
+  ChartGrafico.AddSeries(LinePIOPGRF);
+  ChartGrafico.AddSeries(LineSEGPGRF);
+  actEtiqueta.Execute;
+  ChartGrafico.Legend.CheckBoxes:= true;
+  FrmPrincipal.ProgressBarAtualizar;
+end;
+
+procedure TFrmPericiaMarinha.actGRFSalvarImagemExecute(Sender: TObject);
+begin
+  SavePictureDialog1.FileName:= ChartGrafico.Title.Caption+'.wmf';
+  if(SavePictureDialog1.Execute) then
+    ChartGrafico.SaveToMetafile(SavePictureDialog1.FileName);
+end;
+
+procedure TFrmPericiaMarinha.actGRFSalvarTXTExecute(Sender: TObject);
+begin
+  FrmPrincipal.salvarGrafico(ChartGrafico);
+end;
+
+procedure TFrmPericiaMarinha.actGRFTipoEtapaServicoExecute(Sender: TObject);
+  var
+    BarSeriesGRF: TBarSeries;
+    NumRegistros,i,EixoX: Integer;
+    TipoEtapaServico,SQLString,SQLBase: String;
+begin
+  BarSeriesGRF:= carregaSerie;
+  ChartGrafico.Legend.Visible:= true;
+  ChartGrafico.Legend.CheckBoxes:= false;
+  ChartGrafico.Axes.Left.Title.Caption:= 'N° de Pendências';
+  SQLString:= frmPrincipal.SQLStringFiltroTabela(ColunasLayout,true);
+    if SQLString<>'' then
+    SQLString:= SQLString+'AND'
+  else
+    SQLString:= 'WHERE ';
+  FrmDataModule.ADOQueryTipoEtapaServico.Active:= false;
+  FrmDataModule.ADOQueryTipoEtapaServico.Active:= true;
+  EixoX:= 0;
+  i:= 0;
+  FrmPrincipal.ProgressBarIncializa(FrmDataModule.ADOQueryTipoEtapaServico.RecordCount,
+  'Gerando gráfico...');
+  while not FrmDataModule.ADOQueryTipoEtapaServico.Eof do
+  begin
+    TipoEtapaServico:= FrmDataModule.DataSourceTipoEtapaServico.
+    DataSet.FieldByName('TipoEtapaServico').AsString;
+    SQLBase:='SELECT tblPericiaMarinha.* FROM tblPericiaMarinha '+
+    SQLString+'((TipoEtapaServico LIKE '+QuotedStr('%'+TipoEtapaServico+'%')+'));';
+    FrmDataModule.ADOQueryTemporarioDBConsulta1.Close;
+    FrmDataModule.ADOQueryTemporarioDBConsulta1.SQL.Clear;
+    FrmDataModule.ADOQueryTemporarioDBConsulta1.SQL.Add(SQLBase);
+    FrmDataModule.ADOQueryTemporarioDBConsulta1.Open;
+    NumRegistros:= FrmDataModule.ADOQueryTemporarioDBConsulta1.RecordCount;
+    //=============================================================
+    if (NumRegistros > 0) then
+    begin
+      BarSeriesGRF.AddXY(EixoX,NumRegistros,TipoEtapaServico,
+      FrmPrincipal.CoresAuto[i]);
+      if i <= 13 then
+        i:= i+1
+      else
+        i:= 0;
+      EixoX:= EixoX+1;
+    end;
+    FrmDataModule.ADOQueryTipoEtapaServico.Next;
+    FrmPrincipal.ProgressBarIncremento(1);
+  end;
+  ChartGrafico.AddSeries(BarSeriesGRF);
+  FrmPrincipal.ProgressBarAtualizar;
+end;
+
+procedure TFrmPericiaMarinha.actGRFTituloExecute(Sender: TObject);
+  var
+    Titulo: String;
+begin
+  Titulo:= ChartGrafico.Title.Caption;
+  ChartGrafico.Title.Text.Clear;
+  ChartGrafico.Title.Text.Add(InputBox('Titulo da tabela de carga',
+  'Descrição',Titulo));
+end;
+
+procedure TFrmPericiaMarinha.actGridASCExecute(Sender: TObject);
+begin
+  FrmPrincipal.ClassificaDBGrid(DBGridPericiaMarinha,FrmDataModule.ADOQueryPericiaMarinha,0);
+end;
+
+procedure TFrmPericiaMarinha.actGridASCResumoExecute(Sender: TObject);
+begin
+  FrmPrincipal.ClassificaDBGrid(DBGridResumoCarta,FrmDataModule.ADOQueryResumoCarta,0);
+end;
+
+procedure TFrmPericiaMarinha.actGridDESCExecute(Sender: TObject);
+begin
+  FrmPrincipal.ClassificaDBGrid(DBGridPericiaMarinha,FrmDataModule.ADOQueryPericiaMarinha,1);
+end;
+
+procedure TFrmPericiaMarinha.actGridDESCResumoExecute(Sender: TObject);
+begin
+  FrmPrincipal.ClassificaDBGrid(DBGridResumoCarta,FrmDataModule.ADOQueryResumoCarta,1);
+end;
+
+procedure TFrmPericiaMarinha.actInserirLinhaExecute(Sender: TObject);
+  var
+    numLinha: Integer;
+begin
+  numLinha:= StrGridProrrogacaoData.RowCount;
+  StrGridProrrogacaoData.RowCount:= numLinha+1;
+  StrGridProrrogacaoData.Cells[0,numLinha]:= '';
+  StrGridProrrogacaoData.Cells[1,numLinha]:= '';
+  FrmPrincipal.AutoFitGrade(StrGridProrrogacaoData);
+  StrGridProrrogacaoData.ColWidths[0]:= 20;
+  try
+    StrGridProrrogacaoData.FixedRows:=1;
+  except
+  end;
+end;
+
+procedure TFrmPericiaMarinha.actGRFVencimentoCartaExecute(Sender: TObject);
+begin
+  GRFVencimento(1);
+end;
+
+procedure TFrmPericiaMarinha.actGRFVencimentoExecute(Sender: TObject);
+begin
+  GRFVencimento(0);
+end;
+
+procedure TFrmPericiaMarinha.actGRFVencimentoRetificadoExecute(Sender: TObject);
+begin
+  GRFAnalise('DataVencimento');
+end;
+
+procedure TFrmPericiaMarinha.actLayoutJanelaExecute(Sender: TObject);
+begin
+  FrmPrincipal.btnCima.Action:= actCima;
+  FrmPrincipal.btnBaixo.Action:= actBaixo;
+  FrmPrincipal.btnBaixoTudo.Action:= actBaixoTudo;
+  FrmPrincipal.btnCimaTudo.Action:= actCimaTudo;
+  FrmPrincipal.btnSalvarLayout.Action:= actSalvarLayout;
+  FrmPrincipal.btnSalvarLayout.Visible:= false;
+  FrmPrincipal.CarregarRLColunas('Marinha.txt',ColunasLayout);
+  FrmPrincipal.actConfigPanelLayout.Execute;
+  actConfigPickList.Execute;
+end;
+
+procedure TFrmPericiaMarinha.actLimparFiltrosExecute(Sender: TObject);
+begin
+  FrmPrincipal.LimparColunasFiltro(DBGridPericiaMarinha,ColunasLayout);
+  actProcurar.Execute;
+  if (FrmPrincipal.PanelFiltrosTabela.Visible)AND(FrmPrincipal.PanelAjuda1.Visible) then
+    actFiltrosTabela.Execute;
+end;
+
+procedure TFrmPericiaMarinha.actLimparFiltrosResumoExecute(Sender: TObject);
+begin
+  FrmPrincipal.LimparColunasFiltro(DBGridResumoCarta,ColunasLayoutResumoCarta);
+  actProcurarResumoCarta.Execute;
+  if (FrmPrincipal.PanelFiltrosTabela.Visible)AND(FrmPrincipal.PanelAjuda1.Visible) then
+    actFiltrosTabelaResumo.Execute;
+end;
+
+procedure TFrmPericiaMarinha.actMACLetterExecute(Sender: TObject);
+  var
+    Item,Relatorio,Plataforma,Mitigacao,PrazoAtendimento,
+    ObservacaoCarta,DescricaoItem,MotivoNaoAtendimento,OQueFoiFeito,Atendido,Erros: String;
+    ListaErros: TStringList;
+    i: Integer;
+begin
+  FrmPrincipal.ProgressBarIncializa(FrmDataModule.ADOQueryPericiaMarinha.RecordCount,
+  'Gerando Carta...');
+  PageControlMarinha.TabIndex:= 2;
+  ListaErros:= TStringList.Create;
+  ListaErros.delimiter:= ';';
+  ListaErros.StrictDelimiter:= true;
+  ListaErros.Clear;
+  FrmDataModule.DataSourcePericiaMarinha.Enabled:= false;
+  FrmDataModule.ADOQueryPericiaMarinha.Sort:= 'Item ASC';
+  FrmDataModule.ADOQueryPericiaMarinha.First;
+  MemoCarta.Lines.Clear;
+  Relatorio:= FrmDataModule.DataSourcePericiaMarinha.DataSet.FieldByName('Relatorio').AsString;
+  Plataforma:= FrmDataModule.DataSourcePericiaMarinha.DataSet.FieldByName('Plataforma').AsString;
+  MemoCarta.Lines.Add('Em relação ao Relatório '+
+  Relatorio+', da Plataforma '+Plataforma+':');
+  MemoCarta.Lines.Add('');
+  while not FrmDataModule.ADOQueryPericiaMarinha.Eof do
+  begin
+    Item:= FrmDataModule.DataSourcePericiaMarinha.
+    DataSet.FieldByName('Item').AsString;
+    DescricaoItem:= FrmDataModule.DataSourcePericiaMarinha.
+    DataSet.FieldByName('DescricaoItem').AsString;
+    if DescricaoItem = '' then
+    begin
+      ListaErros.Add('Erro no Item '+Item+': Descrição do Item');
+      DescricaoItem:= 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX';
+    end;
+    Atendido:= FrmDataModule.DataSourcePericiaMarinha.
+    DataSet.FieldByName('Atendido').AsString;
+    if Atendido = '' then
+    begin
+      ListaErros.Add('Erro no Item '+Item+': Atendido');
+      Atendido:= 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX';
+    end;
+    //==================================================================
+    if Atendido = 'Não' then
+    begin
+      MotivoNaoAtendimento:= FrmDataModule.DataSourcePericiaMarinha.
+      DataSet.FieldByName('MotivoNaoAtendimento').AsString;
+      if MotivoNaoAtendimento = '' then
+      begin
+        ListaErros.Add('Erro no Item '+Item+': Porque não atendemos');
+        MotivoNaoAtendimento:= 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX';
+      end;
+      OQueFoiFeito:= FrmDataModule.DataSourcePericiaMarinha.
+      DataSet.FieldByName('OQueFoiFeito').AsString;
+      if OQueFoiFeito = '' then
+      begin
+        ListaErros.Add('Erro no Item '+Item+': O que foi feito');
+        OQueFoiFeito:= 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX';
+      end;
+      Mitigacao:= FrmDataModule.DataSourcePericiaMarinha.
+      DataSet.FieldByName('Mitigacao').AsString;
+      if Mitigacao = '' then
+      begin
+        ListaErros.Add('Erro no Item '+Item+': Mitigação');
+        Mitigacao:= 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX';
+      end;
+      PrazoAtendimento:= FrmDataModule.DataSourcePericiaMarinha.
+      DataSet.FieldByName('PrazoAtendimento').AsString;
+      if PrazoAtendimento = '' then
+      begin
+        ListaErros.Add('Erro no Item '+Item+': Prazo de atendimento');
+        PrazoAtendimento:= 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX';
+      end;
+      ObservacaoCarta:= FrmDataModule.DataSourcePericiaMarinha.
+      DataSet.FieldByName('ObservacaoCarta').AsString;
+      MemoCarta.Lines.Add('Item '+Item+': '+DescricaoItem);
+      MemoCarta.Lines.Add('Status: não atendido.');
+      MemoCarta.Lines.Add('Porque não atendemos: '+MotivoNaoAtendimento);
+      MemoCarta.Lines.Add('O que foi feito: '+OQueFoiFeito);
+      MemoCarta.Lines.Add('Mitigação: '+Mitigacao);
+      MemoCarta.Lines.Add('Data prevista para atendimento: '+PrazoAtendimento);
+      if ObservacaoCarta <> '' then
+        MemoCarta.Lines.Add('Observação: '+ObservacaoCarta);
+      MemoCarta.Lines.Add('_________________________________________________________________');
+      MemoCarta.Lines.Add('');
+    end
+    else
+    begin
+      Atendido:= 'Este item encontra-se atendido, aguardando agendamento de vistoria para retificação.';
+      MemoCarta.Lines.Add('Item '+Item+': '+DescricaoItem);
+      MemoCarta.Lines.Add('Status: '+Atendido);
+      MemoCarta.Lines.Add('_________________________________________________________________');
+      MemoCarta.Lines.Add('');
+    end;
+    FrmDataModule.ADOQueryPericiaMarinha.Next;
+    FrmPrincipal.ProgressBarIncremento(1);
+  end;
+  FrmDataModule.ADOQueryPericiaMarinha.First;
+  FrmDataModule.DataSourcePericiaMarinha.Enabled:= true;
+  FrmPrincipal.ProgressBarAtualizar;
+  MemoCarta.Lines.Add('');
+  MemoCarta.Lines.Add('Diante do exposto:');
+  MemoCarta.Lines.Add('Para o(s) item(s) atendido(s), devido à falta de tempo hábil '+
+  'para agendamento da perícia, solicitamos que nos seja concedido prorrogação de 30 '+
+  'dias, para que possamos programar o embarque dos inspetores navais.');
+  MemoCarta.Lines.Add('Para o(s) item(s) não atendido(s), solicitamos que nos seja '+
+  'concedido prorrogação conforme o prazo apresentado para saneamento das deficiências.');
+
+  if ListaErros.Count > 0 then
+  begin
+    Erros:= '';
+    for I := 0 to ListaErros.Count -1 do
+      Erros:= Erros+#13+ListaErros[i];
+    ShowMessage('Lista de erros:'+#13+Erros);
+  end;
+
+  {WinWord := CreateOleObject('Word.Application');
+  // Tornar o word visivel
+  WinWord.Visible := True;
+  // Abrir arquivo para edição
+  Doc:= WinWord.Documents.Open(ExtractFilePath(Application.ExeName)+'\Arquivos\Modelo.docx');
+  // Substituir itens do arquivo por texto escolhido
+  Doc.Content.Find.Execute('@aluno', EmptyParam, EmptyParam, EmptyParam, EmptyParam, EmptyParam,
+  EmptyParam, EmptyParam, EmptyParam, 'Aluno', EmptyParam, EmptyParam,
+  EmptyParam, EmptyParam, EmptyParam);
+  Doc.Content.Find.Execute('@treinamento', EmptyParam, EmptyParam, EmptyParam, EmptyParam, EmptyParam,
+  EmptyParam, EmptyParam, EmptyParam, 'Treinamento', EmptyParam, EmptyParam,
+  EmptyParam, EmptyParam, EmptyParam);
+  Doc.Content.Find.Execute('@horario', EmptyParam, EmptyParam, EmptyParam, EmptyParam, EmptyParam,
+  EmptyParam, EmptyParam, EmptyParam, 'Horario', EmptyParam, EmptyParam,
+  EmptyParam, EmptyParam, EmptyParam);
+  // inserir texto
+  Range := Doc.Paragraphs.Item(1).Range;
+  Range.Text := 'Antonio Augusto Zuchi Leite';
+  Range.Paragraphs.Add;
+  Range.Bold := 1;
+  Range.Font.Size := 15;
+  Doc.SaveAs('C:\Users\ZUCHI\Desktop\Marinha.doc');}
+end;
+
+procedure TFrmPericiaMarinha.actPIEPrazoAtendimentoExecute(Sender: TObject);
+  var
+    PieGRF: TPieSeries;
+    NumRegistros,Vermelho,Amarelo,Verde: Integer;
+    PrazoAtendimento: TDateTime;
+begin
+  ChartGrafico.Title.Caption:= RadioGroupEixoX.Items.Strings[RadioGroupEixoX.ItemIndex];
+  ChartGrafico.Legend.Visible:= true;
+  ChartGrafico.Axes.Left.Title.Caption:= 'Prorrogação Declaração';
+  ChartGrafico.RemoveAllSeries;
+  ChartGrafico.BottomAxis.Visible:= false;
+  ChartGrafico.Legend.CheckBoxes:= false;
+  PieGRF:= TPieSeries.Create(ChartGrafico);
+  //=================================================
+  Vermelho:= 0;
+  Amarelo:= 0;
+  Verde:= 0;
+  FrmDataModule.ADOQueryPericiaMarinha.First;
+  NumRegistros:= FrmDataModule.ADOQueryPericiaMarinha.RecordCount;
+  FrmPrincipal.ProgressBarIncializa(NumRegistros,'Gerando gráfico...');
+  while not FrmDataModule.ADOQueryPericiaMarinha.Eof do
+  begin
+    PrazoAtendimento:= FrmDataModule.DataSourcePericiaMarinha.DataSet.
+    FieldByName('PrazoAtendimento').AsDateTime;
+    if (PrazoAtendimento <= now) then
+      Vermelho:= Vermelho+1
+    else if ((PrazoAtendimento > now)AND(PrazoAtendimento <= IncDay(now,30))) then
+      Amarelo:= Amarelo+1
+    else if (PrazoAtendimento > IncDay(now,30)) then
+      Verde:= Verde+1;
+
+    FrmDataModule.ADOQueryPericiaMarinha.Next;
+    FrmPrincipal.ProgressBarIncremento(1);
+  end;
+  FrmDataModule.ADOQueryPericiaMarinha.First;
+  if Verde <> 0 then
+    PieGRF.AddPie(Verde,'Mais de 30d: '+
+    FormatFloat('0.0%',(Verde*100)/NumRegistros),clLime);
+  if Amarelo <> 0 then
+    PieGRF.AddPie(Amarelo,'Menos de 30d: '+
+    FormatFloat('0.0%',(Amarelo*100)/NumRegistros),clYellow);
+  if Vermelho <> 0 then
+    PieGRF.AddPie(Vermelho,'Vencido: '+
+    FormatFloat('0.0%',(Vermelho*100)/NumRegistros),clRed);
+  //=======================================================================
+  ChartGrafico.AddSeries(PieGRF);
+  FrmPrincipal.ProgressBarAtualizar;
+end;
+
+procedure TFrmPericiaMarinha.actPIEProrrogacaoExecute(Sender: TObject);
+  var
+    PieGRF: TPieSeries;
+    TotalDiasProrrogacao,NumRegistros,ProrroRed,ProrroOrange,
+    ProrroYellow,ProrroGreen: Integer;
+begin
+  ChartGrafico.Title.Caption:= RadioGroupEixoX.Items.Strings[RadioGroupEixoX.ItemIndex];
+  ChartGrafico.Legend.Visible:= true;
+  ChartGrafico.Axes.Left.Title.Caption:= 'Prorrogação Declaração';
+  ChartGrafico.RemoveAllSeries;
+  ChartGrafico.BottomAxis.Visible:= false;
+  ChartGrafico.Legend.CheckBoxes:= false;
+  PieGRF:= TPieSeries.Create(ChartGrafico);
+  //=================================================
+  ProrroRed:= 0;
+  ProrroOrange:= 0;
+  ProrroYellow:= 0;
+  ProrroGreen:= 0;
+  FrmDataModule.ADOQueryPericiaMarinha.First;
+  NumRegistros:= FrmDataModule.ADOQueryPericiaMarinha.RecordCount;
+  FrmPrincipal.ProgressBarIncializa(NumRegistros,'Gerando gráfico...');
+  while not FrmDataModule.ADOQueryPericiaMarinha.Eof do
+  begin
+    TotalDiasProrrogacao:= FrmDataModule.DataSourcePericiaMarinha.DataSet.
+    FieldByName('TotalDiasProrrogacao').AsInteger;
+    if (TotalDiasProrrogacao >= 365) then
+      ProrroRed:= ProrroRed+1
+    else if ((TotalDiasProrrogacao >= 275)AND(TotalDiasProrrogacao < 365)) then
+      ProrroOrange:= ProrroOrange+1
+    else if ((TotalDiasProrrogacao >= 185)AND(TotalDiasProrrogacao < 275)) then
+      ProrroYellow:= ProrroYellow+1
+    else if (TotalDiasProrrogacao < 185) then
+      ProrroGreen:= ProrroGreen+1;
+    FrmDataModule.ADOQueryPericiaMarinha.Next;
+    FrmPrincipal.ProgressBarIncremento(1);
+  end;
+  FrmDataModule.ADOQueryPericiaMarinha.First;
+  if ProrroGreen <> 0 then
+    PieGRF.AddPie(ProrroGreen,'1° e 2° até 185d: '+
+    FormatFloat('0.0%',(ProrroGreen*100)/NumRegistros),clLime);
+  if ProrroYellow <> 0 then
+    PieGRF.AddPie(ProrroYellow,'3° até 275d: '+
+    FormatFloat('0.0%',(ProrroYellow*100)/NumRegistros),clYellow);
+  if ProrroOrange <> 0 then
+    PieGRF.AddPie(ProrroOrange,'4° até 365d: '+
+    FormatFloat('0.0%',(ProrroOrange*100)/NumRegistros),clFuchsia);
+  if ProrroRed <> 0 then
+    PieGRF.AddPie(ProrroRed,'Vencido: '+
+    FormatFloat('0.0%',(ProrroRed*100)/NumRegistros),clRed);
+  //=======================================================================
+  ChartGrafico.AddSeries(PieGRF);
+  FrmPrincipal.ProgressBarAtualizar;
+end;
+
+procedure TFrmPericiaMarinha.actPIEVencimentoExecute(Sender: TObject);
+  var
+    PieGRF: TPieSeries;
+    DataVencimento,Data1,Data2: TDateTime;
+    NumRegistros,Retificado,Verde,Amarelo,Vermelho: Integer;
+begin
+  ChartGrafico.Title.Caption:= RadioGroupEixoX.Items.Strings[RadioGroupEixoX.ItemIndex];
+  ChartGrafico.Legend.Visible:= true;
+  ChartGrafico.Axes.Left.Title.Caption:= 'Data de Vencimento';
+  ChartGrafico.RemoveAllSeries;
+  ChartGrafico.BottomAxis.Visible:= false;
+  ChartGrafico.Legend.CheckBoxes:= false;
+  PieGRF:= TPieSeries.Create(ChartGrafico);
+  //=================================================
+  Retificado:= 0;
+  Verde:= 0;
+  Amarelo:= 0;
+  Vermelho:= 0;
+  Data1:= FrmPrincipal.DiasFinalCorridos(Now,PrazoCores1);
+  Data2:= FrmPrincipal.DiasFinalCorridos(Now,PrazoCores2);
+  FrmDataModule.ADOQueryPericiaMarinha.First;
+  NumRegistros:= FrmDataModule.ADOQueryPericiaMarinha.RecordCount;
+  FrmPrincipal.ProgressBarIncializa(NumRegistros,'Gerando gráfico...');
+  while not FrmDataModule.ADOQueryPericiaMarinha.Eof do
+  begin
+    if (FrmDataModule.DataSourcePericiaMarinha.DataSet.
+    FieldByName('Retificado').AsString = 'Retificado') then
+    begin
+      Retificado:= Retificado+1;
+    end
+    else
+    begin
+      DataVencimento:= FrmDataModule.DataSourcePericiaMarinha.DataSet.
+      FieldByName('DataVencimento').AsDateTime;
+      if (DataVencimento >= Data2) then
+        Verde:= Verde+1
+      else if ((DataVencimento < Data2)AND(DataVencimento > Data1)) then
+        Amarelo:= Amarelo+1
+      else if (DataVencimento <= Data1) then
+        Vermelho:= Vermelho+1;
+    end;
+    FrmDataModule.ADOQueryPericiaMarinha.Next;
+    FrmPrincipal.ProgressBarIncremento(1);
+  end;
+  FrmDataModule.ADOQueryPericiaMarinha.First;
+  if Retificado <> 0 then
+    PieGRF.AddPie(Retificado,'Retificado'+
+    FormatFloat(': 0.0%',(Retificado*100)/NumRegistros),clSilver);
+  if Verde <> 0 then
+    PieGRF.AddPie(Verde,'X >='+DateToStr(Data2)+
+    FormatFloat(': 0.0%',(Verde*100)/NumRegistros),clLime);
+  if Amarelo <> 0 then
+    PieGRF.AddPie(Amarelo,DateToStr(Data1)+' < X < '+DateToStr(Data2)+
+    FormatFloat(': 0.0%',(Amarelo*100)/NumRegistros),clYellow);
+  if Vermelho <> 0 then
+    PieGRF.AddPie(Vermelho,'X <='+DateToStr(Data1)+
+    FormatFloat(': 0.0%',(Vermelho*100)/NumRegistros),clRed);
+  //=======================================================================
+  ChartGrafico.AddSeries(PieGRF);
+  FrmPrincipal.ProgressBarAtualizar;
+end;
+
+procedure TFrmPericiaMarinha.actGRFPrazoAtendimentoExecute(Sender: TObject);
+  var
+    LineVencimento,LinePrazoAtendimento,LineMaxProrrogacao: TLineSeries;
+    Plataforma,Gerencia,Relatorio,Texto: String;
+    DataVencimento,PrazoAtendimento,MaxProgramacao: TDateTime;
+begin
+  ChartGrafico.Title.Caption:= RadioGroupEixoX.Items.Strings[RadioGroupEixoX.ItemIndex];
+  ChartGrafico.Legend.Visible:= true;
+  ChartGrafico.Axes.Left.Title.Caption:= 'Prazo Atendimento';
+  ChartGrafico.RemoveAllSeries;
+  ChartGrafico.BottomAxis.Visible:= false;
+  ChartGrafico.Legend.CheckBoxes:= true;
+  //=================================================
+  LinePrazoAtendimento:= TLineSeries.Create(ChartGrafico);
+  LinePrazoAtendimento.Pointer.Size:= 4;
+  LinePrazoAtendimento.Pointer.Visible:= true;
+  LinePrazoAtendimento.Pointer.Style:= TSeriesPointerStyle(1);
+  LinePrazoAtendimento.Color:= clBlue;
+  LinePrazoAtendimento.Title:= 'Prazo Atendimento';
+  LinePrazoAtendimento.YValues.DateTime:= true;
+  //=================================================
+  LineVencimento:= TLineSeries.Create(ChartGrafico);
+  LineVencimento.Pointer.Size:= 4;
+  LineVencimento.Pointer.Visible:= true;
+  LineVencimento.Pointer.Style:= TSeriesPointerStyle(2);
+  LineVencimento.Color:= clGreen;
+  LineVencimento.Title:= 'Data Vencimento';
+  LineVencimento.YValues.DateTime:= true;
+  //=================================================
+  LineMaxProrrogacao:= TLineSeries.Create(ChartGrafico);
+  LineMaxProrrogacao.Pointer.Size:= 4;
+  LineMaxProrrogacao.Pointer.Visible:= true;
+  LineMaxProrrogacao.Pointer.Style:= TSeriesPointerStyle(3);
+  LineMaxProrrogacao.Color:= clRed;
+  LineMaxProrrogacao.Title:= 'Máxima Prorrogação';
+  LineMaxProrrogacao.YValues.DateTime:= true;
+  //=================================================
+  FrmDataModule.DataSourcePericiaMarinha.Enabled:= false;
+  FrmDataModule.ADOQueryPericiaMarinha.First;
+  FrmPrincipal.ProgressBarIncializa(FrmDataModule.ADOQueryPericiaMarinha.
+  RecordCount,'Gerando gráfico...');
+  while not FrmDataModule.ADOQueryPericiaMarinha.Eof do
+  begin
+    DataVencimento:= FrmDataModule.DataSourcePericiaMarinha.DataSet.
+    FieldByName('DataVencimento').AsDateTime;
+    MaxProgramacao:= IncYear(FrmDataModule.DataSourcePericiaMarinha.DataSet.
+    FieldByName('DataPericia').AsDateTime,1);
+    PrazoAtendimento:= FrmDataModule.DataSourcePericiaMarinha.DataSet.
+    FieldByName('PrazoAtendimento').AsDateTime;
+    Plataforma:= FrmDataModule.DataSourcePericiaMarinha.DataSet.
+    FieldByName('Plataforma').AsString;
+    Gerencia:= FrmDataModule.DataSourcePericiaMarinha.DataSet.
+    FieldByName('Gerencia').AsString;
+    Relatorio:= FrmDataModule.DataSourcePericiaMarinha.DataSet.
+    FieldByName('Relatorio').AsString+'.'+FrmDataModule.DataSourcePericiaMarinha.DataSet.
+    FieldByName('Item').AsString;
+    Texto:= Plataforma+';'+Gerencia+';'+Relatorio;
+    LineVencimento.AddY(DataVencimento,Texto,clGreen);
+    LinePrazoAtendimento.AddY(PrazoAtendimento,Texto,clBlue);
+    LineMaxProrrogacao.AddY(MaxProgramacao,Texto,clRed);
+    FrmDataModule.ADOQueryPericiaMarinha.Next;
+    FrmPrincipal.ProgressBarIncremento(1);
+  end;
+  FrmDataModule.ADOQueryPericiaMarinha.First;
+  FrmDataModule.DataSourcePericiaMarinha.Enabled:= true;
+  //=======================================================================
+  ChartGrafico.AddSeries(LineVencimento);
+  ChartGrafico.AddSeries(LinePrazoAtendimento);
+  ChartGrafico.AddSeries(LineMaxProrrogacao);
+  actEtiqueta.Execute;
+  FrmPrincipal.ProgressBarAtualizar;
+end;
+
+procedure TFrmPericiaMarinha.actProcuraFiltrosTabelaExecute(Sender: TObject);
+begin
+  frmPrincipal.CarregaFiltrosProcura(ColunasLayout);
+  actProcurar.Execute;
+end;
+
+procedure TFrmPericiaMarinha.actProcuraFiltrosTabelaResumoExecute(
+  Sender: TObject);
+begin
+  frmPrincipal.CarregaFiltrosProcura(ColunasLayoutResumoCarta);
+  actProcurarResumoCarta.Execute;
+end;
+
+procedure TFrmPericiaMarinha.actProcurarExecute(Sender: TObject);
+    var
+    SQLString,SQLBase: String;
+begin
+  FrmDataModule.DataSourceColibri.DataSet.
+  FieldByName('PrazoCores1').AsInteger;
+  SQLString:= frmPrincipal.SQLStringFiltroTabela(ColunasLayout,true);
+  SQLBase:= 'SELECT tblPericiaMarinha.*, tblPericiaMarinha.DataVencimento-'+IntToStr(PrazoCores1)+
+  ' AS DataVencimentoCarta FROM tblPericiaMarinha'+
+  SQLString+' ORDER BY Plataforma,Relatorio,Item;';
+  FrmPrincipal.ProcuraQuery(SQLBase,FrmDataModule.ADOQueryPericiaMarinha,
+  StatusBarPericiaMarinha);
+end;
+
+procedure TFrmPericiaMarinha.actProcurarResumoCartaExecute(Sender: TObject);
+  var
+    SQLBase,SQLString: String;
+begin
+  SQLString:= frmPrincipal.SQLStringFiltroTabela(ColunasLayoutResumoCarta,false);
+  if SQLString <> '' then
+    SQLString:= 'AND'+SQLString;
+  SQLBase:= 'SELECT DataVencimento,Plataforma, Relatorio,Retificado,DataDeclaracaoPlataforma, '+
+  'tblPericiaMarinha.DataVencimento-'+IntToStr(PrazoCores1)+' AS DataVencimentoCarta FROM tblPericiaMarinha '+
+  'GROUP BY DataVencimento,Plataforma, Relatorio,Retificado,DataDeclaracaoPlataforma '+
+  'HAVING (Retificado LIKE "Em aberto")'+SQLString+' ORDER BY Plataforma,DataVencimento;';
+  FrmPrincipal.ProcuraQuery(SQLBase,FrmDataModule.ADOQueryResumoCarta,
+  StatusBarResumoCarta);
+end;
+
+procedure TFrmPericiaMarinha.actRelatorioMarinhaExecute(Sender: TObject);
+  var
+    Relatorio: String;
+begin
+  if not Assigned(FrmRelatorioMarinha) then
+    FrmRelatorioMarinha:= TFrmRelatorioMarinha.Create(Application)
+  else
+    FrmRelatorioMarinha.Show;
+
+  Relatorio:= FrmDataModule.DataSourcePericiaMarinha.DataSet.FieldByName('Relatorio').AsString;
+  FrmRelatorioMarinha.actLimparFiltros.Execute;
+  FrmPrincipal.buscaFiledGrid1('NumDOC',Relatorio,'Contem',
+  FrmRelatorioMarinha.ColunasLayout,4,false);
+  FrmPrincipal.buscaFiledGrid1('TipoDOC','Relatório','Contem',
+  FrmRelatorioMarinha.ColunasLayout,4,false);
+  FrmRelatorioMarinha.actProcurar.Execute;
+  FrmRelatorioMarinha.actAbrir.Execute;
+end;
+
+procedure TFrmPericiaMarinha.actSalvarFotoExecute(Sender: TObject);
+  var
+    Diretorio,NomeArquivo,Extensao,Origem: String;
+begin
+  Diretorio:= FrmDataModule.DataSourceColibri.DataSet.FieldByName
+  ('enderecoMarinha').AsString;
+  NomeArquivo:= FrmDataModule.ADOQueryFotosMarinha.FieldByName('idFotosMarinha').AsString;
+  Extensao:= FrmDataModule.ADOQueryFotosMarinha.FieldByName('Extensao').AsString;
+  Origem:= Diretorio+'\Fotos\'+NomeArquivo+Extensao;
+  SavePictureDialog1.FileName:= NomeArquivo+Extensao;
+  if SavePictureDialog1.Execute then
+  begin
+    if CopyFile(PChar(Origem), PChar(SavePictureDialog1.FileName), false) then
+    begin
+
+    end;
+  end;
+end;
+
+procedure TFrmPericiaMarinha.actSalvarLayoutExecute(Sender: TObject);
+begin
+  FrmPrincipal.SalvarRLColunasCarregaGRID(FrmDataModule.ADOConnectionConsulta,
+  'Marinha.txt','tblPericiaMarinha',
+  DBGridPericiaMarinha,ColunasLayout);
+  actLimparFiltros.Execute;
+  actConfigPickList.Execute;
+end;
+
+procedure TFrmPericiaMarinha.actSalvarProrrogacaoDataExecute(Sender: TObject);
+  var
+    data,nota,TipoRelatorio,SQLBase,Plataforma,Operacional: String;
+    i,DiasProrrogacao,DiasProrrogacaoFLAG,NumeroProrrogacao,IntDiferenca: Integer;
+    DataPericia,DataPericiaReferencia: TDateTime;
+begin
+  MemoMarinha.Lines.Clear;
+  DiasProrrogacao:= 0;
+  NumeroProrrogacao:= StrGridProrrogacaoData.RowCount-2;
+  //============================================================================
+  for I := 1 to StrGridProrrogacaoData.RowCount-1 do
+  begin
+    data:= StrGridProrrogacaoData.Cells[1,i];
+    nota:= StrGridProrrogacaoData.Cells[2,i];
+    MemoMarinha.Lines.Add(data+';'+nota);
+    try
+      DiasProrrogacao:= DiasProrrogacao+StrToInt(data);
+    except
+    end;
+  end;
+  //============================================================================
+  DataPericia:= FrmDataModule.DataSourcePericiaMarinha.DataSet.FieldByName('DataPericia').AsDateTime;
+  TipoRelatorio:= FrmDataModule.DataSourcePericiaMarinha.DataSet.FieldByName('TipoRelatorio').AsString;
+  Plataforma:= FrmDataModule.DataSourcePericiaMarinha.DataSet.FieldByName('Plataforma').AsString;
+  Operacional:= FrmDataModule.DataSourcePericiaMarinha.DataSet.FieldByName('Operacional').AsString;
+  if ((TipoRelatorio = 'Flag state')AND(Operacional = 'Operacional')) then
+  begin
+    SQLBase:= 'SELECT tblPericiaMarinha.* FROM tblPericiaMarinha '+
+    'WHERE ((TipoRelatorio LIKE "Perícia inicial")AND(Plataforma LIKE '+QuotedStr(Plataforma)+
+    ')) ORDER BY DataPericia DESC;';
+    FrmDataModule.ADOQueryTemporarioDBConsulta1.Close;
+    FrmDataModule.ADOQueryTemporarioDBConsulta1.SQL.Clear;
+    FrmDataModule.ADOQueryTemporarioDBConsulta1.SQL.Add(SQLBase);
+    FrmDataModule.ADOQueryTemporarioDBConsulta1.Open;
+    FrmDataModule.ADOQueryTemporarioDBConsulta1.First;
+    if not FrmDataModule.ADOQueryTemporarioDBConsulta1.IsEmpty then
+    begin
+      DataPericiaReferencia:= FrmDataModule.DataSourceTemporarioDBConsulta1.DataSet.FieldByName('DataPericia').AsDateTime;
+      //==========================================================================
+      IntDiferenca:= DaysBetween(DataPericiaReferencia,DataPericia);
+      DiasProrrogacaoFLAG:= DiasProrrogacao + IntDiferenca;
+      FrmDataModule.ADOQueryPericiaMarinha.Edit;
+      FrmDataModule.DataSourcePericiaMarinha.DataSet.
+      FieldByName('ProrrogacaoData').AsString:= MemoMarinha.Lines.Text;
+      FrmDataModule.DataSourcePericiaMarinha.DataSet.
+      FieldByName('DataVencimento').AsDateTime:= IncDay(DataPericia,DiasProrrogacao);
+      FrmDataModule.DataSourcePericiaMarinha.DataSet.
+      FieldByName('TotalDiasProrrogacao').AsInteger:= DiasProrrogacaoFLAG;
+      FrmDataModule.DataSourcePericiaMarinha.DataSet.
+      FieldByName('NumeroProrrogacao').AsInteger:= NumeroProrrogacao;
+      FrmDataModule.DataSourcePericiaMarinha.DataSet.
+      FieldByName('DataReferenciaFlagState').AsString:=
+      FrmDataModule.ADOQueryTemporarioDBConsulta1.FieldByName('DataPericia').AsString;
+      FrmDataModule.DataSourcePericiaMarinha.DataSet.
+      FieldByName('RelatorioFlagState').AsString:=
+      FrmDataModule.ADOQueryTemporarioDBConsulta1.FieldByName('Relatorio').AsString;
+      FrmDataModule.ADOQueryPericiaMarinha.Post;
+      FrmPrincipal.MenssagemStatus('Perícia inicial: '+FrmDataModule.
+      ADOQueryTemporarioDBConsulta1.FieldByName('Relatorio').AsString);
+    end
+    else
+    begin
+      FrmDataModule.ADOQueryPericiaMarinha.Edit;
+      FrmDataModule.DataSourcePericiaMarinha.DataSet.
+      FieldByName('ProrrogacaoData').AsString:= MemoMarinha.Lines.Text;
+      FrmDataModule.DataSourcePericiaMarinha.DataSet.
+      FieldByName('DataVencimento').AsDateTime:= IncDay(DataPericia,DiasProrrogacao);
+      FrmDataModule.DataSourcePericiaMarinha.DataSet.
+      FieldByName('TotalDiasProrrogacao').AsInteger:= DiasProrrogacao;
+      FrmDataModule.DataSourcePericiaMarinha.DataSet.
+      FieldByName('NumeroProrrogacao').AsInteger:= NumeroProrrogacao;
+      FrmDataModule.DataSourcePericiaMarinha.DataSet.
+      FieldByName('DataReferenciaFlagState').AsString:= '';
+      FrmDataModule.DataSourcePericiaMarinha.DataSet.
+      FieldByName('RelatorioFlagState').AsString:= 'NA';
+      FrmDataModule.ADOQueryPericiaMarinha.Post;
+      FrmPrincipal.MenssagemStatus('Perícia inicial: Não encontrado');
+    end;
+  end
+  else if ((TipoRelatorio = 'Flag state')AND(Operacional = 'Fora Operação')) then
+  begin
+    SQLBase:= 'SELECT tblPericiaMarinha.* FROM tblPericiaMarinha '+
+    'WHERE ((TipoRelatorio LIKE "Inicial Flag")AND(Plataforma LIKE '+QuotedStr(Plataforma)+
+    ')) ORDER BY DataPericia DESC;';
+    FrmDataModule.ADOQueryTemporarioDBConsulta1.Close;
+    FrmDataModule.ADOQueryTemporarioDBConsulta1.SQL.Clear;
+    FrmDataModule.ADOQueryTemporarioDBConsulta1.SQL.Add(SQLBase);
+    FrmDataModule.ADOQueryTemporarioDBConsulta1.Open;
+    FrmDataModule.ADOQueryTemporarioDBConsulta1.First;
+    if not FrmDataModule.ADOQueryTemporarioDBConsulta1.IsEmpty then
+    begin
+      DataPericiaReferencia:= FrmDataModule.DataSourceTemporarioDBConsulta1.DataSet.
+      FieldByName('DataPericia').AsDateTime;
+      //==========================================================================
+      IntDiferenca:= DaysBetween(DataPericiaReferencia,DataPericia);
+      DiasProrrogacaoFLAG:= DiasProrrogacao + IntDiferenca;
+      FrmDataModule.ADOQueryPericiaMarinha.Edit;
+      FrmDataModule.DataSourcePericiaMarinha.DataSet.
+      FieldByName('ProrrogacaoData').AsString:= MemoMarinha.Lines.Text;
+      FrmDataModule.DataSourcePericiaMarinha.DataSet.
+      FieldByName('DataVencimento').AsDateTime:= IncDay(DataPericia,DiasProrrogacao);
+      FrmDataModule.DataSourcePericiaMarinha.DataSet.
+      FieldByName('TotalDiasProrrogacao').AsInteger:= DiasProrrogacaoFLAG;
+      FrmDataModule.DataSourcePericiaMarinha.DataSet.
+      FieldByName('NumeroProrrogacao').AsInteger:= NumeroProrrogacao;
+      FrmDataModule.DataSourcePericiaMarinha.DataSet.
+      FieldByName('DataReferenciaFlagState').AsString:=
+      FrmDataModule.ADOQueryTemporarioDBConsulta1.FieldByName('DataPericia').AsString;
+      FrmDataModule.DataSourcePericiaMarinha.DataSet.
+      FieldByName('RelatorioFlagState').AsString:=
+      FrmDataModule.ADOQueryTemporarioDBConsulta1.FieldByName('Relatorio').AsString;
+      FrmDataModule.ADOQueryPericiaMarinha.Post;
+      FrmPrincipal.MenssagemStatus('Inicial Flag: '+FrmDataModule.
+      ADOQueryTemporarioDBConsulta1.FieldByName('Relatorio').AsString);
+    end
+    else
+    begin
+      FrmDataModule.ADOQueryPericiaMarinha.Edit;
+      FrmDataModule.DataSourcePericiaMarinha.DataSet.
+      FieldByName('ProrrogacaoData').AsString:= MemoMarinha.Lines.Text;
+      FrmDataModule.DataSourcePericiaMarinha.DataSet.
+      FieldByName('DataVencimento').AsDateTime:= IncDay(DataPericia,DiasProrrogacao);
+      FrmDataModule.DataSourcePericiaMarinha.DataSet.
+      FieldByName('TotalDiasProrrogacao').AsInteger:= DiasProrrogacao;
+      FrmDataModule.DataSourcePericiaMarinha.DataSet.
+      FieldByName('NumeroProrrogacao').AsInteger:= NumeroProrrogacao;
+      FrmDataModule.DataSourcePericiaMarinha.DataSet.
+      FieldByName('DataReferenciaFlagState').AsString:= '';
+      FrmDataModule.DataSourcePericiaMarinha.DataSet.
+      FieldByName('RelatorioFlagState').AsString:= 'NA';
+      FrmDataModule.ADOQueryPericiaMarinha.Post;
+      FrmPrincipal.MenssagemStatus('Inicial Flag: Não encontrado');
+    end;
+  end
+  else
+  begin
+    FrmDataModule.ADOQueryPericiaMarinha.Edit;
+    FrmDataModule.DataSourcePericiaMarinha.DataSet.
+    FieldByName('ProrrogacaoData').AsString:= MemoMarinha.Lines.Text;
+    FrmDataModule.DataSourcePericiaMarinha.DataSet.
+    FieldByName('DataVencimento').AsDateTime:= IncDay(DataPericia,DiasProrrogacao);
+    FrmDataModule.DataSourcePericiaMarinha.DataSet.
+    FieldByName('TotalDiasProrrogacao').AsInteger:= DiasProrrogacao;
+    FrmDataModule.DataSourcePericiaMarinha.DataSet.
+    FieldByName('NumeroProrrogacao').AsInteger:= NumeroProrrogacao;
+    FrmDataModule.DataSourcePericiaMarinha.DataSet.
+    FieldByName('DataReferenciaFlagState').AsString:= '';
+    FrmDataModule.DataSourcePericiaMarinha.DataSet.
+    FieldByName('RelatorioFlagState').AsString:= 'NA';
+    FrmDataModule.ADOQueryPericiaMarinha.Post;
+    FrmPrincipal.MenssagemStatus('Sem Referência');
+  end;
+end;
+
+procedure TFrmPericiaMarinha.actSubstituirPorExecute(Sender: TObject);
+begin
+  FrmPrincipal.SubstituirPor(DBGridPericiaMarinha,FrmDataModule.ADOQueryPericiaMarinha,
+  FrmDataModule.DataSourcePericiaMarinha);
+end;
+
+procedure TFrmPericiaMarinha.actZoomMaisExecute(Sender: TObject);
+begin
+  ChartGrafico.ZoomPercent(110);
+end;
+
+procedure TFrmPericiaMarinha.actZoomMenosExecute(Sender: TObject);
+begin
+  ChartGrafico.ZoomPercent(90);
+end;
+
+function TFrmPericiaMarinha.carregaSerie: TBarSeries;
+begin
+  ChartGrafico.Title.Caption:= RadioGroupEixoX.Items.Strings[RadioGroupEixoX.ItemIndex];
+  ChartGrafico.RemoveAllSeries;
+  Result:= TBarSeries.Create(ChartGrafico);
+  Result.MultiBar:= mbSide;
+  Result.AutoBarSize:= true;
+  Result.XValues.DateTime:= false;
+  ChartGrafico.BottomAxis.Visible:= false;
+  Result.CustomBarWidth:= 20;
+  if btnMark.Down then
+  begin
+    Result.Marks.Style:= smsLabelValue;
+    Result.Marks.MultiLine:= true;
+    Result.Marks.Arrow.Visible:= true;
+    Result.Marks.Arrow.Color:= clBlack;
+    Result.Marks.Margins.Left:= 1;
+    Result.Marks.Margins.Right:= 1;
+    Result.Marks.Margins.Top:= 1;
+    Result.Marks.Margins.Bottom:= 1;
+    Result.Marks.Visible:= true;
+  end
+  else
+    Result.Marks.Visible:= false;
+end;
+
+procedure TFrmPericiaMarinha.CartaExecute(Sender: TObject);
+  var
+    Relatorio,Item: String;
+begin
+  if not Assigned(FrmRelatorioMarinha) then
+    FrmRelatorioMarinha:= TFrmRelatorioMarinha.Create(Application)
+  else
+    FrmRelatorioMarinha.Show;
+
+  Relatorio:= FrmDataModule.DataSourcePericiaMarinha.DataSet.FieldByName('Relatorio').AsString;
+  Item:= FrmDataModule.DataSourcePericiaMarinha.DataSet.FieldByName('Item').AsString;
+  FrmRelatorioMarinha.actLimparFiltros.Execute;
+  FrmPrincipal.buscaFiledGrid1('CartaRelatorio',Relatorio,'Contem',
+  FrmRelatorioMarinha.ColunasLayout,4,false);
+  FrmPrincipal.buscaFiledGrid1('CartaItem',Item,'Contem',
+  FrmRelatorioMarinha.ColunasLayout,4,false);
+  FrmRelatorioMarinha.actProcurar.Execute;
+  FrmRelatorioMarinha.actAbrir.Execute;
+end;
+
+procedure TFrmPericiaMarinha.DBGridResumoCartaDrawColumnCell(Sender: TObject;
+  const Rect: TRect; DataCol: Integer; Column: TColumn; State: TGridDrawState);
+    var
+      DataVencimento,Data1,Data2: TDateTime;
+begin
+  FrmPrincipal.GridZebrado(DBGridResumoCarta,ColunasLayoutResumoCarta,State,Rect,DataCol,Column);
+  if (Column.Field.FieldName = 'DataVencimento') then
+  begin
+    if (FrmDataModule.DataSourceResumoCarta.DataSet.
+    FieldByName('Retificado').AsString = 'Retificado') then
+    begin
+      DBGridResumoCarta.Canvas.Brush.Color:= clSilver;
+      DBGridResumoCarta.Font.Color:= clBlack;
+      DBGridResumoCarta.Canvas.FillRect(Rect);
+      DBGridResumoCarta.DefaultDrawColumnCell(Rect, DataCol,Column, State);
+    end
+    else
+    begin
+      DataVencimento:= FrmDataModule.DataSourceResumoCarta.DataSet.
+      FieldByName('DataVencimento').AsDateTime;
+      Data1:= FrmPrincipal.DiasFinalCorridos(Now,PrazoCores1);
+      Data2:= FrmPrincipal.DiasFinalCorridos(Now,PrazoCores2);
+      if (DataVencimento >= Data2) then
+      begin
+        DBGridResumoCarta.Canvas.Brush.Color:= clLime;
+        DBGridResumoCarta.Font.Color:= clBlack;
+        DBGridResumoCarta.Canvas.FillRect(Rect);
+        DBGridResumoCarta.DefaultDrawColumnCell(Rect, DataCol,Column, State);
+      end
+      else if ((DataVencimento < Data2)AND(DataVencimento > Data1)) then
+      begin
+        DBGridResumoCarta.Canvas.Brush.Color:= clYellow;
+        DBGridResumoCarta.Font.Color:= clBlack;
+        DBGridResumoCarta.Canvas.FillRect(Rect);
+        DBGridResumoCarta.DefaultDrawColumnCell(Rect, DataCol,Column, State);
+      end
+      else if (DataVencimento <= Data1) then
+      begin
+        DBGridResumoCarta.Canvas.Brush.Color:= clRed;
+        DBGridResumoCarta.Font.Color:= clBlack;
+        DBGridResumoCarta.Canvas.FillRect(Rect);
+        DBGridResumoCarta.DefaultDrawColumnCell(Rect, DataCol,Column, State);
+      end;
+    end;
+  end;
+end;
+
+procedure TFrmPericiaMarinha.DBGridResumoCartaKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+  if (Key in [VK_DOWN])AND(DBGridResumoCarta.DataSource.DataSet.RecNo=
+  DBGridResumoCarta.DataSource.DataSet.RecordCount) then
+    Abort;
+end;
+
+procedure TFrmPericiaMarinha.DBGridResumoCartaTitleClick(Column: TColumn);
+begin
+  FrmPrincipal.configurarFiltro(0,Column.FieldName,IntToStr(Column.Index),
+  Column.ReadOnly,actFiltroInserirResumo,actGridASCResumo,actGridDESCResumo,actSubstituirPor);
+  //======================================================
+  FrmPrincipal.titleGrid(ColunasLayoutResumoCarta,'Consulta',FrmDataModule.ADOQueryResumoCarta.SQL.Text);
+end;
+
+procedure TFrmPericiaMarinha.DBEditPericiaMarinhaChange(Sender: TObject);
+  var
+    idPericiaMarinha: Integer;
+begin
+  if DBEditPericiaMarinha.Text <> '' then
+  begin
+    idPericiaMarinha:= FrmDataModule.DataSourcePericiaMarinha.DataSet.FieldByName('idPericiaMarinha').AsInteger;
+    FrmDataModule.ADOQueryFotosMarinha.Active := false;
+    FrmDataModule.ADOQueryFotosMarinha.Parameters.Items[0].Value:= idPericiaMarinha;
+    FrmDataModule.ADOQueryFotosMarinha.Active := true;
+  end
+  else
+  begin
+    FrmDataModule.ADOQueryFotosMarinha.Active := false;
+    FrmDataModule.ADOQueryFotosMarinha.Active := false;
+  end;
+end;
+
+procedure TFrmPericiaMarinha.DBGridPericiaMarinhaFotosDrawColumnCell(Sender: TObject;
+  const Rect: TRect; DataCol: Integer; Column: TColumn; State: TGridDrawState);
+begin
+  FrmPrincipal.GridZebrado(DBGridPericiaMarinhaFotos,ColunasLayout,State,Rect,DataCol,Column);
+end;
+
+procedure TFrmPericiaMarinha.DBGridFotosMarinhaDrawColumnCell(Sender: TObject;
+  const Rect: TRect; DataCol: Integer; Column: TColumn; State: TGridDrawState);
+begin
+  FrmPrincipal.GridZebrado(DBGridFotosMarinha,ColunasLayout,State,Rect,DataCol,Column);
+end;
+
+procedure TFrmPericiaMarinha.DBGridPericiaMarinhaColumnMoved(Sender: TObject;
+  FromIndex, ToIndex: Integer);
+begin
+  FrmPrincipal.CarregarRLColunasAtivasGRID(DBGridPericiaMarinha);
+  FrmPrincipal.GravarRLColunas('Marinha.txt');
+  actConfigPickList.Execute;
+end;
+
+procedure TFrmPericiaMarinha.DBGridPericiaMarinhaDrawColumnCell(Sender: TObject;
+  const Rect: TRect; DataCol: Integer; Column: TColumn; State: TGridDrawState);
+    var
+      DataVencimento,Data1,Data2: TDateTime;
+begin
+  FrmPrincipal.GridZebrado(DBGridPericiaMarinha,ColunasLayout,State,Rect,DataCol,Column);
+  if (Column.Field.FieldName = 'Retificado') then
+  begin
+    if FrmDataModule.DataSourcePericiaMarinha.DataSet.
+    FieldByName('Retificado').AsString = 'Retificado' then
+    begin
+      DBGridPericiaMarinha.Canvas.Brush.Color:= clSilver;
+      DBGridPericiaMarinha.Font.Color:= clBlack;
+      DBGridPericiaMarinha.Canvas.FillRect(Rect);
+      DBGridPericiaMarinha.DefaultDrawColumnCell(Rect, DataCol,Column, State);
+    end
+    else
+    begin
+      DBGridPericiaMarinha.Canvas.Brush.Color:= clRed;
+      DBGridPericiaMarinha.Font.Color:= clBlack;
+      DBGridPericiaMarinha.Canvas.FillRect(Rect);
+      DBGridPericiaMarinha.DefaultDrawColumnCell(Rect, DataCol,Column, State);
+    end
+  end
+  else if (Column.Field.FieldName = 'Operacional') then
+  begin
+    if FrmDataModule.DataSourcePericiaMarinha.DataSet.
+    FieldByName('Operacional').AsString = 'Operacional' then
+    begin
+      DBGridPericiaMarinha.Canvas.Brush.Color:= clLime;
+      DBGridPericiaMarinha.Font.Color:= clBlack;
+      DBGridPericiaMarinha.Canvas.FillRect(Rect);
+      DBGridPericiaMarinha.DefaultDrawColumnCell(Rect, DataCol,Column, State);
+    end
+    else
+    begin
+      DBGridPericiaMarinha.Canvas.Brush.Color:= clRed;
+      DBGridPericiaMarinha.Font.Color:= clBlack;
+      DBGridPericiaMarinha.Canvas.FillRect(Rect);
+      DBGridPericiaMarinha.DefaultDrawColumnCell(Rect, DataCol,Column, State);
+    end
+  end
+  else if (Column.Field.FieldName = 'Atendido') then
+  begin
+    if FrmDataModule.DataSourcePericiaMarinha.DataSet.
+    FieldByName('Atendido').AsString = 'Sim' then
+    begin
+      DBGridPericiaMarinha.Canvas.Brush.Color:= clLime;
+      DBGridPericiaMarinha.Font.Color:= clBlack;
+      DBGridPericiaMarinha.Canvas.FillRect(Rect);
+      DBGridPericiaMarinha.DefaultDrawColumnCell(Rect, DataCol,Column, State);
+    end
+    else if FrmDataModule.DataSourcePericiaMarinha.DataSet.
+    FieldByName('Atendido').AsString = 'Não' then
+    begin
+      DBGridPericiaMarinha.Canvas.Brush.Color:= clRed;
+      DBGridPericiaMarinha.Font.Color:= clBlack;
+      DBGridPericiaMarinha.Canvas.FillRect(Rect);
+      DBGridPericiaMarinha.DefaultDrawColumnCell(Rect, DataCol,Column, State);
+    end
+    else if FrmDataModule.DataSourcePericiaMarinha.DataSet.
+    FieldByName('Atendido').AsString = 'Parcial' then
+    begin
+      DBGridPericiaMarinha.Canvas.Brush.Color:= clYellow;
+      DBGridPericiaMarinha.Font.Color:= clBlack;
+      DBGridPericiaMarinha.Canvas.FillRect(Rect);
+      DBGridPericiaMarinha.DefaultDrawColumnCell(Rect, DataCol,Column, State);
+    end
+    else
+    begin
+      DBGridPericiaMarinha.Canvas.Brush.Color:= clAqua;
+      DBGridPericiaMarinha.Font.Color:= clBlack;
+      DBGridPericiaMarinha.Canvas.FillRect(Rect);
+      DBGridPericiaMarinha.DefaultDrawColumnCell(Rect, DataCol,Column, State);
+    end
+  end
+  else if (Column.Field.FieldName = 'TotalDiasProrrogacao') then
+  begin
+    if (FrmDataModule.DataSourcePericiaMarinha.DataSet.
+    FieldByName('TotalDiasProrrogacao').AsInteger >= 365) then
+    begin
+      DBGridPericiaMarinha.Canvas.Brush.Color:= clRed;
+      DBGridPericiaMarinha.Font.Color:= clBlack;
+      DBGridPericiaMarinha.Canvas.FillRect(Rect);
+      DBGridPericiaMarinha.DefaultDrawColumnCell(Rect, DataCol,Column, State);
+    end
+    else if ((FrmDataModule.DataSourcePericiaMarinha.DataSet.
+    FieldByName('TotalDiasProrrogacao').AsInteger >= 275)AND
+    (FrmDataModule.DataSourcePericiaMarinha.DataSet.
+    FieldByName('TotalDiasProrrogacao').AsInteger < 365)) then
+    begin
+      DBGridPericiaMarinha.Canvas.Brush.Color:= clFuchsia;
+      DBGridPericiaMarinha.Font.Color:= clBlack;
+      DBGridPericiaMarinha.Canvas.FillRect(Rect);
+      DBGridPericiaMarinha.DefaultDrawColumnCell(Rect, DataCol,Column, State);
+    end
+    else if ((FrmDataModule.DataSourcePericiaMarinha.DataSet.
+    FieldByName('TotalDiasProrrogacao').AsInteger >= 185)AND(FrmDataModule.DataSourcePericiaMarinha.DataSet.
+    FieldByName('TotalDiasProrrogacao').AsInteger < 275)) then
+    begin
+      DBGridPericiaMarinha.Canvas.Brush.Color:= clYellow;
+      DBGridPericiaMarinha.Font.Color:= clBlack;
+      DBGridPericiaMarinha.Canvas.FillRect(Rect);
+      DBGridPericiaMarinha.DefaultDrawColumnCell(Rect, DataCol,Column, State);
+    end
+    else if ((FrmDataModule.DataSourcePericiaMarinha.DataSet.
+    FieldByName('TotalDiasProrrogacao').AsInteger < 185)) then
+    begin
+      DBGridPericiaMarinha.Canvas.Brush.Color:= clLime;
+      DBGridPericiaMarinha.Font.Color:= clBlack;
+      DBGridPericiaMarinha.Canvas.FillRect(Rect);
+      DBGridPericiaMarinha.DefaultDrawColumnCell(Rect, DataCol,Column, State);
+    end
+  end
+  else if (Column.Field.FieldName = 'DataVencimento') then
+  begin
+    if (FrmDataModule.DataSourcePericiaMarinha.DataSet.
+    FieldByName('Retificado').AsString = 'Retificado') then
+    begin
+      DBGridPericiaMarinha.Canvas.Brush.Color:= clSilver;
+      DBGridPericiaMarinha.Font.Color:= clBlack;
+      DBGridPericiaMarinha.Canvas.FillRect(Rect);
+      DBGridPericiaMarinha.DefaultDrawColumnCell(Rect, DataCol,Column, State);
+    end
+    else
+    begin
+      DataVencimento:= FrmDataModule.DataSourcePericiaMarinha.DataSet.
+      FieldByName('DataVencimento').AsDateTime;
+      Data1:= FrmPrincipal.DiasFinalCorridos(Now,PrazoCores1);
+      Data2:= FrmPrincipal.DiasFinalCorridos(Now,PrazoCores2);
+      if (DataVencimento >= Data2) then
+      begin
+        DBGridPericiaMarinha.Canvas.Brush.Color:= clLime;
+        DBGridPericiaMarinha.Font.Color:= clBlack;
+        DBGridPericiaMarinha.Canvas.FillRect(Rect);
+        DBGridPericiaMarinha.DefaultDrawColumnCell(Rect, DataCol,Column, State);
+      end
+      else if ((DataVencimento < Data2)AND(DataVencimento > Data1)) then
+      begin
+        DBGridPericiaMarinha.Canvas.Brush.Color:= clYellow;
+        DBGridPericiaMarinha.Font.Color:= clBlack;
+        DBGridPericiaMarinha.Canvas.FillRect(Rect);
+        DBGridPericiaMarinha.DefaultDrawColumnCell(Rect, DataCol,Column, State);
+      end
+      else if (DataVencimento <= Data1) then
+      begin
+        DBGridPericiaMarinha.Canvas.Brush.Color:= clRed;
+        DBGridPericiaMarinha.Font.Color:= clBlack;
+        DBGridPericiaMarinha.Canvas.FillRect(Rect);
+        DBGridPericiaMarinha.DefaultDrawColumnCell(Rect, DataCol,Column, State);
+      end;
+    end;
+  end
+  else if (Column.Field.FieldName = 'DataDeclaracaoPlataforma') then
+  begin
+    if (FrmDataModule.DataSourcePericiaMarinha.DataSet.
+    FieldByName('DeclaracaoPlataforma').AsString = 'Sem Declaração') then
+    begin
+      DBGridPericiaMarinha.Canvas.Brush.Color:= clSilver;
+      DBGridPericiaMarinha.Font.Color:= clBlack;
+      DBGridPericiaMarinha.Canvas.FillRect(Rect);
+      DBGridPericiaMarinha.DefaultDrawColumnCell(Rect, DataCol,Column, State);
+    end
+    else if (FrmDataModule.DataSourcePericiaMarinha.DataSet.
+    FieldByName('DeclaracaoPlataforma').AsString = 'Definitiva') then
+    begin
+      DBGridPericiaMarinha.Canvas.Brush.Color:= clAqua;
+      DBGridPericiaMarinha.Font.Color:= clBlack;
+      DBGridPericiaMarinha.Canvas.FillRect(Rect);
+      DBGridPericiaMarinha.DefaultDrawColumnCell(Rect, DataCol,Column, State);
+    end
+    else
+    begin
+      DataVencimento:= FrmDataModule.DataSourcePericiaMarinha.DataSet.
+      FieldByName('DataDeclaracaoPlataforma').AsDateTime;
+      Data1:= FrmPrincipal.DiasFinalCorridos(Now,10);
+      if (DataVencimento >= Data1) then
+      begin
+        DBGridPericiaMarinha.Canvas.Brush.Color:= clLime;
+        DBGridPericiaMarinha.Font.Color:= clBlack;
+        DBGridPericiaMarinha.Canvas.FillRect(Rect);
+        DBGridPericiaMarinha.DefaultDrawColumnCell(Rect, DataCol,Column, State);
+      end
+      else
+      begin
+        DBGridPericiaMarinha.Canvas.Brush.Color:= clRed;
+        DBGridPericiaMarinha.Font.Color:= clBlack;
+        DBGridPericiaMarinha.Canvas.FillRect(Rect);
+        DBGridPericiaMarinha.DefaultDrawColumnCell(Rect, DataCol,Column, State);
+      end;
+    end;
+  end;
+  if (gdFocused in State) then
+  begin
+    //=============================================================
+    if (DBGridPericiaMarinha.SelectedField.FieldName= 'DataPericia')AND(PermiteAlterar) then
+    begin
+      with DBDateTimeDataPericia do
+      begin
+        Left := Rect.Left + DBGridPericiaMarinha.Left + 1;
+        Top := Rect.Top + DBGridPericiaMarinha.Top + 1;
+        Width := Rect.Right - Rect.Left + 2;
+        Width := Rect.Right - Rect.Left + 2;
+        Height := Rect.Bottom - Rect.Top + 2;
+        Visible := True;
+      end;
+    end
+    else
+      DBDateTimeDataPericia.Visible := False;
+    //=============================================================
+    if (DBGridPericiaMarinha.SelectedField.FieldName= 'Relatorio')AND
+    (PermiteAlterar) then
+    begin
+      with MaskEditRelatorio do
+      begin
+        Left := Rect.Left + DBGridPericiaMarinha.Left + 1;
+        Top := Rect.Top + DBGridPericiaMarinha.Top + 1;
+        Width := Rect.Right - Rect.Left + 2;
+        Width := Rect.Right - Rect.Left + 2;
+        Height := Rect.Bottom - Rect.Top + 2;
+        MaskEditRelatorio.Text:= DBGridPericiaMarinha.DataSource.
+        DataSet.FieldByName('Relatorio').AsString;
+        Visible := True;
+      end;
+    end
+    else
+      MaskEditRelatorio.Visible := False;
+  end;
+end;
+
+procedure TFrmPericiaMarinha.DBGridPericiaMarinhaKeyDown(Sender: TObject;
+  var Key: Word; Shift: TShiftState);
+begin
+  if (Key in [VK_DOWN])AND(DBGridPericiaMarinha.DataSource.DataSet.RecNo=
+  DBGridPericiaMarinha.DataSource.DataSet.RecordCount) then
+    Abort;
+end;
+
+procedure TFrmPericiaMarinha.DBGridPericiaMarinhaKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+  if (DBGridPericiaMarinha.SelectedField.FieldName = 'DeclaracaoPlataforma')OR
+  (DBGridPericiaMarinha.SelectedField.FieldName = 'Atendido')OR
+  (DBGridPericiaMarinha.SelectedField.FieldName = 'Retificado')OR
+  (DBGridPericiaMarinha.SelectedField.FieldName = 'Operacional')OR
+  (DBGridPericiaMarinha.SelectedField.FieldName = 'Plataforma')OR
+  (DBGridPericiaMarinha.SelectedField.FieldName = 'TipoEtapaServico')OR
+  (DBGridPericiaMarinha.SelectedField.FieldName = 'TipoRelatorio') then
+    Key:= #0
+  else if ((DBGridPericiaMarinha.SelectedField.FieldName = 'DataDeclaracaoPlataforma')AND
+  (FrmDataModule.DataSourcePericiaMarinha.DataSet.
+  FieldByName('DeclaracaoPlataforma').AsString = 'Sem Declaração')) then
+  begin
+    Key:= #0;
+  end;
+end;
+
+procedure TFrmPericiaMarinha.DBGridPericiaMarinhaTitleClick(Column: TColumn);
+begin
+  FrmPrincipal.configurarFiltro(1,Column.FieldName,IntToStr(Column.Index),
+  Column.ReadOnly,actFiltroInserir,actGridASC,actGridDESC,actSubstituirPor);
+  //======================================================
+  FrmPrincipal.titleGrid(ColunasLayout,'Consulta',
+  FrmDataModule.ADOQueryPericiaMarinha.SQL.Text);
+end;
+
+procedure TFrmPericiaMarinha.edtPlataformaKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+  if key = #13 then
+    actProcurar.Execute;
+end;
+
+procedure TFrmPericiaMarinha.edtPrazoCores1Change(Sender: TObject);
+begin
+  FrmDataModule.ADOQueryColibri.Edit;
+  FrmDataModule.DataSourceColibri.DataSet.
+  FieldByName('PrazoCores1').AsInteger:= TRUNC(edtPrazoCores1.Value);
+  FrmDataModule.ADOQueryColibri.Post;
+  PrazoCores1:= TRUNC(edtPrazoCores1.Value);
+  DBGridPericiaMarinha.Repaint;
+end;
+
+procedure TFrmPericiaMarinha.edtPrazoCores2Change(Sender: TObject);
+begin
+  FrmDataModule.ADOQueryColibri.Edit;
+  FrmDataModule.DataSourceColibri.DataSet.
+  FieldByName('PrazoCores2').AsInteger:= TRUNC(edtPrazoCores2.Value);
+  FrmDataModule.ADOQueryColibri.Post;
+  PrazoCores2:= TRUNC(edtPrazoCores2.Value);
+  DBGridPericiaMarinha.Repaint;
+end;
+
+procedure TFrmPericiaMarinha.FormClose(Sender: TObject;
+  var Action: TCloseAction);
+begin
+  Action:= caFree;
+  FrmPericiaMarinha:=nil;
+end;
+
+procedure TFrmPericiaMarinha.FormCreate(Sender: TObject);
+begin
+  //======ADICIONAR TABSET DO FOMRMDI=======
+  FrmPrincipal.MDIChildCreated(self.Handle);
+  FrmDataModule.ADOQueryColibri.Active:= false;
+  FrmDataModule.ADOQueryColibri.Active:= true;
+  PageControlMarinha.TabIndex:= 0;
+  PageControlTipos.TabIndex:= 0;
+
+  PrazoCores1:= FrmDataModule.DataSourceColibri.DataSet.
+  FieldByName('PrazoCores1').AsInteger;
+  PrazoCores2:= FrmDataModule.DataSourceColibri.DataSet.
+  FieldByName('PrazoCores2').AsInteger;
+  edtPrazoCores1.Value:= PrazoCores1;
+  edtPrazoCores2.Value:= PrazoCores2;
+  StrGridOrdemManutencao.ColCount:= 9;
+  StrGridOrdemManutencao.Cells[0,0]:= 'Sala';
+  StrGridOrdemManutencao.Cells[1,0]:= 'Ordem Manutenção';
+  StrGridOrdemManutencao.Cells[2,0]:= 'Centro Trabalho OM';
+  StrGridOrdemManutencao.Cells[3,0]:= 'Texto Breve OM';
+  StrGridOrdemManutencao.Cells[4,0]:= 'Operação';
+  StrGridOrdemManutencao.Cells[5,0]:= 'Centro Trabalho OP';
+  StrGridOrdemManutencao.Cells[6,0]:= 'Texto Breve OP';
+  StrGridOrdemManutencao.Cells[7,0]:= 'Trabalho Plan. (HH)';
+  StrGridOrdemManutencao.Cells[8,0]:= 'Trabalho Real.(HH)';
+  FrmPrincipal.AutoFitGrade(StrGridOrdemManutencao);
+  //==============================================
+  StrGridProrrogacaoData.ColCount:= 3;
+  StrGridProrrogacaoData.Cells[0,0]:= '';
+  StrGridProrrogacaoData.Cells[1,0]:= 'Dias';
+  StrGridProrrogacaoData.Cells[2,0]:= 'Observações';
+  FrmPrincipal.AutoFitGrade(StrGridProrrogacaoData);
+  StrGridProrrogacaoData.ColWidths[0]:= 20;
+  //==============================================
+  FrmPrincipal.SetUpColunasLayout(DBGridPericiaMarinha, ColunasLayout);
+  if ((FrmPrincipal.logPerfil = 'SEG')OR
+  (FrmPrincipal.logPerfil = 'SEG-PIOP')OR
+  (FrmPrincipal.logPerfil = 'Administrador')) then
+  begin
+    ToolBarProrrogacao.Enabled:= true;
+    StrGridProrrogacaoData.Options:= [goFixedVertLine,goFixedHorzLine,goVertLine,
+    goHorzLine,goRangeSelect,goDrawFocusSelected,goColSizing,goColMoving,goEditing];
+    DBNavigatorMarinha.Enabled:= true;
+    DBGridPericiaMarinha.ReadOnly:= false;
+    DBMemoDescricao.ReadOnly:= false;
+    DBMemoDescricao.Color:= clInfoBk;
+    DBMemoObservacao.ReadOnly:= false;
+    DBMemoObservacao.Color:= clInfoBk;
+    DBMemoMotivoNaoAtendimento.ReadOnly:= false;
+    DBMemoMotivoNaoAtendimento.Color:= clInfoBk;
+    DBMemoOQueFoiFeito.ReadOnly:= false;
+    DBMemoOQueFoiFeito.Color:= clInfoBk;
+    DBMemoMitigacao.ReadOnly:= false;
+    DBMemoMitigacao.Color:= clInfoBk;
+    DBMemoObservacaoCarta.ReadOnly:= false;
+    DBMemoObservacaoCarta.Color:= clInfoBk;
+    actSalvarProrrogacaoData.Enabled:= true;
+    actExcluirLinha.Enabled:= true;
+    actInserirLinha.Enabled:= true;
+    actOrdemManutencaoTodos.Enabled:= true;
+    SAPOM1.Enabled:= true;
+    edtPrazoCores1.Enabled:= true;
+    edtPrazoCores2.Enabled:= true;
+    PermiteAlterar:= true;
+    DBGridFotosMarinha.ReadOnly:= false;
+    actFotosExcluir.Enabled:= true;
+    actAnexarFoto.Enabled:= true;
+    FrmPrincipal.buscaFiledGrid1('DataRetificado','FALSE','',ColunasLayout,3,false);
+    FrmPrincipal.buscaFiledGrid1('Retificado','FALSE','',ColunasLayout,3,false);
+    FrmPrincipal.buscaFiledGrid1('Operacional','FALSE','',ColunasLayout,3,false);
+    FrmPrincipal.buscaFiledGrid1('Plataforma','FALSE','',ColunasLayout,3,false);
+    FrmPrincipal.buscaFiledGrid1('Relatorio','FALSE','',ColunasLayout,3,false);
+    FrmPrincipal.buscaFiledGrid1('Item','FALSE','',ColunasLayout,3,false);
+    FrmPrincipal.buscaFiledGrid1('Atendido','FALSE','',ColunasLayout,3,false);
+    FrmPrincipal.buscaFiledGrid1('DataAtendimento','FALSE','',ColunasLayout,3,false);
+    FrmPrincipal.buscaFiledGrid1('TipoEtapaServico','FALSE','',ColunasLayout,3,false);
+    FrmPrincipal.buscaFiledGrid1('Gerencia','FALSE','',ColunasLayout,3,false);
+    FrmPrincipal.buscaFiledGrid1('Responsavel','FALSE','',ColunasLayout,3,false);
+    FrmPrincipal.buscaFiledGrid1('TipoRelatorio','FALSE','',ColunasLayout,3,false);
+    FrmPrincipal.buscaFiledGrid1('DataPericia','FALSE','',ColunasLayout,3,false);
+    FrmPrincipal.buscaFiledGrid1('DeclaracaoPlataforma','FALSE','',ColunasLayout,3,false);
+    FrmPrincipal.buscaFiledGrid1('DataDeclaracaoPlataforma','FALSE','',ColunasLayout,3,false);
+    //==========================================================================
+  end
+  else if (FrmPrincipal.logPerfil = 'PCM') then
+  begin
+    ToolBarProrrogacao.Enabled:= false;
+    StrGridProrrogacaoData.Options:= [goFixedVertLine,goFixedHorzLine,goVertLine,
+    goHorzLine,goRangeSelect,goDrawFocusSelected,goColSizing,goColMoving];
+    DBNavigatorMarinha.Enabled:= false;
+    DBGridPericiaMarinha.ReadOnly:= false;
+    DBMemoDescricao.ReadOnly:= true;
+    DBMemoDescricao.Color:= clSilver;
+    DBMemoObservacao.ReadOnly:= false;
+    DBMemoObservacao.Color:= clInfoBk;
+    DBMemoMotivoNaoAtendimento.ReadOnly:= true;
+    DBMemoMotivoNaoAtendimento.Color:= clSilver;
+    DBMemoOQueFoiFeito.ReadOnly:= true;
+    DBMemoOQueFoiFeito.Color:= clSilver;
+    DBMemoMitigacao.ReadOnly:= true;
+    DBMemoMitigacao.Color:= clSilver;
+    DBMemoObservacaoCarta.ReadOnly:= true;
+    DBMemoObservacaoCarta.Color:= clSilver;
+    actSalvarProrrogacaoData.Enabled:= false;
+    actExcluirLinha.Enabled:= false;
+    actInserirLinha.Enabled:= false;
+    actOrdemManutencaoTodos.Enabled:= true;
+    SAPOM1.Enabled:= true;
+    edtPrazoCores1.Enabled:= false;
+    edtPrazoCores2.Enabled:= false;
+    PermiteAlterar:= False;
+    DBGridFotosMarinha.ReadOnly:= false;
+    actFotosExcluir.Enabled:= true;
+    actAnexarFoto.Enabled:= true;
+    FrmPrincipal.buscaFiledGrid1('DataRetificado','TRUE','',ColunasLayout,3,false);
+    FrmPrincipal.buscaFiledGrid1('Retificado','TRUE','',ColunasLayout,3,false);
+    FrmPrincipal.buscaFiledGrid1('Operacional','TRUE','',ColunasLayout,3,false);
+    FrmPrincipal.buscaFiledGrid1('Plataforma','TRUE','',ColunasLayout,3,false);
+    FrmPrincipal.buscaFiledGrid1('Relatorio','TRUE','',ColunasLayout,3,false);
+    FrmPrincipal.buscaFiledGrid1('Item','TRUE','',ColunasLayout,3,false);
+    FrmPrincipal.buscaFiledGrid1('Atendido','FALSE','',ColunasLayout,3,false);
+    FrmPrincipal.buscaFiledGrid1('DataAtendimento','FALSE','',ColunasLayout,3,false);
+    FrmPrincipal.buscaFiledGrid1('TipoEtapaServico','TRUE','',ColunasLayout,3,false);
+    FrmPrincipal.buscaFiledGrid1('Gerencia','TRUE','',ColunasLayout,3,false);
+    FrmPrincipal.buscaFiledGrid1('Responsavel','TRUE','',ColunasLayout,3,false);
+    FrmPrincipal.buscaFiledGrid1('TipoRelatorio','TRUE','',ColunasLayout,3,false);
+    FrmPrincipal.buscaFiledGrid1('DataPericia','TRUE','',ColunasLayout,3,false);
+    FrmPrincipal.buscaFiledGrid1('DeclaracaoPlataforma','TRUE','',ColunasLayout,3,false);
+    FrmPrincipal.buscaFiledGrid1('DataDeclaracaoPlataforma','TRUE','',ColunasLayout,3,false);
+  end
+  else
+  begin
+    ToolBarProrrogacao.Enabled:= false;
+    StrGridProrrogacaoData.Options:= [goFixedVertLine,goFixedHorzLine,goVertLine,
+    goHorzLine,goRangeSelect,goDrawFocusSelected,goColSizing,goColMoving];
+    StrGridOrdemManutencao.Options:= [goFixedVertLine,goFixedHorzLine,goVertLine,
+    goHorzLine,goRangeSelect,goDrawFocusSelected,goColSizing,goColMoving];
+    DBNavigatorMarinha.Enabled:= false;
+    DBGridPericiaMarinha.ReadOnly:= true;
+    DBMemoDescricao.ReadOnly:= true;
+    DBMemoDescricao.Color:= clSilver;
+    DBMemoObservacao.ReadOnly:= true;
+    DBMemoObservacao.Color:= clSilver;
+    DBMemoMotivoNaoAtendimento.ReadOnly:= true;
+    DBMemoMotivoNaoAtendimento.Color:= clSilver;
+    DBMemoOQueFoiFeito.ReadOnly:= true;
+    DBMemoOQueFoiFeito.Color:= clSilver;
+    DBMemoMitigacao.ReadOnly:= true;
+    DBMemoMitigacao.Color:= clSilver;
+    DBMemoObservacaoCarta.ReadOnly:= true;
+    DBMemoObservacaoCarta.Color:= clSilver;
+    actSalvarProrrogacaoData.Enabled:= false;
+    actExcluirLinha.Enabled:= false;
+    actInserirLinha.Enabled:= false;
+    actOrdemManutencaoTodos.Enabled:= false;
+    SAPOM1.Enabled:= false;
+    PermiteAlterar:= false;
+    edtPrazoCores1.Enabled:= false;
+    edtPrazoCores2.Enabled:= false;
+  end;
+
+  FrmPrincipal.SetUpColunasLayout(DBGridResumoCarta, ColunasLayoutResumoCarta);
+  FrmPrincipal.CarregarRLColunas('Marinha.txt', ColunasLayout);
+  FrmPrincipal.CarregarColunasGRID(FrmDataModule.ADOConnectionConsulta,
+  'tblPericiaMarinha',DBGridPericiaMarinha,ColunasLayout);
+  actConfigPickList.Execute;
+  FrmPrincipal.buscaFiledGrid1('Retificado','Em aberto','Contem',ColunasLayout,4,false);
+  actProcurar.Execute;
+end;
+
+procedure TFrmPericiaMarinha.FormDestroy(Sender: TObject);
+begin
+  FrmPrincipal.MDIChildDestroyed(self.Handle);
+end;
+
+procedure TFrmPericiaMarinha.GRFAnalise(DataTipo: String);
+  var
+    BarSeriesGRF: TBarSeries;
+    AVencer,NPericia,Retificados,i,j,EixoX,MenorAno,MaiorAno,NumRegistros,
+    AnoInicioPericia,AnoFimPericia,AnoInicioRetificado,AnoFimRetificado: Integer;
+    SQLString,Mes: String;
+    Data1,Data2: TDateTime;
+begin
+  BarSeriesGRF:= carregaSerie;
+  ChartGrafico.Legend.Visible:= true;
+  ChartGrafico.Legend.CheckBoxes:= false;
+  ChartGrafico.Axes.Left.Title.Caption:= 'N° de Pendências';
+  //=========================================
+  NumRegistros:= FrmDataModule.ADOQueryPericiaMarinha.RecordCount;
+  FrmDataModule.ADOQueryPericiaMarinha.Sort := DataTipo+' ASC';
+  FrmDataModule.ADOQueryPericiaMarinha.First;
+  Data1:= FrmDataModule.DataSourcePericiaMarinha.DataSet.
+  FieldByName(DataTipo).AsDateTime;
+  AnoInicioPericia:= YearOF(Data1);
+  if AnoInicioPericia = 1899 then
+    for I := 1 to NumRegistros do
+    begin
+      Data1:= FrmDataModule.DataSourcePericiaMarinha.DataSet.
+      FieldByName(DataTipo).AsDateTime;
+      AnoInicioPericia:= YearOF(Data1);
+      if AnoInicioPericia = 1899 then
+        FrmDataModule.ADOQueryPericiaMarinha.Next
+      else
+        break;
+    end;
+  FrmDataModule.ADOQueryPericiaMarinha.Last;
+  Data2:= FrmDataModule.DataSourcePericiaMarinha.DataSet.
+  FieldByName(DataTipo).AsDateTime;
+  AnoFimPericia:= YearOF(Data2);
+  //=========================================
+  FrmDataModule.ADOQueryPericiaMarinha.Sort := 'DataRetificado ASC';
+  FrmDataModule.ADOQueryPericiaMarinha.First;
+  Data1:= FrmDataModule.DataSourcePericiaMarinha.DataSet.
+  FieldByName('DataRetificado').AsDateTime;
+  AnoInicioRetificado:= YearOF(Data1);
+  if AnoInicioRetificado = 1899 then
+    for I := 1 to NumRegistros do
+    begin
+      Data1:= FrmDataModule.DataSourcePericiaMarinha.DataSet.
+      FieldByName('DataRetificado').AsDateTime;
+      AnoInicioRetificado:= YearOF(Data1);
+      if AnoInicioRetificado = 1899 then
+        FrmDataModule.ADOQueryPericiaMarinha.Next
+      else
+        break;
+    end;
+  FrmDataModule.ADOQueryPericiaMarinha.Last;
+  Data2:= FrmDataModule.DataSourcePericiaMarinha.DataSet.
+  FieldByName('DataRetificado').AsDateTime;
+  AnoFimRetificado:= YearOF(Data2);
+  if (AnoInicioRetificado < AnoInicioPericia)AND(AnoInicioRetificado<>1899) then
+    MenorAno:= AnoInicioRetificado
+  else
+    MenorAno:= AnoInicioPericia;
+  if AnoFimPericia > AnoFimRetificado then
+    MaiorAno:= AnoFimPericia
+  else
+    MaiorAno:= AnoFimRetificado;
+  //==========================================
+  SQLString:= frmPrincipal.SQLStringFiltroTabela(ColunasLayout,false);
+  if SQLString<>'' then
+    SQLString:= 'AND'+SQLString;
+  FrmPrincipal.ProgressBarIncializa(12,'Gerando gráfico...');
+  EixoX:= 0;
+  NPericia:= 0;
+  AVencer:= 0;
+  for j := MenorAno to MaiorAno do
+    for i := 1 to 12 do
+    begin
+      try
+        //Em aberto
+        if DataTipo = 'DataVencimento' then
+        begin
+          FrmDataModule.ADOQueryTemporarioDBConsulta1.Close;
+          FrmDataModule.ADOQueryTemporarioDBConsulta1.SQL.Clear;
+          FrmDataModule.ADOQueryTemporarioDBConsulta1.SQL.Add(
+          'SELECT tblPericiaMarinha.* FROM tblPericiaMarinha '+
+          'WHERE ((MONTH('+DataTipo+') = '+QuotedStr(IntToStr(i))+
+          ')AND(YEAR('+DataTipo+') = "'+IntToStr(j)+'")'+
+          'AND(Retificado LIKE "Em aberto"))'+SQLString+';');
+          FrmDataModule.ADOQueryTemporarioDBConsulta1.Open;
+          AVencer:= FrmDataModule.ADOQueryTemporarioDBConsulta1.RecordCount;
+        end
+        else if DataTipo = 'DataPericia' then
+        begin
+          FrmDataModule.ADOQueryTemporarioDBConsulta1.Close;
+          FrmDataModule.ADOQueryTemporarioDBConsulta1.SQL.Clear;
+          FrmDataModule.ADOQueryTemporarioDBConsulta1.SQL.Add(
+          'SELECT tblPericiaMarinha.* FROM tblPericiaMarinha '+
+          'WHERE ((MONTH('+DataTipo+') = '+QuotedStr(IntToStr(i))+
+          ')AND(YEAR('+DataTipo+') = "'+IntToStr(j)+'"))'+SQLString+';');
+          FrmDataModule.ADOQueryTemporarioDBConsulta1.Open;
+          NPericia:= FrmDataModule.ADOQueryTemporarioDBConsulta1.RecordCount;
+        end;
+        //Retificados
+        FrmDataModule.ADOQueryTemporarioDBConsulta1.Close;
+        FrmDataModule.ADOQueryTemporarioDBConsulta1.SQL.Clear;
+        FrmDataModule.ADOQueryTemporarioDBConsulta1.SQL.Add(
+        'SELECT tblPericiaMarinha.* FROM tblPericiaMarinha '+
+        'WHERE ((MONTH(DataRetificado) = '+QuotedStr(IntToStr(i))+
+        ')AND(YEAR(DataRetificado) = "'+IntToStr(j)+'")'+
+        'AND(Retificado LIKE "Retificado"))'+SQLString+';');
+        FrmDataModule.ADOQueryTemporarioDBConsulta1.Open;
+        Retificados:= FrmDataModule.ADOQueryTemporarioDBConsulta1.RecordCount;
+        case i of
+          1: Mes:= 'JAN/'+IntToStr(j);
+          2: Mes:= 'FEV/'+IntToStr(j);
+          3: Mes:= 'MAR/'+IntToStr(j);
+          4: Mes:= 'ABR/'+IntToStr(j);
+          5: Mes:= 'MAI/'+IntToStr(j);
+          6: Mes:= 'JUN/'+IntToStr(j);
+          7: Mes:= 'JUL/'+IntToStr(j);
+          8: Mes:= 'AGO/'+IntToStr(j);
+          9: Mes:= 'SET/'+IntToStr(j);
+          10: Mes:= 'OUT/'+IntToStr(j);
+          11: Mes:= 'NOV/'+IntToStr(j);
+          12: Mes:= 'DEZ/'+IntToStr(j);
+        end;
+        //=============================================================
+        if ((DataTipo = 'DataVencimento')AND(AVencer > 0)) then
+        begin
+          BarSeriesGRF.AddXY(EixoX,AVencer,Mes,clRed);
+          EixoX:= EixoX+1;
+        end;
+        if ((DataTipo = 'DataPericia')AND(NPericia > 0)) then
+        begin
+          BarSeriesGRF.AddXY(EixoX,NPericia,Mes,clBlue);
+          EixoX:= EixoX+1;
+        end;
+        if (Retificados > 0) then
+        begin
+          BarSeriesGRF.AddXY(EixoX,Retificados,Mes,clLime);
+          EixoX:= EixoX+1;
+        end;
+        FrmPrincipal.ProgressBarIncremento(1);
+      except
+      end;
+    end;
+  ChartGrafico.BottomAxis.Visible:= true;
+  ChartGrafico.AddSeries(BarSeriesGRF);
+  FrmPrincipal.ProgressBarAtualizar;
+end;
+
+procedure TFrmPericiaMarinha.GRFVencimento(Tipo: Integer);
+  var
+    BarSeriesGRF: TBarSeries;
+    NumRegistros,i,cor: Integer;
+    SQLString,DataProcura: String;
+    DataEixo,DataVemciemtnoCarta: TDateTime;
+    ListaData: TStringList;
+begin
+  BarSeriesGRF:= carregaSerie;
+  ChartGrafico.Legend.Visible:= true;
+  ChartGrafico.Legend.CheckBoxes:= false;
+  ChartGrafico.Axes.Left.Title.Caption:= 'N° de Pendências';
+  //==========================================
+  FrmDataModule.ADOQueryTemporarioDBConsulta1.Close;
+  FrmDataModule.ADOQueryTemporarioDBConsulta1.SQL.Clear;
+  FrmDataModule.ADOQueryTemporarioDBConsulta1.SQL.Add(
+  'SELECT tblPericiaMarinha.DataVencimento FROM tblPericiaMarinha '+
+  'GROUP BY tblPericiaMarinha.DataVencimento ORDER BY DataVencimento;');
+  FrmDataModule.ADOQueryTemporarioDBConsulta1.Open;
+  ListaData:=TStringList.Create;
+  ListaData.Clear;
+  while not FrmDataModule.ADOQueryTemporarioDBConsulta1.Eof do
+  begin
+    ListaData.Add(FrmDataModule.ADOQueryTemporarioDBConsulta1.FieldByName('DataVencimento').AsString);
+    FrmDataModule.ADOQueryTemporarioDBConsulta1.Next;
+  end;
+  //==========================================
+  cor:= 0;
+  SQLString:= frmPrincipal.SQLStringFiltroTabela(ColunasLayout,true);
+    if SQLString<>'' then
+    SQLString:= SQLString+'AND'
+  else
+    SQLString:= 'WHERE ';
+  FrmPrincipal.ProgressBarIncializa(ListaData.Count,'Gerando gráfico...');
+  for I := 0 to ListaData.Count-1 do
+  begin
+    try
+      DataEixo:= StrToDateTime(ListaData[i]);
+      DataProcura:= (FormatDateTime('dd/mm/yyyy',DataEixo));
+      FrmDataModule.ADOQueryTemporarioDBConsulta1.Close;
+      FrmDataModule.ADOQueryTemporarioDBConsulta1.SQL.Clear;
+      FrmDataModule.ADOQueryTemporarioDBConsulta1.SQL.Add(
+      'SELECT tblPericiaMarinha.* FROM tblPericiaMarinha '+
+      SQLString+'((DataVencimento LIKE '+QuotedStr(Dataprocura)+'));');
+      //=============================================================
+      FrmDataModule.ADOQueryTemporarioDBConsulta1.Open;
+      NumRegistros:= FrmDataModule.ADOQueryTemporarioDBConsulta1.RecordCount;
+      //=============================================================
+      if Tipo = 1 then
+      begin
+        DataVemciemtnoCarta:= StrToDate(DataProcura);
+        DataVemciemtnoCarta:= IncDay(DataVemciemtnoCarta,-PrazoCores1);
+        DataProcura:= DateToStr(DataVemciemtnoCarta);
+      end;
+      if (NumRegistros > 0) then
+      begin
+        BarSeriesGRF.AddXY(DataEixo,NumRegistros,DataProcura,
+        FrmPrincipal.CoresAuto[cor]);
+        if cor <= 13 then
+          cor:= i+1
+        else
+          cor:= 0;
+      end;
+      FrmPrincipal.ProgressBarIncremento(1);
+    except
+    end;
+  end;
+  ChartGrafico.AddSeries(BarSeriesGRF);
+  FrmPrincipal.ProgressBarAtualizar;
+end;
+
+procedure TFrmPericiaMarinha.MaskEditRelatorioChange(Sender: TObject);
+begin
+  try
+    if not (DBGridPericiaMarinha.DataSource.State in [dsEdit, dsInsert]) then
+      DBGridPericiaMarinha.DataSource.Edit;
+
+    DBGridPericiaMarinha.DataSource.DataSet.FieldByName('Relatorio').AsString:=
+    MaskEditRelatorio.Text;
+  except
+
+  end;
+end;
+
+procedure TFrmPericiaMarinha.PageControleCartaChange(Sender: TObject);
+begin
+  case PageControleCarta.TabIndex of
+    1: actProcurarResumoCarta.Execute;
+  end;
+end;
+
+procedure TFrmPericiaMarinha.PanelTituloAjuda1MouseDown(Sender: TObject;
+  Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
+begin
+  FrmPrincipal.Capturing := true;
+  FrmPrincipal.MouseDownSpot.X := X;
+  FrmPrincipal.MouseDownSpot.Y := Y;
+end;
+
+procedure TFrmPericiaMarinha.PanelTituloAjudaMouseDown(Sender: TObject;
+  Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
+begin
+  FrmPrincipal.Capturing := true;
+  FrmPrincipal.MouseDownSpot.X := X;
+  FrmPrincipal.MouseDownSpot.Y := Y;
+end;
+
+procedure TFrmPericiaMarinha.SAPOM1Click(Sender: TObject);
+begin
+  try
+    actOrdemManutencao.Execute;
+    actCarregarOrdemManutencao.Execute;
+  except
+    ShowMessage('Não foi possível conectar com o banco de dados');
+  end;
+end;
+
+procedure TFrmPericiaMarinha.StrGridOrdemManutencaoFixedCellClick(
+  Sender: TObject; ACol, ARow: Integer);
+begin
+  FrmPrincipal.clasifica(StrGridOrdemManutencao,ACol,true);
+  FrmPrincipal.AutoFitGrade(StrGridOrdemManutencao);
+end;
+
+procedure TFrmPericiaMarinha.StrGridProrrogacaoDataFixedCellClick(
+  Sender: TObject; ACol, ARow: Integer);
+begin
+  FrmPrincipal.clasifica(StrGridProrrogacaoData,ACol,true);
+  FrmPrincipal.AutoFitGrade(StrGridProrrogacaoData);
+end;
+
+procedure TFrmPericiaMarinha.StrGridProrrogacaoDataKeyDown(Sender: TObject;
+  var Key: Word; Shift: TShiftState);
+begin
+  if (Key in [VK_DOWN])AND
+  (StrGridProrrogacaoData.Row=StrGridProrrogacaoData.RowCount-1) then
+    actInserirLinha.Execute;
+end;
+
+procedure TFrmPericiaMarinha.btnStretchClick(Sender: TObject);
+begin
+  if btnStretch.Down then
+    ImageFoto.Stretch:= true
+  else
+    ImageFoto.Stretch:= false;
+end;
+
+procedure TFrmPericiaMarinha.ToolButton14Click(Sender: TObject);
+begin
+  MessageBox(0,PChar(
+  'Verde: (Data de Vencimento) ≥ (Prazo Cores 2)'+#13+
+  'Vermelho: (Data de Vencimento) ≤ (Prazo Cores 1)'+#13+
+  'Amarelo:  (Prazo Cores 2) > (Data de Vencimento) > (Prazo Cores 1)'+#13+
+  'Cinza: Itens retificados.'),
+  'Cores: Data de Vencimento',MB_ICONINFORMATION)
+end;
+
+procedure TFrmPericiaMarinha.WMMDIACTIVATE(var msg: TWMMDIACTIVATE);
+var
+  active: TWinControl;
+  idx: Integer;
+begin
+  active := FindControl(msg.ActiveWnd) ;
+
+  if Assigned(active) then
+  begin
+    idx := FrmPrincipal.mdiChildrenTabs.Tabs.IndexOfObject(TObject(msg.ActiveWnd));
+    FrmPrincipal.mdiChildrenTabs.Tag := -1;
+    FrmPrincipal.mdiChildrenTabs.TabIndex := idx;
+    FrmPrincipal.mdiChildrenTabs.Tag := 0;
+  end;
+end;
+
+end.

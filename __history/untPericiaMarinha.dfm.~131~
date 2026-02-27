@@ -1,0 +1,2288 @@
+object FrmPericiaMarinha: TFrmPericiaMarinha
+  Left = 0
+  Top = 0
+  Caption = 'Per'#237'cias de Marinha'
+  ClientHeight = 488
+  ClientWidth = 1370
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  FormStyle = fsMDIChild
+  OldCreateOrder = False
+  Visible = True
+  WindowState = wsMaximized
+  OnClose = FormClose
+  OnCreate = FormCreate
+  OnDestroy = FormDestroy
+  PixelsPerInch = 96
+  TextHeight = 13
+  object PageControlMarinha: TPageControl
+    Left = 0
+    Top = 0
+    Width = 1370
+    Height = 488
+    ActivePage = TabSheet1
+    Align = alClient
+    TabOrder = 0
+    object TabSheet1: TTabSheet
+      Caption = 'Per'#237'cias de Marinha'
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
+      object PanelTudo: TPanel
+        Left = 0
+        Top = 0
+        Width = 1362
+        Height = 460
+        Align = alClient
+        TabOrder = 0
+        object Splitter2: TSplitter
+          Left = 1
+          Top = 177
+          Width = 1360
+          Height = 3
+          Cursor = crVSplit
+          Align = alTop
+          ExplicitLeft = 3
+          ExplicitTop = 186
+        end
+        object ToolBar1: TToolBar
+          Left = 1
+          Top = 26
+          Width = 1360
+          Height = 29
+          ButtonWidth = 25
+          Caption = 'ToolBar1'
+          DrawingStyle = dsGradient
+          EdgeBorders = [ebLeft, ebTop, ebRight, ebBottom]
+          HotTrackColor = clRed
+          Images = FrmPrincipal.ImageList1
+          TabOrder = 0
+          object DBNavigatorMarinha: TDBNavigator
+            Left = 0
+            Top = 0
+            Width = 138
+            Height = 22
+            DataSource = FrmDataModule.DataSourcePericiaMarinha
+            VisibleButtons = [nbInsert, nbDelete, nbEdit, nbPost, nbCancel, nbRefresh]
+            Enabled = False
+            Hints.Strings = (
+              'Primeiro'
+              'Anterior'
+              'Pr'#243'ximo'
+              #218'ltimo'
+              'Inserir'
+              'Excluir'
+              'Editar'
+              'Gravar'
+              'Cancelar'
+              'Atualizar'
+              'Aplicar atualiza'#231#245'es'
+              'Calcelar atualiza'#231#245'es')
+            ParentShowHint = False
+            ShowHint = True
+            TabOrder = 3
+          end
+          object ToolButton6: TToolButton
+            Left = 138
+            Top = 0
+            Width = 8
+            Caption = 'ToolButton6'
+            ImageIndex = 464
+            Style = tbsSeparator
+          end
+          object ToolButton11: TToolButton
+            Left = 146
+            Top = 0
+            Hint = 'Carregar Ordens de Manuten'#231#227'o'
+            Caption = 'ToolButton11'
+            DropdownMenu = PopupMenuOM
+            ImageIndex = 463
+            Style = tbsDropDown
+          end
+          object ToolButton9: TToolButton
+            Left = 186
+            Top = 0
+            Hint = 'Exportar para o Excel'
+            Caption = 'ToolButton9'
+            DropdownMenu = PopupMenuExcel
+            ImageIndex = 54
+            Style = tbsDropDown
+          end
+          object BitBtn1: TBitBtn
+            Left = 226
+            Top = 0
+            Width = 69
+            Height = 22
+            Action = actLimparFiltros
+            Caption = 'Limpar'
+            ParentShowHint = False
+            ShowHint = True
+            TabOrder = 5
+          end
+          object BitBtn6: TBitBtn
+            Left = 295
+            Top = 0
+            Width = 69
+            Height = 22
+            Action = actFiltrosTabela
+            Caption = 'Filtros'
+            ParentShowHint = False
+            ShowHint = True
+            TabOrder = 1
+          end
+          object BitBtn2: TBitBtn
+            Left = 364
+            Top = 0
+            Width = 75
+            Height = 22
+            Action = actLayoutJanela
+            Caption = 'Layout'
+            ParentShowHint = False
+            ShowHint = True
+            TabOrder = 2
+          end
+          object BitBtn13: TBitBtn
+            Left = 439
+            Top = 0
+            Width = 69
+            Height = 22
+            Action = actRelatorioMarinha
+            Caption = 'Relat'#243'rio'
+            ParentShowHint = False
+            ShowHint = True
+            TabOrder = 9
+          end
+          object BitBtn4: TBitBtn
+            Left = 508
+            Top = 0
+            Width = 69
+            Height = 22
+            Action = Carta
+            Caption = 'Carta'
+            ParentShowHint = False
+            ShowHint = True
+            TabOrder = 4
+          end
+          object BitBtn16: TBitBtn
+            Left = 577
+            Top = 0
+            Width = 69
+            Height = 22
+            Action = actMACLetter
+            Caption = 'Minuta'
+            ParentShowHint = False
+            ShowHint = True
+            TabOrder = 8
+          end
+          object edtPrazoCores1: TNumIO2
+            Left = 646
+            Top = 0
+            Width = 135
+            Height = 22
+            Hint = 
+              'Prazo em rela'#231#227'o a HOJE para condicional de cores da coluna "Dat' +
+              'a Vencimento"'
+            Alignment = taCenter
+            AutoSize = False
+            Beep = False
+            ButVisible = False
+            But3D = True
+            ButHeight = 22
+            ButWidth = 18
+            ButIncrem = 1.000000000000000000
+            ButSpace = 3
+            ButColor = clSilver
+            ColorBoxBG = clWhite
+            ColorBoxText = clBlack
+            ColorOutBG = clBtnFace
+            ColorOutText = clBlack
+            ColorScheme = csBWG
+            ColorWarnBG = 1619591152
+            ColorWarnText = clRed
+            DecPlaceSep = dsBoth
+            Enabled = True
+            FixPointDecPlaces = 2
+            FrameStyle = fsLowered
+            GaugeColor = clNavy
+            GaugeColorBg = clSilver
+            GaugeColorFrame = clGray
+            GaugeHeight = 8
+            GaugeFrameStyle = fsLowered
+            GaugeLeftMargin = 35
+            GaugeTopMargin = 3
+            GaugeVisible = False
+            GaugeWidth = 82
+            HideSelection = True
+            InputFormat = itInt
+            LeftSpace = 80
+            LeftText = 'Prazo Cores 1:'
+            LeftTextAlignment = taRightJustify
+            ParentShowHint = False
+            RangeHigh = 1000.000000000000000000
+            RangeLow = 0.000000000000000000
+            ReadOnly = False
+            RightTextAlignment = taLeftJustify
+            ShowHint = True
+            SignificantDigits = 6
+            TabOrder = 6
+            Text = '15'
+            TextBoxWidth = 50
+            Value = 15.000000000000000000
+            OnChange = edtPrazoCores1Change
+          end
+          object edtPrazoCores2: TNumIO2
+            Left = 781
+            Top = 0
+            Width = 135
+            Height = 22
+            Hint = 
+              'Prazo em rela'#231#227'o a HOJE para condicional de cores da coluna "Dat' +
+              'a Vencimento"'
+            Alignment = taCenter
+            AutoSize = False
+            Beep = False
+            ButVisible = False
+            But3D = True
+            ButHeight = 22
+            ButWidth = 18
+            ButIncrem = 1.000000000000000000
+            ButSpace = 3
+            ButColor = clSilver
+            ColorBoxBG = clWhite
+            ColorBoxText = clBlack
+            ColorOutBG = clBtnFace
+            ColorOutText = clBlack
+            ColorScheme = csBWG
+            ColorWarnBG = 1619591152
+            ColorWarnText = clRed
+            DecPlaceSep = dsBoth
+            Enabled = True
+            FixPointDecPlaces = 2
+            FrameStyle = fsLowered
+            GaugeColor = clNavy
+            GaugeColorBg = clSilver
+            GaugeColorFrame = clGray
+            GaugeHeight = 8
+            GaugeFrameStyle = fsLowered
+            GaugeLeftMargin = 35
+            GaugeTopMargin = 3
+            GaugeVisible = False
+            GaugeWidth = 82
+            HideSelection = True
+            InputFormat = itInt
+            LeftSpace = 80
+            LeftText = 'Prazo Cores 2:'
+            LeftTextAlignment = taRightJustify
+            ParentShowHint = False
+            RangeHigh = 1000.000000000000000000
+            RangeLow = 0.000000000000000000
+            ReadOnly = False
+            RightTextAlignment = taLeftJustify
+            ShowHint = True
+            SignificantDigits = 6
+            TabOrder = 7
+            Text = '30'
+            TextBoxWidth = 50
+            Value = 30.000000000000000000
+            OnChange = edtPrazoCores2Change
+          end
+          object ToolButton14: TToolButton
+            Left = 916
+            Top = 0
+            Hint = 'Informa'#231#227'o sobre o tratamento de cores na data de vencimento'
+            Caption = 'ToolButton14'
+            ImageIndex = 22
+            ParentShowHint = False
+            ShowHint = True
+            OnClick = ToolButton14Click
+          end
+          object DBEdit1: TDBEdit
+            Left = 941
+            Top = 0
+            Width = 34
+            Height = 22
+            DataField = 'idPericiaMarinha'
+            DataSource = FrmDataModule.DataSourcePericiaMarinha
+            TabOrder = 0
+            Visible = False
+            OnChange = actCarregarOrdemManutencaoExecute
+          end
+        end
+        object PanelTitulo: TPanel
+          Left = 1
+          Top = 1
+          Width = 1360
+          Height = 25
+          Align = alTop
+          Caption = 'Controle de Per'#237'cias de Marinha'
+          Color = clGradientActiveCaption
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -13
+          Font.Name = 'Tahoma'
+          Font.Style = [fsBold]
+          ParentBackground = False
+          ParentFont = False
+          TabOrder = 1
+        end
+        object DBGridPericiaMarinha: TDBGrid
+          Left = 1
+          Top = 180
+          Width = 1360
+          Height = 260
+          Align = alClient
+          DataSource = FrmDataModule.DataSourcePericiaMarinha
+          TabOrder = 2
+          TitleFont.Charset = DEFAULT_CHARSET
+          TitleFont.Color = clWindowText
+          TitleFont.Height = -11
+          TitleFont.Name = 'Tahoma'
+          TitleFont.Style = []
+          OnColumnMoved = DBGridPericiaMarinhaColumnMoved
+          OnDrawColumnCell = DBGridPericiaMarinhaDrawColumnCell
+          OnKeyDown = DBGridPericiaMarinhaKeyDown
+          OnKeyPress = DBGridPericiaMarinhaKeyPress
+          OnTitleClick = DBGridPericiaMarinhaTitleClick
+          Columns = <
+            item
+              Alignment = taCenter
+              Expanded = False
+              FieldName = 'DataRetificado'
+              Title.Alignment = taCenter
+              Title.Caption = 'Data Retificado'
+              Width = 84
+              Visible = True
+            end
+            item
+              Alignment = taCenter
+              Expanded = False
+              FieldName = 'Retificado'
+              PickList.Strings = (
+                'Retificado'
+                'Em Aberto')
+              Title.Alignment = taCenter
+              Width = 76
+              Visible = True
+            end
+            item
+              Alignment = taCenter
+              Expanded = False
+              FieldName = 'Operacional'
+              Title.Alignment = taCenter
+              Title.Caption = 'Condi'#231#227'o Plataforma'
+              Width = 105
+              Visible = True
+            end
+            item
+              Alignment = taCenter
+              Expanded = False
+              FieldName = 'Plataforma'
+              Title.Alignment = taCenter
+              Width = 77
+              Visible = True
+            end
+            item
+              Alignment = taCenter
+              Expanded = False
+              FieldName = 'Relatorio'
+              Title.Alignment = taCenter
+              Title.Caption = 'Relat'#243'rio'
+              Visible = True
+            end
+            item
+              Alignment = taCenter
+              Expanded = False
+              FieldName = 'Item'
+              Title.Alignment = taCenter
+              Visible = True
+            end
+            item
+              Alignment = taCenter
+              Expanded = False
+              FieldName = 'DataVencimento'
+              ReadOnly = True
+              Title.Alignment = taCenter
+              Title.Caption = 'Data Vencimento'
+              Width = 92
+              Visible = True
+            end
+            item
+              Alignment = taCenter
+              Expanded = False
+              FieldName = 'DataVencimentoCarta'
+              Title.Alignment = taCenter
+              Title.Caption = 'Vencimento Carta'
+              Width = 93
+              Visible = True
+            end
+            item
+              Alignment = taCenter
+              Expanded = False
+              FieldName = 'Atendido'
+              Title.Alignment = taCenter
+              Visible = True
+            end
+            item
+              Alignment = taCenter
+              Expanded = False
+              FieldName = 'DataAtendimento'
+              Title.Alignment = taCenter
+              Title.Caption = 'Data Atendimento'
+              Width = 95
+              Visible = True
+            end
+            item
+              Expanded = False
+              FieldName = 'TipoEtapaServico'
+              Title.Alignment = taCenter
+              Title.Caption = 'Tipo de Etapa de Servi'#231'o'
+              Width = 143
+              Visible = True
+            end
+            item
+              Alignment = taCenter
+              Expanded = False
+              FieldName = 'Gerencia'
+              Title.Alignment = taCenter
+              Title.Caption = 'Ger'#234'ncia'
+              Visible = True
+            end
+            item
+              Expanded = False
+              FieldName = 'Responsavel'
+              Title.Alignment = taCenter
+              Title.Caption = 'Respons'#225'vel'
+              Width = 80
+              Visible = True
+            end
+            item
+              Alignment = taCenter
+              Expanded = False
+              FieldName = 'TotalDiasProrrogacao'
+              ReadOnly = True
+              Title.Alignment = taCenter
+              Title.Caption = 'Prorroga'#231#227'o'
+              Width = 75
+              Visible = True
+            end
+            item
+              Alignment = taCenter
+              Expanded = False
+              FieldName = 'DataDeclaracaoPlataforma'
+              Title.Alignment = taCenter
+              Title.Caption = 'Validade Declar. Plat.'
+              Width = 106
+              Visible = True
+            end
+            item
+              Alignment = taCenter
+              Expanded = False
+              FieldName = 'TipoRelatorio'
+              Title.Alignment = taCenter
+              Title.Caption = 'Tipo Relat'#243'rio'
+              Width = 98
+              Visible = True
+            end
+            item
+              Alignment = taCenter
+              Expanded = False
+              FieldName = 'DataPericia'
+              Title.Alignment = taCenter
+              Title.Caption = 'Data Per'#237'cia'
+              Width = 81
+              Visible = True
+            end
+            item
+              Alignment = taCenter
+              Expanded = False
+              FieldName = 'DeclaracaoPlataforma'
+              PickList.Strings = (
+                'Sem Declara'#231#227'o'
+                'Provis'#243'ria'
+                'Conformidade')
+              Title.Alignment = taCenter
+              Title.Caption = 'Declara'#231#227'o Plataforma'
+              Width = 115
+              Visible = True
+            end
+            item
+              Alignment = taCenter
+              Expanded = False
+              FieldName = 'CriadoPor'
+              ReadOnly = True
+              Title.Alignment = taCenter
+              Title.Caption = 'Criado Por'
+              Visible = True
+            end
+            item
+              Alignment = taCenter
+              Expanded = False
+              FieldName = 'DataCriacao'
+              ReadOnly = True
+              Title.Alignment = taCenter
+              Title.Caption = 'Data Cria'#231#227'o'
+              Width = 88
+              Visible = True
+            end
+            item
+              Alignment = taCenter
+              Expanded = False
+              FieldName = 'ComputadorCriacao'
+              ReadOnly = True
+              Title.Alignment = taCenter
+              Title.Caption = 'Computador Cria'#231#227'o'
+              Width = 103
+              Visible = True
+            end
+            item
+              Alignment = taCenter
+              Expanded = False
+              FieldName = 'AvaliadoPor'
+              ReadOnly = True
+              Title.Alignment = taCenter
+              Title.Caption = 'Avaliado Por'
+              Width = 68
+              Visible = True
+            end
+            item
+              Alignment = taCenter
+              Expanded = False
+              FieldName = 'DataAtualizacao'
+              ReadOnly = True
+              Title.Alignment = taCenter
+              Title.Caption = 'Data Atualiza'#231#227'o'
+              Width = 95
+              Visible = True
+            end
+            item
+              Alignment = taCenter
+              Expanded = False
+              FieldName = 'ComputadorAtualizacao'
+              ReadOnly = True
+              Title.Alignment = taCenter
+              Title.Caption = 'Computador Atualiza'#231#227'o'
+              Width = 121
+              Visible = True
+            end
+            item
+              Expanded = False
+              FieldName = 'DescricaoItem'
+              ReadOnly = True
+              Title.Alignment = taCenter
+              Title.Caption = 'Descri'#231#227'o do Item'
+              Width = 97
+              Visible = True
+            end
+            item
+              Expanded = False
+              FieldName = 'TextoLongoOM'
+              ReadOnly = True
+              Title.Alignment = taCenter
+              Title.Caption = 'Texto Longo OM'
+              Width = 87
+              Visible = True
+            end
+            item
+              Expanded = False
+              FieldName = 'Observacao'
+              ReadOnly = True
+              Title.Alignment = taCenter
+              Title.Caption = 'Observa'#231#245'es'
+              Width = 97
+              Visible = True
+            end
+            item
+              Expanded = False
+              FieldName = 'OrdemManutencao'
+              ReadOnly = True
+              Title.Alignment = taCenter
+              Title.Caption = 'Ordem de Manutencao'
+              Width = 125
+              Visible = True
+            end
+            item
+              Expanded = False
+              FieldName = 'ProrrogacaoData'
+              ReadOnly = True
+              Title.Alignment = taCenter
+              Title.Caption = 'Prorroga'#231#245'es'
+              Width = 91
+              Visible = True
+            end
+            item
+              Expanded = False
+              FieldName = 'PrazoAtendimento'
+              ReadOnly = True
+              Title.Alignment = taCenter
+              Title.Caption = 'Prazo Atendimento'
+              Width = 122
+              Visible = True
+            end
+            item
+              Expanded = False
+              FieldName = 'MotivoNaoAtendimento'
+              ReadOnly = True
+              Title.Alignment = taCenter
+              Title.Caption = 'Porque n'#227'o atendemos'
+              Width = 128
+              Visible = True
+            end
+            item
+              Expanded = False
+              FieldName = 'OQueFoiFeito'
+              ReadOnly = True
+              Title.Alignment = taCenter
+              Title.Caption = 'O que foi feito'
+              Width = 86
+              Visible = True
+            end
+            item
+              Expanded = False
+              FieldName = 'Mitigacao'
+              ReadOnly = True
+              Title.Alignment = taCenter
+              Title.Caption = 'Mitiga'#231#227'o'
+              Width = 69
+              Visible = True
+            end
+            item
+              Expanded = False
+              FieldName = 'ObservacaoCarta'
+              ReadOnly = True
+              Title.Alignment = taCenter
+              Title.Caption = 'Observa'#231#227'o Carta'
+              Width = 120
+              Visible = True
+            end
+            item
+              Alignment = taCenter
+              Expanded = False
+              FieldName = 'NumeroProrrogacao'
+              ReadOnly = True
+              Title.Alignment = taCenter
+              Title.Caption = 'N'#176' Prorroga'#231#245'es'
+              Width = 99
+              Visible = True
+            end
+            item
+              Expanded = False
+              FieldName = 'DataReferenciaFlagState'
+              ReadOnly = True
+              Title.Alignment = taCenter
+              Title.Caption = 'Data Ref. Flag State'
+              Visible = True
+            end
+            item
+              Expanded = False
+              FieldName = 'RelatorioFlagState'
+              ReadOnly = True
+              Title.Alignment = taCenter
+              Title.Caption = 'Relat'#243'rio Ref. Flag State'
+              Visible = True
+            end>
+        end
+        object ColunasLayout: TStringGrid
+          Left = 226
+          Top = 337
+          Width = 117
+          Height = 58
+          TabOrder = 3
+          Visible = False
+          RowHeights = (
+            24
+            24
+            21
+            24
+            24)
+        end
+        object StatusBarPericiaMarinha: TStatusBar
+          Left = 1
+          Top = 440
+          Width = 1360
+          Height = 19
+          Panels = <
+            item
+              Width = 50
+            end
+            item
+              Width = 50
+            end
+            item
+              Width = 50
+            end
+            item
+              Width = 50
+            end
+            item
+              Width = 50
+            end>
+        end
+        object MemoMarinha: TMemo
+          Left = 402
+          Top = 256
+          Width = 279
+          Height = 89
+          Lines.Strings = (
+            'MemoProrrogacaoDa'
+            'ta')
+          TabOrder = 5
+          Visible = False
+        end
+        object DBDateTimeDataPericia: TDBDateTimePicker
+          Left = 91
+          Top = 280
+          Width = 92
+          Height = 21
+          Date = 43034.000000000000000000
+          Time = 43034.000000000000000000
+          TabOrder = 6
+          Visible = False
+          Caption = ''
+          DataField = 'DataPericia'
+          DataSource = FrmDataModule.DataSourcePericiaMarinha
+        end
+        object MaskEditRelatorio: TMaskEdit
+          Left = 189
+          Top = 280
+          Width = 77
+          Height = 21
+          Hint = 'N'#250'mero do relat'#243'rio da Marinha'
+          EditMask = '!90.00;1;_'
+          MaxLength = 5
+          ParentShowHint = False
+          ShowHint = True
+          TabOrder = 7
+          Text = '  .  '
+          Visible = False
+          OnChange = MaskEditRelatorioChange
+        end
+        object PageControlTipos: TPageControl
+          Left = 1
+          Top = 55
+          Width = 1360
+          Height = 122
+          ActivePage = TabSheet6
+          Align = alTop
+          TabOrder = 8
+          object TabSheet5: TTabSheet
+            Caption = 'Descri'#231#227'o do Item'
+            ExplicitLeft = 0
+            ExplicitTop = 0
+            ExplicitWidth = 0
+            ExplicitHeight = 0
+            object DBMemoDescricao: TDBMemo
+              Left = 0
+              Top = 0
+              Width = 1352
+              Height = 94
+              Align = alClient
+              Color = clInfoBk
+              DataField = 'DescricaoItem'
+              DataSource = FrmDataModule.DataSourcePericiaMarinha
+              Font.Charset = DEFAULT_CHARSET
+              Font.Color = clWindowText
+              Font.Height = -13
+              Font.Name = 'Tahoma'
+              Font.Style = []
+              ParentFont = False
+              ScrollBars = ssVertical
+              TabOrder = 0
+              ExplicitTop = -2
+            end
+          end
+          object TabSheet3: TTabSheet
+            Caption = 'Prorroga'#231#245'es'
+            ImageIndex = 3
+            ExplicitLeft = 0
+            ExplicitTop = 0
+            ExplicitWidth = 0
+            ExplicitHeight = 0
+            object ToolBarProrrogacao: TToolBar
+              Left = 0
+              Top = 0
+              Width = 1352
+              Height = 29
+              DrawingStyle = dsGradient
+              EdgeBorders = [ebLeft, ebTop, ebRight]
+              Images = FrmPrincipal.ImageList1
+              TabOrder = 0
+              object ToolButton8: TToolButton
+                Left = 0
+                Top = 0
+                Action = actInserirLinha
+                ParentShowHint = False
+                ShowHint = True
+              end
+              object ToolButton10: TToolButton
+                Left = 23
+                Top = 0
+                Action = actExcluirLinha
+                ParentShowHint = False
+                ShowHint = True
+              end
+              object ToolButton12: TToolButton
+                Left = 46
+                Top = 0
+                Action = actSalvarProrrogacaoData
+                ParentShowHint = False
+                ShowHint = True
+              end
+            end
+            object StrGridProrrogacaoData: TStringGrid
+              Left = 0
+              Top = 29
+              Width = 1352
+              Height = 65
+              Align = alClient
+              ColCount = 3
+              DefaultRowHeight = 21
+              Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goDrawFocusSelected, goColSizing, goRowMoving, goEditing]
+              TabOrder = 1
+              OnFixedCellClick = StrGridProrrogacaoDataFixedCellClick
+              OnKeyDown = StrGridProrrogacaoDataKeyDown
+            end
+          end
+          object TabSheet7: TTabSheet
+            Caption = 'Ordem de Manuten'#231#227'o (SAP)'
+            ImageIndex = 2
+            ExplicitLeft = 0
+            ExplicitTop = 0
+            ExplicitWidth = 0
+            ExplicitHeight = 0
+            object PageControlOrdem: TPageControl
+              Left = 0
+              Top = 0
+              Width = 1352
+              Height = 94
+              ActivePage = TabSheet9
+              Align = alClient
+              TabOrder = 0
+              object TabSheet9: TTabSheet
+                Caption = 'Detalhes'
+                ExplicitLeft = 0
+                ExplicitTop = 0
+                ExplicitWidth = 0
+                ExplicitHeight = 0
+                object StrGridOrdemManutencao: TStringGrid
+                  Left = 0
+                  Top = 0
+                  Width = 1344
+                  Height = 66
+                  Align = alClient
+                  DefaultRowHeight = 20
+                  FixedCols = 0
+                  Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goDrawFocusSelected, goColSizing, goColMoving, goEditing]
+                  TabOrder = 0
+                  OnFixedCellClick = StrGridOrdemManutencaoFixedCellClick
+                end
+              end
+              object TabSheet10: TTabSheet
+                Caption = 'Texto Longo'
+                ImageIndex = 1
+                ExplicitLeft = 0
+                ExplicitTop = 0
+                ExplicitWidth = 0
+                ExplicitHeight = 0
+                object DBMemoTextolongoOM: TDBMemo
+                  Left = 0
+                  Top = 0
+                  Width = 1344
+                  Height = 66
+                  Align = alClient
+                  Color = clSilver
+                  DataField = 'TextoLongoOM'
+                  DataSource = FrmDataModule.DataSourcePericiaMarinha
+                  Font.Charset = DEFAULT_CHARSET
+                  Font.Color = clWindowText
+                  Font.Height = -13
+                  Font.Name = 'Tahoma'
+                  Font.Style = []
+                  ParentFont = False
+                  ParentShowHint = False
+                  ReadOnly = True
+                  ScrollBars = ssVertical
+                  ShowHint = False
+                  TabOrder = 0
+                end
+              end
+            end
+          end
+          object TabSheet6: TTabSheet
+            Caption = 'Carta'
+            ImageIndex = 1
+            ExplicitLeft = 0
+            ExplicitTop = 0
+            ExplicitWidth = 0
+            ExplicitHeight = 0
+            object PageCartaDados: TPageControl
+              Left = 0
+              Top = 0
+              Width = 1352
+              Height = 94
+              ActivePage = TabSheet8
+              Align = alClient
+              TabOrder = 0
+              object TabSheet8: TTabSheet
+                Caption = 'Porque n'#227'o atendemos'
+                ExplicitLeft = 0
+                ExplicitTop = 0
+                ExplicitWidth = 0
+                ExplicitHeight = 0
+                object DBMemoMotivoNaoAtendimento: TDBMemo
+                  Left = 0
+                  Top = 0
+                  Width = 1344
+                  Height = 66
+                  Align = alClient
+                  Color = clSilver
+                  DataField = 'MotivoNaoAtendimento'
+                  DataSource = FrmDataModule.DataSourcePericiaMarinha
+                  Font.Charset = DEFAULT_CHARSET
+                  Font.Color = clWindowText
+                  Font.Height = -13
+                  Font.Name = 'Tahoma'
+                  Font.Style = []
+                  ParentFont = False
+                  ParentShowHint = False
+                  ReadOnly = True
+                  ScrollBars = ssVertical
+                  ShowHint = False
+                  TabOrder = 0
+                  ExplicitTop = 2
+                end
+              end
+              object TabSheet14: TTabSheet
+                Caption = 'O que foi feito'
+                ImageIndex = 3
+                ExplicitLeft = 0
+                ExplicitTop = 0
+                ExplicitWidth = 0
+                ExplicitHeight = 0
+                object DBMemoOQueFoiFeito: TDBMemo
+                  Left = 0
+                  Top = 0
+                  Width = 1344
+                  Height = 66
+                  Align = alClient
+                  Color = clSilver
+                  DataField = 'OQueFoiFeito'
+                  DataSource = FrmDataModule.DataSourcePericiaMarinha
+                  Font.Charset = DEFAULT_CHARSET
+                  Font.Color = clWindowText
+                  Font.Height = -13
+                  Font.Name = 'Tahoma'
+                  Font.Style = []
+                  ParentFont = False
+                  ParentShowHint = False
+                  ReadOnly = True
+                  ScrollBars = ssVertical
+                  ShowHint = False
+                  TabOrder = 0
+                end
+              end
+              object TabSheet11: TTabSheet
+                Caption = 'Mitiga'#231#227'o'
+                ImageIndex = 1
+                ExplicitLeft = 0
+                ExplicitTop = 0
+                ExplicitWidth = 0
+                ExplicitHeight = 0
+                object DBMemoMitigacao: TDBMemo
+                  Left = 0
+                  Top = 0
+                  Width = 1344
+                  Height = 66
+                  Align = alClient
+                  Color = clSilver
+                  DataField = 'Mitigacao'
+                  DataSource = FrmDataModule.DataSourcePericiaMarinha
+                  Font.Charset = DEFAULT_CHARSET
+                  Font.Color = clWindowText
+                  Font.Height = -13
+                  Font.Name = 'Tahoma'
+                  Font.Style = []
+                  ParentFont = False
+                  ParentShowHint = False
+                  ReadOnly = True
+                  ScrollBars = ssVertical
+                  ShowHint = False
+                  TabOrder = 0
+                end
+              end
+              object TabSheet12: TTabSheet
+                Caption = 'Observa'#231#227'o'
+                ImageIndex = 2
+                ExplicitLeft = 0
+                ExplicitTop = 0
+                ExplicitWidth = 0
+                ExplicitHeight = 0
+                object DBMemoObservacaoCarta: TDBMemo
+                  Left = 0
+                  Top = 0
+                  Width = 1344
+                  Height = 66
+                  Align = alClient
+                  Color = clSilver
+                  DataField = 'ObservacaoCarta'
+                  DataSource = FrmDataModule.DataSourcePericiaMarinha
+                  Font.Charset = DEFAULT_CHARSET
+                  Font.Color = clWindowText
+                  Font.Height = -13
+                  Font.Name = 'Tahoma'
+                  Font.Style = []
+                  ParentFont = False
+                  ParentShowHint = False
+                  ReadOnly = True
+                  ScrollBars = ssVertical
+                  ShowHint = False
+                  TabOrder = 0
+                end
+              end
+              object TabSheet15: TTabSheet
+                Caption = 'Prazo para atendimento'
+                ImageIndex = 4
+                ExplicitLeft = 0
+                ExplicitTop = 0
+                ExplicitWidth = 0
+                ExplicitHeight = 0
+                object ToolBar3: TToolBar
+                  Left = 0
+                  Top = 0
+                  Width = 1344
+                  Height = 29
+                  Caption = 'ToolBar3'
+                  TabOrder = 0
+                  object DBDateTimePicker1: TDBDateTimePicker
+                    Left = 0
+                    Top = 0
+                    Width = 113
+                    Height = 22
+                    Date = 43187.000000000000000000
+                    Time = 43187.000000000000000000
+                    TabOrder = 0
+                    Caption = ''
+                    DataField = 'PrazoAtendimento'
+                    DataSource = FrmDataModule.DataSourcePericiaMarinha
+                  end
+                end
+              end
+            end
+          end
+          object TabSheet4: TTabSheet
+            Caption = 'Observa'#231#245'es'
+            ImageIndex = 4
+            ExplicitLeft = 0
+            ExplicitTop = 0
+            ExplicitWidth = 0
+            ExplicitHeight = 0
+            object DBMemoObservacao: TDBMemo
+              Left = 0
+              Top = 0
+              Width = 1352
+              Height = 94
+              Align = alClient
+              Color = clInfoBk
+              DataField = 'Observacao'
+              DataSource = FrmDataModule.DataSourcePericiaMarinha
+              Font.Charset = DEFAULT_CHARSET
+              Font.Color = clWindowText
+              Font.Height = -13
+              Font.Name = 'Tahoma'
+              Font.Style = []
+              ParentFont = False
+              ParentShowHint = False
+              ScrollBars = ssVertical
+              ShowHint = False
+              TabOrder = 0
+            end
+          end
+        end
+      end
+    end
+    object TabSheet2: TTabSheet
+      Caption = 'Gr'#225'fico'
+      ImageIndex = 1
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
+      object Splitter5: TSplitter
+        Left = 1133
+        Top = 29
+        Height = 431
+        Align = alRight
+        ExplicitLeft = 880
+        ExplicitTop = 160
+        ExplicitHeight = 100
+      end
+      object Panel54: TPanel
+        Left = 1136
+        Top = 29
+        Width = 226
+        Height = 431
+        Align = alRight
+        TabOrder = 0
+        object RadioGroupEixoX: TRadioGroup
+          Left = 1
+          Top = 1
+          Width = 224
+          Height = 240
+          Align = alTop
+          Caption = 'Tipo de Gr'#225'fico'
+          ItemIndex = 0
+          Items.Strings = (
+            'Plataforma'
+            'Tipo de Etapa de Servi'#231'o'
+            'Data Vencimento'
+            'Data Vencimento Carta'
+            '(Data Pericia) e (Data Retificado)'
+            '(Data Vencimento) e (Data Retificado)'
+            'Prorroga'#231#227'o de Declara'#231#227'o (Indicador)'
+            'Prorroga'#231#227'o de Declara'#231#227'o (Ger'#234'ncia)'
+            'Data de Vencimento (Indicador)'
+            'Data de Vencimento (Ger'#234'ncia)'
+            'Prazo de Atendimento (Linhas)'
+            'Prazo de Atendimento (Indicador)')
+          TabOrder = 0
+        end
+      end
+      object ToolBar4: TToolBar
+        Left = 0
+        Top = 0
+        Width = 1362
+        Height = 29
+        Caption = 'ToolBar4'
+        Color = clBtnFace
+        DrawingStyle = dsGradient
+        EdgeBorders = [ebLeft, ebTop, ebRight, ebBottom]
+        HotTrackColor = clRed
+        Images = FrmPrincipal.ImageList1
+        ParentColor = False
+        TabOrder = 1
+        object ToolButton3: TToolButton
+          Left = 0
+          Top = 0
+          Action = actGRFSalvarImagem
+          ParentShowHint = False
+          ShowHint = True
+        end
+        object ToolButton7: TToolButton
+          Left = 23
+          Top = 0
+          Action = actGRFSalvarTXT
+        end
+        object ToolButton5: TToolButton
+          Left = 46
+          Top = 0
+          Action = actGRFImprimir
+        end
+        object ToolButton4: TToolButton
+          Left = 69
+          Top = 0
+          Action = actGRFTitulo
+          ParentShowHint = False
+          ShowHint = True
+        end
+        object ToolButton1: TToolButton
+          Left = 92
+          Top = 0
+          Action = actZoomMais
+          ParentShowHint = False
+          ShowHint = True
+        end
+        object ToolButton2: TToolButton
+          Left = 115
+          Top = 0
+          Action = actZoomMenos
+          ParentShowHint = False
+          ShowHint = True
+        end
+        object btnMark: TToolButton
+          Left = 138
+          Top = 0
+          Action = actEtiqueta
+          Down = True
+          ParentShowHint = False
+          ShowHint = True
+          Style = tbsCheck
+        end
+        object BitBtn18: TBitBtn
+          Left = 161
+          Top = 0
+          Width = 75
+          Height = 22
+          Action = actGrafico
+          Caption = 'Gr'#225'fico'
+          ParentShowHint = False
+          ShowHint = True
+          TabOrder = 0
+        end
+      end
+      object ChartGrafico: TChart
+        Left = 0
+        Top = 29
+        Width = 1133
+        Height = 431
+        Border.Color = clDefault
+        Border.Width = 2
+        Border.EndStyle = esSquare
+        Border.Fill.Gradient.EndColor = clBlack
+        Border.Fill.Gradient.StartColor = clBlack
+        Border.Fill.Gradient.Visible = True
+        Border.Visible = True
+        Legend.TextStyle = ltsRightValue
+        Title.Font.Color = clBlack
+        Title.Font.Height = -16
+        Title.Text.Strings = (
+          
+            'Selecione o tipo de gr'#225'fico [lado direito] e clique no bot'#227'o [Gr' +
+            #225'fico]')
+        BottomAxis.Axis.Style = psDash
+        BottomAxis.Axis.Visible = False
+        BottomAxis.ExactDateTime = False
+        BottomAxis.Grid.Style = psDash
+        BottomAxis.LabelsOnAxis = False
+        BottomAxis.LabelsSeparation = 20
+        BottomAxis.LabelStyle = talPointValue
+        BottomAxis.MaximumOffset = 1
+        BottomAxis.MinimumOffset = 1
+        BottomAxis.RoundFirstLabel = False
+        BottomAxis.Title.Visible = False
+        LeftAxis.Grid.Style = psDash
+        LeftAxis.Grid.DrawAlways = True
+        LeftAxis.MaximumRound = True
+        LeftAxis.MinimumRound = True
+        LeftAxis.MinorGrid.Style = psDash
+        LeftAxis.MinorGrid.SmallDots = True
+        View3D = False
+        Align = alClient
+        BevelInner = bvRaised
+        Color = clWhite
+        TabOrder = 2
+        DefaultCanvas = 'TGDIPlusCanvas'
+        ColorPaletteIndex = 13
+        object Series1: TLineSeries
+          Marks.Visible = True
+          Marks.Style = smsLabelValue
+          Brush.BackColor = clDefault
+          Pointer.InflateMargins = True
+          Pointer.Style = psRectangle
+          XValues.Name = 'X'
+          XValues.Order = loAscending
+          YValues.DateTime = True
+          YValues.Name = 'Y'
+          YValues.Order = loNone
+        end
+      end
+    end
+    object TabSheet13: TTabSheet
+      Caption = 'Carta'
+      ImageIndex = 2
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
+      object PageControleCarta: TPageControl
+        Left = 0
+        Top = 0
+        Width = 1362
+        Height = 460
+        ActivePage = TabSheet16
+        Align = alClient
+        TabOrder = 0
+        OnChange = PageControleCartaChange
+        object TabSheet16: TTabSheet
+          Caption = 'Minuta'
+          ExplicitLeft = 0
+          ExplicitTop = 0
+          ExplicitWidth = 0
+          ExplicitHeight = 0
+          object ToolBar2: TToolBar
+            Left = 0
+            Top = 0
+            Width = 1354
+            Height = 29
+            Caption = 'ToolBar2'
+            DrawingStyle = dsGradient
+            EdgeBorders = [ebLeft, ebTop, ebRight, ebBottom]
+            TabOrder = 0
+            object BitBtn9: TBitBtn
+              Left = 0
+              Top = 0
+              Width = 65
+              Height = 22
+              Action = actCartaSalvar
+              Caption = 'Salvar'
+              ParentShowHint = False
+              ShowHint = True
+              TabOrder = 0
+            end
+            object BitBtn15: TBitBtn
+              Left = 65
+              Top = 0
+              Width = 65
+              Height = 22
+              Action = actCartaCopiar
+              Caption = 'Copiar'
+              ParentShowHint = False
+              ShowHint = True
+              TabOrder = 1
+            end
+          end
+          object MemoCarta: TMemo
+            Left = 0
+            Top = 29
+            Width = 1354
+            Height = 403
+            Align = alClient
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -16
+            Font.Name = 'Arial'
+            Font.Style = []
+            ParentFont = False
+            ScrollBars = ssVertical
+            TabOrder = 1
+          end
+        end
+        object TabSheet17: TTabSheet
+          Caption = 'Resumo vencimento de cartas'
+          ImageIndex = 1
+          ExplicitLeft = 0
+          ExplicitTop = 0
+          ExplicitWidth = 0
+          ExplicitHeight = 0
+          object ToolBarPrioridadeForcada: TToolBar
+            Left = 0
+            Top = 0
+            Width = 1354
+            Height = 29
+            ButtonHeight = 21
+            Caption = 'ToolBarPrioridadeForcada'
+            DrawingStyle = dsGradient
+            EdgeBorders = [ebLeft, ebTop, ebRight, ebBottom]
+            TabOrder = 0
+            object BitBtn7: TBitBtn
+              Left = 0
+              Top = 0
+              Width = 75
+              Height = 21
+              Action = actExcelResumoCarta
+              Caption = 'Exportar'
+              ParentShowHint = False
+              ShowHint = True
+              TabOrder = 0
+            end
+            object BitBtn11: TBitBtn
+              Left = 75
+              Top = 0
+              Width = 69
+              Height = 21
+              Action = actLimparFiltrosResumo
+              Caption = 'Limpar'
+              ParentShowHint = False
+              ShowHint = True
+              TabOrder = 2
+            end
+            object BitBtn10: TBitBtn
+              Left = 144
+              Top = 0
+              Width = 69
+              Height = 21
+              Action = actFiltrosTabelaResumo
+              Caption = 'Filtros'
+              ParentShowHint = False
+              ShowHint = True
+              TabOrder = 1
+            end
+            object DBEdit2: TDBEdit
+              Left = 213
+              Top = 0
+              Width = 121
+              Height = 21
+              DataField = 'DataVencimento'
+              DataSource = FrmDataModule.DataSourceResumoCarta
+              TabOrder = 3
+              Visible = False
+            end
+          end
+          object DBGridResumoCarta: TDBGrid
+            Left = 0
+            Top = 29
+            Width = 1354
+            Height = 384
+            Align = alClient
+            DataSource = FrmDataModule.DataSourceResumoCarta
+            ReadOnly = True
+            TabOrder = 1
+            TitleFont.Charset = DEFAULT_CHARSET
+            TitleFont.Color = clWindowText
+            TitleFont.Height = -11
+            TitleFont.Name = 'Tahoma'
+            TitleFont.Style = []
+            OnDrawColumnCell = DBGridResumoCartaDrawColumnCell
+            OnKeyDown = DBGridResumoCartaKeyDown
+            OnTitleClick = DBGridResumoCartaTitleClick
+            Columns = <
+              item
+                Alignment = taCenter
+                Expanded = False
+                FieldName = 'Plataforma'
+                Title.Alignment = taCenter
+                Width = 70
+                Visible = True
+              end
+              item
+                Alignment = taCenter
+                Expanded = False
+                FieldName = 'Relatorio'
+                Title.Alignment = taCenter
+                Title.Caption = 'Relat'#243'rio'
+                Width = 70
+                Visible = True
+              end
+              item
+                Alignment = taCenter
+                Expanded = False
+                FieldName = 'DataVencimento'
+                Title.Alignment = taCenter
+                Title.Caption = 'Data Vencimento'
+                Visible = True
+              end
+              item
+                Alignment = taCenter
+                Expanded = False
+                FieldName = 'DataVencimentoCarta'
+                Title.Alignment = taCenter
+                Title.Caption = 'Vencimento Carta'
+                Visible = True
+              end
+              item
+                Alignment = taCenter
+                Expanded = False
+                FieldName = 'DataDeclaracaoPlataforma'
+                Title.Alignment = taCenter
+                Title.Caption = 'Validade Declar. Plat.'
+                Visible = True
+              end>
+          end
+          object ColunasLayoutResumoCarta: TStringGrid
+            Left = 34
+            Top = 114
+            Width = 151
+            Height = 97
+            TabOrder = 2
+            Visible = False
+            RowHeights = (
+              24
+              24
+              21
+              24
+              24)
+          end
+          object StatusBarResumoCarta: TStatusBar
+            Left = 0
+            Top = 413
+            Width = 1354
+            Height = 19
+            Panels = <
+              item
+                Width = 50
+              end
+              item
+                Width = 50
+              end
+              item
+                Width = 50
+              end
+              item
+                Width = 50
+              end
+              item
+                Width = 50
+              end>
+          end
+        end
+      end
+    end
+    object TabSheet18: TTabSheet
+      Caption = 'Fotos'
+      ImageIndex = 3
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
+      object Panel2: TPanel
+        Left = 0
+        Top = 0
+        Width = 1362
+        Height = 460
+        Align = alClient
+        TabOrder = 0
+        object Splitter4: TSplitter
+          Left = 417
+          Top = 1
+          Height = 458
+          ExplicitLeft = 520
+          ExplicitTop = 144
+          ExplicitHeight = 100
+        end
+        object Panel1: TPanel
+          Left = 1
+          Top = 1
+          Width = 416
+          Height = 458
+          Align = alLeft
+          Caption = 'Panel1'
+          TabOrder = 0
+          object Splitter1: TSplitter
+            Left = 1
+            Top = 268
+            Width = 414
+            Height = 3
+            Cursor = crVSplit
+            Align = alTop
+            ExplicitTop = 281
+            ExplicitWidth = 147
+          end
+          object DBGridPericiaMarinhaFotos: TDBGrid
+            Left = 1
+            Top = 113
+            Width = 414
+            Height = 155
+            Align = alTop
+            DataSource = FrmDataModule.DataSourcePericiaMarinha
+            ReadOnly = True
+            TabOrder = 0
+            TitleFont.Charset = DEFAULT_CHARSET
+            TitleFont.Color = clWindowText
+            TitleFont.Height = -11
+            TitleFont.Name = 'Tahoma'
+            TitleFont.Style = []
+            OnDrawColumnCell = DBGridPericiaMarinhaFotosDrawColumnCell
+            OnKeyDown = DBGridPericiaMarinhaKeyDown
+            Columns = <
+              item
+                Alignment = taCenter
+                Expanded = False
+                FieldName = 'Retificado'
+                Title.Alignment = taCenter
+                Width = 76
+                Visible = True
+              end
+              item
+                Alignment = taCenter
+                Expanded = False
+                FieldName = 'Plataforma'
+                Title.Alignment = taCenter
+                Width = 77
+                Visible = True
+              end
+              item
+                Alignment = taCenter
+                Expanded = False
+                FieldName = 'Relatorio'
+                Title.Alignment = taCenter
+                Title.Caption = 'Relat'#243'rio'
+                Visible = True
+              end
+              item
+                Alignment = taCenter
+                Expanded = False
+                FieldName = 'Item'
+                Title.Alignment = taCenter
+                Visible = True
+              end
+              item
+                Expanded = False
+                FieldName = 'TipoEtapaServico'
+                Title.Alignment = taCenter
+                Title.Caption = 'Tipo Etapa de Servi'#231'o'
+                Width = 200
+                Visible = True
+              end>
+          end
+          object TPanel
+            Left = 1
+            Top = 271
+            Width = 414
+            Height = 186
+            Align = alClient
+            TabOrder = 1
+            object ToolBar6: TToolBar
+              Left = 1
+              Top = 1
+              Width = 412
+              Height = 29
+              Caption = 'ToolBar6'
+              DrawingStyle = dsGradient
+              EdgeBorders = [ebLeft, ebTop, ebRight, ebBottom]
+              Images = FrmPrincipal.ImageList1
+              TabOrder = 0
+              object btnStretch: TToolButton
+                Left = 0
+                Top = 0
+                Hint = 'Stretch'
+                Caption = 'btnStretch'
+                ImageIndex = 264
+                ParentShowHint = False
+                ShowHint = True
+                Style = tbsCheck
+                OnClick = btnStretchClick
+              end
+              object BitBtn3: TBitBtn
+                Left = 23
+                Top = 0
+                Width = 69
+                Height = 22
+                Action = actAnexarFoto
+                Caption = 'Anexar'
+                ParentShowHint = False
+                ShowHint = True
+                TabOrder = 0
+              end
+              object BitBtn12: TBitBtn
+                Left = 92
+                Top = 0
+                Width = 60
+                Height = 22
+                Action = actSalvarFoto
+                Caption = 'Salvar'
+                ParentShowHint = False
+                ShowHint = True
+                TabOrder = 3
+              end
+              object BitBtn14: TBitBtn
+                Left = 152
+                Top = 0
+                Width = 60
+                Height = 22
+                Action = actFotosExcluir
+                Caption = 'Excluir'
+                ParentShowHint = False
+                ShowHint = True
+                TabOrder = 2
+              end
+              object DBEdit3: TDBEdit
+                Left = 212
+                Top = 0
+                Width = 68
+                Height = 22
+                DataField = 'idFotosMarinha'
+                DataSource = FrmDataModule.DataSourceFotosMarinha
+                TabOrder = 1
+                Visible = False
+                OnChange = actFotosAbrirExecute
+              end
+            end
+            object DBGridFotosMarinha: TDBGrid
+              Left = 1
+              Top = 30
+              Width = 412
+              Height = 155
+              Align = alClient
+              DataSource = FrmDataModule.DataSourceFotosMarinha
+              TabOrder = 1
+              TitleFont.Charset = DEFAULT_CHARSET
+              TitleFont.Color = clWindowText
+              TitleFont.Height = -11
+              TitleFont.Name = 'Tahoma'
+              TitleFont.Style = []
+              OnDrawColumnCell = DBGridFotosMarinhaDrawColumnCell
+              Columns = <
+                item
+                  Alignment = taCenter
+                  Expanded = False
+                  FieldName = 'idFotosMarinha'
+                  ReadOnly = True
+                  Title.Alignment = taCenter
+                  Title.Caption = 'C'#243'digo'
+                  Visible = True
+                end
+                item
+                  Expanded = False
+                  FieldName = 'Fotos'
+                  Title.Alignment = taCenter
+                  Title.Caption = 'Descri'#231#227'o'
+                  Width = 134
+                  Visible = True
+                end
+                item
+                  Alignment = taCenter
+                  Expanded = False
+                  FieldName = 'Tamanho'
+                  ReadOnly = True
+                  Title.Alignment = taCenter
+                  Title.Caption = 'Tamanho (kb)'
+                  Width = 80
+                  Visible = True
+                end>
+            end
+          end
+          object ToolBar5: TToolBar
+            Left = 1
+            Top = 1
+            Width = 414
+            Height = 29
+            ButtonHeight = 21
+            Caption = 'ToolBar5'
+            DrawingStyle = dsGradient
+            EdgeBorders = [ebLeft, ebTop, ebRight, ebBottom]
+            TabOrder = 2
+            object BitBtn5: TBitBtn
+              Left = 0
+              Top = 0
+              Width = 69
+              Height = 21
+              Action = actLimparFiltros
+              Caption = 'Limpar'
+              ParentShowHint = False
+              ShowHint = True
+              TabOrder = 0
+            end
+            object BitBtn8: TBitBtn
+              Left = 69
+              Top = 0
+              Width = 69
+              Height = 21
+              Action = actFiltrosTabela
+              Caption = 'Filtros'
+              ParentShowHint = False
+              ShowHint = True
+              TabOrder = 1
+            end
+            object DBEditPericiaMarinha: TDBEdit
+              Left = 138
+              Top = 0
+              Width = 63
+              Height = 21
+              DataField = 'idPericiaMarinha'
+              DataSource = FrmDataModule.DataSourcePericiaMarinha
+              TabOrder = 2
+              Visible = False
+              OnChange = DBEditPericiaMarinhaChange
+            end
+          end
+          object DBMemo1: TDBMemo
+            Left = 1
+            Top = 30
+            Width = 414
+            Height = 83
+            Align = alTop
+            Color = clInfoBk
+            DataField = 'DescricaoItem'
+            DataSource = FrmDataModule.DataSourcePericiaMarinha
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -13
+            Font.Name = 'Tahoma'
+            Font.Style = []
+            ParentFont = False
+            ReadOnly = True
+            ScrollBars = ssVertical
+            TabOrder = 3
+          end
+        end
+        object Panel3: TPanel
+          Left = 420
+          Top = 1
+          Width = 941
+          Height = 458
+          Align = alClient
+          TabOrder = 1
+          object ImageFoto: TImage
+            Left = 1
+            Top = 1
+            Width = 939
+            Height = 456
+            Align = alClient
+            Center = True
+            Proportional = True
+            ExplicitTop = 3
+          end
+        end
+      end
+    end
+  end
+  object ActionManager1: TActionManager
+    Images = FrmPrincipal.ImageList1
+    Left = 76
+    Top = 144
+    StyleName = 'Platform Default'
+    object actCimaTudo: TAction
+      Category = 'Layout'
+      Caption = 'actCimaTudo'
+      Hint = 'Mover todos para Colunas Ativas'
+      ImageIndex = 464
+      OnExecute = actCimaTudoExecute
+    end
+    object actBaixoTudo: TAction
+      Category = 'Layout'
+      Caption = 'actBaixoTudo'
+      Hint = 'Mover todos para Colunas Optativas'
+      ImageIndex = 465
+      OnExecute = actBaixoTudoExecute
+    end
+    object actExcel: TAction
+      Category = 'Excel'
+      Caption = 'Exportar "FILTRADOS" formatado'
+      Hint = 'Exportar para o Excel'
+      ImageIndex = 54
+      OnExecute = actExcelExecute
+    end
+    object acrExcelTabelaAccess: TAction
+      Category = 'Excel'
+      Caption = 'Exportar tabela do banco de dados'
+      Hint = 'Exportar para o Excel'
+      ImageIndex = 54
+      OnExecute = acrExcelTabelaAccessExecute
+    end
+    object actExcelResumoCarta: TAction
+      Category = 'Excel'
+      Caption = 'Exportar'
+      Hint = 'Exportar para o Excel'
+      ImageIndex = 54
+      OnExecute = actExcelResumoCartaExecute
+    end
+    object actProcurar: TAction
+      Category = 'Bot'#245'es'
+      Caption = 'Procurar'
+      Hint = 'Procurar'
+      ImageIndex = 28
+      OnExecute = actProcurarExecute
+    end
+    object actCongelarPainel: TAction
+      Category = 'Bot'#245'es'
+      Caption = 'Congelar'
+      Hint = 'Congelar Painel'
+      ImageIndex = 116
+      OnExecute = actCongelarPainelExecute
+    end
+    object actGrafico: TAction
+      Category = 'Gr'#225'fico'
+      Caption = 'Gr'#225'fico'
+      Hint = 'Atualizar Gr'#225'fico'
+      ImageIndex = 467
+      OnExecute = actGraficoExecute
+    end
+    object actGRFSalvarImagem: TAction
+      Category = 'Gr'#225'fico'
+      Caption = 'actGRFSalvarImagem'
+      Hint = 'Salvar como imagem...'
+      ImageIndex = 264
+      OnExecute = actGRFSalvarImagemExecute
+    end
+    object actZoomMais: TAction
+      Category = 'Gr'#225'fico'
+      Caption = 'actZoomMais'
+      Hint = 'Zoom mais'
+      ImageIndex = 46
+      OnExecute = actZoomMaisExecute
+    end
+    object actZoomMenos: TAction
+      Category = 'Gr'#225'fico'
+      Caption = 'actZoomMenos'
+      Hint = 'Zoom menos'
+      ImageIndex = 47
+      OnExecute = actZoomMenosExecute
+    end
+    object actGRFTitulo: TAction
+      Category = 'Gr'#225'fico'
+      Caption = 'actGRFTitulo'
+      Hint = 'Alterar titulo'
+      ImageIndex = 43
+      OnExecute = actGRFTituloExecute
+    end
+    object actGRFImprimir: TAction
+      Category = 'Gr'#225'fico'
+      Caption = 'actGRFImprimir'
+      Hint = 'Imprimir gr'#225'fico'
+      ImageIndex = 21
+      OnExecute = actGRFImprimirExecute
+    end
+    object actGRFSalvarTXT: TAction
+      Category = 'Gr'#225'fico'
+      Caption = 'actGRFSalvarTXT'
+      Hint = 'Salvar dados em *.txt'
+      ImageIndex = 18
+      OnExecute = actGRFSalvarTXTExecute
+    end
+    object actEtiqueta: TAction
+      Category = 'Gr'#225'fico'
+      Caption = 'actEtiqueta'
+      Hint = 'Legenda por coluna'
+      ImageIndex = 55
+      OnExecute = actEtiquetaExecute
+    end
+    object actGRFPlataforma: TAction
+      Category = 'Gr'#225'fico'
+      Caption = 'actGRFPlataforma'
+      OnExecute = actGRFPlataformaExecute
+    end
+    object actGRFTipoEtapaServico: TAction
+      Category = 'Gr'#225'fico'
+      Caption = 'actGRFTipoEtapaServico'
+      OnExecute = actGRFTipoEtapaServicoExecute
+    end
+    object actGRFVencimento: TAction
+      Category = 'Gr'#225'fico'
+      Caption = 'actGRFVencimento'
+      OnExecute = actGRFVencimentoExecute
+    end
+    object actOrdemManutencao: TAction
+      Category = 'Bot'#245'es'
+      Caption = 'SAP [OM] - Selecionado'
+      Hint = 'Carregar Ordens de Manuten'#231#227'o'
+      ImageIndex = 463
+      ShortCut = 119
+      OnExecute = actOrdemManutencaoExecute
+    end
+    object actCarregarOrdemManutencao: TAction
+      Category = 'Configura'#231#227'o'
+      Caption = 'actCarregarOrdemManutencao'
+      OnExecute = actCarregarOrdemManutencaoExecute
+    end
+    object actOrdemManutencaoTodos: TAction
+      Category = 'Bot'#245'es'
+      Caption = 'SAP [OM] - Todos'
+      ImageIndex = 463
+      OnExecute = actOrdemManutencaoTodosExecute
+    end
+    object actFiltroInserir: TAction
+      Category = 'Tabela'
+      Caption = 'Inserir'
+      Hint = 'Inserir filtro'
+      ImageIndex = 194
+      OnExecute = actFiltroInserirExecute
+    end
+    object actGridASC: TAction
+      Category = 'Tabela'
+      Caption = 'actGridASC'
+      Hint = 'Crescente'
+      ImageIndex = 86
+      OnExecute = actGridASCExecute
+    end
+    object actGridDESC: TAction
+      Category = 'Tabela'
+      Caption = 'actGridDESC'
+      Hint = 'Descrescente'
+      ImageIndex = 85
+      OnExecute = actGridDESCExecute
+    end
+    object actSubstituirPor: TAction
+      Category = 'Tabela'
+      Caption = 'actSubstituirPor'
+      Hint = 'Substituir Por'
+      ImageIndex = 59
+      OnExecute = actSubstituirPorExecute
+    end
+    object actLimparFiltros: TAction
+      Category = 'Tabela'
+      Caption = 'Limpar'
+      Hint = 'Limpar Filtros'
+      ImageIndex = 469
+      OnExecute = actLimparFiltrosExecute
+    end
+    object actBaixo: TAction
+      Category = 'Layout'
+      Caption = 'actBaixo'
+      Hint = 'Mover para Colunas Optativas'
+      ImageIndex = 126
+      OnExecute = actBaixoExecute
+    end
+    object actCima: TAction
+      Category = 'Layout'
+      Caption = 'actCima'
+      Hint = 'Mover para Colunas Ativas'
+      ImageIndex = 125
+      OnExecute = actCimaExecute
+    end
+    object actSalvarLayout: TAction
+      Category = 'Layout'
+      Caption = 'actSalvarLayout'
+      Hint = 'Salvar Layout'
+      ImageIndex = 18
+      OnExecute = actSalvarLayoutExecute
+    end
+    object actLayoutJanela: TAction
+      Category = 'Layout'
+      Caption = 'Layout'
+      Hint = 'Layout da tabela'
+      ImageIndex = 466
+      OnExecute = actLayoutJanelaExecute
+    end
+    object actFiltrosTabela: TAction
+      Category = 'Tabela'
+      Caption = 'Filtros'
+      Hint = 'Visualizar tabela de filtros'
+      ImageIndex = 470
+      OnExecute = actFiltrosTabelaExecute
+    end
+    object actSalvarProrrogacaoData: TAction
+      Category = 'Prorrogacao'
+      Caption = 'actSalvarProrrogacaoData'
+      Hint = 'Gravar dados'
+      ImageIndex = 18
+      ShortCut = 117
+      OnExecute = actSalvarProrrogacaoDataExecute
+    end
+    object actInserirLinha: TAction
+      Category = 'Prorrogacao'
+      Caption = 'actInserirLinha'
+      Hint = 'Inserir linha'
+      ImageIndex = 194
+      OnExecute = actInserirLinhaExecute
+    end
+    object actExcluirLinha: TAction
+      Category = 'Prorrogacao'
+      Caption = 'actExcluirLinha'
+      Hint = 'Excluir linha'
+      ImageIndex = 324
+      OnExecute = actExcluirLinhaExecute
+    end
+    object actProcuraFiltrosTabela: TAction
+      Category = 'Tabela'
+      Caption = 'actProcuraFiltrosTabela'
+      OnExecute = actProcuraFiltrosTabelaExecute
+    end
+    object actOrdemManutencaoLimpar: TAction
+      Category = 'Bot'#245'es'
+      Caption = 'SAP [OM] - Limpar dados selecionado'
+      ImageIndex = 463
+      OnExecute = actOrdemManutencaoLimparExecute
+    end
+    object actRelatorioMarinha: TAction
+      Category = 'Carta'
+      Caption = 'Relat'#243'rio'
+      Hint = 'Visualizar o relat'#243'rio da Marinha'
+      ImageIndex = 114
+      OnExecute = actRelatorioMarinhaExecute
+    end
+    object actGRFVencimentoCarta: TAction
+      Category = 'Gr'#225'fico'
+      Caption = 'actGRFVencimentoCarta'
+      OnExecute = actGRFVencimentoCartaExecute
+    end
+    object actGRFPericiaRetificado: TAction
+      Category = 'Gr'#225'fico'
+      Caption = 'actGRFPericiaRetificado'
+      OnExecute = actGRFPericiaRetificadoExecute
+    end
+    object actGRFVencimentoRetificado: TAction
+      Category = 'Gr'#225'fico'
+      Caption = 'actGRFVencimentoRetificado'
+      OnExecute = actGRFVencimentoRetificadoExecute
+    end
+    object actConfigPickList: TAction
+      Category = 'Configura'#231#227'o'
+      Caption = 'actConfigPickList'
+      OnExecute = actConfigPickListExecute
+    end
+    object Carta: TAction
+      Category = 'Carta'
+      Caption = 'Carta'
+      Hint = 'Visualizar Carta Enviada em PDF'
+      ImageIndex = 114
+      OnExecute = CartaExecute
+    end
+    object actMACLetter: TAction
+      Category = 'Carta'
+      Caption = 'Minuta'
+      Hint = 'Gerar carta para Marinha conforme itens filtrados'
+      ImageIndex = 224
+      OnExecute = actMACLetterExecute
+    end
+    object actCartaSalvar: TAction
+      Category = 'Carta'
+      Caption = 'Salvar'
+      Hint = 'Salvar arquivo *.txt'
+      ImageIndex = 18
+      ShortCut = 120
+      OnExecute = actCartaSalvarExecute
+    end
+    object actCartaCopiar: TAction
+      Category = 'Carta'
+      Caption = 'Copiar'
+      Hint = 'Copiar para o clipboard'
+      ImageIndex = 138
+      ShortCut = 119
+      OnExecute = actCartaCopiarExecute
+    end
+    object actCartaSelTudo: TAction
+      Category = 'Carta'
+      Caption = 'actCartaSelTudo'
+      ShortCut = 16468
+      OnExecute = actCartaSelTudoExecute
+    end
+    object actFiltroInserirResumo: TAction
+      Category = 'Tabela Resumo Carta'
+      Caption = 'actFiltroInserirResumo'
+      OnExecute = actFiltroInserirResumoExecute
+    end
+    object actGridASCResumo: TAction
+      Category = 'Tabela Resumo Carta'
+      Caption = 'actGridASCResumo'
+      OnExecute = actGridASCResumoExecute
+    end
+    object actGridDESCResumo: TAction
+      Category = 'Tabela Resumo Carta'
+      Caption = 'actGridDESCResumo'
+      OnExecute = actGridDESCResumoExecute
+    end
+    object actLimparFiltrosResumo: TAction
+      Category = 'Tabela Resumo Carta'
+      Caption = 'Limpar'
+      Hint = 'Limpar Filtros'
+      ImageIndex = 469
+      OnExecute = actLimparFiltrosResumoExecute
+    end
+    object actFiltrosTabelaResumo: TAction
+      Category = 'Tabela Resumo Carta'
+      Caption = 'Filtros'
+      Hint = 'Visualizar tabela de filtros'
+      ImageIndex = 470
+      OnExecute = actFiltrosTabelaResumoExecute
+    end
+    object actProcuraFiltrosTabelaResumo: TAction
+      Category = 'Tabela Resumo Carta'
+      Caption = 'actProcuraFiltrosTabelaResumo'
+      OnExecute = actProcuraFiltrosTabelaResumoExecute
+    end
+    object actProcurarResumoCarta: TAction
+      Category = 'Carta'
+      Caption = 'actProcurarResumoCarta'
+      OnExecute = actProcurarResumoCartaExecute
+    end
+    object actAjudaLimpar: TAction
+      Category = 'Configura'#231#227'o'
+      Caption = 'actAjudaLimpar'
+    end
+    object actExcelControleCarta: TAction
+      Category = 'Excel'
+      Caption = 'Exportar'
+      Hint = 'Exportar para o Excel'
+      ImageIndex = 54
+    end
+    object actGRFControleCarta: TAction
+      Category = 'Gr'#225'fico'
+      Caption = 'actGRFControleCarta'
+      OnExecute = actGRFControleCartaExecute
+    end
+    object actPIEControleCarta: TAction
+      Category = 'Gr'#225'fico'
+      Caption = 'actPIEControleCarta'
+    end
+    object actPIEProrrogacao: TAction
+      Category = 'Gr'#225'fico'
+      Caption = 'actPIEProrrogacao'
+      OnExecute = actPIEProrrogacaoExecute
+    end
+    object actBarraProrrogacao: TAction
+      Category = 'Gr'#225'fico'
+      Caption = 'actBarraProrrogacao'
+      OnExecute = actBarraProrrogacaoExecute
+    end
+    object actPIEVencimento: TAction
+      Category = 'Gr'#225'fico'
+      Caption = 'actPIEVencimento'
+      OnExecute = actPIEVencimentoExecute
+    end
+    object actBarraVencimento: TAction
+      Category = 'Gr'#225'fico'
+      Caption = 'actBarraVencimento'
+      OnExecute = actBarraVencimentoExecute
+    end
+    object actGRFPrazoAtendimento: TAction
+      Category = 'Gr'#225'fico'
+      Caption = 'actGRFPrazoAtendimento'
+      OnExecute = actGRFPrazoAtendimentoExecute
+    end
+    object actPIEPrazoAtendimento: TAction
+      Category = 'Gr'#225'fico'
+      Caption = 'actPIEPrazoAtendimento'
+      OnExecute = actPIEPrazoAtendimentoExecute
+    end
+    object actExcelTexto: TAction
+      Category = 'Excel'
+      Caption = 'Exportar dados para arquixo *.txt'
+      Hint = 'Exportar dados para arquixo *.txt'
+      ImageIndex = 54
+      OnExecute = actExcelTextoExecute
+    end
+    object actAnexarFoto: TAction
+      Category = 'Fotos'
+      Caption = 'Anexar'
+      Hint = 'Anexar fotos'
+      ImageIndex = 137
+      OnExecute = actAnexarFotoExecute
+    end
+    object actFotosExcluir: TAction
+      Category = 'Fotos'
+      Caption = 'Excluir'
+      Hint = 'Excluir foto selecionada'
+      ImageIndex = 450
+      OnExecute = actFotosExcluirExecute
+    end
+    object actSalvarFoto: TAction
+      Category = 'Fotos'
+      Caption = 'Salvar'
+      Hint = 'Salvar foto'
+      ImageIndex = 18
+      OnExecute = actSalvarFotoExecute
+    end
+    object actFotosAbrir: TAction
+      Category = 'Fotos'
+      Caption = 'actFotosAbrir'
+      OnExecute = actFotosAbrirExecute
+    end
+  end
+  object SaveDialog1: TSaveDialog
+    DefaultExt = '*.txt'
+    FileName = 'Marinha'
+    Filter = 'Notepad|*.txt'
+    Left = 104
+    Top = 168
+  end
+  object SavePictureDialog1: TSavePictureDialog
+    Left = 176
+    Top = 216
+  end
+  object PopupMenuOM: TPopupMenu
+    Left = 297
+    Top = 181
+    object SAPOM1: TMenuItem
+      Caption = 'SAP [OM] - Selecionado'
+      Hint = 'Carregar Ordens de Manuten'#231#227'o'
+      ImageIndex = 463
+      ShortCut = 119
+      OnClick = SAPOM1Click
+    end
+    object SAPOMTodos1: TMenuItem
+      Action = actOrdemManutencaoTodos
+    end
+    object SAPOMLimpardadosselecionado1: TMenuItem
+      Action = actOrdemManutencaoLimpar
+    end
+  end
+  object PopupMenuExcel: TPopupMenu
+    Left = 268
+    Top = 160
+    object ExportarFILTRADOSformatado1: TMenuItem
+      Action = actExcel
+      Caption = 'Exportar "FILTRADOS"'
+    end
+    object Exportartabeladobancodedados1: TMenuItem
+      Action = acrExcelTabelaAccess
+    end
+  end
+  object OpenPictureDialog1: TOpenPictureDialog
+    Options = [ofHideReadOnly, ofAllowMultiSelect, ofEnableSizing]
+    Left = 576
+    Top = 229
+  end
+end

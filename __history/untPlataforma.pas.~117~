@@ -1,0 +1,1022 @@
+unit untPlataforma;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, Vcl.Buttons, Vcl.CheckLst, Vcl.ExtCtrls, Vcl.ComCtrls,
+  Vcl.Samples.Spin, Vcl.OleCtrls, SHDocVw, Vcl.DBCtrls,
+  Vcl.ToolWin, Vcl.Grids, Vcl.DBGrids,ComOBJ, System.Actions, Vcl.ActnList,
+  Vcl.PlatformDefaultStyleActnCtrls, Vcl.ActnMan, Vcl.Mask, Menus, Data.DB,
+  SDL_rchart, Vcl.ExtDlgs,Math,SDL_sdlbase, SDL_NumIO, Data.Win.ADODB,System.Types,DateUtils;
+
+
+type
+  TFrmPlataforma = class(TForm)
+    ActionManager1: TActionManager;
+    actPanTo: TAction;
+    actImprimir: TAction;
+    actSalvar: TAction;
+    PanelTitulo: TPanel;
+    PageControl1: TPageControl;
+    TabSheet1: TTabSheet;
+    TabSheet2: TTabSheet;
+    PanelMapaGeral: TPanel;
+    PanelMapa: TPanel;
+    ToolBar2: TToolBar;
+    ToolButton8: TToolButton;
+    ToolButton10: TToolButton;
+    ToolBar1: TToolBar;
+    DBNavigatorCadastro: TDBNavigator;
+    ToolButton2: TToolButton;
+    DBGridPlataformas: TDBGrid;
+    DBEdit1: TDBEdit;
+    actAtualizarTituo: TAction;
+    btnPanTo: TToolButton;
+    ToolButton11: TToolButton;
+    actMarcar: TAction;
+    actProcurar: TAction;
+    DBNavigatorMapa: TDBNavigator;
+    ToolButton5: TToolButton;
+    RChartMapa: TRChart;
+    SavePictureDialog1: TSavePictureDialog;
+    actCalcularXY: TAction;
+    ToolButton6: TToolButton;
+    ToolButton7: TToolButton;
+    ToolButton9: TToolButton;
+    actZoomFit: TAction;
+    actPan: TAction;
+    actZoomDinamico: TAction;
+    actZoomWindow: TAction;
+    ToolButton13: TToolButton;
+    ToolBar19: TToolBar;
+    CheckBox1: TCheckBox;
+    ToolButton18: TToolButton;
+    edtGridXFEA: TNumIO2;
+    edtGridYFEA: TNumIO2;
+    ToolButton57: TToolButton;
+    edtXFEA: TNumIO2;
+    ToolButton60: TToolButton;
+    edtYFEA: TNumIO2;
+    ToolButton71: TToolButton;
+    StatusBarMapa: TStatusBar;
+    ToolButton14: TToolButton;
+    actClearGrafico: TAction;
+    btnCotas: TToolButton;
+    ToolButton3: TToolButton;
+    PopupMenuMapa: TPopupMenu;
+    actMapaMundi: TAction;
+    MemoMapaMundi: TMemo;
+    MapaMundi1: TMenuItem;
+    actBrasil: TAction;
+    Brasil1: TMenuItem;
+    actLatitudeLongitude: TAction;
+    LatitudeseLongitudes1: TMenuItem;
+    actCarregarLinhas: TAction;
+    OpenDialog1: TOpenDialog;
+    Carregarlinhas2Dx1y1x2y21: TMenuItem;
+    actAbrirDesenho: TAction;
+    actSalvarDesenhoData: TAction;
+    ToolButton12: TToolButton;
+    ToolButton15: TToolButton;
+    SaveDialog1: TSaveDialog;
+    StatusBar1: TStatusBar;
+    ColunasLayout: TStringGrid;
+    actFiltroInserir: TAction;
+    actGridASC: TAction;
+    actGridDESC: TAction;
+    actSubstituirPor: TAction;
+    actLimparFiltros: TAction;
+    actFiltrosTabela: TAction;
+    actProcuraFiltrosTabela: TAction;
+    BitBtn1: TBitBtn;
+    BitBtn4: TBitBtn;
+    actExcel: TAction;
+    BitBtn3: TBitBtn;
+    actTabuaMare: TAction;
+    BitBtn5: TBitBtn;
+    actProcurarTabuaMare: TAction;
+    actExcelTabuaMAre: TAction;
+    actExcelImportarTabuaMare: TAction;
+    actCimaTudo: TAction;
+    actBaixoTudo: TAction;
+    actBaixo: TAction;
+    actCima: TAction;
+    actSalvarLayout: TAction;
+    actLayoutJanela: TAction;
+    BitBtn2: TBitBtn;
+    procedure StatusBar1DrawPanel(StatusBar: TStatusBar; Panel: TStatusPanel;
+      const Rect: TRect);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure FormCreate(Sender: TObject);
+    procedure FormDestroy(Sender: TObject);
+    procedure DBGridPlataformasDrawColumnCell(Sender: TObject;
+      const Rect: TRect; DataCol: Integer; Column: TColumn;
+      State: TGridDrawState);
+    procedure actAtualizarTituoExecute(Sender: TObject);
+    procedure PageControl1Change(Sender: TObject);
+    procedure actProcurarExecute(Sender: TObject);
+    procedure DBEdit1Change(Sender: TObject);
+    procedure actSalvarExecute(Sender: TObject);
+    procedure actMarcarExecute(Sender: TObject);
+    procedure actCalcularXYExecute(Sender: TObject);
+    procedure actZoomFitExecute(Sender: TObject);
+    procedure actPanExecute(Sender: TObject);
+    procedure actZoomDinamicoExecute(Sender: TObject);
+    procedure actZoomWindowExecute(Sender: TObject);
+    procedure RChartMapaDblClick(Sender: TObject);
+    procedure edtGridXFEAChange(Sender: TObject);
+    procedure edtGridYFEAChange(Sender: TObject);
+    procedure RChartMapaMouseMove(Sender: TObject; Shift: TShiftState; X,
+      Y: Integer);
+    procedure RChartMapaMouseLeave(Sender: TObject);
+    procedure RChartMapaZoomPan(Sender: TObject);
+    procedure CheckBox1Click(Sender: TObject);
+    procedure actPanToExecute(Sender: TObject);
+    procedure actClearGraficoExecute(Sender: TObject);
+    procedure actImprimirExecute(Sender: TObject);
+    procedure PanelTituloAjudaMouseDown(Sender: TObject; Button: TMouseButton;
+      Shift: TShiftState; X, Y: Integer);
+    procedure RChartMapaMouseDown(Sender: TObject; Button: TMouseButton;
+      Shift: TShiftState; X, Y: Integer);
+    procedure btnCotasClick(Sender: TObject);
+    procedure actMapaMundiExecute(Sender: TObject);
+    procedure actBrasilExecute(Sender: TObject);
+    procedure actLatitudeLongitudeExecute(Sender: TObject);
+    procedure actCarregarLinhasExecute(Sender: TObject);
+    procedure actAbrirDesenhoExecute(Sender: TObject);
+    procedure actSalvarDesenhoDataExecute(Sender: TObject);
+    procedure DBGridPlataformasCellClick(Column: TColumn);
+    procedure actFiltrosTabelaExecute(Sender: TObject);
+    procedure actFiltroInserirExecute(Sender: TObject);
+    procedure actGridASCExecute(Sender: TObject);
+    procedure actGridDESCExecute(Sender: TObject);
+    procedure actSubstituirPorExecute(Sender: TObject);
+    procedure actLimparFiltrosExecute(Sender: TObject);
+    procedure actProcuraFiltrosTabelaExecute(Sender: TObject);
+    procedure DBGridPlataformasTitleClick(Column: TColumn);
+    procedure actExcelExecute(Sender: TObject);
+    procedure actCimaTudoExecute(Sender: TObject);
+    procedure actBaixoTudoExecute(Sender: TObject);
+    procedure actBaixoExecute(Sender: TObject);
+    procedure actCimaExecute(Sender: TObject);
+    procedure actSalvarLayoutExecute(Sender: TObject);
+    procedure actLayoutJanelaExecute(Sender: TObject);
+
+  private
+    //procedure DoMap;
+    booleanZoomMapa,Capturing: Boolean;
+    MouseDownSpot: TPoint;
+    TabResultado: Integer;
+    AlturaAgora: Double;
+    txtLayout: String;
+    procedure WMMDIACTIVATE(var msg: TWMMDIACTIVATE);message WM_MDIACTIVATE;
+
+  public
+
+  end;
+
+var
+  FrmPlataforma: TFrmPlataforma;
+
+implementation
+
+uses
+  untPrincipal,untDataModule,untFrmPreview;
+
+function GetStatusBarPanelXY(StatusBar : TStatusBar; X, Y: Integer) : Integer;
+var
+  i: Integer;
+  R: TRect;
+begin
+  Result := -1;
+
+  // Buscamos panel a panel hasta encontrar en cual está XY
+  with StatusBar do
+    for i := 0 to Panels.Count - 1 do
+    begin
+      // Obtenemos las dimensiones del panel
+      SendMessage(Handle, WM_USER + 10, i, Integer(@R));
+      if PtInRect(R, Point(x,y)) then
+      begin
+        Result := i;
+        Break;
+      end;
+    end;
+end;
+
+{$R *.dfm}
+
+procedure TFrmPlataforma.DBEdit1Change(Sender: TObject);
+begin
+  actAtualizarTituo.Execute;
+  if btnPanTo.Down then
+    actPanTo.Execute;
+end;
+
+procedure TFrmPlataforma.DBGridPlataformasCellClick(Column: TColumn);
+begin
+  if ((FrmPrincipal.logPerfil = 'Administrador') OR
+  (FrmPrincipal.logPerfil = 'Supervisor')) then
+  begin
+    try
+      if (Self.DBGridPlataformas.SelectedField.DataType = ftBoolean)AND
+      (Column.Field.FieldName = 'booleanPlataforma') then
+      begin
+        DBGridPlataformas.Options:=
+        [dgTitles,dgIndicator,dgColumnResize,dgColLines,dgRowLines,dgTabs,dgAlwaysShowSelection,dgTitleClick,dgTitleHotTrack];
+        FrmDataModule.ADOQueryPlataforma.Edit;
+        FrmDataModule.DataSourcePlataforma.DataSet.
+        FieldByName('booleanPlataforma').AsBoolean:= not Self.DBGridPlataformas.SelectedField.AsBoolean;
+        FrmDataModule.ADOQueryPlataforma.Post;
+      end
+      else if (Self.DBGridPlataformas.SelectedField.DataType = ftBoolean)AND
+      (Column.Field.FieldName = 'booleanOrigem') then
+      begin
+        DBGridPlataformas.Options:=
+        [dgTitles,dgIndicator,dgColumnResize,dgColLines,dgRowLines,dgTabs,dgAlwaysShowSelection,dgTitleClick,dgTitleHotTrack];
+        FrmDataModule.ADOQueryPlataforma.Edit;
+        FrmDataModule.DataSourcePlataforma.DataSet.
+        FieldByName('booleanOrigem').AsBoolean:= not Self.DBGridPlataformas.SelectedField.AsBoolean;
+        FrmDataModule.ADOQueryPlataforma.Post;
+      end
+      else
+        DBGridPlataformas.Options:=
+        [dgEditing,dgTitles,dgIndicator,dgColumnResize,dgColLines,dgRowLines,dgTabs,dgAlwaysShowSelection,dgTitleClick,dgTitleHotTrack];
+    except
+    end;
+  end;
+end;
+
+procedure TFrmPlataforma.DBGridPlataformasDrawColumnCell(Sender: TObject;
+  const Rect: TRect; DataCol: Integer; Column: TColumn; State: TGridDrawState);
+    var
+      CheckBoxRectangle : TRect;
+    Const
+    CtrlState : array[Boolean] of Integer = (DFCS_BUTTONCHECK,
+    DFCS_BUTTONCHECK or DFCS_CHECKED);
+begin
+  FrmPrincipal.GridZebrado(DBGridPlataformas,ColunasLayout,State,Rect,DataCol,Column);
+  if ((Column.Field.FieldName = 'booleanPlataforma')OR
+  (Column.Field.FieldName = 'booleanOrigem')) then
+  begin
+    Self.DBGridPlataformas.Canvas.FillRect(Rect);
+    CheckBoxRectangle.Left := Rect.Left + 2;
+    CheckBoxRectangle.Right := Rect.Right - 2;
+    CheckBoxRectangle.Top := Rect.Top + 2;
+    CheckBoxRectangle.Bottom := Rect.Bottom - 2;
+    DrawFrameControl(Self.DBGridPlataformas.Canvas.Handle,
+    CheckBoxRectangle, DFC_BUTTON,
+    CtrlState[Column.Field.AsBoolean]);
+  end;
+end;
+
+procedure TFrmPlataforma.DBGridPlataformasTitleClick(Column: TColumn);
+begin
+  TabResultado:= 0;
+  FrmPrincipal.configurarFiltro(1,Column.FieldName,IntToStr(Column.Index),
+  Column.ReadOnly,actFiltroInserir,actGridASC,actGridDESC,actSubstituirPor);
+  //======================================================
+  FrmPrincipal.titleGrid(ColunasLayout,'Consulta',FrmDataModule.ADOQueryPlataforma.SQL.Text);
+end;
+
+procedure TFrmPlataforma.edtGridXFEAChange(Sender: TObject);
+begin
+  RChartMapa.GridDx:= edtGridXFEA.Value;
+end;
+
+procedure TFrmPlataforma.edtGridYFEAChange(Sender: TObject);
+begin
+  RChartMapa.GridDy:= edtGridYFEA.Value;
+end;
+
+procedure TFrmPlataforma.actAbrirDesenhoExecute(Sender: TObject);
+begin
+  OpenDialog1.FileName:= 'Desenho.zuchi';
+  OpenDialog1.DefaultExt:= 'zuchi';
+  OpenDialog1.Filter:= 'Desenho (*.zuchi)|*.zuchi|Todos os Arquivos (*.*)|*.*';
+  if OpenDialog1.Execute then
+    RChartMapa.LoadData(OpenDialog1.FileName,true);
+end;
+
+procedure TFrmPlataforma.actAtualizarTituoExecute(Sender: TObject);
+  var
+    plataforma: String;
+begin
+  //Nome da plataforma e guindaste no titulo de cada aba
+  plataforma:=
+  FrmDataModule.DataSourcePlataforma.
+  DataSet.FieldByName('Plataforma').AsString+
+  ' - Lat.: '+ FrmDataModule.DataSourcePlataforma.
+  DataSet.FieldByName('Latitude').AsString+
+  '; Lgn.: '+ FrmDataModule.DataSourcePlataforma.
+  DataSet.FieldByName('Longitude').AsString;
+
+  PanelTitulo.Caption:=
+  'Cadastro de Instalações - '+plataforma;
+end;
+
+procedure TFrmPlataforma.actBaixoExecute(Sender: TObject);
+begin
+  FrmPrincipal.moveBaixo(DBGridPlataformas, ColunasLayout);
+  actLimparFiltros.Execute;
+end;
+
+procedure TFrmPlataforma.actBaixoTudoExecute(Sender: TObject);
+begin
+  FrmPrincipal.botaoMoveTudo(FrmDataModule.ADOConnectionConsulta,
+  txtLayout,'tblPlataforma','TAB2;',
+  DBGridPlataformas,ColunasLayout);
+  actLimparFiltros.Execute;
+end;
+
+procedure TFrmPlataforma.actBrasilExecute(Sender: TObject);
+  var
+    i: integer;
+    ListaXY: TStringList;
+    X1,Y1,X2,Y2: Double;
+    Endereco: String;
+begin
+  Endereco := ExtractFilePath(Application.ExeName) + 'Mapas\Mapa_3.txt';
+  MemoMapaMundi.Lines.LoadFromFile(Endereco);
+  ListaXY:=TStringList.Create;
+  ListaXY.delimiter:= ';';
+  ListaXY.StrictDelimiter:=False;
+  RChartMapa.LineWidth:= 1;
+  RChartMapa.PenStyle:= psSolid;
+  RChartMapa.DataColor:= clLime;
+  for i := 1 to MemoMapaMundi.Lines.Count-1 do
+  begin
+    ListaXY.Clear;
+    ListaXY.DelimitedText:= MemoMapaMundi.Lines[i];
+    X1:= StrToFloat(ListaXY[0]);
+    Y1:= StrToFloat(ListaXY[1]);
+    X2:= StrToFloat(ListaXY[2]);
+    Y2:= StrToFloat(ListaXY[3]);
+    RChartMapa.MoveTo(X1,Y1);
+    RChartMapa.DrawTo(X2,Y2);
+    //RChartMapa.MarkAt(X,Y,24);
+  end;
+  actZoomFit.Execute;
+end;
+
+procedure TFrmPlataforma.actCalcularXYExecute(Sender: TObject);
+  var
+    Latitude,Longitude: Double;
+    NoOrigem,NODestino: TPointFloat;
+begin
+  FrmDataModule.ADOQueryPlataforma.Active:= false;
+  FrmDataModule.ADOQueryPlataforma.Active:= true;
+  NoOrigem.X:= 0;
+  NoOrigem.Y:= 0;
+  FrmDataModule.ADOQueryPlataforma.Active:= false;
+  FrmDataModule.ADOQueryPlataforma.Active:= true;
+  //======================================================
+  FrmPrincipal.ProgressBarIncializa(FrmDataModule.ADOQueryPlataforma.RecordCount,'Calculando coordenadas (X,Y)');
+  FrmDataModule.DataSourcePlataforma.Enabled:= false;
+  FrmDataModule.ADOQueryPlataforma.First;
+  while not(FrmDataModule.ADOQueryPlataforma.Eof) do
+  begin
+    Latitude:= FrmDataModule.DataSourcePlataforma.
+    DataSet.FieldByName('Latitude').AsFloat;
+    Longitude:= FrmDataModule.DataSourcePlataforma.
+    DataSet.FieldByName('Longitude').AsFloat;
+    NODestino:= FrmPrincipal.LatLong_XY(Latitude,Longitude);
+    FrmDataModule.ADOQueryPlataforma.Edit;
+    FrmDataModule.DataSourcePlataforma.
+    DataSet.FieldByName('CoordX').AsFloat:= RoundTo(NODestino.X,-4);
+    FrmDataModule.DataSourcePlataforma.
+    DataSet.FieldByName('CoordY').AsFloat:= RoundTo(NODestino.Y,-4);
+    FrmDataModule.ADOQueryPlataforma.Post;
+    FrmDataModule.ADOQueryPlataforma.Next;
+    FrmPrincipal.ProgressBarIncremento(1);
+  end;
+  FrmDataModule.ADOQueryPlataforma.First;
+  FrmDataModule.DataSourcePlataforma.Enabled:= true;
+  FrmPrincipal.ProgressBarAtualizar;
+end;
+
+procedure TFrmPlataforma.actCarregarLinhasExecute(Sender: TObject);
+  var
+    i: integer;
+    ListaXY: TStringList;
+    X1,Y1,X2,Y2: Double;
+begin
+  OpenDialog1.FileName:= 'Desenho.txt';
+  OpenDialog1.DefaultExt:= 'txt';
+  OpenDialog1.Filter:= 'Desenho (*.txt)|*.txt|Todos os Arquivos (*.*)|*.*';
+  if OpenDialog1.Execute then
+  begin
+    MemoMapaMundi.Lines.LoadFromFile(OpenDialog1.FileName);
+    ListaXY:=TStringList.Create;
+    ListaXY.delimiter:= ';';
+    ListaXY.StrictDelimiter:=False;
+    RChartMapa.LineWidth:= 1;
+    RChartMapa.PenStyle:= psSolid;
+    RChartMapa.DataColor:= clBlue;
+    for i := 1 to MemoMapaMundi.Lines.Count-1 do
+    begin
+      ListaXY.Clear;
+      ListaXY.DelimitedText:= MemoMapaMundi.Lines[i];
+      X1:= StrToFloat(ListaXY[0]);
+      Y1:= StrToFloat(ListaXY[1]);
+      X2:= StrToFloat(ListaXY[2]);
+      Y2:= StrToFloat(ListaXY[3]);
+      RChartMapa.MoveTo(X1,Y1);
+      RChartMapa.DrawTo(X2,Y2);
+      //RChartMapa.MarkAt(X,Y,24);
+    end;
+    actZoomFit.Execute;
+  end;
+end;
+
+procedure TFrmPlataforma.actCimaExecute(Sender: TObject);
+begin
+  FrmPrincipal.moveCima(DBGridPlataformas, ColunasLayout);
+  actLimparFiltros.Execute;
+end;
+
+procedure TFrmPlataforma.actCimaTudoExecute(Sender: TObject);
+begin
+  FrmPrincipal.botaoMoveTudo(FrmDataModule.ADOConnectionConsulta,
+  txtLayout,'tblPlataforma','TAB1;',
+  DBGridPlataformas,ColunasLayout);
+  actLimparFiltros.Execute;
+end;
+
+procedure TFrmPlataforma.actClearGraficoExecute(Sender: TObject);
+begin
+  RChartMapa.ClearGraf;
+  RChartMapa.Repaint;
+end;
+
+procedure TFrmPlataforma.actExcelExecute(Sender: TObject);
+begin
+  FrmPrincipal.GerarExcel(DBGridPlataformas,'Plataformas');
+end;
+
+procedure TFrmPlataforma.actFiltroInserirExecute(Sender: TObject);
+begin
+  case TabResultado of
+    0:
+    begin
+      FrmPrincipal.inserirProcura(DBGridPlataformas,ColunasLayout);
+      actProcurar.Execute;
+    end;
+
+  end;
+  if (FrmPrincipal.PanelFiltrosTabela.Visible)AND(FrmPrincipal.PanelAjuda1.Visible) then
+    actFiltrosTabela.Execute;
+end;
+
+procedure TFrmPlataforma.actFiltrosTabelaExecute(Sender: TObject);
+begin
+  FrmPrincipal.btnProcurarFiltrosTabela.Action:= actProcuraFiltrosTabela;
+  case TabResultado of
+    0: FrmPrincipal.FiltrosTabela(DBGridPlataformas,ColunasLayout);
+  end;
+end;
+
+procedure TFrmPlataforma.actGridASCExecute(Sender: TObject);
+begin
+  case TabResultado of
+    0:FrmPrincipal.ClassificaDBGrid(DBGridPlataformas,FrmDataModule.ADOQueryPlataforma,0);
+  end;
+end;
+
+procedure TFrmPlataforma.actGridDESCExecute(Sender: TObject);
+begin
+  case TabResultado of
+    0:FrmPrincipal.ClassificaDBGrid(DBGridPlataformas,FrmDataModule.ADOQueryPlataforma,1);
+  end;
+end;
+
+procedure TFrmPlataforma.actImprimirExecute(Sender: TObject);
+begin
+  RChartMapa.ChartColor:= clWhite;
+  if not Assigned(FrmPreview) then
+    FrmPreview:=TFrmPreview.Create(Application)
+  else
+    FrmPreview.Show;
+  try
+    FrmPreview.ListaTituloRelatorio1:= TStringList.Create;
+    FrmPreview.ListaTituloRelatorio1.Add('Mapa de Plataformas');
+    FrmPreview.RadioGroupRelatorio.ItemIndex:= 3;
+    FrmPreview.PrintPreview.PrintJobTitle:= 'Mapa de Plataformas';
+    FrmPreview.GeneratePages;
+  except
+    RChartMapa.Align:= alClient;
+    RChartMapa.ChartColor:= clGradientInactiveCaption;
+  end;
+end;
+
+procedure TFrmPlataforma.actLatitudeLongitudeExecute(Sender: TObject);
+  var
+    i: integer;
+    ListaXY: TStringList;
+    X1,Y1,X2,Y2: Double;
+    Endereco: String;
+begin
+  Endereco := ExtractFilePath(Application.ExeName) + 'Mapas\Mapa_2.txt';
+  MemoMapaMundi.Lines.LoadFromFile(Endereco);
+  ListaXY:=TStringList.Create;
+  ListaXY.delimiter:= ';';
+  ListaXY.StrictDelimiter:=False;
+  RChartMapa.LineWidth:= 1;
+  RChartMapa.PenStyle:= psDashDot;
+  RChartMapa.FillColor:= RChartMapa.ChartColor;
+  RChartMapa.DataColor:= clGray;
+  for i := 1 to MemoMapaMundi.Lines.Count-1 do
+  begin
+    ListaXY.Clear;
+    ListaXY.DelimitedText:= MemoMapaMundi.Lines[i];
+    X1:= StrToFloat(ListaXY[0]);
+    Y1:= StrToFloat(ListaXY[1]);
+    X2:= StrToFloat(ListaXY[2]);
+    Y2:= StrToFloat(ListaXY[3]);
+    RChartMapa.MoveTo(X1,Y1);
+    RChartMapa.DrawTo(X2,Y2);
+  end;
+  //Escala de Latitude
+  RChartMapa.TextBkStyle:= tbClear;
+  RChartMapa.TextAlignment:= taCenter;
+  RChartMapa.TextBkColor:= RChartMapa.ChartColor;
+  RChartMapa.DataColor:= clFuchsia;
+  for i := 0 to 12 do
+  begin
+    RChartMapa.Text(i*1669.793,-7500,10,intToStr(i*15));
+    RChartMapa.Text(i*1669.793,12900,10,intToStr(i*15));
+  end;
+  for i := 0 to 11 do
+  begin
+    RChartMapa.Text(-i*1669.793,-7500,10,intToStr(-i*15));
+    RChartMapa.Text(-i*1669.793,12900,10,intToStr(-i*15));
+  end;
+  //Escala de Longitude
+  RChartMapa.TextAlignment:= taRightJustify;
+  RChartMapa.Text(-18735,-5411.9749,10,'-45');
+  RChartMapa.Text(-18735,-3430.0606,10,'-30');
+  RChartMapa.Text(-18735,-1708.9247,10,'-15');
+  RChartMapa.Text(-18735,0,10,'0');
+  RChartMapa.Text(-18735,1681.1916,10,'15');
+  RChartMapa.Text(-18735,3426.7500,10,'30');
+  RChartMapa.Text(-18735,5384.2417,10,'45');
+  RChartMapa.Text(-18735,7626.9341,10,'60');
+  RChartMapa.Text(-18735,10495.4941,10,'75');
+  RChartMapa.TextAlignment:= taLeftJustify;
+  RChartMapa.Text(21346,-5411.9749,10,'-45');
+  RChartMapa.Text(21346,-3430.0606,10,'-30');
+  RChartMapa.Text(21346,-1708.9247,10,'-15');
+  RChartMapa.Text(21346,0,10,'0');
+  RChartMapa.Text(21346,1681.1916,10,'15');
+  RChartMapa.Text(21346,3426.7500,10,'30');
+  RChartMapa.Text(21346,5384.2417,10,'45');
+  RChartMapa.Text(21346,7626.9341,10,'60');
+  RChartMapa.Text(21346,10495.4941,10,'75');
+  actZoomFit.Execute;
+end;
+
+procedure TFrmPlataforma.actLayoutJanelaExecute(Sender: TObject);
+begin
+  FrmPrincipal.btnCima.Action:= actCima;
+  FrmPrincipal.btnBaixo.Action:= actBaixo;
+  FrmPrincipal.btnBaixoTudo.Action:= actBaixoTudo;
+  FrmPrincipal.btnCimaTudo.Action:= actCimaTudo;
+  FrmPrincipal.btnSalvarLayout.Action:= actSalvarLayout;
+  FrmPrincipal.btnSalvarLayout.Visible:= false;
+  FrmPrincipal.CarregarRLColunas(txtLayout,ColunasLayout);
+  FrmPrincipal.actConfigPanelLayout.Execute;
+end;
+
+procedure TFrmPlataforma.actLimparFiltrosExecute(Sender: TObject);
+begin
+  case TabResultado of
+    0:
+    begin
+      FrmPrincipal.LimparColunasFiltro(DBGridPlataformas,ColunasLayout);
+      actProcurar.Execute;
+    end;
+  end;
+
+  if (FrmPrincipal.PanelFiltrosTabela.Visible)AND(FrmPrincipal.PanelAjuda1.Visible) then
+    actFiltrosTabela.Execute;
+end;
+
+procedure TFrmPlataforma.actProcuraFiltrosTabelaExecute(Sender: TObject);
+begin
+  frmPrincipal.CarregaFiltrosProcura(ColunasLayout);
+  actProcurar.Execute;
+end;
+
+procedure TFrmPlataforma.actProcurarExecute(Sender: TObject);
+  var
+    SQLString,SQLBase: String;
+begin
+  SQLString:= frmPrincipal.SQLStringFiltroTabela(ColunasLayout,true);
+  SQLBase:= 'SELECT tblPlataforma.* FROM tblPlataforma '+
+  SQLString+' ORDER BY Plataforma;';
+  FrmPrincipal.ProcuraQuery(SQLBase,FrmDataModule.ADOQueryPlataforma,StatusBar1);
+end;
+
+procedure TFrmPlataforma.actMapaMundiExecute(Sender: TObject);
+  var
+    i: integer;
+    ListaXY: TStringList;
+    X1,Y1,X2,Y2: Double;
+    Endereco: String;
+begin
+  Endereco := ExtractFilePath(Application.ExeName) + 'Mapas\Mapa_1.txt';
+  MemoMapaMundi.Lines.LoadFromFile(Endereco);
+  ListaXY:=TStringList.Create;
+  ListaXY.delimiter:= ';';
+  ListaXY.StrictDelimiter:=False;
+  RChartMapa.LineWidth:= 1;
+  RChartMapa.PenStyle:= psSolid;
+  RChartMapa.DataColor:= clNavy;
+  for i := 1 to MemoMapaMundi.Lines.Count-1 do
+  begin
+    ListaXY.Clear;
+    ListaXY.DelimitedText:= MemoMapaMundi.Lines[i];
+    X1:= StrToFloat(ListaXY[0]);
+    Y1:= StrToFloat(ListaXY[1]);
+    X2:= StrToFloat(ListaXY[2]);
+    Y2:= StrToFloat(ListaXY[3]);
+    RChartMapa.MoveTo(X1,Y1);
+    RChartMapa.DrawTo(X2,Y2);
+    //RChartMapa.MarkAt(X,Y,24);
+  end;
+  actZoomFit.Execute;
+end;
+
+procedure TFrmPlataforma.actMarcarExecute(Sender: TObject);
+  var
+    Latitude,Longitude: Double;
+    Plataforma: String;
+    NoOrigem,NODestino: TPointFloat;
+begin
+  //Dados da plataforma de Origem (0,0)
+  NoOrigem.X:= 0;
+  NoOrigem.Y:= 0;
+  //======================================================
+  RChartMapa.DataColor:= clBlack;
+  FrmDataModule.ADOQueryPlataforma.Active:= false;
+  FrmDataModule.ADOQueryPlataforma.Active:= true;
+  FrmDataModule.DataSourcePlataforma.Enabled:= false;
+  FrmDataModule.ADOQueryPlataforma.First;
+  while not(FrmDataModule.ADOQueryPlataforma.Eof) do
+  begin
+    Latitude:= FrmDataModule.DataSourcePlataforma.
+    DataSet.FieldByName('Latitude').AsFloat;
+    Longitude:= FrmDataModule.DataSourcePlataforma.
+    DataSet.FieldByName('Longitude').AsFloat;
+    Plataforma:= FrmDataModule.DataSourcePlataforma.
+    DataSet.FieldByName('Plataforma').AsString;
+    //============================================
+    NODestino:= FrmPrincipal.LatLong_XY(Latitude,Longitude);
+    RChartMapa.MarkAt(NODestino.X,NODestino.Y,24);
+    RChartMapa.Text(NODestino.X,NODestino.Y,8,'  '+Plataforma);
+    FrmDataModule.ADOQueryPlataforma.Next;
+  end;
+  FrmDataModule.ADOQueryPlataforma.First;
+  FrmDataModule.DataSourcePlataforma.Enabled:= true;
+  RChartMapa.Repaint;
+end;
+
+procedure TFrmPlataforma.actPanExecute(Sender: TObject);
+begin
+  booleanZoomMapa:= false;
+  RChartMapa.MouseAction := maPan;
+end;
+
+procedure TFrmPlataforma.actPanToExecute(Sender: TObject);
+  var
+    rangeXLow,rangeXHigh,rangeYHigh,rangeYlow,rangeX,rangeY: Double;
+    YLow,YHigh,XLow,XHigh,CentroX,CentroY,Largura,Altura: Double;
+    NomePlataforma: String;
+    NoOrigem: TPointFloat;
+begin
+  try
+    NomePlataforma:= FrmDataModule.DataSourcePlataforma.
+    DataSet.FieldByName('Plataforma').AsString;
+    NoOrigem.X:= FrmDataModule.DataSourcePlataforma.DataSet.
+    FieldByName('CoordX').AsFloat;
+    NoOrigem.Y:= FrmDataModule.DataSourcePlataforma.DataSet.
+    FieldByName('CoordY').AsFloat;
+
+    with RChartMapa do
+    begin
+      rangeXHigh:= NoOrigem.X + 8;
+      rangeXLow:= NoOrigem.X - 8;
+      rangeYHigh:= NoOrigem.Y + 8;
+      rangeYlow:= NoOrigem.Y - 8;
+      rangeX:= rangeXHigh-rangeXLow;
+      rangeY:= rangeYHigh-rangeYLow;
+      Largura:= (Width-LRim-RRim);
+      Altura:= (Height -TRim-BRim);
+      //====================================
+      if rangeX > rangeY*(Largura/Altura) then
+        rangeY:= rangeX/(Largura/Altura)
+      else
+        rangeX:= rangeY*(Largura/Altura);
+      //=====================================
+      CentroX:= ((rangeXHigh-rangeXLow)/2)+rangeXLow;
+      CentroY:= ((rangeYHigh-rangeYLow)/2)+rangeYLow;
+      XLow:= CentroX-(rangeX/2);
+      XHigh:= CentroX+(rangeX/2);
+      YLow:= CentroY-(rangeY/2);
+      YHigh:= CentroY+(rangeY/2);
+      setRange(0,XLow,YLow,XHigh,YHigh);
+  end;
+  except
+
+  end;
+end;
+
+procedure TFrmPlataforma.actSalvarDesenhoDataExecute(Sender: TObject);
+begin
+  SaveDialog1.FileName:= 'Desenho.zuchi';
+  SaveDialog1.DefaultExt:= 'zuchi';
+  SaveDialog1.Filter:= 'Desenho (*.zuchi)|*.zuchi|Todos os Arquivos (*.*)|*.*';
+  if SaveDialog1.Execute then
+    RChartMapa.SaveData(SaveDialog1.FileName);
+end;
+
+procedure TFrmPlataforma.actSalvarExecute(Sender: TObject);
+begin
+  SavePictureDialog1.FileName:= 'Mapa.wmf';
+  if SavePictureDialog1.Execute then
+    RChartMapa.CopyToWMF(SavePictureDialog1.FileName,false);
+end;
+
+procedure TFrmPlataforma.actSalvarLayoutExecute(Sender: TObject);
+begin
+  FrmPrincipal.SalvarRLColunasCarregaGRID(FrmDataModule.ADOConnectionConsulta,
+  txtLayout,'tblPlataforma',
+  DBGridPlataformas,ColunasLayout);
+  actLimparFiltros.Execute;
+end;
+
+procedure TFrmPlataforma.actSubstituirPorExecute(Sender: TObject);
+begin
+    case TabResultado of
+    0:FrmPrincipal.SubstituirPor(DBGridPlataformas,FrmDataModule.ADOQueryPlataforma,
+      FrmDataModule.DataSourcePlataforma);
+  end;
+end;
+
+procedure TFrmPlataforma.actZoomDinamicoExecute(Sender: TObject);
+begin
+  booleanZoomMapa:= true;
+  RChartMapa.MouseAction := maZoomDrag;
+end;
+
+procedure TFrmPlataforma.actZoomFitExecute(Sender: TObject);
+  var
+    rangeXLow,rangeXHigh,rangeYHigh,rangeYlow,rangeX,rangeY: Double;
+    YLow,YHigh,XLow,XHigh,CentroX,CentroY,Largura,Altura: Double;
+begin
+  with RChartMapa do
+  begin
+    AutoRange(0,5);
+    rangeXHigh:= Scale1X.RangeHigh;
+    rangeXLow:= Scale1X.RangeLow;
+    rangeYHigh:= Scale1Y.RangeHigh;
+    rangeYlow:= Scale1Y.RangeLow;
+    rangeX:= rangeXHigh-rangeXLow;
+    rangeY:= rangeYHigh-rangeYLow;
+    Largura:= (Width-LRim-RRim);
+    Altura:= (Height -TRim-BRim);
+    //====================================
+    if rangeX > rangeY*(Largura/Altura) then
+      rangeY:= rangeX/(Largura/Altura)
+    else
+      rangeX:= rangeY*(Largura/Altura);
+    //=====================================
+    CentroX:= ((rangeXHigh-rangeXLow)/2)+rangeXLow;
+    CentroY:= ((rangeYHigh-rangeYLow)/2)+rangeYLow;
+    XLow:= CentroX-(rangeX/2);
+    XHigh:= CentroX+(rangeX/2);
+    YLow:= CentroY-(rangeY/2);
+    YHigh:= CentroY+(rangeY/2);
+    setRange(0,XLow,YLow,XHigh,YHigh);
+  end;
+end;
+
+procedure TFrmPlataforma.actZoomWindowExecute(Sender: TObject);
+begin
+  RChartMapa.MouseAction := maZoomWindPos;
+end;
+
+procedure TFrmPlataforma.btnCotasClick(Sender: TObject);
+begin
+  StatusBarMapa.Panels[0].Text:= '';
+  StatusBarMapa.Panels[1].Text:= '';
+  StatusBarMapa.Panels[2].Text:= '';
+  StatusBarMapa.Panels[3].Text:= '';
+  FrmPrincipal.AutoFitStatusBar(StatusBarMapa);
+end;
+
+procedure TFrmPlataforma.CheckBox1Click(Sender: TObject);
+begin
+  if CheckBox1.Checked=true then
+    RChartMapa.GridStyle:= gsDotLines
+  else
+    RChartMapa.GridStyle:= gsNone;
+end;
+
+procedure TFrmPlataforma.PageControl1Change(Sender: TObject);
+begin
+  case PageControl1.TabIndex of
+    0: TabResultado:= 0;
+  end;
+end;
+
+procedure TFrmPlataforma.PanelTituloAjudaMouseDown(Sender: TObject;
+  Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
+begin
+  Capturing := true;
+  MouseDownSpot.X := X;
+  MouseDownSpot.Y := Y;
+end;
+
+procedure TFrmPlataforma.RChartMapaDblClick(Sender: TObject);
+begin
+  if booleanZoomMapa = true then
+  begin
+    booleanZoomMapa := false;
+    actPan.Execute;
+    RChartMapa.Repaint;
+  end
+  else
+  begin
+    booleanZoomMapa := true;
+    actZoomDinamico.Execute;
+    RChartMapa.Repaint;
+  end;
+end;
+
+procedure TFrmPlataforma.RChartMapaMouseDown(Sender: TObject;
+  Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
+    var
+      ptMouse: TPointFloat;
+begin
+  //Coordenadas X,Y do mouse
+  ptMouse.X:= RChartMapa.MousePosX;
+  ptMouse.Y:= RChartMapa.MousePosY;
+  if btnCotas.Down then
+  begin
+    FrmPrincipal.selecaoPlataforma(RChartMapa,ptMouse,StatusBarMapa);
+  end;
+end;
+
+procedure TFrmPlataforma.RChartMapaMouseLeave(Sender: TObject);
+begin
+  screen.Cursor:= crDefault;
+end;
+
+procedure TFrmPlataforma.RChartMapaMouseMove(Sender: TObject;
+  Shift: TShiftState; X, Y: Integer);
+begin
+  edtXFEA.Value := RChartMapa.MousePosX;
+  edtYFEA.Value  := RChartMapa.MousePosY;
+end;
+
+procedure TFrmPlataforma.RChartMapaZoomPan(Sender: TObject);
+  var
+    rangeXLow,rangeXHigh,rangeYHigh,rangeYlow,rangeX,rangeY: Double;
+    YLow,YHigh,XLow,XHigh,CentroX,CentroY,Largura,Altura: Double;
+begin
+  with RChartMapa do
+  begin
+    rangeXHigh:= Scale1X.RangeHigh;
+    rangeXLow:= Scale1X.RangeLow;
+    rangeYHigh:= Scale1Y.RangeHigh;
+    rangeYlow:= Scale1Y.RangeLow;
+    rangeX:= rangeXHigh-rangeXLow;
+    rangeY:= rangeYHigh-rangeYLow;
+    Largura:= (Width-LRim-RRim);
+    Altura:= (Height -TRim-BRim);
+    //====================================
+    if rangeX > rangeY*(Largura/Altura) then
+      rangeY:= rangeX/(Largura/Altura)
+    else
+      rangeX:= rangeY*(Largura/Altura);
+    //=====================================
+    CentroX:= ((rangeXHigh-rangeXLow)/2)+rangeXLow;
+    CentroY:= ((rangeYHigh-rangeYLow)/2)+rangeYLow;
+    XLow:= CentroX-(rangeX/2);
+    XHigh:= CentroX+(rangeX/2);
+    YLow:= CentroY-(rangeY/2);
+    YHigh:= CentroY+(rangeY/2);
+    setRange(0,XLow,YLow,XHigh,YHigh);
+  end;
+end;
+
+procedure TFrmPlataforma.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+  Action:= caFree;
+  FrmPlataforma:=nil;
+end;
+
+procedure TFrmPlataforma.FormCreate(Sender: TObject);
+  var
+    rangeXLow,rangeXHigh,rangeYHigh,rangeYlow,rangeX,rangeY: Double;
+    YLow,YHigh,XLow,XHigh,CentroX,CentroY,Largura,Altura: Double;
+    NoOrigem: TPointFloat;
+begin
+  //===============================================================
+  AlturaAgora:=0;
+  RChartMapa.GridDx:= edtGridXFEA.Value;
+  RChartMapa.GridDy:= edtGridYFEA.Value;
+  RChartMapa.GridStyle:= gsNone;
+  PageControl1.TabIndex:= 0;
+  //=====================================
+  txtLayout:= 'Plataforma.txt';
+  //Incicialização
+  FrmPrincipal.SetUpColunasLayout(DBGridPlataformas, ColunasLayout);
+  FrmPrincipal.CarregarRLColunas(txtLayout, ColunasLayout);
+  FrmPrincipal.CarregarColunasGRID(FrmDataModule.ADOConnectionConsulta,
+  'tblPlataforma',DBGridPlataformas,ColunasLayout);
+  //Carrgear Mapa com configuração incial
+  try
+    actMarcar.Execute;
+    actBrasil.Execute;
+    NoOrigem.X:= -4102.2959;
+    NoOrigem.Y:= -1233.1057;
+    with RChartMapa do
+    begin
+      rangeXHigh:= NoOrigem.X + 90;
+      rangeXLow:= NoOrigem.X - 90;
+      rangeYHigh:= NoOrigem.Y + 90;
+      rangeYlow:= NoOrigem.Y - 90;
+      rangeX:= rangeXHigh-rangeXLow;
+      rangeY:= rangeYHigh-rangeYLow;
+      Largura:= (Width-LRim-RRim);
+      Altura:= (Height -TRim-BRim);
+      //====================================
+      if rangeX > rangeY*(Largura/Altura) then
+        rangeY:= rangeX/(Largura/Altura)
+      else
+        rangeX:= rangeY*(Largura/Altura);
+      //=====================================
+      CentroX:= ((rangeXHigh-rangeXLow)/2)+rangeXLow;
+      CentroY:= ((rangeYHigh-rangeYLow)/2)+rangeYLow;
+      XLow:= CentroX-(rangeX/2);
+      XHigh:= CentroX+(rangeX/2);
+      YLow:= CentroY-(rangeY/2);
+      YHigh:= CentroY+(rangeY/2);
+      setRange(0,XLow,YLow,XHigh,YHigh);
+  end;
+  except
+  end;
+  //======ADICIONAR TABSET DO FOMRMDI=======
+  FrmPrincipal.MDIChildCreated(self.Handle);
+  //Configuração de Perfil
+  if ((FrmPrincipal.logPerfil = 'Administrador') OR
+  (FrmPrincipal.logPerfil = 'PIOP') OR
+  (FrmPrincipal.logPerfil = 'Supervisor')) then
+  begin
+    DBNavigatorCadastro.Enabled:= true;
+    DBGridPlataformas.ReadOnly:= false;
+    actCalcularXY.Enabled:= true;
+  end
+  else
+  begin
+    DBNavigatorCadastro.Enabled:= false;
+    DBGridPlataformas.ReadOnly:= true;
+    actCalcularXY.Enabled:= false;
+  end;
+
+  actProcurar.Execute;
+
+end;
+
+procedure TFrmPlataforma.FormDestroy(Sender: TObject);
+begin
+  FrmPrincipal.MDIChildDestroyed(self.Handle);
+end;
+
+procedure TFrmPlataforma.StatusBar1DrawPanel(StatusBar: TStatusBar; Panel: TStatusPanel;
+  const Rect: TRect);
+begin
+  StatusBar.Canvas.Font.Color := clBlue;
+  Statusbar.Canvas.TextRect(Rect, Rect.Left, Rect.Top, Panel.Text);
+end;
+
+procedure TFrmPlataforma.WMMDIACTIVATE(var msg: TWMMDIACTIVATE);
+var
+  active: TWinControl;
+  idx: Integer;
+begin
+  active := FindControl(msg.ActiveWnd) ;
+
+  if Assigned(active) then
+  begin
+    idx := FrmPrincipal.mdiChildrenTabs.Tabs.IndexOfObject(TObject(msg.ActiveWnd));
+    FrmPrincipal.mdiChildrenTabs.Tag := -1;
+    FrmPrincipal.mdiChildrenTabs.TabIndex := idx;
+    FrmPrincipal.mdiChildrenTabs.Tag := 0;
+  end;
+end;
+
+end.

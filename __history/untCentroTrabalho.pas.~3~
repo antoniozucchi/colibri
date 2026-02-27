@@ -1,0 +1,351 @@
+unit untCentroTrabalho;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Data.DB, Vcl.Grids, Vcl.DBGrids,
+  Vcl.DBCtrls, Vcl.ToolWin, Vcl.ComCtrls, Vcl.ExtCtrls, Vcl.StdCtrls, Vcl.Mask,
+  System.Actions, Vcl.ActnList, Vcl.PlatformDefaultStyleActnCtrls, Vcl.ActnMan,
+  Vcl.Buttons;
+
+type
+  TFrmCentroTrabalho = class(TForm)
+    PanelTitulo: TPanel;
+    ToolBar1: TToolBar;
+    DBNavigator1: TDBNavigator;
+    DBGridCentroTrabalho: TDBGrid;
+    DBLookupComboBox_TipoServico: TDBLookupComboBox;
+    DBEdit1: TDBEdit;
+    ActionManager1: TActionManager;
+    actProcurar: TAction;
+    actExcel: TAction;
+    Splitter1: TSplitter;
+    PanelNotas: TPanel;
+    DBMemoNotas: TDBMemo;
+    Panel2: TPanel;
+    StatusBar1: TStatusBar;
+    actFiltroInserir: TAction;
+    actGridASC: TAction;
+    actGridDESC: TAction;
+    actSubstituirPor: TAction;
+    BitBtn2: TBitBtn;
+    actLimparFiltros: TAction;
+    ColunasLayout: TStringGrid;
+    actCimaTudo: TAction;
+    actBaixoTudo: TAction;
+    actBaixo: TAction;
+    actCima: TAction;
+    actSalvarLayout: TAction;
+    actLayoutJanela: TAction;
+    BitBtn3: TBitBtn;
+    actFiltrosTabela: TAction;
+    BitBtn4: TBitBtn;
+    actProcuraFiltrosTabela: TAction;
+    BitBtn1: TBitBtn;
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure FormCreate(Sender: TObject);
+    procedure DBGridCentroTrabalhoDrawColumnCell(Sender: TObject;
+      const Rect: TRect; DataCol: Integer; Column: TColumn;
+      State: TGridDrawState);
+    procedure FormDestroy(Sender: TObject);
+    procedure DBLookupComboBox_TipoServicoCloseUp(Sender: TObject);
+    procedure DBEdit1Change(Sender: TObject);
+    procedure actProcurarExecute(Sender: TObject);
+    procedure actExcelExecute(Sender: TObject);
+    procedure DBGridCentroTrabalhoKeyPress(Sender: TObject; var Key: Char);
+    procedure actFiltroInserirExecute(Sender: TObject);
+    procedure actGridASCExecute(Sender: TObject);
+    procedure actGridDESCExecute(Sender: TObject);
+    procedure actSubstituirPorExecute(Sender: TObject);
+    procedure actLimparFiltrosExecute(Sender: TObject);
+    procedure DBGridCentroTrabalhoTitleClick(Column: TColumn);
+    procedure DBGridCentroTrabalhoColumnMoved(Sender: TObject; FromIndex,
+      ToIndex: Integer);
+    procedure actCimaTudoExecute(Sender: TObject);
+    procedure actBaixoTudoExecute(Sender: TObject);
+    procedure actBaixoExecute(Sender: TObject);
+    procedure actCimaExecute(Sender: TObject);
+    procedure actSalvarLayoutExecute(Sender: TObject);
+    procedure actLayoutJanelaExecute(Sender: TObject);
+    procedure actFiltrosTabelaExecute(Sender: TObject);
+    procedure actProcuraFiltrosTabelaExecute(Sender: TObject);
+  private
+    { Private declarations }
+    procedure WMMDIACTIVATE(var msg: TWMMDIACTIVATE);message WM_MDIACTIVATE;
+  public
+    { Public declarations }
+  end;
+
+var
+  FrmCentroTrabalho: TFrmCentroTrabalho;
+
+implementation
+  uses untPrincipal,untDataModule;
+
+{$R *.dfm}
+
+procedure TFrmCentroTrabalho.actExcelExecute(Sender: TObject);
+begin
+  FrmPrincipal.GerarExcel(DBGridCentroTrabalho,'Centro de Trabalho');
+end;
+
+procedure TFrmCentroTrabalho.actFiltroInserirExecute(Sender: TObject);
+begin
+  FrmPrincipal.inserirProcura(DBGridCentroTrabalho,ColunasLayout);
+  actProcurar.Execute;
+  if (FrmPrincipal.PanelFiltrosTabela.Visible)AND(FrmPrincipal.PanelAjuda1.Visible) then
+    actFiltrosTabela.Execute;
+end;
+
+procedure TFrmCentroTrabalho.actFiltrosTabelaExecute(Sender: TObject);
+begin
+  FrmPrincipal.btnProcurarFiltrosTabela.Action:= actProcuraFiltrosTabela;
+  FrmPrincipal.FiltrosTabela(DBGridCentroTrabalho,ColunasLayout);
+end;
+
+procedure TFrmCentroTrabalho.actGridASCExecute(Sender: TObject);
+begin
+  FrmPrincipal.ClassificaDBGrid(DBGridCentroTrabalho,
+  FrmDataModule.ADOQueryCentroTrabalho,0);
+end;
+
+procedure TFrmCentroTrabalho.actGridDESCExecute(Sender: TObject);
+begin
+  FrmPrincipal.ClassificaDBGrid(DBGridCentroTrabalho,FrmDataModule.ADOQueryCentroTrabalho,1);
+end;
+
+procedure TFrmCentroTrabalho.actBaixoExecute(Sender: TObject);
+begin
+  FrmPrincipal.moveBaixo(DBGridCentroTrabalho, ColunasLayout);
+  actLimparFiltros.Execute;
+end;
+
+procedure TFrmCentroTrabalho.actBaixoTudoExecute(Sender: TObject);
+begin
+  FrmPrincipal.botaoMoveTudo(FrmDataModule.ADOConnectionConsulta,
+  'CentroTrabalho.txt','tblCentroTrabalho','TAB2;',
+  DBGridCentroTrabalho,ColunasLayout);
+  actLimparFiltros.Execute;
+end;
+
+procedure TFrmCentroTrabalho.actCimaExecute(Sender: TObject);
+begin
+  FrmPrincipal.moveCima(DBGridCentroTrabalho, ColunasLayout);
+  actLimparFiltros.Execute;
+end;
+
+procedure TFrmCentroTrabalho.actCimaTudoExecute(Sender: TObject);
+begin
+  FrmPrincipal.botaoMoveTudo(FrmDataModule.ADOConnectionConsulta,
+  'CentroTrabalho.txt','tblCentroTrabalho','TAB1;',
+  DBGridCentroTrabalho,ColunasLayout);
+  actLimparFiltros.Execute;
+end;
+
+procedure TFrmCentroTrabalho.actLayoutJanelaExecute(Sender: TObject);
+begin
+  FrmPrincipal.btnCima.Action:= actCima;
+  FrmPrincipal.btnBaixo.Action:= actBaixo;
+  FrmPrincipal.btnBaixoTudo.Action:= actBaixoTudo;
+  FrmPrincipal.btnCimaTudo.Action:= actCimaTudo;
+  FrmPrincipal.btnSalvarLayout.Action:= actSalvarLayout;
+  FrmPrincipal.btnSalvarLayout.Visible:= false;
+  FrmPrincipal.CarregarRLColunas('CentroTrabalho.txt',ColunasLayout);
+  FrmPrincipal.actConfigPanelLayout.Execute;
+end;
+
+procedure TFrmCentroTrabalho.actLimparFiltrosExecute(Sender: TObject);
+begin
+  FrmPrincipal.LimparColunasFiltro(DBGridCentroTrabalho,ColunasLayout);
+  actProcurar.Execute;
+  if (FrmPrincipal.PanelFiltrosTabela.Visible)AND(FrmPrincipal.PanelAjuda1.Visible) then
+    actFiltrosTabela.Execute;
+end;
+
+procedure TFrmCentroTrabalho.actProcuraFiltrosTabelaExecute(Sender: TObject);
+begin
+  frmPrincipal.CarregaFiltrosProcura(ColunasLayout);
+  actProcurar.Execute;
+end;
+
+procedure TFrmCentroTrabalho.actProcurarExecute(Sender: TObject);
+  var
+    SQLString,SQLBase: String;
+begin
+  SQLString:= frmPrincipal.SQLStringFiltroTabela(ColunasLayout,true);
+  SQLBase:= 'SELECT tblCentroTrabalho.*,'+
+  '(GrauUtilizacao*TempoDisponivel*NumCapacIndividual)/100 AS TempoTotalDisponivel'+
+  ' FROM tblCentroTrabalho '+
+  SQLString+' ORDER BY CentroTrabalho;';
+  FrmPrincipal.ProcuraQuery(SQLBase,FrmDataModule.ADOQueryCentroTrabalho,StatusBar1);
+end;
+
+procedure TFrmCentroTrabalho.actSalvarLayoutExecute(Sender: TObject);
+begin
+  FrmPrincipal.SalvarRLColunasCarregaGRID(FrmDataModule.ADOConnectionConsulta,
+  'CentroTrabalho.txt','tblCentroTrabalho',
+  DBGridCentroTrabalho,ColunasLayout);
+  actLimparFiltros.Execute;
+end;
+
+procedure TFrmCentroTrabalho.actSubstituirPorExecute(Sender: TObject);
+begin
+  FrmPrincipal.SubstituirPor(DBGridCentroTrabalho,FrmDataModule.ADOQueryCentroTrabalho,
+  FrmDataModule.DataSourceCentroTrabalho);
+end;
+
+procedure TFrmCentroTrabalho.DBEdit1Change(Sender: TObject);
+  var
+    codigoTipoEtapaServico: Integer;
+    txtTipoEtapaServico,TipoEtapaServico: String;
+begin
+  if (FrmPrincipal.logPerfil = 'Administrador')OR(FrmPrincipal.logPerfil = 'PIOP') then
+  begin
+    try
+      codigoTipoEtapaServico:= FrmDataModule.DataSourceCentroTrabalho.
+      DataSet.FieldByName('CodigoTipoEtapaServico').AsInteger;
+      //SELECIONAR O SISTEMA
+      FrmDataModule.ADOQueryConsultaTipoEtapaServico_ID.Active := false;
+      FrmDataModule.ADOQueryConsultaTipoEtapaServico_ID.Parameters.Items[0].Value:=
+      codigoTipoEtapaServico;
+      FrmDataModule.ADOQueryConsultaTipoEtapaServico_ID.Active := true;
+      //CARREGAR O SISTEMA NA TABELA
+      txtTipoEtapaServico:= FrmDataModule.DataSourceCentroTrabalho.
+      DataSet.FieldByName('txtTipoEtapaServico').AsString;
+      TipoEtapaServico:= FrmDataModule.DataSourceConsultaTipoEtapaServico_ID.
+      DataSet.FieldByName('TipoEtapaServico').AsString;
+      //==============================================
+      if txtTipoEtapaServico <> TipoEtapaServico then
+      begin
+        try
+          FrmDataModule.ADOQueryCentroTrabalho.Edit;
+          FrmDataModule.DataSourceCentroTrabalho.DataSet.
+          FieldByName('txtTipoEtapaServico').AsString:= TipoEtapaServico;
+          FrmDataModule.ADOQueryCentroTrabalho.Post;
+        except
+          FrmDataModule.ADOQueryCentroTrabalho.Cancel;
+          FrmDataModule.ADOQueryCentroTrabalho.Refresh;
+        end;
+      end;
+    except
+      //MessageBox(0, 'Não foi possível atualizar o material!',
+      //'ControlCrane', MB_ICONERROR);
+    end;
+  end;
+end;
+
+procedure TFrmCentroTrabalho.DBGridCentroTrabalhoColumnMoved(Sender: TObject;
+  FromIndex, ToIndex: Integer);
+begin
+  FrmPrincipal.CarregarRLColunasAtivasGRID(DBGridCentroTrabalho);
+  FrmPrincipal.GravarRLColunas('CentroTrabalho.txt');
+end;
+
+procedure TFrmCentroTrabalho.DBGridCentroTrabalhoDrawColumnCell(Sender: TObject;
+  const Rect: TRect; DataCol: Integer; Column: TColumn; State: TGridDrawState);
+begin
+  if (gdFocused in State) then
+  begin
+    if (DBGridCentroTrabalho.SelectedField.FieldName= 'txtTipoEtapaServico') then
+    begin
+      with DBLookupComboBox_TipoServico do
+      begin
+        Left := Rect.Left + DBGridCentroTrabalho.Left + 1;
+        Top := Rect.Top + DBGridCentroTrabalho.Top + 1;
+        Width := Rect.Right - Rect.Left + 2;
+        Width := Rect.Right - Rect.Left + 2;
+        Height := Rect.Bottom - Rect.Top + 2;
+        Visible := True;
+      end;
+    end
+    else
+      DBLookupComboBox_TipoServico.Visible := False;
+  end;
+  FrmPrincipal.GridZebrado(DBGridCentroTrabalho,ColunasLayout,State,Rect,DataCol,Column);
+end;
+
+procedure TFrmCentroTrabalho.DBGridCentroTrabalhoKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+  if (DBGridCentroTrabalho.SelectedField.FieldName = 'txtTipoEtapaServico') then
+  begin
+    DBLookupComboBox_TipoServico.SetFocus;
+    SendMessage(DBLookupComboBox_TipoServico.Handle,WM_Char,word(Key),0);
+  end;
+end;
+
+procedure TFrmCentroTrabalho.DBGridCentroTrabalhoTitleClick(Column: TColumn);
+begin
+  FrmPrincipal.configurarFiltro(1,Column.FieldName,IntToStr(Column.Index),
+  Column.ReadOnly,actFiltroInserir,actGridASC,actGridDESC,actSubstituirPor);
+  //======================================================
+  FrmPrincipal.titleGrid(ColunasLayout,
+  FrmDataModule.ADOQueryCentroTrabalho,
+  StatusBar1,'Consulta');
+end;
+
+procedure TFrmCentroTrabalho.DBLookupComboBox_TipoServicoCloseUp(
+  Sender: TObject);
+begin
+  if not (DBGridCentroTrabalho.DataSource.State in [dsEdit, dsInsert]) then
+    DBGridCentroTrabalho.DataSource.Edit;
+
+  FrmDataModule.DataSourceCentroTrabalho.DataSet.FieldByName('txtTipoEtapaServico').AsString:=
+  DBLookupComboBox_TipoServico.Text;
+end;
+
+procedure TFrmCentroTrabalho.FormClose(Sender: TObject;
+  var Action: TCloseAction);
+begin
+  Action:= caFree;
+  FrmCentroTrabalho:=nil;
+end;procedure TFrmCentroTrabalho.FormCreate(Sender: TObject);
+begin
+  FrmPrincipal.MDIChildCreated(self.Handle);
+  FrmDataModule.ADOQueryTipoEtapaServico.Active:= false;
+  FrmDataModule.ADOQueryTipoEtapaServico.Active:= true;
+  //================================================
+  if (FrmPrincipal.logPerfil = 'Administrador')OR
+  (FrmPrincipal.logPerfil = 'PIOP')OR
+  (FrmPrincipal.logPerfil = 'SEG-PIOP')OR
+  (FrmPrincipal.logPerfil = 'Supervisor') then
+  begin
+    DBNavigator1.Enabled:= true;
+    DBGridCentroTrabalho.ReadOnly:= false;
+  end
+  else
+  begin
+    DBNavigator1.Enabled:= false;
+    DBGridCentroTrabalho.ReadOnly:= true;
+  end;
+  //Incicialização
+  FrmPrincipal.SetUpColunasLayout(DBGridCentroTrabalho, ColunasLayout);
+  FrmPrincipal.CarregarRLColunas('CentroTrabalho.txt', ColunasLayout);
+  FrmPrincipal.CarregarColunasGRID(FrmDataModule.ADOConnectionConsulta,
+  'tblCentroTrabalho',DBGridCentroTrabalho,ColunasLayout);
+  actProcurar.Execute;
+end;
+
+procedure TFrmCentroTrabalho.FormDestroy(Sender: TObject);
+begin
+  FrmPrincipal.MDIChildDestroyed(self.Handle);
+end;
+
+procedure TFrmCentroTrabalho.WMMDIACTIVATE(var msg: TWMMDIACTIVATE);
+var
+  active: TWinControl;
+  idx: Integer;
+begin
+  active := FindControl(msg.ActiveWnd) ;
+
+  if Assigned(active) then
+  begin
+    idx := FrmPrincipal.mdiChildrenTabs.Tabs.IndexOfObject(TObject(msg.ActiveWnd));
+    FrmPrincipal.mdiChildrenTabs.Tag := -1;
+    FrmPrincipal.mdiChildrenTabs.TabIndex := idx;
+    FrmPrincipal.mdiChildrenTabs.Tag := 0;
+  end;
+end;
+
+end.

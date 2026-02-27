@@ -1,0 +1,233 @@
+unit untMovimentacaoCarga;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Data.DB, Vcl.ComCtrls, System.Actions,
+  Vcl.ActnList, Vcl.PlatformDefaultStyleActnCtrls, Vcl.ActnMan, Vcl.Grids,DateUtils,
+  Vcl.DBGrids, Vcl.StdCtrls, Vcl.Buttons, Vcl.DBCtrls, Vcl.ToolWin, Vcl.ExtCtrls,
+  DBDateTimePicker;
+
+type
+  TFrmMovimentacaoCarga = class(TForm)
+    PanelTitulo: TPanel;
+    ToolBar1: TToolBar;
+    DBNavigator1: TDBNavigator;
+    BitBtn4: TBitBtn;
+    BitBtn2: TBitBtn;
+    BitBtn1: TBitBtn;
+    DBGridMovimentacaoCarga: TDBGrid;
+    ColunasLayout: TStringGrid;
+    ActionManager1: TActionManager;
+    actProcurar: TAction;
+    actExcel: TAction;
+    actFiltroInserir: TAction;
+    actGridASC: TAction;
+    actGridDESC: TAction;
+    actSubstituirPor: TAction;
+    actLimparFiltros: TAction;
+    actFiltrosTabela: TAction;
+    actProcuraFiltrosTabela: TAction;
+    StatusBar1: TStatusBar;
+    Panel3: TPanel;
+    dataInicio: TDateTimePicker;
+    Panel4: TPanel;
+    dataFim: TDateTimePicker;
+    Panel8: TPanel;
+    DBDateTimePickerData: TDBDateTimePicker;
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure FormDestroy(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+    procedure actProcurarExecute(Sender: TObject);
+    procedure actExcelExecute(Sender: TObject);
+    procedure actFiltroInserirExecute(Sender: TObject);
+    procedure actGridASCExecute(Sender: TObject);
+    procedure actGridDESCExecute(Sender: TObject);
+    procedure actSubstituirPorExecute(Sender: TObject);
+    procedure actLimparFiltrosExecute(Sender: TObject);
+    procedure actFiltrosTabelaExecute(Sender: TObject);
+    procedure actProcuraFiltrosTabelaExecute(Sender: TObject);
+    procedure DBGridMovimentacaoCargaTitleClick(Column: TColumn);
+    procedure DBGridMovimentacaoCargaDrawColumnCell(Sender: TObject;
+      const Rect: TRect; DataCol: Integer; Column: TColumn;
+      State: TGridDrawState);
+  private
+    { Private declarations }
+    procedure WMMDIACTIVATE(var msg: TWMMDIACTIVATE);message WM_MDIACTIVATE;
+  public
+    { Public declarations }
+  end;
+
+var
+  FrmMovimentacaoCarga: TFrmMovimentacaoCarga;
+
+implementation
+  uses untPrincipal,untDataModule;
+{$R *.dfm}
+
+procedure TFrmMovimentacaoCarga.actExcelExecute(Sender: TObject);
+begin
+  FrmPrincipal.GerarExcel(DBGridMovimentacaoCarga,'Mov.Carga');
+end;
+
+procedure TFrmMovimentacaoCarga.actFiltroInserirExecute(Sender: TObject);
+begin
+  FrmPrincipal.inserirProcura(DBGridMovimentacaoCarga,ColunasLayout);
+  actProcurar.Execute;
+  if (FrmPrincipal.PanelFiltrosTabela.Visible)AND(FrmPrincipal.PanelAjuda1.Visible) then
+    actFiltrosTabela.Execute;
+end;
+
+procedure TFrmMovimentacaoCarga.actFiltrosTabelaExecute(Sender: TObject);
+begin
+  FrmPrincipal.btnProcurarFiltrosTabela.Action:= actProcuraFiltrosTabela;
+  FrmPrincipal.FiltrosTabela(DBGridMovimentacaoCarga,ColunasLayout);
+end;
+
+procedure TFrmMovimentacaoCarga.actGridASCExecute(Sender: TObject);
+begin
+  FrmPrincipal.ClassificaDBGrid(DBGridMovimentacaoCarga,FrmDataModule.ADOQueryMovimentacaoCarga,0);
+end;
+
+procedure TFrmMovimentacaoCarga.actGridDESCExecute(Sender: TObject);
+begin
+  FrmPrincipal.ClassificaDBGrid(DBGridMovimentacaoCarga,FrmDataModule.ADOQueryMovimentacaoCarga,1);
+end;
+
+procedure TFrmMovimentacaoCarga.actLimparFiltrosExecute(Sender: TObject);
+begin
+  FrmPrincipal.LimparColunasFiltro(DBGridMovimentacaoCarga,ColunasLayout);
+  actProcurar.Execute;
+  if (FrmPrincipal.PanelFiltrosTabela.Visible)AND(FrmPrincipal.PanelAjuda1.Visible) then
+    actFiltrosTabela.Execute;
+end;
+
+procedure TFrmMovimentacaoCarga.actProcuraFiltrosTabelaExecute(Sender: TObject);
+begin
+  FrmPrincipal.CarregaFiltrosProcura(ColunasLayout);
+  actProcurar.Execute;
+end;
+
+procedure TFrmMovimentacaoCarga.actProcurarExecute(Sender: TObject);
+  var
+    SQLString,SQLBase,DataProcuraIncio,DataProcuraFim: String;
+begin
+  DataProcuraIncio:= (FormatDateTime('mm/dd/yyyy',dataInicio.Date));
+  DataProcuraFim:= (FormatDateTime('mm/dd/yyyy',dataFim.Date));
+  SQLString:= frmPrincipal.SQLStringFiltroTabela(ColunasLayout,false);
+  if SQLString <> '' then
+    SQLString:= 'AND'+SQLString;
+  SQLBase:= 'SELECT tblMovimentacaoCarga.* FROM tblMovimentacaoCarga '+
+  'WHERE (Data BETWEEN #'+DataProcuraIncio+'# and #'+DataProcuraFim+'#)'+
+  SQLString+' ORDER BY Data;';
+  FrmPrincipal.ProcuraQuery(SQLBase,FrmDataModule.ADOQueryMovimentacaoCarga,StatusBar1);
+end;
+
+procedure TFrmMovimentacaoCarga.actSubstituirPorExecute(Sender: TObject);
+begin
+  FrmPrincipal.SubstituirPor(DBGridMovimentacaoCarga,FrmDataModule.ADOQueryMovimentacaoCarga,
+  FrmDataModule.DataSourceMovimentacaoCarga);
+end;
+
+procedure TFrmMovimentacaoCarga.DBGridMovimentacaoCargaDrawColumnCell(
+  Sender: TObject; const Rect: TRect; DataCol: Integer; Column: TColumn;
+  State: TGridDrawState);
+begin
+  FrmPrincipal.GridZebrado(DBGridMovimentacaoCarga,ColunasLayout,State,Rect,DataCol,Column);
+  if (Column.Field.FieldName = 'Status') then
+  begin
+    if FrmDataModule.DataSourceMovimentacaoCarga.DataSet.
+    FieldByName('Status').AsString = 'Atendido' then
+    begin
+      DBGridMovimentacaoCarga.Canvas.Brush.Color:= clLime;
+      DBGridMovimentacaoCarga.Font.Color:= clBlack;
+      DBGridMovimentacaoCarga.Canvas.FillRect(Rect);
+      DBGridMovimentacaoCarga.DefaultDrawColumnCell(Rect, DataCol,Column, State);
+    end
+    else if FrmDataModule.DataSourceMovimentacaoCarga.DataSet.
+    FieldByName('Status').AsString = 'Cancelado' then
+    begin
+      DBGridMovimentacaoCarga.Canvas.Brush.Color:= clRed;
+      DBGridMovimentacaoCarga.Font.Color:= clBlack;
+      DBGridMovimentacaoCarga.Canvas.FillRect(Rect);
+      DBGridMovimentacaoCarga.DefaultDrawColumnCell(Rect, DataCol,Column, State);
+    end
+    else if FrmDataModule.DataSourceMovimentacaoCarga.DataSet.
+    FieldByName('Status').AsString = 'Pendente' then
+    begin
+      DBGridMovimentacaoCarga.Canvas.Brush.Color:= clYellow;
+      DBGridMovimentacaoCarga.Font.Color:= clBlack;
+      DBGridMovimentacaoCarga.Canvas.FillRect(Rect);
+      DBGridMovimentacaoCarga.DefaultDrawColumnCell(Rect, DataCol,Column, State);
+    end;
+  end;
+  if (gdFocused in State) then
+  begin
+    //Cor da linha
+    if (Column.Field.FieldName= 'Data') then
+    begin
+      with DBDateTimePickerData do
+      begin
+        Left := Rect.Left + DBGridMovimentacaoCarga.Left + 1;
+        Top := Rect.Top + DBGridMovimentacaoCarga.Top + 1;
+        Width := Rect.Right - Rect.Left + 2;
+        Width := Rect.Right - Rect.Left + 2;
+        Height := Rect.Bottom - Rect.Top + 2;
+        Visible := True;
+      end;
+    end
+    else
+      DBDateTimePickerData.Visible := False;
+  end;
+end;
+
+procedure TFrmMovimentacaoCarga.DBGridMovimentacaoCargaTitleClick(
+  Column: TColumn);
+begin
+  FrmPrincipal.configurarFiltro(1,Column.FieldName,IntToStr(Column.Index),
+  Column.ReadOnly,actFiltroInserir,actGridASC,actGridDESC,actSubstituirPor);
+  //======================================================
+  FrmPrincipal.titleGrid(ColunasLayout,FrmDataModule.ADOQueryMovimentacaoCarga,
+  StatusBar1,'Consulta');
+end;
+
+procedure TFrmMovimentacaoCarga.FormClose(Sender: TObject;
+  var Action: TCloseAction);
+begin
+  Action:= caFree;
+  FrmMovimentacaoCarga:=nil;
+end;
+
+procedure TFrmMovimentacaoCarga.FormCreate(Sender: TObject);
+begin
+  FrmPrincipal.MDIChildCreated(self.Handle);
+  dataInicio.Date:= IncDay(now,-2);
+  dataFim.Date:= IncDay(now,2);
+  //Incicialização
+  FrmPrincipal.SetUpColunasLayout(DBGridMovimentacaoCarga, ColunasLayout);
+  actProcurar.Execute;
+end;
+
+procedure TFrmMovimentacaoCarga.FormDestroy(Sender: TObject);
+begin
+  FrmPrincipal.MDIChildDestroyed(self.Handle);
+end;
+
+procedure TFrmMovimentacaoCarga.WMMDIACTIVATE(var msg: TWMMDIACTIVATE);
+ var
+  active: TWinControl;
+  idx: Integer;
+begin
+  active := FindControl(msg.ActiveWnd) ;
+
+  if Assigned(active) then
+  begin
+    idx := FrmPrincipal.mdiChildrenTabs.Tabs.IndexOfObject(TObject(msg.ActiveWnd));
+    FrmPrincipal.mdiChildrenTabs.Tag := -1;
+    FrmPrincipal.mdiChildrenTabs.TabIndex := idx;
+    FrmPrincipal.mdiChildrenTabs.Tag := 0;
+  end;
+end;
+
+end.

@@ -1,0 +1,489 @@
+object FrmCentroTrabalho: TFrmCentroTrabalho
+  Left = 0
+  Top = 0
+  Caption = 'Centro de Trabalho'
+  ClientHeight = 458
+  ClientWidth = 1049
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  FormStyle = fsMDIChild
+  OldCreateOrder = False
+  Visible = True
+  WindowState = wsMaximized
+  OnClose = FormClose
+  OnCreate = FormCreate
+  OnDestroy = FormDestroy
+  PixelsPerInch = 96
+  TextHeight = 13
+  object Splitter1: TSplitter
+    Left = 0
+    Top = 335
+    Width = 1049
+    Height = 3
+    Cursor = crVSplit
+    Align = alBottom
+    ExplicitLeft = 8
+    ExplicitTop = 247
+    ExplicitWidth = 676
+  end
+  object PanelTitulo: TPanel
+    Left = 0
+    Top = 0
+    Width = 1049
+    Height = 25
+    Align = alTop
+    Caption = 'Cadastro de Centro de Trabalho'
+    Color = clGradientActiveCaption
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -13
+    Font.Name = 'Tahoma'
+    Font.Style = [fsBold]
+    ParentBackground = False
+    ParentFont = False
+    TabOrder = 0
+  end
+  object ToolBar1: TToolBar
+    Left = 0
+    Top = 25
+    Width = 1049
+    Height = 29
+    Caption = 'ToolBar1'
+    DrawingStyle = dsGradient
+    EdgeBorders = [ebLeft, ebTop, ebRight, ebBottom]
+    Images = FrmPrincipal.ImageList1
+    TabOrder = 1
+    object DBNavigator1: TDBNavigator
+      Left = 0
+      Top = 0
+      Width = 138
+      Height = 22
+      DataSource = FrmDataModule.DataSourceCentroTrabalho
+      VisibleButtons = [nbInsert, nbDelete, nbEdit, nbPost, nbCancel, nbRefresh]
+      Hints.Strings = (
+        'Primeiro'
+        'Anterior'
+        'Pr'#243'ximo'
+        #218'ltimo'
+        'Inserir'
+        'Excluir'
+        'Editar'
+        'Gravar'
+        'Cancelar'
+        'Atualizar'
+        'Aplicar atualiza'#231#245'es'
+        'Calcelar atualiza'#231#245'es')
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 0
+    end
+    object ToolButton1: TToolButton
+      Left = 138
+      Top = 0
+      Hint = 'Excel'
+      Caption = 'ToolButton1'
+      DropdownMenu = PopupMenuExcel
+      ImageIndex = 54
+      Style = tbsDropDown
+    end
+    object BitBtn4: TBitBtn
+      Left = 176
+      Top = 0
+      Width = 64
+      Height = 22
+      Action = actLimparFiltros
+      Align = alLeft
+      Caption = 'Limpar'
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 3
+    end
+    object BitBtn1: TBitBtn
+      Left = 240
+      Top = 0
+      Width = 64
+      Height = 22
+      Action = actFiltrosTabela
+      Align = alLeft
+      Caption = 'Filtros'
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 4
+    end
+    object BitBtn3: TBitBtn
+      Left = 304
+      Top = 0
+      Width = 63
+      Height = 22
+      Action = actLayoutJanela
+      Align = alLeft
+      Caption = 'Layout'
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 2
+    end
+    object DBEdit1: TDBEdit
+      Left = 367
+      Top = 0
+      Width = 55
+      Height = 22
+      DataField = 'idCentroTrabalho'
+      DataSource = FrmDataModule.DataSourceCentroTrabalho
+      TabOrder = 1
+      Visible = False
+      OnChange = DBEdit1Change
+    end
+  end
+  object DBGridCentroTrabalho: TDBGrid
+    Left = 0
+    Top = 54
+    Width = 1049
+    Height = 281
+    Align = alClient
+    DataSource = FrmDataModule.DataSourceCentroTrabalho
+    TabOrder = 2
+    TitleFont.Charset = DEFAULT_CHARSET
+    TitleFont.Color = clWindowText
+    TitleFont.Height = -11
+    TitleFont.Name = 'Tahoma'
+    TitleFont.Style = []
+    OnColumnMoved = DBGridCentroTrabalhoColumnMoved
+    OnDrawColumnCell = DBGridCentroTrabalhoDrawColumnCell
+    OnKeyPress = DBGridCentroTrabalhoKeyPress
+    OnTitleClick = DBGridCentroTrabalhoTitleClick
+    Columns = <
+      item
+        Alignment = taCenter
+        Expanded = False
+        FieldName = 'CentroTrabalho'
+        Title.Alignment = taCenter
+        Title.Caption = 'Centro de Trabalho'
+        Width = 114
+        Visible = True
+      end
+      item
+        Alignment = taCenter
+        Expanded = False
+        FieldName = 'GrupoPlanejamento'
+        Title.Alignment = taCenter
+        Title.Caption = 'Grp.Plnj.PM'
+        Width = 68
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'DenominacaoBreve'
+        Title.Alignment = taCenter
+        Title.Caption = 'Denomina'#231#227'o Breve'
+        Width = 239
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'txtTipoEtapaServico'
+        Title.Alignment = taCenter
+        Title.Caption = 'Tipo de  Etapa de Servi'#231'o'
+        Width = 143
+        Visible = True
+      end
+      item
+        Alignment = taCenter
+        Expanded = False
+        FieldName = 'GrauUtilizacao'
+        Title.Alignment = taCenter
+        Title.Caption = 'Grau Utiliza'#231#227'o (%)'
+        Width = 113
+        Visible = True
+      end
+      item
+        Alignment = taCenter
+        Expanded = False
+        FieldName = 'NumCapacIndividual'
+        Title.Alignment = taCenter
+        Title.Caption = 'N'#176' Capac. Indivi. (Pessoas)'
+        Width = 138
+        Visible = True
+      end
+      item
+        Alignment = taCenter
+        Expanded = False
+        FieldName = 'TempoDisponivel'
+        Title.Alignment = taCenter
+        Title.Caption = 'Tempo/Dia (Horas)'
+        Width = 95
+        Visible = True
+      end
+      item
+        Alignment = taCenter
+        Expanded = False
+        FieldName = 'TempoTotalDisponivel'
+        Title.Alignment = taCenter
+        Title.Caption = 'Total HH/dia Dispon'#237'vel'
+        Width = 124
+        Visible = True
+      end
+      item
+        Alignment = taCenter
+        Expanded = False
+        FieldName = 'ChaveControle'
+        Title.Alignment = taCenter
+        Title.Caption = 'Chave Controle'
+        Width = 83
+        Visible = True
+      end
+      item
+        Alignment = taCenter
+        Expanded = False
+        FieldName = 'TipoAtvPessoal'
+        Title.Alignment = taCenter
+        Title.Caption = 'Tipo Atv. Pessoal'
+        Width = 93
+        Visible = True
+      end
+      item
+        Alignment = taCenter
+        Expanded = False
+        FieldName = 'AvaliadoPor'
+        Title.Alignment = taCenter
+        Title.Caption = 'Avaliado Por'
+        Width = 81
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'DataAtualizacao'
+        ReadOnly = True
+        Title.Alignment = taCenter
+        Title.Caption = 'Data Atualiza'#231#227'o'
+        Width = 90
+        Visible = True
+      end
+      item
+        Alignment = taCenter
+        Expanded = False
+        FieldName = 'Computador'
+        ReadOnly = True
+        Title.Alignment = taCenter
+        Width = 72
+        Visible = True
+      end
+      item
+        Alignment = taCenter
+        Expanded = False
+        FieldName = 'CodigoTipoEtapaServico'
+        Title.Alignment = taCenter
+        Title.Caption = 'C'#243'digo Tipo de Etapa de Servico'
+        Width = 161
+        Visible = True
+      end>
+  end
+  object DBLookupComboBox_TipoServico: TDBLookupComboBox
+    Left = 387
+    Top = 141
+    Width = 172
+    Height = 21
+    Color = clWhite
+    DataField = 'codigoTipoEtapaServico'
+    DataSource = FrmDataModule.DataSourceCentroTrabalho
+    DropDownRows = 12
+    KeyField = 'idTipoEtapaServico'
+    ListField = 'TipoEtapaServico'
+    ListSource = FrmDataModule.DataSourceTipoEtapaServico
+    TabOrder = 3
+    Visible = False
+    OnCloseUp = DBLookupComboBox_TipoServicoCloseUp
+  end
+  object PanelNotas: TPanel
+    Left = 0
+    Top = 338
+    Width = 1049
+    Height = 120
+    Align = alBottom
+    TabOrder = 4
+    object DBMemoNotas: TDBMemo
+      Left = 1
+      Top = 19
+      Width = 1047
+      Height = 81
+      Align = alClient
+      DataField = 'Notas'
+      DataSource = FrmDataModule.DataSourceCentroTrabalho
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -13
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentFont = False
+      ScrollBars = ssBoth
+      TabOrder = 0
+    end
+    object Panel2: TPanel
+      Left = 1
+      Top = 1
+      Width = 1047
+      Height = 18
+      Align = alTop
+      Caption = 'Observa'#231#245'es'
+      Color = clGradientActiveCaption
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -13
+      Font.Name = 'Tahoma'
+      Font.Style = [fsBold]
+      ParentBackground = False
+      ParentFont = False
+      TabOrder = 1
+    end
+    object StatusBar1: TStatusBar
+      Left = 1
+      Top = 100
+      Width = 1047
+      Height = 19
+      Panels = <
+        item
+          Width = 50
+        end
+        item
+          Width = 50
+        end
+        item
+          Width = 50
+        end
+        item
+          Width = 50
+        end
+        item
+          Width = 50
+        end>
+    end
+  end
+  object ColunasLayout: TStringGrid
+    Left = 96
+    Top = 112
+    Width = 89
+    Height = 97
+    FixedCols = 0
+    Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goDrawFocusSelected, goRowSizing, goColSizing, goEditing]
+    TabOrder = 5
+    Visible = False
+    RowHeights = (
+      24
+      24
+      21
+      24
+      24)
+  end
+  object ActionManager1: TActionManager
+    Images = FrmPrincipal.ImageList1
+    Left = 344
+    Top = 176
+    StyleName = 'Platform Default'
+    object actProcurar: TAction
+      Caption = 'actProcurar'
+      OnExecute = actProcurarExecute
+    end
+    object actExcel: TAction
+      Category = 'Excel'
+      Caption = 'Exportar para o Excel'
+      Hint = 'Exportar para o Excel'
+      ImageIndex = 54
+      OnExecute = actExcelExecute
+    end
+    object actFiltroInserir: TAction
+      Category = 'Tabela'
+      Caption = 'Inserir'
+      OnExecute = actFiltroInserirExecute
+    end
+    object actGridASC: TAction
+      Category = 'Tabela'
+      Caption = 'actGridASC'
+      OnExecute = actGridASCExecute
+    end
+    object actGridDESC: TAction
+      Category = 'Tabela'
+      Caption = 'actGridDESC'
+      OnExecute = actGridDESCExecute
+    end
+    object actSubstituirPor: TAction
+      Category = 'Tabela'
+      Caption = 'actSubstituirPor'
+      OnExecute = actSubstituirPorExecute
+    end
+    object actLimparFiltros: TAction
+      Category = 'Tabela'
+      Caption = 'Limpar'
+      Hint = 'Limpar Filtros'
+      ImageIndex = 469
+      OnExecute = actLimparFiltrosExecute
+    end
+    object actCimaTudo: TAction
+      Category = 'Layout'
+      Caption = 'actCimaTudo'
+      OnExecute = actCimaTudoExecute
+    end
+    object actBaixoTudo: TAction
+      Category = 'Layout'
+      Caption = 'actBaixoTudo'
+      OnExecute = actBaixoTudoExecute
+    end
+    object actBaixo: TAction
+      Category = 'Layout'
+      Caption = 'actBaixo'
+      OnExecute = actBaixoExecute
+    end
+    object actCima: TAction
+      Category = 'Layout'
+      Caption = 'actCima'
+      OnExecute = actCimaExecute
+    end
+    object actSalvarLayout: TAction
+      Category = 'Layout'
+      Caption = 'actSalvarLayout'
+      OnExecute = actSalvarLayoutExecute
+    end
+    object actLayoutJanela: TAction
+      Category = 'Layout'
+      Caption = 'Layout'
+      Hint = 'Layout da tabela'
+      ImageIndex = 466
+      OnExecute = actLayoutJanelaExecute
+    end
+    object actFiltrosTabela: TAction
+      Category = 'Tabela'
+      Caption = 'Filtros'
+      Hint = 'Visualizar tabela de filtros'
+      ImageIndex = 470
+      OnExecute = actFiltrosTabelaExecute
+    end
+    object actProcuraFiltrosTabela: TAction
+      Category = 'Tabela'
+      Caption = 'actProcuraFiltrosTabela'
+      OnExecute = actProcuraFiltrosTabelaExecute
+    end
+    object actExcelImportar: TAction
+      Category = 'Excel'
+      Caption = 'Importar do Excel'
+      Hint = 'Importar tabela do Excel'
+      ImageIndex = 251
+      OnExecute = actExcelImportarExecute
+    end
+  end
+  object OpenDialog1: TOpenDialog
+    Left = 260
+    Top = 169
+  end
+  object PopupMenuExcel: TPopupMenu
+    Left = 316
+    Top = 265
+    object Exportar1: TMenuItem
+      Action = actExcel
+    end
+    object Importar1: TMenuItem
+      Action = actExcelImportar
+    end
+  end
+end

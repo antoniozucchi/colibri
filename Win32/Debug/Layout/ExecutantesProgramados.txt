@@ -1,0 +1,40 @@
+TAB1;Código
+TAB1;Seleção
+TAB1;Data Programação
+TAB1;Origem
+TAB1;Destino
+TAB1;Código SAP
+TAB1;Status [Programação]
+TAB1;Status [Execução]
+TAB1;N° Exec.
+TAB1;Motivo [Programação]
+TAB1;Tipo de Etapa de Servico
+TAB1;Nome do Executante
+TAB1;N° Apro.
+TAB1;N° Canc.
+TAB1;Hora Chegada
+TAB1;Hora PT
+TAB1;Hora Encerramento
+TAB1;Hora Saída
+TAB1;Hora Saldo
+TAB1;Hora NOTA
+TAB1;RT
+TAB1;Tipo Embarque
+TAB1;Função
+TAB1;Empresa
+TAB1;Motivo [Não Execução]
+TAB1;RT
+TAB1;Tipo de Embarque
+TAB1;Documento
+TAB1;Kit_PS
+TAB1;TM
+TAB1;Req. PT
+TAB1;Criado Por
+TAB1;Data [Criação]
+TAB1;Computador [Criação]
+TAB1;Avaliação [Programação]
+TAB1;Data [Programação]
+TAB1;Computador [Programação]
+TAB1;Avaliação [Execução]
+TAB1;Data [Execução]
+TAB1;Computador [Execução]

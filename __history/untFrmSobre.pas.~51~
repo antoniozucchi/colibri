@@ -1,0 +1,250 @@
+unit untFrmSobre;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, ExtCtrls, Buttons, Vcl.Imaging.pngimage, Vcl.Mask,
+  Vcl.DBCtrls,{$WARN UNIT_PLATFORM OFF}Vcl.FileCtrl{$WARN UNIT_PLATFORM ON};
+
+type
+  TFrmSobre = class(TForm)
+    Panel3: TPanel;
+    MemoInformacoes: TMemo;
+    DBNavigatorVersao: TDBNavigator;
+    OpenDialog1: TOpenDialog;
+    PanelEntrada: TPanel;
+    PanelSuperior: TPanel;
+    PanelVersaoDB: TPanel;
+    Panel6: TPanel;
+    Panel7: TPanel;
+    DBEditVersao: TDBEdit;
+    PanelInstalador: TPanel;
+    Panel2: TPanel;
+    btnInstalador: TSpeedButton;
+    Panel4: TPanel;
+    DBEditInstalador: TDBEdit;
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure FormCreate(Sender: TObject);
+    procedure FormDestroy(Sender: TObject);
+    procedure btnInstaladorClick(Sender: TObject);
+  private
+    { Private declarations }
+    function FileVerInfo(var FileInfo: TStringList): Boolean;
+  public
+    { Public declarations }
+  end;
+
+var
+  FrmSobre: TFrmSobre;
+  StrLst : TStringList;
+
+implementation
+  uses untPrincipal,untDataModule;
+{$R *.dfm}
+
+function TFrmSobre.FileVerInfo(var FileInfo: TStringList): Boolean;
+const
+
+Key: array[1..9] of string =(
+  'CompanyName',
+  'FileDescription',
+  'FileVersion',
+  'InternalName',
+  'LegalCopyright',
+  'OriginalFilename',
+  'ProductName',
+  'ProductVersion',
+  'Comments');
+
+KeyBr: array [1..9] of string = (
+  'Empresa'+#9+#9+#9+': ',
+  'Descrição'+#9+#9+#9+': ',
+  'Versão do Arquivo'+#9+#9+': ',
+  'Nome Interno'+#9+#9+': ',
+  'Copyright'+#9+#9+#9+': ',
+  'Nome Original do Arquivo'+#9+': ',
+  'Produto'+#9+#9+#9+': ',
+  'Versão do Produto'+#9+#9+': ',
+  'Comentários'+#9+#9+': ');
+var
+  Dummy                   : DWord;
+  BufferSize, Len         : Integer;
+  Buffer,PFileName        : PChar;
+  LoCharSet, HiCharSet    : Word;
+  Translate, Return       : Pointer;
+  FileName                : string;
+  StrFileInfo, Flags      : string;
+  TargetOS, TypeArq       : string;
+  FixedFileInfo           : Pointer;
+  i                       : Byte;
+begin
+  Result := False;
+  FileName:= Application.ExeName;
+  If not FileExists(FileName) then
+  begin
+    showmessage('Arquivo não encontrado');
+    Result := False;
+    exit;
+  end;
+  FileInfo.Add('Unidade'+#9+#9+#9+': E&P-UO-SEAL/ATP-SM/MI');
+
+  FileInfo.Add('Autor'+#9+#9+#9+': Antonio Augusto Zuchi Leite');
+  FileInfo.Add('Chave'+#9+#9+#9+': KBEB');
+  FileInfo.Add('Matricula'+#9+#9+#9+': 962347-7');
+  FileInfo.Add('e-mail'+#9+#9+#9+': augustozuchi@petrobras.com.br');
+  FileInfo.Add('CREA'+#9+#9+#9+': 260235313-2');
+  FileInfo.Add('1° Versão'+#9+#9+': 06/10/2016');
+  PFileName:= StrAlloc(Length(FileName) + 1);
+  StrPCopy(PFileName,FileName);
+  BufferSize := GetFileVersionInfoSize(PFileName, Dummy);
+  if BufferSize <> 0 then
+  begin
+    GetMem(Buffer, Succ(BufferSize));
+    try
+      if GetFileVersionInfo(PChar(FileName), 0, BufferSize,Buffer) then
+      begin
+        if VerQueryValue(Buffer, '\VarFileInfo\Translation', Translate, UINT(Len)) then
+        begin
+          LoCharSet := LoWord(Longint(Translate^));
+          HiCharSet := HiWord(Longint(Translate^));
+          for i := 1 to 9 do
+          begin
+            StrFileInfo := Format('\StringFileInfo\0%x0%x\%s',[LoCharSet, HiCharSet, Key[i]]);
+            if VerQueryValue(Buffer,PChar(StrFileInfo), Return,UINT(Len)) then
+              FileInfo.Add(KeyBr[i] + PChar(Return));
+          end;
+          if VerQueryValue(Buffer,'\',FixedFileInfo, UINT(Len)) then
+          with TVSFixedFileInfo(FixedFileInfo^) do
+          begin
+            Flags := '';
+            if (dwFileFlags and VS_FF_DEBUG) = VS_FF_DEBUG then
+              Flags := Concat(Flags,'*Debug* ');
+            if (dwFileFlags and VS_FF_SPECIALBUILD) = VS_FF_SPECIALBUILD then
+              Flags := Concat(Flags, '*Special Build* ');
+            if (dwFileFlags and VS_FF_PRIVATEBUILD) = VS_FF_PRIVATEBUILD then
+              Flags := Concat(Flags, '*Private Build* ');
+            if (dwFileFlags and VS_FF_PRERELEASE) = VS_FF_PRERELEASE then
+              Flags := Concat(Flags, '*Pre-Release Build* ');
+            if (dwFileFlags and VS_FF_PATCHED) = VS_FF_PATCHED then
+              Flags := Concat(Flags, '*Patched* ');
+            if Flags <> '' then
+              FileInfo.Add('Atributos'+#9+#9+': ' + Flags);
+            TargetOS := 'Plataforma (OS)'+#9+#9+': ';
+            case dwFileOS of
+              VOS_UNKNOWN : TargetOS := Concat(TargetOS, 'Desconhecido');
+              VOS_DOS : TargetOS := Concat(TargetOS, 'MS-DOS');
+              VOS_OS216 : TargetOS := Concat(TargetOS, '16-bit OS/2');
+              VOS_OS232 : TargetOS := Concat(TargetOS, '32-bit OS/2');
+              VOS_NT : TargetOS := Concat(TargetOS, 'Windows NT');
+              VOS_NT_WINDOWS32, 4: TargetOS := Concat(TargetOS, 'Win32 API');
+              VOS_DOS_WINDOWS16: TargetOS := Concat(TargetOS, '16-bit Windows ','sob MS-DOS');
+            else
+              TargetOS := Concat(TargetOS, 'Fora do Padrão. Código: ', IntToStr(dwFileOS));
+          end;
+          FileInfo.Add(TargetOS);
+          TypeArq := 'Tipo de Arquivo'+#9+#9+': ';
+          case dwFileType of
+            VFT_UNKNOWN : TypeArq := Concat(TypeArq,'Desconhecido');
+            VFT_APP : TypeArq := Concat(TypeArq,'Aplicacao');
+            VFT_DLL : TypeArq := Concat(TypeArq,'Dynamic-Link Lib.');
+            VFT_DRV : begin
+            TypeArq := Concat(TypeArq,'Device driver - Driver ');
+            case dwFileSubtype of
+              VFT2_UNKNOWN : TypeArq := Concat(TypeArq,'Desconhecido');
+              VFT2_DRV_PRINTER : TypeArq := Concat(TypeArq,'de Impressao');
+              VFT2_DRV_KEYBOARD : TypeArq := Concat(TypeArq,'de Teclado');
+              VFT2_DRV_LANGUAGE : TypeArq := Concat(TypeArq,'de Idioma');
+              VFT2_DRV_DISPLAY : TypeArq := Concat(TypeArq,'de Vídeo');
+              VFT2_DRV_MOUSE : TypeArq := Concat(TypeArq,'de Mouse');
+              VFT2_DRV_NETWORK : TypeArq := Concat(TypeArq,'de Rede');
+              VFT2_DRV_SYSTEM : TypeArq := Concat(TypeArq,'de Sistema');
+              VFT2_DRV_INSTALLABLE : TypeArq := Concat(TypeArq,'Instalavel');
+              VFT2_DRV_SOUND : TypeArq := Concat(TypeArq,'Multimida');
+            end;
+          end;
+          VFT_FONT : begin
+          TypeArq := Concat(TypeArq,'Fonte - Fonte ');
+          case dwFileSubtype of
+            VFT2_UNKNOWN : TypeArq := Concat(TypeArq, 'Desconhecida');
+            VFT2_FONT_RASTER : TypeArq := Concat(TypeArq,'Raster');
+            VFT2_FONT_VECTOR : TypeArq := Concat(TypeArq,'Vetorial');
+            VFT2_FONT_TRUETYPE : TypeArq := Concat(TypeArq,'TrueType');
+        end;
+      end;
+      VFT_VXD : TypeArq := Concat(TypeArq,'Virtual Device');
+      VFT_STATIC_LIB: TypeArq := Concat(TypeArq,'Static-Link Lib.');
+    end;
+    FileInfo.Add(TypeArq);
+  end;
+  end;
+  end;
+  finally
+    FreeMem(Buffer, Succ(BufferSize));
+    Result := FileInfo.Text <> '';
+  end;
+  end;
+end;
+
+procedure TFrmSobre.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+  Action:= caFree;
+  FrmSobre:=nil;
+end;
+
+procedure TFrmSobre.FormCreate(Sender: TObject);
+begin
+  //======ADICIONAR TABSET DO FOMRMDI=======
+  FrmPrincipal.MDIChildCreated(self.Handle);
+  FrmDataModule.ADOQueryColibri.Active:= false;
+  FrmDataModule.ADOQueryColibri.Active:= true;
+  StrLst := TStringList.Create;
+  FileVerInfo(StrLst);
+  MemoInformacoes.Text:= StrLst.Text;
+  if ((FrmPrincipal.logPerfil = 'Administrador')OR
+  (FrmPrincipal.logPerfil = 'Supervisor')) then
+  begin
+    DBEditVersao.Enabled:= true;
+    DBEditInstalador.Enabled:= true;
+    btnInstalador.Enabled:= true;
+    DBNavigatorVersao.Enabled:= true;
+  end
+  else if ((FrmPrincipal.logPerfil = 'PIOP')OR
+  (FrmPrincipal.logPerfil = 'Programação')) then
+  begin
+    DBEditVersao.Enabled:= false;
+    DBEditInstalador.Enabled:= false;
+    btnInstalador.Enabled:= false;
+    DBNavigatorVersao.Enabled:= true;
+  end
+  else
+  begin
+    DBEditVersao.Enabled:= false;
+    DBEditInstalador.Enabled:= false;
+    btnInstalador.Enabled:= false;
+    DBNavigatorVersao.Enabled:= false;
+  end;
+end;
+
+procedure TFrmSobre.FormDestroy(Sender: TObject);
+begin
+  FrmPrincipal.MDIChildDestroyed(self.Handle);
+end;
+
+procedure TFrmSobre.btnInstaladorClick(Sender: TObject);
+  var
+    CaminhoArquivo: String;
+begin
+  CaminhoArquivo:= '';
+  SelectDirectory('Selecione a pasta onde encontra-se o instalador do programa para atualizações',
+   '', CaminhoArquivo);
+  FrmDataModule.ADOQueryColibri.Edit;
+  FrmDataModule.DataSourceColibri.DataSet.FieldByName
+  ('enderecoInstalador').AsString:= CaminhoArquivo;
+  FrmDataModule.ADOQueryColibri.Post;
+end;
+
+end.
+
+
+

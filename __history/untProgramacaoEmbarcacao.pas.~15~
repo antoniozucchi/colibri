@@ -1,0 +1,977 @@
+unit untProgramacaoEmbarcacao;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Data.DB, System.Actions, Vcl.ActnList,
+  Vcl.PlatformDefaultStyleActnCtrls, Vcl.ActnMan, Vcl.Grids, Vcl.DBGrids,
+  Vcl.StdCtrls, Vcl.Buttons, Vcl.ComCtrls, Vcl.ExtCtrls,DateUtils, Vcl.DBCtrls,
+  Vcl.ToolWin, Vcl.Menus, Vcl.Mask, Vcl.Samples.Spin,ComOBJ;
+
+type
+  TFrmProgramacaoEmbarcacao = class(TForm)
+    Panel2: TPanel;
+    Panel12: TPanel;
+    dataInicio: TDateTimePicker;
+    Panel24: TPanel;
+    dataFim: TDateTimePicker;
+    Panel8: TPanel;
+    ColunasLayout: TStringGrid;
+    ActionManager1: TActionManager;
+    actExcelFiltrados: TAction;
+    actFiltroInserir: TAction;
+    actGridASC: TAction;
+    actGridDESC: TAction;
+    actLimparFiltros: TAction;
+    actFiltrosTabela: TAction;
+    actProcuraFiltrosTabela: TAction;
+    actProcurar: TAction;
+    StatusBar1: TStatusBar;
+    actCimaTudo: TAction;
+    actBaixoTudo: TAction;
+    actBaixo: TAction;
+    actCima: TAction;
+    actSalvarLayout: TAction;
+    actLayoutJanela: TAction;
+    DBGridProgramacaoEmbarcacao: TDBGrid;
+    actImprirmirOilRecoverAprovado: TAction;
+    StringGridImpressao: TStringGrid;
+    ToolBar1: TToolBar;
+    DBNavigator1: TDBNavigator;
+    BitBtn3: TBitBtn;
+    BitBtn4: TBitBtn;
+    BitBtn5: TBitBtn;
+    BitBtn2: TBitBtn;
+    ToolButton1: TToolButton;
+    ToolButton2: TToolButton;
+    actSelecaoTodos: TAction;
+    actSelecaoLimpar: TAction;
+    ToolButton3: TToolButton;
+    PopupMenuImprimir: TPopupMenu;
+    ProgramaoOilRecover1: TMenuItem;
+    ProgramaoOilRecoverTodos1: TMenuItem;
+    ProgramaodeMergulho1: TMenuItem;
+    actAprovar: TAction;
+    actCancelar: TAction;
+    BitBtn6: TBitBtn;
+    actImprimirOilRecoverTodos: TAction;
+    actImprimirMergulho: TAction;
+    ToolButton5: TToolButton;
+    actImprimirFiltrados: TAction;
+    ImprimirPlanilha1: TMenuItem;
+    ToolButton6: TToolButton;
+    actAjustarColunas: TAction;
+    BitBtn7: TBitBtn;
+    actPendente: TAction;
+    MaskEditHoraInicio: TMaskEdit;
+    MaskEditHoraFim: TMaskEdit;
+    actSubstituirPor: TAction;
+    ToolButton4: TToolButton;
+    PopupMenuExcel: TPopupMenu;
+    actExcelOilRecoverAprovados: TAction;
+    actExcelOilRecoverTodos: TAction;
+    Exportarfiltrados1: TMenuItem;
+    ExportarOilRecoverAprovados1: TMenuItem;
+    ExportarOilRecoverTodos1: TMenuItem;
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure FormCreate(Sender: TObject);
+    procedure FormDestroy(Sender: TObject);
+    procedure actExcelFiltradosExecute(Sender: TObject);
+    procedure actFiltroInserirExecute(Sender: TObject);
+    procedure actGridASCExecute(Sender: TObject);
+    procedure actGridDESCExecute(Sender: TObject);
+    procedure actLimparFiltrosExecute(Sender: TObject);
+    procedure actFiltrosTabelaExecute(Sender: TObject);
+    procedure actProcuraFiltrosTabelaExecute(Sender: TObject);
+    procedure actProcurarExecute(Sender: TObject);
+    procedure actCimaTudoExecute(Sender: TObject);
+    procedure actBaixoTudoExecute(Sender: TObject);
+    procedure actBaixoExecute(Sender: TObject);
+    procedure actCimaExecute(Sender: TObject);
+    procedure actSalvarLayoutExecute(Sender: TObject);
+    procedure actLayoutJanelaExecute(Sender: TObject);
+    procedure DBGridProgramacaoEmbarcacaoDrawColumnCell(Sender: TObject; const Rect: TRect;
+      DataCol: Integer; Column: TColumn; State: TGridDrawState);
+    procedure DBGridProgramacaoEmbarcacaoTitleClick(Column: TColumn);
+    procedure DBGridProgramacaoEmbarcacaoColumnMoved(Sender: TObject; FromIndex,
+      ToIndex: Integer);
+    procedure actImprirmirOilRecoverAprovadoExecute(Sender: TObject);
+    procedure actSelecaoTodosExecute(Sender: TObject);
+    procedure actSelecaoLimparExecute(Sender: TObject);
+    procedure DBGridProgramacaoEmbarcacaoCellClick(Column: TColumn);
+    procedure DBGridProgramacaoEmbarcacaoKeyPress(Sender: TObject;
+      var Key: Char);
+    procedure actCancelarExecute(Sender: TObject);
+    procedure actAprovarExecute(Sender: TObject);
+    procedure actImprimirOilRecoverTodosExecute(Sender: TObject);
+    procedure actImprimirMergulhoExecute(Sender: TObject);
+    procedure actImprimirFiltradosExecute(Sender: TObject);
+    procedure actAjustarColunasExecute(Sender: TObject);
+    procedure actPendenteExecute(Sender: TObject);
+    procedure MaskEditHoraInicioChange(Sender: TObject);
+    procedure MaskEditHoraFimChange(Sender: TObject);
+    procedure actSubstituirPorExecute(Sender: TObject);
+    procedure actExcelOilRecoverAprovadosExecute(Sender: TObject);
+    procedure actExcelOilRecoverTodosExecute(Sender: TObject);
+  private
+    { Private declarations }
+    procedure WMMDIACTIVATE(var msg: TWMMDIACTIVATE);message WM_MDIACTIVATE;
+    procedure ExcelOilRecovery(Tipo: Integer);
+  public
+    { Public declarations }
+  end;
+
+var
+  FrmProgramacaoEmbarcacao: TFrmProgramacaoEmbarcacao;
+
+implementation
+  uses untPrincipal,untDataModule, untFrmPreview;
+{$R *.dfm}
+
+procedure TFrmProgramacaoEmbarcacao.actAjustarColunasExecute(Sender: TObject);
+begin
+  FrmPrincipal.AutoSizeDBGrid(DBGridProgramacaoEmbarcacao);
+end;
+
+procedure TFrmProgramacaoEmbarcacao.actAprovarExecute(Sender: TObject);
+  var
+    NumRegistros: Integer;
+begin
+  if not FrmDataModule.ADOQueryProgramacaoEmbarcacao.IsEmpty then
+  begin
+    FrmDataModule.DataSourceProgramacaoEmbarcacao.Enabled:= false;
+    NumRegistros:= FrmDataModule.ADOQueryProgramacaoEmbarcacao.RecordCount;
+    FrmDataModule.ADOQueryProgramacaoEmbarcacao.First;
+    FrmPrincipal.ProgressBarIncializa(NumRegistros,
+    'Atribuindo status para programação...');
+    while not FrmDataModule.ADOQueryProgramacaoEmbarcacao.Eof do
+    begin
+      if FrmDataModule.DataSourceProgramacaoEmbarcacao.DataSet.
+      FieldByName('BooleanSelecao').AsBoolean then
+      begin
+        FrmDataModule.ADOQueryProgramacaoEmbarcacao.Edit;
+        FrmDataModule.DataSourceProgramacaoEmbarcacao.DataSet.
+        FieldByName('StatusProgramacao').AsString:= 'Aprovado';
+        FrmDataModule.DataSourceProgramacaoEmbarcacao.DataSet.
+        FieldByName('MotivoCancelamento').AsString:= '';
+        FrmDataModule.DataSourceProgramacaoEmbarcacao.DataSet.
+        FieldByName('AvaliadoPor').AsString:= FrmPrincipal.logChave;
+        FrmDataModule.DataSourceProgramacaoEmbarcacao.DataSet.
+        FieldByName('ComputadorAvaliacao').AsString:= FrmPrincipal.logMaquina;
+        FrmDataModule.DataSourceProgramacaoEmbarcacao.DataSet.
+        FieldByName('DataAvaliacao').AsDateTime:= now;
+        FrmDataModule.ADOQueryProgramacaoEmbarcacao.Post;
+      end;
+      FrmDataModule.ADOQueryProgramacaoEmbarcacao.Next;
+      FrmPrincipal.ProgressBarIncremento(1);
+    end;
+    FrmPrincipal.ProgressBarAtualizar;
+    FrmDataModule.ADOQueryProgramacaoEmbarcacao.First;
+    FrmDataModule.DataSourceProgramacaoEmbarcacao.Enabled:= true;
+  end;
+end;
+
+procedure TFrmProgramacaoEmbarcacao.actBaixoExecute(Sender: TObject);
+begin
+  FrmPrincipal.moveBaixo(DBGridProgramacaoEmbarcacao, ColunasLayout);
+  actLimparFiltros.Execute;
+end;
+
+procedure TFrmProgramacaoEmbarcacao.actBaixoTudoExecute(Sender: TObject);
+begin
+  FrmPrincipal.botaoMoveTudo(FrmDataModule.ADOConnectionOperacao,
+  'Embarcacao.txt','','TAB2;',
+  DBGridProgramacaoEmbarcacao,ColunasLayout);
+  actLimparFiltros.Execute;
+end;
+
+procedure TFrmProgramacaoEmbarcacao.actCancelarExecute(Sender: TObject);
+  var
+    Motivo: String;
+    NumRegistros: Integer;
+begin
+  if not FrmDataModule.ADOQueryProgramacaoEmbarcacao.IsEmpty then
+  begin
+    Motivo:= '';
+    if InputQuery('Motivo do Cancelamento','Entre com o motivo do cancelamento',
+    Motivo) then
+    begin
+      FrmDataModule.DataSourceProgramacaoEmbarcacao.Enabled:= false;
+      NumRegistros:= FrmDataModule.ADOQueryProgramacaoEmbarcacao.RecordCount;
+      FrmDataModule.ADOQueryProgramacaoEmbarcacao.First;
+      FrmPrincipal.ProgressBarIncializa(NumRegistros,
+      'Atribuindo status para programação...');
+      while not FrmDataModule.ADOQueryProgramacaoEmbarcacao.Eof do
+      begin
+        if FrmDataModule.DataSourceProgramacaoEmbarcacao.DataSet.
+        FieldByName('BooleanSelecao').AsBoolean then
+        begin
+          FrmDataModule.ADOQueryProgramacaoEmbarcacao.Edit;
+          FrmDataModule.DataSourceProgramacaoEmbarcacao.DataSet.
+          FieldByName('StatusProgramacao').AsString:= 'Cancelado';
+          FrmDataModule.DataSourceProgramacaoEmbarcacao.DataSet.
+          FieldByName('MotivoCancelamento').AsString:= Motivo;
+          FrmDataModule.DataSourceProgramacaoEmbarcacao.DataSet.
+          FieldByName('AvaliadoPor').AsString:= FrmPrincipal.logChave;
+          FrmDataModule.DataSourceProgramacaoEmbarcacao.DataSet.
+          FieldByName('ComputadorAvaliacao').AsString:= FrmPrincipal.logMaquina;
+          FrmDataModule.DataSourceProgramacaoEmbarcacao.DataSet.
+          FieldByName('DataAvaliacao').AsDateTime:= now;
+          FrmDataModule.ADOQueryProgramacaoEmbarcacao.Post;
+        end;
+        FrmDataModule.ADOQueryProgramacaoEmbarcacao.Next;
+        FrmPrincipal.ProgressBarIncremento(1);
+      end;
+      FrmPrincipal.ProgressBarAtualizar;
+      FrmDataModule.ADOQueryProgramacaoEmbarcacao.First;
+      FrmDataModule.DataSourceProgramacaoEmbarcacao.Enabled:= true;
+    end;
+    end;
+  end;
+end;
+
+procedure TFrmProgramacaoEmbarcacao.actCimaExecute(Sender: TObject);
+begin
+  FrmPrincipal.moveCima(DBGridProgramacaoEmbarcacao, ColunasLayout);
+  actLimparFiltros.Execute;
+end;
+
+procedure TFrmProgramacaoEmbarcacao.actCimaTudoExecute(Sender: TObject);
+begin
+  FrmPrincipal.botaoMoveTudo(FrmDataModule.ADOConnectionOperacao,
+  'Embarcacao.txt','','TAB1;',
+  DBGridProgramacaoEmbarcacao,ColunasLayout);
+  actLimparFiltros.Execute;
+end;
+
+procedure TFrmProgramacaoEmbarcacao.actExcelFiltradosExecute(Sender: TObject);
+begin
+  FrmPrincipal.GerarExcel(DBGridProgramacaoEmbarcacao,'Embarcações Programadas');
+end;
+
+procedure TFrmProgramacaoEmbarcacao.actExcelOilRecoverAprovadosExecute(
+  Sender: TObject);
+begin
+  ExcelOilRecovery(0);
+end;
+
+procedure TFrmProgramacaoEmbarcacao.actExcelOilRecoverTodosExecute(
+  Sender: TObject);
+begin
+  ExcelOilRecovery(1);
+end;
+
+procedure TFrmProgramacaoEmbarcacao.actFiltroInserirExecute(Sender: TObject);
+begin
+  FrmPrincipal.inserirProcura(DBGridProgramacaoEmbarcacao,ColunasLayout);
+  actProcurar.Execute;
+  if (FrmPrincipal.PanelFiltrosTabela.Visible)AND(FrmPrincipal.PanelAjuda1.Visible) then
+    actFiltrosTabela.Execute;
+end;
+
+procedure TFrmProgramacaoEmbarcacao.actFiltrosTabelaExecute(Sender: TObject);
+begin
+  FrmPrincipal.btnProcurarFiltrosTabela.Action:= actProcuraFiltrosTabela;
+  FrmPrincipal.FiltrosTabela(DBGridProgramacaoEmbarcacao,ColunasLayout);
+end;
+
+procedure TFrmProgramacaoEmbarcacao.actGridASCExecute(Sender: TObject);
+begin
+  FrmPrincipal.ClassificaDBGrid(DBGridProgramacaoEmbarcacao,
+  FrmDataModule.ADOQueryProgramacaoEmbarcacao,0);
+end;
+
+procedure TFrmProgramacaoEmbarcacao.actGridDESCExecute(Sender: TObject);
+begin
+  FrmPrincipal.ClassificaDBGrid(DBGridProgramacaoEmbarcacao,
+  FrmDataModule.ADOQueryProgramacaoEmbarcacao,1);
+end;
+
+procedure TFrmProgramacaoEmbarcacao.actImprimirMergulhoExecute(Sender: TObject);
+  var
+    SelRegistro,NumLinhas: Integer;
+begin
+  actLimparFiltros.Execute;
+  FrmPrincipal.buscaFiledGrid1('txtTipoEtapaServico','MERGULHO','Contem',ColunasLayout,4,false);
+  actProcurar.Execute;
+  StringGridImpressao.RowCount:= 1;
+  StringGridImpressao.ColCount:= 7;
+  StringGridImpressao.Cells[0,0]:= 'Data';
+  StringGridImpressao.Cells[1,0]:= 'Destino';
+  StringGridImpressao.Cells[2,0]:= 'Texto Breve da Operação';
+  StringGridImpressao.Cells[3,0]:= 'Ordem de Serviço';
+  StringGridImpressao.Cells[4,0]:= 'Empresa';
+  StringGridImpressao.Cells[5,0]:= 'Embarcação';
+  StringGridImpressao.Cells[6,0]:= 'Observação';
+  //=====================================================================
+  SelRegistro:= FrmDataModule.ADOQueryProgramacaoEmbarcacao.RecNo;
+  FrmDataModule.DataSourceProgramacaoEmbarcacao.Enabled:= false;
+  FrmDataModule.ADOQueryProgramacaoEmbarcacao.First;
+  while not FrmDataModule.ADOQueryProgramacaoEmbarcacao.Eof do
+  begin
+    numLinhas:= StringGridImpressao.RowCount;
+    StringGridImpressao.RowCount:= numLinhas+1;
+    StringGridImpressao.Cells[0,numLinhas]:= FrmDataModule.
+    DataSourceProgramacaoEmbarcacao.DataSet.FieldByName('DataProgramacao').AsString;
+    StringGridImpressao.Cells[1,numLinhas]:= FrmDataModule.
+    DataSourceProgramacaoEmbarcacao.DataSet.FieldByName('txtDestino').AsString;
+    StringGridImpressao.Cells[2,numLinhas]:= FrmDataModule.
+    DataSourceProgramacaoEmbarcacao.DataSet.FieldByName('TextoBreveOP').AsString;
+    StringGridImpressao.Cells[3,numLinhas]:= FrmDataModule.
+    DataSourceProgramacaoEmbarcacao.DataSet.FieldByName('OrdemServico').AsString;
+    StringGridImpressao.Cells[4,numLinhas]:= FrmDataModule.
+    DataSourceProgramacaoEmbarcacao.DataSet.FieldByName('Empresa').AsString;
+    StringGridImpressao.Cells[5,numLinhas]:= FrmDataModule.
+    DataSourceProgramacaoEmbarcacao.DataSet.FieldByName('NomeEmbarcacao').AsString;
+    StringGridImpressao.Cells[6,numLinhas]:= FrmDataModule.
+    DataSourceProgramacaoEmbarcacao.DataSet.FieldByName('Observacao').AsString;
+    FrmDataModule.ADOQueryProgramacaoEmbarcacao.Next;
+  end;
+  FrmDataModule.ADOQueryProgramacaoEmbarcacao.RecNo:= SelRegistro;
+  FrmDataModule.DataSourceProgramacaoEmbarcacao.Enabled:= true;
+  FrmPrincipal.AutoFitGrade(StringGridImpressao);
+  //===================================================================
+  if not Assigned(FrmPreview) then
+    FrmPreview:=TFrmPreview.Create(Application)
+  else
+    FrmPreview.Show;
+
+  begin
+    FrmPreview.ListaTituloRelatorio:= TStringList.Create;
+    FrmPreview.ListaTituloRelatorio.Add('Programação do Mergulho');
+    FrmPreview.RadioGroupRelatorio.ItemIndex:= 5;
+    FrmPreview.PrintPreview.PrintJobTitle:= 'Mergulho';
+    FrmPreview.GeneratePages;
+  end;
+end;
+
+procedure TFrmProgramacaoEmbarcacao.actImprimirOilRecoverTodosExecute(
+  Sender: TObject);
+  var
+    SelRegistro,NumLinhas: Integer;
+begin
+  actLimparFiltros.Execute;
+  FrmPrincipal.buscaFiledGrid1('txtTipoEtapaServico','EMBARCAÇÃO OIL RECOVERY','Contem',ColunasLayout,4,false);
+  actProcurar.Execute;
+  StringGridImpressao.RowCount:= 1;
+  StringGridImpressao.ColCount:= 7;
+  StringGridImpressao.Cells[0,0]:= 'Data';
+  StringGridImpressao.Cells[1,0]:= 'Destino';
+  StringGridImpressao.Cells[2,0]:= 'Texto Breve da Operação';
+  StringGridImpressao.Cells[3,0]:= 'Hora Início';
+  StringGridImpressao.Cells[4,0]:= 'Hora Fim';
+  StringGridImpressao.Cells[5,0]:= 'Embarcação';
+  StringGridImpressao.Cells[6,0]:= 'Observação';
+  //=====================================================================
+  SelRegistro:= FrmDataModule.ADOQueryProgramacaoEmbarcacao.RecNo;
+  FrmDataModule.DataSourceProgramacaoEmbarcacao.Enabled:= false;
+  FrmDataModule.ADOQueryProgramacaoEmbarcacao.First;
+  while not FrmDataModule.ADOQueryProgramacaoEmbarcacao.Eof do
+  begin
+    numLinhas:= StringGridImpressao.RowCount;
+    StringGridImpressao.RowCount:= numLinhas+1;
+    StringGridImpressao.Cells[0,numLinhas]:= FrmDataModule.
+    DataSourceProgramacaoEmbarcacao.DataSet.FieldByName('DataProgramacao').AsString;
+    StringGridImpressao.Cells[1,numLinhas]:= FrmDataModule.
+    DataSourceProgramacaoEmbarcacao.DataSet.FieldByName('txtDestino').AsString;
+    StringGridImpressao.Cells[2,numLinhas]:= FrmDataModule.
+    DataSourceProgramacaoEmbarcacao.DataSet.FieldByName('TextoBreveOP').AsString;
+    StringGridImpressao.Cells[3,numLinhas]:= FrmDataModule.
+    DataSourceProgramacaoEmbarcacao.DataSet.FieldByName('HoraInicio').AsString;
+    StringGridImpressao.Cells[4,numLinhas]:= FrmDataModule.
+    DataSourceProgramacaoEmbarcacao.DataSet.FieldByName('HoraFim').AsString;
+    StringGridImpressao.Cells[5,numLinhas]:= FrmDataModule.
+    DataSourceProgramacaoEmbarcacao.DataSet.FieldByName('NomeEmbarcacao').AsString;
+    StringGridImpressao.Cells[6,numLinhas]:= FrmDataModule.
+    DataSourceProgramacaoEmbarcacao.DataSet.FieldByName('Observacao').AsString;
+    FrmDataModule.ADOQueryProgramacaoEmbarcacao.Next;
+  end;
+  FrmDataModule.ADOQueryProgramacaoEmbarcacao.RecNo:= SelRegistro;
+  FrmDataModule.DataSourceProgramacaoEmbarcacao.Enabled:= true;
+  FrmPrincipal.AutoFitGrade(StringGridImpressao);
+  //===================================================================
+  if not Assigned(FrmPreview) then
+    FrmPreview:=TFrmPreview.Create(Application)
+  else
+    FrmPreview.Show;
+
+  begin
+    FrmPreview.ListaTituloRelatorio:= TStringList.Create;
+    FrmPreview.ListaTituloRelatorio.Add('Programação de Embarcações Oil Recovery');
+    FrmPreview.RadioGroupRelatorio.ItemIndex:= 5;
+    FrmPreview.PrintPreview.PrintJobTitle:= 'Oil Recovery';
+    FrmPreview.GeneratePages;
+  end;
+end;
+
+procedure TFrmProgramacaoEmbarcacao.actImprimirFiltradosExecute(Sender: TObject);
+  var
+    SelRegistro,NumLinhas,i: Integer;
+    FieldName: String;
+begin
+  StringGridImpressao.RowCount:= 1;
+  StringGridImpressao.ColCount:= DBGridProgramacaoEmbarcacao.Columns.Count;
+  for I := 0 to DBGridProgramacaoEmbarcacao.Columns.Count-1 do
+    StringGridImpressao.Cells[i,0]:= DBGridProgramacaoEmbarcacao.columns[i].Title.Caption;
+  //=====================================================================
+  SelRegistro:= FrmDataModule.ADOQueryProgramacaoEmbarcacao.RecNo;
+  FrmDataModule.DataSourceProgramacaoEmbarcacao.Enabled:= false;
+  FrmDataModule.ADOQueryProgramacaoEmbarcacao.First;
+  while not FrmDataModule.ADOQueryProgramacaoEmbarcacao.Eof do
+  begin
+    numLinhas:= StringGridImpressao.RowCount;
+    StringGridImpressao.RowCount:= numLinhas+1;
+    for I := 0 to DBGridProgramacaoEmbarcacao.Columns.Count-1 do
+    begin
+      FieldName:= DBGridProgramacaoEmbarcacao.columns[i].FieldName;
+      StringGridImpressao.Cells[i,numLinhas]:= FrmDataModule.
+      DataSourceProgramacaoEmbarcacao.DataSet.FieldByName(FieldName).AsString;
+    end;
+    FrmDataModule.ADOQueryProgramacaoEmbarcacao.Next;
+  end;
+  FrmDataModule.ADOQueryProgramacaoEmbarcacao.RecNo:= SelRegistro;
+  FrmDataModule.DataSourceProgramacaoEmbarcacao.Enabled:= true;
+  FrmPrincipal.AutoFitGrade(StringGridImpressao);
+  //===================================================================
+  if not Assigned(FrmPreview) then
+    FrmPreview:=TFrmPreview.Create(Application)
+  else
+    FrmPreview.Show;
+
+  begin
+    FrmPreview.ListaTituloRelatorio:= TStringList.Create;
+    FrmPreview.ListaTituloRelatorio.Add('Programação de Embarcações');
+    FrmPreview.RadioGroupRelatorio.ItemIndex:= 5;
+    FrmPreview.PrintPreview.PrintJobTitle:= 'Programação';
+    FrmPreview.GeneratePages;
+  end;
+end;
+
+procedure TFrmProgramacaoEmbarcacao.actImprirmirOilRecoverAprovadoExecute(Sender: TObject);
+  var
+    SelRegistro,NumLinhas: Integer;
+begin
+  actLimparFiltros.Execute;
+  FrmPrincipal.buscaFiledGrid1('txtTipoEtapaServico','EMBARCAÇÃO OIL RECOVERY','Contem',ColunasLayout,4,false);
+  FrmPrincipal.buscaFiledGrid1('StatusProgramacao','Aprovado','Contem',ColunasLayout,4,false);
+  actProcurar.Execute;
+  StringGridImpressao.RowCount:= 1;
+  StringGridImpressao.ColCount:= 7;
+  StringGridImpressao.Cells[0,0]:= 'Data';
+  StringGridImpressao.Cells[1,0]:= 'Destino';
+  StringGridImpressao.Cells[2,0]:= 'Texto Breve da Operação';
+  StringGridImpressao.Cells[3,0]:= 'Hora Início';
+  StringGridImpressao.Cells[4,0]:= 'Hora Fim';
+  StringGridImpressao.Cells[5,0]:= 'Embarcação';
+  StringGridImpressao.Cells[6,0]:= 'Observação';
+  //=====================================================================
+  SelRegistro:= FrmDataModule.ADOQueryProgramacaoEmbarcacao.RecNo;
+  FrmDataModule.DataSourceProgramacaoEmbarcacao.Enabled:= false;
+  FrmDataModule.ADOQueryProgramacaoEmbarcacao.First;
+  while not FrmDataModule.ADOQueryProgramacaoEmbarcacao.Eof do
+  begin
+    numLinhas:= StringGridImpressao.RowCount;
+    StringGridImpressao.RowCount:= numLinhas+1;
+    StringGridImpressao.Cells[0,numLinhas]:= FrmDataModule.
+    DataSourceProgramacaoEmbarcacao.DataSet.FieldByName('DataProgramacao').AsString;
+    StringGridImpressao.Cells[1,numLinhas]:= FrmDataModule.
+    DataSourceProgramacaoEmbarcacao.DataSet.FieldByName('txtDestino').AsString;
+    StringGridImpressao.Cells[2,numLinhas]:= FrmDataModule.
+    DataSourceProgramacaoEmbarcacao.DataSet.FieldByName('TextoBreveOP').AsString;
+    StringGridImpressao.Cells[3,numLinhas]:= FrmDataModule.
+    DataSourceProgramacaoEmbarcacao.DataSet.FieldByName('HoraInicio').AsString;
+    StringGridImpressao.Cells[4,numLinhas]:= FrmDataModule.
+    DataSourceProgramacaoEmbarcacao.DataSet.FieldByName('HoraFim').AsString;
+    StringGridImpressao.Cells[5,numLinhas]:= FrmDataModule.
+    DataSourceProgramacaoEmbarcacao.DataSet.FieldByName('NomeEmbarcacao').AsString;
+    StringGridImpressao.Cells[6,numLinhas]:= FrmDataModule.
+    DataSourceProgramacaoEmbarcacao.DataSet.FieldByName('Observacao').AsString;
+    FrmDataModule.ADOQueryProgramacaoEmbarcacao.Next;
+  end;
+  FrmDataModule.ADOQueryProgramacaoEmbarcacao.RecNo:= SelRegistro;
+  FrmDataModule.DataSourceProgramacaoEmbarcacao.Enabled:= true;
+  FrmPrincipal.AutoFitGrade(StringGridImpressao);
+  //===================================================================
+  if not Assigned(FrmPreview) then
+    FrmPreview:=TFrmPreview.Create(Application)
+  else
+    FrmPreview.Show;
+
+  begin
+    FrmPreview.ListaTituloRelatorio:= TStringList.Create;
+    FrmPreview.ListaTituloRelatorio.Add('Programação de Embarcações Oil Recovery');
+    FrmPreview.RadioGroupRelatorio.ItemIndex:= 5;
+    FrmPreview.PrintPreview.PrintJobTitle:= 'Oil Recovery';
+    FrmPreview.GeneratePages;
+  end;
+end;
+
+procedure TFrmProgramacaoEmbarcacao.actSelecaoLimparExecute(Sender: TObject);
+  var
+    selRegistro: Integer;
+begin
+  selRegistro:= FrmDataModule.ADOQueryProgramacaoEmbarcacao.RecNo;
+  FrmDataModule.DataSourceProgramacaoEmbarcacao.Enabled:= false;
+  FrmDataModule.ADOQueryProgramacaoEmbarcacao.First;
+  while not FrmDataModule.ADOQueryProgramacaoEmbarcacao.Eof do
+  begin
+    FrmDataModule.ADOQueryProgramacaoEmbarcacao.Edit;
+    FrmDataModule.DataSourceProgramacaoEmbarcacao.DataSet.
+    FieldByName('BooleanSelecao').AsBoolean:= false;
+    FrmDataModule.ADOQueryProgramacaoEmbarcacao.Post;
+    //=============================================
+    FrmDataModule.ADOQueryProgramacaoEmbarcacao.Next;
+  end;
+  FrmDataModule.ADOQueryProgramacaoEmbarcacao.Active:= false;
+  FrmDataModule.ADOQueryProgramacaoEmbarcacao.Active:= true;
+  FrmDataModule.ADOQueryProgramacaoEmbarcacao.RecNo:= selRegistro;
+  FrmDataModule.DataSourceProgramacaoEmbarcacao.Enabled:= true;
+end;
+
+procedure TFrmProgramacaoEmbarcacao.actSelecaoTodosExecute(Sender: TObject);
+  var
+    selRegistro: Integer;
+begin
+  selRegistro:= FrmDataModule.ADOQueryProgramacaoEmbarcacao.RecNo;
+  FrmDataModule.DataSourceProgramacaoEmbarcacao.Enabled:= false;
+  FrmDataModule.ADOQueryProgramacaoEmbarcacao.First;
+  while not FrmDataModule.ADOQueryProgramacaoEmbarcacao.Eof do
+  begin
+    FrmDataModule.ADOQueryProgramacaoEmbarcacao.Edit;
+    FrmDataModule.DataSourceProgramacaoEmbarcacao.DataSet.
+    FieldByName('BooleanSelecao').AsBoolean:= true;
+    FrmDataModule.ADOQueryProgramacaoEmbarcacao.Post;
+    //=============================================
+    FrmDataModule.ADOQueryProgramacaoEmbarcacao.Next;
+  end;
+  FrmDataModule.ADOQueryProgramacaoEmbarcacao.Active:= false;
+  FrmDataModule.ADOQueryProgramacaoEmbarcacao.Active:= true;
+  FrmDataModule.ADOQueryProgramacaoEmbarcacao.RecNo:= selRegistro;
+  FrmDataModule.DataSourceProgramacaoEmbarcacao.Enabled:= true;
+end;
+
+procedure TFrmProgramacaoEmbarcacao.actSubstituirPorExecute(Sender: TObject);
+begin
+  FrmPrincipal.SubstituirPor(DBGridProgramacaoEmbarcacao,FrmDataModule.ADOQueryProgramacaoEmbarcacao,
+  FrmDataModule.DataSourceProgramacaoEmbarcacao);
+end;
+
+procedure TFrmProgramacaoEmbarcacao.actLayoutJanelaExecute(Sender: TObject);
+begin
+  FrmPrincipal.btnCima.Action:= actCima;
+  FrmPrincipal.btnBaixo.Action:= actBaixo;
+  FrmPrincipal.btnBaixoTudo.Action:= actBaixoTudo;
+  FrmPrincipal.btnCimaTudo.Action:= actCimaTudo;
+  FrmPrincipal.btnSalvarLayout.Action:= actSalvarLayout;
+  FrmPrincipal.btnSalvarLayout.Visible:= false;
+  FrmPrincipal.CarregarRLColunas('Embarcacao.txt',ColunasLayout);
+  FrmPrincipal.actConfigPanelLayout.Execute;
+end;
+
+procedure TFrmProgramacaoEmbarcacao.actLimparFiltrosExecute(Sender: TObject);
+begin
+  FrmPrincipal.LimparColunasFiltro(DBGridProgramacaoEmbarcacao,ColunasLayout);
+  actProcurar.Execute;
+  if (FrmPrincipal.PanelFiltrosTabela.Visible)AND(FrmPrincipal.PanelAjuda1.Visible) then
+    actFiltrosTabela.Execute;
+end;
+
+procedure TFrmProgramacaoEmbarcacao.actPendenteExecute(Sender: TObject);
+  var
+    NumRegistros: Integer;
+begin
+  if not FrmDataModule.ADOQueryProgramacaoEmbarcacao.IsEmpty then
+  begin
+    FrmDataModule.DataSourceProgramacaoEmbarcacao.Enabled:= false;
+    NumRegistros:= FrmDataModule.ADOQueryProgramacaoEmbarcacao.RecordCount;
+    FrmDataModule.ADOQueryProgramacaoEmbarcacao.First;
+    FrmPrincipal.ProgressBarIncializa(NumRegistros,
+    'Atribuindo status para programação...');
+    while not FrmDataModule.ADOQueryProgramacaoEmbarcacao.Eof do
+    begin
+      if FrmDataModule.DataSourceProgramacaoEmbarcacao.DataSet.
+      FieldByName('BooleanSelecao').AsBoolean then
+      begin
+        FrmDataModule.ADOQueryProgramacaoEmbarcacao.Edit;
+        FrmDataModule.DataSourceProgramacaoEmbarcacao.DataSet.
+        FieldByName('StatusProgramacao').AsString:= 'Pendente';
+        FrmDataModule.DataSourceProgramacaoEmbarcacao.DataSet.
+        FieldByName('MotivoCancelamento').AsString:= '';
+        FrmDataModule.DataSourceProgramacaoEmbarcacao.DataSet.
+        FieldByName('AvaliadoPor').AsString:= FrmPrincipal.logChave;
+        FrmDataModule.DataSourceProgramacaoEmbarcacao.DataSet.
+        FieldByName('ComputadorAvaliacao').AsString:= FrmPrincipal.logMaquina;
+        FrmDataModule.DataSourceProgramacaoEmbarcacao.DataSet.
+        FieldByName('DataAvaliacao').AsDateTime:= now;
+        FrmDataModule.ADOQueryProgramacaoEmbarcacao.Post;
+      end;
+      FrmDataModule.ADOQueryProgramacaoEmbarcacao.Next;
+      FrmPrincipal.ProgressBarIncremento(1);
+    end;
+    FrmPrincipal.ProgressBarAtualizar;
+    FrmDataModule.ADOQueryProgramacaoEmbarcacao.First;
+    FrmDataModule.DataSourceProgramacaoEmbarcacao.Enabled:= true;
+  end;
+end;
+
+procedure TFrmProgramacaoEmbarcacao.actProcuraFiltrosTabelaExecute(
+  Sender: TObject);
+begin
+  FrmPrincipal.CarregaFiltrosProcura(ColunasLayout);
+  actProcurar.Execute;
+end;
+
+procedure TFrmProgramacaoEmbarcacao.actProcurarExecute(Sender: TObject);
+  var
+    SQLString,SQLBase,DataProcuraIncio,DataProcuraFim: String;
+    Lista: TStringList;
+begin
+  Lista:= TStringList.Create;
+  DataProcuraIncio:= (FormatDateTime('mm/dd/yyyy',dataInicio.Date));
+  DataProcuraFim:= (FormatDateTime('mm/dd/yyyy',dataFim.Date));
+  //=======================================================
+  SQLString:= frmPrincipal.SQLStringFiltroTabela(ColunasLayout,false);
+  if SQLString <> '' then
+    SQLString:= ' AND '+SQLString;
+  SQLBase:= 'SELECT tblProgramacaoEmbarcacao.* FROM tblProgramacaoEmbarcacao '+
+  'WHERE ((DataProgramacao BETWEEN #'+DataProcuraIncio+'# and #'+DataProcuraFim+'#))'+
+  SQLString+' ORDER BY DataProgramacao;';
+  FrmPrincipal.ProcuraQuery(SQLBase,FrmDataModule.ADOQueryProgramacaoEmbarcacao,
+  StatusBar1);
+  FrmPrincipal.SetupGridPickListSQL(FrmDataModule.ADOConnectionConsulta,'txtDestino',
+  'SELECT tblPlataforma.Plataforma FROM tblPlataforma GROUP BY tblPlataforma.Plataforma;',
+  DBGridProgramacaoEmbarcacao,false);
+  Lista.Clear;
+  Lista.Add('EMBARCAÇÃO OIL RECOVERY');
+  Lista.Add('MERGULHO');
+  Lista.Add('LANCHA DE PASSAGEIROS');
+  FrmPrincipal.SetupGridPickListLista('txtTipoEtapaServico',Lista,DBGridProgramacaoEmbarcacao);
+end;
+
+procedure TFrmProgramacaoEmbarcacao.actSalvarLayoutExecute(Sender: TObject);
+begin
+  FrmPrincipal.SalvarRLColunasCarregaGRID(FrmDataModule.ADOConnectionOperacao,
+  'Embarcacao.txt','',DBGridProgramacaoEmbarcacao,ColunasLayout);
+  actLimparFiltros.Execute;
+end;
+
+procedure TFrmProgramacaoEmbarcacao.DBGridProgramacaoEmbarcacaoCellClick(
+  Column: TColumn);
+begin
+  try
+    if (Self.DBGridProgramacaoEmbarcacao.SelectedField.DataType = ftBoolean)AND
+    (Column.Field.FieldName = 'BooleanSelecao') then
+    begin
+      DBGridProgramacaoEmbarcacao.Options:=
+      [dgTitles,dgIndicator,dgColumnResize,dgColLines,dgRowLines,dgTabs,
+      dgAlwaysShowSelection,dgTitleClick,dgTitleHotTrack];
+      FrmDataModule.ADOQueryProgramacaoEmbarcacao.Edit;
+      FrmDataModule.DataSourceProgramacaoEmbarcacao.DataSet.
+      FieldByName('BooleanSelecao').AsBoolean:=
+      not Self.DBGridProgramacaoEmbarcacao.SelectedField.AsBoolean;
+      FrmDataModule.ADOQueryProgramacaoEmbarcacao.Post;
+    end
+    else
+      DBGridProgramacaoEmbarcacao.Options:=
+      [dgEditing,dgTitles,dgIndicator,dgColumnResize,dgColLines,dgRowLines,dgTabs,
+      dgConfirmDelete,dgCancelOnExit,dgTitleClick,dgTitleHotTrack];
+  except
+
+  end;
+end;
+
+procedure TFrmProgramacaoEmbarcacao.DBGridProgramacaoEmbarcacaoColumnMoved(Sender: TObject;
+  FromIndex, ToIndex: Integer);
+begin
+  FrmPrincipal.CarregarRLColunasAtivasGRID(DBGridProgramacaoEmbarcacao);
+  FrmPrincipal.GravarRLColunas('Embarcacao.txt');
+end;
+
+procedure TFrmProgramacaoEmbarcacao.DBGridProgramacaoEmbarcacaoDrawColumnCell(Sender: TObject;
+  const Rect: TRect; DataCol: Integer; Column: TColumn; State: TGridDrawState);
+  Const
+    CtrlState : array[Boolean] of Integer = (DFCS_BUTTONCHECK,
+    DFCS_BUTTONCHECK or DFCS_CHECKED);
+  var
+    CheckBoxRectangle : TRect;
+begin
+  FrmPrincipal.GridZebrado(DBGridProgramacaoEmbarcacao,ColunasLayout,State,Rect,DataCol,Column);
+  if (Column.Field.FieldName = 'BooleanSelecao') then
+  begin
+    Self.DBGridProgramacaoEmbarcacao.Canvas.FillRect(Rect);
+    CheckBoxRectangle.Left := Rect.Left + 2;
+    CheckBoxRectangle.Right := Rect.Right - 2;
+    CheckBoxRectangle.Top := Rect.Top + 2;
+    CheckBoxRectangle.Bottom := Rect.Bottom - 2;
+    DrawFrameControl(Self.DBGridProgramacaoEmbarcacao.Canvas.Handle,
+    CheckBoxRectangle, DFC_BUTTON,
+    CtrlState[Column.Field.AsBoolean]);
+  end
+  else if (Column.Field.FieldName = 'StatusProgramacao') then
+  begin
+    if FrmDataModule.DataSourceProgramacaoEmbarcacao.DataSet.
+    FieldByName('StatusProgramacao').AsString = 'Aprovado' then
+    begin
+      DBGridProgramacaoEmbarcacao.Canvas.Brush.Color:= clLime;
+      DBGridProgramacaoEmbarcacao.Font.Color:= clBlack;
+      DBGridProgramacaoEmbarcacao.Canvas.FillRect(Rect);
+      DBGridProgramacaoEmbarcacao.DefaultDrawColumnCell(Rect, DataCol,Column, State);
+    end
+    else if FrmDataModule.DataSourceProgramacaoEmbarcacao.DataSet.
+    FieldByName('StatusProgramacao').AsString = 'Cancelado' then
+    begin
+      DBGridProgramacaoEmbarcacao.Canvas.Brush.Color:= clRed;
+      DBGridProgramacaoEmbarcacao.Font.Color:= clBlack;
+      DBGridProgramacaoEmbarcacao.Canvas.FillRect(Rect);
+      DBGridProgramacaoEmbarcacao.DefaultDrawColumnCell(Rect, DataCol,Column, State);
+    end
+    else
+    begin
+      DBGridProgramacaoEmbarcacao.Canvas.Brush.Color:= clYellow;
+      DBGridProgramacaoEmbarcacao.Font.Color:= clBlack;
+      DBGridProgramacaoEmbarcacao.Canvas.FillRect(Rect);
+      DBGridProgramacaoEmbarcacao.DefaultDrawColumnCell(Rect, DataCol,Column, State);
+    end;
+  end;
+  if (gdFocused in State) then
+  begin
+    if (Column.Field.FieldName= 'HoraInicio') then
+    begin
+      with MaskEditHoraInicio do
+      begin
+        Left := Rect.Left + DBGridProgramacaoEmbarcacao.Left + 1;
+        Top := Rect.Top + DBGridProgramacaoEmbarcacao.Top + 1;
+        Width := Rect.Right - Rect.Left + 2;
+        Width := Rect.Right - Rect.Left + 2;
+        Height := Rect.Bottom - Rect.Top + 2;
+        MaskEditHoraInicio.Text:= DBGridProgramacaoEmbarcacao.DataSource.
+        DataSet.FieldByName('HoraInicio').AsString;
+        Visible := True;
+      end;
+    end
+    else
+      MaskEditHoraInicio.Visible := False;
+    //===================================================
+    if (Column.Field.FieldName= 'HoraFim') then
+    begin
+      with MaskEditHoraFim do
+      begin
+        Left := Rect.Left + DBGridProgramacaoEmbarcacao.Left + 1;
+        Top := Rect.Top + DBGridProgramacaoEmbarcacao.Top + 1;
+        Width := Rect.Right - Rect.Left + 2;
+        Width := Rect.Right - Rect.Left + 2;
+        Height := Rect.Bottom - Rect.Top + 2;
+        MaskEditHoraFim.Text:= DBGridProgramacaoEmbarcacao.DataSource.
+        DataSet.FieldByName('HoraFim').AsString;
+        Visible := True;
+      end;
+    end
+    else
+      MaskEditHoraFim.Visible := False;
+  end;
+end;
+
+procedure TFrmProgramacaoEmbarcacao.DBGridProgramacaoEmbarcacaoKeyPress(
+  Sender: TObject; var Key: Char);
+begin
+  if ((DBGridProgramacaoEmbarcacao.SelectedField.FieldName = 'txtDestino')OR
+  (DBGridProgramacaoEmbarcacao.SelectedField.FieldName = 'txtTipoEtapaServico')) then
+    Key:= #0;
+end;
+
+procedure TFrmProgramacaoEmbarcacao.DBGridProgramacaoEmbarcacaoTitleClick(Column: TColumn);
+begin
+  FrmPrincipal.configurarFiltro(1,Column.FieldName,IntToStr(Column.Index),
+  Column.ReadOnly,actFiltroInserir,actGridASC,actGridDESC,actSubstituirPor);
+  //======================================================
+  FrmPrincipal.titleGrid(ColunasLayout,'Operacao',FrmDataModule.ADOQueryProgramacaoEmbarcacao.SQL.Text);
+end;
+
+procedure TFrmProgramacaoEmbarcacao.ExcelOilRecovery(Tipo: Integer);
+var
+  Excel, Sheet: Variant;
+  i,NumRegistros: Integer;
+begin
+  actLimparFiltros.Execute;
+  FrmPrincipal.buscaFiledGrid1('txtTipoEtapaServico','EMBARCAÇÃO OIL RECOVERY','Contem',ColunasLayout,4,false);
+  if Tipo = 0 then
+    FrmPrincipal.buscaFiledGrid1('StatusProgramacao','Aprovado','Contem',ColunasLayout,4,false);
+  actProcurar.Execute;
+  try
+    try
+      Excel := CreateOleObject('Excel.Application');
+      Excel.Workbooks.Add;
+      Excel.Workbooks[1].WorkSheets[1].Name := 'Oil Recovery';
+      Sheet := Excel.Workbooks[1].WorkSheets['Oil Recovery'];
+      Excel.Caption := 'Oil Recovery';
+      // CONFIGURAÇÃO DO PROGRESSBAR
+      NumRegistros:= FrmDataModule.ADOQueryProgramacaoEmbarcacao.RecordCount;
+      FrmPrincipal.ProgressBarIncializa(NumRegistros,'Gerando Excel...');
+      FrmDataModule.DataSourceProgramacaoEmbarcacao.Enabled:=false;
+      FrmDataModule.ADOQueryProgramacaoEmbarcacao.First;
+      i:=3;
+      Excel.Workbooks[1].Sheets[1].Cells[1,1].NumberFormat:= '@';
+      Excel.Workbooks[1].Sheets[1].Cells[1,1] := 'PROGRAMAÇÃO EMBARCAÇÃO OIL RECOVERY';
+      Sheet.Range['A1','G1'].MergeCells:= true;
+      Excel.Workbooks[1].Sheets[1].Cells[2,1].NumberFormat:= '@';
+      Excel.Workbooks[1].Sheets[1].Cells[2,1] := 'Data';
+      Excel.Workbooks[1].Sheets[1].Cells[2,2].NumberFormat:= '@';
+      Excel.Workbooks[1].Sheets[1].Cells[2,2] := 'Hora Início';
+      Excel.Workbooks[1].Sheets[1].Cells[2,3].NumberFormat:= '@';
+      Excel.Workbooks[1].Sheets[1].Cells[2,3] := 'Hora Fim';
+      Excel.Workbooks[1].Sheets[1].Cells[2,4].NumberFormat:= '@';
+      Excel.Workbooks[1].Sheets[1].Cells[2,4] := 'Destino';
+      Excel.Workbooks[1].Sheets[1].Cells[2,5].NumberFormat:= '@';
+      Excel.Workbooks[1].Sheets[1].Cells[2,5] := 'Texto Breve da Operação';
+      Excel.Workbooks[1].Sheets[1].Cells[2,6].NumberFormat:= '@';
+      Excel.Workbooks[1].Sheets[1].Cells[2,6] := 'Embarcação';
+      Excel.Workbooks[1].Sheets[1].Cells[2,7].NumberFormat:= '@';
+      Excel.Workbooks[1].Sheets[1].Cells[2,7] := 'Observação';
+      while not FrmDataModule.ADOQueryProgramacaoEmbarcacao.Eof do
+      begin
+        Excel.Workbooks[1].Sheets[1].Cells[i,1].NumberFormat:= 'dd/mm/aaaa';
+        Excel.Workbooks[1].Sheets[1].Cells[i,1] :=FrmDataModule.
+        DataSourceProgramacaoEmbarcacao.DataSet.FieldByName('DataProgramacao').AsDateTime;
+        Excel.Workbooks[1].Sheets[1].Cells[i,2].NumberFormat:= '@';
+        Excel.Workbooks[1].Sheets[1].Cells[i,2] := FrmDataModule.
+        DataSourceProgramacaoEmbarcacao.DataSet.FieldByName('HoraInicio').AsString;
+        Excel.Workbooks[1].Sheets[1].Cells[i,3].NumberFormat:= '@';
+        Excel.Workbooks[1].Sheets[1].Cells[i,3] := FrmDataModule.
+        DataSourceProgramacaoEmbarcacao.DataSet.FieldByName('HoraFim').AsString;
+        Excel.Workbooks[1].Sheets[1].Cells[i,4].NumberFormat:= '@';
+        Excel.Workbooks[1].Sheets[1].Cells[i,4] := FrmDataModule.
+        DataSourceProgramacaoEmbarcacao.DataSet.FieldByName('txtDestino').AsString;
+        Excel.Workbooks[1].Sheets[1].Cells[i,5].NumberFormat:= '@';
+        Excel.Workbooks[1].Sheets[1].Cells[i,5] := FrmDataModule.
+        DataSourceProgramacaoEmbarcacao.DataSet.FieldByName('TextoBreveOP').AsString;
+        Excel.Workbooks[1].Sheets[1].Cells[i,6].NumberFormat:= '@';
+        Excel.Workbooks[1].Sheets[1].Cells[i,6] := FrmDataModule.
+        DataSourceProgramacaoEmbarcacao.DataSet.FieldByName('NomeEmbarcacao').AsString;
+        Excel.Workbooks[1].Sheets[1].Cells[i,7].NumberFormat:= '@';
+        Excel.Workbooks[1].Sheets[1].Cells[i,7] := FrmDataModule.
+        DataSourceProgramacaoEmbarcacao.DataSet.FieldByName('Observacao').AsString;
+        // CONFIGURAÇÃO DAS CÉLULAS DAS LINHAS
+        Sheet.Rows[i].VerticalAlignment := 2; //2=Center
+        Sheet.Rows[i].HorizontalAlignment := 3; //3=Center
+        // Atualizar ProgressBar
+        FrmPrincipal.ProgressBarIncremento(1);
+        FrmDataModule.ADOQueryProgramacaoEmbarcacao.Next;
+        i:= i+1;
+      end;
+      // letras do cabeçalho
+      Sheet.Rows[1].Font.Bold := true;
+      Sheet.Rows[1].Font.Italic := true;
+      Sheet.Rows[1].VerticalAlignment := 2; // 1=Top - 2=Center - 3=Bottom
+      Sheet.Rows[1].HorizontalAlignment := 3; // 3=Center
+      Sheet.Rows[2].Font.Bold := true;
+      Sheet.Rows[2].Font.Italic := true;
+      Sheet.Rows[2].VerticalAlignment := 2; // 1=Top - 2=Center - 3=Bottom
+      Sheet.Rows[2].HorizontalAlignment := 3; // 3=Center
+      // desenha as grades da tabela
+      Sheet.Range['A1', 'G'+IntToStr(NumRegistros+2)].Borders.LineStyle := 1;
+      Sheet.Range['A1', 'G'+IntToStr(NumRegistros+2)].Borders.Weight := 2;
+      Sheet.Range['A1', 'G'+IntToStr(NumRegistros+2)].Borders.ColorIndex := 1;
+      Sheet.Range['A1', 'G2'].Interior.Color := clSilver;
+      // Cor da Célula
+      Excel.Visible := true;
+      Excel.columns.Autofit;
+    finally
+      FrmDataModule.ADOQueryProgramacaoEmbarcacao.First;
+      FrmDataModule.DataSourceProgramacaoEmbarcacao.Enabled:=true;
+      // Atualizar ProgressBar
+      FrmPrincipal.ProgressBarAtualizar;
+    end;
+  except
+    MessageBox(0, 'Erro de conexão com o Excel' + #13 + #10 +
+    'Verifique se o Microsoft Office Excel esta instalado na sua máquina.',
+    'Excel', MB_ICONERROR);
+    // Atualizar ProgressBar
+    FrmPrincipal.ProgressBarAtualizar;
+  end;
+end;
+
+procedure TFrmProgramacaoEmbarcacao.FormClose(Sender: TObject;
+  var Action: TCloseAction);
+begin
+  Action:= caFree;
+  FrmProgramacaoEmbarcacao:=nil;
+end;
+
+procedure TFrmProgramacaoEmbarcacao.FormCreate(Sender: TObject);
+begin
+  //======ADICIONAR TABSET DO FOMRMDI=======
+  FrmPrincipal.MDIChildCreated(self.Handle);
+  dataInicio.Date:= now;
+  dataFim.Date:= IncDay(now,365);
+  //Incicialização
+  FrmPrincipal.SetUpColunasLayout(DBGridProgramacaoEmbarcacao, ColunasLayout);
+  FrmPrincipal.CarregarRLColunas('Embarcacao.txt', ColunasLayout);
+  FrmPrincipal.CarregarColunasGRID(FrmDataModule.ADOConnectionOperacao,'',DBGridProgramacaoEmbarcacao,ColunasLayout);
+  actProcurar.Execute;
+  if ((FrmPrincipal.logPerfil = 'Administrador')OR
+  (FrmPrincipal.logPerfil = 'PIOP')OR
+  (FrmPrincipal.logPerfil = 'SEG-PIOP')) then
+  begin
+    DBNavigator1.Enabled:= true;
+    DBGridProgramacaoEmbarcacao.ReadOnly:= false;
+    actPendente.Enabled:= true;
+    actAprovar.Enabled:= true;
+    actCancelar.Enabled:= true;
+  end
+  else
+  begin
+    DBNavigator1.Enabled:= false;
+    DBGridProgramacaoEmbarcacao.ReadOnly:= true;
+    actPendente.Enabled:= false;
+    actAprovar.Enabled:= false;
+    actCancelar.Enabled:= false;
+  end;
+end;
+
+procedure TFrmProgramacaoEmbarcacao.FormDestroy(Sender: TObject);
+begin
+  FrmPrincipal.MDIChildDestroyed(self.Handle);
+end;
+
+procedure TFrmProgramacaoEmbarcacao.MaskEditHoraFimChange(Sender: TObject);
+begin
+  try
+    if not (DBGridProgramacaoEmbarcacao.DataSource.State in [dsEdit, dsInsert]) then
+      DBGridProgramacaoEmbarcacao.DataSource.Edit;
+
+    DBGridProgramacaoEmbarcacao.DataSource.DataSet.FieldByName('HoraFim').AsString:=
+    MaskEditHoraFim.Text;
+  except
+  end;
+end;
+
+procedure TFrmProgramacaoEmbarcacao.MaskEditHoraInicioChange(Sender: TObject);
+begin
+  try
+    if not (DBGridProgramacaoEmbarcacao.DataSource.State in [dsEdit, dsInsert]) then
+      DBGridProgramacaoEmbarcacao.DataSource.Edit;
+
+    DBGridProgramacaoEmbarcacao.DataSource.DataSet.FieldByName('HoraInicio').AsString:=
+    MaskEditHoraInicio.Text;
+  except
+  end;
+end;
+
+procedure TFrmProgramacaoEmbarcacao.WMMDIACTIVATE(var msg: TWMMDIACTIVATE);
+var
+  active: TWinControl;
+  idx: Integer;
+begin
+  active := FindControl(msg.ActiveWnd) ;
+
+  if Assigned(active) then
+  begin
+    idx := FrmPrincipal.mdiChildrenTabs.Tabs.IndexOfObject(TObject(msg.ActiveWnd));
+    FrmPrincipal.mdiChildrenTabs.Tag := -1;
+    FrmPrincipal.mdiChildrenTabs.TabIndex := idx;
+    FrmPrincipal.mdiChildrenTabs.Tag := 0;
+  end;
+end;
+
+end.

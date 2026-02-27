@@ -1,0 +1,1407 @@
+object FrmPlataforma: TFrmPlataforma
+  Left = 0
+  Top = 0
+  Caption = 'Cadastro de Instala'#231#227'o'
+  ClientHeight = 419
+  ClientWidth = 1184
+  Color = clMenu
+  Font.Charset = ANSI_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Arial'
+  Font.Style = []
+  FormStyle = fsMDIChild
+  OldCreateOrder = False
+  Position = poScreenCenter
+  Visible = True
+  WindowState = wsMaximized
+  OnClose = FormClose
+  OnCreate = FormCreate
+  OnDestroy = FormDestroy
+  PixelsPerInch = 96
+  TextHeight = 14
+  object PanelTitulo: TPanel
+    Left = 0
+    Top = 0
+    Width = 1184
+    Height = 25
+    Align = alTop
+    Caption = 'Cadastro de Instala'#231#227'o'
+    Color = clGradientInactiveCaption
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -13
+    Font.Name = 'Tahoma'
+    Font.Style = [fsBold]
+    ParentBackground = False
+    ParentFont = False
+    TabOrder = 0
+  end
+  object PageControl1: TPageControl
+    Left = 0
+    Top = 25
+    Width = 1184
+    Height = 394
+    ActivePage = TabSheet2
+    Align = alClient
+    TabOrder = 1
+    OnChange = PageControl1Change
+    object TabSheet2: TTabSheet
+      Caption = 'Cadastro de Instala'#231#227'o'
+      ImageIndex = 1
+      object ToolBar1: TToolBar
+        Left = 0
+        Top = 0
+        Width = 1176
+        Height = 29
+        Caption = 'ToolBar1'
+        DrawingStyle = dsGradient
+        EdgeBorders = [ebLeft, ebTop, ebRight, ebBottom]
+        Images = FrmPrincipal.ImageList1
+        TabOrder = 0
+        object DBNavigatorCadastro: TDBNavigator
+          Left = 0
+          Top = 0
+          Width = 144
+          Height = 22
+          DataSource = FrmDataModule.DataSourcePlataforma
+          VisibleButtons = [nbInsert, nbDelete, nbEdit, nbPost, nbCancel, nbRefresh]
+          Hints.Strings = (
+            'Primeiro'
+            'Anterior'
+            'Pr'#243'ximo'
+            #218'ltimo'
+            'Inserir'
+            'Deletar'
+            'Editar'
+            'Carregar'
+            'Cancelar'
+            'Atualizar')
+          ParentShowHint = False
+          ShowHint = True
+          TabOrder = 0
+        end
+        object ToolButton2: TToolButton
+          Left = 144
+          Top = 0
+          Width = 8
+          Caption = 'ToolButton2'
+          ImageIndex = 58
+          Style = tbsSeparator
+        end
+        object BitBtn3: TBitBtn
+          Left = 152
+          Top = 0
+          Width = 70
+          Height = 22
+          Action = actExcel
+          Align = alLeft
+          Caption = 'Exportar'
+          ParentShowHint = False
+          ShowHint = True
+          TabOrder = 4
+        end
+        object BitBtn4: TBitBtn
+          Left = 222
+          Top = 0
+          Width = 70
+          Height = 22
+          Action = actLimparFiltros
+          Align = alLeft
+          Caption = 'Limpar'
+          ParentShowHint = False
+          ShowHint = True
+          TabOrder = 3
+        end
+        object BitBtn1: TBitBtn
+          Left = 292
+          Top = 0
+          Width = 70
+          Height = 22
+          Action = actFiltrosTabela
+          Align = alLeft
+          Caption = 'Filtros'
+          ParentShowHint = False
+          ShowHint = True
+          TabOrder = 2
+        end
+        object BitBtn2: TBitBtn
+          Left = 362
+          Top = 0
+          Width = 63
+          Height = 22
+          Action = actLayoutJanela
+          Align = alLeft
+          Caption = 'Layout'
+          ParentShowHint = False
+          ShowHint = True
+          TabOrder = 6
+        end
+        object BitBtn5: TBitBtn
+          Left = 425
+          Top = 0
+          Width = 97
+          Height = 22
+          Action = actCalcularXY
+          Align = alLeft
+          Caption = 'Calcular (X,Y)'
+          ParentShowHint = False
+          ShowHint = True
+          TabOrder = 5
+        end
+        object DBEdit1: TDBEdit
+          Left = 522
+          Top = 0
+          Width = 121
+          Height = 22
+          DataField = 'idPlataforma'
+          DataSource = FrmDataModule.DataSourcePlataforma
+          TabOrder = 1
+          Visible = False
+          OnChange = DBEdit1Change
+        end
+      end
+      object DBGridPlataformas: TDBGrid
+        Left = 0
+        Top = 29
+        Width = 1176
+        Height = 317
+        Align = alClient
+        DataSource = FrmDataModule.DataSourcePlataforma
+        TabOrder = 1
+        TitleFont.Charset = ANSI_CHARSET
+        TitleFont.Color = clWindowText
+        TitleFont.Height = -11
+        TitleFont.Name = 'Arial'
+        TitleFont.Style = []
+        OnCellClick = DBGridPlataformasCellClick
+        OnDrawColumnCell = DBGridPlataformasDrawColumnCell
+        OnTitleClick = DBGridPlataformasTitleClick
+        Columns = <
+          item
+            Expanded = False
+            FieldName = 'booleanPlataforma'
+            Title.Alignment = taCenter
+            Title.Caption = 'Controle'
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'booleanOrigem'
+            Title.Alignment = taCenter
+            Title.Caption = 'Origem'
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'Plataforma'
+            Title.Alignment = taCenter
+            Title.Caption = 'Instala'#231#227'o'
+            Width = 162
+            Visible = True
+          end
+          item
+            Alignment = taCenter
+            Expanded = False
+            FieldName = 'Salvatagem'
+            Title.Alignment = taCenter
+            Visible = True
+          end
+          item
+            Alignment = taCenter
+            Expanded = False
+            FieldName = 'CoordX'
+            Title.Alignment = taCenter
+            Title.Caption = 'Coord. X (km)'
+            Visible = True
+          end
+          item
+            Alignment = taCenter
+            Expanded = False
+            FieldName = 'CoordY'
+            Title.Alignment = taCenter
+            Title.Caption = 'Coord. Y (km)'
+            Visible = True
+          end
+          item
+            Alignment = taCenter
+            Expanded = False
+            FieldName = 'ElevacaoTopDECK'
+            Title.Alignment = taCenter
+            Title.Caption = 'Eleva'#231#227'o conv'#233's superior (El) [cm]'
+            Width = 200
+            Visible = True
+          end
+          item
+            Alignment = taCenter
+            Expanded = False
+            FieldName = 'Latitude'
+            Title.Alignment = taCenter
+            Width = 150
+            Visible = True
+          end
+          item
+            Alignment = taCenter
+            Expanded = False
+            FieldName = 'Longitude'
+            Title.Alignment = taCenter
+            Width = 150
+            Visible = True
+          end
+          item
+            Alignment = taCenter
+            Expanded = False
+            FieldName = 'InicioOperacao'
+            Title.Alignment = taCenter
+            Title.Caption = 'In'#237'cio da opera'#231#227'o'
+            Width = 150
+            Visible = True
+          end
+          item
+            Alignment = taCenter
+            Expanded = False
+            FieldName = 'LaminaAgua'
+            Title.Alignment = taCenter
+            Title.Caption = 'L'#226'mina d'#39#225'gua [m]'
+            Width = 150
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'AvaliadoPor'
+            Title.Alignment = taCenter
+            Title.Caption = 'Avaliado Por'
+            Visible = True
+          end
+          item
+            Alignment = taCenter
+            Expanded = False
+            FieldName = 'DataAtualizacao'
+            Title.Alignment = taCenter
+            Title.Caption = 'Data Atualiza'#231#227'o'
+            Visible = True
+          end
+          item
+            Alignment = taCenter
+            Expanded = False
+            FieldName = 'Computador'
+            ReadOnly = True
+            Title.Alignment = taCenter
+            Width = 70
+            Visible = True
+          end>
+      end
+      object StatusBar1: TStatusBar
+        Left = 0
+        Top = 346
+        Width = 1176
+        Height = 19
+        Panels = <
+          item
+            Width = 50
+          end
+          item
+            Width = 50
+          end
+          item
+            Width = 50
+          end
+          item
+            Width = 50
+          end
+          item
+            Width = 50
+          end>
+      end
+      object ColunasLayout: TStringGrid
+        Left = 41
+        Top = 209
+        Width = 113
+        Height = 94
+        ColCount = 2
+        DefaultRowHeight = 21
+        TabOrder = 3
+        Visible = False
+        RowHeights = (
+          21
+          21
+          21
+          21
+          21)
+      end
+    end
+    object TabSheet1: TTabSheet
+      Caption = 'Mapa - Localiza'#231#227'o'
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
+      object PanelMapaGeral: TPanel
+        Left = 0
+        Top = 0
+        Width = 1176
+        Height = 365
+        Align = alClient
+        Caption = ' '
+        TabOrder = 0
+        object PanelMapa: TPanel
+          Left = 1
+          Top = 1
+          Width = 1174
+          Height = 363
+          Align = alClient
+          TabOrder = 0
+          object ToolBar2: TToolBar
+            Left = 1
+            Top = 1
+            Width = 1172
+            Height = 29
+            Caption = 'ToolBar2'
+            DrawingStyle = dsGradient
+            EdgeBorders = [ebLeft, ebTop, ebRight, ebBottom]
+            HotTrackColor = clRed
+            Images = FrmPrincipal.ImageList1
+            TabOrder = 0
+            object DBNavigatorMapa: TDBNavigator
+              Left = 0
+              Top = 0
+              Width = 116
+              Height = 22
+              DataSource = FrmDataModule.DataSourcePlataforma
+              VisibleButtons = [nbFirst, nbPrior, nbNext, nbLast]
+              Hints.Strings = (
+                'Primeiro'
+                'Anterior'
+                'Pr'#243'ximo'
+                #218'ltimo'
+                'Inserir'
+                'Deletar'
+                'Editar'
+                'Carregar'
+                'Cancelar'
+                'Atualizar')
+              ParentShowHint = False
+              ShowHint = True
+              TabOrder = 0
+            end
+            object ToolButton5: TToolButton
+              Left = 116
+              Top = 0
+              Width = 8
+              Caption = 'ToolButton5'
+              ImageIndex = 20
+              Style = tbsSeparator
+            end
+            object ToolButton15: TToolButton
+              Left = 124
+              Top = 0
+              Action = actAbrirDesenho
+              ParentShowHint = False
+              ShowHint = True
+            end
+            object ToolButton12: TToolButton
+              Left = 147
+              Top = 0
+              Action = actSalvarDesenhoData
+              ParentShowHint = False
+              ShowHint = True
+            end
+            object ToolButton8: TToolButton
+              Left = 170
+              Top = 0
+              Action = actImprimir
+              ParentShowHint = False
+              ShowHint = True
+            end
+            object ToolButton10: TToolButton
+              Left = 193
+              Top = 0
+              Action = actSalvar
+              ParentShowHint = False
+              ShowHint = True
+            end
+            object btnPanTo: TToolButton
+              Left = 216
+              Top = 0
+              Action = actPanTo
+              ParentShowHint = False
+              ShowHint = True
+              Style = tbsCheck
+            end
+            object ToolButton11: TToolButton
+              Left = 239
+              Top = 0
+              Action = actMarcar
+              ParentShowHint = False
+              ShowHint = True
+            end
+            object ToolButton9: TToolButton
+              Left = 262
+              Top = 0
+              Action = actZoomDinamico
+              ParentShowHint = False
+              ShowHint = True
+            end
+            object ToolButton6: TToolButton
+              Left = 285
+              Top = 0
+              Action = actZoomFit
+              ParentShowHint = False
+              ShowHint = True
+            end
+            object ToolButton13: TToolButton
+              Left = 308
+              Top = 0
+              Action = actZoomWindow
+              ParentShowHint = False
+              ShowHint = True
+            end
+            object ToolButton7: TToolButton
+              Left = 331
+              Top = 0
+              Action = actPan
+              ParentShowHint = False
+              ShowHint = True
+            end
+            object ToolButton14: TToolButton
+              Left = 354
+              Top = 0
+              Action = actClearGrafico
+              ParentShowHint = False
+              ShowHint = True
+            end
+            object btnCotas: TToolButton
+              Left = 377
+              Top = 0
+              Hint = 
+                'Gerar uma cota com a dist'#226'nica entre duas Plataformas selecionad' +
+                'as com o clique do mouse'
+              Caption = 'actCota'
+              ImageIndex = 66
+              Style = tbsCheck
+              OnClick = btnCotasClick
+            end
+            object ToolButton3: TToolButton
+              Left = 400
+              Top = 0
+              Hint = 'Desenho dos mapas e Latitudes;Longitudes'
+              Caption = 'ToolButton3'
+              DropdownMenu = PopupMenuMapa
+              ImageIndex = 461
+              ParentShowHint = False
+              ShowHint = True
+              Style = tbsDropDown
+            end
+          end
+          object RChartMapa: TRChart
+            Left = 1
+            Top = 98
+            Width = 1172
+            Height = 235
+            Cursor = crHandPoint
+            ParentCustomHint = False
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -16
+            Font.Name = 'Arial'
+            Font.Style = []
+            Align = alClient
+            AvoidDuplicateMarks = False
+            AllocSize = 1000
+            AutoRedraw = True
+            MarginLeft = 40
+            MarginRight = 2
+            MarginTop = 1
+            MarginBottom = 25
+            MinDupMarkDist = 1
+            LRim = 40
+            RRim = 2
+            TRim = 1
+            BRim = 25
+            BackGroundImg.IncludePath = True
+            BackGroundImg.FillMode = bfStretch
+            BackGroundImg.AreaMode = bamNone
+            BackGroundImg.AreaColor = 14540253
+            BackGroundImg.AreaLeft = -1.000000000000000000
+            BackGroundImg.AreaRight = 1.000000000000000000
+            BackGroundImg.AreaTop = 1.000000000000000000
+            BackGroundImg.AreaBottom = -1.000000000000000000
+            ClassDefault = 0
+            GridStyle = gsDotLines
+            GridDx = 200.000000000000000000
+            GridDy = 200.000000000000000000
+            Isometric = True
+            FillColor = clWhite
+            ChartColor = clGradientInactiveCaption
+            WindColor = clWhite
+            GridColor = clSilver
+            JointLayers.L01xControlledBy = 1
+            JointLayers.L01yControlledBy = 1
+            JointLayers.L02xControlledBy = 2
+            JointLayers.L02yControlledBy = 2
+            JointLayers.L03xControlledBy = 3
+            JointLayers.L03yControlledBy = 3
+            JointLayers.L04xControlledBy = 4
+            JointLayers.L04yControlledBy = 4
+            JointLayers.L05xControlledBy = 5
+            JointLayers.L05yControlledBy = 5
+            JointLayers.L06xControlledBy = 6
+            JointLayers.L06yControlledBy = 6
+            JointLayers.L07xControlledBy = 7
+            JointLayers.L07yControlledBy = 7
+            JointLayers.L08xControlledBy = 8
+            JointLayers.L08yControlledBy = 8
+            JointLayers.L09xControlledBy = 9
+            JointLayers.L09yControlledBy = 9
+            JointLayers.L10xControlledBy = 10
+            JointLayers.L10yControlledBy = 10
+            JointLayers.L11xControlledBy = 11
+            JointLayers.L11yControlledBy = 11
+            JointLayers.L12xControlledBy = 12
+            JointLayers.L12yControlledBy = 12
+            JointLayers.L13xControlledBy = 13
+            JointLayers.L13yControlledBy = 13
+            JointLayers.L14xControlledBy = 14
+            JointLayers.L14yControlledBy = 14
+            JointLayers.L15xControlledBy = 15
+            JointLayers.L15yControlledBy = 15
+            JointLayers.L16xControlledBy = 16
+            JointLayers.L16yControlledBy = 16
+            Caption = ''
+            CaptionPosX = 0
+            CaptionPosY = -30
+            CaptionAlignment = taCenter
+            CaptionAnchorHoriz = cahChartCenter
+            CaptionAnchorVert = cavChartTop
+            CaptionTrim = 100
+            MouseTraceColor = clWhite
+            MouseTraceInvert = True
+            CrossHair1.Color = clBlack
+            CrossHair1.Layer = 1
+            CrossHair1.Mode = chBoth
+            CrossHair1.LineType = psClear
+            CrossHair1.LineWid = 1
+            CrossHair2.Color = clMaroon
+            CrossHair2.Layer = 2
+            CrossHair2.Mode = chOff
+            CrossHair2.LineType = psSolid
+            CrossHair2.LineWid = 1
+            CrossHair3.Color = clBlack
+            CrossHair3.Layer = 2
+            CrossHair3.Mode = chOff
+            CrossHair3.LineType = psSolid
+            CrossHair3.LineWid = 1
+            CrossHair4.Color = clBlack
+            CrossHair4.Layer = 2
+            CrossHair4.Mode = chOff
+            CrossHair4.LineType = psSolid
+            CrossHair4.LineWid = 1
+            MouseAction = maPan
+            MouseCursorFixed = False
+            PanGridDx = 1.000000000000000000
+            PanGridDy = 1.000000000000000000
+            Scale1X.CaptionPosX = -45
+            Scale1X.CaptionPosY = 19
+            Scale1X.CaptionAlignment = taCenter
+            Scale1X.CaptionAnchor = uaSclCenter
+            Scale1X.ColorScale = clBlack
+            Scale1X.DateFormat.TimeFormat = tfHHMMSS
+            Scale1X.DateFormat.DateSeparator = '-'
+            Scale1X.DateFormat.TimeSeparator = ':'
+            Scale1X.DateFormat.YearLength = ylYYYY
+            Scale1X.DateFormat.MonthName = True
+            Scale1X.DateFormat.DateOrder = doDDMMYY
+            Scale1X.DateFormat.DateForTime = dtOnePerDay
+            Scale1X.DecPlaces = -2
+            Scale1X.Font.Charset = DEFAULT_CHARSET
+            Scale1X.Font.Color = clWindowText
+            Scale1X.Font.Height = -11
+            Scale1X.Font.Name = 'MS Sans Serif'
+            Scale1X.Font.Style = []
+            Scale1X.Logarithmic = False
+            Scale1X.LabelType = ftNum
+            Scale1X.MinTicks = 5
+            Scale1X.MinRange = 0.000000000100000000
+            Scale1X.MouseAction = maNone
+            Scale1X.RangeLow = -10.000000000000000000
+            Scale1X.RangeHigh = 10.000000000000000000
+            Scale1X.ShortTicks = True
+            Scale1X.ScalePos = 0
+            Scale1X.Visible = True
+            Scale1X.ScaleLocation = slBottom
+            Scale1Y.CaptionPosX = -50
+            Scale1Y.CaptionPosY = 0
+            Scale1Y.CaptionAlignment = taLeftJustify
+            Scale1Y.CaptionAnchor = uaSclTopLft
+            Scale1Y.ColorScale = clBlack
+            Scale1Y.DateFormat.TimeFormat = tfHHMMSS
+            Scale1Y.DateFormat.DateSeparator = '-'
+            Scale1Y.DateFormat.TimeSeparator = ':'
+            Scale1Y.DateFormat.YearLength = ylYYYY
+            Scale1Y.DateFormat.MonthName = True
+            Scale1Y.DateFormat.DateOrder = doDDMMYY
+            Scale1Y.DateFormat.DateForTime = dtOnePerDay
+            Scale1Y.DecPlaces = -2
+            Scale1Y.Font.Charset = DEFAULT_CHARSET
+            Scale1Y.Font.Color = clWindowText
+            Scale1Y.Font.Height = -11
+            Scale1Y.Font.Name = 'MS Sans Serif'
+            Scale1Y.Font.Style = []
+            Scale1Y.Logarithmic = False
+            Scale1Y.LabelType = ftNum
+            Scale1Y.MinTicks = 5
+            Scale1Y.MinRange = 0.000000000100000000
+            Scale1Y.MouseAction = maNone
+            Scale1Y.RangeLow = -1.856763925729443000
+            Scale1Y.RangeHigh = 1.856763925729443000
+            Scale1Y.ShortTicks = True
+            Scale1Y.ScalePos = 0
+            Scale1Y.Visible = True
+            Scale1Y.ScaleLocation = slLeft
+            Scale2X.CaptionPosX = 10
+            Scale2X.CaptionPosY = 100
+            Scale2X.CaptionAlignment = taCenter
+            Scale2X.CaptionAnchor = uaSclCenter
+            Scale2X.ColorScale = clMaroon
+            Scale2X.DateFormat.TimeFormat = tfHHMMSS
+            Scale2X.DateFormat.DateSeparator = '-'
+            Scale2X.DateFormat.TimeSeparator = ':'
+            Scale2X.DateFormat.YearLength = ylYYYY
+            Scale2X.DateFormat.MonthName = True
+            Scale2X.DateFormat.DateOrder = doDDMMYY
+            Scale2X.DateFormat.DateForTime = dtOnePerDay
+            Scale2X.DecPlaces = -2
+            Scale2X.Font.Charset = DEFAULT_CHARSET
+            Scale2X.Font.Color = clWindowText
+            Scale2X.Font.Height = -13
+            Scale2X.Font.Name = 'MS Sans Serif'
+            Scale2X.Font.Style = []
+            Scale2X.Logarithmic = False
+            Scale2X.LabelType = ftNum
+            Scale2X.MinTicks = 3
+            Scale2X.MinRange = 0.000000000100000000
+            Scale2X.MouseAction = maNone
+            Scale2X.RangeHigh = 1.000000000000000000
+            Scale2X.ShortTicks = True
+            Scale2X.ScalePos = 0
+            Scale2X.Visible = False
+            Scale2X.ScaleLocation = slBottom
+            Scale2Y.CaptionPosX = 10
+            Scale2Y.CaptionPosY = 100
+            Scale2Y.CaptionAlignment = taRightJustify
+            Scale2Y.CaptionAnchor = uaSclTopLft
+            Scale2Y.ColorScale = clMaroon
+            Scale2Y.DateFormat.TimeFormat = tfHHMMSS
+            Scale2Y.DateFormat.DateSeparator = '-'
+            Scale2Y.DateFormat.TimeSeparator = ':'
+            Scale2Y.DateFormat.YearLength = ylYYYY
+            Scale2Y.DateFormat.MonthName = True
+            Scale2Y.DateFormat.DateOrder = doDDMMYY
+            Scale2Y.DateFormat.DateForTime = dtOnePerDay
+            Scale2Y.DecPlaces = -2
+            Scale2Y.Font.Charset = DEFAULT_CHARSET
+            Scale2Y.Font.Color = clWindowText
+            Scale2Y.Font.Height = -13
+            Scale2Y.Font.Name = 'MS Sans Serif'
+            Scale2Y.Font.Style = []
+            Scale2Y.Logarithmic = False
+            Scale2Y.LabelType = ftNum
+            Scale2Y.MinTicks = 3
+            Scale2Y.MinRange = 0.000000000100000000
+            Scale2Y.MouseAction = maNone
+            Scale2Y.RangeLow = 0.407161803713526800
+            Scale2Y.RangeHigh = 0.592838196286471200
+            Scale2Y.ShortTicks = True
+            Scale2Y.ScalePos = 0
+            Scale2Y.Visible = False
+            Scale2Y.ScaleLocation = slLeft
+            Scale3X.CaptionPosX = 10
+            Scale3X.CaptionPosY = 100
+            Scale3X.CaptionAlignment = taCenter
+            Scale3X.CaptionAnchor = uaSclCenter
+            Scale3X.ColorScale = clGreen
+            Scale3X.DateFormat.TimeFormat = tfHHMMSS
+            Scale3X.DateFormat.DateSeparator = '-'
+            Scale3X.DateFormat.TimeSeparator = ':'
+            Scale3X.DateFormat.YearLength = ylYYYY
+            Scale3X.DateFormat.MonthName = True
+            Scale3X.DateFormat.DateOrder = doDDMMYY
+            Scale3X.DateFormat.DateForTime = dtOnePerDay
+            Scale3X.DecPlaces = -2
+            Scale3X.Font.Charset = DEFAULT_CHARSET
+            Scale3X.Font.Color = clWindowText
+            Scale3X.Font.Height = -11
+            Scale3X.Font.Name = 'Tahoma'
+            Scale3X.Font.Style = []
+            Scale3X.Logarithmic = False
+            Scale3X.LabelType = ftNum
+            Scale3X.MinTicks = 3
+            Scale3X.MinRange = 0.000000000100000000
+            Scale3X.MouseAction = maNone
+            Scale3X.RangeHigh = 1.000000000000000000
+            Scale3X.ShortTicks = True
+            Scale3X.ScalePos = 0
+            Scale3X.Visible = False
+            Scale3X.ScaleLocation = slBottom
+            Scale3Y.CaptionPosX = 10
+            Scale3Y.CaptionPosY = 100
+            Scale3Y.CaptionAlignment = taRightJustify
+            Scale3Y.CaptionAnchor = uaSclTopLft
+            Scale3Y.ColorScale = clGreen
+            Scale3Y.DateFormat.TimeFormat = tfHHMMSS
+            Scale3Y.DateFormat.DateSeparator = '-'
+            Scale3Y.DateFormat.TimeSeparator = ':'
+            Scale3Y.DateFormat.YearLength = ylYYYY
+            Scale3Y.DateFormat.MonthName = True
+            Scale3Y.DateFormat.DateOrder = doDDMMYY
+            Scale3Y.DateFormat.DateForTime = dtOnePerDay
+            Scale3Y.DecPlaces = -2
+            Scale3Y.Font.Charset = DEFAULT_CHARSET
+            Scale3Y.Font.Color = clWindowText
+            Scale3Y.Font.Height = -11
+            Scale3Y.Font.Name = 'Tahoma'
+            Scale3Y.Font.Style = []
+            Scale3Y.Logarithmic = False
+            Scale3Y.LabelType = ftNum
+            Scale3Y.MinTicks = 3
+            Scale3Y.MinRange = 0.000000000100000000
+            Scale3Y.MouseAction = maNone
+            Scale3Y.RangeLow = 0.407161803713526800
+            Scale3Y.RangeHigh = 0.592838196286471200
+            Scale3Y.ShortTicks = True
+            Scale3Y.ScalePos = 0
+            Scale3Y.Visible = False
+            Scale3Y.ScaleLocation = slLeft
+            Scale4X.CaptionPosX = 10
+            Scale4X.CaptionPosY = 100
+            Scale4X.CaptionAlignment = taCenter
+            Scale4X.CaptionAnchor = uaSclCenter
+            Scale4X.ColorScale = clOlive
+            Scale4X.DateFormat.TimeFormat = tfHHMMSS
+            Scale4X.DateFormat.DateSeparator = '-'
+            Scale4X.DateFormat.TimeSeparator = ':'
+            Scale4X.DateFormat.YearLength = ylYYYY
+            Scale4X.DateFormat.MonthName = True
+            Scale4X.DateFormat.DateOrder = doDDMMYY
+            Scale4X.DateFormat.DateForTime = dtOnePerDay
+            Scale4X.DecPlaces = -2
+            Scale4X.Font.Charset = DEFAULT_CHARSET
+            Scale4X.Font.Color = clWindowText
+            Scale4X.Font.Height = -11
+            Scale4X.Font.Name = 'Tahoma'
+            Scale4X.Font.Style = []
+            Scale4X.Logarithmic = False
+            Scale4X.LabelType = ftNum
+            Scale4X.MinTicks = 3
+            Scale4X.MinRange = 0.000000000100000000
+            Scale4X.MouseAction = maNone
+            Scale4X.RangeHigh = 1.000000000000000000
+            Scale4X.ShortTicks = True
+            Scale4X.ScalePos = 0
+            Scale4X.Visible = False
+            Scale4X.ScaleLocation = slBottom
+            Scale4Y.CaptionPosX = 10
+            Scale4Y.CaptionPosY = 100
+            Scale4Y.CaptionAlignment = taRightJustify
+            Scale4Y.CaptionAnchor = uaSclTopLft
+            Scale4Y.ColorScale = clOlive
+            Scale4Y.DateFormat.TimeFormat = tfHHMMSS
+            Scale4Y.DateFormat.DateSeparator = '-'
+            Scale4Y.DateFormat.TimeSeparator = ':'
+            Scale4Y.DateFormat.YearLength = ylYYYY
+            Scale4Y.DateFormat.MonthName = True
+            Scale4Y.DateFormat.DateOrder = doDDMMYY
+            Scale4Y.DateFormat.DateForTime = dtOnePerDay
+            Scale4Y.DecPlaces = -2
+            Scale4Y.Font.Charset = DEFAULT_CHARSET
+            Scale4Y.Font.Color = clWindowText
+            Scale4Y.Font.Height = -11
+            Scale4Y.Font.Name = 'Tahoma'
+            Scale4Y.Font.Style = []
+            Scale4Y.Logarithmic = False
+            Scale4Y.LabelType = ftNum
+            Scale4Y.MinTicks = 3
+            Scale4Y.MinRange = 0.000000000100000000
+            Scale4Y.MouseAction = maNone
+            Scale4Y.RangeLow = 0.407161803713526800
+            Scale4Y.RangeHigh = 0.592838196286471200
+            Scale4Y.ShortTicks = True
+            Scale4Y.ScalePos = 0
+            Scale4Y.Visible = False
+            Scale4Y.ScaleLocation = slLeft
+            ShadowStyle = ssFlying
+            ShadowColor = clGrayText
+            ShadowBakColor = clBtnFace
+            StyleElements = []
+            TextFont.Charset = DEFAULT_CHARSET
+            TextFont.Color = clWindowText
+            TextFont.Height = -11
+            TextFont.Name = 'Tahoma'
+            TextFont.Style = []
+            TextFontStyle = []
+            TextBkStyle = tbClear
+            TextBkColor = clWhite
+            TextAlignment = taLeftJustify
+            OnDblClick = RChartMapaDblClick
+            OnMouseMove = RChartMapaMouseMove
+            OnMouseDown = RChartMapaMouseDown
+            OnMouseLeave = RChartMapaMouseLeave
+            OnZoomPan = RChartMapaZoomPan
+          end
+          object ToolBar19: TToolBar
+            Left = 1
+            Top = 333
+            Width = 1172
+            Height = 29
+            Align = alBottom
+            Caption = 'ToolBar7'
+            Color = clWhite
+            EdgeBorders = [ebLeft, ebTop, ebRight, ebBottom]
+            Images = FrmPrincipal.ImageList1
+            ParentColor = False
+            TabOrder = 2
+            object CheckBox1: TCheckBox
+              Left = 0
+              Top = 0
+              Width = 19
+              Height = 22
+              Hint = 'Mostrar grade no desenho'
+              Alignment = taLeftJustify
+              ParentShowHint = False
+              ShowHint = True
+              TabOrder = 0
+              OnClick = CheckBox1Click
+            end
+            object ToolButton18: TToolButton
+              Left = 19
+              Top = 0
+              Width = 8
+              Caption = 'ToolButton9'
+              ImageIndex = 0
+              Style = tbsSeparator
+            end
+            object edtGridXFEA: TNumIO2
+              Left = 27
+              Top = 0
+              Width = 127
+              Height = 22
+              Hint = 'Grade X'
+              Alignment = taCenter
+              AutoSize = False
+              Beep = False
+              ButVisible = False
+              But3D = True
+              ButHeight = 22
+              ButWidth = 18
+              ButIncrem = 1.000000000000000000
+              ButSpace = 3
+              ButColor = clSilver
+              ColorBoxBG = clWhite
+              ColorBoxText = clBlack
+              ColorOutBG = clWhite
+              ColorOutText = clBlack
+              ColorScheme = csBWG
+              ColorWarnBG = 1619591152
+              ColorWarnText = clRed
+              DecPlaceSep = dsBoth
+              Enabled = True
+              FixPointDecPlaces = 2
+              FrameStyle = fsLowered
+              GaugeColor = clNavy
+              GaugeColorBg = clSilver
+              GaugeColorFrame = clGray
+              GaugeHeight = 8
+              GaugeFrameStyle = fsLowered
+              GaugeLeftMargin = 35
+              GaugeTopMargin = 3
+              GaugeVisible = False
+              GaugeWidth = 82
+              HideSelection = True
+              InputFormat = itFloat
+              LeftSpace = 50
+              LeftText = 'Grade X:'
+              LeftTextAlignment = taRightJustify
+              ParentShowHint = False
+              RangeHigh = 10000000000.000000000000000000
+              RangeLow = -10000000000.000000000000000000
+              ReadOnly = False
+              RightTextAlignment = taLeftJustify
+              ShowHint = True
+              SignificantDigits = 6
+              TabOrder = 1
+              Text = '1666.80'
+              TextBoxWidth = 65
+              Value = 1666.800000000000000000
+              OnChange = edtGridXFEAChange
+            end
+            object edtGridYFEA: TNumIO2
+              Left = 154
+              Top = 0
+              Width = 115
+              Height = 22
+              Hint = 'Grade Y'
+              Alignment = taCenter
+              AutoSize = False
+              Beep = False
+              ButVisible = False
+              But3D = True
+              ButHeight = 22
+              ButWidth = 18
+              ButIncrem = 1.000000000000000000
+              ButSpace = 3
+              ButColor = clSilver
+              ColorBoxBG = clWhite
+              ColorBoxText = clBlack
+              ColorOutBG = clWhite
+              ColorOutText = clBlack
+              ColorScheme = csBWG
+              ColorWarnBG = 1619591152
+              ColorWarnText = clRed
+              DecPlaceSep = dsBoth
+              Enabled = True
+              FixPointDecPlaces = 2
+              FrameStyle = fsLowered
+              GaugeColor = clNavy
+              GaugeColorBg = clSilver
+              GaugeColorFrame = clGray
+              GaugeHeight = 8
+              GaugeFrameStyle = fsLowered
+              GaugeLeftMargin = 35
+              GaugeTopMargin = 3
+              GaugeVisible = False
+              GaugeWidth = 82
+              HideSelection = True
+              InputFormat = itFloat
+              LeftSpace = 50
+              LeftText = 'Grade Y:'
+              LeftTextAlignment = taRightJustify
+              ParentShowHint = False
+              RangeHigh = 10000000000.000000000000000000
+              RangeLow = -10000000000.000000000000000000
+              ReadOnly = False
+              RightTextAlignment = taLeftJustify
+              ShowHint = True
+              SignificantDigits = 6
+              TabOrder = 2
+              Text = '3000.00'
+              TextBoxWidth = 65
+              Value = 3000.000000000000000000
+              OnChange = edtGridYFEAChange
+            end
+            object ToolButton57: TToolButton
+              Left = 269
+              Top = 0
+              Width = 8
+              Caption = 'ToolButton10'
+              ImageIndex = 1
+              Style = tbsSeparator
+            end
+            object edtXFEA: TNumIO2
+              Left = 277
+              Top = 0
+              Width = 115
+              Height = 22
+              Hint = 'Posi'#231#227'o X do mouse'
+              Alignment = taCenter
+              AutoSize = False
+              Beep = False
+              ButVisible = False
+              But3D = True
+              ButHeight = 22
+              ButWidth = 18
+              ButIncrem = 1.000000000000000000
+              ButSpace = 3
+              ButColor = clSilver
+              ColorBoxBG = clInfoBk
+              ColorBoxText = clBlack
+              ColorOutBG = clWhite
+              ColorOutText = clBlack
+              ColorScheme = csBWG
+              ColorWarnBG = 1619591152
+              ColorWarnText = clRed
+              DecPlaceSep = dsBoth
+              Enabled = True
+              FixPointDecPlaces = 2
+              FrameStyle = fsLowered
+              GaugeColor = clNavy
+              GaugeColorBg = clSilver
+              GaugeColorFrame = clGray
+              GaugeHeight = 8
+              GaugeFrameStyle = fsLowered
+              GaugeLeftMargin = 35
+              GaugeTopMargin = 3
+              GaugeVisible = False
+              GaugeWidth = 82
+              HideSelection = True
+              InputFormat = itFloat
+              LeftSpace = 25
+              LeftText = 'X:'
+              LeftTextAlignment = taRightJustify
+              ParentShowHint = False
+              RangeHigh = 1E20
+              RangeLow = -1E20
+              ReadOnly = True
+              RightText = 'km'
+              RightTextAlignment = taLeftJustify
+              ShowHint = True
+              SignificantDigits = 6
+              TabOrder = 3
+              Text = '0.00'
+              TextBoxWidth = 65
+            end
+            object ToolButton60: TToolButton
+              Left = 392
+              Top = 0
+              Width = 8
+              Caption = 'ToolButton14'
+              ImageIndex = 2
+              Style = tbsSeparator
+            end
+            object edtYFEA: TNumIO2
+              Left = 400
+              Top = 0
+              Width = 115
+              Height = 22
+              Hint = 'Posi'#231#227'o Y do mouse'
+              Alignment = taCenter
+              AutoSize = False
+              Beep = False
+              ButVisible = False
+              But3D = True
+              ButHeight = 22
+              ButWidth = 18
+              ButIncrem = 1.000000000000000000
+              ButSpace = 3
+              ButColor = clSilver
+              ColorBoxBG = clInfoBk
+              ColorBoxText = clBlack
+              ColorOutBG = clWhite
+              ColorOutText = clBlack
+              ColorScheme = csBWG
+              ColorWarnBG = 1619591152
+              ColorWarnText = clRed
+              DecPlaceSep = dsBoth
+              Enabled = True
+              FixPointDecPlaces = 2
+              FrameStyle = fsLowered
+              GaugeColor = clNavy
+              GaugeColorBg = clSilver
+              GaugeColorFrame = clGray
+              GaugeHeight = 8
+              GaugeFrameStyle = fsLowered
+              GaugeLeftMargin = 35
+              GaugeTopMargin = 3
+              GaugeVisible = False
+              GaugeWidth = 82
+              HideSelection = True
+              InputFormat = itFloat
+              LeftSpace = 25
+              LeftText = 'Y:'
+              LeftTextAlignment = taRightJustify
+              ParentShowHint = False
+              RangeHigh = 1E20
+              RangeLow = -1E20
+              ReadOnly = False
+              RightText = 'km'
+              RightTextAlignment = taLeftJustify
+              ShowHint = True
+              SignificantDigits = 6
+              TabOrder = 4
+              Text = '0.00'
+              TextBoxWidth = 65
+            end
+            object ToolButton71: TToolButton
+              Left = 515
+              Top = 0
+              Width = 8
+              Caption = 'ToolButton71'
+              ImageIndex = 3
+              Style = tbsSeparator
+            end
+          end
+          object StatusBarMapa: TStatusBar
+            Left = 1
+            Top = 30
+            Width = 1172
+            Height = 19
+            Align = alTop
+            Panels = <
+              item
+                Width = 50
+              end
+              item
+                Width = 50
+              end
+              item
+                Width = 50
+              end
+              item
+                Width = 50
+              end>
+          end
+          object MemoMapaMundi: TMemo
+            Left = 1
+            Top = 49
+            Width = 1172
+            Height = 49
+            Align = alTop
+            TabOrder = 4
+            Visible = False
+          end
+        end
+      end
+    end
+  end
+  object ActionManager1: TActionManager
+    Images = FrmPrincipal.ImageList1
+    Left = 120
+    Top = 122
+    StyleName = 'Platform Default'
+    object actPanTo: TAction
+      Category = 'Ferramentas'
+      Caption = 'actPanTo'
+      Hint = 'Posicionar (Latitude, Longitude)'
+      ImageIndex = 290
+      OnExecute = actPanToExecute
+    end
+    object actImprimir: TAction
+      Category = 'Ferramentas'
+      Caption = 'actImprimir'
+      Hint = 'Imprimir o mapa'
+      ImageIndex = 21
+      OnExecute = actImprimirExecute
+    end
+    object actSalvar: TAction
+      Category = 'Ferramentas'
+      Caption = 'actSalvar'
+      Hint = 'Salvar mapa como imagem'
+      ImageIndex = 264
+      OnExecute = actSalvarExecute
+    end
+    object actAtualizarTituo: TAction
+      Category = 'Configura'#231#245'es'
+      Caption = 'actAtualizarTituo'
+      OnExecute = actAtualizarTituoExecute
+    end
+    object actMarcar: TAction
+      Category = 'Ferramentas'
+      Caption = 'actMarcar'
+      Hint = 'Marcador'
+      ImageIndex = 112
+      OnExecute = actMarcarExecute
+    end
+    object actProcurar: TAction
+      Category = 'Configura'#231#245'es'
+      Caption = 'actProcurar'
+      OnExecute = actProcurarExecute
+    end
+    object actProcurarTabuaMare: TAction
+      Category = 'Configura'#231#245'es'
+      Caption = 'actProcurarTabuaMare'
+    end
+    object actCalcularXY: TAction
+      Category = 'Configura'#231#245'es'
+      Caption = 'Calcular (X,Y)'
+      Hint = 'Calcular coordenadas X,Y com base nas Latitudes e Longitudes'
+      ImageIndex = 51
+      OnExecute = actCalcularXYExecute
+    end
+    object actZoomFit: TAction
+      Category = 'Ferramentas'
+      Caption = 'actZoomFit'
+      Hint = 'Zoom Fit'
+      ImageIndex = 45
+      OnExecute = actZoomFitExecute
+    end
+    object actPan: TAction
+      Category = 'Ferramentas'
+      Caption = 'actPan'
+      Hint = 'Pan'
+      ImageIndex = 41
+      OnExecute = actPanExecute
+    end
+    object actZoomDinamico: TAction
+      Category = 'Ferramentas'
+      Caption = 'actZoomDinamico'
+      Hint = 'Zoom din'#226'mico'
+      ImageIndex = 48
+      OnExecute = actZoomDinamicoExecute
+    end
+    object actZoomWindow: TAction
+      Category = 'Ferramentas'
+      Caption = 'actZoomWindow'
+      Hint = 'Zoom janela'
+      ImageIndex = 46
+      OnExecute = actZoomWindowExecute
+    end
+    object actClearGrafico: TAction
+      Category = 'Ferramentas'
+      Caption = 'actClearGrafico'
+      Hint = 'Limpar o Mapa'
+      ImageIndex = 324
+      OnExecute = actClearGraficoExecute
+    end
+    object actMapaMundi: TAction
+      Category = 'Configura'#231#245'es'
+      Caption = 'Mapa Mundi'
+      OnExecute = actMapaMundiExecute
+    end
+    object actBrasil: TAction
+      Category = 'Configura'#231#245'es'
+      Caption = 'Brasil'
+      OnExecute = actBrasilExecute
+    end
+    object actLatitudeLongitude: TAction
+      Category = 'Configura'#231#245'es'
+      Caption = 'Latitudes e Longitudes'
+      OnExecute = actLatitudeLongitudeExecute
+    end
+    object actCarregarLinhas: TAction
+      Category = 'Configura'#231#245'es'
+      Caption = 'Carregar linhas 2D (x1;y1;x2;y2)...'
+      Hint = 
+        'Carregar linhas a partir de arquivo *.txt com as coordenadas das' +
+        ' linhas no formato: x1;y1;x2;y2 '
+      OnExecute = actCarregarLinhasExecute
+    end
+    object actAbrirDesenho: TAction
+      Category = 'Ferramentas'
+      Caption = 'actAbrirDesenho'
+      Hint = 'Abrir arquivo de desenho 2D (*.zuchi)...'
+      ImageIndex = 20
+      OnExecute = actAbrirDesenhoExecute
+    end
+    object actSalvarDesenhoData: TAction
+      Category = 'Ferramentas'
+      Caption = 'actSalvarDesenhoData'
+      Hint = 'Salvar arquivo como desenho 2D (*.zuchi)...'
+      ImageIndex = 462
+      OnExecute = actSalvarDesenhoDataExecute
+    end
+    object actFiltroInserir: TAction
+      Category = 'Tabela'
+      Caption = 'actFiltroInserir'
+      OnExecute = actFiltroInserirExecute
+    end
+    object actGridASC: TAction
+      Category = 'Tabela'
+      Caption = 'actGridASC'
+      OnExecute = actGridASCExecute
+    end
+    object actGridDESC: TAction
+      Category = 'Tabela'
+      Caption = 'actGridDESC'
+      OnExecute = actGridDESCExecute
+    end
+    object actSubstituirPor: TAction
+      Category = 'Tabela'
+      Caption = 'actSubstituirPor'
+      OnExecute = actSubstituirPorExecute
+    end
+    object actLimparFiltros: TAction
+      Category = 'Tabela'
+      Caption = 'Limpar'
+      Hint = 'Limpar Filtros'
+      ImageIndex = 469
+      OnExecute = actLimparFiltrosExecute
+    end
+    object actFiltrosTabela: TAction
+      Category = 'Tabela'
+      Caption = 'Filtros'
+      Hint = 'Visualizar tabela de filtros'
+      ImageIndex = 470
+      OnExecute = actFiltrosTabelaExecute
+    end
+    object actProcuraFiltrosTabela: TAction
+      Category = 'Tabela'
+      Caption = 'actProcuraFiltrosTabela'
+      OnExecute = actProcuraFiltrosTabelaExecute
+    end
+    object actExcel: TAction
+      Category = 'Excel'
+      Caption = 'Exportar'
+      Hint = 'Exportar para o Excel'
+      ImageIndex = 54
+      OnExecute = actExcelExecute
+    end
+    object actTabuaMare: TAction
+      Category = 'Configura'#231#245'es'
+      Caption = 'Calcular'
+      Hint = 'Consultar altura da mar'#233' agora'
+      ImageIndex = 458
+    end
+    object actExcelTabuaMAre: TAction
+      Category = 'Excel'
+      Caption = 'Exportar'
+      Hint = 'Exportar para o Excel'
+      ImageIndex = 54
+    end
+    object actExcelImportarTabuaMare: TAction
+      Category = 'Excel'
+      Caption = 'Importar'
+      Hint = 'Importar planilha do Excel'
+      ImageIndex = 251
+    end
+    object actCimaTudo: TAction
+      Category = 'Layout'
+      Caption = 'actCimaTudo'
+      OnExecute = actCimaTudoExecute
+    end
+    object actBaixoTudo: TAction
+      Category = 'Layout'
+      Caption = 'actBaixoTudo'
+      OnExecute = actBaixoTudoExecute
+    end
+    object actBaixo: TAction
+      Category = 'Layout'
+      Caption = 'actBaixo'
+      OnExecute = actBaixoExecute
+    end
+    object actCima: TAction
+      Category = 'Layout'
+      Caption = 'actCima'
+      OnExecute = actCimaExecute
+    end
+    object actSalvarLayout: TAction
+      Category = 'Layout'
+      Caption = 'actSalvarLayout'
+      OnExecute = actSalvarLayoutExecute
+    end
+    object actLayoutJanela: TAction
+      Category = 'Layout'
+      Caption = 'Layout'
+      Hint = 'Layout da tabela'
+      ImageIndex = 466
+      OnExecute = actLayoutJanelaExecute
+    end
+  end
+  object SavePictureDialog1: TSavePictureDialog
+    Filter = 'Metafiles (*.wmf)|*.wmf'
+    Left = 152
+    Top = 120
+  end
+  object PopupMenuMapa: TPopupMenu
+    Left = 181
+    Top = 123
+    object MapaMundi1: TMenuItem
+      Action = actMapaMundi
+    end
+    object LatitudeseLongitudes1: TMenuItem
+      Action = actLatitudeLongitude
+    end
+    object Brasil1: TMenuItem
+      Action = actBrasil
+    end
+    object Carregarlinhas2Dx1y1x2y21: TMenuItem
+      Action = actCarregarLinhas
+    end
+  end
+  object OpenDialog1: TOpenDialog
+    Left = 208
+    Top = 120
+  end
+  object SaveDialog1: TSaveDialog
+    Left = 237
+    Top = 115
+  end
+end

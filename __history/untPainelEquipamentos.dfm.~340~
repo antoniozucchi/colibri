@@ -1,0 +1,5130 @@
+object FrmPainelEquipamentos: TFrmPainelEquipamentos
+  Left = 0
+  Top = 0
+  Caption = 'Painel de Disponibilidade de Equipamentos Cr'#237'ticos'
+  ClientHeight = 468
+  ClientWidth = 962
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  FormStyle = fsMDIChild
+  OldCreateOrder = False
+  Visible = True
+  WindowState = wsMaximized
+  OnClose = FormClose
+  OnCreate = FormCreate
+  OnDestroy = FormDestroy
+  PixelsPerInch = 96
+  TextHeight = 13
+  object PageControl1: TPageControl
+    Left = 0
+    Top = 0
+    Width = 962
+    Height = 468
+    ActivePage = TabSheet4
+    Align = alClient
+    TabOrder = 0
+    OnChange = PageControl1Change
+    object TabSheet1: TTabSheet
+      Caption = 'Disponibilidade de Equipamentos'
+      object PanelTitulo: TPanel
+        Left = 0
+        Top = 0
+        Width = 954
+        Height = 25
+        Align = alTop
+        Caption = 'Painel de Disponibilidade de Equipamentos Cr'#237'ticos'
+        Color = clGradientActiveCaption
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -13
+        Font.Name = 'Tahoma'
+        Font.Style = [fsBold]
+        ParentBackground = False
+        ParentFont = False
+        TabOrder = 0
+      end
+      object ToolBar1: TToolBar
+        Left = 0
+        Top = 25
+        Width = 954
+        Height = 29
+        Caption = 'ToolBar1'
+        DrawingStyle = dsGradient
+        EdgeBorders = [ebLeft, ebTop, ebRight, ebBottom]
+        HotTrackColor = clRed
+        Images = FrmPrincipal.ImageList1
+        TabOrder = 1
+        object ToolButton1: TToolButton
+          Left = 0
+          Top = 0
+          Action = actZoomFit
+          ParentShowHint = False
+          ShowHint = True
+        end
+        object ToolButton2: TToolButton
+          Left = 23
+          Top = 0
+          Action = actPan
+          ParentShowHint = False
+          ShowHint = True
+        end
+        object ToolButton3: TToolButton
+          Left = 46
+          Top = 0
+          Action = actZoomDinamico
+          ParentShowHint = False
+          ShowHint = True
+        end
+        object ToolButton4: TToolButton
+          Left = 69
+          Top = 0
+          Action = actZoomWindow
+          ParentShowHint = False
+          ShowHint = True
+        end
+        object ToolButton5: TToolButton
+          Left = 92
+          Top = 0
+          Action = actImprimir
+          ParentShowHint = False
+          ShowHint = True
+        end
+        object ToolButton6: TToolButton
+          Left = 115
+          Top = 0
+          Action = actImagem
+          ParentShowHint = False
+          ShowHint = True
+        end
+        object btnFonteTAG: TToolButton
+          Left = 138
+          Top = 0
+          Hint = 'Mostrar TAG de busca no SAP no desenho'
+          Caption = 'btnFonteTAG'
+          DropdownMenu = PopupMenuTAG
+          ImageIndex = 43
+          ParentShowHint = False
+          ShowHint = True
+          Style = tbsDropDown
+          OnClick = btnFonteTAGClick
+        end
+        object ToolButton7: TToolButton
+          Left = 176
+          Top = 0
+          Hint = 'Selecionar plataforma'
+          Caption = 'ToolButton7'
+          DropdownMenu = PopupMenuPlataforma
+          ImageIndex = 459
+          ParentShowHint = False
+          ShowHint = True
+          Style = tbsDropDown
+        end
+        object ToolButton8: TToolButton
+          Left = 214
+          Top = 0
+          Action = actLegenda
+          ParentShowHint = False
+          ShowHint = True
+        end
+        object btnSAP: TToolButton
+          Left = 237
+          Top = 0
+          Hint = 'Informa'#231#245'es SAP'
+          Caption = 'actSAP'
+          ImageIndex = 463
+          ParentShowHint = False
+          ShowHint = True
+          Style = tbsCheck
+          OnClick = btnSAPClick
+        end
+      end
+      object RChartDesenho: TRChart
+        Left = 0
+        Top = 54
+        Width = 954
+        Height = 338
+        Cursor = crHandPoint
+        ParentCustomHint = False
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -16
+        Font.Name = 'Arial'
+        Font.Style = []
+        Align = alClient
+        AvoidDuplicateMarks = False
+        AllocSize = 1000
+        AutoRedraw = True
+        MarginLeft = 2
+        MarginRight = 3
+        MarginTop = 1
+        MarginBottom = 2
+        MinDupMarkDist = 1
+        LRim = 2
+        RRim = 3
+        TRim = 1
+        BRim = 2
+        BackGroundImg.IncludePath = True
+        BackGroundImg.FillMode = bfStretch
+        BackGroundImg.AreaMode = bamNone
+        BackGroundImg.AreaColor = 14540253
+        BackGroundImg.AreaLeft = -1.000000000000000000
+        BackGroundImg.AreaRight = 1.000000000000000000
+        BackGroundImg.AreaTop = 1.000000000000000000
+        BackGroundImg.AreaBottom = -1.000000000000000000
+        ClassDefault = 0
+        GridStyle = gsNone
+        GridDx = 50.000000000000000000
+        GridDy = 50.000000000000000000
+        Isometric = True
+        FillColor = clWhite
+        WindColor = clWhite
+        GridColor = clSilver
+        JointLayers.L01xControlledBy = 1
+        JointLayers.L01yControlledBy = 1
+        JointLayers.L02xControlledBy = 2
+        JointLayers.L02yControlledBy = 2
+        JointLayers.L03xControlledBy = 3
+        JointLayers.L03yControlledBy = 3
+        JointLayers.L04xControlledBy = 4
+        JointLayers.L04yControlledBy = 4
+        JointLayers.L05xControlledBy = 5
+        JointLayers.L05yControlledBy = 5
+        JointLayers.L06xControlledBy = 6
+        JointLayers.L06yControlledBy = 6
+        JointLayers.L07xControlledBy = 7
+        JointLayers.L07yControlledBy = 7
+        JointLayers.L08xControlledBy = 8
+        JointLayers.L08yControlledBy = 8
+        JointLayers.L09xControlledBy = 9
+        JointLayers.L09yControlledBy = 9
+        JointLayers.L10xControlledBy = 10
+        JointLayers.L10yControlledBy = 10
+        JointLayers.L11xControlledBy = 11
+        JointLayers.L11yControlledBy = 11
+        JointLayers.L12xControlledBy = 12
+        JointLayers.L12yControlledBy = 12
+        JointLayers.L13xControlledBy = 13
+        JointLayers.L13yControlledBy = 13
+        JointLayers.L14xControlledBy = 14
+        JointLayers.L14yControlledBy = 14
+        JointLayers.L15xControlledBy = 15
+        JointLayers.L15yControlledBy = 15
+        JointLayers.L16xControlledBy = 16
+        JointLayers.L16yControlledBy = 16
+        Caption = ''
+        CaptionPosX = 0
+        CaptionPosY = -30
+        CaptionAlignment = taCenter
+        CaptionAnchorHoriz = cahChartCenter
+        CaptionAnchorVert = cavChartTop
+        CaptionTrim = 100
+        MouseTraceColor = clWhite
+        MouseTraceInvert = True
+        CrossHair1.Color = clBlack
+        CrossHair1.Layer = 1
+        CrossHair1.Mode = chBoth
+        CrossHair1.LineType = psClear
+        CrossHair1.LineWid = 1
+        CrossHair2.Color = clMaroon
+        CrossHair2.Layer = 2
+        CrossHair2.Mode = chOff
+        CrossHair2.LineType = psSolid
+        CrossHair2.LineWid = 1
+        CrossHair3.Color = clBlack
+        CrossHair3.Layer = 2
+        CrossHair3.Mode = chOff
+        CrossHair3.LineType = psSolid
+        CrossHair3.LineWid = 1
+        CrossHair4.Color = clBlack
+        CrossHair4.Layer = 2
+        CrossHair4.Mode = chOff
+        CrossHair4.LineType = psSolid
+        CrossHair4.LineWid = 1
+        MouseAction = maPan
+        MouseCursorFixed = False
+        PanGridDx = 1.000000000000000000
+        PanGridDy = 1.000000000000000000
+        Scale1X.CaptionPosX = -45
+        Scale1X.CaptionPosY = 19
+        Scale1X.CaptionAlignment = taCenter
+        Scale1X.CaptionAnchor = uaSclCenter
+        Scale1X.ColorScale = clBlack
+        Scale1X.DateFormat.TimeFormat = tfHHMMSS
+        Scale1X.DateFormat.DateSeparator = '-'
+        Scale1X.DateFormat.TimeSeparator = ':'
+        Scale1X.DateFormat.YearLength = ylYYYY
+        Scale1X.DateFormat.MonthName = True
+        Scale1X.DateFormat.DateOrder = doDDMMYY
+        Scale1X.DateFormat.DateForTime = dtOnePerDay
+        Scale1X.DecPlaces = -2
+        Scale1X.Font.Charset = DEFAULT_CHARSET
+        Scale1X.Font.Color = clWindowText
+        Scale1X.Font.Height = -11
+        Scale1X.Font.Name = 'MS Sans Serif'
+        Scale1X.Font.Style = []
+        Scale1X.Logarithmic = False
+        Scale1X.LabelType = ftNum
+        Scale1X.MinTicks = 5
+        Scale1X.MinRange = 0.000000000100000000
+        Scale1X.MouseAction = maNone
+        Scale1X.RangeLow = -10.000000000000000000
+        Scale1X.RangeHigh = 10.000000000000000000
+        Scale1X.ShortTicks = True
+        Scale1X.ScalePos = 0
+        Scale1X.Visible = False
+        Scale1X.ScaleLocation = slBottom
+        Scale1Y.CaptionPosX = -50
+        Scale1Y.CaptionPosY = 0
+        Scale1Y.CaptionAlignment = taLeftJustify
+        Scale1Y.CaptionAnchor = uaSclTopLft
+        Scale1Y.ColorScale = clBlack
+        Scale1Y.DateFormat.TimeFormat = tfHHMMSS
+        Scale1Y.DateFormat.DateSeparator = '-'
+        Scale1Y.DateFormat.TimeSeparator = ':'
+        Scale1Y.DateFormat.YearLength = ylYYYY
+        Scale1Y.DateFormat.MonthName = True
+        Scale1Y.DateFormat.DateOrder = doDDMMYY
+        Scale1Y.DateFormat.DateForTime = dtOnePerDay
+        Scale1Y.DecPlaces = -2
+        Scale1Y.Font.Charset = DEFAULT_CHARSET
+        Scale1Y.Font.Color = clWindowText
+        Scale1Y.Font.Height = -11
+        Scale1Y.Font.Name = 'MS Sans Serif'
+        Scale1Y.Font.Style = []
+        Scale1Y.Logarithmic = False
+        Scale1Y.LabelType = ftNum
+        Scale1Y.MinTicks = 5
+        Scale1Y.MinRange = 0.000000000100000000
+        Scale1Y.MouseAction = maNone
+        Scale1Y.RangeLow = -3.536842105263158000
+        Scale1Y.RangeHigh = 3.536842105263158000
+        Scale1Y.ShortTicks = True
+        Scale1Y.ScalePos = 0
+        Scale1Y.Visible = False
+        Scale1Y.ScaleLocation = slLeft
+        Scale2X.CaptionPosX = 10
+        Scale2X.CaptionPosY = 100
+        Scale2X.CaptionAlignment = taCenter
+        Scale2X.CaptionAnchor = uaSclCenter
+        Scale2X.ColorScale = clMaroon
+        Scale2X.DateFormat.TimeFormat = tfHHMMSS
+        Scale2X.DateFormat.DateSeparator = '-'
+        Scale2X.DateFormat.TimeSeparator = ':'
+        Scale2X.DateFormat.YearLength = ylYYYY
+        Scale2X.DateFormat.MonthName = True
+        Scale2X.DateFormat.DateOrder = doDDMMYY
+        Scale2X.DateFormat.DateForTime = dtOnePerDay
+        Scale2X.DecPlaces = -2
+        Scale2X.Font.Charset = DEFAULT_CHARSET
+        Scale2X.Font.Color = clWindowText
+        Scale2X.Font.Height = -13
+        Scale2X.Font.Name = 'MS Sans Serif'
+        Scale2X.Font.Style = []
+        Scale2X.Logarithmic = False
+        Scale2X.LabelType = ftNum
+        Scale2X.MinTicks = 3
+        Scale2X.MinRange = 0.000000000100000000
+        Scale2X.MouseAction = maNone
+        Scale2X.RangeHigh = 1.000000000000000000
+        Scale2X.ShortTicks = True
+        Scale2X.ScalePos = 0
+        Scale2X.Visible = False
+        Scale2X.ScaleLocation = slBottom
+        Scale2Y.CaptionPosX = 10
+        Scale2Y.CaptionPosY = 100
+        Scale2Y.CaptionAlignment = taRightJustify
+        Scale2Y.CaptionAnchor = uaSclTopLft
+        Scale2Y.ColorScale = clMaroon
+        Scale2Y.DateFormat.TimeFormat = tfHHMMSS
+        Scale2Y.DateFormat.DateSeparator = '-'
+        Scale2Y.DateFormat.TimeSeparator = ':'
+        Scale2Y.DateFormat.YearLength = ylYYYY
+        Scale2Y.DateFormat.MonthName = True
+        Scale2Y.DateFormat.DateOrder = doDDMMYY
+        Scale2Y.DateFormat.DateForTime = dtOnePerDay
+        Scale2Y.DecPlaces = -2
+        Scale2Y.Font.Charset = DEFAULT_CHARSET
+        Scale2Y.Font.Color = clWindowText
+        Scale2Y.Font.Height = -13
+        Scale2Y.Font.Name = 'MS Sans Serif'
+        Scale2Y.Font.Style = []
+        Scale2Y.Logarithmic = False
+        Scale2Y.LabelType = ftNum
+        Scale2Y.MinTicks = 3
+        Scale2Y.MinRange = 0.000000000100000000
+        Scale2Y.MouseAction = maNone
+        Scale2Y.RangeLow = 0.323157894736841300
+        Scale2Y.RangeHigh = 0.676842105263157100
+        Scale2Y.ShortTicks = True
+        Scale2Y.ScalePos = 0
+        Scale2Y.Visible = False
+        Scale2Y.ScaleLocation = slLeft
+        Scale3X.CaptionPosX = 10
+        Scale3X.CaptionPosY = 100
+        Scale3X.CaptionAlignment = taCenter
+        Scale3X.CaptionAnchor = uaSclCenter
+        Scale3X.ColorScale = clGreen
+        Scale3X.DateFormat.TimeFormat = tfHHMMSS
+        Scale3X.DateFormat.DateSeparator = '-'
+        Scale3X.DateFormat.TimeSeparator = ':'
+        Scale3X.DateFormat.YearLength = ylYYYY
+        Scale3X.DateFormat.MonthName = True
+        Scale3X.DateFormat.DateOrder = doDDMMYY
+        Scale3X.DateFormat.DateForTime = dtOnePerDay
+        Scale3X.DecPlaces = -2
+        Scale3X.Font.Charset = DEFAULT_CHARSET
+        Scale3X.Font.Color = clWindowText
+        Scale3X.Font.Height = -11
+        Scale3X.Font.Name = 'Tahoma'
+        Scale3X.Font.Style = []
+        Scale3X.Logarithmic = False
+        Scale3X.LabelType = ftNum
+        Scale3X.MinTicks = 3
+        Scale3X.MinRange = 0.000000000100000000
+        Scale3X.MouseAction = maNone
+        Scale3X.RangeHigh = 1.000000000000000000
+        Scale3X.ShortTicks = True
+        Scale3X.ScalePos = 0
+        Scale3X.Visible = False
+        Scale3X.ScaleLocation = slBottom
+        Scale3Y.CaptionPosX = 10
+        Scale3Y.CaptionPosY = 100
+        Scale3Y.CaptionAlignment = taRightJustify
+        Scale3Y.CaptionAnchor = uaSclTopLft
+        Scale3Y.ColorScale = clGreen
+        Scale3Y.DateFormat.TimeFormat = tfHHMMSS
+        Scale3Y.DateFormat.DateSeparator = '-'
+        Scale3Y.DateFormat.TimeSeparator = ':'
+        Scale3Y.DateFormat.YearLength = ylYYYY
+        Scale3Y.DateFormat.MonthName = True
+        Scale3Y.DateFormat.DateOrder = doDDMMYY
+        Scale3Y.DateFormat.DateForTime = dtOnePerDay
+        Scale3Y.DecPlaces = -2
+        Scale3Y.Font.Charset = DEFAULT_CHARSET
+        Scale3Y.Font.Color = clWindowText
+        Scale3Y.Font.Height = -11
+        Scale3Y.Font.Name = 'Tahoma'
+        Scale3Y.Font.Style = []
+        Scale3Y.Logarithmic = False
+        Scale3Y.LabelType = ftNum
+        Scale3Y.MinTicks = 3
+        Scale3Y.MinRange = 0.000000000100000000
+        Scale3Y.MouseAction = maNone
+        Scale3Y.RangeLow = 0.323157894736841300
+        Scale3Y.RangeHigh = 0.676842105263157100
+        Scale3Y.ShortTicks = True
+        Scale3Y.ScalePos = 0
+        Scale3Y.Visible = False
+        Scale3Y.ScaleLocation = slLeft
+        Scale4X.CaptionPosX = 10
+        Scale4X.CaptionPosY = 100
+        Scale4X.CaptionAlignment = taCenter
+        Scale4X.CaptionAnchor = uaSclCenter
+        Scale4X.ColorScale = clOlive
+        Scale4X.DateFormat.TimeFormat = tfHHMMSS
+        Scale4X.DateFormat.DateSeparator = '-'
+        Scale4X.DateFormat.TimeSeparator = ':'
+        Scale4X.DateFormat.YearLength = ylYYYY
+        Scale4X.DateFormat.MonthName = True
+        Scale4X.DateFormat.DateOrder = doDDMMYY
+        Scale4X.DateFormat.DateForTime = dtOnePerDay
+        Scale4X.DecPlaces = -2
+        Scale4X.Font.Charset = DEFAULT_CHARSET
+        Scale4X.Font.Color = clWindowText
+        Scale4X.Font.Height = -11
+        Scale4X.Font.Name = 'Tahoma'
+        Scale4X.Font.Style = []
+        Scale4X.Logarithmic = False
+        Scale4X.LabelType = ftNum
+        Scale4X.MinTicks = 3
+        Scale4X.MinRange = 0.000000000100000000
+        Scale4X.MouseAction = maNone
+        Scale4X.RangeHigh = 1.000000000000000000
+        Scale4X.ShortTicks = True
+        Scale4X.ScalePos = 0
+        Scale4X.Visible = False
+        Scale4X.ScaleLocation = slBottom
+        Scale4Y.CaptionPosX = 10
+        Scale4Y.CaptionPosY = 100
+        Scale4Y.CaptionAlignment = taRightJustify
+        Scale4Y.CaptionAnchor = uaSclTopLft
+        Scale4Y.ColorScale = clOlive
+        Scale4Y.DateFormat.TimeFormat = tfHHMMSS
+        Scale4Y.DateFormat.DateSeparator = '-'
+        Scale4Y.DateFormat.TimeSeparator = ':'
+        Scale4Y.DateFormat.YearLength = ylYYYY
+        Scale4Y.DateFormat.MonthName = True
+        Scale4Y.DateFormat.DateOrder = doDDMMYY
+        Scale4Y.DateFormat.DateForTime = dtOnePerDay
+        Scale4Y.DecPlaces = -2
+        Scale4Y.Font.Charset = DEFAULT_CHARSET
+        Scale4Y.Font.Color = clWindowText
+        Scale4Y.Font.Height = -11
+        Scale4Y.Font.Name = 'Tahoma'
+        Scale4Y.Font.Style = []
+        Scale4Y.Logarithmic = False
+        Scale4Y.LabelType = ftNum
+        Scale4Y.MinTicks = 3
+        Scale4Y.MinRange = 0.000000000100000000
+        Scale4Y.MouseAction = maNone
+        Scale4Y.RangeLow = 0.323157894736841300
+        Scale4Y.RangeHigh = 0.676842105263157100
+        Scale4Y.ShortTicks = True
+        Scale4Y.ScalePos = 0
+        Scale4Y.Visible = False
+        Scale4Y.ScaleLocation = slLeft
+        ShadowStyle = ssFlying
+        ShadowColor = clGrayText
+        ShadowBakColor = clBtnFace
+        StyleElements = []
+        TextFont.Charset = DEFAULT_CHARSET
+        TextFont.Color = clWindowText
+        TextFont.Height = -11
+        TextFont.Name = 'Tahoma'
+        TextFont.Style = []
+        TextFontStyle = []
+        TextBkStyle = tbClear
+        TextBkColor = clWhite
+        TextAlignment = taLeftJustify
+        OnDblClick = RChartDesenhoDblClick
+        OnMouseDown = RChartDesenhoMouseDown
+        OnMouseLeave = RChartDesenhoMouseLeave
+        OnZoomPan = RChartDesenhoZoomPan
+      end
+      object ToolBar19: TToolBar
+        Left = 0
+        Top = 392
+        Width = 954
+        Height = 29
+        Align = alBottom
+        Caption = 'ToolBar7'
+        Color = clWhite
+        EdgeBorders = [ebLeft, ebTop, ebRight, ebBottom]
+        HotTrackColor = clRed
+        Images = FrmPrincipal.ImageList1
+        ParentColor = False
+        TabOrder = 3
+        object CheckBox1: TCheckBox
+          Left = 0
+          Top = 0
+          Width = 19
+          Height = 22
+          Hint = 'Mostrar grade no desenho'
+          Alignment = taLeftJustify
+          ParentShowHint = False
+          ShowHint = True
+          TabOrder = 0
+          OnClick = CheckBox1Click
+        end
+        object ToolButton15: TToolButton
+          Left = 19
+          Top = 0
+          Width = 8
+          Caption = 'ToolButton9'
+          ImageIndex = 0
+          Style = tbsSeparator
+        end
+        object edtGridXSO: TNumIO2
+          Left = 27
+          Top = 0
+          Width = 127
+          Height = 22
+          Hint = 'Grade X'
+          Alignment = taCenter
+          AutoSize = False
+          Beep = False
+          ButVisible = False
+          But3D = True
+          ButHeight = 22
+          ButWidth = 18
+          ButIncrem = 1.000000000000000000
+          ButSpace = 3
+          ButColor = clSilver
+          ColorBoxBG = clWhite
+          ColorBoxText = clBlack
+          ColorOutBG = clWhite
+          ColorOutText = clBlack
+          ColorScheme = csBWG
+          ColorWarnBG = 1619591152
+          ColorWarnText = clRed
+          DecPlaceSep = dsBoth
+          Enabled = True
+          FixPointDecPlaces = 2
+          FrameStyle = fsLowered
+          GaugeColor = clNavy
+          GaugeColorBg = clSilver
+          GaugeColorFrame = clGray
+          GaugeHeight = 8
+          GaugeFrameStyle = fsLowered
+          GaugeLeftMargin = 35
+          GaugeTopMargin = 3
+          GaugeVisible = False
+          GaugeWidth = 82
+          HideSelection = True
+          InputFormat = itFloat
+          LeftSpace = 50
+          LeftText = 'Grade X:'
+          LeftTextAlignment = taRightJustify
+          ParentShowHint = False
+          RangeHigh = 1000.000000000000000000
+          RangeLow = 0.000000000000000000
+          ReadOnly = False
+          RightTextAlignment = taLeftJustify
+          ShowHint = True
+          SignificantDigits = 6
+          TabOrder = 1
+          Text = '50.00'
+          TextBoxWidth = 65
+          Value = 50.000000000000000000
+          OnChange = edtGridXSOChange
+        end
+        object edtGridYSO: TNumIO2
+          Left = 154
+          Top = 0
+          Width = 127
+          Height = 22
+          Hint = 'Grade Y'
+          Alignment = taCenter
+          AutoSize = False
+          Beep = False
+          ButVisible = False
+          But3D = True
+          ButHeight = 22
+          ButWidth = 18
+          ButIncrem = 1.000000000000000000
+          ButSpace = 3
+          ButColor = clSilver
+          ColorBoxBG = clWhite
+          ColorBoxText = clBlack
+          ColorOutBG = clWhite
+          ColorOutText = clBlack
+          ColorScheme = csBWG
+          ColorWarnBG = 1619591152
+          ColorWarnText = clRed
+          DecPlaceSep = dsBoth
+          Enabled = True
+          FixPointDecPlaces = 2
+          FrameStyle = fsLowered
+          GaugeColor = clNavy
+          GaugeColorBg = clSilver
+          GaugeColorFrame = clGray
+          GaugeHeight = 8
+          GaugeFrameStyle = fsLowered
+          GaugeLeftMargin = 35
+          GaugeTopMargin = 3
+          GaugeVisible = False
+          GaugeWidth = 82
+          HideSelection = True
+          InputFormat = itFloat
+          LeftSpace = 50
+          LeftText = 'Grade Y:'
+          LeftTextAlignment = taRightJustify
+          ParentShowHint = False
+          RangeHigh = 1000.000000000000000000
+          RangeLow = 0.000000000000000000
+          ReadOnly = False
+          RightTextAlignment = taLeftJustify
+          ShowHint = True
+          SignificantDigits = 6
+          TabOrder = 2
+          Text = '50.00'
+          TextBoxWidth = 65
+          Value = 50.000000000000000000
+          OnChange = edtGridYSOChange
+        end
+      end
+      object StatusBarEquipamentos: TStatusBar
+        Left = 0
+        Top = 421
+        Width = 954
+        Height = 19
+        Panels = <
+          item
+            Width = 50
+          end
+          item
+            Width = 50
+          end
+          item
+            Width = 50
+          end
+          item
+            Width = 50
+          end
+          item
+            Width = 50
+          end
+          item
+            Width = 50
+          end
+          item
+            Width = 50
+          end
+          item
+            Width = 50
+          end
+          item
+            Width = 50
+          end
+          item
+            Width = 50
+          end
+          item
+            Width = 50
+          end>
+      end
+    end
+    object TabSheet2: TTabSheet
+      Caption = 'Acompanhamento de Dutos'
+      ImageIndex = 1
+      object Splitter1: TSplitter
+        Left = 766
+        Top = 25
+        Height = 386
+        Align = alRight
+        ExplicitLeft = 656
+        ExplicitTop = 168
+        ExplicitHeight = 100
+      end
+      object Panel1: TPanel
+        Left = 0
+        Top = 0
+        Width = 954
+        Height = 25
+        Align = alTop
+        Caption = 'Painel de Acompanhamento de Dutos'
+        Color = clGradientActiveCaption
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -13
+        Font.Name = 'Tahoma'
+        Font.Style = [fsBold]
+        ParentBackground = False
+        ParentFont = False
+        TabOrder = 0
+      end
+      object ToolBar4: TToolBar
+        Left = 0
+        Top = 411
+        Width = 954
+        Height = 29
+        Align = alBottom
+        Caption = 'ToolBar7'
+        Color = clWhite
+        EdgeBorders = [ebLeft, ebTop, ebRight, ebBottom]
+        HotTrackColor = clRed
+        Images = FrmPrincipal.ImageList1
+        ParentColor = False
+        TabOrder = 1
+        object CheckBoxGradeDutos: TCheckBox
+          Left = 0
+          Top = 0
+          Width = 19
+          Height = 22
+          Hint = 'Mostrar grade no desenho'
+          Alignment = taLeftJustify
+          ParentShowHint = False
+          ShowHint = True
+          TabOrder = 0
+          OnClick = CheckBoxGradeDutosClick
+        end
+        object ToolButton16: TToolButton
+          Left = 19
+          Top = 0
+          Width = 8
+          Caption = 'ToolButton9'
+          ImageIndex = 0
+          Style = tbsSeparator
+        end
+        object edtGridXDuto: TNumIO2
+          Left = 27
+          Top = 0
+          Width = 127
+          Height = 22
+          Hint = 'Grade X'
+          Alignment = taCenter
+          AutoSize = False
+          Beep = False
+          ButVisible = False
+          But3D = True
+          ButHeight = 22
+          ButWidth = 18
+          ButIncrem = 1.000000000000000000
+          ButSpace = 3
+          ButColor = clSilver
+          ColorBoxBG = clWhite
+          ColorBoxText = clBlack
+          ColorOutBG = clWhite
+          ColorOutText = clBlack
+          ColorScheme = csBWG
+          ColorWarnBG = 1619591152
+          ColorWarnText = clRed
+          DecPlaceSep = dsBoth
+          Enabled = True
+          FixPointDecPlaces = 2
+          FrameStyle = fsLowered
+          GaugeColor = clNavy
+          GaugeColorBg = clSilver
+          GaugeColorFrame = clGray
+          GaugeHeight = 8
+          GaugeFrameStyle = fsLowered
+          GaugeLeftMargin = 35
+          GaugeTopMargin = 3
+          GaugeVisible = False
+          GaugeWidth = 82
+          HideSelection = True
+          InputFormat = itFloat
+          LeftSpace = 50
+          LeftText = 'Grade X:'
+          LeftTextAlignment = taRightJustify
+          ParentShowHint = False
+          RangeHigh = 1000.000000000000000000
+          RangeLow = 0.000000000000000000
+          ReadOnly = False
+          RightTextAlignment = taLeftJustify
+          ShowHint = True
+          SignificantDigits = 6
+          TabOrder = 1
+          Text = '20.00'
+          TextBoxWidth = 65
+          Value = 20.000000000000000000
+          OnChange = edtGridXDutoChange
+        end
+        object edtGridYDuto: TNumIO2
+          Left = 154
+          Top = 0
+          Width = 127
+          Height = 22
+          Hint = 'Grade Y'
+          Alignment = taCenter
+          AutoSize = False
+          Beep = False
+          ButVisible = False
+          But3D = True
+          ButHeight = 22
+          ButWidth = 18
+          ButIncrem = 1.000000000000000000
+          ButSpace = 3
+          ButColor = clSilver
+          ColorBoxBG = clWhite
+          ColorBoxText = clBlack
+          ColorOutBG = clWhite
+          ColorOutText = clBlack
+          ColorScheme = csBWG
+          ColorWarnBG = 1619591152
+          ColorWarnText = clRed
+          DecPlaceSep = dsBoth
+          Enabled = True
+          FixPointDecPlaces = 2
+          FrameStyle = fsLowered
+          GaugeColor = clNavy
+          GaugeColorBg = clSilver
+          GaugeColorFrame = clGray
+          GaugeHeight = 8
+          GaugeFrameStyle = fsLowered
+          GaugeLeftMargin = 35
+          GaugeTopMargin = 3
+          GaugeVisible = False
+          GaugeWidth = 82
+          HideSelection = True
+          InputFormat = itFloat
+          LeftSpace = 50
+          LeftText = 'Grade Y:'
+          LeftTextAlignment = taRightJustify
+          ParentShowHint = False
+          RangeHigh = 1000.000000000000000000
+          RangeLow = 0.000000000000000000
+          ReadOnly = False
+          RightTextAlignment = taLeftJustify
+          ShowHint = True
+          SignificantDigits = 6
+          TabOrder = 2
+          Text = '20.00'
+          TextBoxWidth = 65
+          Value = 20.000000000000000000
+          OnChange = edtGridYDutoChange
+        end
+        object ToolButton17: TToolButton
+          Left = 281
+          Top = 0
+          Width = 8
+          Caption = 'ToolButton17'
+          ImageIndex = 1
+          Style = tbsSeparator
+        end
+        object edtXFEA: TNumIO2
+          Left = 289
+          Top = 0
+          Width = 115
+          Height = 22
+          Hint = 'Posi'#231#227'o X do mouse'
+          Alignment = taCenter
+          AutoSize = False
+          Beep = False
+          ButVisible = False
+          But3D = True
+          ButHeight = 22
+          ButWidth = 18
+          ButIncrem = 1.000000000000000000
+          ButSpace = 3
+          ButColor = clSilver
+          ColorBoxBG = clInfoBk
+          ColorBoxText = clBlack
+          ColorOutBG = clWhite
+          ColorOutText = clBlack
+          ColorScheme = csBWG
+          ColorWarnBG = 1619591152
+          ColorWarnText = clRed
+          DecPlaceSep = dsBoth
+          Enabled = True
+          FixPointDecPlaces = 2
+          FrameStyle = fsLowered
+          GaugeColor = clNavy
+          GaugeColorBg = clSilver
+          GaugeColorFrame = clGray
+          GaugeHeight = 8
+          GaugeFrameStyle = fsLowered
+          GaugeLeftMargin = 35
+          GaugeTopMargin = 3
+          GaugeVisible = False
+          GaugeWidth = 82
+          HideSelection = True
+          InputFormat = itFloat
+          LeftSpace = 25
+          LeftText = 'X:'
+          LeftTextAlignment = taRightJustify
+          ParentShowHint = False
+          RangeHigh = 1E20
+          RangeLow = -1E20
+          ReadOnly = True
+          RightText = 'cm'
+          RightTextAlignment = taLeftJustify
+          ShowHint = True
+          SignificantDigits = 6
+          TabOrder = 4
+          Text = '0.00'
+          TextBoxWidth = 65
+        end
+        object edtYFEA: TNumIO2
+          Left = 404
+          Top = 0
+          Width = 115
+          Height = 22
+          Hint = 'Posi'#231#227'o Y do mouse'
+          Alignment = taCenter
+          AutoSize = False
+          Beep = False
+          ButVisible = False
+          But3D = True
+          ButHeight = 22
+          ButWidth = 18
+          ButIncrem = 1.000000000000000000
+          ButSpace = 3
+          ButColor = clSilver
+          ColorBoxBG = clInfoBk
+          ColorBoxText = clBlack
+          ColorOutBG = clWhite
+          ColorOutText = clBlack
+          ColorScheme = csBWG
+          ColorWarnBG = 1619591152
+          ColorWarnText = clRed
+          DecPlaceSep = dsBoth
+          Enabled = True
+          FixPointDecPlaces = 2
+          FrameStyle = fsLowered
+          GaugeColor = clNavy
+          GaugeColorBg = clSilver
+          GaugeColorFrame = clGray
+          GaugeHeight = 8
+          GaugeFrameStyle = fsLowered
+          GaugeLeftMargin = 35
+          GaugeTopMargin = 3
+          GaugeVisible = False
+          GaugeWidth = 82
+          HideSelection = True
+          InputFormat = itFloat
+          LeftSpace = 25
+          LeftText = 'Y:'
+          LeftTextAlignment = taRightJustify
+          ParentShowHint = False
+          RangeHigh = 1E20
+          RangeLow = -1E20
+          ReadOnly = False
+          RightText = 'cm'
+          RightTextAlignment = taLeftJustify
+          ShowHint = True
+          SignificantDigits = 6
+          TabOrder = 3
+          Text = '0.00'
+          TextBoxWidth = 65
+        end
+      end
+      object PanelFiltroDutos: TPanel
+        Left = 769
+        Top = 25
+        Width = 185
+        Height = 386
+        Align = alRight
+        TabOrder = 2
+        object CheckListBoxTipoDuto: TCheckListBox
+          Left = 1
+          Top = 20
+          Width = 183
+          Height = 38
+          Align = alTop
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -13
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          Items.Strings = (
+            #211'leoduto'
+            'Gasoduto')
+          ParentFont = False
+          TabOrder = 0
+          OnClick = actAtualizarDutosExecute
+        end
+        object CheckListBoxCondicaoDuto: TCheckListBox
+          Left = 1
+          Top = 58
+          Width = 183
+          Height = 69
+          Align = alTop
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -13
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          Items.Strings = (
+            'Opera'#231#227'o'
+            'Paralisado'
+            'Desativado'
+            'Descomissionado')
+          ParentFont = False
+          TabOrder = 1
+          OnClick = actAtualizarDutosExecute
+        end
+        object Panel5: TPanel
+          Left = 1
+          Top = 127
+          Width = 183
+          Height = 19
+          Align = alTop
+          Caption = 'Plataformas'
+          Color = clGradientActiveCaption
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -13
+          Font.Name = 'Tahoma'
+          Font.Style = [fsBold]
+          ParentBackground = False
+          ParentFont = False
+          TabOrder = 2
+        end
+        object Panel6: TPanel
+          Left = 1
+          Top = 1
+          Width = 183
+          Height = 19
+          Align = alTop
+          Caption = 'Dutos'
+          Color = clGradientActiveCaption
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -13
+          Font.Name = 'Tahoma'
+          Font.Style = [fsBold]
+          ParentBackground = False
+          ParentFont = False
+          TabOrder = 3
+        end
+        object CheckListBoxTipoPlataforma: TCheckListBox
+          Left = 1
+          Top = 146
+          Width = 183
+          Height = 71
+          Align = alTop
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -13
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          Items.Strings = (
+            'Tipo-1'
+            'Tipo-2'
+            'Tipo-3'
+            'Tipo-4')
+          ParentFont = False
+          TabOrder = 4
+          OnClick = actAtualizarDutosExecute
+        end
+        object CheckListBoxCondicaoPlataforma: TCheckListBox
+          Left = 1
+          Top = 217
+          Width = 183
+          Height = 69
+          Align = alTop
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -13
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          Items.Strings = (
+            'Opera'#231#227'o'
+            'Paralisado'
+            'Desativado'
+            'Descomissionado')
+          ParentFont = False
+          TabOrder = 5
+          OnClick = actAtualizarDutosExecute
+        end
+      end
+      object PanelDesenhoDutos: TPanel
+        Left = 0
+        Top = 25
+        Width = 766
+        Height = 386
+        Align = alClient
+        TabOrder = 3
+        object ToolBar3: TToolBar
+          Left = 1
+          Top = 1
+          Width = 764
+          Height = 29
+          Caption = 'ToolBar3'
+          DrawingStyle = dsGradient
+          EdgeBorders = [ebLeft, ebTop, ebRight, ebBottom]
+          HotTrackColor = clLime
+          Images = FrmPrincipal.ImageList1
+          TabOrder = 0
+          object ToolButton9: TToolButton
+            Left = 0
+            Top = 0
+            Action = actDutoZoomDinamico
+          end
+          object ToolButton10: TToolButton
+            Left = 23
+            Top = 0
+            Action = actDutoZoomFit
+          end
+          object ToolButton11: TToolButton
+            Left = 46
+            Top = 0
+            Action = actDutoZoomWindow
+          end
+          object ToolButton22: TToolButton
+            Left = 69
+            Top = 0
+            Action = actImprimir
+            ParentShowHint = False
+            ShowHint = True
+          end
+          object ToolButton12: TToolButton
+            Left = 92
+            Top = 0
+            Action = actDutoPan
+          end
+          object ToolButton13: TToolButton
+            Left = 115
+            Top = 0
+            Action = actDutoImagem
+            ParentShowHint = False
+            ShowHint = True
+          end
+          object ToolButton14: TToolButton
+            Left = 138
+            Top = 0
+            Action = actDutoLegenda
+            ParentShowHint = False
+            ShowHint = True
+          end
+          object btnInfo: TToolButton
+            Left = 161
+            Top = 0
+            Caption = 'btnInfo'
+            Down = True
+            ImageIndex = 22
+            ParentShowHint = False
+            ShowHint = True
+            Style = tbsCheck
+          end
+          object edtURLFEng: TEdit
+            Left = 184
+            Top = 0
+            Width = 34
+            Height = 22
+            TabOrder = 0
+            Visible = False
+          end
+          object edtURLFProc: TEdit
+            Left = 218
+            Top = 0
+            Width = 34
+            Height = 22
+            TabOrder = 1
+            Visible = False
+          end
+          object edtURLMCE: TEdit
+            Left = 252
+            Top = 0
+            Width = 34
+            Height = 22
+            TabOrder = 2
+            Visible = False
+          end
+          object edtURLPATEC: TEdit
+            Left = 286
+            Top = 0
+            Width = 34
+            Height = 22
+            TabOrder = 3
+            Visible = False
+          end
+          object edtURLRelatorio: TEdit
+            Left = 320
+            Top = 0
+            Width = 34
+            Height = 22
+            TabOrder = 4
+            Visible = False
+          end
+        end
+        object RChartDutos: TRChart
+          Left = 1
+          Top = 30
+          Width = 764
+          Height = 355
+          Cursor = crHandPoint
+          ParentCustomHint = False
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -16
+          Font.Name = 'Arial'
+          Font.Style = []
+          Align = alClient
+          AvoidDuplicateMarks = False
+          AllocSize = 1000
+          AutoRedraw = True
+          MarginRight = 3
+          MarginTop = 1
+          MarginBottom = 50
+          MinDupMarkDist = 1
+          RRim = 3
+          TRim = 1
+          BRim = 50
+          BackGroundImg.IncludePath = True
+          BackGroundImg.FillMode = bfStretch
+          BackGroundImg.AreaMode = bamNone
+          BackGroundImg.AreaColor = 14540253
+          BackGroundImg.AreaLeft = -1.000000000000000000
+          BackGroundImg.AreaRight = 1.000000000000000000
+          BackGroundImg.AreaTop = 1.000000000000000000
+          BackGroundImg.AreaBottom = -1.000000000000000000
+          ClassDefault = 0
+          GridStyle = gsNone
+          GridDx = 20.000000000000000000
+          GridDy = 20.000000000000000000
+          Isometric = True
+          FillColor = clWhite
+          WindColor = clWhite
+          GridColor = clSilver
+          JointLayers.L01xControlledBy = 1
+          JointLayers.L01yControlledBy = 1
+          JointLayers.L02xControlledBy = 2
+          JointLayers.L02yControlledBy = 2
+          JointLayers.L03xControlledBy = 3
+          JointLayers.L03yControlledBy = 3
+          JointLayers.L04xControlledBy = 4
+          JointLayers.L04yControlledBy = 4
+          JointLayers.L05xControlledBy = 5
+          JointLayers.L05yControlledBy = 5
+          JointLayers.L06xControlledBy = 6
+          JointLayers.L06yControlledBy = 6
+          JointLayers.L07xControlledBy = 7
+          JointLayers.L07yControlledBy = 7
+          JointLayers.L08xControlledBy = 8
+          JointLayers.L08yControlledBy = 8
+          JointLayers.L09xControlledBy = 9
+          JointLayers.L09yControlledBy = 9
+          JointLayers.L10xControlledBy = 10
+          JointLayers.L10yControlledBy = 10
+          JointLayers.L11xControlledBy = 11
+          JointLayers.L11yControlledBy = 11
+          JointLayers.L12xControlledBy = 12
+          JointLayers.L12yControlledBy = 12
+          JointLayers.L13xControlledBy = 13
+          JointLayers.L13yControlledBy = 13
+          JointLayers.L14xControlledBy = 14
+          JointLayers.L14yControlledBy = 14
+          JointLayers.L15xControlledBy = 15
+          JointLayers.L15yControlledBy = 15
+          JointLayers.L16xControlledBy = 16
+          JointLayers.L16yControlledBy = 16
+          Caption = ''
+          CaptionPosX = 0
+          CaptionPosY = -30
+          CaptionAlignment = taCenter
+          CaptionAnchorHoriz = cahChartCenter
+          CaptionAnchorVert = cavChartTop
+          CaptionTrim = 100
+          MouseTraceColor = clWhite
+          MouseTraceInvert = True
+          CrossHair1.Color = clBlack
+          CrossHair1.Layer = 1
+          CrossHair1.Mode = chBoth
+          CrossHair1.LineType = psClear
+          CrossHair1.LineWid = 1
+          CrossHair2.Color = clMaroon
+          CrossHair2.Layer = 2
+          CrossHair2.Mode = chOff
+          CrossHair2.LineType = psSolid
+          CrossHair2.LineWid = 1
+          CrossHair3.Color = clBlack
+          CrossHair3.Layer = 2
+          CrossHair3.Mode = chOff
+          CrossHair3.LineType = psSolid
+          CrossHair3.LineWid = 1
+          CrossHair4.Color = clBlack
+          CrossHair4.Layer = 2
+          CrossHair4.Mode = chOff
+          CrossHair4.LineType = psSolid
+          CrossHair4.LineWid = 1
+          MouseAction = maPan
+          MouseCursorFixed = False
+          PanGridDx = 1.000000000000000000
+          PanGridDy = 1.000000000000000000
+          Scale1X.CaptionPosX = -45
+          Scale1X.CaptionPosY = 19
+          Scale1X.CaptionAlignment = taCenter
+          Scale1X.CaptionAnchor = uaSclCenter
+          Scale1X.ColorScale = clBlack
+          Scale1X.DateFormat.TimeFormat = tfHHMMSS
+          Scale1X.DateFormat.DateSeparator = '-'
+          Scale1X.DateFormat.TimeSeparator = ':'
+          Scale1X.DateFormat.YearLength = ylYYYY
+          Scale1X.DateFormat.MonthName = True
+          Scale1X.DateFormat.DateOrder = doDDMMYY
+          Scale1X.DateFormat.DateForTime = dtOnePerDay
+          Scale1X.DecPlaces = -2
+          Scale1X.Font.Charset = DEFAULT_CHARSET
+          Scale1X.Font.Color = clWindowText
+          Scale1X.Font.Height = -11
+          Scale1X.Font.Name = 'MS Sans Serif'
+          Scale1X.Font.Style = []
+          Scale1X.Logarithmic = False
+          Scale1X.LabelType = ftNum
+          Scale1X.MinTicks = 5
+          Scale1X.MinRange = 0.000000000100000000
+          Scale1X.MouseAction = maNone
+          Scale1X.RangeLow = -10.000000000000000000
+          Scale1X.RangeHigh = 10.000000000000000000
+          Scale1X.ShortTicks = True
+          Scale1X.ScalePos = 0
+          Scale1X.Visible = True
+          Scale1X.ScaleLocation = slBottom
+          Scale1Y.CaptionPosX = -50
+          Scale1Y.CaptionPosY = 0
+          Scale1Y.CaptionAlignment = taLeftJustify
+          Scale1Y.CaptionAnchor = uaSclTopLft
+          Scale1Y.ColorScale = clBlack
+          Scale1Y.DateFormat.TimeFormat = tfHHMMSS
+          Scale1Y.DateFormat.DateSeparator = '-'
+          Scale1Y.DateFormat.TimeSeparator = ':'
+          Scale1Y.DateFormat.YearLength = ylYYYY
+          Scale1Y.DateFormat.MonthName = True
+          Scale1Y.DateFormat.DateOrder = doDDMMYY
+          Scale1Y.DateFormat.DateForTime = dtOnePerDay
+          Scale1Y.DecPlaces = -2
+          Scale1Y.Font.Charset = DEFAULT_CHARSET
+          Scale1Y.Font.Color = clWindowText
+          Scale1Y.Font.Height = -11
+          Scale1Y.Font.Name = 'MS Sans Serif'
+          Scale1Y.Font.Style = []
+          Scale1Y.Logarithmic = False
+          Scale1Y.LabelType = ftNum
+          Scale1Y.MinTicks = 5
+          Scale1Y.MinRange = 0.000000000100000000
+          Scale1Y.MouseAction = maNone
+          Scale1Y.RangeLow = -4.283707865168539000
+          Scale1Y.RangeHigh = 4.283707865168539000
+          Scale1Y.ShortTicks = True
+          Scale1Y.ScalePos = 0
+          Scale1Y.Visible = True
+          Scale1Y.ScaleLocation = slLeft
+          Scale2X.CaptionPosX = 10
+          Scale2X.CaptionPosY = 100
+          Scale2X.CaptionAlignment = taCenter
+          Scale2X.CaptionAnchor = uaSclCenter
+          Scale2X.ColorScale = clMaroon
+          Scale2X.DateFormat.TimeFormat = tfHHMMSS
+          Scale2X.DateFormat.DateSeparator = '-'
+          Scale2X.DateFormat.TimeSeparator = ':'
+          Scale2X.DateFormat.YearLength = ylYYYY
+          Scale2X.DateFormat.MonthName = True
+          Scale2X.DateFormat.DateOrder = doDDMMYY
+          Scale2X.DateFormat.DateForTime = dtOnePerDay
+          Scale2X.DecPlaces = -2
+          Scale2X.Font.Charset = DEFAULT_CHARSET
+          Scale2X.Font.Color = clWindowText
+          Scale2X.Font.Height = -13
+          Scale2X.Font.Name = 'MS Sans Serif'
+          Scale2X.Font.Style = []
+          Scale2X.Logarithmic = False
+          Scale2X.LabelType = ftNum
+          Scale2X.MinTicks = 3
+          Scale2X.MinRange = 0.000000000100000000
+          Scale2X.MouseAction = maNone
+          Scale2X.RangeHigh = 1.000000000000000000
+          Scale2X.ShortTicks = True
+          Scale2X.ScalePos = 0
+          Scale2X.Visible = False
+          Scale2X.ScaleLocation = slBottom
+          Scale2Y.CaptionPosX = 10
+          Scale2Y.CaptionPosY = 100
+          Scale2Y.CaptionAlignment = taRightJustify
+          Scale2Y.CaptionAnchor = uaSclTopLft
+          Scale2Y.ColorScale = clMaroon
+          Scale2Y.DateFormat.TimeFormat = tfHHMMSS
+          Scale2Y.DateFormat.DateSeparator = '-'
+          Scale2Y.DateFormat.TimeSeparator = ':'
+          Scale2Y.DateFormat.YearLength = ylYYYY
+          Scale2Y.DateFormat.MonthName = True
+          Scale2Y.DateFormat.DateOrder = doDDMMYY
+          Scale2Y.DateFormat.DateForTime = dtOnePerDay
+          Scale2Y.DecPlaces = -2
+          Scale2Y.Font.Charset = DEFAULT_CHARSET
+          Scale2Y.Font.Color = clWindowText
+          Scale2Y.Font.Height = -13
+          Scale2Y.Font.Name = 'MS Sans Serif'
+          Scale2Y.Font.Style = []
+          Scale2Y.Logarithmic = False
+          Scale2Y.LabelType = ftNum
+          Scale2Y.MinTicks = 3
+          Scale2Y.MinRange = 0.000000000100000000
+          Scale2Y.MouseAction = maNone
+          Scale2Y.RangeLow = 0.285814606741572200
+          Scale2Y.RangeHigh = 0.714185393258426200
+          Scale2Y.ShortTicks = True
+          Scale2Y.ScalePos = 0
+          Scale2Y.Visible = False
+          Scale2Y.ScaleLocation = slLeft
+          Scale3X.CaptionPosX = 10
+          Scale3X.CaptionPosY = 100
+          Scale3X.CaptionAlignment = taCenter
+          Scale3X.CaptionAnchor = uaSclCenter
+          Scale3X.ColorScale = clGreen
+          Scale3X.DateFormat.TimeFormat = tfHHMMSS
+          Scale3X.DateFormat.DateSeparator = '-'
+          Scale3X.DateFormat.TimeSeparator = ':'
+          Scale3X.DateFormat.YearLength = ylYYYY
+          Scale3X.DateFormat.MonthName = True
+          Scale3X.DateFormat.DateOrder = doDDMMYY
+          Scale3X.DateFormat.DateForTime = dtOnePerDay
+          Scale3X.DecPlaces = -2
+          Scale3X.Font.Charset = DEFAULT_CHARSET
+          Scale3X.Font.Color = clWindowText
+          Scale3X.Font.Height = -11
+          Scale3X.Font.Name = 'Tahoma'
+          Scale3X.Font.Style = []
+          Scale3X.Logarithmic = False
+          Scale3X.LabelType = ftNum
+          Scale3X.MinTicks = 3
+          Scale3X.MinRange = 0.000000000100000000
+          Scale3X.MouseAction = maNone
+          Scale3X.RangeHigh = 1.000000000000000000
+          Scale3X.ShortTicks = True
+          Scale3X.ScalePos = 0
+          Scale3X.Visible = False
+          Scale3X.ScaleLocation = slBottom
+          Scale3Y.CaptionPosX = 10
+          Scale3Y.CaptionPosY = 100
+          Scale3Y.CaptionAlignment = taRightJustify
+          Scale3Y.CaptionAnchor = uaSclTopLft
+          Scale3Y.ColorScale = clGreen
+          Scale3Y.DateFormat.TimeFormat = tfHHMMSS
+          Scale3Y.DateFormat.DateSeparator = '-'
+          Scale3Y.DateFormat.TimeSeparator = ':'
+          Scale3Y.DateFormat.YearLength = ylYYYY
+          Scale3Y.DateFormat.MonthName = True
+          Scale3Y.DateFormat.DateOrder = doDDMMYY
+          Scale3Y.DateFormat.DateForTime = dtOnePerDay
+          Scale3Y.DecPlaces = -2
+          Scale3Y.Font.Charset = DEFAULT_CHARSET
+          Scale3Y.Font.Color = clWindowText
+          Scale3Y.Font.Height = -11
+          Scale3Y.Font.Name = 'Tahoma'
+          Scale3Y.Font.Style = []
+          Scale3Y.Logarithmic = False
+          Scale3Y.LabelType = ftNum
+          Scale3Y.MinTicks = 3
+          Scale3Y.MinRange = 0.000000000100000000
+          Scale3Y.MouseAction = maNone
+          Scale3Y.RangeLow = 0.285814606741572200
+          Scale3Y.RangeHigh = 0.714185393258426200
+          Scale3Y.ShortTicks = True
+          Scale3Y.ScalePos = 0
+          Scale3Y.Visible = False
+          Scale3Y.ScaleLocation = slLeft
+          Scale4X.CaptionPosX = 10
+          Scale4X.CaptionPosY = 100
+          Scale4X.CaptionAlignment = taCenter
+          Scale4X.CaptionAnchor = uaSclCenter
+          Scale4X.ColorScale = clOlive
+          Scale4X.DateFormat.TimeFormat = tfHHMMSS
+          Scale4X.DateFormat.DateSeparator = '-'
+          Scale4X.DateFormat.TimeSeparator = ':'
+          Scale4X.DateFormat.YearLength = ylYYYY
+          Scale4X.DateFormat.MonthName = True
+          Scale4X.DateFormat.DateOrder = doDDMMYY
+          Scale4X.DateFormat.DateForTime = dtOnePerDay
+          Scale4X.DecPlaces = -2
+          Scale4X.Font.Charset = DEFAULT_CHARSET
+          Scale4X.Font.Color = clWindowText
+          Scale4X.Font.Height = -11
+          Scale4X.Font.Name = 'Tahoma'
+          Scale4X.Font.Style = []
+          Scale4X.Logarithmic = False
+          Scale4X.LabelType = ftNum
+          Scale4X.MinTicks = 3
+          Scale4X.MinRange = 0.000000000100000000
+          Scale4X.MouseAction = maNone
+          Scale4X.RangeHigh = 1.000000000000000000
+          Scale4X.ShortTicks = True
+          Scale4X.ScalePos = 0
+          Scale4X.Visible = False
+          Scale4X.ScaleLocation = slBottom
+          Scale4Y.CaptionPosX = 10
+          Scale4Y.CaptionPosY = 100
+          Scale4Y.CaptionAlignment = taRightJustify
+          Scale4Y.CaptionAnchor = uaSclTopLft
+          Scale4Y.ColorScale = clOlive
+          Scale4Y.DateFormat.TimeFormat = tfHHMMSS
+          Scale4Y.DateFormat.DateSeparator = '-'
+          Scale4Y.DateFormat.TimeSeparator = ':'
+          Scale4Y.DateFormat.YearLength = ylYYYY
+          Scale4Y.DateFormat.MonthName = True
+          Scale4Y.DateFormat.DateOrder = doDDMMYY
+          Scale4Y.DateFormat.DateForTime = dtOnePerDay
+          Scale4Y.DecPlaces = -2
+          Scale4Y.Font.Charset = DEFAULT_CHARSET
+          Scale4Y.Font.Color = clWindowText
+          Scale4Y.Font.Height = -11
+          Scale4Y.Font.Name = 'Tahoma'
+          Scale4Y.Font.Style = []
+          Scale4Y.Logarithmic = False
+          Scale4Y.LabelType = ftNum
+          Scale4Y.MinTicks = 3
+          Scale4Y.MinRange = 0.000000000100000000
+          Scale4Y.MouseAction = maNone
+          Scale4Y.RangeLow = 0.285814606741572200
+          Scale4Y.RangeHigh = 0.714185393258426200
+          Scale4Y.ShortTicks = True
+          Scale4Y.ScalePos = 0
+          Scale4Y.Visible = False
+          Scale4Y.ScaleLocation = slLeft
+          ShadowStyle = ssFlying
+          ShadowColor = clGrayText
+          ShadowBakColor = clBtnFace
+          StyleElements = []
+          TextFont.Charset = DEFAULT_CHARSET
+          TextFont.Color = clWindowText
+          TextFont.Height = -11
+          TextFont.Name = 'Tahoma'
+          TextFont.Style = []
+          TextFontStyle = []
+          TextBkStyle = tbClear
+          TextBkColor = clWhite
+          TextAlignment = taLeftJustify
+          OnDblClick = RChartDutosDblClick
+          OnMouseMove = RChartDutosMouseMove
+          OnMouseDown = RChartDutosMouseDown
+          OnZoomPan = RChartDutosZoomPan
+        end
+      end
+    end
+    object TabSheet3: TTabSheet
+      Caption = 'Cadastro Dutos Desenho'
+      ImageIndex = 2
+      object Panel2: TPanel
+        Left = 0
+        Top = 0
+        Width = 954
+        Height = 25
+        Align = alTop
+        Caption = 'Cadastro Dutos Desenho'
+        Color = clGradientActiveCaption
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -13
+        Font.Name = 'Tahoma'
+        Font.Style = [fsBold]
+        ParentBackground = False
+        ParentFont = False
+        TabOrder = 0
+      end
+      object ToolBar5: TToolBar
+        Left = 0
+        Top = 25
+        Width = 954
+        Height = 29
+        Caption = 'ToolBar1'
+        DrawingStyle = dsGradient
+        EdgeBorders = [ebLeft, ebTop, ebRight, ebBottom]
+        Images = FrmPrincipal.ImageList1
+        TabOrder = 1
+        object DBNavigatorDutosOPAR: TDBNavigator
+          Left = 0
+          Top = 0
+          Width = 138
+          Height = 22
+          DataSource = FrmDataModule.DataSourcePainelDutosOPAR
+          VisibleButtons = [nbInsert, nbDelete, nbEdit, nbPost, nbCancel, nbRefresh]
+          Hints.Strings = (
+            'Primeiro'
+            'Anterior'
+            'Pr'#243'ximo'
+            #218'ltimo'
+            'Inserir'
+            'Excluir'
+            'Editar'
+            'Gravar'
+            'Cancelar'
+            'Atualizar'
+            'Aplicar atualiza'#231#245'es'
+            'Calcelar atualiza'#231#245'es')
+          ParentShowHint = False
+          ShowHint = True
+          TabOrder = 0
+        end
+        object BitBtn9: TBitBtn
+          Left = 138
+          Top = 0
+          Width = 80
+          Height = 22
+          Action = actExcelCadastroDutos
+          Align = alLeft
+          Caption = 'Exportar'
+          ParentShowHint = False
+          ShowHint = True
+          TabOrder = 4
+        end
+        object BitBtn2: TBitBtn
+          Left = 218
+          Top = 0
+          Width = 80
+          Height = 22
+          Action = actExcelImportarDutos
+          Align = alLeft
+          Caption = 'Importar'
+          ParentShowHint = False
+          ShowHint = True
+          TabOrder = 1
+        end
+        object BitBtn4: TBitBtn
+          Left = 298
+          Top = 0
+          Width = 64
+          Height = 22
+          Action = actLimparFiltros
+          Align = alLeft
+          Caption = 'Limpar'
+          ParentShowHint = False
+          ShowHint = True
+          TabOrder = 2
+        end
+        object BitBtn1: TBitBtn
+          Left = 362
+          Top = 0
+          Width = 64
+          Height = 22
+          Action = actFiltrosTabela
+          Align = alLeft
+          Caption = 'Filtros'
+          ParentShowHint = False
+          ShowHint = True
+          TabOrder = 3
+        end
+      end
+      object DBGridPainelDutos: TDBGrid
+        Left = 0
+        Top = 54
+        Width = 954
+        Height = 367
+        Align = alClient
+        DataSource = FrmDataModule.DataSourcePainelDutosOPAR
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        ParentFont = False
+        TabOrder = 2
+        TitleFont.Charset = DEFAULT_CHARSET
+        TitleFont.Color = clWindowText
+        TitleFont.Height = -11
+        TitleFont.Name = 'Tahoma'
+        TitleFont.Style = []
+        OnCellClick = DBGridPainelDutosCellClick
+        OnDrawColumnCell = DBGridPainelDutosDrawColumnCell
+        OnKeyPress = DBGridPainelDutosKeyPress
+        OnTitleClick = DBGridPainelDutosTitleClick
+        Columns = <
+          item
+            Alignment = taCenter
+            Expanded = False
+            FieldName = 'BooleanDesenho'
+            Title.Alignment = taCenter
+            Title.Caption = 'Desenho'
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'MarkX1'
+            Title.Alignment = taCenter
+            Title.Caption = 'Mark X1'
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'MarkX2'
+            Title.Alignment = taCenter
+            Title.Caption = 'Mark X2'
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'TAG_DUTO'
+            Title.Alignment = taCenter
+            Title.Caption = 'TAG DUTO'
+            Width = 120
+            Visible = True
+          end
+          item
+            Alignment = taCenter
+            Expanded = False
+            FieldName = 'X1'
+            Title.Alignment = taCenter
+            Visible = True
+          end
+          item
+            Alignment = taCenter
+            Expanded = False
+            FieldName = 'Y1'
+            Title.Alignment = taCenter
+            Visible = True
+          end
+          item
+            Alignment = taCenter
+            Expanded = False
+            FieldName = 'X2'
+            Title.Alignment = taCenter
+            Visible = True
+          end
+          item
+            Alignment = taCenter
+            Expanded = False
+            FieldName = 'Y2'
+            Title.Alignment = taCenter
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'Ligacao'
+            Title.Alignment = taCenter
+            Title.Caption = 'Liga'#231#227'o'
+            Width = 136
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'TipoDuto'
+            PickList.Strings = (
+              #211'leoduto'
+              'Gasoduto')
+            Title.Alignment = taCenter
+            Title.Caption = 'Tipo Duto'
+            Width = 167
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'CondicaoDuto'
+            PickList.Strings = (
+              'Opera'#231#227'o'
+              'Paralisado'
+              'Desativado'
+              'Descomissionado')
+            Title.Alignment = taCenter
+            Title.Caption = 'Condi'#231#227'o Duto'
+            Visible = True
+          end
+          item
+            Alignment = taCenter
+            Expanded = False
+            FieldName = 'Inst_Origem'
+            Title.Alignment = taCenter
+            Title.Caption = 'Inst.Origem'
+            Width = 120
+            Visible = True
+          end
+          item
+            Alignment = taCenter
+            Expanded = False
+            FieldName = 'Inst_Destino'
+            Title.Alignment = taCenter
+            Title.Caption = 'Inst.Destino'
+            Width = 120
+            Visible = True
+          end
+          item
+            Alignment = taCenter
+            Expanded = False
+            FieldName = 'Inst_Resp'
+            Title.Alignment = taCenter
+            Title.Caption = 'Inst.Resp'
+            Width = 120
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'Sentido'
+            PickList.Strings = (
+              'X1 -> X2'
+              'X2 -> X1'
+              'Ambos'
+              'Linha')
+            Title.Alignment = taCenter
+            Width = 100
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'Link_PATEC'
+            Title.Alignment = taCenter
+            Title.Caption = 'Link PATEC'
+            Width = 150
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'Link_Relatorio'
+            Title.Alignment = taCenter
+            Title.Caption = 'Link Relat'#243'rio'
+            Width = 150
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'AnoConstrucao'
+            Title.Alignment = taCenter
+            Title.Caption = 'Ano Constru'#231#227'o'
+            Width = 100
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'AnoEntradaOperacao'
+            Title.Alignment = taCenter
+            Title.Caption = 'Ano Entrada Opera'#231#227'o'
+            Width = 100
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'CapacidadeNominal'
+            Title.Alignment = taCenter
+            Title.Caption = 'Capacidade Nominal'
+            Width = 100
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'Classe'
+            Title.Alignment = taCenter
+            Width = 100
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'ClassePressao'
+            Title.Alignment = taCenter
+            Title.Caption = 'Classe Press'#227'o'
+            Width = 100
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'Comprimento'
+            Title.Alignment = taCenter
+            Width = 100
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'Configuracao'
+            Title.Alignment = taCenter
+            Title.Caption = 'Configura'#231#227'o'
+            Width = 100
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'Funcao'
+            Title.Alignment = taCenter
+            Title.Caption = 'Fun'#231#227'o'
+            Width = 100
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'LocalInstalacao'
+            Title.Alignment = taCenter
+            Title.Caption = 'Local Instala'#231#227'o'
+            Width = 100
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'PMO'
+            Title.Alignment = taCenter
+            Width = 100
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'PMOA'
+            Title.Alignment = taCenter
+            Width = 100
+            Visible = True
+          end
+          item
+            Alignment = taCenter
+            Expanded = False
+            FieldName = 'PIGInspecao'
+            Title.Alignment = taCenter
+            Title.Caption = 'Pigabilidade Inspe'#231#227'o'
+            Visible = True
+          end
+          item
+            Alignment = taCenter
+            Expanded = False
+            FieldName = 'PIGLimpeza'
+            Title.Alignment = taCenter
+            Title.Caption = 'Pigabilidade Limpeza'
+            Visible = True
+          end
+          item
+            Alignment = taCenter
+            Expanded = False
+            FieldName = 'RotinaLimpeza'
+            Title.Alignment = taCenter
+            Title.Caption = 'Rotina Limpeza'
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'NumFAM'
+            Title.Alignment = taCenter
+            Title.Caption = 'N'#176' FAM'
+            Width = 200
+            Visible = True
+          end
+          item
+            Alignment = taCenter
+            Expanded = False
+            FieldName = 'booleanSelecao'
+            Title.Alignment = taCenter
+            Title.Caption = 'Sele'#231#227'o'
+            Visible = True
+          end>
+      end
+      object ColunasLayoutDutos: TStringGrid
+        Left = 32
+        Top = 200
+        Width = 89
+        Height = 97
+        FixedCols = 0
+        Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goDrawFocusSelected, goRowSizing, goColSizing, goEditing]
+        TabOrder = 3
+        Visible = False
+        ColWidths = (
+          64
+          64
+          64
+          64
+          64)
+        RowHeights = (
+          24
+          24
+          21
+          24
+          24)
+      end
+      object StatusBarDutos: TStatusBar
+        Left = 0
+        Top = 421
+        Width = 954
+        Height = 19
+        Panels = <
+          item
+            Width = 50
+          end
+          item
+            Width = 50
+          end
+          item
+            Width = 50
+          end
+          item
+            Width = 50
+          end
+          item
+            Width = 50
+          end>
+      end
+    end
+    object TabSheet4: TTabSheet
+      Caption = 'Cadastro Plataformas Desenho'
+      ImageIndex = 3
+      object DBGridPlataformas: TDBGrid
+        Left = 0
+        Top = 54
+        Width = 954
+        Height = 367
+        Align = alClient
+        DataSource = FrmDataModule.DataSourcePainelPlataformas
+        TabOrder = 0
+        TitleFont.Charset = DEFAULT_CHARSET
+        TitleFont.Color = clWindowText
+        TitleFont.Height = -11
+        TitleFont.Name = 'Tahoma'
+        TitleFont.Style = []
+        OnCellClick = DBGridPlataformasCellClick
+        OnDrawColumnCell = DBGridPlataformasDrawColumnCell
+        OnKeyPress = DBGridPlataformasKeyPress
+        OnTitleClick = DBGridPlataformasTitleClick
+        Columns = <
+          item
+            Alignment = taCenter
+            Expanded = False
+            FieldName = 'Painel_Boolean'
+            Title.Alignment = taCenter
+            Title.Caption = 'Desenho'
+            Visible = True
+          end
+          item
+            Alignment = taCenter
+            Expanded = False
+            FieldName = 'Plataforma'
+            Title.Alignment = taCenter
+            Visible = True
+          end
+          item
+            Alignment = taCenter
+            Expanded = False
+            FieldName = 'Painel_X'
+            Title.Alignment = taCenter
+            Title.Caption = 'X'
+            Visible = True
+          end
+          item
+            Alignment = taCenter
+            Expanded = False
+            FieldName = 'Painel_Y'
+            Title.Alignment = taCenter
+            Title.Caption = 'Y'
+            Visible = True
+          end
+          item
+            Alignment = taCenter
+            Expanded = False
+            FieldName = 'Painel_Tipo'
+            PickList.Strings = (
+              'Tipo-1'
+              'Tipo-2'
+              'Tipo-3'
+              'Tipo-4')
+            Title.Alignment = taCenter
+            Title.Caption = 'Tipo'
+            Width = 70
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'Painel_Condicao'
+            PickList.Strings = (
+              'Opera'#231#227'o'
+              'Paralisado'
+              'Desativado'
+              'Descomissionado'
+              'N/A')
+            Title.Alignment = taCenter
+            Title.Caption = 'Condi'#231#227'o'
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'Link_FEng'
+            Title.Alignment = taCenter
+            Title.Caption = 'Link Fluxo. Eng.'
+            Width = 150
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'Link_FProc'
+            Title.Alignment = taCenter
+            Title.Caption = 'Link Fluxo. Proc.'
+            Width = 150
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'Link_MCE'
+            Title.Alignment = taCenter
+            Title.Caption = 'Link Fluxo. M.C.E.'
+            Width = 150
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'NumFAM'
+            Title.Alignment = taCenter
+            Title.Caption = 'N'#176' FAM'
+            Width = 200
+            Visible = True
+          end
+          item
+            Alignment = taCenter
+            Expanded = False
+            FieldName = 'Escala'
+            Title.Alignment = taCenter
+            Visible = True
+          end
+          item
+            Alignment = taCenter
+            Expanded = False
+            FieldName = 'booleanSelecao'
+            Title.Alignment = taCenter
+            Title.Caption = 'Sele'#231#227'o'
+            Visible = True
+          end>
+      end
+      object ColunasLayoutPlataformas: TStringGrid
+        Left = 41
+        Top = 209
+        Width = 113
+        Height = 94
+        ColCount = 2
+        DefaultRowHeight = 21
+        TabOrder = 1
+        Visible = False
+        RowHeights = (
+          21
+          21
+          21
+          21
+          21)
+      end
+      object StatusBarPlataforma: TStatusBar
+        Left = 0
+        Top = 421
+        Width = 954
+        Height = 19
+        Panels = <
+          item
+            Width = 50
+          end
+          item
+            Width = 50
+          end
+          item
+            Width = 50
+          end
+          item
+            Width = 50
+          end
+          item
+            Width = 50
+          end>
+      end
+      object Panel3: TPanel
+        Left = 0
+        Top = 0
+        Width = 954
+        Height = 25
+        Align = alTop
+        Caption = 'Cadastro Plataformas Desenho'
+        Color = clGradientActiveCaption
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -13
+        Font.Name = 'Tahoma'
+        Font.Style = [fsBold]
+        ParentBackground = False
+        ParentFont = False
+        TabOrder = 3
+      end
+      object ToolBar6: TToolBar
+        Left = 0
+        Top = 25
+        Width = 954
+        Height = 29
+        Caption = 'ToolBar1'
+        DrawingStyle = dsGradient
+        EdgeBorders = [ebLeft, ebTop, ebRight, ebBottom]
+        Images = FrmPrincipal.ImageList1
+        TabOrder = 4
+        object DBNavigatorPlataformas: TDBNavigator
+          Left = 0
+          Top = 0
+          Width = 138
+          Height = 22
+          DataSource = FrmDataModule.DataSourcePainelPlataformas
+          VisibleButtons = [nbInsert, nbDelete, nbEdit, nbPost, nbCancel, nbRefresh]
+          Hints.Strings = (
+            'Primeiro'
+            'Anterior'
+            'Pr'#243'ximo'
+            #218'ltimo'
+            'Inserir'
+            'Excluir'
+            'Editar'
+            'Gravar'
+            'Cancelar'
+            'Atualizar'
+            'Aplicar atualiza'#231#245'es'
+            'Calcelar atualiza'#231#245'es')
+          ParentShowHint = False
+          ShowHint = True
+          TabOrder = 0
+        end
+        object BitBtn3: TBitBtn
+          Left = 138
+          Top = 0
+          Width = 80
+          Height = 22
+          Action = actExcelCadastroPlataformas
+          Align = alLeft
+          Caption = 'Exportar'
+          ParentShowHint = False
+          ShowHint = True
+          TabOrder = 1
+        end
+        object BitBtn8: TBitBtn
+          Left = 218
+          Top = 0
+          Width = 80
+          Height = 22
+          Action = actExcelImportarDutos
+          Align = alLeft
+          Caption = 'Importar'
+          ParentShowHint = False
+          ShowHint = True
+          TabOrder = 4
+        end
+        object BitBtn5: TBitBtn
+          Left = 298
+          Top = 0
+          Width = 64
+          Height = 22
+          Action = actLimparFiltros
+          Align = alLeft
+          Caption = 'Limpar'
+          ParentShowHint = False
+          ShowHint = True
+          TabOrder = 2
+        end
+        object BitBtn6: TBitBtn
+          Left = 362
+          Top = 0
+          Width = 64
+          Height = 22
+          Action = actFiltrosTabela
+          Align = alLeft
+          Caption = 'Filtros'
+          ParentShowHint = False
+          ShowHint = True
+          TabOrder = 3
+        end
+      end
+    end
+    object TabSheet5: TTabSheet
+      Caption = 'GM - Geral'
+      ImageIndex = 4
+      object Splitter2: TSplitter
+        Left = 0
+        Top = 137
+        Width = 954
+        Height = 3
+        Cursor = crVSplit
+        Align = alTop
+        ExplicitWidth = 284
+      end
+      object Panel4: TPanel
+        Left = 0
+        Top = 0
+        Width = 954
+        Height = 25
+        Align = alTop
+        Caption = 'Cadastro Plataformas Desenho'
+        Color = clGradientActiveCaption
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -13
+        Font.Name = 'Tahoma'
+        Font.Style = [fsBold]
+        ParentBackground = False
+        ParentFont = False
+        TabOrder = 0
+      end
+      object ToolBar7: TToolBar
+        Left = 0
+        Top = 25
+        Width = 954
+        Height = 29
+        Caption = 'ToolBar1'
+        DrawingStyle = dsGradient
+        EdgeBorders = [ebLeft, ebTop, ebRight, ebBottom]
+        Images = FrmPrincipal.ImageList1
+        TabOrder = 1
+        object DBNavigatorSIGMGeral: TDBNavigator
+          Left = 0
+          Top = 0
+          Width = 138
+          Height = 22
+          DataSource = FrmDataModule.DataSourceSIGMGeral
+          VisibleButtons = [nbInsert, nbDelete, nbEdit, nbPost, nbCancel, nbRefresh]
+          Hints.Strings = (
+            'Primeiro'
+            'Anterior'
+            'Pr'#243'ximo'
+            #218'ltimo'
+            'Inserir'
+            'Excluir'
+            'Editar'
+            'Gravar'
+            'Cancelar'
+            'Atualizar'
+            'Aplicar atualiza'#231#245'es'
+            'Calcelar atualiza'#231#245'es')
+          ParentShowHint = False
+          ShowHint = True
+          TabOrder = 0
+        end
+        object BitBtn14: TBitBtn
+          Left = 138
+          Top = 0
+          Width = 80
+          Height = 22
+          Action = actExcelSIGMGeral
+          Align = alLeft
+          Caption = 'Exportar'
+          ParentShowHint = False
+          ShowHint = True
+          TabOrder = 4
+        end
+        object BitBtn10: TBitBtn
+          Left = 218
+          Top = 0
+          Width = 80
+          Height = 22
+          Action = actExcelImportarSIGMGeral
+          Align = alLeft
+          Caption = 'Importar'
+          ParentShowHint = False
+          ShowHint = True
+          TabOrder = 1
+        end
+        object BitBtn11: TBitBtn
+          Left = 298
+          Top = 0
+          Width = 64
+          Height = 22
+          Action = actLimparFiltros
+          Align = alLeft
+          Caption = 'Limpar'
+          ParentShowHint = False
+          ShowHint = True
+          TabOrder = 2
+        end
+        object BitBtn12: TBitBtn
+          Left = 362
+          Top = 0
+          Width = 64
+          Height = 22
+          Action = actFiltrosTabela
+          Align = alLeft
+          Caption = 'Filtros'
+          ParentShowHint = False
+          ShowHint = True
+          TabOrder = 3
+        end
+      end
+      object DBGridSIGMGeral: TDBGrid
+        Left = 0
+        Top = 140
+        Width = 954
+        Height = 281
+        Align = alClient
+        DataSource = FrmDataModule.DataSourceSIGMGeral
+        TabOrder = 2
+        TitleFont.Charset = DEFAULT_CHARSET
+        TitleFont.Color = clWindowText
+        TitleFont.Height = -11
+        TitleFont.Name = 'Tahoma'
+        TitleFont.Style = []
+        OnDrawColumnCell = DBGridSIGMGeralDrawColumnCell
+        OnTitleClick = DBGridSIGMGeralTitleClick
+        Columns = <
+          item
+            Alignment = taCenter
+            Expanded = False
+            FieldName = 'Data_FAM'
+            Title.Alignment = taCenter
+            Title.Caption = 'Data FAM'
+            Visible = True
+          end
+          item
+            Alignment = taCenter
+            Expanded = False
+            FieldName = 'DuracaoMudancaFAM'
+            Title.Alignment = taCenter
+            Title.Caption = 'Dura'#231#227'o da Mudan'#231'a'
+            Width = 150
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'Instalacao'
+            Title.Alignment = taCenter
+            Title.Caption = 'Instala'#231#227'o'
+            Width = 200
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'Num_FAM'
+            Title.Alignment = taCenter
+            Title.Caption = 'N'#176' FAM'
+            Width = 200
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'StatusFAM'
+            Title.Alignment = taCenter
+            Title.Caption = 'Status FAM'
+            Width = 200
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'TAG_SIGM'
+            Title.Alignment = taCenter
+            Title.Caption = 'TAG SIGM'
+            Width = 200
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'Tipo_FAM'
+            Title.Alignment = taCenter
+            Title.Caption = 'Tipo FAM'
+            Width = 200
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'TAG_DUTO'
+            Title.Alignment = taCenter
+            Title.Caption = 'TAG DUTO'
+            Width = 120
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'Descricao'
+            Title.Alignment = taCenter
+            Title.Caption = 'Descri'#231#227'o'
+            Width = 84
+            Visible = True
+          end>
+      end
+      object ColunasLayoutSIGMGeral: TStringGrid
+        Left = 51
+        Top = 217
+        Width = 113
+        Height = 94
+        ColCount = 2
+        DefaultRowHeight = 21
+        TabOrder = 3
+        Visible = False
+        RowHeights = (
+          21
+          23
+          21
+          21
+          21)
+      end
+      object StatusBarSIGMGeral: TStatusBar
+        Left = 0
+        Top = 421
+        Width = 954
+        Height = 19
+        Panels = <
+          item
+            Width = 50
+          end
+          item
+            Width = 50
+          end
+          item
+            Width = 50
+          end
+          item
+            Width = 50
+          end
+          item
+            Width = 50
+          end>
+      end
+      object DBMemoDescricaoSIGM: TDBMemo
+        Left = 0
+        Top = 54
+        Width = 954
+        Height = 83
+        Hint = 'Descri'#231#227'o da Mudan'#231'a'
+        Align = alTop
+        DataField = 'Descricao'
+        DataSource = FrmDataModule.DataSourceSIGMGeral
+        ParentShowHint = False
+        ShowHint = True
+        TabOrder = 5
+      end
+    end
+  end
+  object PanelAjuda: TPanel
+    Left = 141
+    Top = 100
+    Width = 400
+    Height = 396
+    Color = clMenu
+    ParentBackground = False
+    TabOrder = 1
+    Visible = False
+    object PanelTituloAjuda1: TPanel
+      Left = 1
+      Top = 879
+      Width = 398
+      Height = 26
+      Align = alTop
+      Caption = 'Motivo de Cancelamento e Palavras Chave'
+      Color = clGradientActiveCaption
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -12
+      Font.Name = 'Tahoma'
+      Font.Style = [fsBold]
+      ParentBackground = False
+      ParentFont = False
+      TabOrder = 0
+      OnMouseDown = PanelTituloAjuda1MouseDown
+      OnMouseMove = PanelTituloAjuda1MouseMove
+      OnMouseUp = PanelTituloAjuda1MouseUp
+      object SpeedButton4: TSpeedButton
+        Left = 374
+        Top = 1
+        Width = 23
+        Height = 24
+        Hint = 'Cancelar opera'#231#227'o'
+        Align = alRight
+        Glyph.Data = {
+          36040000424D3604000000000000360000002800000010000000100000000100
+          2000000000000004000000000000000000000000000000000000FF00FF00FF00
+          FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
+          FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00181A
+          65003436CB003638DB00363ADF00363AE3003639E7003538EB003537EF00393D
+          F0003C41F2004046F200454DF0004046CC000B0C3500FF00FF0003032F001717
+          C2000000BD000000C4000000CB000000D2000202D9001B1BE3001718E7000E12
+          E8001820EA00212CEC002B39ED003344EF003A45D1000000040003034F000000
+          B5000000BC000000C3000E0ECD008D8DEB00EDEDFC00FFFFFF00FFFFFF00DEDF
+          FC00797DF300232EEC002B39ED003444EF00394BEA000000150000004A000000
+          B3000000BB000F0FC500D0D0F500FFFFFF00B4B4EE006D6DE6007878EB00D2D2
+          F700FFFFFF00ACB0F8002A37ED003343EF003647E70000001400000045000A0A
+          B2000E0EBC009999E500FFFFFF007272DE000303D4000000DC000000E2000B0D
+          E400ABADF200FFFFFF006F78F300303FEE003242E30000001200000040001919
+          B2002424BF00F2F2FB00D3D3F2002B2BD2002E2ED9002525DD001414E1000405
+          E5001D21E600F9F9FE00BDC1F9002A38ED002D3BDF000000120000003C002626
+          B2004141C400FFFFFF00B0B0EB003B3BD2003E3ED8004040DE004343E3003E3E
+          E8001F20E800DBDBFB00D8D9FB00232DEC002531DC0000001200000037003232
+          B1004444C100F8F8FC00D0D0F3004A4AD2004D4DD700C0C0F3009292ED005656
+          E6005F5FEC00F8F8FE00BFC1F700181FEA001B24D90000001200000034003F3F
+          B1005151C100C1C1E600FEFEFF008B8BE0005C5CD600FFFFFF00CACAF5006565
+          E400BABAF500FFFFFF009797EF001215E8000E12D50000001200000033004B4B
+          B2006060C2007373C900F0F0F700FCFCFE008282DC00FFFFFF00CFCFF400BEBE
+          F100FFFFFF00DCDCF3007C7CE9006363EB000505D00000001200000032005B5B
+          B5006F6FC3007171C8008484CC00B6B6DD007D7DD400FFFFFF00D3D3F300B2B2
+          E400C6C6E7008A8AE1008989E7008C8CE9004747D00000001100000031007474
+          BD007C7CC4007F7FC9008181CD008484D1008787D400FFFFFF00D8D8F3008F8F
+          DE009292E0009595E2009898E3009A9AE4007171D00001011200101034008989
+          C3008B8BC6008D8DCB009090CE009393D2009696D400C5C5E000B2B2DD009E9E
+          DC00A0A0DE00A3A3E000A6A6E000A8A8E1009F9FD90000000C00000007007B7B
+          AA00A4A4CF00A3A3D100A6A6D400A9A9D700ACACD900AFAFDC00B2B2DE00B5B5
+          E000B7B7E200BABAE300BDBDE300C9C9E8006C6C8C00FF00FF00FF00FF000303
+          0B004040590056566C0058586D005A5A6E005C5C6F005E5E70005F5F71006161
+          720062627200636373006363730039394C0000000200FF00FF00}
+        ParentShowHint = False
+        ShowHint = True
+        OnClick = SpeedButton4Click
+        ExplicitLeft = 0
+        ExplicitTop = -4
+        ExplicitHeight = 39
+      end
+    end
+    object PanelLegenda: TPanel
+      Left = 1
+      Top = 657
+      Width = 398
+      Height = 222
+      Align = alTop
+      TabOrder = 1
+      object RChartLegenda: TRChart
+        Left = 1
+        Top = 1
+        Width = 396
+        Height = 220
+        Cursor = crHandPoint
+        ParentCustomHint = False
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -16
+        Font.Name = 'Arial'
+        Font.Style = []
+        Align = alClient
+        AvoidDuplicateMarks = False
+        AllocSize = 1000
+        AutoRedraw = True
+        MarginLeft = 2
+        MarginRight = 3
+        MarginTop = 1
+        MarginBottom = 2
+        MinDupMarkDist = 1
+        LRim = 2
+        RRim = 3
+        TRim = 1
+        BRim = 2
+        BackGroundImg.IncludePath = True
+        BackGroundImg.FillMode = bfStretch
+        BackGroundImg.AreaMode = bamNone
+        BackGroundImg.AreaColor = 14540253
+        BackGroundImg.AreaLeft = -1.000000000000000000
+        BackGroundImg.AreaRight = 1.000000000000000000
+        BackGroundImg.AreaTop = 1.000000000000000000
+        BackGroundImg.AreaBottom = -1.000000000000000000
+        ClassDefault = 0
+        GridStyle = gsNone
+        GridDx = 500.000000000000000000
+        GridDy = 500.000000000000000000
+        Isometric = True
+        FillColor = clWhite
+        WindColor = clWhite
+        GridColor = clSilver
+        JointLayers.L01xControlledBy = 1
+        JointLayers.L01yControlledBy = 1
+        JointLayers.L02xControlledBy = 2
+        JointLayers.L02yControlledBy = 2
+        JointLayers.L03xControlledBy = 3
+        JointLayers.L03yControlledBy = 3
+        JointLayers.L04xControlledBy = 4
+        JointLayers.L04yControlledBy = 4
+        JointLayers.L05xControlledBy = 5
+        JointLayers.L05yControlledBy = 5
+        JointLayers.L06xControlledBy = 6
+        JointLayers.L06yControlledBy = 6
+        JointLayers.L07xControlledBy = 7
+        JointLayers.L07yControlledBy = 7
+        JointLayers.L08xControlledBy = 8
+        JointLayers.L08yControlledBy = 8
+        JointLayers.L09xControlledBy = 9
+        JointLayers.L09yControlledBy = 9
+        JointLayers.L10xControlledBy = 10
+        JointLayers.L10yControlledBy = 10
+        JointLayers.L11xControlledBy = 11
+        JointLayers.L11yControlledBy = 11
+        JointLayers.L12xControlledBy = 12
+        JointLayers.L12yControlledBy = 12
+        JointLayers.L13xControlledBy = 13
+        JointLayers.L13yControlledBy = 13
+        JointLayers.L14xControlledBy = 14
+        JointLayers.L14yControlledBy = 14
+        JointLayers.L15xControlledBy = 15
+        JointLayers.L15yControlledBy = 15
+        JointLayers.L16xControlledBy = 16
+        JointLayers.L16yControlledBy = 16
+        Caption = ''
+        CaptionPosX = 0
+        CaptionPosY = -30
+        CaptionAlignment = taCenter
+        CaptionAnchorHoriz = cahChartCenter
+        CaptionAnchorVert = cavChartTop
+        CaptionTrim = 100
+        MouseTraceColor = clWhite
+        MouseTraceInvert = True
+        CrossHair1.Color = clBlack
+        CrossHair1.Layer = 1
+        CrossHair1.Mode = chBoth
+        CrossHair1.LineType = psClear
+        CrossHair1.LineWid = 1
+        CrossHair2.Color = clMaroon
+        CrossHair2.Layer = 2
+        CrossHair2.Mode = chOff
+        CrossHair2.LineType = psSolid
+        CrossHair2.LineWid = 1
+        CrossHair3.Color = clBlack
+        CrossHair3.Layer = 2
+        CrossHair3.Mode = chOff
+        CrossHair3.LineType = psSolid
+        CrossHair3.LineWid = 1
+        CrossHair4.Color = clBlack
+        CrossHair4.Layer = 2
+        CrossHair4.Mode = chOff
+        CrossHair4.LineType = psSolid
+        CrossHair4.LineWid = 1
+        MouseAction = maPan
+        MouseCursorFixed = False
+        PanGridDx = 1.000000000000000000
+        PanGridDy = 1.000000000000000000
+        Scale1X.CaptionPosX = -45
+        Scale1X.CaptionPosY = 19
+        Scale1X.CaptionAlignment = taCenter
+        Scale1X.CaptionAnchor = uaSclCenter
+        Scale1X.ColorScale = clBlack
+        Scale1X.DateFormat.TimeFormat = tfHHMMSS
+        Scale1X.DateFormat.DateSeparator = '-'
+        Scale1X.DateFormat.TimeSeparator = ':'
+        Scale1X.DateFormat.YearLength = ylYYYY
+        Scale1X.DateFormat.MonthName = True
+        Scale1X.DateFormat.DateOrder = doDDMMYY
+        Scale1X.DateFormat.DateForTime = dtOnePerDay
+        Scale1X.DecPlaces = -2
+        Scale1X.Font.Charset = DEFAULT_CHARSET
+        Scale1X.Font.Color = clWindowText
+        Scale1X.Font.Height = -11
+        Scale1X.Font.Name = 'MS Sans Serif'
+        Scale1X.Font.Style = []
+        Scale1X.Logarithmic = False
+        Scale1X.LabelType = ftNum
+        Scale1X.MinTicks = 5
+        Scale1X.MinRange = 0.000000000100000000
+        Scale1X.MouseAction = maNone
+        Scale1X.RangeLow = -10.000000000000000000
+        Scale1X.RangeHigh = 10.000000000000000000
+        Scale1X.ShortTicks = True
+        Scale1X.ScalePos = 0
+        Scale1X.Visible = False
+        Scale1X.ScaleLocation = slBottom
+        Scale1Y.CaptionPosX = -50
+        Scale1Y.CaptionPosY = 0
+        Scale1Y.CaptionAlignment = taLeftJustify
+        Scale1Y.CaptionAnchor = uaSclTopLft
+        Scale1Y.ColorScale = clBlack
+        Scale1Y.DateFormat.TimeFormat = tfHHMMSS
+        Scale1Y.DateFormat.DateSeparator = '-'
+        Scale1Y.DateFormat.TimeSeparator = ':'
+        Scale1Y.DateFormat.YearLength = ylYYYY
+        Scale1Y.DateFormat.MonthName = True
+        Scale1Y.DateFormat.DateOrder = doDDMMYY
+        Scale1Y.DateFormat.DateForTime = dtOnePerDay
+        Scale1Y.DecPlaces = -2
+        Scale1Y.Font.Charset = DEFAULT_CHARSET
+        Scale1Y.Font.Color = clWindowText
+        Scale1Y.Font.Height = -11
+        Scale1Y.Font.Name = 'MS Sans Serif'
+        Scale1Y.Font.Style = []
+        Scale1Y.Logarithmic = False
+        Scale1Y.LabelType = ftNum
+        Scale1Y.MinTicks = 5
+        Scale1Y.MinRange = 0.000000000100000000
+        Scale1Y.MouseAction = maNone
+        Scale1Y.RangeLow = -5.561224489795919000
+        Scale1Y.RangeHigh = 5.561224489795919000
+        Scale1Y.ShortTicks = True
+        Scale1Y.ScalePos = 0
+        Scale1Y.Visible = False
+        Scale1Y.ScaleLocation = slLeft
+        Scale2X.CaptionPosX = 10
+        Scale2X.CaptionPosY = 100
+        Scale2X.CaptionAlignment = taCenter
+        Scale2X.CaptionAnchor = uaSclCenter
+        Scale2X.ColorScale = clMaroon
+        Scale2X.DateFormat.TimeFormat = tfHHMMSS
+        Scale2X.DateFormat.DateSeparator = '-'
+        Scale2X.DateFormat.TimeSeparator = ':'
+        Scale2X.DateFormat.YearLength = ylYYYY
+        Scale2X.DateFormat.MonthName = True
+        Scale2X.DateFormat.DateOrder = doDDMMYY
+        Scale2X.DateFormat.DateForTime = dtOnePerDay
+        Scale2X.DecPlaces = -2
+        Scale2X.Font.Charset = DEFAULT_CHARSET
+        Scale2X.Font.Color = clWindowText
+        Scale2X.Font.Height = -13
+        Scale2X.Font.Name = 'MS Sans Serif'
+        Scale2X.Font.Style = []
+        Scale2X.Logarithmic = False
+        Scale2X.LabelType = ftNum
+        Scale2X.MinTicks = 3
+        Scale2X.MinRange = 0.000000000100000000
+        Scale2X.MouseAction = maNone
+        Scale2X.RangeHigh = 1.000000000000000000
+        Scale2X.ShortTicks = True
+        Scale2X.ScalePos = 0
+        Scale2X.Visible = False
+        Scale2X.ScaleLocation = slBottom
+        Scale2Y.CaptionPosX = 10
+        Scale2Y.CaptionPosY = 100
+        Scale2Y.CaptionAlignment = taRightJustify
+        Scale2Y.CaptionAnchor = uaSclTopLft
+        Scale2Y.ColorScale = clMaroon
+        Scale2Y.DateFormat.TimeFormat = tfHHMMSS
+        Scale2Y.DateFormat.DateSeparator = '-'
+        Scale2Y.DateFormat.TimeSeparator = ':'
+        Scale2Y.DateFormat.YearLength = ylYYYY
+        Scale2Y.DateFormat.MonthName = True
+        Scale2Y.DateFormat.DateOrder = doDDMMYY
+        Scale2Y.DateFormat.DateForTime = dtOnePerDay
+        Scale2Y.DecPlaces = -2
+        Scale2Y.Font.Charset = DEFAULT_CHARSET
+        Scale2Y.Font.Color = clWindowText
+        Scale2Y.Font.Height = -13
+        Scale2Y.Font.Name = 'MS Sans Serif'
+        Scale2Y.Font.Style = []
+        Scale2Y.Logarithmic = False
+        Scale2Y.LabelType = ftNum
+        Scale2Y.MinTicks = 3
+        Scale2Y.MinRange = 0.000000000100000000
+        Scale2Y.MouseAction = maNone
+        Scale2Y.RangeLow = 0.221938775510203000
+        Scale2Y.RangeHigh = 0.778061224489794800
+        Scale2Y.ShortTicks = True
+        Scale2Y.ScalePos = 0
+        Scale2Y.Visible = False
+        Scale2Y.ScaleLocation = slLeft
+        Scale3X.CaptionPosX = 10
+        Scale3X.CaptionPosY = 100
+        Scale3X.CaptionAlignment = taCenter
+        Scale3X.CaptionAnchor = uaSclCenter
+        Scale3X.ColorScale = clGreen
+        Scale3X.DateFormat.TimeFormat = tfHHMMSS
+        Scale3X.DateFormat.DateSeparator = '-'
+        Scale3X.DateFormat.TimeSeparator = ':'
+        Scale3X.DateFormat.YearLength = ylYYYY
+        Scale3X.DateFormat.MonthName = True
+        Scale3X.DateFormat.DateOrder = doDDMMYY
+        Scale3X.DateFormat.DateForTime = dtOnePerDay
+        Scale3X.DecPlaces = -2
+        Scale3X.Font.Charset = DEFAULT_CHARSET
+        Scale3X.Font.Color = clWindowText
+        Scale3X.Font.Height = -11
+        Scale3X.Font.Name = 'Tahoma'
+        Scale3X.Font.Style = []
+        Scale3X.Logarithmic = False
+        Scale3X.LabelType = ftNum
+        Scale3X.MinTicks = 3
+        Scale3X.MinRange = 0.000000000100000000
+        Scale3X.MouseAction = maNone
+        Scale3X.RangeHigh = 1.000000000000000000
+        Scale3X.ShortTicks = True
+        Scale3X.ScalePos = 0
+        Scale3X.Visible = False
+        Scale3X.ScaleLocation = slBottom
+        Scale3Y.CaptionPosX = 10
+        Scale3Y.CaptionPosY = 100
+        Scale3Y.CaptionAlignment = taRightJustify
+        Scale3Y.CaptionAnchor = uaSclTopLft
+        Scale3Y.ColorScale = clGreen
+        Scale3Y.DateFormat.TimeFormat = tfHHMMSS
+        Scale3Y.DateFormat.DateSeparator = '-'
+        Scale3Y.DateFormat.TimeSeparator = ':'
+        Scale3Y.DateFormat.YearLength = ylYYYY
+        Scale3Y.DateFormat.MonthName = True
+        Scale3Y.DateFormat.DateOrder = doDDMMYY
+        Scale3Y.DateFormat.DateForTime = dtOnePerDay
+        Scale3Y.DecPlaces = -2
+        Scale3Y.Font.Charset = DEFAULT_CHARSET
+        Scale3Y.Font.Color = clWindowText
+        Scale3Y.Font.Height = -11
+        Scale3Y.Font.Name = 'Tahoma'
+        Scale3Y.Font.Style = []
+        Scale3Y.Logarithmic = False
+        Scale3Y.LabelType = ftNum
+        Scale3Y.MinTicks = 3
+        Scale3Y.MinRange = 0.000000000100000000
+        Scale3Y.MouseAction = maNone
+        Scale3Y.RangeLow = 0.221938775510203000
+        Scale3Y.RangeHigh = 0.778061224489794800
+        Scale3Y.ShortTicks = True
+        Scale3Y.ScalePos = 0
+        Scale3Y.Visible = False
+        Scale3Y.ScaleLocation = slLeft
+        Scale4X.CaptionPosX = 10
+        Scale4X.CaptionPosY = 100
+        Scale4X.CaptionAlignment = taCenter
+        Scale4X.CaptionAnchor = uaSclCenter
+        Scale4X.ColorScale = clOlive
+        Scale4X.DateFormat.TimeFormat = tfHHMMSS
+        Scale4X.DateFormat.DateSeparator = '-'
+        Scale4X.DateFormat.TimeSeparator = ':'
+        Scale4X.DateFormat.YearLength = ylYYYY
+        Scale4X.DateFormat.MonthName = True
+        Scale4X.DateFormat.DateOrder = doDDMMYY
+        Scale4X.DateFormat.DateForTime = dtOnePerDay
+        Scale4X.DecPlaces = -2
+        Scale4X.Font.Charset = DEFAULT_CHARSET
+        Scale4X.Font.Color = clWindowText
+        Scale4X.Font.Height = -11
+        Scale4X.Font.Name = 'Tahoma'
+        Scale4X.Font.Style = []
+        Scale4X.Logarithmic = False
+        Scale4X.LabelType = ftNum
+        Scale4X.MinTicks = 3
+        Scale4X.MinRange = 0.000000000100000000
+        Scale4X.MouseAction = maNone
+        Scale4X.RangeHigh = 1.000000000000000000
+        Scale4X.ShortTicks = True
+        Scale4X.ScalePos = 0
+        Scale4X.Visible = False
+        Scale4X.ScaleLocation = slBottom
+        Scale4Y.CaptionPosX = 10
+        Scale4Y.CaptionPosY = 100
+        Scale4Y.CaptionAlignment = taRightJustify
+        Scale4Y.CaptionAnchor = uaSclTopLft
+        Scale4Y.ColorScale = clOlive
+        Scale4Y.DateFormat.TimeFormat = tfHHMMSS
+        Scale4Y.DateFormat.DateSeparator = '-'
+        Scale4Y.DateFormat.TimeSeparator = ':'
+        Scale4Y.DateFormat.YearLength = ylYYYY
+        Scale4Y.DateFormat.MonthName = True
+        Scale4Y.DateFormat.DateOrder = doDDMMYY
+        Scale4Y.DateFormat.DateForTime = dtOnePerDay
+        Scale4Y.DecPlaces = -2
+        Scale4Y.Font.Charset = DEFAULT_CHARSET
+        Scale4Y.Font.Color = clWindowText
+        Scale4Y.Font.Height = -11
+        Scale4Y.Font.Name = 'Tahoma'
+        Scale4Y.Font.Style = []
+        Scale4Y.Logarithmic = False
+        Scale4Y.LabelType = ftNum
+        Scale4Y.MinTicks = 3
+        Scale4Y.MinRange = 0.000000000100000000
+        Scale4Y.MouseAction = maNone
+        Scale4Y.RangeLow = 0.221938775510203000
+        Scale4Y.RangeHigh = 0.778061224489794800
+        Scale4Y.ShortTicks = True
+        Scale4Y.ScalePos = 0
+        Scale4Y.Visible = False
+        Scale4Y.ScaleLocation = slLeft
+        ShadowStyle = ssFlying
+        ShadowColor = clGrayText
+        ShadowBakColor = clBtnFace
+        StyleElements = []
+        TextFont.Charset = DEFAULT_CHARSET
+        TextFont.Color = clWindowText
+        TextFont.Height = -11
+        TextFont.Name = 'Tahoma'
+        TextFont.Style = []
+        TextFontStyle = []
+        TextBkStyle = tbClear
+        TextBkColor = clWhite
+        TextAlignment = taLeftJustify
+        OnDblClick = RChartDesenhoDblClick
+        OnMouseDown = RChartDesenhoMouseDown
+        OnMouseLeave = RChartDesenhoMouseLeave
+        OnZoomPan = RChartDesenhoZoomPan
+      end
+    end
+    object PanelEditarDutos: TPanel
+      Left = 1
+      Top = 321
+      Width = 398
+      Height = 336
+      Align = alTop
+      TabOrder = 2
+      object PageControlEditarDutos: TPageControl
+        Left = 1
+        Top = 1
+        Width = 396
+        Height = 334
+        ActivePage = TabSheet6
+        Align = alClient
+        TabOrder = 0
+        OnChange = actLinkSIGMDutoExecute
+        object TabSheet6: TTabSheet
+          Caption = 'Edi'#231#227'o'
+          object Panel12: TPanel
+            Left = 0
+            Top = 54
+            Width = 388
+            Height = 25
+            Align = alTop
+            TabOrder = 0
+            object Panel13: TPanel
+              Left = 1
+              Top = 1
+              Width = 110
+              Height = 23
+              Align = alLeft
+              Alignment = taLeftJustify
+              Caption = ' Sentido:'
+              TabOrder = 0
+            end
+            object Panel14: TPanel
+              Left = 111
+              Top = 1
+              Width = 276
+              Height = 23
+              Align = alClient
+              TabOrder = 1
+              object DBComboBox2: TDBComboBox
+                Left = 1
+                Top = 1
+                Width = 274
+                Height = 21
+                Align = alClient
+                DataField = 'Sentido'
+                DataSource = FrmDataModule.DataSourceEditarDutos
+                Items.Strings = (
+                  'X1 -> X2'
+                  'X2 -> X1'
+                  'Ambos'
+                  'Linha')
+                TabOrder = 0
+                OnKeyPress = DBComboBox2KeyPress
+              end
+            end
+          end
+          object Panel15: TPanel
+            Left = 0
+            Top = 79
+            Width = 388
+            Height = 25
+            Align = alTop
+            TabOrder = 1
+            object Panel16: TPanel
+              Left = 1
+              Top = 1
+              Width = 110
+              Height = 23
+              Align = alLeft
+              Alignment = taLeftJustify
+              Caption = ' Tipo de Duto:'
+              TabOrder = 0
+            end
+            object Panel17: TPanel
+              Left = 111
+              Top = 1
+              Width = 276
+              Height = 23
+              Align = alClient
+              TabOrder = 1
+              object DBComboBox1: TDBComboBox
+                Left = 1
+                Top = 1
+                Width = 274
+                Height = 21
+                Align = alClient
+                DataField = 'TipoDuto'
+                DataSource = FrmDataModule.DataSourceEditarDutos
+                Items.Strings = (
+                  #211'leoduto'
+                  'Gasoduto')
+                TabOrder = 0
+                OnKeyPress = DBComboBox1KeyPress
+              end
+            end
+          end
+          object Panel18: TPanel
+            Left = 0
+            Top = 104
+            Width = 388
+            Height = 25
+            Align = alTop
+            TabOrder = 2
+            object Panel19: TPanel
+              Left = 1
+              Top = 1
+              Width = 110
+              Height = 23
+              Align = alLeft
+              Alignment = taLeftJustify
+              Caption = ' Condi'#231#227'o do Duto:'
+              TabOrder = 0
+            end
+            object Panel20: TPanel
+              Left = 111
+              Top = 1
+              Width = 276
+              Height = 23
+              Align = alClient
+              TabOrder = 1
+              object DBComboBox3: TDBComboBox
+                Left = 1
+                Top = 1
+                Width = 274
+                Height = 21
+                Align = alClient
+                DataField = 'CondicaoDuto'
+                DataSource = FrmDataModule.DataSourceEditarDutos
+                Items.Strings = (
+                  'Opera'#231#227'o'
+                  'Paralisado'
+                  'Desativado'
+                  'Descomissionado')
+                TabOrder = 0
+                OnKeyPress = DBComboBox3KeyPress
+              end
+            end
+          end
+          object Panel21: TPanel
+            Left = 0
+            Top = 229
+            Width = 388
+            Height = 25
+            Align = alTop
+            TabOrder = 3
+            object Panel22: TPanel
+              Left = 1
+              Top = 1
+              Width = 110
+              Height = 23
+              Align = alLeft
+              Alignment = taLeftJustify
+              Caption = ' PMOA:'
+              TabOrder = 0
+            end
+            object Panel23: TPanel
+              Left = 111
+              Top = 1
+              Width = 276
+              Height = 23
+              Align = alClient
+              TabOrder = 1
+              object DBEdit5: TDBEdit
+                Left = 1
+                Top = 1
+                Width = 274
+                Height = 21
+                Align = alClient
+                DataField = 'PMOA'
+                DataSource = FrmDataModule.DataSourceEditarDutos
+                TabOrder = 0
+              end
+            end
+          end
+          object Panel24: TPanel
+            Left = 0
+            Top = 129
+            Width = 388
+            Height = 25
+            Align = alTop
+            TabOrder = 4
+            object Panel25: TPanel
+              Left = 1
+              Top = 1
+              Width = 110
+              Height = 23
+              Align = alLeft
+              Alignment = taLeftJustify
+              Caption = ' Comprimento [m]:'
+              TabOrder = 0
+            end
+            object Panel26: TPanel
+              Left = 111
+              Top = 1
+              Width = 276
+              Height = 23
+              Align = alClient
+              TabOrder = 1
+              object DBEdit6: TDBEdit
+                Left = 1
+                Top = 1
+                Width = 274
+                Height = 21
+                Align = alClient
+                DataField = 'Comprimento'
+                DataSource = FrmDataModule.DataSourceEditarDutos
+                TabOrder = 0
+              end
+            end
+          end
+          object Panel27: TPanel
+            Left = 0
+            Top = 29
+            Width = 388
+            Height = 25
+            Align = alTop
+            TabOrder = 5
+            object Panel28: TPanel
+              Left = 1
+              Top = 1
+              Width = 110
+              Height = 23
+              Align = alLeft
+              Alignment = taLeftJustify
+              Caption = ' TAG Duto:'
+              TabOrder = 0
+            end
+            object Panel29: TPanel
+              Left = 111
+              Top = 1
+              Width = 276
+              Height = 23
+              Align = alClient
+              TabOrder = 1
+              object DBEdit7: TDBEdit
+                Left = 1
+                Top = 1
+                Width = 274
+                Height = 21
+                Align = alClient
+                DataField = 'TAG_DUTO'
+                DataSource = FrmDataModule.DataSourceEditarDutos
+                TabOrder = 0
+              end
+            end
+          end
+          object Panel30: TPanel
+            Left = 0
+            Top = 204
+            Width = 388
+            Height = 25
+            Align = alTop
+            TabOrder = 6
+            object Panel31: TPanel
+              Left = 1
+              Top = 1
+              Width = 110
+              Height = 23
+              Align = alLeft
+              Alignment = taLeftJustify
+              Caption = ' PMO:'
+              TabOrder = 0
+            end
+            object Panel32: TPanel
+              Left = 111
+              Top = 1
+              Width = 276
+              Height = 23
+              Align = alClient
+              TabOrder = 1
+              object DBEdit8: TDBEdit
+                Left = 1
+                Top = 1
+                Width = 274
+                Height = 21
+                Align = alClient
+                DataField = 'PMO'
+                DataSource = FrmDataModule.DataSourceEditarDutos
+                TabOrder = 0
+              end
+            end
+          end
+          object Panel33: TPanel
+            Left = 0
+            Top = 254
+            Width = 388
+            Height = 25
+            Align = alTop
+            TabOrder = 7
+            object Panel34: TPanel
+              Left = 1
+              Top = 1
+              Width = 110
+              Height = 23
+              Align = alLeft
+              Alignment = taLeftJustify
+              Caption = ' Classe Press'#227'o:'
+              TabOrder = 0
+            end
+            object Panel35: TPanel
+              Left = 111
+              Top = 1
+              Width = 276
+              Height = 23
+              Align = alClient
+              TabOrder = 1
+              object DBEdit9: TDBEdit
+                Left = 1
+                Top = 1
+                Width = 274
+                Height = 21
+                Align = alClient
+                DataField = 'ClassePressao'
+                DataSource = FrmDataModule.DataSourceEditarDutos
+                TabOrder = 0
+              end
+            end
+          end
+          object Panel36: TPanel
+            Left = 0
+            Top = 279
+            Width = 388
+            Height = 25
+            Align = alTop
+            TabOrder = 8
+            object Panel37: TPanel
+              Left = 1
+              Top = 1
+              Width = 110
+              Height = 23
+              Align = alLeft
+              Alignment = taLeftJustify
+              Caption = ' Capacidade Nominal:'
+              TabOrder = 0
+            end
+            object Panel38: TPanel
+              Left = 111
+              Top = 1
+              Width = 276
+              Height = 23
+              Align = alClient
+              TabOrder = 1
+              object DBEdit10: TDBEdit
+                Left = 1
+                Top = 1
+                Width = 274
+                Height = 21
+                Align = alClient
+                DataField = 'CapacidadeNominal'
+                DataSource = FrmDataModule.DataSourceEditarDutos
+                TabOrder = 0
+              end
+            end
+          end
+          object Panel71: TPanel
+            Left = 0
+            Top = 179
+            Width = 388
+            Height = 25
+            Align = alTop
+            TabOrder = 9
+            object Panel72: TPanel
+              Left = 1
+              Top = 1
+              Width = 47
+              Height = 23
+              Align = alLeft
+              Alignment = taRightJustify
+              Caption = ' X2:  '
+              TabOrder = 0
+              object DBCheckBox2: TDBCheckBox
+                Left = 1
+                Top = 1
+                Width = 17
+                Height = 21
+                Align = alLeft
+                DataField = 'MarkX2'
+                DataSource = FrmDataModule.DataSourceEditarDutos
+                TabOrder = 0
+              end
+            end
+            object Panel73: TPanel
+              Left = 48
+              Top = 1
+              Width = 339
+              Height = 23
+              Align = alClient
+              TabOrder = 1
+              object DBEdit1: TDBEdit
+                Left = 165
+                Top = 1
+                Width = 173
+                Height = 21
+                Align = alClient
+                DataField = 'Y2'
+                DataSource = FrmDataModule.DataSourceEditarDutos
+                TabOrder = 0
+              end
+              object SpinButton1: TSpinButton
+                Left = 1
+                Top = 1
+                Width = 20
+                Height = 21
+                Align = alLeft
+                DownGlyph.Data = {
+                  0E010000424D0E01000000000000360000002800000009000000060000000100
+                  200000000000D800000000000000000000000000000000000000008080000080
+                  8000008080000080800000808000008080000080800000808000008080000080
+                  8000008080000080800000808000000000000080800000808000008080000080
+                  8000008080000080800000808000000000000000000000000000008080000080
+                  8000008080000080800000808000000000000000000000000000000000000000
+                  0000008080000080800000808000000000000000000000000000000000000000
+                  0000000000000000000000808000008080000080800000808000008080000080
+                  800000808000008080000080800000808000}
+                TabOrder = 1
+                UpGlyph.Data = {
+                  0E010000424D0E01000000000000360000002800000009000000060000000100
+                  200000000000D800000000000000000000000000000000000000008080000080
+                  8000008080000080800000808000008080000080800000808000008080000080
+                  8000000000000000000000000000000000000000000000000000000000000080
+                  8000008080000080800000000000000000000000000000000000000000000080
+                  8000008080000080800000808000008080000000000000000000000000000080
+                  8000008080000080800000808000008080000080800000808000000000000080
+                  8000008080000080800000808000008080000080800000808000008080000080
+                  800000808000008080000080800000808000}
+                OnDownClick = SpinButton1DownClick
+                OnUpClick = SpinButton1UpClick
+              end
+              object Panel7: TPanel
+                Left = 113
+                Top = 1
+                Width = 32
+                Height = 21
+                Align = alLeft
+                Alignment = taLeftJustify
+                Caption = ' Y2:'
+                TabOrder = 2
+              end
+              object SpinButton2: TSpinButton
+                Left = 145
+                Top = 1
+                Width = 20
+                Height = 21
+                Align = alLeft
+                DownGlyph.Data = {
+                  0E010000424D0E01000000000000360000002800000009000000060000000100
+                  200000000000D800000000000000000000000000000000000000008080000080
+                  8000008080000080800000808000008080000080800000808000008080000080
+                  8000008080000080800000808000000000000080800000808000008080000080
+                  8000008080000080800000808000000000000000000000000000008080000080
+                  8000008080000080800000808000000000000000000000000000000000000000
+                  0000008080000080800000808000000000000000000000000000000000000000
+                  0000000000000000000000808000008080000080800000808000008080000080
+                  800000808000008080000080800000808000}
+                TabOrder = 3
+                UpGlyph.Data = {
+                  0E010000424D0E01000000000000360000002800000009000000060000000100
+                  200000000000D800000000000000000000000000000000000000008080000080
+                  8000008080000080800000808000008080000080800000808000008080000080
+                  8000000000000000000000000000000000000000000000000000000000000080
+                  8000008080000080800000000000000000000000000000000000000000000080
+                  8000008080000080800000808000008080000000000000000000000000000080
+                  8000008080000080800000808000008080000080800000808000000000000080
+                  8000008080000080800000808000008080000080800000808000008080000080
+                  800000808000008080000080800000808000}
+                OnDownClick = SpinButton2DownClick
+                OnUpClick = SpinButton2UpClick
+              end
+              object DBEdit2: TDBEdit
+                Left = 21
+                Top = 1
+                Width = 92
+                Height = 21
+                Align = alLeft
+                DataField = 'X2'
+                DataSource = FrmDataModule.DataSourceEditarDutos
+                TabOrder = 4
+              end
+            end
+          end
+          object Panel8: TPanel
+            Left = 0
+            Top = 154
+            Width = 388
+            Height = 25
+            Align = alTop
+            TabOrder = 10
+            object Panel9: TPanel
+              Left = 1
+              Top = 1
+              Width = 47
+              Height = 23
+              Align = alLeft
+              Alignment = taRightJustify
+              Caption = ' X1:  '
+              TabOrder = 0
+              object DBCheckBox1: TDBCheckBox
+                Left = 1
+                Top = 1
+                Width = 17
+                Height = 21
+                Align = alLeft
+                DataField = 'MarkX1'
+                DataSource = FrmDataModule.DataSourceEditarDutos
+                TabOrder = 0
+              end
+            end
+            object Panel10: TPanel
+              Left = 48
+              Top = 1
+              Width = 339
+              Height = 23
+              Align = alClient
+              TabOrder = 1
+              object DBEdit3: TDBEdit
+                Left = 165
+                Top = 1
+                Width = 173
+                Height = 21
+                Align = alClient
+                DataField = 'Y1'
+                DataSource = FrmDataModule.DataSourceEditarDutos
+                TabOrder = 0
+              end
+              object SpinButton3: TSpinButton
+                Left = 1
+                Top = 1
+                Width = 20
+                Height = 21
+                Align = alLeft
+                DownGlyph.Data = {
+                  0E010000424D0E01000000000000360000002800000009000000060000000100
+                  200000000000D800000000000000000000000000000000000000008080000080
+                  8000008080000080800000808000008080000080800000808000008080000080
+                  8000008080000080800000808000000000000080800000808000008080000080
+                  8000008080000080800000808000000000000000000000000000008080000080
+                  8000008080000080800000808000000000000000000000000000000000000000
+                  0000008080000080800000808000000000000000000000000000000000000000
+                  0000000000000000000000808000008080000080800000808000008080000080
+                  800000808000008080000080800000808000}
+                TabOrder = 1
+                UpGlyph.Data = {
+                  0E010000424D0E01000000000000360000002800000009000000060000000100
+                  200000000000D800000000000000000000000000000000000000008080000080
+                  8000008080000080800000808000008080000080800000808000008080000080
+                  8000000000000000000000000000000000000000000000000000000000000080
+                  8000008080000080800000000000000000000000000000000000000000000080
+                  8000008080000080800000808000008080000000000000000000000000000080
+                  8000008080000080800000808000008080000080800000808000000000000080
+                  8000008080000080800000808000008080000080800000808000008080000080
+                  800000808000008080000080800000808000}
+                OnDownClick = SpinButton3DownClick
+                OnUpClick = SpinButton3UpClick
+              end
+              object Panel11: TPanel
+                Left = 113
+                Top = 1
+                Width = 32
+                Height = 21
+                Align = alLeft
+                Alignment = taLeftJustify
+                Caption = ' Y1:'
+                TabOrder = 2
+              end
+              object SpinButton4: TSpinButton
+                Left = 145
+                Top = 1
+                Width = 20
+                Height = 21
+                Align = alLeft
+                DownGlyph.Data = {
+                  0E010000424D0E01000000000000360000002800000009000000060000000100
+                  200000000000D800000000000000000000000000000000000000008080000080
+                  8000008080000080800000808000008080000080800000808000008080000080
+                  8000008080000080800000808000000000000080800000808000008080000080
+                  8000008080000080800000808000000000000000000000000000008080000080
+                  8000008080000080800000808000000000000000000000000000000000000000
+                  0000008080000080800000808000000000000000000000000000000000000000
+                  0000000000000000000000808000008080000080800000808000008080000080
+                  800000808000008080000080800000808000}
+                TabOrder = 3
+                UpGlyph.Data = {
+                  0E010000424D0E01000000000000360000002800000009000000060000000100
+                  200000000000D800000000000000000000000000000000000000008080000080
+                  8000008080000080800000808000008080000080800000808000008080000080
+                  8000000000000000000000000000000000000000000000000000000000000080
+                  8000008080000080800000000000000000000000000000000000000000000080
+                  8000008080000080800000808000008080000000000000000000000000000080
+                  8000008080000080800000808000008080000080800000808000000000000080
+                  8000008080000080800000808000008080000080800000808000008080000080
+                  800000808000008080000080800000808000}
+                OnDownClick = SpinButton4DownClick
+                OnUpClick = SpinButton4UpClick
+              end
+              object DBEdit4: TDBEdit
+                Left = 21
+                Top = 1
+                Width = 92
+                Height = 21
+                Align = alLeft
+                DataField = 'X1'
+                DataSource = FrmDataModule.DataSourceEditarDutos
+                TabOrder = 4
+              end
+            end
+          end
+          object ToolBar2: TToolBar
+            Left = 0
+            Top = 0
+            Width = 388
+            Height = 29
+            ButtonHeight = 30
+            ButtonWidth = 47
+            Caption = 'ToolBar2'
+            DrawingStyle = dsGradient
+            EdgeBorders = [ebLeft, ebTop, ebRight, ebBottom]
+            Images = FrmPrincipal.ImageList1
+            TabOrder = 11
+            object ToolButton20: TToolButton
+              Left = 0
+              Top = 0
+              Action = actDutoAnterior
+              ParentShowHint = False
+              ShowHint = True
+            end
+            object ToolButton24: TToolButton
+              Left = 47
+              Top = 0
+              Action = actDutoPosterior
+              ParentShowHint = False
+              ShowHint = True
+            end
+            object ToolButton25: TToolButton
+              Left = 94
+              Top = 0
+              Action = actDutoGravar
+              ParentShowHint = False
+              ShowHint = True
+            end
+            object ToolButton26: TToolButton
+              Left = 141
+              Top = 0
+              Action = actDutoDeletar
+              ParentShowHint = False
+              ShowHint = True
+            end
+            object ToolButton27: TToolButton
+              Left = 188
+              Top = 0
+              Action = actDutoInserir
+              ParentShowHint = False
+              ShowHint = True
+            end
+            object ToolButton28: TToolButton
+              Left = 235
+              Top = 0
+              Action = actDutoCancelar
+              ParentShowHint = False
+              ShowHint = True
+            end
+            object ToolButton19: TToolButton
+              Left = 282
+              Top = 0
+              Action = actAtualizarDutos
+              ParentShowHint = False
+              ShowHint = True
+            end
+            object ToolButton18: TToolButton
+              Left = 329
+              Top = 0
+              Hint = 'Links Dutos'
+              Caption = 'ToolButton18'
+              DropdownMenu = PopupMenuLINKDuto
+              ImageIndex = 290
+              Style = tbsDropDown
+            end
+            object DBEdit_idDutosOPAR: TDBEdit
+              Left = 391
+              Top = 0
+              Width = 48
+              Height = 30
+              DataField = 'idDutosOPAR'
+              DataSource = FrmDataModule.DataSourceEditarDutos
+              TabOrder = 0
+              Visible = False
+            end
+          end
+        end
+        object TabSheet7: TTabSheet
+          Caption = 'GM'
+          ImageIndex = 1
+          object Splitter4: TSplitter
+            Left = 0
+            Top = 112
+            Width = 388
+            Height = 3
+            Cursor = crVSplit
+            Align = alTop
+            ExplicitWidth = 194
+          end
+          object DBGridSIGMDutos: TDBGrid
+            Left = 0
+            Top = 115
+            Width = 388
+            Height = 191
+            Align = alClient
+            DataSource = FrmDataModule.DataSourceSIGMDutos
+            TabOrder = 0
+            TitleFont.Charset = DEFAULT_CHARSET
+            TitleFont.Color = clWindowText
+            TitleFont.Height = -11
+            TitleFont.Name = 'Tahoma'
+            TitleFont.Style = []
+            OnDrawColumnCell = DBGridSIGMDutosDrawColumnCell
+            Columns = <
+              item
+                Alignment = taCenter
+                Expanded = False
+                FieldName = 'Data_FAM'
+                Title.Alignment = taCenter
+                Title.Caption = 'Data FAM'
+                Visible = True
+              end
+              item
+                Alignment = taCenter
+                Expanded = False
+                FieldName = 'DuracaoMudancaFAM'
+                Title.Alignment = taCenter
+                Title.Caption = 'Dura'#231#227'o da Mudan'#231'a'
+                Width = 150
+                Visible = True
+              end
+              item
+                Expanded = False
+                FieldName = 'Instalacao'
+                Title.Alignment = taCenter
+                Title.Caption = 'Instala'#231#227'o'
+                Width = 200
+                Visible = True
+              end
+              item
+                Expanded = False
+                FieldName = 'Num_FAM'
+                Title.Alignment = taCenter
+                Title.Caption = 'N'#176' FAM'
+                Width = 200
+                Visible = True
+              end
+              item
+                Expanded = False
+                FieldName = 'StatusFAM'
+                Title.Alignment = taCenter
+                Title.Caption = 'Status FAM'
+                Width = 200
+                Visible = True
+              end
+              item
+                Expanded = False
+                FieldName = 'TAG_SIGM'
+                Title.Alignment = taCenter
+                Title.Caption = 'TAG SIGM'
+                Width = 200
+                Visible = True
+              end
+              item
+                Expanded = False
+                FieldName = 'Tipo_FAM'
+                Title.Alignment = taCenter
+                Title.Caption = 'Tipo FAM'
+                Width = 200
+                Visible = True
+              end
+              item
+                Expanded = False
+                FieldName = 'TAG_DUTO'
+                Title.Alignment = taCenter
+                Title.Caption = 'TAG DUTO'
+                Width = 120
+                Visible = True
+              end>
+          end
+          object DBMemoDescricaoSIGMDuto: TDBMemo
+            Left = 0
+            Top = 29
+            Width = 388
+            Height = 83
+            Hint = 'Descri'#231#227'o da Mudan'#231'a'
+            Align = alTop
+            DataField = 'Descricao'
+            DataSource = FrmDataModule.DataSourceSIGMDutos
+            ParentShowHint = False
+            ShowHint = True
+            TabOrder = 1
+          end
+          object ColunasLayoutSIGMDutos: TStringGrid
+            Left = 121
+            Top = 160
+            Width = 113
+            Height = 73
+            ColCount = 2
+            DefaultRowHeight = 21
+            TabOrder = 2
+            Visible = False
+            RowHeights = (
+              21
+              21
+              21
+              21
+              21)
+          end
+          object ToolBar10: TToolBar
+            Left = 0
+            Top = 0
+            Width = 388
+            Height = 29
+            Caption = 'ToolBar1'
+            DrawingStyle = dsGradient
+            EdgeBorders = [ebLeft, ebTop, ebRight, ebBottom]
+            Images = FrmPrincipal.ImageList1
+            TabOrder = 3
+            object DBNavigator1: TDBNavigator
+              Left = 0
+              Top = 0
+              Width = 138
+              Height = 22
+              DataSource = FrmDataModule.DataSourceSIGMDutos
+              VisibleButtons = [nbInsert, nbDelete, nbEdit, nbPost, nbCancel, nbRefresh]
+              Hints.Strings = (
+                'Primeiro'
+                'Anterior'
+                'Pr'#243'ximo'
+                #218'ltimo'
+                'Inserir'
+                'Excluir'
+                'Editar'
+                'Gravar'
+                'Cancelar'
+                'Atualizar'
+                'Aplicar atualiza'#231#245'es'
+                'Calcelar atualiza'#231#245'es')
+              ParentShowHint = False
+              ShowHint = True
+              TabOrder = 0
+            end
+          end
+        end
+      end
+    end
+    object PanelEditarPlataforma: TPanel
+      Left = 1
+      Top = 1
+      Width = 398
+      Height = 320
+      Align = alTop
+      TabOrder = 3
+      object PageControlEditarPlataforma: TPageControl
+        Left = 1
+        Top = 1
+        Width = 396
+        Height = 318
+        ActivePage = TabSheet8
+        Align = alClient
+        TabOrder = 0
+        OnChange = actLinkSIGMPlataformaExecute
+        object TabSheet8: TTabSheet
+          Caption = 'Editar'
+          object Panel42: TPanel
+            Left = 0
+            Top = 29
+            Width = 388
+            Height = 25
+            Align = alTop
+            TabOrder = 0
+            object Panel43: TPanel
+              Left = 1
+              Top = 1
+              Width = 130
+              Height = 23
+              Align = alLeft
+              Alignment = taLeftJustify
+              Caption = ' Fluxograma Engenharia:'
+              TabOrder = 0
+            end
+            object Panel44: TPanel
+              Left = 131
+              Top = 1
+              Width = 256
+              Height = 23
+              Align = alClient
+              TabOrder = 1
+              object DBEdit13: TDBEdit
+                Left = 1
+                Top = 1
+                Width = 254
+                Height = 21
+                Align = alClient
+                DataField = 'Link_FEng'
+                DataSource = FrmDataModule.DataSourceEditarPlataformaPainel
+                TabOrder = 0
+              end
+            end
+          end
+          object Panel45: TPanel
+            Left = 0
+            Top = 54
+            Width = 388
+            Height = 25
+            Align = alTop
+            TabOrder = 1
+            object Panel46: TPanel
+              Left = 1
+              Top = 1
+              Width = 130
+              Height = 23
+              Align = alLeft
+              Alignment = taLeftJustify
+              Caption = ' Condi'#231#227'o:'
+              TabOrder = 0
+            end
+            object Panel47: TPanel
+              Left = 131
+              Top = 1
+              Width = 256
+              Height = 23
+              Align = alClient
+              TabOrder = 1
+              object DBComboBox6: TDBComboBox
+                Left = 1
+                Top = 1
+                Width = 254
+                Height = 21
+                Align = alClient
+                AutoComplete = False
+                DataField = 'Painel_Condicao'
+                DataSource = FrmDataModule.DataSourceEditarPlataformaPainel
+                Items.Strings = (
+                  'Opera'#231#227'o'
+                  'Paralisado'
+                  'Desativado'
+                  'Descomissionado'
+                  'N/A')
+                TabOrder = 0
+                OnKeyPress = DBComboBox6KeyPress
+              end
+            end
+          end
+          object Panel48: TPanel
+            Left = 0
+            Top = 104
+            Width = 388
+            Height = 25
+            Align = alTop
+            TabOrder = 2
+            object Panel49: TPanel
+              Left = 1
+              Top = 1
+              Width = 130
+              Height = 23
+              Align = alLeft
+              Alignment = taLeftJustify
+              Caption = ' Tipo:'
+              TabOrder = 0
+            end
+            object Panel50: TPanel
+              Left = 131
+              Top = 1
+              Width = 256
+              Height = 23
+              Align = alClient
+              TabOrder = 1
+              object DBComboBox7: TDBComboBox
+                Left = 1
+                Top = 1
+                Width = 254
+                Height = 21
+                Align = alClient
+                AutoComplete = False
+                DataField = 'Painel_Tipo'
+                DataSource = FrmDataModule.DataSourceEditarPlataformaPainel
+                Items.Strings = (
+                  'Tipo-1'
+                  'Tipo-2'
+                  'Tipo-3'
+                  'Tipo-4')
+                TabOrder = 0
+                OnKeyPress = DBComboBox7KeyPress
+              end
+            end
+          end
+          object Panel51: TPanel
+            Left = 0
+            Top = 129
+            Width = 388
+            Height = 25
+            Align = alTop
+            TabOrder = 3
+            object Panel52: TPanel
+              Left = 1
+              Top = 1
+              Width = 32
+              Height = 23
+              Align = alLeft
+              Alignment = taLeftJustify
+              Caption = ' X:  '
+              TabOrder = 0
+            end
+            object Panel53: TPanel
+              Left = 33
+              Top = 1
+              Width = 354
+              Height = 23
+              Align = alClient
+              TabOrder = 1
+              object DBEdit11: TDBEdit
+                Left = 257
+                Top = 1
+                Width = 96
+                Height = 21
+                Align = alClient
+                DataField = 'Painel_Y'
+                DataSource = FrmDataModule.DataSourceEditarPlataformaPainel
+                TabOrder = 0
+              end
+              object SpinButton5: TSpinButton
+                Left = 1
+                Top = 1
+                Width = 20
+                Height = 21
+                Align = alLeft
+                DownGlyph.Data = {
+                  0E010000424D0E01000000000000360000002800000009000000060000000100
+                  200000000000D800000000000000000000000000000000000000008080000080
+                  8000008080000080800000808000008080000080800000808000008080000080
+                  8000008080000080800000808000000000000080800000808000008080000080
+                  8000008080000080800000808000000000000000000000000000008080000080
+                  8000008080000080800000808000000000000000000000000000000000000000
+                  0000008080000080800000808000000000000000000000000000000000000000
+                  0000000000000000000000808000008080000080800000808000008080000080
+                  800000808000008080000080800000808000}
+                TabOrder = 1
+                UpGlyph.Data = {
+                  0E010000424D0E01000000000000360000002800000009000000060000000100
+                  200000000000D800000000000000000000000000000000000000008080000080
+                  8000008080000080800000808000008080000080800000808000008080000080
+                  8000000000000000000000000000000000000000000000000000000000000080
+                  8000008080000080800000000000000000000000000000000000000000000080
+                  8000008080000080800000808000008080000000000000000000000000000080
+                  8000008080000080800000808000008080000080800000808000000000000080
+                  8000008080000080800000808000008080000080800000808000008080000080
+                  800000808000008080000080800000808000}
+                OnDownClick = SpinButton5DownClick
+                OnUpClick = SpinButton5UpClick
+              end
+              object Panel54: TPanel
+                Left = 205
+                Top = 1
+                Width = 32
+                Height = 21
+                Align = alLeft
+                Alignment = taLeftJustify
+                Caption = ' Y:'
+                TabOrder = 2
+              end
+              object SpinButton6: TSpinButton
+                Left = 237
+                Top = 1
+                Width = 20
+                Height = 21
+                Align = alLeft
+                DownGlyph.Data = {
+                  0E010000424D0E01000000000000360000002800000009000000060000000100
+                  200000000000D800000000000000000000000000000000000000008080000080
+                  8000008080000080800000808000008080000080800000808000008080000080
+                  8000008080000080800000808000000000000080800000808000008080000080
+                  8000008080000080800000808000000000000000000000000000008080000080
+                  8000008080000080800000808000000000000000000000000000000000000000
+                  0000008080000080800000808000000000000000000000000000000000000000
+                  0000000000000000000000808000008080000080800000808000008080000080
+                  800000808000008080000080800000808000}
+                TabOrder = 3
+                UpGlyph.Data = {
+                  0E010000424D0E01000000000000360000002800000009000000060000000100
+                  200000000000D800000000000000000000000000000000000000008080000080
+                  8000008080000080800000808000008080000080800000808000008080000080
+                  8000000000000000000000000000000000000000000000000000000000000080
+                  8000008080000080800000000000000000000000000000000000000000000080
+                  8000008080000080800000808000008080000000000000000000000000000080
+                  8000008080000080800000808000008080000080800000808000000000000080
+                  8000008080000080800000808000008080000080800000808000008080000080
+                  800000808000008080000080800000808000}
+                OnDownClick = SpinButton6DownClick
+                OnUpClick = SpinButton6UpClick
+              end
+              object DBEdit12: TDBEdit
+                Left = 21
+                Top = 1
+                Width = 184
+                Height = 21
+                Align = alLeft
+                DataField = 'Painel_X'
+                DataSource = FrmDataModule.DataSourceEditarPlataformaPainel
+                TabOrder = 4
+              end
+            end
+          end
+          object Panel55: TPanel
+            Left = 0
+            Top = 154
+            Width = 388
+            Height = 25
+            Align = alTop
+            TabOrder = 4
+            object Panel56: TPanel
+              Left = 1
+              Top = 1
+              Width = 130
+              Height = 23
+              Align = alLeft
+              Alignment = taLeftJustify
+              Caption = ' MCE:'
+              TabOrder = 0
+            end
+            object Panel57: TPanel
+              Left = 131
+              Top = 1
+              Width = 256
+              Height = 23
+              Align = alClient
+              TabOrder = 1
+              object DBEdit15: TDBEdit
+                Left = 1
+                Top = 1
+                Width = 254
+                Height = 21
+                Align = alClient
+                DataField = 'Link_MCE'
+                DataSource = FrmDataModule.DataSourceEditarPlataformaPainel
+                TabOrder = 0
+              end
+            end
+          end
+          object Panel58: TPanel
+            Left = 0
+            Top = 179
+            Width = 388
+            Height = 25
+            Align = alTop
+            TabOrder = 5
+            object Panel59: TPanel
+              Left = 1
+              Top = 1
+              Width = 130
+              Height = 23
+              Align = alLeft
+              Alignment = taLeftJustify
+              Caption = ' Fluxograma Processo:'
+              TabOrder = 0
+            end
+            object Panel60: TPanel
+              Left = 131
+              Top = 1
+              Width = 256
+              Height = 23
+              Align = alClient
+              TabOrder = 1
+              object DBEdit16: TDBEdit
+                Left = 1
+                Top = 1
+                Width = 254
+                Height = 21
+                Align = alClient
+                DataField = 'Link_FProc'
+                DataSource = FrmDataModule.DataSourceEditarPlataformaPainel
+                TabOrder = 0
+              end
+            end
+          end
+          object Panel61: TPanel
+            Left = 0
+            Top = 79
+            Width = 388
+            Height = 25
+            Align = alTop
+            TabOrder = 6
+            object Panel62: TPanel
+              Left = 1
+              Top = 1
+              Width = 130
+              Height = 23
+              Align = alLeft
+              Alignment = taLeftJustify
+              Caption = ' Platafroma:'
+              TabOrder = 0
+            end
+            object Panel63: TPanel
+              Left = 131
+              Top = 1
+              Width = 256
+              Height = 23
+              Align = alClient
+              TabOrder = 1
+              object DBEdit17: TDBEdit
+                Left = 1
+                Top = 1
+                Width = 254
+                Height = 21
+                Align = alClient
+                DataField = 'Plataforma'
+                DataSource = FrmDataModule.DataSourceEditarPlataformaPainel
+                TabOrder = 0
+              end
+            end
+          end
+          object ToolBar8: TToolBar
+            Left = 0
+            Top = 0
+            Width = 388
+            Height = 29
+            ButtonHeight = 30
+            ButtonWidth = 35
+            Caption = 'ToolBar2'
+            DrawingStyle = dsGradient
+            EdgeBorders = [ebLeft, ebTop, ebRight, ebBottom]
+            Images = FrmPrincipal.ImageList1
+            TabOrder = 7
+            object ToolButton29: TToolButton
+              Left = 0
+              Top = 0
+              Action = actPlataformaAnterior
+            end
+            object ToolButton30: TToolButton
+              Left = 35
+              Top = 0
+              Action = actPlataformaPosterior
+            end
+            object ToolButton31: TToolButton
+              Left = 70
+              Top = 0
+              Action = actPlataformaGravar
+            end
+            object ToolButton32: TToolButton
+              Left = 105
+              Top = 0
+              Action = actPlataformaDeletar
+            end
+            object ToolButton33: TToolButton
+              Left = 140
+              Top = 0
+              Action = actPlataformaInserir
+            end
+            object ToolButton34: TToolButton
+              Left = 175
+              Top = 0
+              Action = actPlataformaCancelar
+            end
+            object ToolButton21: TToolButton
+              Left = 210
+              Top = 0
+              Action = actAtualizarDutos
+              ParentShowHint = False
+              ShowHint = True
+            end
+            object ToolButton23: TToolButton
+              Left = 245
+              Top = 0
+              Hint = 'Links Plataformas'
+              Caption = 'ToolButton23'
+              DropdownMenu = PopupMenuLINKPlataforma
+              ImageIndex = 290
+              Style = tbsDropDown
+            end
+            object DBEdit_idPlataforma: TDBEdit
+              Left = 295
+              Top = 0
+              Width = 58
+              Height = 30
+              Align = alClient
+              DataField = 'idPlataformaPainel'
+              DataSource = FrmDataModule.DataSourceEditarPlataformaPainel
+              TabOrder = 0
+              Visible = False
+            end
+          end
+        end
+        object TabSheet9: TTabSheet
+          Caption = 'GM'
+          ImageIndex = 1
+          object Splitter3: TSplitter
+            Left = 0
+            Top = 112
+            Width = 388
+            Height = 3
+            Cursor = crVSplit
+            Align = alTop
+            ExplicitWidth = 178
+          end
+          object ToolBar11: TToolBar
+            Left = 0
+            Top = 0
+            Width = 388
+            Height = 29
+            Caption = 'ToolBar1'
+            DrawingStyle = dsGradient
+            EdgeBorders = [ebLeft, ebTop, ebRight, ebBottom]
+            Images = FrmPrincipal.ImageList1
+            TabOrder = 0
+            object DBNavigator2: TDBNavigator
+              Left = 0
+              Top = 0
+              Width = 138
+              Height = 22
+              DataSource = FrmDataModule.DataSourceSIGMDutos
+              VisibleButtons = [nbInsert, nbDelete, nbEdit, nbPost, nbCancel, nbRefresh]
+              Hints.Strings = (
+                'Primeiro'
+                'Anterior'
+                'Pr'#243'ximo'
+                #218'ltimo'
+                'Inserir'
+                'Excluir'
+                'Editar'
+                'Gravar'
+                'Cancelar'
+                'Atualizar'
+                'Aplicar atualiza'#231#245'es'
+                'Calcelar atualiza'#231#245'es')
+              ParentShowHint = False
+              ShowHint = True
+              TabOrder = 0
+            end
+          end
+          object DBMemoSIGMPlataforma: TDBMemo
+            Left = 0
+            Top = 29
+            Width = 388
+            Height = 83
+            Hint = 'Descri'#231#227'o da Mudan'#231'a'
+            Align = alTop
+            DataField = 'Descricao'
+            DataSource = FrmDataModule.DataSourceSIGMDutos
+            ParentShowHint = False
+            ShowHint = True
+            TabOrder = 1
+          end
+          object DBGridSIGMPlataforma: TDBGrid
+            Left = 0
+            Top = 115
+            Width = 388
+            Height = 175
+            Align = alClient
+            DataSource = FrmDataModule.DataSourceSIGMDutos
+            TabOrder = 2
+            TitleFont.Charset = DEFAULT_CHARSET
+            TitleFont.Color = clWindowText
+            TitleFont.Height = -11
+            TitleFont.Name = 'Tahoma'
+            TitleFont.Style = []
+            OnDrawColumnCell = DBGridSIGMPlataformaDrawColumnCell
+            Columns = <
+              item
+                Alignment = taCenter
+                Expanded = False
+                FieldName = 'Data_FAM'
+                Title.Alignment = taCenter
+                Title.Caption = 'Data FAM'
+                Visible = True
+              end
+              item
+                Alignment = taCenter
+                Expanded = False
+                FieldName = 'DuracaoMudancaFAM'
+                Title.Alignment = taCenter
+                Title.Caption = 'Dura'#231#227'o da Mudan'#231'a'
+                Width = 150
+                Visible = True
+              end
+              item
+                Expanded = False
+                FieldName = 'Instalacao'
+                Title.Alignment = taCenter
+                Title.Caption = 'Instala'#231#227'o'
+                Width = 200
+                Visible = True
+              end
+              item
+                Expanded = False
+                FieldName = 'Num_FAM'
+                Title.Alignment = taCenter
+                Title.Caption = 'N'#176' FAM'
+                Width = 200
+                Visible = True
+              end
+              item
+                Expanded = False
+                FieldName = 'StatusFAM'
+                Title.Alignment = taCenter
+                Title.Caption = 'Status FAM'
+                Width = 200
+                Visible = True
+              end
+              item
+                Expanded = False
+                FieldName = 'TAG_SIGM'
+                Title.Alignment = taCenter
+                Title.Caption = 'TAG SIGM'
+                Width = 200
+                Visible = True
+              end
+              item
+                Expanded = False
+                FieldName = 'Tipo_FAM'
+                Title.Alignment = taCenter
+                Title.Caption = 'Tipo FAM'
+                Width = 200
+                Visible = True
+              end
+              item
+                Expanded = False
+                FieldName = 'TAG_DUTO'
+                Title.Alignment = taCenter
+                Title.Caption = 'TAG DUTO'
+                Width = 120
+                Visible = True
+              end>
+          end
+          object ColunasLayoutSIGMPlataforma: TStringGrid
+            Left = 140
+            Top = 163
+            Width = 113
+            Height = 73
+            ColCount = 2
+            DefaultRowHeight = 21
+            TabOrder = 3
+            Visible = False
+            RowHeights = (
+              21
+              21
+              21
+              21
+              21)
+          end
+        end
+      end
+    end
+    object PanelInformacao: TPanel
+      Left = 1
+      Top = 905
+      Width = 398
+      Height = 242
+      Align = alTop
+      TabOrder = 4
+      object ToolBar9: TToolBar
+        Left = 1
+        Top = 1
+        Width = 396
+        Height = 29
+        Caption = 'ToolBar9'
+        DrawingStyle = dsGradient
+        EdgeBorders = [ebLeft, ebTop, ebRight, ebBottom]
+        TabOrder = 0
+        object BitBtn7: TBitBtn
+          Left = 0
+          Top = 0
+          Width = 80
+          Height = 22
+          Action = actExcelStringGrid
+          Align = alLeft
+          Caption = 'Exportar'
+          ParentShowHint = False
+          ShowHint = True
+          TabOrder = 0
+        end
+      end
+      object StringGridSAP: TStringGrid
+        Left = 1
+        Top = 30
+        Width = 396
+        Height = 192
+        Align = alClient
+        TabOrder = 1
+      end
+      object StatusBarSAP: TStatusBar
+        Left = 1
+        Top = 222
+        Width = 396
+        Height = 19
+        Panels = <
+          item
+            Width = 50
+          end
+          item
+            Width = 50
+          end>
+      end
+    end
+  end
+  object ActionManager1: TActionManager
+    Images = FrmPrincipal.ImageList1
+    Left = 56
+    Top = 145
+    StyleName = 'Platform Default'
+    object actZoomFit: TAction
+      Category = 'Desenho'
+      Caption = 'actZoomFit'
+      Hint = 'Zoom Fit'
+      ImageIndex = 45
+      OnExecute = actZoomFitExecute
+    end
+    object actPan: TAction
+      Category = 'Desenho'
+      Caption = 'actPan'
+      Hint = 'Pan'
+      ImageIndex = 41
+      OnExecute = actPanExecute
+    end
+    object actZoomDinamico: TAction
+      Category = 'Desenho'
+      Caption = 'actZoomDinamico'
+      Hint = 'Zoom Din'#226'mico'
+      ImageIndex = 48
+      OnExecute = actZoomDinamicoExecute
+    end
+    object actZoomWindow: TAction
+      Category = 'Desenho'
+      Caption = 'actZoomWindow'
+      Hint = 'Zoom Janela'
+      ImageIndex = 46
+      OnExecute = actZoomWindowExecute
+    end
+    object actLimparPopUp: TAction
+      Category = 'Configura'#231#227'o'
+      Caption = 'actLimparPopUp'
+      OnExecute = actLimparPopUpExecute
+    end
+    object actPintura: TAction
+      Category = 'Pintura'
+      Caption = 'actPintura'
+      OnExecute = actPinturaExecute
+    end
+    object actPCB01: TAction
+      Category = 'Pintura'
+      Caption = 'actPCB01'
+      OnExecute = actPCB01Execute
+    end
+    object actPCB02: TAction
+      Category = 'Pintura'
+      Caption = 'actPCB02'
+      OnExecute = actPCB02Execute
+    end
+    object actPCB03: TAction
+      Category = 'Pintura'
+      Caption = 'actPCB03'
+      OnExecute = actPCB03Execute
+    end
+    object actPCB04: TAction
+      Category = 'Pintura'
+      Caption = 'actPCB04'
+      OnExecute = actPCB04Execute
+    end
+    object actPCM01: TAction
+      Category = 'Pintura'
+      Caption = 'actPCM01'
+      OnExecute = actPCM01Execute
+    end
+    object actPCM02: TAction
+      Category = 'Pintura'
+      Caption = 'actPCM02'
+      OnExecute = actPCM02Execute
+    end
+    object actPCM03: TAction
+      Category = 'Pintura'
+      Caption = 'actPCM03'
+      OnExecute = actPCM03Execute
+    end
+    object actPCM04: TAction
+      Category = 'Pintura'
+      Caption = 'actPCM04'
+      OnExecute = actPCM04Execute
+    end
+    object actPCM05: TAction
+      Category = 'Pintura'
+      Caption = 'actPCM05'
+      OnExecute = actPCM05Execute
+    end
+    object actPCM06: TAction
+      Category = 'Pintura'
+      Caption = 'actPCM06'
+      OnExecute = actPCM06Execute
+    end
+    object actPCM07: TAction
+      Category = 'Pintura'
+      Caption = 'actPCM07'
+      OnExecute = actPCM07Execute
+    end
+    object actPCM08: TAction
+      Category = 'Pintura'
+      Caption = 'actPCM08'
+      OnExecute = actPCM08Execute
+    end
+    object actPCM09: TAction
+      Category = 'Pintura'
+      Caption = 'actPCM09'
+      OnExecute = actPCM09Execute
+    end
+    object actPCM10: TAction
+      Category = 'Pintura'
+      Caption = 'actPCM10'
+      OnExecute = actPCM10Execute
+    end
+    object actPDO01: TAction
+      Category = 'Pintura'
+      Caption = 'actPDO01'
+      OnExecute = actPDO01Execute
+    end
+    object actPGA01_0: TAction
+      Category = 'Pintura'
+      Caption = 'actPGA01_0'
+      OnExecute = actPGA01_0Execute
+    end
+    object actPGA01_1: TAction
+      Category = 'Pintura'
+      Caption = 'actPGA01_1'
+      OnExecute = actPGA01_1Execute
+    end
+    object actPGA02: TAction
+      Category = 'Pintura'
+      Caption = 'actPGA02'
+      OnExecute = actPGA02Execute
+    end
+    object actPGA03_0: TAction
+      Category = 'Pintura'
+      Caption = 'actPGA03_0'
+      OnExecute = actPGA03_0Execute
+    end
+    object actPGA03_1: TAction
+      Category = 'Pintura'
+      Caption = 'actPGA03_1'
+      OnExecute = actPGA03_1Execute
+    end
+    object actPGA04: TAction
+      Category = 'Pintura'
+      Caption = 'actPGA04'
+      OnExecute = actPGA04Execute
+    end
+    object actPGA05: TAction
+      Category = 'Pintura'
+      Caption = 'actPGA05'
+      OnExecute = actPGA05Execute
+    end
+    object actPGA07: TAction
+      Category = 'Pintura'
+      Caption = 'actPGA07'
+      OnExecute = actPGA07Execute
+    end
+    object actPGA08: TAction
+      Category = 'Pintura'
+      Caption = 'actPGA08'
+      OnExecute = actPGA08Execute
+    end
+    object actImprimir: TAction
+      Category = 'Desenho'
+      Caption = 'actImprimir'
+      Hint = 'Imprimir'
+      ImageIndex = 21
+      OnExecute = actImprimirExecute
+    end
+    object actImagem: TAction
+      Category = 'Desenho'
+      Caption = 'actImagem'
+      Hint = 'Salvar como imagem'
+      ImageIndex = 264
+      OnExecute = actImagemExecute
+    end
+    object actLegenda: TAction
+      Category = 'Desenho'
+      Caption = 'actLegenda'
+      Hint = 'Legenda'
+      ImageIndex = 55
+      OnExecute = actLegendaExecute
+    end
+    object actTAG: TAction
+      Category = 'Desenho'
+      Caption = 'actTAG'
+      Hint = 'Mostrar TAG no desenho'
+      ImageIndex = 43
+      OnExecute = actTAGExecute
+    end
+    object actAjudaLimpar: TAction
+      Category = 'Configura'#231#227'o'
+      Caption = 'actAjudaLimpar'
+      OnExecute = actAjudaLimparExecute
+    end
+    object actExcelStringGrid: TAction
+      Category = 'Excel'
+      Caption = 'Exportar'
+      Hint = 'Exportar para o Excel'
+      ImageIndex = 54
+      OnExecute = actExcelStringGridExecute
+    end
+    object actMatrizPlataformas: TAction
+      Category = 'Dutos'
+      Caption = 'actMatizPlataformas'
+      OnExecute = actMatrizPlataformasExecute
+    end
+    object actMatrizDutos: TAction
+      Category = 'Dutos'
+      Caption = 'actMatrizDutos'
+      OnExecute = actMatrizDutosExecute
+    end
+    object actDutoZoomFit: TAction
+      Category = 'Desenho'
+      Caption = 'actDutoZoomFit'
+      Hint = 'Zoom Fit'
+      ImageIndex = 45
+      OnExecute = actDutoZoomFitExecute
+    end
+    object actDutoPan: TAction
+      Category = 'Desenho'
+      Caption = 'actDutoPan'
+      Hint = 'Pan'
+      ImageIndex = 41
+      OnExecute = actDutoPanExecute
+    end
+    object actDutoZoomDinamico: TAction
+      Category = 'Desenho'
+      Caption = 'actDutoZoomDinamico'
+      Hint = 'Zoom Din'#226'mico'
+      ImageIndex = 48
+      OnExecute = actDutoZoomDinamicoExecute
+    end
+    object actDutoZoomWindow: TAction
+      Category = 'Desenho'
+      Caption = 'actDutoZoomWindow'
+      Hint = 'Zoom Janela'
+      ImageIndex = 46
+      OnExecute = actDutoZoomWindowExecute
+    end
+    object actDesPlataforma: TAction
+      Category = 'Dutos'
+      Caption = 'actDesPlataforma'
+      OnExecute = actDesPlataformaExecute
+    end
+    object actDesDutos: TAction
+      Category = 'Dutos'
+      Caption = 'actDesDutos'
+      OnExecute = actDesDutosExecute
+    end
+    object actDutoImagem: TAction
+      Category = 'Desenho'
+      Caption = 'actDutoImagem'
+      Hint = 'Salvar como imagem'
+      ImageIndex = 264
+      OnExecute = actDutoImagemExecute
+    end
+    object actDutoLegenda: TAction
+      Category = 'Desenho'
+      Caption = 'actDutoLegenda'
+      Hint = 'Legenda'
+      ImageIndex = 55
+      OnExecute = actDutoLegendaExecute
+    end
+    object actCarregar: TAction
+      Category = 'Dutos'
+      Caption = 'actCarregar'
+      ImageIndex = 17
+    end
+    object actFiltroInserir: TAction
+      Category = 'Tabela'
+      Caption = 'actFiltroInserir'
+      OnExecute = actFiltroInserirExecute
+    end
+    object actGridASC: TAction
+      Category = 'Tabela'
+      Caption = 'actGridASC'
+      OnExecute = actGridASCExecute
+    end
+    object actGridDESC: TAction
+      Category = 'Tabela'
+      Caption = 'actGridDESC'
+      OnExecute = actGridDESCExecute
+    end
+    object actSubstituirPor: TAction
+      Category = 'Tabela'
+      Caption = 'actSubstituirPor'
+      OnExecute = actSubstituirPorExecute
+    end
+    object actLimparFiltros: TAction
+      Category = 'Tabela'
+      Caption = 'Limpar'
+      Hint = 'Limpar Filtros'
+      ImageIndex = 469
+      OnExecute = actLimparFiltrosExecute
+    end
+    object actFiltrosTabela: TAction
+      Category = 'Tabela'
+      Caption = 'Filtros'
+      Hint = 'Visualizar tabela de filtros'
+      ImageIndex = 470
+      OnExecute = actFiltrosTabelaExecute
+    end
+    object actProcuraFiltrosTabela: TAction
+      Category = 'Tabela'
+      Caption = 'actProcuraFiltrosTabela'
+      OnExecute = actProcuraFiltrosTabelaExecute
+    end
+    object actProcurarDutos: TAction
+      Category = 'Procurar'
+      Caption = 'actProcurarDutos'
+      OnExecute = actProcurarDutosExecute
+    end
+    object actProcurarPlataformas: TAction
+      Category = 'Procurar'
+      Caption = 'actProcurarPlataformas'
+      OnExecute = actProcurarPlataformasExecute
+    end
+    object actLinkFeng: TAction
+      Category = 'Link'
+      Caption = 'Fluxograma de Engenharia'
+      OnExecute = actLinkFengExecute
+    end
+    object actLinkFProc: TAction
+      Category = 'Link'
+      Caption = 'Fluxograma de Processo'
+      OnExecute = actLinkFProcExecute
+    end
+    object actLinkMCE: TAction
+      Category = 'Link'
+      Caption = 'Matriz de Causa e Efeito'
+      OnExecute = actLinkMCEExecute
+    end
+    object actLinkPATEC: TAction
+      Category = 'Link'
+      Caption = 'PATEC'
+      OnExecute = actLinkPATECExecute
+    end
+    object actLinkRelatorio: TAction
+      Category = 'Link'
+      Caption = 'Relat'#243'rio'
+      OnExecute = actLinkRelatorioExecute
+    end
+    object actLinkSIGMDuto: TAction
+      Category = 'Link'
+      OnExecute = actLinkSIGMDutoExecute
+    end
+    object actLinkSIGMPlataforma: TAction
+      Category = 'Link'
+      OnExecute = actLinkSIGMPlataformaExecute
+    end
+    object actExcelCadastroDutos: TAction
+      Category = 'Excel'
+      Caption = 'Exportar'
+      Hint = 'Exportar para o Excel'
+      ImageIndex = 54
+      OnExecute = actExcelCadastroDutosExecute
+    end
+    object actExcelCadastroPlataformas: TAction
+      Category = 'Excel'
+      Caption = 'Exportar'
+      Hint = 'Exportar para o Excel'
+      ImageIndex = 54
+      OnExecute = actExcelCadastroPlataformasExecute
+    end
+    object actExcelImportarDutos: TAction
+      Category = 'Excel'
+      Caption = 'Importar'
+      Hint = 'Importar planilha do Excel'
+      ImageIndex = 251
+      OnExecute = actExcelImportarDutosExecute
+    end
+    object actLimparTudo: TAction
+      Category = 'Dutos'
+      Caption = 'actLimparTudo'
+      Hint = 'Limpar sele'#231#227'o dos itens'
+      ImageIndex = 155
+    end
+    object actSelTudo: TAction
+      Category = 'Dutos'
+      Caption = 'actSelTudo'
+      Hint = 'Selecionr todos os itens'
+      ImageIndex = 154
+      OnExecute = actSelTudoExecute
+    end
+    object actAtualizarDutos: TAction
+      Category = 'Dutos'
+      Caption = 'actAtualizarDutos'
+      Hint = 'Atualizar desenho'
+      ImageIndex = 238
+      OnExecute = actAtualizarDutosExecute
+    end
+    object actImprimirDutos: TAction
+      Category = 'Dutos'
+      Caption = 'actImprimirDutos'
+      OnExecute = actImprimirDutosExecute
+    end
+    object actExcelSIGMGeral: TAction
+      Category = 'Excel'
+      Caption = 'Exportar'
+      Hint = 'Exportar para o Excel'
+      ImageIndex = 54
+      OnExecute = actExcelSIGMGeralExecute
+    end
+    object actExcelImportarSIGMGeral: TAction
+      Category = 'Excel'
+      Caption = 'Importar'
+      Hint = 'Importar planilha do Excel'
+      ImageIndex = 251
+      OnExecute = actExcelImportarSIGMGeralExecute
+    end
+    object actProcurarSIGMGeral: TAction
+      Category = 'Procurar'
+      Caption = 'actProcurarSIGMGeral'
+      OnExecute = actProcurarSIGMGeralExecute
+    end
+    object actDutoAnterior: TAction
+      Category = 'Dutos'
+      Caption = 'actDutoAnterior'
+      Hint = 'Anterior'
+      ImageIndex = 297
+      OnExecute = actDutoAnteriorExecute
+    end
+    object actDutoPosterior: TAction
+      Category = 'Dutos'
+      Caption = 'actDutoPosterior'
+      Hint = 'Pr'#243'ximo'
+      ImageIndex = 300
+      OnExecute = actDutoPosteriorExecute
+    end
+    object actDutoGravar: TAction
+      Category = 'Dutos'
+      Caption = 'actDutoGravar'
+      Hint = 'Gravar'
+      ImageIndex = 18
+      OnExecute = actDutoGravarExecute
+    end
+    object actDutoCancelar: TAction
+      Category = 'Dutos'
+      Caption = 'actDutoCancelar'
+      Hint = 'Cancelar'
+      ImageIndex = 190
+      OnExecute = actDutoCancelarExecute
+    end
+    object actDutoInserir: TAction
+      Category = 'Dutos'
+      Caption = 'actDutoInserir'
+      Hint = 'Inserir'
+      ImageIndex = 194
+      OnExecute = actDutoInserirExecute
+    end
+    object actDutoDeletar: TAction
+      Category = 'Dutos'
+      Caption = 'actDutoDeletar'
+      Hint = 'Excluir'
+      ImageIndex = 324
+      OnExecute = actDutoDeletarExecute
+    end
+    object actPlataformaAnterior: TAction
+      Category = 'Dutos'
+      Caption = 'actPlataformaAnterior'
+      Hint = 'Anterior'
+      ImageIndex = 297
+      OnExecute = actPlataformaAnteriorExecute
+    end
+    object actPlataformaPosterior: TAction
+      Category = 'Dutos'
+      Caption = 'actPlataformaPosterior'
+      Hint = 'Pr'#243'ximo'
+      ImageIndex = 300
+      OnExecute = actPlataformaPosteriorExecute
+    end
+    object actPlataformaGravar: TAction
+      Category = 'Dutos'
+      Caption = 'actPlataformaGravar'
+      Hint = 'Gravar'
+      ImageIndex = 18
+      OnExecute = actPlataformaGravarExecute
+    end
+    object actPlataformaCancelar: TAction
+      Category = 'Dutos'
+      Caption = 'actPlataformaCancelar'
+      Hint = 'Cancelar'
+      ImageIndex = 190
+      OnExecute = actPlataformaCancelarExecute
+    end
+    object actPlataformaInserir: TAction
+      Category = 'Dutos'
+      Caption = 'actPlataformaInserir'
+      Hint = 'Inserir'
+      ImageIndex = 194
+      OnExecute = actPlataformaInserirExecute
+    end
+    object actPlataformaDeletar: TAction
+      Category = 'Dutos'
+      Caption = 'actPlataformaDeletar'
+      Hint = 'Excluir'
+      ImageIndex = 324
+      OnExecute = actPlataformaDeletarExecute
+    end
+    object actExcelImportarPlataforma: TAction
+      Category = 'Excel'
+      Caption = 'Importar'
+      Hint = 'Importar planilha do Excel'
+      ImageIndex = 251
+      OnExecute = actExcelImportarPlataformaExecute
+    end
+  end
+  object SavePictureDialog1: TSavePictureDialog
+    Filter = 'Metafiles (*.wmf)|*.wmf'
+    Left = 24
+    Top = 145
+  end
+  object PopupMenuTAG: TPopupMenu
+    Left = 32
+    Top = 89
+    object MostrarTAG: TMenuItem
+      AutoCheck = True
+      Caption = 'Mostrar TAG'
+      Checked = True
+      OnClick = MostrarTAGClick
+    end
+    object Fonte6: TMenuItem
+      Caption = 'Fonte: 6'
+      Checked = True
+      OnClick = Fonte6Click
+    end
+    object Fonte7: TMenuItem
+      Caption = 'Fonte: 7'
+      OnClick = Fonte7Click
+    end
+    object Fonte8: TMenuItem
+      Caption = 'Fonte: 8'
+      OnClick = Fonte8Click
+    end
+    object Fonte9: TMenuItem
+      Caption = 'Fonte: 9'
+      OnClick = Fonte9Click
+    end
+    object Fonte10: TMenuItem
+      Caption = 'Fonte: 10'
+      OnClick = Fonte10Click
+    end
+    object Fonte11: TMenuItem
+      Caption = 'Fonte: 11'
+      OnClick = Fonte11Click
+    end
+    object Fonte12: TMenuItem
+      Caption = 'Fonte: 12'
+      OnClick = Fonte12Click
+    end
+  end
+  object PopupMenuPlataforma: TPopupMenu
+    Left = 64
+    Top = 89
+    object PCB01: TMenuItem
+      Caption = 'PCB-01'
+      OnClick = PCB01Click
+    end
+    object PCB02: TMenuItem
+      Caption = 'PCB-02'
+      OnClick = PCB02Click
+    end
+    object PCB03: TMenuItem
+      Caption = 'PCB-03'
+      OnClick = PCB03Click
+    end
+    object PCB04: TMenuItem
+      Caption = 'PCB-04'
+      OnClick = PCB04Click
+    end
+    object PCM01: TMenuItem
+      Caption = 'PCM-01'
+      OnClick = PCM01Click
+    end
+    object PCM02: TMenuItem
+      Caption = 'PCM-02'
+      OnClick = PCM02Click
+    end
+    object PCM03: TMenuItem
+      Caption = 'PCM-03'
+      OnClick = PCM03Click
+    end
+    object PCM04: TMenuItem
+      Caption = 'PCM-04'
+      OnClick = PCM04Click
+    end
+    object PCM05: TMenuItem
+      Caption = 'PCM-05'
+      OnClick = PCM05Click
+    end
+    object PCM06: TMenuItem
+      Caption = 'PCM-06'
+      OnClick = PCM06Click
+    end
+    object PCM07: TMenuItem
+      Caption = 'PCM-07'
+      OnClick = PCM07Click
+    end
+    object PCM08: TMenuItem
+      Caption = 'PCM-08'
+      OnClick = PCM08Click
+    end
+    object PCM09: TMenuItem
+      Caption = 'PCM-09'
+      OnClick = PCM09Click
+    end
+    object PCM10: TMenuItem
+      Caption = 'PCM-10'
+      OnClick = PCM10Click
+    end
+    object PDO01: TMenuItem
+      Caption = 'PDO-01'
+      OnClick = PDO01Click
+    end
+    object PGA01ORIGINAL: TMenuItem
+      Caption = 'PGA-01 (ORIGINAL)'
+      OnClick = PGA01ORIGINALClick
+    end
+    object PGA01MODIFICADO: TMenuItem
+      Caption = 'PGA-01 (MODIFICADO)'
+      OnClick = PGA01MODIFICADOClick
+    end
+    object PGA02: TMenuItem
+      Caption = 'PGA-02'
+      OnClick = PGA02Click
+    end
+    object PGA03ORIGINAL: TMenuItem
+      Caption = 'PGA-03 (ORIGINAL)'
+      OnClick = PGA03ORIGINALClick
+    end
+    object PGA03MODIFICADO: TMenuItem
+      Caption = 'PGA-03 (MODIFICADO)'
+      OnClick = PGA03MODIFICADOClick
+    end
+    object PGA04: TMenuItem
+      Caption = 'PGA-04'
+      OnClick = PGA04Click
+    end
+    object PGA05: TMenuItem
+      Caption = 'PGA-05'
+      OnClick = PGA05Click
+    end
+    object PGA07: TMenuItem
+      Caption = 'PGA-07'
+      OnClick = PGA07Click
+    end
+    object PGA08: TMenuItem
+      Caption = 'PGA-08'
+      OnClick = PGA08Click
+    end
+  end
+  object PopupMenuLINKDuto: TPopupMenu
+    Left = 68
+    Top = 216
+    object PATEC1: TMenuItem
+      Action = actLinkPATEC
+    end
+    object Relatrio1: TMenuItem
+      Action = actLinkRelatorio
+    end
+  end
+  object PopupMenuLINKPlataforma: TPopupMenu
+    Left = 100
+    Top = 216
+    object FluxogramadeEngenharia1: TMenuItem
+      Action = actLinkFeng
+    end
+    object FluxogramadeProcesso1: TMenuItem
+      Action = actLinkFProc
+    end
+    object MatrizdeCausaeEfeito1: TMenuItem
+      Action = actLinkMCE
+    end
+  end
+  object OpenDialog1: TOpenDialog
+    Left = 68
+    Top = 352
+  end
+end

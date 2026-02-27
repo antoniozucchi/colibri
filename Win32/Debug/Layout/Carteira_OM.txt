@@ -1,0 +1,27 @@
+TAB1;Instalação
+TAB1;Ordem Manutenção
+TAB1;Data Base Início
+TAB1;Data Base Fim
+TAB1;Inicio Programado [OM]
+TAB1;Fim Programado [OM]
+TAB1;Texto Breve [OM]
+TAB1;Campo Seleção
+TAB1;Sala
+TAB1;CPO
+TAB1;Tipo Etapa Serviço [OM]
+TAB1;Local Instalação
+TAB1;TipoAtvMnt
+TAB1;Grp.Plnj.PM
+TAB1;Centro Trabalho [OM]
+TAB1;Status Usuário [OM]
+TAB1;Status Sistema [OM]
+TAB1;Impacto de Falha
+TAB1;Nota Manutenção
+TAB1;Total Planejado (R$)
+TAB1;Total Real (R$)
+TAB1;Denomin. Local Instalação
+TAB1;Plano Manutenção
+TAB1;Equipamento
+TAB1;Criado Por
+TAB1;Data Referência
+TAB1;Data Entrada

@@ -1,0 +1,20 @@
+TAB1;Seleção
+TAB1;Status
+TAB1;Data
+TAB1;Destino
+TAB1;Texto Breve da Operação
+TAB1;Hora Início
+TAB1;Hora Fim
+TAB1;Embarcação
+TAB1;Observação
+TAB1;Especialidade
+TAB1;Ordem de Serviço (OS)
+TAB1;Empresa
+TAB1;Motivo do Cancelamento
+TAB1;Palavra Chave Cancelamento
+TAB1;Atualizado Por
+TAB1;Data [Atualização]
+TAB1;Computador [Atualização]
+TAB1;Avaliado Por
+TAB1;Computador [Avaliação]
+TAB1;Data [Avaliação]

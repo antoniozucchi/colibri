@@ -1,0 +1,1627 @@
+object FrmCondicaoEmbarcacao: TFrmCondicaoEmbarcacao
+  Left = 0
+  Top = 0
+  Caption = 'Condi'#231#227'o de Mar e Disponibilidade de Embarca'#231#245'es'
+  ClientHeight = 640
+  ClientWidth = 894
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  FormStyle = fsMDIChild
+  OldCreateOrder = False
+  Visible = True
+  WindowState = wsMaximized
+  OnClose = FormClose
+  OnCreate = FormCreate
+  OnDestroy = FormDestroy
+  PixelsPerInch = 96
+  TextHeight = 13
+  object PageControl1: TPageControl
+    Left = 0
+    Top = 25
+    Width = 894
+    Height = 615
+    ActivePage = TabSheet1
+    Align = alClient
+    TabOrder = 0
+    OnChange = PageControl1Change
+    object TabSheet1: TTabSheet
+      Caption = 'Condi'#231#227'o de Mar'
+      object Splitter1: TSplitter
+        Left = 0
+        Top = 353
+        Width = 886
+        Height = 3
+        Cursor = crVSplit
+        Align = alTop
+        ExplicitWidth = 234
+      end
+      object PanelMes: TPanel
+        Left = 0
+        Top = 0
+        Width = 886
+        Height = 353
+        Align = alTop
+        TabOrder = 0
+        object PanelCalendario: TPanel
+          Left = 1
+          Top = 1
+          Width = 448
+          Height = 351
+          Align = alLeft
+          BevelOuter = bvNone
+          Color = clWhite
+          ParentBackground = False
+          TabOrder = 0
+          object PanelNomeMesMar: TPanel
+            Left = 0
+            Top = 0
+            Width = 448
+            Height = 30
+            Align = alTop
+            BevelOuter = bvNone
+            Caption = 'm'#234's de ano'
+            Color = clActiveCaption
+            Font.Charset = ANSI_CHARSET
+            Font.Color = clBlack
+            Font.Height = -12
+            Font.Name = 'Tahoma'
+            Font.Style = [fsBold]
+            ParentFont = False
+            TabOrder = 0
+            object btnAnoProximo: TSpeedButton
+              Left = 425
+              Top = 0
+              Width = 23
+              Height = 30
+              Hint = 'Pr'#243'ximo ano'
+              Align = alRight
+              Font.Charset = ANSI_CHARSET
+              Font.Color = clBlack
+              Font.Height = -12
+              Font.Name = 'Tahoma'
+              Font.Style = [fsBold]
+              Glyph.Data = {
+                36040000424D3604000000000000360000002800000010000000100000000100
+                2000000000000004000000000000000000000000000000000000FF00FF00FF00
+                FF00FF00FF00FF00FF00FF00FF007D2C05006B250800521E1500551F13006D26
+                07007E2D0500FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
+                FF00FF00FF008932040055211700BF5C1500E1985500EFBD8A00F0BF8C00E29D
+                5B00C2621800541F160090350300FF00FF00FF00FF00FF00FF00FF00FF00FF00
+                FF006C290E00AF470400EBB17900FFFEF800FEF8F400F2DAC400F2D9C200FCF6
+                F000FFFFFC00EEBA8700B64E070060231100FF00FF00FF00FF00FF00FF009A38
+                0000B0460200F4D0AB00FEFCFA00D78C4E00C0540900BA460000BA450000BF52
+                0600D4864400FCF8F400F8DDBD00B64D050090350200FF00FF00FF00FF00732D
+                0D00E6AB7200FFFFFF00D17E3500B73F0000BB470000BB490000BF500300BB46
+                0000B63E0000C96A1E00FCF8F600EFBC8800541F1600FF00FF00A9440300C05C
+                1100FFFCFA00DE9A5D00D98C4800E5B07E00C1530300BB460000D07B3300E6B7
+                8B00BD4D0300B53A0000D58A4600FFFFFF00C16016007D2C04009A3B0200DD95
+                5400FFFFFF00D06E1E00E2A16600FFFFFF00EEC7A100C75C0C00D17D3300FFFF
+                FF00EECEAF00C2580F00BC4B0100FCF8F400E29D5A006D26070089340600EBBB
+                8A00FBF0E700D7732200E9AD7500FFFFFF00FFFFFF00F4DEC900E1A16700FFFE
+                FE00FFFFFF00F8EBDD00CA6B2100F0D4B800EFC08E00551F13009A3B0200EEBF
+                9000FCF4EB00E0843500EEB78300FFFFFF00FFFFFF00F3D0B000E2A16600FFFF
+                FF00FFFFFF00F0D4B800C5601500F2D9BF00EFBD8A00521F1600A9440300E9AA
+                6E00FFFFFF00EB9F5800F3C29200FFFFFF00F2C79D00D9772500E1975400FFFF
+                FF00E7B78A00BC4A0300BF4F0300FEFBFA00E09752006B240800AD450200DD89
+                3F00FFFCF800FAD3AC00FAC59200F7C99C00E9924400E0823200E39C5900E5AC
+                7700C4540400B73F0000D9955600FFFFFE00501F18007B2C0400FF00FF00B247
+                0100F8CEA500FFFFFF00FED1A500F4A45A00EB994E00E28A3C00D9792A00CC63
+                1000C14F0100D0793100FFFFFF00EAAF730089310300FF00FF00FF00FF00C965
+                1800E0873B00FEE5CB00FFFFFF00FAD5B100EDA56300E28B3F00D97B2C00D478
+                2A00E1A46C00FFFFFF00F3CCA400AC44020089310300FF00FF00FF00FF00FF00
+                FF00B64C0400DE873B00F8CEA300FFFAF300FFFFFF00FEF6EE00FCF3EA00FFFF
+                FF00FEF7EE00E6A56A00AC4403005A221400FF00FF00FF00FF00FF00FF00FF00
+                FF00FF00FF00C5641800AF450100DC884000E9A76C00EEBB8900EBB58100DC91
+                4D00BD590F00752D0C0090340200FF00FF00FF00FF00FF00FF00FF00FF00FF00
+                FF00FF00FF00FF00FF00FF00FF00A64608008B350500752D0C00752D0C008B35
+                05009E400600FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00}
+              ParentFont = False
+              ParentShowHint = False
+              ShowHint = True
+              OnClick = btnAnoProximoClick
+              ExplicitLeft = 420
+              ExplicitTop = 11
+              ExplicitHeight = 24
+            end
+            object btnMesProximo: TSpeedButton
+              Left = 402
+              Top = 0
+              Width = 23
+              Height = 30
+              Hint = 'Pr'#243'ximo m'#234's'
+              Align = alRight
+              Font.Charset = ANSI_CHARSET
+              Font.Color = clBlack
+              Font.Height = -12
+              Font.Name = 'Tahoma'
+              Font.Style = [fsBold]
+              Glyph.Data = {
+                36040000424D3604000000000000360000002800000010000000100000000100
+                2000000000000004000000000000000000000000000000000000FF00FF00FF00
+                FF00FF00FF00FF00FF00FF00FF006D332700853C130095440D0096450D00873D
+                120070342500FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
+                FF00FF00FF0070372A0070372A00CD772700E8AD7000F3CCA100F4CDA300E9B1
+                7600D07C2C006F3529006F352900FF00FF00FF00FF00FF00FF00FF00FF00FF00
+                FF0086411D00C0620B00F0C29200FFFEFA00FDFAF600F5E3D100F5E2D000FDF8
+                F400FFFFFD00F2C99E00C66911007B3A2100FF00FF00FF00FF00FF00FF008C45
+                1C00C1610700F7DBBD00FFFEFE00E0A46B00CE6D1300C75C0000C9610000CE6E
+                1200DE9D5F00FDFAF700FAE5CC00C6680D006F352800FF00FF00FF00FF008C45
+                1C00ECBD8B00FFFFFF00DA8F4300C6560000FFFFFF00DC975100C75B0000CA62
+                0000C75B0000D5833300FDFAF800F3CB9F006F352800FF00FF00A04D1000CE77
+                2100FFFDFB00E8B68400D06B0400D06B0700FFFFFF00FFFFFF00E1A87000C95E
+                0000CA630000C75B0000DFA06100FFFFFF00CF7B280070352500AF550700E5AA
+                6F00FFFFFF00DD8F3F00DA812800D87B1E00FFFFFF00FFFFFF00FFFFFF00EAC1
+                9800CC670800C95F0000CE6E0D00FDFAF600E9B1750070352500BB5F0A00F0CA
+                A100FCF4ED00E1934300E2924200DF8A3400FFFFFF00FFFFFF00FFFFFF00FFFF
+                FF00F3DEC600CF701700C95F0000F5E3D000F3CEA40070352500C1650F00F2CD
+                A600FDF7F000E9A15800E9A05600E6994A00FFFFFF00FFFFFF00FFFFFF00FFFF
+                FF00EBC39B00CD6A0D00C9610000F6E6D400F3CCA10070352500C1640D00EEBC
+                8800FFFFFF00F1B87C00F0AE6900EEA75F00FFFFFF00FFFFFF00FFFFFF00E7B1
+                7A00CE690200C9610000CF711100FEFCFA00E7AC6D0070352500BF600600E5A0
+                5900FFFDFA00FBE0C400F8BA7B00F4B47100FFFFFF00FFFFFF00E8AB6D00D87B
+                1D00D2741400C85C0000E2AA7100FFFFFE00CC75200070352500FF00FF00C362
+                0400FAD9B800FFFFFF00FEDCB800F7B87700FFFFFF00EBAD6D00E08D3700DA82
+                2800D06B0500DB924A00FFFFFF00EFC08C006B342C00FF00FF00FF00FF00C362
+                0400E79E5500FEEBD700FFFFFF00FBDFC300F1B57800E89F5500E2944500DE91
+                4200E8B78600FFFFFF00F6D8B700BE5F06006B342C00FF00FF00FF00FF00FF00
+                FF00C6670C00E69E5500FAD9B600FFFBF600FFFFFF00FEF8F200FDF6EF00FFFF
+                FF00FEF9F200ECB88400BE5F090075382600FF00FF00FF00FF00FF00FF00FF00
+                FF00FF00FF00C0600500C0600500E49F5A00EEBA8600F2CAA000F0C59900E4A7
+                6800CC741E00783A2700783A2700FF00FF00FF00FF00FF00FF00FF00FF00FF00
+                FF00FF00FF00FF00FF00FF00FF00B65C0A00B8601200B9611300B25A0F00A24F
+                0E008E451A00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00}
+              ParentFont = False
+              ParentShowHint = False
+              ShowHint = True
+              OnClick = btnMesProximoClick
+              ExplicitLeft = 391
+              ExplicitTop = 11
+              ExplicitHeight = 24
+            end
+            object btnAnoAnterior: TSpeedButton
+              Left = 0
+              Top = 0
+              Width = 23
+              Height = 30
+              Hint = 'Ano anterior'
+              Align = alLeft
+              Font.Charset = ANSI_CHARSET
+              Font.Color = clBlack
+              Font.Height = -12
+              Font.Name = 'Tahoma'
+              Font.Style = [fsBold]
+              Glyph.Data = {
+                36040000424D3604000000000000360000002800000010000000100000000100
+                2000000000000004000000000000000000000000000000000000FF00FF00FF00
+                FF00FF00FF00FF00FF00FF00FF009E4006008B350500752D0C00752D0C008B35
+                0500A6460800FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
+                FF00FF00FF0090340200752D0C00BD590F00DC914D00EBB58100EEBB8900E9A7
+                6C00DC884000AF450100C5641800FF00FF00FF00FF00FF00FF00FF00FF00FF00
+                FF005A221400AC440300E6A56A00FEF7EE00FFFFFF00FCF3EA00FEF6EE00FFFF
+                FF00FFFAF300F8CEA300DE873B00B64C0400FF00FF00FF00FF00FF00FF008931
+                0300AC440200F3CCA400FFFFFF00E1A46C00D4782A00D97B2C00E28B3F00EDA5
+                6300FAD5B100FFFFFF00FEE5CB00E0873B00C9651800FF00FF00FF00FF008931
+                0300EAAF7300FFFFFF00D0793100C14F0100CC631000D9792A00E28A3C00EB99
+                4E00F4A45A00FED1A500FFFFFF00F8CEA500B2470100FF00FF007B2C0400501F
+                1800FFFFFE00D9955600B73F0000C4540400E5AC7700E39C5900E0823200E992
+                4400F7C99C00FAC59200FAD3AC00FFFCF800DD893F00AD4502006B240800E097
+                5200FEFBFA00BF4F0300BC4A0300E7B78A00FFFFFF00E1975400D9772500F2C7
+                9D00FFFFFF00F3C29200EB9F5800FFFFFF00E9AA6E00A9440300521F1600EFBD
+                8A00F2D9BF00C5601500F0D4B800FFFFFF00FFFFFF00E2A16600F3D0B000FFFF
+                FF00FFFFFF00EEB78300E0843500FCF4EB00EEBF90009A3B0200551F1300EFC0
+                8E00F0D4B800CA6B2100F8EBDD00FFFFFF00FFFEFE00E1A16700F4DEC900FFFF
+                FF00FFFFFF00E9AD7500D7732200FBF0E700EBBB8A00893406006D260700E29D
+                5A00FCF8F400BC4B0100C2580F00EECEAF00FFFFFF00D17D3300C75C0C00EEC7
+                A100FFFFFF00E2A16600D06E1E00FFFFFF00DD9554009A3B02007D2C0400C160
+                1600FFFFFF00D58A4600B53A0000BD4D0300E6B78B00D07B3300BB460000C153
+                0300E5B07E00D98C4800DE9A5D00FFFCFA00C05C1100A9440300FF00FF00541F
+                1600EFBC8800FCF8F600C96A1E00B63E0000BB460000BF500300BB490000BB47
+                0000B73F0000D17E3500FFFFFF00E6AB7200732D0D00FF00FF00FF00FF009035
+                0200B64D0500F8DDBD00FCF8F400D4864400BF520600BA450000BA460000C054
+                0900D78C4E00FEFCFA00F4D0AB00B04602009A380000FF00FF00FF00FF00FF00
+                FF0060231100B64E0700EEBA8700FFFFFC00FCF6F000F2D9C200F2DAC400FEF8
+                F400FFFEF800EBB17900AF4704006C290E00FF00FF00FF00FF00FF00FF00FF00
+                FF00FF00FF0090350300541F1600C2621800E29D5B00F0BF8C00EFBD8A00E198
+                5500BF5C15005521170089320400FF00FF00FF00FF00FF00FF00FF00FF00FF00
+                FF00FF00FF00FF00FF00FF00FF007E2D05006D260700551F1300521E15006B25
+                08007D2C0500FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00}
+              ParentFont = False
+              ParentShowHint = False
+              ShowHint = True
+              OnClick = btnAnoAnteriorClick
+              ExplicitLeft = 4
+              ExplicitTop = 11
+              ExplicitHeight = 24
+            end
+            object btnMesAnterior: TSpeedButton
+              Left = 23
+              Top = 0
+              Width = 23
+              Height = 30
+              Hint = 'M'#234's anterior'
+              Align = alLeft
+              Font.Charset = ANSI_CHARSET
+              Font.Color = clBlack
+              Font.Height = -12
+              Font.Name = 'Tahoma'
+              Font.Style = [fsBold]
+              Glyph.Data = {
+                36040000424D3604000000000000360000002800000010000000100000000100
+                2000000000000004000000000000000000000000000000000000FF00FF00FF00
+                FF00FF00FF00FF00FF00FF00FF008E451A00A24F0E00B25A0F00B9611300B860
+                1200B65C0A00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
+                FF00FF00FF00783A2700783A2700CC741E00E4A76800F0C59900F2CAA000EEBA
+                8600E49F5A00C0600500C0600500FF00FF00FF00FF00FF00FF00FF00FF00FF00
+                FF0075382600BE5F0900ECB88400FEF9F200FFFFFF00FDF6EF00FEF8F200FFFF
+                FF00FFFBF600FAD9B600E69E5500C6670C00FF00FF00FF00FF00FF00FF006B34
+                2C00BE5F0600F6D8B700FFFFFF00E8B78600DE914200E2944500E89F5500F1B5
+                7800FBDFC300FFFFFF00FEEBD700E79E5500C3620400FF00FF00FF00FF006B34
+                2C00EFC08C00FFFFFF00DB924A00D06B0500DA822800E08D3700EBAD6D00FFFF
+                FF00F7B87700FEDCB800FFFFFF00FAD9B800C3620400FF00FF0070352500CC75
+                2000FFFFFE00E2AA7100C85C0000D2741400D87B1D00E8AB6D00FFFFFF00FFFF
+                FF00F4B47100F8BA7B00FBE0C400FFFDFA00E5A05900BF60060070352500E7AC
+                6D00FEFCFA00CF711100C9610000CE690200E7B17A00FFFFFF00FFFFFF00FFFF
+                FF00EEA75F00F0AE6900F1B87C00FFFFFF00EEBC8800C1640D0070352500F3CC
+                A100F6E6D400C9610000CD6A0D00EBC39B00FFFFFF00FFFFFF00FFFFFF00FFFF
+                FF00E6994A00E9A05600E9A15800FDF7F000F2CDA600C1650F0070352500F3CE
+                A400F5E3D000C95F0000CF701700F3DEC600FFFFFF00FFFFFF00FFFFFF00FFFF
+                FF00DF8A3400E2924200E1934300FCF4ED00F0CAA100BB5F0A0070352500E9B1
+                7500FDFAF600CE6E0D00C95F0000CC670800EAC19800FFFFFF00FFFFFF00FFFF
+                FF00D87B1E00DA812800DD8F3F00FFFFFF00E5AA6F00AF55070070352500CF7B
+                2800FFFFFF00DFA06100C75B0000CA630000C95E0000E1A87000FFFFFF00FFFF
+                FF00D06B0700D06B0400E8B68400FFFDFB00CE772100A04D1000FF00FF006F35
+                2800F3CB9F00FDFAF800D5833300C75B0000CA620000C75B0000DC975100FFFF
+                FF00C6560000DA8F4300FFFFFF00ECBD8B008C451C00FF00FF00FF00FF006F35
+                2800C6680D00FAE5CC00FDFAF700DE9D5F00CE6E1200C9610000C75C0000CE6D
+                1300E0A46B00FFFEFE00F7DBBD00C16107008C451C00FF00FF00FF00FF00FF00
+                FF007B3A2100C6691100F2C99E00FFFFFD00FDF8F400F5E2D000F5E3D100FDFA
+                F600FFFEFA00F0C29200C0620B0086411D00FF00FF00FF00FF00FF00FF00FF00
+                FF00FF00FF006F3529006F352900D07C2C00E9B17600F4CDA300F3CCA100E8AD
+                7000CD77270070372A0070372A00FF00FF00FF00FF00FF00FF00FF00FF00FF00
+                FF00FF00FF00FF00FF00FF00FF0070342500873D120096450D0095440D00853C
+                13006D332700FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00}
+              ParentFont = False
+              ParentShowHint = False
+              ShowHint = True
+              OnClick = btnMesAnteriorClick
+              ExplicitLeft = 33
+              ExplicitTop = 11
+              ExplicitHeight = 24
+            end
+          end
+          object CalendarMar: TStringGrid
+            Left = 0
+            Top = 30
+            Width = 448
+            Height = 232
+            Align = alTop
+            BorderStyle = bsNone
+            Color = clWhite
+            ColCount = 7
+            Ctl3D = True
+            DefaultRowHeight = 32
+            DefaultDrawing = False
+            FixedCols = 0
+            RowCount = 7
+            Options = [goFixedHorzLine]
+            ParentCtl3D = False
+            TabOrder = 1
+            OnDblClick = CalendarMarDblClick
+            OnDrawCell = CalendarMarDrawCell
+            OnSelectCell = CalendarMarSelectCell
+            ExplicitLeft = -3
+            ExplicitTop = 31
+          end
+        end
+        object PanelTabelaCondicaoMar: TPanel
+          Left = 449
+          Top = 1
+          Width = 436
+          Height = 351
+          Align = alClient
+          TabOrder = 1
+          object ToolBar1: TToolBar
+            Left = 1
+            Top = 1
+            Width = 434
+            Height = 29
+            Caption = 'ToolBar1'
+            DrawingStyle = dsGradient
+            EdgeBorders = [ebLeft, ebTop, ebRight, ebBottom]
+            TabOrder = 0
+            object BitBtn4: TBitBtn
+              Left = 0
+              Top = 0
+              Width = 75
+              Height = 22
+              Action = actExcelCondicaoMar
+              Align = alLeft
+              Caption = 'Exportar'
+              ParentShowHint = False
+              ShowHint = True
+              TabOrder = 0
+            end
+            object BitBtn10: TBitBtn
+              Left = 75
+              Top = 0
+              Width = 64
+              Height = 22
+              Action = actLimparFiltros
+              Align = alLeft
+              Caption = 'Limpar'
+              ParentShowHint = False
+              ShowHint = True
+              TabOrder = 1
+            end
+            object BitBtn11: TBitBtn
+              Left = 139
+              Top = 0
+              Width = 64
+              Height = 22
+              Action = actFiltrosTabela
+              Align = alLeft
+              Caption = 'Filtros'
+              ParentShowHint = False
+              ShowHint = True
+              TabOrder = 2
+            end
+          end
+          object DBGridCondicaoMar: TDBGrid
+            Left = 1
+            Top = 30
+            Width = 249
+            Height = 301
+            Align = alClient
+            DataSource = FrmDataModule.DataSourceCondicaoMar
+            ReadOnly = True
+            TabOrder = 1
+            TitleFont.Charset = DEFAULT_CHARSET
+            TitleFont.Color = clWindowText
+            TitleFont.Height = -11
+            TitleFont.Name = 'Tahoma'
+            TitleFont.Style = []
+            OnDrawColumnCell = DBGridCondicaoMarDrawColumnCell
+            OnTitleClick = DBGridCondicaoMarTitleClick
+            Columns = <
+              item
+                Alignment = taCenter
+                Expanded = False
+                FieldName = 'DataCondicaoMar'
+                Title.Alignment = taCenter
+                Title.Caption = 'Data Condi'#231#227'o de Mar'
+                Visible = True
+              end
+              item
+                Alignment = taCenter
+                Expanded = False
+                FieldName = 'AvaliadoPor'
+                Title.Alignment = taCenter
+                Title.Caption = 'Avaliado Por'
+                Visible = True
+              end
+              item
+                Alignment = taCenter
+                Expanded = False
+                FieldName = 'DataAtualizacao'
+                Title.Alignment = taCenter
+                Title.Caption = 'Data Atualiza'#231#227'o'
+                Visible = True
+              end
+              item
+                Alignment = taCenter
+                Expanded = False
+                FieldName = 'Computador'
+                Title.Alignment = taCenter
+                Visible = True
+              end>
+          end
+          object ColunasLayoutMar: TStringGrid
+            Left = 48
+            Top = 80
+            Width = 113
+            Height = 97
+            FixedCols = 0
+            Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goDrawFocusSelected, goRowSizing, goColSizing, goEditing]
+            TabOrder = 2
+            Visible = False
+            RowHeights = (
+              24
+              24
+              21
+              24
+              24)
+          end
+          object StatusBarCondicaoMar: TStatusBar
+            Left = 1
+            Top = 331
+            Width = 434
+            Height = 19
+            Panels = <
+              item
+                Width = 50
+              end
+              item
+                Width = 50
+              end
+              item
+                Width = 50
+              end
+              item
+                Width = 50
+              end
+              item
+                Width = 50
+              end>
+          end
+          object Panel15: TPanel
+            Left = 250
+            Top = 30
+            Width = 185
+            Height = 301
+            Align = alRight
+            Caption = 'Panel15'
+            TabOrder = 4
+            object ToolBar6: TToolBar
+              Left = 1
+              Top = 1
+              Width = 183
+              Height = 29
+              Caption = 'ToolBar6'
+              DrawingStyle = dsGradient
+              EdgeBorders = [ebLeft, ebTop, ebRight, ebBottom]
+              Images = FrmPrincipal.ImageList1
+              TabOrder = 0
+              object ToolButton1: TToolButton
+                Left = 0
+                Top = 0
+                Action = actSelTudoMar
+                ParentShowHint = False
+                ShowHint = True
+              end
+              object ToolButton2: TToolButton
+                Left = 23
+                Top = 0
+                Action = actSelLimparMar
+                ParentShowHint = False
+                ShowHint = True
+              end
+              object ToolButton3: TToolButton
+                Left = 46
+                Top = 0
+                Action = actSalvarListaMar
+                ParentShowHint = False
+                ShowHint = True
+              end
+            end
+            object CheckListBoxMar: TCheckListBox
+              Left = 1
+              Top = 30
+              Width = 183
+              Height = 270
+              Hint = 'Selecione datas para filtrar'
+              Align = alClient
+              ItemHeight = 13
+              ParentShowHint = False
+              ShowHint = True
+              TabOrder = 1
+              OnClick = CheckListBoxMarClick
+            end
+          end
+        end
+      end
+      object PanelAno: TPanel
+        Left = 0
+        Top = 356
+        Width = 886
+        Height = 231
+        Align = alClient
+        TabOrder = 1
+        object ToolBar2: TToolBar
+          Left = 1
+          Top = 1
+          Width = 884
+          Height = 29
+          Caption = 'ToolBar2'
+          DrawingStyle = dsGradient
+          EdgeBorders = [ebLeft, ebTop, ebRight, ebBottom]
+          TabOrder = 0
+          object BitBtn1: TBitBtn
+            Left = 0
+            Top = 0
+            Width = 75
+            Height = 22
+            Action = actExcelCalendarioMar
+            Align = alLeft
+            Caption = 'Exportar'
+            ParentShowHint = False
+            ShowHint = True
+            TabOrder = 0
+          end
+        end
+        object RLMar: TStringGrid
+          Left = 1
+          Top = 30
+          Width = 884
+          Height = 200
+          Align = alClient
+          ColCount = 35
+          DefaultColWidth = 25
+          FixedCols = 0
+          RowCount = 1
+          FixedRows = 0
+          TabOrder = 1
+          OnDrawCell = RLMarDrawCell
+        end
+      end
+    end
+    object TabSheet2: TTabSheet
+      Caption = 'Disponibilidade de Embarca'#231#227'o de Passageiros'
+      ImageIndex = 1
+      object Splitter2: TSplitter
+        Left = 0
+        Top = 297
+        Width = 886
+        Height = 3
+        Cursor = crVSplit
+        Align = alTop
+        ExplicitTop = 353
+      end
+      object Panel1: TPanel
+        Left = 0
+        Top = 0
+        Width = 886
+        Height = 297
+        Align = alTop
+        TabOrder = 0
+        object Panel2: TPanel
+          Left = 1
+          Top = 1
+          Width = 448
+          Height = 295
+          Align = alLeft
+          BevelOuter = bvNone
+          Color = clWhite
+          ParentBackground = False
+          TabOrder = 0
+          object PanelNomeMesEmbarcacao: TPanel
+            Left = 0
+            Top = 0
+            Width = 448
+            Height = 30
+            Align = alTop
+            BevelOuter = bvNone
+            Caption = 'm'#234's de ano'
+            Color = clActiveCaption
+            Font.Charset = ANSI_CHARSET
+            Font.Color = clBlack
+            Font.Height = -12
+            Font.Name = 'Tahoma'
+            Font.Style = [fsBold]
+            ParentFont = False
+            TabOrder = 0
+            object SpeedButton1: TSpeedButton
+              Left = 425
+              Top = 0
+              Width = 23
+              Height = 30
+              Hint = 'Pr'#243'ximo ano'
+              Align = alRight
+              Font.Charset = ANSI_CHARSET
+              Font.Color = clBlack
+              Font.Height = -12
+              Font.Name = 'Tahoma'
+              Font.Style = [fsBold]
+              Glyph.Data = {
+                36040000424D3604000000000000360000002800000010000000100000000100
+                2000000000000004000000000000000000000000000000000000FF00FF00FF00
+                FF00FF00FF00FF00FF00FF00FF007D2C05006B250800521E1500551F13006D26
+                07007E2D0500FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
+                FF00FF00FF008932040055211700BF5C1500E1985500EFBD8A00F0BF8C00E29D
+                5B00C2621800541F160090350300FF00FF00FF00FF00FF00FF00FF00FF00FF00
+                FF006C290E00AF470400EBB17900FFFEF800FEF8F400F2DAC400F2D9C200FCF6
+                F000FFFFFC00EEBA8700B64E070060231100FF00FF00FF00FF00FF00FF009A38
+                0000B0460200F4D0AB00FEFCFA00D78C4E00C0540900BA460000BA450000BF52
+                0600D4864400FCF8F400F8DDBD00B64D050090350200FF00FF00FF00FF00732D
+                0D00E6AB7200FFFFFF00D17E3500B73F0000BB470000BB490000BF500300BB46
+                0000B63E0000C96A1E00FCF8F600EFBC8800541F1600FF00FF00A9440300C05C
+                1100FFFCFA00DE9A5D00D98C4800E5B07E00C1530300BB460000D07B3300E6B7
+                8B00BD4D0300B53A0000D58A4600FFFFFF00C16016007D2C04009A3B0200DD95
+                5400FFFFFF00D06E1E00E2A16600FFFFFF00EEC7A100C75C0C00D17D3300FFFF
+                FF00EECEAF00C2580F00BC4B0100FCF8F400E29D5A006D26070089340600EBBB
+                8A00FBF0E700D7732200E9AD7500FFFFFF00FFFFFF00F4DEC900E1A16700FFFE
+                FE00FFFFFF00F8EBDD00CA6B2100F0D4B800EFC08E00551F13009A3B0200EEBF
+                9000FCF4EB00E0843500EEB78300FFFFFF00FFFFFF00F3D0B000E2A16600FFFF
+                FF00FFFFFF00F0D4B800C5601500F2D9BF00EFBD8A00521F1600A9440300E9AA
+                6E00FFFFFF00EB9F5800F3C29200FFFFFF00F2C79D00D9772500E1975400FFFF
+                FF00E7B78A00BC4A0300BF4F0300FEFBFA00E09752006B240800AD450200DD89
+                3F00FFFCF800FAD3AC00FAC59200F7C99C00E9924400E0823200E39C5900E5AC
+                7700C4540400B73F0000D9955600FFFFFE00501F18007B2C0400FF00FF00B247
+                0100F8CEA500FFFFFF00FED1A500F4A45A00EB994E00E28A3C00D9792A00CC63
+                1000C14F0100D0793100FFFFFF00EAAF730089310300FF00FF00FF00FF00C965
+                1800E0873B00FEE5CB00FFFFFF00FAD5B100EDA56300E28B3F00D97B2C00D478
+                2A00E1A46C00FFFFFF00F3CCA400AC44020089310300FF00FF00FF00FF00FF00
+                FF00B64C0400DE873B00F8CEA300FFFAF300FFFFFF00FEF6EE00FCF3EA00FFFF
+                FF00FEF7EE00E6A56A00AC4403005A221400FF00FF00FF00FF00FF00FF00FF00
+                FF00FF00FF00C5641800AF450100DC884000E9A76C00EEBB8900EBB58100DC91
+                4D00BD590F00752D0C0090340200FF00FF00FF00FF00FF00FF00FF00FF00FF00
+                FF00FF00FF00FF00FF00FF00FF00A64608008B350500752D0C00752D0C008B35
+                05009E400600FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00}
+              ParentFont = False
+              ParentShowHint = False
+              ShowHint = True
+              OnClick = btnAnoProximoClick
+              ExplicitLeft = 420
+              ExplicitTop = 11
+              ExplicitHeight = 24
+            end
+            object SpeedButton2: TSpeedButton
+              Left = 402
+              Top = 0
+              Width = 23
+              Height = 30
+              Hint = 'Pr'#243'ximo m'#234's'
+              Align = alRight
+              Font.Charset = ANSI_CHARSET
+              Font.Color = clBlack
+              Font.Height = -12
+              Font.Name = 'Tahoma'
+              Font.Style = [fsBold]
+              Glyph.Data = {
+                36040000424D3604000000000000360000002800000010000000100000000100
+                2000000000000004000000000000000000000000000000000000FF00FF00FF00
+                FF00FF00FF00FF00FF00FF00FF006D332700853C130095440D0096450D00873D
+                120070342500FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
+                FF00FF00FF0070372A0070372A00CD772700E8AD7000F3CCA100F4CDA300E9B1
+                7600D07C2C006F3529006F352900FF00FF00FF00FF00FF00FF00FF00FF00FF00
+                FF0086411D00C0620B00F0C29200FFFEFA00FDFAF600F5E3D100F5E2D000FDF8
+                F400FFFFFD00F2C99E00C66911007B3A2100FF00FF00FF00FF00FF00FF008C45
+                1C00C1610700F7DBBD00FFFEFE00E0A46B00CE6D1300C75C0000C9610000CE6E
+                1200DE9D5F00FDFAF700FAE5CC00C6680D006F352800FF00FF00FF00FF008C45
+                1C00ECBD8B00FFFFFF00DA8F4300C6560000FFFFFF00DC975100C75B0000CA62
+                0000C75B0000D5833300FDFAF800F3CB9F006F352800FF00FF00A04D1000CE77
+                2100FFFDFB00E8B68400D06B0400D06B0700FFFFFF00FFFFFF00E1A87000C95E
+                0000CA630000C75B0000DFA06100FFFFFF00CF7B280070352500AF550700E5AA
+                6F00FFFFFF00DD8F3F00DA812800D87B1E00FFFFFF00FFFFFF00FFFFFF00EAC1
+                9800CC670800C95F0000CE6E0D00FDFAF600E9B1750070352500BB5F0A00F0CA
+                A100FCF4ED00E1934300E2924200DF8A3400FFFFFF00FFFFFF00FFFFFF00FFFF
+                FF00F3DEC600CF701700C95F0000F5E3D000F3CEA40070352500C1650F00F2CD
+                A600FDF7F000E9A15800E9A05600E6994A00FFFFFF00FFFFFF00FFFFFF00FFFF
+                FF00EBC39B00CD6A0D00C9610000F6E6D400F3CCA10070352500C1640D00EEBC
+                8800FFFFFF00F1B87C00F0AE6900EEA75F00FFFFFF00FFFFFF00FFFFFF00E7B1
+                7A00CE690200C9610000CF711100FEFCFA00E7AC6D0070352500BF600600E5A0
+                5900FFFDFA00FBE0C400F8BA7B00F4B47100FFFFFF00FFFFFF00E8AB6D00D87B
+                1D00D2741400C85C0000E2AA7100FFFFFE00CC75200070352500FF00FF00C362
+                0400FAD9B800FFFFFF00FEDCB800F7B87700FFFFFF00EBAD6D00E08D3700DA82
+                2800D06B0500DB924A00FFFFFF00EFC08C006B342C00FF00FF00FF00FF00C362
+                0400E79E5500FEEBD700FFFFFF00FBDFC300F1B57800E89F5500E2944500DE91
+                4200E8B78600FFFFFF00F6D8B700BE5F06006B342C00FF00FF00FF00FF00FF00
+                FF00C6670C00E69E5500FAD9B600FFFBF600FFFFFF00FEF8F200FDF6EF00FFFF
+                FF00FEF9F200ECB88400BE5F090075382600FF00FF00FF00FF00FF00FF00FF00
+                FF00FF00FF00C0600500C0600500E49F5A00EEBA8600F2CAA000F0C59900E4A7
+                6800CC741E00783A2700783A2700FF00FF00FF00FF00FF00FF00FF00FF00FF00
+                FF00FF00FF00FF00FF00FF00FF00B65C0A00B8601200B9611300B25A0F00A24F
+                0E008E451A00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00}
+              ParentFont = False
+              ParentShowHint = False
+              ShowHint = True
+              OnClick = btnMesProximoClick
+              ExplicitLeft = 391
+              ExplicitTop = 11
+              ExplicitHeight = 24
+            end
+            object SpeedButton3: TSpeedButton
+              Left = 0
+              Top = 0
+              Width = 23
+              Height = 30
+              Hint = 'Ano anterior'
+              Align = alLeft
+              Font.Charset = ANSI_CHARSET
+              Font.Color = clBlack
+              Font.Height = -12
+              Font.Name = 'Tahoma'
+              Font.Style = [fsBold]
+              Glyph.Data = {
+                36040000424D3604000000000000360000002800000010000000100000000100
+                2000000000000004000000000000000000000000000000000000FF00FF00FF00
+                FF00FF00FF00FF00FF00FF00FF009E4006008B350500752D0C00752D0C008B35
+                0500A6460800FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
+                FF00FF00FF0090340200752D0C00BD590F00DC914D00EBB58100EEBB8900E9A7
+                6C00DC884000AF450100C5641800FF00FF00FF00FF00FF00FF00FF00FF00FF00
+                FF005A221400AC440300E6A56A00FEF7EE00FFFFFF00FCF3EA00FEF6EE00FFFF
+                FF00FFFAF300F8CEA300DE873B00B64C0400FF00FF00FF00FF00FF00FF008931
+                0300AC440200F3CCA400FFFFFF00E1A46C00D4782A00D97B2C00E28B3F00EDA5
+                6300FAD5B100FFFFFF00FEE5CB00E0873B00C9651800FF00FF00FF00FF008931
+                0300EAAF7300FFFFFF00D0793100C14F0100CC631000D9792A00E28A3C00EB99
+                4E00F4A45A00FED1A500FFFFFF00F8CEA500B2470100FF00FF007B2C0400501F
+                1800FFFFFE00D9955600B73F0000C4540400E5AC7700E39C5900E0823200E992
+                4400F7C99C00FAC59200FAD3AC00FFFCF800DD893F00AD4502006B240800E097
+                5200FEFBFA00BF4F0300BC4A0300E7B78A00FFFFFF00E1975400D9772500F2C7
+                9D00FFFFFF00F3C29200EB9F5800FFFFFF00E9AA6E00A9440300521F1600EFBD
+                8A00F2D9BF00C5601500F0D4B800FFFFFF00FFFFFF00E2A16600F3D0B000FFFF
+                FF00FFFFFF00EEB78300E0843500FCF4EB00EEBF90009A3B0200551F1300EFC0
+                8E00F0D4B800CA6B2100F8EBDD00FFFFFF00FFFEFE00E1A16700F4DEC900FFFF
+                FF00FFFFFF00E9AD7500D7732200FBF0E700EBBB8A00893406006D260700E29D
+                5A00FCF8F400BC4B0100C2580F00EECEAF00FFFFFF00D17D3300C75C0C00EEC7
+                A100FFFFFF00E2A16600D06E1E00FFFFFF00DD9554009A3B02007D2C0400C160
+                1600FFFFFF00D58A4600B53A0000BD4D0300E6B78B00D07B3300BB460000C153
+                0300E5B07E00D98C4800DE9A5D00FFFCFA00C05C1100A9440300FF00FF00541F
+                1600EFBC8800FCF8F600C96A1E00B63E0000BB460000BF500300BB490000BB47
+                0000B73F0000D17E3500FFFFFF00E6AB7200732D0D00FF00FF00FF00FF009035
+                0200B64D0500F8DDBD00FCF8F400D4864400BF520600BA450000BA460000C054
+                0900D78C4E00FEFCFA00F4D0AB00B04602009A380000FF00FF00FF00FF00FF00
+                FF0060231100B64E0700EEBA8700FFFFFC00FCF6F000F2D9C200F2DAC400FEF8
+                F400FFFEF800EBB17900AF4704006C290E00FF00FF00FF00FF00FF00FF00FF00
+                FF00FF00FF0090350300541F1600C2621800E29D5B00F0BF8C00EFBD8A00E198
+                5500BF5C15005521170089320400FF00FF00FF00FF00FF00FF00FF00FF00FF00
+                FF00FF00FF00FF00FF00FF00FF007E2D05006D260700551F1300521E15006B25
+                08007D2C0500FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00}
+              ParentFont = False
+              ParentShowHint = False
+              ShowHint = True
+              OnClick = btnAnoAnteriorClick
+              ExplicitLeft = 4
+              ExplicitTop = 11
+              ExplicitHeight = 24
+            end
+            object SpeedButton4: TSpeedButton
+              Left = 23
+              Top = 0
+              Width = 23
+              Height = 30
+              Hint = 'M'#234's anterior'
+              Align = alLeft
+              Font.Charset = ANSI_CHARSET
+              Font.Color = clBlack
+              Font.Height = -12
+              Font.Name = 'Tahoma'
+              Font.Style = [fsBold]
+              Glyph.Data = {
+                36040000424D3604000000000000360000002800000010000000100000000100
+                2000000000000004000000000000000000000000000000000000FF00FF00FF00
+                FF00FF00FF00FF00FF00FF00FF008E451A00A24F0E00B25A0F00B9611300B860
+                1200B65C0A00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
+                FF00FF00FF00783A2700783A2700CC741E00E4A76800F0C59900F2CAA000EEBA
+                8600E49F5A00C0600500C0600500FF00FF00FF00FF00FF00FF00FF00FF00FF00
+                FF0075382600BE5F0900ECB88400FEF9F200FFFFFF00FDF6EF00FEF8F200FFFF
+                FF00FFFBF600FAD9B600E69E5500C6670C00FF00FF00FF00FF00FF00FF006B34
+                2C00BE5F0600F6D8B700FFFFFF00E8B78600DE914200E2944500E89F5500F1B5
+                7800FBDFC300FFFFFF00FEEBD700E79E5500C3620400FF00FF00FF00FF006B34
+                2C00EFC08C00FFFFFF00DB924A00D06B0500DA822800E08D3700EBAD6D00FFFF
+                FF00F7B87700FEDCB800FFFFFF00FAD9B800C3620400FF00FF0070352500CC75
+                2000FFFFFE00E2AA7100C85C0000D2741400D87B1D00E8AB6D00FFFFFF00FFFF
+                FF00F4B47100F8BA7B00FBE0C400FFFDFA00E5A05900BF60060070352500E7AC
+                6D00FEFCFA00CF711100C9610000CE690200E7B17A00FFFFFF00FFFFFF00FFFF
+                FF00EEA75F00F0AE6900F1B87C00FFFFFF00EEBC8800C1640D0070352500F3CC
+                A100F6E6D400C9610000CD6A0D00EBC39B00FFFFFF00FFFFFF00FFFFFF00FFFF
+                FF00E6994A00E9A05600E9A15800FDF7F000F2CDA600C1650F0070352500F3CE
+                A400F5E3D000C95F0000CF701700F3DEC600FFFFFF00FFFFFF00FFFFFF00FFFF
+                FF00DF8A3400E2924200E1934300FCF4ED00F0CAA100BB5F0A0070352500E9B1
+                7500FDFAF600CE6E0D00C95F0000CC670800EAC19800FFFFFF00FFFFFF00FFFF
+                FF00D87B1E00DA812800DD8F3F00FFFFFF00E5AA6F00AF55070070352500CF7B
+                2800FFFFFF00DFA06100C75B0000CA630000C95E0000E1A87000FFFFFF00FFFF
+                FF00D06B0700D06B0400E8B68400FFFDFB00CE772100A04D1000FF00FF006F35
+                2800F3CB9F00FDFAF800D5833300C75B0000CA620000C75B0000DC975100FFFF
+                FF00C6560000DA8F4300FFFFFF00ECBD8B008C451C00FF00FF00FF00FF006F35
+                2800C6680D00FAE5CC00FDFAF700DE9D5F00CE6E1200C9610000C75C0000CE6D
+                1300E0A46B00FFFEFE00F7DBBD00C16107008C451C00FF00FF00FF00FF00FF00
+                FF007B3A2100C6691100F2C99E00FFFFFD00FDF8F400F5E2D000F5E3D100FDFA
+                F600FFFEFA00F0C29200C0620B0086411D00FF00FF00FF00FF00FF00FF00FF00
+                FF00FF00FF006F3529006F352900D07C2C00E9B17600F4CDA300F3CCA100E8AD
+                7000CD77270070372A0070372A00FF00FF00FF00FF00FF00FF00FF00FF00FF00
+                FF00FF00FF00FF00FF00FF00FF0070342500873D120096450D0095440D00853C
+                13006D332700FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00}
+              ParentFont = False
+              ParentShowHint = False
+              ShowHint = True
+              OnClick = btnMesAnteriorClick
+              ExplicitLeft = 31
+              ExplicitTop = 11
+              ExplicitHeight = 24
+            end
+          end
+          object CalendarioEmbarcacao: TStringGrid
+            Left = 0
+            Top = 30
+            Width = 448
+            Height = 232
+            Align = alTop
+            BorderStyle = bsNone
+            Color = clWhite
+            ColCount = 7
+            Ctl3D = True
+            DefaultRowHeight = 32
+            DefaultDrawing = False
+            FixedCols = 0
+            RowCount = 7
+            Options = [goFixedHorzLine]
+            ParentCtl3D = False
+            TabOrder = 1
+            OnDblClick = CalendarioEmbarcacaoDblClick
+            OnDrawCell = CalendarioEmbarcacaoDrawCell
+            OnSelectCell = CalendarioEmbarcacaoSelectCell
+          end
+        end
+        object Panel4: TPanel
+          Left = 449
+          Top = 1
+          Width = 436
+          Height = 295
+          Align = alClient
+          TabOrder = 1
+          object ToolBar3: TToolBar
+            Left = 1
+            Top = 1
+            Width = 434
+            Height = 29
+            Caption = 'ToolBar1'
+            DrawingStyle = dsGradient
+            EdgeBorders = [ebLeft, ebTop, ebRight, ebBottom]
+            TabOrder = 0
+            object BitBtn2: TBitBtn
+              Left = 0
+              Top = 0
+              Width = 75
+              Height = 22
+              Action = actExcelIndisponibilidadeEmbarcacaco
+              Align = alLeft
+              Caption = 'Exportar'
+              ParentShowHint = False
+              ShowHint = True
+              TabOrder = 0
+            end
+            object BitBtn5: TBitBtn
+              Left = 75
+              Top = 0
+              Width = 64
+              Height = 22
+              Action = actLimparFiltros
+              Align = alLeft
+              Caption = 'Limpar'
+              ParentShowHint = False
+              ShowHint = True
+              TabOrder = 1
+            end
+            object BitBtn6: TBitBtn
+              Left = 139
+              Top = 0
+              Width = 64
+              Height = 22
+              Action = actFiltrosTabela
+              Align = alLeft
+              Caption = 'Filtros'
+              ParentShowHint = False
+              ShowHint = True
+              TabOrder = 2
+            end
+            object BitBtn9: TBitBtn
+              Left = 203
+              Top = 0
+              Width = 78
+              Height = 22
+              Action = actAtualizarEmbarcacao
+              Align = alLeft
+              Caption = 'Atualizar'
+              ParentShowHint = False
+              ShowHint = True
+              TabOrder = 3
+            end
+          end
+          object DBGridCondicaoEmbarcacao: TDBGrid
+            Left = 1
+            Top = 30
+            Width = 249
+            Height = 245
+            Align = alClient
+            DataSource = FrmDataModule.DataSourceCondicaoEmbarcacao
+            TabOrder = 1
+            TitleFont.Charset = DEFAULT_CHARSET
+            TitleFont.Color = clWindowText
+            TitleFont.Height = -11
+            TitleFont.Name = 'Tahoma'
+            TitleFont.Style = []
+            OnDrawColumnCell = DBGridCondicaoEmbarcacaoDrawColumnCell
+            OnTitleClick = DBGridCondicaoEmbarcacaoTitleClick
+            Columns = <
+              item
+                Alignment = taCenter
+                Expanded = False
+                FieldName = 'DataCondicaoEmbarcacao'
+                ReadOnly = True
+                Title.Alignment = taCenter
+                Title.Caption = 'Data Embarca'#231#227'o'
+                Visible = True
+              end
+              item
+                Alignment = taCenter
+                Expanded = False
+                FieldName = 'NumEmbarcacaoPrevista'
+                Title.Alignment = taCenter
+                Title.Caption = 'N'#176' Previsto'
+                Visible = True
+              end
+              item
+                Alignment = taCenter
+                Expanded = False
+                FieldName = 'NumEmbarcacaoIndisponivel'
+                Title.Alignment = taCenter
+                Title.Caption = 'N'#176' Indisponivel'
+                Visible = True
+              end
+              item
+                Expanded = False
+                FieldName = 'Comentarios'
+                Title.Alignment = taCenter
+                Title.Caption = 'Coment'#225'rios'
+                Width = 250
+                Visible = True
+              end
+              item
+                Alignment = taCenter
+                Expanded = False
+                FieldName = 'AvaliadoPor'
+                ReadOnly = True
+                Title.Alignment = taCenter
+                Title.Caption = 'Avaliado Por'
+                Visible = True
+              end
+              item
+                Alignment = taCenter
+                Expanded = False
+                FieldName = 'DataAtualizacao'
+                ReadOnly = True
+                Title.Alignment = taCenter
+                Title.Caption = 'Data Atualiza'#231#227'o'
+                Visible = True
+              end
+              item
+                Alignment = taCenter
+                Expanded = False
+                FieldName = 'Computador'
+                ReadOnly = True
+                Title.Alignment = taCenter
+                Visible = True
+              end>
+          end
+          object ColunasLayoutEmbarcacao: TStringGrid
+            Left = 48
+            Top = 80
+            Width = 113
+            Height = 97
+            FixedCols = 0
+            Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goDrawFocusSelected, goRowSizing, goColSizing, goEditing]
+            TabOrder = 2
+            Visible = False
+            RowHeights = (
+              24
+              24
+              21
+              24
+              24)
+          end
+          object StatusBarCondicaoEmbarcacao: TStatusBar
+            Left = 1
+            Top = 275
+            Width = 434
+            Height = 19
+            Panels = <
+              item
+                Width = 50
+              end
+              item
+                Width = 50
+              end
+              item
+                Width = 50
+              end
+              item
+                Width = 50
+              end
+              item
+                Width = 50
+              end>
+          end
+          object Panel16: TPanel
+            Left = 250
+            Top = 30
+            Width = 185
+            Height = 245
+            Align = alRight
+            Caption = 'Panel15'
+            TabOrder = 4
+            object ToolBar7: TToolBar
+              Left = 1
+              Top = 1
+              Width = 183
+              Height = 29
+              Caption = 'ToolBar6'
+              DrawingStyle = dsGradient
+              EdgeBorders = [ebLeft, ebTop, ebRight, ebBottom]
+              Images = FrmPrincipal.ImageList1
+              TabOrder = 0
+              object ToolButton4: TToolButton
+                Left = 0
+                Top = 0
+                Action = actSelTudoEmbarcacao
+                ParentShowHint = False
+                ShowHint = True
+              end
+              object ToolButton5: TToolButton
+                Left = 23
+                Top = 0
+                Action = actSelLimparEmbarcacao
+                ParentShowHint = False
+                ShowHint = True
+              end
+              object ToolButton6: TToolButton
+                Left = 46
+                Top = 0
+                Action = actSalvarListaEmbarcacao
+                ParentShowHint = False
+                ShowHint = True
+              end
+            end
+            object CheckListBoxEmbarcacao: TCheckListBox
+              Left = 1
+              Top = 30
+              Width = 183
+              Height = 214
+              Hint = 'Selecione datas para filtrar'
+              Align = alClient
+              ItemHeight = 13
+              ParentShowHint = False
+              ShowHint = True
+              TabOrder = 1
+              OnClick = CheckListBoxEmbarcacaoClick
+            end
+          end
+        end
+      end
+      object Panel5: TPanel
+        Left = 0
+        Top = 300
+        Width = 886
+        Height = 287
+        Align = alClient
+        TabOrder = 1
+        object ToolBar4: TToolBar
+          Left = 1
+          Top = 1
+          Width = 884
+          Height = 29
+          Caption = 'ToolBar2'
+          DrawingStyle = dsGradient
+          EdgeBorders = [ebLeft, ebTop, ebRight, ebBottom]
+          Images = FrmPrincipal.ImageList1
+          TabOrder = 0
+          object BitBtn3: TBitBtn
+            Left = 0
+            Top = 0
+            Width = 75
+            Height = 22
+            Action = actExcelCalendarioEmbarcacao
+            Align = alLeft
+            Caption = 'Exportar'
+            ParentShowHint = False
+            ShowHint = True
+            TabOrder = 0
+          end
+          object ToolButton7: TToolButton
+            Left = 75
+            Top = 0
+            Action = actGraficoGeral
+            DropdownMenu = PopupMenuGeral
+            ImageIndex = 458
+            ParentShowHint = False
+            ShowHint = True
+            Style = tbsDropDown
+          end
+        end
+        object RLEmbarcacao: TStringGrid
+          Left = 1
+          Top = 30
+          Width = 884
+          Height = 120
+          Align = alClient
+          ColCount = 35
+          DefaultColWidth = 25
+          FixedCols = 0
+          RowCount = 1
+          FixedRows = 0
+          TabOrder = 1
+          OnDrawCell = RLEmbarcacaoDrawCell
+        end
+        object RLGeral: TStringGrid
+          Left = 1
+          Top = 208
+          Width = 884
+          Height = 78
+          Align = alBottom
+          ColCount = 35
+          DefaultColWidth = 25
+          FixedCols = 0
+          RowCount = 13
+          TabOrder = 2
+          Visible = False
+          OnDrawCell = RLGeralDrawCell
+        end
+        object RLPrevisto: TStringGrid
+          Left = 1
+          Top = 150
+          Width = 884
+          Height = 58
+          Align = alBottom
+          ColCount = 35
+          DefaultColWidth = 25
+          FixedCols = 0
+          RowCount = 1
+          FixedRows = 0
+          TabOrder = 3
+          Visible = False
+        end
+      end
+    end
+  end
+  object Panel7: TPanel
+    Left = 0
+    Top = 0
+    Width = 894
+    Height = 25
+    Align = alTop
+    Caption = 'Condi'#231#227'o de Mar e Disponibilidade de Embarca'#231#245'es'
+    Color = clGradientActiveCaption
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -13
+    Font.Name = 'Tahoma'
+    Font.Style = [fsBold]
+    ParentBackground = False
+    ParentFont = False
+    TabOrder = 1
+  end
+  object PanelAjuda: TPanel
+    Left = 108
+    Top = 143
+    Width = 253
+    Height = 238
+    Color = clMenu
+    ParentBackground = False
+    TabOrder = 2
+    Visible = False
+    object PanelTituloAjuda1: TPanel
+      Left = 1
+      Top = 1
+      Width = 251
+      Height = 26
+      Align = alTop
+      Caption = 'Alterar Destino dos Executantes da Programa'#231#227'o'
+      Color = clGradientActiveCaption
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -12
+      Font.Name = 'Tahoma'
+      Font.Style = [fsBold]
+      ParentBackground = False
+      ParentFont = False
+      TabOrder = 0
+      OnMouseDown = PanelTituloAjuda1MouseDown
+      OnMouseMove = PanelTituloAjuda1MouseMove
+      OnMouseUp = PanelTituloAjuda1MouseUp
+      object SpeedButton5: TSpeedButton
+        Left = 227
+        Top = 1
+        Width = 23
+        Height = 24
+        Hint = 'Cancelar opera'#231#227'o'
+        Align = alRight
+        Glyph.Data = {
+          36040000424D3604000000000000360000002800000010000000100000000100
+          2000000000000004000000000000000000000000000000000000FF00FF00FF00
+          FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
+          FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00181A
+          65003436CB003638DB00363ADF00363AE3003639E7003538EB003537EF00393D
+          F0003C41F2004046F200454DF0004046CC000B0C3500FF00FF0003032F001717
+          C2000000BD000000C4000000CB000000D2000202D9001B1BE3001718E7000E12
+          E8001820EA00212CEC002B39ED003344EF003A45D1000000040003034F000000
+          B5000000BC000000C3000E0ECD008D8DEB00EDEDFC00FFFFFF00FFFFFF00DEDF
+          FC00797DF300232EEC002B39ED003444EF00394BEA000000150000004A000000
+          B3000000BB000F0FC500D0D0F500FFFFFF00B4B4EE006D6DE6007878EB00D2D2
+          F700FFFFFF00ACB0F8002A37ED003343EF003647E70000001400000045000A0A
+          B2000E0EBC009999E500FFFFFF007272DE000303D4000000DC000000E2000B0D
+          E400ABADF200FFFFFF006F78F300303FEE003242E30000001200000040001919
+          B2002424BF00F2F2FB00D3D3F2002B2BD2002E2ED9002525DD001414E1000405
+          E5001D21E600F9F9FE00BDC1F9002A38ED002D3BDF000000120000003C002626
+          B2004141C400FFFFFF00B0B0EB003B3BD2003E3ED8004040DE004343E3003E3E
+          E8001F20E800DBDBFB00D8D9FB00232DEC002531DC0000001200000037003232
+          B1004444C100F8F8FC00D0D0F3004A4AD2004D4DD700C0C0F3009292ED005656
+          E6005F5FEC00F8F8FE00BFC1F700181FEA001B24D90000001200000034003F3F
+          B1005151C100C1C1E600FEFEFF008B8BE0005C5CD600FFFFFF00CACAF5006565
+          E400BABAF500FFFFFF009797EF001215E8000E12D50000001200000033004B4B
+          B2006060C2007373C900F0F0F700FCFCFE008282DC00FFFFFF00CFCFF400BEBE
+          F100FFFFFF00DCDCF3007C7CE9006363EB000505D00000001200000032005B5B
+          B5006F6FC3007171C8008484CC00B6B6DD007D7DD400FFFFFF00D3D3F300B2B2
+          E400C6C6E7008A8AE1008989E7008C8CE9004747D00000001100000031007474
+          BD007C7CC4007F7FC9008181CD008484D1008787D400FFFFFF00D8D8F3008F8F
+          DE009292E0009595E2009898E3009A9AE4007171D00001011200101034008989
+          C3008B8BC6008D8DCB009090CE009393D2009696D400C5C5E000B2B2DD009E9E
+          DC00A0A0DE00A3A3E000A6A6E000A8A8E1009F9FD90000000C00000007007B7B
+          AA00A4A4CF00A3A3D100A6A6D400A9A9D700ACACD900AFAFDC00B2B2DE00B5B5
+          E000B7B7E200BABAE300BDBDE300C9C9E8006C6C8C00FF00FF00FF00FF000303
+          0B004040590056566C0058586D005A5A6E005C5C6F005E5E70005F5F71006161
+          720062627200636373006363730039394C0000000200FF00FF00}
+        ParentShowHint = False
+        ShowHint = True
+        OnClick = SpeedButton5Click
+        ExplicitTop = -3
+      end
+    end
+    object PanelEmbarcacaoIndisponivel: TPanel
+      Left = 1
+      Top = 27
+      Width = 251
+      Height = 150
+      Align = alTop
+      TabOrder = 1
+      object ToolBar5: TToolBar
+        Left = 1
+        Top = 1
+        Width = 249
+        Height = 29
+        Caption = 'ToolBar5'
+        DrawingStyle = dsGradient
+        EdgeBorders = [ebLeft, ebTop, ebRight, ebBottom]
+        TabOrder = 0
+        object BitBtn7: TBitBtn
+          Left = 0
+          Top = 0
+          Width = 70
+          Height = 22
+          Action = actGravar
+          Caption = 'Gravar'
+          ParentShowHint = False
+          ShowHint = True
+          TabOrder = 0
+        end
+        object BitBtn8: TBitBtn
+          Left = 70
+          Top = 0
+          Width = 70
+          Height = 22
+          Action = actCancelar
+          Caption = 'Cancelar'
+          ParentShowHint = False
+          ShowHint = True
+          TabOrder = 1
+        end
+      end
+      object Panel71: TPanel
+        Left = 1
+        Top = 105
+        Width = 249
+        Height = 25
+        Align = alTop
+        TabOrder = 1
+        object Panel72: TPanel
+          Left = 1
+          Top = 1
+          Width = 90
+          Height = 23
+          Align = alLeft
+          Alignment = taLeftJustify
+          Caption = ' Coment'#225'rios:'
+          TabOrder = 0
+        end
+        object Panel73: TPanel
+          Left = 91
+          Top = 1
+          Width = 157
+          Height = 23
+          Align = alClient
+          TabOrder = 1
+          object DBEdit1: TDBEdit
+            Left = 1
+            Top = 1
+            Width = 155
+            Height = 21
+            Align = alClient
+            DataField = 'Comentarios'
+            DataSource = FrmDataModule.DataSourceCondicaoEmbarcacao
+            TabOrder = 0
+          end
+        end
+      end
+      object Panel3: TPanel
+        Left = 1
+        Top = 55
+        Width = 249
+        Height = 25
+        Align = alTop
+        TabOrder = 2
+        object Panel6: TPanel
+          Left = 1
+          Top = 1
+          Width = 90
+          Height = 23
+          Align = alLeft
+          Alignment = taLeftJustify
+          Caption = ' N'#176' Previsto:'
+          TabOrder = 0
+        end
+        object Panel8: TPanel
+          Left = 91
+          Top = 1
+          Width = 157
+          Height = 23
+          Align = alClient
+          TabOrder = 1
+          object DBEditPrevisto: TDBEdit
+            Left = 1
+            Top = 1
+            Width = 155
+            Height = 21
+            Align = alClient
+            DataField = 'NumEmbarcacaoPrevista'
+            DataSource = FrmDataModule.DataSourceCondicaoEmbarcacao
+            TabOrder = 0
+          end
+        end
+      end
+      object Panel9: TPanel
+        Left = 1
+        Top = 30
+        Width = 249
+        Height = 25
+        Align = alTop
+        TabOrder = 3
+        object Panel10: TPanel
+          Left = 1
+          Top = 1
+          Width = 90
+          Height = 23
+          Align = alLeft
+          Alignment = taLeftJustify
+          Caption = ' Data:'
+          TabOrder = 0
+        end
+        object Panel11: TPanel
+          Left = 91
+          Top = 1
+          Width = 157
+          Height = 23
+          Align = alClient
+          TabOrder = 1
+          object DBDateTimePicker1: TDBDateTimePicker
+            Left = 1
+            Top = 1
+            Width = 155
+            Height = 21
+            Align = alClient
+            Date = 43643.739703865730000000
+            Time = 43643.739703865730000000
+            TabOrder = 0
+            Caption = ''
+            DataField = 'DataCondicaoEmbarcacao'
+            DataSource = FrmDataModule.DataSourceCondicaoEmbarcacao
+          end
+        end
+      end
+      object Panel12: TPanel
+        Left = 1
+        Top = 80
+        Width = 249
+        Height = 25
+        Align = alTop
+        TabOrder = 4
+        object Panel13: TPanel
+          Left = 1
+          Top = 1
+          Width = 90
+          Height = 23
+          Align = alLeft
+          Alignment = taLeftJustify
+          Caption = ' N'#176' Indisponivel:'
+          TabOrder = 0
+        end
+        object Panel14: TPanel
+          Left = 91
+          Top = 1
+          Width = 157
+          Height = 23
+          Align = alClient
+          TabOrder = 1
+          object DBEditIndisponivel: TDBEdit
+            Left = 1
+            Top = 1
+            Width = 155
+            Height = 21
+            Align = alClient
+            DataField = 'NumEmbarcacaoIndisponivel'
+            DataSource = FrmDataModule.DataSourceCondicaoEmbarcacao
+            TabOrder = 0
+          end
+        end
+      end
+    end
+  end
+  object ActionManager1: TActionManager
+    Images = FrmPrincipal.ImageList1
+    Left = 55
+    Top = 177
+    StyleName = 'Platform Default'
+    object actFiltroInserir: TAction
+      Category = 'Tabela'
+      Caption = 'actFiltroInserir'
+      OnExecute = actFiltroInserirExecute
+    end
+    object actGridASC: TAction
+      Category = 'Tabela'
+      Caption = 'actGridASC'
+      OnExecute = actGridASCExecute
+    end
+    object actGridDESC: TAction
+      Category = 'Tabela'
+      Caption = 'actGridDESC'
+      OnExecute = actGridDESCExecute
+    end
+    object actSubstituirPor: TAction
+      Category = 'Tabela'
+      Caption = 'actSubstituirPor'
+      OnExecute = actSubstituirPorExecute
+    end
+    object actLimparFiltros: TAction
+      Category = 'Tabela'
+      Caption = 'Limpar'
+      Hint = 'Limpar Filtros'
+      ImageIndex = 469
+      OnExecute = actLimparFiltrosExecute
+    end
+    object actFiltrosTabela: TAction
+      Category = 'Tabela'
+      Caption = 'Filtros'
+      Hint = 'Visualizar tabela de filtros'
+      ImageIndex = 470
+      OnExecute = actFiltrosTabelaExecute
+    end
+    object actProcuraFiltrosTabela: TAction
+      Category = 'Tabela'
+      Caption = 'actProcuraFiltrosTabela'
+      OnExecute = actProcuraFiltrosTabelaExecute
+    end
+    object actProcurarMar: TAction
+      Category = 'Mar'
+      Caption = 'actProcurarMar'
+      OnExecute = actProcurarMarExecute
+    end
+    object actDadosMar: TAction
+      Category = 'Mar'
+      Caption = 'actDadosMar'
+      OnExecute = actDadosMarExecute
+    end
+    object actProcurarEmbarcacao: TAction
+      Category = 'Embarca'#231#227'o'
+      Caption = 'actProcurarEmbarcacao'
+      OnExecute = actProcurarEmbarcacaoExecute
+    end
+    object actDadosEmbarcacao: TAction
+      Category = 'Embarca'#231#227'o'
+      Caption = 'actDadosEmbarcacao'
+      OnExecute = actDadosEmbarcacaoExecute
+    end
+    object actExcelCondicaoMar: TAction
+      Category = 'Mar'
+      Caption = 'Exportar'
+      Hint = 'Exportar para o Excel'
+      ImageIndex = 54
+      OnExecute = actExcelCondicaoMarExecute
+    end
+    object actExcelCalendarioMar: TAction
+      Category = 'Mar'
+      Caption = 'Exportar'
+      Hint = 'Exportar para o Excel'
+      ImageIndex = 54
+      OnExecute = actExcelCalendarioMarExecute
+    end
+    object actExcelCalendarioEmbarcacao: TAction
+      Category = 'Embarca'#231#227'o'
+      Caption = 'Exportar'
+      Hint = 'Exportar para o Excel'
+      ImageIndex = 54
+      OnExecute = actExcelCalendarioEmbarcacaoExecute
+    end
+    object actLimparAjuda: TAction
+      Category = 'Configura'#231#227'o'
+      Caption = 'actLimparAjuda'
+      OnExecute = actLimparAjudaExecute
+    end
+    object actExcelIndisponibilidadeEmbarcacaco: TAction
+      Category = 'Embarca'#231#227'o'
+      Caption = 'Exportar'
+      Hint = 'Exportar para o Excel'
+      ImageIndex = 54
+      OnExecute = actExcelIndisponibilidadeEmbarcacacoExecute
+    end
+    object actGravar: TAction
+      Category = 'Embarca'#231#227'o'
+      Caption = 'Gravar'
+      Hint = 'Gravar registro'
+      ImageIndex = 18
+      OnExecute = actGravarExecute
+    end
+    object actCancelar: TAction
+      Category = 'Embarca'#231#227'o'
+      Caption = 'Cancelar'
+      Hint = 'Cancelar opera'#231#227'o'
+      ImageIndex = 190
+      OnExecute = actCancelarExecute
+    end
+    object actSelLimparMar: TAction
+      Category = 'Tabela'
+      Hint = 'Limpar sele'#231#227'o'
+      ImageIndex = 155
+      OnExecute = actSelLimparMarExecute
+    end
+    object actSelTudoMar: TAction
+      Category = 'Tabela'
+      Caption = 'actSelTudo'
+      Hint = 'Selecionar todos'
+      ImageIndex = 154
+      OnExecute = actSelTudoMarExecute
+    end
+    object actSalvarListaMar: TAction
+      Category = 'Mar'
+      Caption = 'actSalvarListaMar'
+      Hint = 'Salvar lista de datas'
+      ImageIndex = 18
+      OnExecute = actSalvarListaMarExecute
+    end
+    object actSelLimparEmbarcacao: TAction
+      Category = 'Tabela'
+      Caption = 'actSelLimparEmbarcacao'
+      Hint = 'Limpar sele'#231#227'o'
+      ImageIndex = 155
+      OnExecute = actSelLimparEmbarcacaoExecute
+    end
+    object actSelTudoEmbarcacao: TAction
+      Category = 'Tabela'
+      Caption = 'actSelTudoEmbarcacao'
+      Hint = 'Selecionar todos'
+      ImageIndex = 154
+      OnExecute = actSelTudoEmbarcacaoExecute
+    end
+    object actSalvarListaEmbarcacao: TAction
+      Category = 'Embarca'#231#227'o'
+      Caption = 'actSalvarListaEmbarcacao'
+      Hint = 'Salvar lista de datas'
+      ImageIndex = 18
+      OnExecute = actSalvarListaEmbarcacaoExecute
+    end
+    object actAtualizarEmbarcacao: TAction
+      Category = 'Embarca'#231#227'o'
+      Caption = 'Atualizar'
+      Hint = 'Atualizar informa'#231#245'es gr'#225'ficas'
+      ImageIndex = 288
+      OnExecute = actAtualizarEmbarcacaoExecute
+    end
+    object actGraficoGeral: TAction
+      Caption = 'actGraficoGeral'
+      OnExecute = actGraficoGeralExecute
+    end
+  end
+  object PopupMenuGeral: TPopupMenu
+    Left = 524
+    Top = 397
+    object GRF1: TMenuItem
+      Caption = 'Disponibilidade de Embarca'#231#227'o de Passageiros'
+      Checked = True
+      OnClick = GRF1Click
+    end
+    object GRF2: TMenuItem
+      Caption = 'Sobreposi'#231#227'o de condi'#231#227'o de mar e disponibilidade de embarca'#231#227'o'
+      OnClick = GRF2Click
+    end
+  end
+end

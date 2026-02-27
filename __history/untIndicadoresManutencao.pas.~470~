@@ -1,0 +1,1945 @@
+﻿unit untIndicadoresManutencao;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.Buttons, Vcl.ExtCtrls,
+  Vcl.ComCtrls, Vcl.ToolWin, System.Actions, Vcl.ActnList,
+  Vcl.PlatformDefaultStyleActnCtrls, Vcl.ActnMan, Data.DB, Vcl.Grids,
+  Vcl.DBGrids, Vcl.CheckLst, Vcl.Mask, Vcl.DBCtrls,ClipBrd, VclTee.TeeGDIPlus,
+  VCLTee.TeEngine, VCLTee.Series, VCLTee.GanttCh, VCLTee.TeeProcs, VCLTee.Chart,
+  Vcl.Menus, Vcl.ExtDlgs,DateUtils,Math, Data.Win.ADODB, Vcl.Samples.Spin;
+
+type
+  TFrmIndicadoresManutencao = class(TForm)
+    Panel7: TPanel;
+    PageControlIndicadores: TPageControl;
+    TabSheet1: TTabSheet;
+    TabSheet2: TTabSheet;
+    TabSheet3: TTabSheet;
+    ActionManager1: TActionManager;
+    actProcurarICPM: TAction;
+    actExcelICPM: TAction;
+    actFiltroInserir: TAction;
+    actGridASC: TAction;
+    actGridDESC: TAction;
+    actLimparFiltros: TAction;
+    actFiltrosTabela: TAction;
+    actProcuraFiltrosTabela: TAction;
+    TabSheet4: TTabSheet;
+    ToolBar4: TToolBar;
+    BitBtn7: TBitBtn;
+    BitBtn8: TBitBtn;
+    BitBtn9: TBitBtn;
+    StatusBarICPM: TStatusBar;
+    actFiltrosICPM: TAction;
+    Splitter1: TSplitter;
+    PanelICPM: TPanel;
+    DBGridICPM: TDBGrid;
+    ToolBar2: TToolBar;
+    BitBtn2: TBitBtn;
+    BitBtn1: TBitBtn;
+    BitBtn16: TBitBtn;
+    BitBtn6: TBitBtn;
+    ColunasLayoutICPM: TStringGrid;
+    PanelFiltroICPM: TPanel;
+    ToolBar7: TToolBar;
+    PageControlICPM: TPageControl;
+    TabSheet8: TTabSheet;
+    CheckListBoxSistemaFiltroICPM: TCheckListBox;
+    ToolBar8: TToolBar;
+    ToolButton15: TToolButton;
+    ToolButton16: TToolButton;
+    TabSheet9: TTabSheet;
+    CheckListBoxPlataformaICPM: TCheckListBox;
+    ToolBar9: TToolBar;
+    ToolButton6: TToolButton;
+    ToolButton8: TToolButton;
+    TabSheet10: TTabSheet;
+    CheckListBoxTipoEtapaServicoICPM: TCheckListBox;
+    ToolBar10: TToolBar;
+    ToolButton10: TToolButton;
+    ToolButton11: TToolButton;
+    btnMostrarOcultarICPM: TToolButton;
+    actOcultarICPM: TAction;
+    actMostrarICPM: TAction;
+    ToolButton1: TToolButton;
+    ToolButton2: TToolButton;
+    actZoomMais: TAction;
+    actZoomMenos: TAction;
+    actIndicadorICPM: TAction;
+    TabSheet11: TTabSheet;
+    RLICPM: TStringGrid;
+    Panel1: TPanel;
+    Panel2: TPanel;
+    Panel3: TPanel;
+    RLICPMSO: TStringGrid;
+    DBEditComentarioICPM: TDBEdit;
+    actCopiarComentario: TAction;
+    actColarComentario: TAction;
+    actImprimirICPM: TAction;
+    BitBtn17: TBitBtn;
+    RLImprimirICPM: TStringGrid;
+    actResumoIndicadores: TAction;
+    actGravarResumo: TAction;
+    PanelResumoIndicadorResultados: TPanel;
+    ToolBar1: TToolBar;
+    BitBtn18: TBitBtn;
+    RLResumo: TStringGrid;
+    PanelResumoIndicadorDados: TPanel;
+    ToolBar11: TToolBar;
+    DBNavigator1: TDBNavigator;
+    DBGridResumoIndicador: TDBGrid;
+    Splitter3: TSplitter;
+    PanelGrafico: TPanel;
+    Splitter4: TSplitter;
+    ChartGrafico: TChart;
+    actGRFSalvarImagem: TAction;
+    actGRFSalvarData: TAction;
+    actGRFZoomMais: TAction;
+    actGRFZoomMenos: TAction;
+    actGRFTitulo: TAction;
+    actGRFImprimir: TAction;
+    actEtiqueta: TAction;
+    ToolBar13: TToolBar;
+    ToolButton4: TToolButton;
+    ToolButton5: TToolButton;
+    ToolButton7: TToolButton;
+    ToolButton9: TToolButton;
+    ToolButton12: TToolButton;
+    ToolButton13: TToolButton;
+    btnMark: TToolButton;
+    SavePictureDialog1: TSavePictureDialog;
+    Series2: TLineSeries;
+    ColunasLayoutResumo: TStringGrid;
+    actSubstituirPor: TAction;
+    actProcurarResumo: TAction;
+    StatusBarResumoIndicador: TStatusBar;
+    BitBtn19: TBitBtn;
+    BitBtn20: TBitBtn;
+    RadioGroupGrafico: TRadioGroup;
+    actGrafico: TAction;
+    BitBtn21: TBitBtn;
+    PanelTitulo: TPanel;
+    StatusBarRTI: TStatusBar;
+    actOcultarRTI: TAction;
+    actMostrarRTI: TAction;
+    actExcelICPI: TAction;
+    actIndicadorRTI: TAction;
+    Splitter5: TSplitter;
+    ToolBar14: TToolBar;
+    DateTimeVencimentoRTI: TDateTimePicker;
+    BitBtn3: TBitBtn;
+    BitBtn4: TBitBtn;
+    ToolButton17: TToolButton;
+    ToolButton18: TToolButton;
+    actICPMLimpar: TAction;
+    actICPMSel: TAction;
+    ToolBar3: TToolBar;
+    BitBtn5: TBitBtn;
+    BitBtn10: TBitBtn;
+    Panel19: TPanel;
+    SpinEdit1: TSpinEdit;
+    DBGridICPI: TDBGrid;
+    actProcurarICPI: TAction;
+    StatusBarICPI: TStatusBar;
+    ColunasLayoutICPI: TStringGrid;
+    RLICPI: TStringGrid;
+    Splitter7: TSplitter;
+    actIndicadorICPI: TAction;
+    BitBtn11: TBitBtn;
+    actRealizadoPendente: TAction;
+    BitBtn12: TBitBtn;
+    DBEditStatusICPM: TDBEdit;
+    actMedidasPH: TAction;
+    PanelPH: TPanel;
+    Panel9: TPanel;
+    RLPH: TStringGrid;
+    Splitter2: TSplitter;
+    Panel_IMRI: TPanel;
+    Panel8: TPanel;
+    RLIMRI: TStringGrid;
+    DBEditStatusICPI: TDBEdit;
+    BitBtn13: TBitBtn;
+    DBEditComentarioICPI: TDBEdit;
+    BitBtn14: TBitBtn;
+    BitBtn15: TBitBtn;
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure FormCreate(Sender: TObject);
+    procedure FormDestroy(Sender: TObject);
+    procedure DBGridICPMKeyPress(Sender: TObject; var Key: Char);
+    procedure actProcurarICPMExecute(Sender: TObject);
+    procedure DBGridICPMDrawColumnCell(Sender: TObject; const Rect: TRect;
+      DataCol: Integer; Column: TColumn; State: TGridDrawState);
+    procedure DBGridICPMCellClick(Column: TColumn);
+    procedure DBGridICPMTitleClick(Column: TColumn);
+    procedure actFiltroInserirExecute(Sender: TObject);
+    procedure actGridASCExecute(Sender: TObject);
+    procedure actGridDESCExecute(Sender: TObject);
+    procedure actLimparFiltrosExecute(Sender: TObject);
+    procedure actFiltrosTabelaExecute(Sender: TObject);
+    procedure actProcuraFiltrosTabelaExecute(Sender: TObject);
+    procedure actFiltrosICPMExecute(Sender: TObject);
+    procedure actOcultarICPMExecute(Sender: TObject);
+    procedure actMostrarICPMExecute(Sender: TObject);
+    procedure actZoomMaisExecute(Sender: TObject);
+    procedure actZoomMenosExecute(Sender: TObject);
+    procedure actIndicadorICPMExecute(Sender: TObject);
+    procedure RLICPMDrawCell(Sender: TObject; ACol, ARow: Integer; Rect: TRect;
+      State: TGridDrawState);
+    procedure RLICPMSODrawCell(Sender: TObject; ACol, ARow: Integer;
+      Rect: TRect; State: TGridDrawState);
+    procedure actCopiarComentarioExecute(Sender: TObject);
+    procedure actColarComentarioExecute(Sender: TObject);
+    procedure actImprimirICPMExecute(Sender: TObject);
+    procedure actExcelICPMExecute(Sender: TObject);
+    procedure actResumoIndicadoresExecute(Sender: TObject);
+    procedure actGravarResumoExecute(Sender: TObject);
+    procedure DBGridResumoIndicadorDrawColumnCell(Sender: TObject; const Rect: TRect;
+      DataCol: Integer; Column: TColumn; State: TGridDrawState);
+    procedure actGRFSalvarImagemExecute(Sender: TObject);
+    procedure actGRFSalvarDataExecute(Sender: TObject);
+    procedure actGRFZoomMaisExecute(Sender: TObject);
+    procedure actGRFZoomMenosExecute(Sender: TObject);
+    procedure actGRFTituloExecute(Sender: TObject);
+    procedure actGRFImprimirExecute(Sender: TObject);
+    procedure actEtiquetaExecute(Sender: TObject);
+    procedure RLResumoDrawCell(Sender: TObject; ACol, ARow: Integer;
+      Rect: TRect; State: TGridDrawState);
+    procedure DBGridResumoIndicadorTitleClick(Column: TColumn);
+    procedure actSubstituirPorExecute(Sender: TObject);
+    procedure actProcurarResumoExecute(Sender: TObject);
+    procedure PageControlIndicadoresChange(Sender: TObject);
+    procedure actGraficoExecute(Sender: TObject);
+    procedure actExcelICPIExecute(Sender: TObject);
+    procedure actIndicadorRTIExecute(Sender: TObject);
+    procedure actICPMSelExecute(Sender: TObject);
+    procedure actICPMLimparExecute(Sender: TObject);
+    procedure DBGridICPMKeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure actProcurarICPIExecute(Sender: TObject);
+    procedure DBGridICPITitleClick(Column: TColumn);
+    procedure DBGridICPIDrawColumnCell(Sender: TObject; const Rect: TRect;
+      DataCol: Integer; Column: TColumn; State: TGridDrawState);
+    procedure actIndicadorICPIExecute(Sender: TObject);
+    procedure DBGridICPIKeyPress(Sender: TObject; var Key: Char);
+    procedure DBGridICPIKeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure DBGridICPICellClick(Column: TColumn);
+    procedure actRealizadoPendenteExecute(Sender: TObject);
+    procedure actMedidasPHExecute(Sender: TObject);
+    type
+      TICPM = record
+        Atual,Projecao,HHRealizado,HHPlanejado,HHRealizadoProjecao,HHRisco:Double;
+    end;
+    type
+      TIMRI = record
+        Vencidas,Monitoradas:Integer;
+        IMRI,IMRI_B:Double;
+    end;
+    type
+      TIARI = record
+        Atendidas,TotalIARI:Integer;
+        IARI,Projetado:Double;
+    end;
+    type
+      TIGARI = record
+        Vencidas,TotalIGARI:Integer;
+        IGARI,Projetado:Double;
+    end;
+    type
+      TICPI = record
+        EmAtraso,TotalICPI:Integer;
+        ICPI,Projetado:Double;
+    end;
+  private
+    { Private declarations }
+    TabIndexPageControl: Integer;
+    CopiaComentario: String;
+    MetaICPM,MetaICPMSO,MetaIARI,MetaIGARI,MetaIARIBCVT,MetaICPI,MetaIMRI,MetaIMRIB: String;
+    procedure WMMDIACTIVATE(var msg: TWMMDIACTIVATE);message WM_MDIACTIVATE;
+    function PreecherICPM(RLSrt:TStringGrid;SQLBase,Meta:String;Linha: Integer): TICPM;
+    function linhaGrafico(Field: String;Meta: Double; Color: TColor): TLineSeries;
+    function PreencherIMRI(DataReferencia: TDateTime;RLSrt:TStringGrid;BCVT,Resumo: Boolean):TIMRI;
+    function PreencherICPI(RLSrt:TStringGrid;Resumo: Boolean):TICPI;
+  public
+    { Public declarations }
+  end;
+
+var
+  FrmIndicadoresManutencao: TFrmIndicadoresManutencao;
+
+implementation
+  uses untPrincipal,untDataModule,untFrmPreview;
+{$R *.dfm}
+
+procedure TFrmIndicadoresManutencao.actColarComentarioExecute(Sender: TObject);
+begin
+  case PageControlIndicadores.TabIndex of
+    1:
+    begin
+      FrmDataModule.ADOQueryICPM.Edit;
+      DBEditComentarioICPM.Text:= CopiaComentario;
+      FrmDataModule.ADOQueryICPM.Post;
+    end;
+    3:
+    begin
+      FrmDataModule.ADOQueryICPI.Edit;
+      DBEditComentarioICPI.Text:= CopiaComentario;
+      FrmDataModule.ADOQueryICPI.Post;
+    end;
+  end;
+
+end;
+
+procedure TFrmIndicadoresManutencao.actCopiarComentarioExecute(Sender: TObject);
+begin
+  case PageControlIndicadores.TabIndex of
+    1: CopiaComentario:= DBEditComentarioICPM.Text;
+    3: CopiaComentario:= DBEditComentarioICPI.Text;
+  end;
+end;
+
+procedure TFrmIndicadoresManutencao.actEtiquetaExecute(Sender: TObject);
+begin
+  if btnMark.Down then
+  begin
+    ChartGrafico.Series[0].Marks.Style:= smsLabelValue;
+    ChartGrafico.Series[0].Marks.MultiLine:= true;
+    ChartGrafico.Series[0].Marks.Arrow.Visible:= true;
+    ChartGrafico.Series[0].Marks.Arrow.Color:= clBlack;
+    ChartGrafico.Series[0].Marks.Margins.Left:= 2;
+    ChartGrafico.Series[0].Marks.Margins.Right:= 2;
+    ChartGrafico.Series[0].Marks.Margins.Top:= 1;
+    ChartGrafico.Series[0].Marks.Margins.Bottom:= 1;
+    ChartGrafico.Series[0].Marks.Visible:= true;
+  end
+  else
+    ChartGrafico.Series[0].Marks.Visible:= false;
+end;
+
+procedure TFrmIndicadoresManutencao.actExcelICPMExecute(Sender: TObject);
+begin
+  FrmPrincipal.GerarExcel(DBGridICPM,'ICPM');
+end;
+
+procedure TFrmIndicadoresManutencao.actExcelICPIExecute(Sender: TObject);
+begin
+  FrmPrincipal.GerarExcel(DBGridICPI,'ICPI');
+end;
+
+procedure TFrmIndicadoresManutencao.actFiltroInserirExecute(Sender: TObject);
+begin
+  case TabIndexPageControl of
+    0:
+    begin
+      FrmPrincipal.inserirProcura(DBGridResumoIndicador,ColunasLayoutResumo);
+      actProcurarResumo.Execute;
+    end;
+    1:
+    begin
+      FrmPrincipal.inserirProcura(DBGridICPM,ColunasLayoutICPM);
+      actProcurarICPM.Execute;
+    end;
+    3:
+    begin
+      FrmPrincipal.inserirProcura(DBGridICPI,ColunasLayoutICPI);
+      actProcurarICPI.Execute;
+    end;
+  end;
+  if (FrmPrincipal.PanelFiltrosTabela.Visible)AND(FrmPrincipal.PanelAjuda1.Visible) then
+    actFiltrosTabela.Execute;
+end;
+
+procedure TFrmIndicadoresManutencao.actFiltrosICPMExecute(Sender: TObject);
+  var
+    PalavraLista,PalavraBusca: String;
+    i: Integer;
+begin
+  //Sistemas
+  FrmPrincipal.configurarCheckListBox(CheckListBoxSistemaFiltroICPM,DBGridICPM,ColunasLayoutICPM,true);
+  //Plataformas
+  PalavraBusca:= '';
+  for I := 0 to CheckListBoxPlataformaICPM.Count-1 do
+  begin
+    if CheckListBoxPlataformaICPM.Checked[i] then
+    begin
+      PalavraLista:= CheckListBoxPlataformaICPM.Items[i];
+      if PalavraBusca <> '' then
+        PalavraBusca:= PalavraBusca+';'+PalavraLista
+      else
+        PalavraBusca:= PalavraLista;
+    end;
+  end;
+  FrmPrincipal.buscaFiledGrid1('Plataforma',PalavraBusca,'Contem',ColunasLayoutICPM,4,false);
+  //Tipo Etapa Serviço
+  PalavraBusca:= '';
+  for I := 0 to CheckListBoxTipoEtapaServicoICPM.Count-1 do
+  begin
+    if CheckListBoxTipoEtapaServicoICPM.Checked[i] then
+    begin
+      PalavraLista:= CheckListBoxTipoEtapaServicoICPM.Items[i];
+      if PalavraBusca <> '' then
+        PalavraBusca:= PalavraBusca+';'+PalavraLista
+      else
+        PalavraBusca:= PalavraLista;
+    end;
+  end;
+  FrmPrincipal.buscaFiledGrid1('txtTipoEtapaServico',PalavraBusca,'Contem',ColunasLayoutICPM,4,false);
+  actProcurarICPM.Execute;
+end;
+
+procedure TFrmIndicadoresManutencao.actFiltrosTabelaExecute(Sender: TObject);
+begin
+  FrmPrincipal.btnProcurarFiltrosTabela.Action:= actProcuraFiltrosTabela;
+  case TabIndexPageControl of
+    0: FrmPrincipal.FiltrosTabela(DBGridResumoIndicador,ColunasLayoutResumo);
+    1: FrmPrincipal.FiltrosTabela(DBGridICPM,ColunasLayoutICPM);
+    3: FrmPrincipal.FiltrosTabela(DBGridICPI,ColunasLayoutICPI);
+  end;
+end;
+
+procedure TFrmIndicadoresManutencao.actGravarResumoExecute(Sender: TObject);
+  var
+    PrimeiroDiaMes: TDateTime;
+    Descricao: String;
+begin
+  PrimeiroDiaMes := RecodeDay(Date, 1);
+  Descricao:= 'S'+IntToStr(WeekOf(now))+'-'+FrmPrincipal.PrimeiraLetraMaiscula(FormatDateTime('mmmm yyyy', PrimeiroDiaMes));
+
+  FrmDataModule.ADOQueryResumoIndicador.Insert;
+  FrmDataModule.ADOQueryResumoIndicador.FieldByName('DataIndicador').AsString:= FrmPrincipal.corrigirData(now);
+  try
+    FrmDataModule.ADOQueryResumoIndicador.FieldByName('ICPM').AsFloat:= StrToFloat(RLResumo.Cells[3,1]);
+  except
+    FrmDataModule.ADOQueryResumoIndicador.FieldByName('ICPM').AsFloat:= 0;
+  end;
+  try
+    FrmDataModule.ADOQueryResumoIndicador.FieldByName('ICPMSO').AsFloat:= StrToFloat(RLResumo.Cells[3,2]);
+  except
+    FrmDataModule.ADOQueryResumoIndicador.FieldByName('ICPMSO').AsFloat:= 0;
+  end;
+  try
+    FrmDataModule.ADOQueryResumoIndicador.FieldByName('ICPI').AsFloat:= StrToFloat(RLResumo.Cells[3,3]);
+  except
+    FrmDataModule.ADOQueryResumoIndicador.FieldByName('ICPI').AsFloat:= 0;
+  end;
+  try
+  FrmDataModule.ADOQueryResumoIndicador.FieldByName('IMRI').AsFloat:= StrToFloat(RLResumo.Cells[3,4]);
+  except
+    FrmDataModule.ADOQueryResumoIndicador.FieldByName('IMRI').AsFloat:= 0;
+  end;
+  try
+    FrmDataModule.ADOQueryResumoIndicador.FieldByName('IMRI_B').AsFloat:= StrToFloat(RLResumo.Cells[3,5]);
+  except
+    FrmDataModule.ADOQueryResumoIndicador.FieldByName('IMRI_B').AsFloat:= 0;
+  end;
+  FrmDataModule.ADOQueryResumoIndicador.FieldByName('Descricao').AsString:= Descricao;
+  FrmDataModule.ADOQueryResumoIndicador.Post;
+end;
+
+procedure TFrmIndicadoresManutencao.actGRFImprimirExecute(Sender: TObject);
+begin
+  if not Assigned(FrmPreview) then
+    FrmPreview:=TFrmPreview.Create(Application)
+  else
+    FrmPreview.Show;
+
+  FrmPreview.ListaTituloRelatorio:= TStringList.Create;
+  FrmPreview.ListaTituloRelatorio.Add(ChartGrafico.Title.Caption);
+  FrmPreview.PrintPreview.PrintJobTitle:= ChartGrafico.Title.Caption;
+  FrmPreview.paginaTChart(ChartGrafico,FrmPreview.btnExcluirAntes.Down);
+  ChartGrafico.Legend.CheckBoxes:= false;
+end;
+
+procedure TFrmIndicadoresManutencao.actGRFSalvarDataExecute(Sender: TObject);
+begin
+  FrmPrincipal.salvarGrafico(ChartGrafico);
+end;
+
+procedure TFrmIndicadoresManutencao.actGRFSalvarImagemExecute(Sender: TObject);
+begin
+  SavePictureDialog1.FileName:= ChartGrafico.Title.Caption+'.wmf';
+  if(SavePictureDialog1.Execute) then
+    ChartGrafico.SaveToMetafile(SavePictureDialog1.FileName);
+end;
+
+procedure TFrmIndicadoresManutencao.actGRFTituloExecute(Sender: TObject);
+  var
+    Titulo: String;
+begin
+  Titulo:= ChartGrafico.Title.Caption;
+  ChartGrafico.Title.Text.Clear;
+  ChartGrafico.Title.Text.Add(InputBox('Titulo da tabela de carga',
+  'Descrição',Titulo));
+end;
+
+procedure TFrmIndicadoresManutencao.actGRFZoomMaisExecute(Sender: TObject);
+begin
+  ChartGrafico.ZoomPercent(110);
+end;
+
+procedure TFrmIndicadoresManutencao.actGRFZoomMenosExecute(Sender: TObject);
+begin
+  ChartGrafico.ZoomPercent(90);
+end;
+
+procedure TFrmIndicadoresManutencao.actGridASCExecute(Sender: TObject);
+begin
+  case TabIndexPageControl of
+    0: FrmPrincipal.ClassificaDBGrid(DBGridResumoIndicador,
+    FrmDataModule.ADOQueryResumoIndicador,0);
+    1: FrmPrincipal.ClassificaDBGrid(DBGridICPM,
+    FrmDataModule.ADOQueryICPM,0);
+    3: FrmPrincipal.ClassificaDBGrid(DBGridICPI,
+    FrmDataModule.ADOQueryICPI,0);
+  end;
+end;
+
+procedure TFrmIndicadoresManutencao.actGridDESCExecute(Sender: TObject);
+begin
+  case TabIndexPageControl of
+    0: FrmPrincipal.ClassificaDBGrid(DBGridResumoIndicador,
+    FrmDataModule.ADOQueryResumoIndicador,1);
+    1: FrmPrincipal.ClassificaDBGrid(DBGridICPM,
+    FrmDataModule.ADOQueryICPM,1);
+    3: FrmPrincipal.ClassificaDBGrid(DBGridICPI,
+    FrmDataModule.ADOQueryICPI,1);
+  end;
+end;
+
+procedure TFrmIndicadoresManutencao.actGraficoExecute(Sender: TObject);
+  var
+    SerieLinha: TLineSeries;
+begin
+  ChartGrafico.RemoveAllSeries;
+  case RadioGroupGrafico.ItemIndex of
+    0:
+    begin
+      SerieLinha:= linhaGrafico('ICPM',95,clBlue);
+      ChartGrafico.Title.Caption:= 'ICPM';
+      ChartGrafico.Axes.Left.Title.Caption:= 'ICPM';
+      ChartGrafico.AddSeries(SerieLinha);
+    end;
+    1:
+    begin
+      SerieLinha:= linhaGrafico('ICPMSO',97,clFuchsia);
+      ChartGrafico.Title.Caption:= 'ICPM-SO';
+      ChartGrafico.Axes.Left.Title.Caption:= 'ICPM-SO';
+      ChartGrafico.AddSeries(SerieLinha);
+    end;
+    2:
+    begin
+      SerieLinha:= linhaGrafico('ICPI',99.5,clOlive);
+      ChartGrafico.Title.Caption:= 'ICPI';
+      ChartGrafico.Axes.Left.Title.Caption:= 'ICPI';
+      ChartGrafico.AddSeries(SerieLinha);
+    end;
+    3:
+    begin
+      SerieLinha:= linhaGrafico('IMRI',95,clAqua);
+      ChartGrafico.Title.Caption:= 'IMRI';
+      ChartGrafico.Axes.Left.Title.Caption:= 'IMRI';
+      ChartGrafico.AddSeries(SerieLinha);
+    end;
+    4:
+    begin
+      SerieLinha:= linhaGrafico('IMRI_B',95,clTeal);
+      ChartGrafico.Title.Caption:= 'IMRI-B';
+      ChartGrafico.Axes.Left.Title.Caption:= 'IMRI-B';
+      ChartGrafico.AddSeries(SerieLinha);
+    end;
+    5:
+    begin
+      ChartGrafico.AddSeries(linhaGrafico('ICPM',95,clBlue));
+      ChartGrafico.AddSeries(linhaGrafico('ICPMSO',97,clFuchsia));
+      ChartGrafico.AddSeries(linhaGrafico('ICPI',99.5,clOlive) );
+      ChartGrafico.AddSeries(linhaGrafico('IMRI',95,clAqua));
+      ChartGrafico.AddSeries(linhaGrafico('IMRI_B',95,clTeal));
+      ChartGrafico.Title.Caption:= 'Indicadores';
+      ChartGrafico.Axes.Left.Title.Caption:= 'Indicadores';
+    end;
+  end;
+
+end;
+
+procedure TFrmIndicadoresManutencao.actICPMLimparExecute(Sender: TObject);
+  var
+    selRegistro: Integer;
+begin
+  selRegistro:= FrmDataModule.ADOQueryICPM.RecNo;
+  FrmDataModule.DataSourceICPM.Enabled:= false;
+  FrmDataModule.ADOQueryICPM.First;
+  FrmPrincipal.ProgressBarIncializa(FrmDataModule.ADOQueryICPM.RecordCount,'Risco de atendimento');
+  while not FrmDataModule.ADOQueryICPM.Eof do
+  begin
+    FrmDataModule.ADOQueryICPM.Edit;
+    FrmDataModule.DataSourceICPM.DataSet.
+    FieldByName('RiscoAtendimento').AsBoolean:= false;
+    FrmDataModule.ADOQueryICPM.Post;
+
+    //=============================================
+    FrmDataModule.ADOQueryICPM.Next;
+    FrmPrincipal.ProgressBarIncremento(1);
+  end;
+  FrmDataModule.ADOQueryICPM.Active:= false;
+  FrmDataModule.ADOQueryICPM.Active:= true;
+  FrmDataModule.ADOQueryICPM.RecNo:= selRegistro;
+  FrmDataModule.DataSourceICPM.Enabled:= true;
+  FrmPrincipal.ProgressBarAtualizar;
+end;
+
+procedure TFrmIndicadoresManutencao.actICPMSelExecute(Sender: TObject);
+  var
+    selRegistro: Integer;
+begin
+  selRegistro:= FrmDataModule.ADOQueryICPM.RecNo;
+  FrmDataModule.DataSourceICPM.Enabled:= false;
+  FrmDataModule.ADOQueryICPM.First;
+  FrmPrincipal.ProgressBarIncializa(FrmDataModule.ADOQueryICPM.RecordCount,'Risco de atendimento');
+  while not FrmDataModule.ADOQueryICPM.Eof do
+  begin
+    FrmDataModule.ADOQueryICPM.Edit;
+    FrmDataModule.DataSourceICPM.DataSet.
+    FieldByName('RiscoAtendimento').AsBoolean:= true;
+    FrmDataModule.ADOQueryICPM.Post;
+
+    //=============================================
+    FrmDataModule.ADOQueryICPM.Next;
+    FrmPrincipal.ProgressBarIncremento(1);
+  end;
+  FrmDataModule.ADOQueryICPM.Active:= false;
+  FrmDataModule.ADOQueryICPM.Active:= true;
+  FrmDataModule.ADOQueryICPM.RecNo:= selRegistro;
+  FrmDataModule.DataSourceICPM.Enabled:= true;
+  FrmPrincipal.ProgressBarAtualizar;
+end;
+
+procedure TFrmIndicadoresManutencao.actImprimirICPMExecute(Sender: TObject);
+  var
+   BooleanCritico,RiscoAtendimento: Boolean;
+   TextoBreveOM,DenominacaoLocalInstalacao,txtTipoEtapaServico,
+   Comentario,HHPlanejado,Plataforma:String;
+   Linha: Integer;
+begin
+  //Titulo e Configuração da tabela base
+  RLImprimirICPM.ColCount:= 8;
+  RLImprimirICPM.RowCount:= 1;
+  RLImprimirICPM.Cells[0,0]:= 'Crítico';
+  RLImprimirICPM.Cells[1,0]:= 'Texto Breve [OM]';
+  RLImprimirICPM.Cells[2,0]:= 'Denomin. Local Instalação';
+  RLImprimirICPM.Cells[3,0]:= 'Tipo Etapa Serviço';
+  RLImprimirICPM.Cells[4,0]:= 'Risco';
+  RLImprimirICPM.Cells[5,0]:= 'Comentário';
+  RLImprimirICPM.Cells[6,0]:= 'HH Plan.';
+  RLImprimirICPM.Cells[7,0]:= 'Instalação';
+  //Preencher tabela base
+  FrmDataModule.DataSourceICPM.Enabled:= false;
+  FrmDataModule.ADOQueryICPM.First;
+  while not FrmDataModule.ADOQueryICPM.Eof do
+  begin
+    Linha:= RLImprimirICPM.RowCount;
+    RLImprimirICPM.RowCount:= RLImprimirICPM.RowCount+1;
+    TextoBreveOM:=FrmDataModule.DataSourceICPM.DataSet.FieldByName('TextoBreveOM').AsString;
+    DenominacaoLocalInstalacao:=FrmDataModule.DataSourceICPM.DataSet.FieldByName('DenominacaoLocalInstalacao').AsString;
+    txtTipoEtapaServico:=FrmDataModule.DataSourceICPM.DataSet.FieldByName('txtTipoEtapaServico').AsString;
+    RiscoAtendimento:=FrmDataModule.DataSourceICPM.DataSet.FieldByName('RiscoAtendimento').AsBoolean;
+    BooleanCritico:=FrmDataModule.DataSourceICPM.DataSet.FieldByName('BooleanCritico').AsBoolean;
+    Comentario:=FrmDataModule.DataSourceICPM.DataSet.FieldByName('Comentario').AsString;
+    HHPlanejado:=FrmDataModule.DataSourceICPM.DataSet.FieldByName('HHPlanejado').AsString;
+    Plataforma:=FrmDataModule.DataSourceICPM.DataSet.FieldByName('Plataforma').AsString;
+    if BooleanCritico then
+      RLImprimirICPM.Cells[0,Linha]:= 'SIM'
+    else
+      RLImprimirICPM.Cells[0,Linha]:= 'NÃO';
+    if RiscoAtendimento then
+      RLImprimirICPM.Cells[4,Linha]:= 'SIM'
+    else
+      RLImprimirICPM.Cells[4,Linha]:= 'NÃO';
+    RLImprimirICPM.Cells[1,Linha]:= TextoBreveOM;
+    RLImprimirICPM.Cells[2,Linha]:= DenominacaoLocalInstalacao;
+    RLImprimirICPM.Cells[3,Linha]:= txtTipoEtapaServico;
+    RLImprimirICPM.Cells[5,Linha]:= Comentario;
+    RLImprimirICPM.Cells[6,Linha]:= HHPlanejado;
+    RLImprimirICPM.Cells[7,Linha]:= Plataforma;
+    FrmDataModule.ADOQueryICPM.Next;
+  end;
+  FrmDataModule.ADOQueryICPM.First;
+  FrmDataModule.DataSourceICPM.Enabled:= true;
+  FrmPrincipal.AutoFitGrade(RLImprimirICPM);
+  //Imprimir
+  if not Assigned(FrmPreview) then
+    FrmPreview:=TFrmPreview.Create(Application)
+  else
+    FrmPreview.Show;
+
+  FrmPreview.ListaTituloRelatorio:= TStringList.Create;
+  FrmPreview.ListaTituloRelatorio.Add('Pendencias ICPM - '+DateToStr(now));
+  FrmPreview.RadioGroupRelatorio.ItemIndex:= 9;
+  FrmPreview.GeneratePages;
+end;
+
+procedure TFrmIndicadoresManutencao.actIndicadorICPIExecute(Sender: TObject);
+begin
+  PreencherICPI(RLICPI,false);
+end;
+
+procedure TFrmIndicadoresManutencao.actIndicadorICPMExecute(Sender: TObject);
+  var
+    i: Integer;
+    SQLBase,txtTipoEtapaServico: String;
+begin
+  RLICPM.RowCount:= CheckListBoxTipoEtapaServicoICPM.Items.Count+2;
+  for i := 0 to CheckListBoxTipoEtapaServicoICPM.Items.Count-1 do
+    RLICPM.Cells[0,i+2]:= CheckListBoxTipoEtapaServicoICPM.Items[i];
+
+  RLICPM.Cells[0,1]:= 'ICPM';
+  //Titulo
+  RLICPM.ColCount:= 7;
+  RLICPM.Cells[0,0]:= 'Tipo Etapa Serviço';
+  RLICPM.Cells[1,0]:= 'Atual(%)';
+  RLICPM.Cells[2,0]:= 'Projeção(%)';
+  RLICPM.Cells[3,0]:= 'HH Plan.';
+  RLICPM.Cells[4,0]:= 'HH Real';
+  RLICPM.Cells[5,0]:= 'HH Risco';
+  RLICPM.Cells[6,0]:= 'Meta(%)';
+  //=====================================================
+  RLICPMSO.RowCount:= CheckListBoxTipoEtapaServicoICPM.Items.Count+2;
+  for i := 0 to CheckListBoxTipoEtapaServicoICPM.Items.Count-1 do
+    RLICPMSO.Cells[0,i+2]:= CheckListBoxTipoEtapaServicoICPM.Items[i];
+
+  RLICPMSO.Cells[0,1]:= 'ICPM-SO';
+  //Titulo
+  RLICPMSO.ColCount:= 7;
+  RLICPMSO.Cells[0,0]:= 'Tipo Etapa Serviço';
+  RLICPMSO.Cells[1,0]:= 'Atual(%)';
+  RLICPMSO.Cells[2,0]:= 'Projeção(%)';
+  RLICPMSO.Cells[3,0]:= 'HH Plan.';
+  RLICPMSO.Cells[4,0]:= 'HH Real.';
+  RLICPMSO.Cells[5,0]:= 'HH Risco';
+  RLICPMSO.Cells[6,0]:= 'Meta(%)';
+  //=====================================================
+  //Cálculo ICPM
+  SQLBase:= 'SELECT tblICPM.* FROM tblICPM;';
+  PreecherICPM(RLICPM,SQLBase,MetaICPM,1);
+  //Cálculo ICPM-SO
+  SQLBase:= 'SELECT tblICPM.* FROM tblICPM WHERE (BooleanCritico = True);';
+  PreecherICPM(RLICPMSO,SQLBase,MetaICPMSO,1);
+  //Tipo Etapa de Serviço ICPM
+  for i := 0 to CheckListBoxTipoEtapaServicoICPM.Items.Count-1 do
+  begin
+    txtTipoEtapaServico:= CheckListBoxTipoEtapaServicoICPM.Items[i];
+    SQLBase:= 'SELECT tblICPM.* FROM tblICPM '+
+    'WHERE ((txtTipoEtapaServico LIKE '+QuotedStr(txtTipoEtapaServico)+'));';
+    PreecherICPM(RLICPM,SQLBase,MetaICPM,i+2);
+  end;
+  //Tipo Etapa de Serviço ICPM-SO
+  for i := 0 to CheckListBoxTipoEtapaServicoICPM.Items.Count-1 do
+  begin
+    txtTipoEtapaServico:= CheckListBoxTipoEtapaServicoICPM.Items[i];
+    SQLBase:= 'SELECT tblICPM.* FROM tblICPM '+
+    'WHERE ((BooleanCritico = True)AND(txtTipoEtapaServico LIKE '+QuotedStr(txtTipoEtapaServico)+'));';
+    PreecherICPM(RLICPMSO,SQLBase,MetaICPMSO,i+2);
+  end;
+  //AutoFit
+  FrmPrincipal.AutoFitGrade(RLICPM);
+  FrmPrincipal.AutoFitGrade(RLICPMSO);
+end;
+
+procedure TFrmIndicadoresManutencao.actIndicadorRTIExecute(Sender: TObject);
+begin
+  PreencherIMRI(DateTimeVencimentoRTI.Date,RLIMRI,false,false);
+  actMedidasPH.Execute;
+end;
+
+procedure TFrmIndicadoresManutencao.actLimparFiltrosExecute(Sender: TObject);
+begin
+  case TabIndexPageControl of
+    0:
+    begin
+      FrmPrincipal.LimparColunasFiltro(DBGridResumoIndicador,ColunasLayoutResumo);
+      actProcurarResumo.Execute;
+    end;
+    1:
+    begin
+      FrmPrincipal.LimparColunasFiltro(DBGridICPM,ColunasLayoutICPM);
+      actProcurarICPM.Execute;
+    end;
+    3:
+    begin
+      FrmPrincipal.LimparColunasFiltro(DBGridICPI,ColunasLayoutICPI);
+      actProcurarICPI.Execute;
+    end;
+  end;
+  if (FrmPrincipal.PanelFiltrosTabela.Visible)AND(FrmPrincipal.PanelAjuda1.Visible) then
+    actFiltrosTabela.Execute;
+end;
+
+procedure TFrmIndicadoresManutencao.actMedidasPHExecute(Sender: TObject);
+  var
+    SQLBase: String;
+    ListaCentroTrabalhoResp: TStringList;
+    i,Linha,Qtd,TotalPH,A,B,C,D,BCVT: Integer;
+begin
+  RLPH.RowCount:= 1;
+  RLPH.ColCount:= 7;
+  RLPH.Cells[0,0]:= 'Centro Trabalho Resp.';
+  RLPH.Cells[1,0]:= '∑';
+  RLPH.Cells[2,0]:= 'A';
+  RLPH.Cells[3,0]:= 'B-CVT';
+  RLPH.Cells[4,0]:= 'B';
+  RLPH.Cells[5,0]:= 'C';
+  RLPH.Cells[6,0]:= 'D';
+  //Tipo Etapa Serviço
+  SQLBase:= 'SELECT tblRTI.* FROM tblRTI '+
+  'WHERE ((StatusUsuarioMedida LIKE "PH"));';
+  FrmDataModule.ADOQueryTemporarioDBMemoria.Close;
+  FrmDataModule.ADOQueryTemporarioDBMemoria.SQL.Clear;
+  FrmDataModule.ADOQueryTemporarioDBMemoria.SQL.Add(SQLBase);
+  FrmDataModule.ADOQueryTemporarioDBMemoria.Open;
+  TotalPH:= FrmDataModule.ADOQueryTemporarioDBMemoria.RecordCount;
+  ListaCentroTrabalhoResp:= TStringList.Create;
+  ListaCentroTrabalhoResp.Clear;
+  while not FrmDataModule.ADOQueryTemporarioDBMemoria.Eof do
+  begin
+    ListaCentroTrabalhoResp.Add(FrmDataModule.ADOQueryTemporarioDBMemoria.
+    FieldByName('CentroTrabalhoResp').AsString);
+    FrmDataModule.ADOQueryTemporarioDBMemoria.Next;
+  end;
+  FrmPrincipal.deleteRepetidosList(ListaCentroTrabalhoResp);
+  for I := 0 to ListaCentroTrabalhoResp.Count-1 do
+  begin
+    Linha:= RLPH.RowCount;
+    RLPH.RowCount:= RLPH.RowCount+1;
+    SQLBase:= 'SELECT tblRTI.* FROM tblRTI '+
+    'WHERE ((StatusUsuarioMedida LIKE "PH")AND(CentroTrabalhoResp LIKE '+QuotedStr(ListaCentroTrabalhoResp[i])+'));';
+    FrmDataModule.ADOQueryTemporarioDBMemoria.Close;
+    FrmDataModule.ADOQueryTemporarioDBMemoria.SQL.Clear;
+    FrmDataModule.ADOQueryTemporarioDBMemoria.SQL.Add(SQLBase);
+    FrmDataModule.ADOQueryTemporarioDBMemoria.Open;
+    Qtd:= FrmDataModule.ADOQueryTemporarioDBMemoria.RecordCount;
+    //
+    SQLBase:= 'SELECT tblRTI.* FROM tblRTI '+
+    'WHERE ((StatusUsuarioMedida LIKE "PH")AND(CodigoMedidaABCD LIKE "A")AND(CentroTrabalhoResp LIKE '+QuotedStr(ListaCentroTrabalhoResp[i])+'));';
+    FrmDataModule.ADOQueryTemporarioDBMemoria.Close;
+    FrmDataModule.ADOQueryTemporarioDBMemoria.SQL.Clear;
+    FrmDataModule.ADOQueryTemporarioDBMemoria.SQL.Add(SQLBase);
+    FrmDataModule.ADOQueryTemporarioDBMemoria.Open;
+    A:= FrmDataModule.ADOQueryTemporarioDBMemoria.RecordCount;
+    //
+    SQLBase:= 'SELECT tblRTI.* FROM tblRTI '+
+    'WHERE ((StatusUsuarioMedida LIKE "PH")AND(CodigoMedidaABCD LIKE "B")AND(CentroTrabalhoResp LIKE '+QuotedStr(ListaCentroTrabalhoResp[i])+'));';
+    FrmDataModule.ADOQueryTemporarioDBMemoria.Close;
+    FrmDataModule.ADOQueryTemporarioDBMemoria.SQL.Clear;
+    FrmDataModule.ADOQueryTemporarioDBMemoria.SQL.Add(SQLBase);
+    FrmDataModule.ADOQueryTemporarioDBMemoria.Open;
+    B:= FrmDataModule.ADOQueryTemporarioDBMemoria.RecordCount;
+    //
+    SQLBase:= 'SELECT tblRTI.* FROM tblRTI '+
+    'WHERE ((StatusUsuarioMedida LIKE "PH")AND(BCVT = True)AND(CentroTrabalhoResp LIKE '+QuotedStr(ListaCentroTrabalhoResp[i])+'));';
+    FrmDataModule.ADOQueryTemporarioDBMemoria.Close;
+    FrmDataModule.ADOQueryTemporarioDBMemoria.SQL.Clear;
+    FrmDataModule.ADOQueryTemporarioDBMemoria.SQL.Add(SQLBase);
+    FrmDataModule.ADOQueryTemporarioDBMemoria.Open;
+    BCVT:= FrmDataModule.ADOQueryTemporarioDBMemoria.RecordCount;
+    //
+    SQLBase:= 'SELECT tblRTI.* FROM tblRTI '+
+    'WHERE ((StatusUsuarioMedida LIKE "PH")AND(CodigoMedidaABCD LIKE "C")AND(CentroTrabalhoResp LIKE '+QuotedStr(ListaCentroTrabalhoResp[i])+'));';
+    FrmDataModule.ADOQueryTemporarioDBMemoria.Close;
+    FrmDataModule.ADOQueryTemporarioDBMemoria.SQL.Clear;
+    FrmDataModule.ADOQueryTemporarioDBMemoria.SQL.Add(SQLBase);
+    FrmDataModule.ADOQueryTemporarioDBMemoria.Open;
+    C:= FrmDataModule.ADOQueryTemporarioDBMemoria.RecordCount;
+    //
+    SQLBase:= 'SELECT tblRTI.* FROM tblRTI '+
+    'WHERE ((StatusUsuarioMedida LIKE "PH")AND(CodigoMedidaABCD LIKE "D")AND(CentroTrabalhoResp LIKE '+QuotedStr(ListaCentroTrabalhoResp[i])+'));';
+    FrmDataModule.ADOQueryTemporarioDBMemoria.Close;
+    FrmDataModule.ADOQueryTemporarioDBMemoria.SQL.Clear;
+    FrmDataModule.ADOQueryTemporarioDBMemoria.SQL.Add(SQLBase);
+    FrmDataModule.ADOQueryTemporarioDBMemoria.Open;
+    D:= FrmDataModule.ADOQueryTemporarioDBMemoria.RecordCount;
+    //=================================================
+    RLPH.Cells[0,Linha]:= ListaCentroTrabalhoResp[i];
+    RLPH.Cells[1,Linha]:= IntToStr(Qtd);
+    RLPH.Cells[2,Linha]:= IntToStr(A);
+    RLPH.Cells[3,Linha]:= IntToStr(BCVT);
+    RLPH.Cells[4,Linha]:= IntToStr(B);
+    RLPH.Cells[5,Linha]:= IntToStr(C);
+    RLPH.Cells[6,Linha]:= IntToStr(D);
+  end;
+  Linha:= RLPH.RowCount;
+  RLPH.RowCount:= RLPH.RowCount+1;
+  RLPH.Cells[0,Linha]:= 'Total ∑';
+  RLPH.Cells[1,Linha]:= IntToStr(TotalPH);
+
+  A:=0;
+  B:=0;
+  C:=0;
+  D:=0;
+  BCVT:=0;
+  for i := 1 to RLPH.RowCount-2 do
+  begin
+    A:= A+ StrToInt(RLPH.Cells[2,i]);
+    BCVT:= BCVT+ StrToInt(RLPH.Cells[3,i]);
+    B:= B+ StrToInt(RLPH.Cells[4,i]);
+    C:= C+ StrToInt(RLPH.Cells[5,i]);
+    D:= D+ StrToInt(RLPH.Cells[6,i]);
+  end;
+  RLPH.Cells[2,RLPH.RowCount-1]:= IntToStr(A);
+  RLPH.Cells[3,RLPH.RowCount-1]:= IntToStr(BCVT);
+  RLPH.Cells[4,RLPH.RowCount-1]:= IntToStr(B);
+  RLPH.Cells[5,RLPH.RowCount-1]:= IntToStr(C);
+  RLPH.Cells[6,RLPH.RowCount-1]:= IntToStr(D);
+  FrmPrincipal.AutoFitGrade(RLPH);
+end;
+
+procedure TFrmIndicadoresManutencao.actMostrarICPMExecute(Sender: TObject);
+begin
+  btnMostrarOcultarICPM.Action:= actOcultarICPM;
+  PanelFiltroICPM.Width:= 325;
+  PageControlICPM.Visible:= true;
+end;
+
+procedure TFrmIndicadoresManutencao.actOcultarICPMExecute(Sender: TObject);
+begin
+  btnMostrarOcultarICPM.Action:= actMostrarICPM;
+  PanelFiltroICPM.Width:= 30;
+  PageControlICPM.Visible:= false;
+end;
+
+procedure TFrmIndicadoresManutencao.actProcuraFiltrosTabelaExecute(
+  Sender: TObject);
+begin
+  case TabIndexPageControl of
+    0:
+    begin
+      frmPrincipal.CarregaFiltrosProcura(ColunasLayoutResumo);
+      actProcurarResumo.Execute;
+    end;
+    1:
+    begin
+      frmPrincipal.CarregaFiltrosProcura(ColunasLayoutICPM);
+      actProcurarICPM.Execute;
+    end;
+    3:
+    begin
+      frmPrincipal.CarregaFiltrosProcura(ColunasLayoutICPI);
+      actProcurarICPI.Execute;
+    end;
+  end;
+end;
+
+procedure TFrmIndicadoresManutencao.actProcurarICPIExecute(Sender: TObject);
+  var
+    SQLString,SQLBase: String;
+begin
+  SQLString:= frmPrincipal.SQLStringFiltroTabela(ColunasLayoutICPI,true);
+  SQLBase:= 'SELECT tblICPI.* FROM tblICPI '+
+  SQLString+' ORDER BY DescricaoEquipamento,DenominacaoLocalInstalacao;';
+  FrmPrincipal.ProcuraQuery(SQLBase,FrmDataModule.ADOQueryICPI,StatusBarICPI);
+end;
+
+procedure TFrmIndicadoresManutencao.actProcurarICPMExecute(Sender: TObject);
+  var
+    SQLString,SQLBase: String;
+begin
+  SQLString:= frmPrincipal.SQLStringFiltroTabela(ColunasLayoutICPM,true);
+  SQLBase:= 'SELECT tblICPM.* FROM tblICPM '+
+  SQLString+' ORDER BY txtTipoEtapaServico,LocalInstalacao,DenominacaoLocalInstalacao;';
+  FrmPrincipal.ProcuraQuery(SQLBase,FrmDataModule.ADOQueryICPM,StatusBarICPM);
+end;
+
+procedure TFrmIndicadoresManutencao.actProcurarResumoExecute(Sender: TObject);
+  var
+    SQLString,SQLBase: String;
+begin
+  SQLString:= frmPrincipal.SQLStringFiltroTabela(ColunasLayoutResumo,true);
+  SQLBase:= 'SELECT tblResumoIndicador.* FROM tblResumoIndicador '+
+  SQLString+' ORDER BY DataIndicador;';
+  FrmPrincipal.ProcuraQuery(SQLBase,FrmDataModule.ADOQueryResumoIndicador,StatusBarResumoIndicador);
+end;
+
+procedure TFrmIndicadoresManutencao.actRealizadoPendenteExecute(
+  Sender: TObject);
+begin
+  case PageControlIndicadores.TabIndex of
+    1:
+    begin
+      FrmDataModule.ADOQueryICPM.Edit;
+      if DBEditStatusICPM.Text = 'REALIZADO' then
+      begin
+        DBEditStatusICPM.Text:= 'PENDENTE'
+      end
+      else if DBEditStatusICPM.Text = 'PENDENTE' then
+      begin
+        DBEditStatusICPM.Text:= 'REALIZADO'
+      end;
+      FrmDataModule.ADOQueryICPM.Post;
+      actIndicadorICPM.Execute;
+    end;
+    3:
+    begin
+      FrmDataModule.ADOQueryICPI.Edit;
+      if DBEditStatusICPI.Text = 'REALIZADO' then
+      begin
+        DBEditStatusICPI.Text:= 'PENDENTE'
+      end
+      else if DBEditStatusICPI.Text = 'PENDENTE' then
+      begin
+        DBEditStatusICPI.Text:= 'REALIZADO'
+      end;
+      FrmDataModule.ADOQueryICPI.Post;
+      actIndicadorICPI.Execute;
+    end;
+  end;
+
+end;
+
+procedure TFrmIndicadoresManutencao.actResumoIndicadoresExecute(
+  Sender: TObject);
+  var
+    ICPM,ICPM_SO: TICPM;
+    IMRI: TIMRI;
+    ICPI: TICPI;
+    SQLBase,Anterior,Atual,Mes,Ano: String;
+    PrimeiroDiaMes: TDateTime;
+begin
+  PrimeiroDiaMes := RecodeDay(Date, 1);
+  Atual:= FrmPrincipal.PrimeiraLetraMaiscula(FormatDateTime('mmmm yyyy', PrimeiroDiaMes));
+  PrimeiroDiaMes:= IncMonth(PrimeiroDiaMes,-1);
+  Anterior:= FrmPrincipal.PrimeiraLetraMaiscula(FormatDateTime('mmmm yyyy', PrimeiroDiaMes));
+
+  RLResumo.RowCount:= 6;
+  RLResumo.ColCount:= 5;
+  RLResumo.Rows[1].Clear;
+  RLResumo.Rows[2].Clear;
+  RLResumo.Rows[3].Clear;
+  RLResumo.Rows[4].Clear;
+  RLResumo.Rows[5].Clear;
+  //=====================================
+  RLResumo.Cells[0,0]:= 'Indicador (%)';
+  RLResumo.Cells[1,0]:= 'Meta';
+  RLResumo.Cells[2,0]:= Anterior;
+  RLResumo.Cells[3,0]:= Atual;
+  RLResumo.Cells[4,0]:= 'Projeção';
+  //Titulos
+  RLResumo.Cells[0,1]:= 'ICPM';
+  RLResumo.Cells[0,2]:= 'ICPM-SO';
+  RLResumo.Cells[0,3]:= 'ICPI';
+  RLResumo.Cells[0,4]:= 'IMRI';
+  RLResumo.Cells[0,5]:= 'IMRI-B';
+  //Meta
+  RLResumo.Cells[1,1]:= MetaICPM;
+  RLResumo.Cells[1,2]:= MetaICPMSO;
+  RLResumo.Cells[1,3]:= MetaICPI;
+  RLResumo.Cells[1,4]:= MetaIMRI;
+  RLResumo.Cells[1,5]:= MetaIMRIB;
+  //Anterior
+  Mes:= IntToSTr(MonthOf(PrimeiroDiaMes));
+  Ano:= IntToSTr(YearOf(PrimeiroDiaMes));
+  SQLBase:= 'SELECT tblResumoIndicador.* FROM tblResumoIndicador '+
+  'WHERE ((Month(DataIndicador)= '+(Mes)+')AND(Year(DataIndicador)= '+(Ano)+')) '+
+  'ORDER BY DataIndicador DESC';
+  FrmDataModule.ADOQueryTemporarioDBConsulta1.Close;
+  FrmDataModule.ADOQueryTemporarioDBConsulta1.SQL.Clear;
+  FrmDataModule.ADOQueryTemporarioDBConsulta1.SQL.Add(SQLBase);
+  FrmDataModule.ADOQueryTemporarioDBConsulta1.Open;
+  if not FrmDataModule.ADOQueryTemporarioDBConsulta1.IsEmpty then
+  begin
+    RLResumo.Cells[2,1]:= FrmDataModule.ADOQueryTemporarioDBConsulta1.FieldByName('ICPM').AsString;
+    RLResumo.Cells[2,2]:= FrmDataModule.ADOQueryTemporarioDBConsulta1.FieldByName('ICPMSO').AsString;
+    RLResumo.Cells[2,3]:= FrmDataModule.ADOQueryTemporarioDBConsulta1.FieldByName('ICPI').AsString;
+    RLResumo.Cells[2,4]:= FrmDataModule.ADOQueryTemporarioDBConsulta1.FieldByName('IMRI').AsString;
+    RLResumo.Cells[2,5]:= FrmDataModule.ADOQueryTemporarioDBConsulta1.FieldByName('IMRI_B').AsString;
+  end;
+  //ICPM
+  SQLBase:= 'SELECT tblICPM.* FROM tblICPM;';
+  ICPM:= PreecherICPM(RLICPM,SQLBase,MetaICPM,1);
+  SQLBase:= 'SELECT tblICPM.* FROM tblICPM WHERE (BooleanCritico = True);';
+  ICPM_SO:= PreecherICPM(RLICPMSO,SQLBase,MetaICPMSO,1);
+  //ICPI
+  ICPI:= PreencherICPI(RLICPI,true);
+  //IMRI
+  IMRI:= PreencherIMRI(now,RLIMRI,false,true);
+  //IMRIB:= PreencherIMRI(now,RLIMRIB,true,true);
+  //Atual
+  RLResumo.Cells[3,1]:= FormatFloat('0.00',ICPM.Atual);
+  RLResumo.Cells[3,2]:= FormatFloat('0.00',ICPM_SO.Atual);
+  RLResumo.Cells[3,3]:= FormatFloat('0.00',ICPI.ICPI);
+  RLResumo.Cells[3,4]:= FormatFloat('0.00',IMRI.IMRI);
+  RLResumo.Cells[3,5]:= FormatFloat('0.00',IMRI.IMRI_B);
+  //Projeção
+  RLResumo.Cells[4,1]:= FormatFloat('0.00',ICPM.Projecao);
+  RLResumo.Cells[4,2]:= FormatFloat('0.00',ICPM_SO.Projecao);
+  RLResumo.Cells[4,3]:= FormatFloat('0.00',ICPI.Projetado);
+  //FrmPrincipal.AutoFitGrade(RLResumo);
+end;
+
+procedure TFrmIndicadoresManutencao.actSubstituirPorExecute(Sender: TObject);
+begin
+  case TabIndexPageControl of
+    0: FrmPrincipal.SubstituirPor(DBGridResumoIndicador,FrmDataModule.ADOQueryResumoIndicador,
+    FrmDataModule.DataSourceResumoIndicador);
+    1: FrmPrincipal.SubstituirPor(DBGridICPM,FrmDataModule.ADOQueryICPM,
+    FrmDataModule.DataSourceICPM);
+    3: FrmPrincipal.SubstituirPor(DBGridICPI,FrmDataModule.ADOQueryRTI,
+    FrmDataModule.DataSourceICPI);
+  end;
+end;
+
+procedure TFrmIndicadoresManutencao.actZoomMaisExecute(Sender: TObject);
+  var
+    i: Integer;
+begin
+  DBGridICPM.Font.Size:= DBGridICPM.Font.Size+1;
+  //StatusBarExecutantes
+  StatusBarICPM.Height:= StatusBarICPM.Height+2;
+  StatusBarICPM.Font.Size:= StatusBarICPM.Font.Size+1;
+  //RLICPM
+  RLICPM.Font.Size:= RLICPM.Font.Size+1;
+  //AutoFit
+  FrmPrincipal.AutoSizeDBGrid(DBGridICPM);
+  FrmPrincipal.AutoFitStatusBar(StatusBarICPM);
+  FrmPrincipal.AutoFitGrade(RLICPM);
+  for I := 0 to DBGridICPM.Columns.Count-1 do
+  begin
+    if ((DBGridICPM.Columns[i].Title.Caption = 'Crítico')OR
+    (DBGridICPM.Columns[i].Title.Caption = 'Risco')) then
+      DBGridICPM.Columns[i].Width:= 40;
+  end;
+end;
+
+procedure TFrmIndicadoresManutencao.actZoomMenosExecute(Sender: TObject);
+  var
+    i: Integer;
+begin
+  if DBGridICPM.Font.Size > 7 then
+  begin
+    DBGridICPM.Font.Size:= DBGridICPM.Font.Size-1;
+    //StatusBarExecutantes
+    StatusBarICPM.Height:= StatusBarICPM.Height-2;
+    StatusBarICPM.Font.Size:= StatusBarICPM.Font.Size-1;
+    //RLICPM
+    RLICPM.Font.Size:= RLICPM.Font.Size-1;
+    //AutoFit
+    FrmPrincipal.AutoSizeDBGrid(DBGridICPM);
+    FrmPrincipal.AutoFitStatusBar(StatusBarICPM);
+    FrmPrincipal.AutoFitGrade(RLICPM);
+    for I := 0 to DBGridICPM.Columns.Count-1 do
+    begin
+      if ((DBGridICPM.Columns[i].Title.Caption = 'Crítico')OR
+      (DBGridICPM.Columns[i].Title.Caption = 'Risco')) then
+        DBGridICPM.Columns[i].Width:= 40;
+    end;
+  end;
+end;
+
+procedure TFrmIndicadoresManutencao.DBGridResumoIndicadorDrawColumnCell(Sender: TObject;
+  const Rect: TRect; DataCol: Integer; Column: TColumn; State: TGridDrawState);
+begin
+  FrmPrincipal.GridZebrado(DBGridResumoIndicador,ColunasLayoutResumo,State,Rect,DataCol,Column);
+end;
+
+procedure TFrmIndicadoresManutencao.DBGridResumoIndicadorTitleClick(
+  Column: TColumn);
+begin
+  FrmPrincipal.configurarFiltro(1,Column.FieldName,IntToStr(Column.Index),
+  Column.ReadOnly,actFiltroInserir,actGridASC,actGridDESC,actSubstituirPor);
+  //======================================================
+  FrmPrincipal.titleGrid(ColunasLayoutResumo,'Consulta',
+  FrmDataModule.ADOQueryResumoIndicador.SQL.Text);
+  TabIndexPageControl:= 0;
+end;
+
+procedure TFrmIndicadoresManutencao.DBGridICPICellClick(Column: TColumn);
+begin
+  if ((FrmPrincipal.logPerfil = 'Administrador')OR
+  (FrmPrincipal.logPerfil = 'Supervisor')OR
+  (FrmPrincipal.logPerfil = 'PCM')) then
+  begin
+    try
+      if (Self.DBGridICPI.SelectedField.DataType = ftBoolean)AND
+      (Column.Field.FieldName = 'RiscoAtendimento') then
+      begin
+        DBGridICPI.Options:=
+        [dgTitles,dgIndicator,dgColumnResize,dgColLines,dgRowLines,dgTabs,dgAlwaysShowSelection,dgTitleClick,dgTitleHotTrack];
+        //=================================================================
+        FrmDataModule.ADOQueryICPI.Edit;
+        FrmDataModule.DataSourceICPI.DataSet.
+        FieldByName('RiscoAtendimento').AsBoolean:= not Self.DBGridICPI.SelectedField.AsBoolean;
+        if Self.DBGridICPI.SelectedField.AsBoolean then
+          FrmDataModule.DataSourceICPI.DataSet.
+          FieldByName('StatusICPI').AsString:= 'PENDENTE';
+        try
+          FrmDataModule.ADOQueryICPI.Post;
+        except
+          MessageBox(0,'Banco de dados alterado, necessário atualização!','Banco de Dados',MB_ICONINFORMATION);
+          FrmDataModule.ADOQueryICPI.Cancel;
+        end;
+        actIndicadorICPI.Execute;
+      end
+      else
+        DBGridICPI.Options:=
+        [dgEditing,dgTitles,dgIndicator,dgColumnResize,dgColLines,dgRowLines,dgTabs,dgAlwaysShowSelection,dgTitleClick,dgTitleHotTrack];
+    except
+    end;
+  end;
+end;
+
+procedure TFrmIndicadoresManutencao.DBGridICPIDrawColumnCell(Sender: TObject;
+  const Rect: TRect; DataCol: Integer; Column: TColumn; State: TGridDrawState);
+begin
+  FrmPrincipal.GridZebrado(DBGridICPI,ColunasLayoutICPI,State,Rect,DataCol,Column);
+  if (Column.Field.FieldName = 'RiscoAtendimento') then
+  begin
+    if FrmDataModule.DataSourceICPI.DataSet.
+    FieldByName('RiscoAtendimento').AsBoolean then
+    begin
+      TDBGrid(Sender).Canvas.FillRect(Rect);
+      FrmPrincipal.ImageList1.Draw(TDBGrid(Sender).Canvas, Rect.Left +10,Rect.Top + 1, 154);
+    end
+    else
+    begin
+      TDBGrid(Sender).Canvas.FillRect(Rect);
+      FrmPrincipal.ImageList1.Draw(TDBGrid(Sender).Canvas, Rect.Left +10,Rect.Top + 1, 155);
+    end;
+  end
+  else if (Column.Field.FieldName = 'StatusICPI') then
+  begin
+    if FrmDataModule.DataSourceICPI.DataSet.
+    FieldByName('StatusICPI').AsString= 'REALIZADO' then
+    begin
+      DBGridICPI.Canvas.Brush.Color:= clLime;
+      DBGridICPI.Font.Color:= clBlack;
+      DBGridICPI.Canvas.FillRect(Rect);
+      DBGridICPI.DefaultDrawColumnCell(Rect, DataCol,Column, State);
+    end
+    else if FrmDataModule.DataSourceICPI.DataSet.
+    FieldByName('StatusICPI').AsString= 'PENDENTE' then
+    begin
+      DBGridICPI.Canvas.Brush.Color:= clRed;
+      DBGridICPI.Font.Color:= clBlack;
+      DBGridICPI.Canvas.FillRect(Rect);
+      DBGridICPI.DefaultDrawColumnCell(Rect, DataCol,Column, State);
+    end
+    else
+    begin
+      DBGridICPI.Canvas.Brush.Color:= clSilver;
+      DBGridICPI.Font.Color:= clBlack;
+      DBGridICPI.Canvas.FillRect(Rect);
+      DBGridICPI.DefaultDrawColumnCell(Rect, DataCol,Column, State);
+    end;
+  end;
+end;
+
+procedure TFrmIndicadoresManutencao.DBGridICPIKeyDown(Sender: TObject;
+  var Key: Word; Shift: TShiftState);
+begin
+  if (Key in [VK_DOWN]) AND (DBGridICPI.DataSource.DataSet.RecNo=
+  DBGridICPI.DataSource.DataSet.RecordCount) then
+    Abort;
+end;
+
+procedure TFrmIndicadoresManutencao.DBGridICPIKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+  if not (DBGridICPI.SelectedField.FieldName = 'Comentario') then
+    Key:= #0;
+end;
+
+procedure TFrmIndicadoresManutencao.DBGridICPITitleClick(Column: TColumn);
+begin
+  FrmPrincipal.configurarFiltro(1,Column.FieldName,IntToStr(Column.Index),
+  Column.ReadOnly,actFiltroInserir,actGridASC,actGridDESC,actSubstituirPor);
+  //======================================================
+  FrmPrincipal.titleGrid(ColunasLayoutICPI,'Memoria',
+  FrmDataModule.ADOQueryICPI.SQL.Text);
+  TabIndexPageControl:= 3;
+end;
+
+procedure TFrmIndicadoresManutencao.DBGridICPMCellClick(Column: TColumn);
+begin
+  if ((FrmPrincipal.logPerfil = 'Administrador')OR
+  (FrmPrincipal.logPerfil = 'Supervisor')OR
+  (FrmPrincipal.logPerfil = 'PCM')) then
+  begin
+    try
+      if (Self.DBGridICPM.SelectedField.DataType = ftBoolean)AND
+      (Column.Field.FieldName = 'RiscoAtendimento') then
+      begin
+        DBGridICPM.Options:=
+        [dgTitles,dgIndicator,dgColumnResize,dgColLines,dgRowLines,dgTabs,dgAlwaysShowSelection,dgTitleClick,dgTitleHotTrack];
+        //=================================================================
+        FrmDataModule.ADOQueryICPM.Edit;
+        FrmDataModule.DataSourceICPM.DataSet.
+        FieldByName('RiscoAtendimento').AsBoolean:= not Self.DBGridICPM.SelectedField.AsBoolean;
+        if Self.DBGridICPM.SelectedField.AsBoolean then
+          FrmDataModule.DataSourceICPM.DataSet.
+          FieldByName('StatusICPM').AsString:= 'PENDENTE';
+        try
+          FrmDataModule.ADOQueryICPM.Post;
+        except
+          MessageBox(0,'Banco de dados alterado, necessário atualização!','Banco de Dados',MB_ICONINFORMATION);
+          FrmDataModule.ADOQueryICPM.Cancel;
+        end;
+        actIndicadorICPM.Execute;
+      end
+      else
+        DBGridICPM.Options:=
+        [dgEditing,dgTitles,dgIndicator,dgColumnResize,dgColLines,dgRowLines,dgTabs,dgAlwaysShowSelection,dgTitleClick,dgTitleHotTrack];
+    except
+    end;
+  end;
+end;
+
+procedure TFrmIndicadoresManutencao.DBGridICPMDrawColumnCell(Sender: TObject;
+  const Rect: TRect; DataCol: Integer; Column: TColumn; State: TGridDrawState);
+begin
+  FrmPrincipal.GridZebrado(DBGridICPM,ColunasLayoutICPM,State,Rect,DataCol,Column);
+  if (Column.Field.FieldName = 'BooleanCritico') then
+  begin
+    if FrmDataModule.DataSourceICPM.DataSet.
+    FieldByName('BooleanCritico').AsBoolean then
+    begin
+      TDBGrid(Sender).Canvas.FillRect(Rect);
+      FrmPrincipal.ImageList1.Draw(TDBGrid(Sender).Canvas, Rect.Left +10,Rect.Top + 1, 154);
+    end
+    else
+    begin
+      TDBGrid(Sender).Canvas.FillRect(Rect);
+      FrmPrincipal.ImageList1.Draw(TDBGrid(Sender).Canvas, Rect.Left +10,Rect.Top + 1, 155);
+    end;
+  end
+  else if (Column.Field.FieldName = 'RiscoAtendimento') then
+  begin
+    if FrmDataModule.DataSourceICPM.DataSet.
+    FieldByName('RiscoAtendimento').AsBoolean then
+    begin
+      TDBGrid(Sender).Canvas.FillRect(Rect);
+      FrmPrincipal.ImageList1.Draw(TDBGrid(Sender).Canvas, Rect.Left +10,Rect.Top + 1, 154);
+    end
+    else
+    begin
+      TDBGrid(Sender).Canvas.FillRect(Rect);
+      FrmPrincipal.ImageList1.Draw(TDBGrid(Sender).Canvas, Rect.Left +10,Rect.Top + 1, 155);
+    end;
+  end
+  else if (Column.Field.FieldName = 'StatusICPM') then
+  begin
+    if ((FrmDataModule.DataSourceICPM.DataSet.
+    FieldByName('StatusICPM').AsString= 'REALIZADO')AND(FrmDataModule.DataSourceICPM.DataSet.
+    FieldByName('StatusSistema').AsString= 'LIB CONF')) then
+    begin
+      DBGridICPM.Canvas.Brush.Color:= clYellow;
+      DBGridICPM.Font.Color:= clBlack;
+      DBGridICPM.Canvas.FillRect(Rect);
+      DBGridICPM.DefaultDrawColumnCell(Rect, DataCol,Column, State);
+    end
+    else if (FrmDataModule.DataSourceICPM.DataSet.
+    FieldByName('StatusICPM').AsString= 'REALIZADO') then
+    begin
+      DBGridICPM.Canvas.Brush.Color:= clLime;
+      DBGridICPM.Font.Color:= clBlack;
+      DBGridICPM.Canvas.FillRect(Rect);
+      DBGridICPM.DefaultDrawColumnCell(Rect, DataCol,Column, State);
+    end
+    else if FrmDataModule.DataSourceICPM.DataSet.
+    FieldByName('StatusICPM').AsString= 'PENDENTE' then
+    begin
+      DBGridICPM.Canvas.Brush.Color:= clRed;
+      DBGridICPM.Font.Color:= clBlack;
+      DBGridICPM.Canvas.FillRect(Rect);
+      DBGridICPM.DefaultDrawColumnCell(Rect, DataCol,Column, State);
+    end
+    else
+    begin
+      DBGridICPM.Canvas.Brush.Color:= clSilver;
+      DBGridICPM.Font.Color:= clBlack;
+      DBGridICPM.Canvas.FillRect(Rect);
+      DBGridICPM.DefaultDrawColumnCell(Rect, DataCol,Column, State);
+    end
+  end;
+end;
+
+procedure TFrmIndicadoresManutencao.DBGridICPMKeyDown(Sender: TObject;
+  var Key: Word; Shift: TShiftState);
+begin
+  if (Key in [VK_DOWN]) AND (DBGridICPM.DataSource.DataSet.RecNo=
+  DBGridICPM.DataSource.DataSet.RecordCount) then
+    Abort;
+end;
+
+procedure TFrmIndicadoresManutencao.DBGridICPMKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+  if not (DBGridICPM.SelectedField.FieldName = 'Comentario') then
+    Key:= #0;
+end;
+
+procedure TFrmIndicadoresManutencao.DBGridICPMTitleClick(Column: TColumn);
+begin
+  FrmPrincipal.configurarFiltro(1,Column.FieldName,IntToStr(Column.Index),
+  Column.ReadOnly,actFiltroInserir,actGridASC,actGridDESC,actSubstituirPor);
+  //======================================================
+  FrmPrincipal.titleGrid(ColunasLayoutICPM,'Memoria',
+  FrmDataModule.ADOQueryICPM.SQL.Text);
+  TabIndexPageControl:= 1;
+end;
+
+procedure TFrmIndicadoresManutencao.FormClose(Sender: TObject;
+  var Action: TCloseAction);
+begin
+  Action:= caFree;
+  FrmIndicadoresManutencao:=nil;
+end;
+
+procedure TFrmIndicadoresManutencao.FormCreate(Sender: TObject);
+  var
+    Mes,Ano: String;
+    DataIndicador: String;
+begin
+  FrmPrincipal.MDIChildCreated(self.Handle);
+  DateTimeVencimentoRTI.DateTime:= now;
+  Mes:= FormatFloat('00',(MonthOf(now)));
+  Ano:= IntToStr(YearOf(now));
+  DataIndicador:= Mes+'/'+Ano;
+  TabIndexPageControl:= 0;
+  MetaICPM:= '90';
+  MetaICPMSO:= '97';
+  MetaIGARI:= '98';
+  MetaIARI:= '98';
+  MetaIARIBCVT:= '95';
+  MetaICPI:= '99,5';
+  MetaIMRI:= '85';
+  MetaIMRIB:= '88';
+  //Incicialização
+  FrmPrincipal.SetUpColunasLayout(DBGridICPM, ColunasLayoutICPM);
+  FrmPrincipal.SetUpColunasLayout(DBGridResumoIndicador, ColunasLayoutResumo);
+  FrmPrincipal.SetUpColunasLayout(DBGridICPI,ColunasLayoutICPI);
+  Frmprincipal.buscaFiledGrid1('DataIndicador',DataIndicador,'Contem',ColunasLayoutResumo,4,false);
+  Frmprincipal.buscaFiledGrid1('EmAtraso','0','Diferente',ColunasLayoutICPI,4,false);
+  //=========================================================
+  PageControlIndicadores.TabIndex:=0;
+  FrmDataModule.ADOQueryPlataformaControle.Active:= false;
+  FrmDataModule.ADOQueryPlataformaControle.Active:= true;
+  FrmPrincipal.carregarCheckListBox(FrmDataModule.ADOQueryPlataformaControle,
+  CheckListBoxPlataformaICPM,'Plataforma');
+  FrmPrincipal.carregarCheckListBox(FrmDataModule.ADOQueryICPM,
+  CheckListBoxTipoEtapaServicoICPM,'txtTipoEtapaServico');
+  FrmPrincipal.deleteRepetidosCheckListBox(CheckListBoxTipoEtapaServicoICPM);
+  FrmPrincipal.carregarFiltroSistemaCheckList(CheckListBoxSistemaFiltroICPM,DBGridICPM);
+  //=========================================================
+  actProcurarResumo.Execute;
+  actResumoIndicadores.Execute;
+  actGrafico.Execute;
+end;
+
+procedure TFrmIndicadoresManutencao.FormDestroy(Sender: TObject);
+begin
+  FrmPrincipal.MDIChildDestroyed(self.Handle);
+end;
+
+function TFrmIndicadoresManutencao.linhaGrafico(Field: String;Meta: Double; Color: TColor): TLineSeries;
+var
+  SerieMeta: TLineSeries;
+  DataIndicador: TDateTime;
+  ICPM: Double;
+begin
+  ChartGrafico.Axes.Bottom.Title.Caption:= 'Tempo';
+  ChartGrafico.BottomAxis.Visible:= true;
+  Result:= TLineSeries.Create(ChartGrafico);
+  SerieMeta:= TLineSeries.Create(ChartGrafico);
+  Result.XValues.DateTime:= true;
+  SerieMeta.XValues.DateTime:= true;
+  Result.Pointer.Visible:= true;
+  FrmDataModule.ADOQueryResumoIndicador.Active:= false;
+  FrmDataModule.ADOQueryResumoIndicador.Active:= true;
+  FrmDataModule.ADOQueryResumoIndicador.First;
+  FrmDataModule.DataSourceResumoIndicador.Enabled:= false;
+  //=============================================================
+  while not FrmDataModule.ADOQueryResumoIndicador.Eof do
+  begin
+    DataIndicador:= FrmDataModule.ADOQueryResumoIndicador.FieldByName('DataIndicador').AsDateTime;
+    ICPM:= FrmDataModule.ADOQueryResumoIndicador.FieldByName(Field).AsFloat;
+    Result.AddXY(DataIndicador,ICPM,DateToStr(DataIndicador),Color);
+    SerieMeta.AddXY(DataIndicador,Meta,DateToStr(DataIndicador),clRed);
+    FrmDataModule.ADOQueryResumoIndicador.Next;
+  end;
+  FrmDataModule.ADOQueryResumoIndicador.First;
+  FrmDataModule.DataSourceResumoIndicador.Enabled:= true;
+  ChartGrafico.AutoSize:= true;
+  ChartGrafico.AddSeries(SerieMeta);
+end;
+
+procedure TFrmIndicadoresManutencao.PageControlIndicadoresChange(Sender: TObject);
+begin
+  case PageControlIndicadores.TabIndex of
+    0:
+    begin
+      actProcurarResumo.Execute;
+      actResumoIndicadores.Execute;
+      TabIndexPageControl:= 0;
+    end;
+    1:
+    begin
+      actProcurarICPM.Execute;
+      actIndicadorICPM.Execute;
+      TabIndexPageControl:= 1;
+    end;
+    2:
+    begin
+      actIndicadorRTI.Execute;
+      TabIndexPageControl:= 2;
+    end;
+    3:
+    begin
+      actProcurarICPI.Execute;
+      TabIndexPageControl:= 3;
+      actIndicadorICPI.Execute;
+    end;
+  end;
+end;
+
+function TFrmIndicadoresManutencao.PreecherICPM(RLSrt: TStringGrid; SQLBase,
+  Meta: String; Linha: Integer): TICPM;
+  var
+    Atual,Projecao,HHRealizado,HHPlanejado,HHRealizadoProjecao,HHRisco:Double;
+begin
+  FrmDataModule.ADOQueryTemporarioDBMemoria.Close;
+  FrmDataModule.ADOQueryTemporarioDBMemoria.SQL.Clear;
+  FrmDataModule.ADOQueryTemporarioDBMemoria.SQL.Add(SQLBase);
+  FrmDataModule.ADOQueryTemporarioDBMemoria.Open;
+  HHRealizado:=0;
+  HHPlanejado:=0;
+  HHRealizadoProjecao:=0;
+  HHRisco:=0;
+  while not FrmDataModule.ADOQueryTemporarioDBMemoria.Eof do
+  begin
+    HHPlanejado:=HHPlanejado+FrmDataModule.ADOQueryTemporarioDBMemoria.FieldByName('HHPlanejado').AsFloat;
+    HHRealizado:=HHRealizado+FrmDataModule.ADOQueryTemporarioDBMemoria.FieldByName('HHRealizado').AsFloat;
+    if (FrmDataModule.ADOQueryTemporarioDBMemoria.FieldByName('RiscoAtendimento').AsBoolean=false) then
+    begin
+      HHRealizadoProjecao:= HHRealizadoProjecao+FrmDataModule.ADOQueryTemporarioDBMemoria.
+      FieldByName('HHPlanejado').AsFloat;
+    end
+    else
+    begin
+      HHRisco:= HHRisco+FrmDataModule.ADOQueryTemporarioDBMemoria.
+      FieldByName('HHPlanejado').AsFloat;
+    end;
+    FrmDataModule.ADOQueryTemporarioDBMemoria.Next;
+  end;
+  //============================================================================
+  if HHPlanejado = 0 then
+  begin
+    Atual:= 100;
+    Projecao:= 100;
+  end
+  else
+  begin
+    Atual:= (HHRealizado/HHPlanejado)*100;
+    Projecao:= (HHRealizadoProjecao/HHPlanejado)*100;
+  end;
+  RLSrt.Cells[1,Linha]:= FormatFloat('0.00',Atual);
+  RLSrt.Cells[2,Linha]:= FormatFloat('0.00',Projecao);
+  RLSrt.Cells[3,Linha]:= FormatFloat('0.00',HHPlanejado);
+  RLSrt.Cells[4,Linha]:= FormatFloat('0.00',HHRealizado);
+  RLSrt.Cells[5,Linha]:= FormatFloat('0.00',HHRisco);
+  RLSrt.Cells[6,Linha]:= Meta;
+  Result.Atual:= Atual;
+  Result.Projecao:= Projecao;
+  Result.HHRealizado:= HHRealizado;
+  Result.HHPlanejado:= HHPlanejado;
+  Result.HHRealizadoProjecao:= HHRealizadoProjecao;
+  Result.HHRisco:= HHRisco;
+end;
+
+function TFrmIndicadoresManutencao.PreencherICPI(RLSrt: TStringGrid;
+  Resumo: Boolean): TICPI;
+  var
+    SQLBase: String;
+    TotalICPI,EmAtraso,TotalProjetado: Integer;
+    Indicador,Projetado: Double;
+begin
+  RLSrt.ColCount:=3;
+  RLSrt.RowCount:= 4;
+  RLSrt.Rows[1].Clear;
+  RLSrt.Rows[2].Clear;
+  RLSrt.Cells[0,0]:= '';
+  RLSrt.Cells[0,1]:= 'Em Atraso';
+  RLSrt.Cells[0,2]:= 'Total';
+  //===========================================================
+  SQLBase:= 'SELECT tblICPI.* FROM tblICPI;';
+  FrmDataModule.ADOQueryTemporarioDBMemoria.Close;
+  FrmDataModule.ADOQueryTemporarioDBMemoria.SQL.Clear;
+  FrmDataModule.ADOQueryTemporarioDBMemoria.SQL.Add(SQLBase);
+  FrmDataModule.ADOQueryTemporarioDBMemoria.Open;
+  TotalICPI:= FrmDataModule.ADOQueryTemporarioDBMemoria.RecordCount;
+  //Em Atraso
+  SQLBase:= 'SELECT tblICPI.* FROM tblICPI '+
+  'WHERE ((EmAtraso <> 0)AND(StatusICPI LIKE "PENDENTE"));';
+  FrmDataModule.ADOQueryTemporarioDBMemoria.Close;
+  FrmDataModule.ADOQueryTemporarioDBMemoria.SQL.Clear;
+  FrmDataModule.ADOQueryTemporarioDBMemoria.SQL.Add(SQLBase);
+  FrmDataModule.ADOQueryTemporarioDBMemoria.Open;
+  EmAtraso:= FrmDataModule.ADOQueryTemporarioDBMemoria.RecordCount;
+  //TotalProjetado
+  SQLBase:= 'SELECT tblICPI.* FROM tblICPI '+
+  'WHERE ((EmAtraso <> 0)AND(RiscoAtendimento = True));';
+  FrmDataModule.ADOQueryTemporarioDBMemoria.Close;
+  FrmDataModule.ADOQueryTemporarioDBMemoria.SQL.Clear;
+  FrmDataModule.ADOQueryTemporarioDBMemoria.SQL.Add(SQLBase);
+  FrmDataModule.ADOQueryTemporarioDBMemoria.Open;
+  TotalProjetado:= FrmDataModule.ADOQueryTemporarioDBMemoria.RecordCount;
+  //==========================================================
+  RLSrt.Cells[1,0]:= FrmPrincipal.PrimeiraLetraMaiscula(FormatDateTime('mmmm yyyy', now));
+  RLSrt.Cells[2,0]:= 'Projetado';
+  //EmAtraso
+  RLSrt.Cells[1,1]:= IntToStr(EmAtraso);
+  RLSrt.Cells[2,1]:= IntToStr(TotalProjetado);
+  //TotalICPI
+  RLSrt.Cells[1,2]:= IntToStr(TotalICPI);
+  RLSrt.Cells[2,2]:= IntToStr(TotalICPI);
+  //Indicador
+  if TotalICPI = 0 then
+  begin
+    Indicador:= 100;
+    Projetado:= 100;
+  end
+  else
+  begin
+    Indicador:= RoundTo((1-(EmAtraso/TotalICPI))*100,-2);
+    Projetado:= RoundTo((1-(TotalProjetado/TotalICPI))*100,-2);
+  end;
+  //=====================================
+  RLSrt.Cells[0,3]:= 'ICPI';
+  RLSrt.Cells[1,3]:= FormatFloat('0.00%',Indicador);
+  RLSrt.Cells[2,3]:= FormatFloat('0.00%',Projetado);
+  //================================================================
+  FrmPrincipal.AutoFitGrade(RLSrt);
+  Result.EmAtraso:= EmAtraso;
+  Result.TotalICPI:= TotalICPI;
+  Result.ICPI:= Indicador;
+  Result.Projetado:= Projetado;
+end;
+
+function TFrmIndicadoresManutencao.PreencherIMRI(DataReferencia: TDateTime;RLSrt: TStringGrid;
+  BCVT,Resumo: Boolean): TIMRI;
+  var
+    SQLBase,SQLBCVT: String;
+    DataProcura,Coluna: String;
+    Vencidas,TotalMONI,Projecao,i,VencidaA,VencidaB,VencidaC,VencidaD,
+    MonitoradaA,MonitoradaB,MonitoradaC,MonitoradaD: Integer;
+    PrimeiroDiaMes: TDateTime;
+    IMRI,IMRI_B: Double;
+begin
+  VencidaA:=0;VencidaB:=0;VencidaC:=0;VencidaD:=0;
+  MonitoradaA:=0;MonitoradaB:=0;MonitoradaC:=0;MonitoradaD:=0;
+  if Resumo then
+    Projecao:= 0
+  else
+    Projecao:= SpinEdit1.Value;
+  if BCVT then
+  begin
+    RLSrt.RowCount:= 4;
+    for I := 1 to RLSrt.RowCount-1 do
+      RLSrt.Rows[i].Clear;
+    //=================================
+    RLSrt.Cells[0,0]:= '';
+    RLSrt.Cells[0,1]:= 'Vencida ∑';
+    RLSrt.Cells[0,2]:= 'Monitorada ∑';
+    RLSrt.Cells[0,3]:= 'IMRI-B-CVT %';
+  end
+  else
+  begin
+    RLSrt.RowCount:= 12;
+    for I := 1 to RLSrt.RowCount-1 do
+      RLSrt.Rows[i].Clear;
+    //=================================
+    RLSrt.Cells[0,0]:= '';
+    RLSrt.Cells[0,1]:= 'Vencida A';
+    RLSrt.Cells[0,2]:= 'MONI A';
+    RLSrt.Cells[0,3]:= 'Vencida B';
+    RLSrt.Cells[0,4]:= 'MONI B';
+    RLSrt.Cells[0,5]:= 'Vencida C';
+    RLSrt.Cells[0,6]:= 'MONI C';
+    RLSrt.Cells[0,7]:= 'Vencida D';
+    RLSrt.Cells[0,8]:= 'MONI D';
+    RLSrt.Cells[0,9]:= 'Vencida ∑';
+    RLSrt.Cells[0,10]:= 'Monitorada ∑';
+    RLSrt.Cells[0,11]:= 'IMRI %';
+  end;
+  RLSrt.ColCount:=1;
+
+  for i := 0 to Projecao do
+  begin
+    RLSrt.ColCount:= RLSrt.ColCount+1;
+    DataProcura:= (FormatDateTime('mm/dd/yyyy',IncMonth(DataReferencia,i)));
+    if BCVT then
+      SQLBCVT:= 'AND(BCVT = True));'
+    else
+      SQLBCVT:= ');';
+
+    if BCVT = false then
+    begin
+      //Vencidas A
+      SQLBase:= 'SELECT tblRTI.* FROM tblRTI '+
+      'WHERE ((DataVencimento < #'+DataProcura+'#)AND(CodigoMedidaABCD LIKE "A")'+SQLBCVT;
+      FrmDataModule.ADOQueryTemporarioDBMemoria.Close;
+      FrmDataModule.ADOQueryTemporarioDBMemoria.SQL.Clear;
+      FrmDataModule.ADOQueryTemporarioDBMemoria.SQL.Add(SQLBase);
+      FrmDataModule.ADOQueryTemporarioDBMemoria.Open;
+      VencidaA:= FrmDataModule.ADOQueryTemporarioDBMemoria.RecordCount;
+      //Vencidas B
+      SQLBase:= 'SELECT tblRTI.* FROM tblRTI '+
+      'WHERE ((DataVencimento < #'+DataProcura+'#)AND(CodigoMedidaABCD LIKE "B")'+SQLBCVT;
+      FrmDataModule.ADOQueryTemporarioDBMemoria.Close;
+      FrmDataModule.ADOQueryTemporarioDBMemoria.SQL.Clear;
+      FrmDataModule.ADOQueryTemporarioDBMemoria.SQL.Add(SQLBase);
+      FrmDataModule.ADOQueryTemporarioDBMemoria.Open;
+      VencidaB:= FrmDataModule.ADOQueryTemporarioDBMemoria.RecordCount;
+      //Vencidas C
+      SQLBase:= 'SELECT tblRTI.* FROM tblRTI '+
+      'WHERE ((DataVencimento < #'+DataProcura+'#)AND(CodigoMedidaABCD LIKE "C")'+SQLBCVT;
+      FrmDataModule.ADOQueryTemporarioDBMemoria.Close;
+      FrmDataModule.ADOQueryTemporarioDBMemoria.SQL.Clear;
+      FrmDataModule.ADOQueryTemporarioDBMemoria.SQL.Add(SQLBase);
+      FrmDataModule.ADOQueryTemporarioDBMemoria.Open;
+      VencidaC:= FrmDataModule.ADOQueryTemporarioDBMemoria.RecordCount;
+      //Vencidas D
+      SQLBase:= 'SELECT tblRTI.* FROM tblRTI '+
+      'WHERE ((DataVencimento < #'+DataProcura+'#)AND(CodigoMedidaABCD LIKE "D")'+SQLBCVT;
+      FrmDataModule.ADOQueryTemporarioDBMemoria.Close;
+      FrmDataModule.ADOQueryTemporarioDBMemoria.SQL.Clear;
+      FrmDataModule.ADOQueryTemporarioDBMemoria.SQL.Add(SQLBase);
+      FrmDataModule.ADOQueryTemporarioDBMemoria.Open;
+      VencidaD:= FrmDataModule.ADOQueryTemporarioDBMemoria.RecordCount;
+      //Monitoradas A
+      SQLBase:= 'SELECT tblRTI.* FROM tblRTI '+
+      'WHERE ((CodigoAcao LIKE "MONI")AND(CodigoMedidaABCD LIKE "A")'+SQLBCVT;
+      FrmDataModule.ADOQueryTemporarioDBMemoria.Close;
+      FrmDataModule.ADOQueryTemporarioDBMemoria.SQL.Clear;
+      FrmDataModule.ADOQueryTemporarioDBMemoria.SQL.Add(SQLBase);
+      FrmDataModule.ADOQueryTemporarioDBMemoria.Open;
+      MonitoradaA:= FrmDataModule.ADOQueryTemporarioDBMemoria.RecordCount;
+      //Monitoradas B
+      SQLBase:= 'SELECT tblRTI.* FROM tblRTI '+
+      'WHERE ((CodigoAcao LIKE "MONI")AND(CodigoMedidaABCD LIKE "B")'+SQLBCVT;
+      FrmDataModule.ADOQueryTemporarioDBMemoria.Close;
+      FrmDataModule.ADOQueryTemporarioDBMemoria.SQL.Clear;
+      FrmDataModule.ADOQueryTemporarioDBMemoria.SQL.Add(SQLBase);
+      FrmDataModule.ADOQueryTemporarioDBMemoria.Open;
+      MonitoradaB:= FrmDataModule.ADOQueryTemporarioDBMemoria.RecordCount;
+      //Monitoradas C
+      SQLBase:= 'SELECT tblRTI.* FROM tblRTI '+
+      'WHERE ((CodigoAcao LIKE "MONI")AND(CodigoMedidaABCD LIKE "C")'+SQLBCVT;
+      FrmDataModule.ADOQueryTemporarioDBMemoria.Close;
+      FrmDataModule.ADOQueryTemporarioDBMemoria.SQL.Clear;
+      FrmDataModule.ADOQueryTemporarioDBMemoria.SQL.Add(SQLBase);
+      FrmDataModule.ADOQueryTemporarioDBMemoria.Open;
+      MonitoradaC:= FrmDataModule.ADOQueryTemporarioDBMemoria.RecordCount;
+      //Monitoradas D
+      SQLBase:= 'SELECT tblRTI.* FROM tblRTI '+
+      'WHERE ((CodigoAcao LIKE "MONI")AND(CodigoMedidaABCD LIKE "D")'+SQLBCVT;
+      FrmDataModule.ADOQueryTemporarioDBMemoria.Close;
+      FrmDataModule.ADOQueryTemporarioDBMemoria.SQL.Clear;
+      FrmDataModule.ADOQueryTemporarioDBMemoria.SQL.Add(SQLBase);
+      FrmDataModule.ADOQueryTemporarioDBMemoria.Open;
+      MonitoradaD:= FrmDataModule.ADOQueryTemporarioDBMemoria.RecordCount;
+    end;
+    //Vencidas Data1
+    SQLBase:= 'SELECT tblRTI.* FROM tblRTI '+
+    'WHERE ((DataVencimento < #'+DataProcura+'#)'+SQLBCVT;
+    FrmDataModule.ADOQueryTemporarioDBMemoria.Close;
+    FrmDataModule.ADOQueryTemporarioDBMemoria.SQL.Clear;
+    FrmDataModule.ADOQueryTemporarioDBMemoria.SQL.Add(SQLBase);
+    FrmDataModule.ADOQueryTemporarioDBMemoria.Open;
+    Vencidas:= FrmDataModule.ADOQueryTemporarioDBMemoria.RecordCount;
+    //Monitoradas
+    SQLBase:= 'SELECT tblRTI.* FROM tblRTI '+
+    'WHERE ((CodigoAcao LIKE "MONI")'+SQLBCVT;
+    FrmDataModule.ADOQueryTemporarioDBMemoria.Close;
+    FrmDataModule.ADOQueryTemporarioDBMemoria.SQL.Clear;
+    FrmDataModule.ADOQueryTemporarioDBMemoria.SQL.Add(SQLBase);
+    FrmDataModule.ADOQueryTemporarioDBMemoria.Open;
+    TotalMONI:= FrmDataModule.ADOQueryTemporarioDBMemoria.RecordCount;
+    //Preencher IMRI
+    PrimeiroDiaMes := RecodeDay(DateTimeVencimentoRTI.Date, 1);
+    Coluna:= FrmPrincipal.PrimeiraLetraMaiscula(FormatDateTime('mmmm yyyy', IncMonth(PrimeiroDiaMes,i)));
+    RLSrt.Cells[i+1,0]:= Coluna;
+    if Vencidas = 0 then
+      IMRI:= 100
+    else
+      IMRI:= RoundTo((TotalMONI/Vencidas)*100,-2);
+    if VencidaB = 0 then
+      IMRI_B:= 100
+    else
+      IMRI_B:= RoundTo((MonitoradaB/VencidaB)*100,-2);
+    if BCVT then
+    begin
+      RLSrt.Cells[i+1,1]:= IntToStr(Vencidas);
+      RLSrt.Cells[i+1,2]:= IntToStr(TotalMONI);
+      RLSrt.Cells[i+1,3]:= FormatFloat('0.00%',IMRI);
+    end
+    else
+    begin
+      RLSrt.Cells[i+1,1]:= IntToStr(VencidaA);
+      RLSrt.Cells[i+1,2]:= IntToStr(MonitoradaA);
+      RLSrt.Cells[i+1,3]:= IntToStr(VencidaB);
+      RLSrt.Cells[i+1,4]:= IntToStr(MonitoradaB);
+      RLSrt.Cells[i+1,5]:= IntToStr(VencidaC);
+      RLSrt.Cells[i+1,6]:= IntToStr(MonitoradaC);
+      RLSrt.Cells[i+1,7]:= IntToStr(VencidaD);
+      RLSrt.Cells[i+1,8]:= IntToStr(MonitoradaD);
+      RLSrt.Cells[i+1,9]:= IntToStr(Vencidas);
+      RLSrt.Cells[i+1,10]:= IntToStr(TotalMONI);
+      RLSrt.Cells[i+1,11]:= FormatFloat('0.00%',IMRI);
+    end;
+    //================================================================
+    FrmPrincipal.AutoFitGrade(RLSrt);
+    Result.Vencidas:= Vencidas;
+    Result.Monitoradas:= TotalMONI;
+    Result.IMRI:= IMRI;
+    Result.IMRI_B:= IMRI_B;
+  end;
+end;
+
+procedure TFrmIndicadoresManutencao.RLICPMDrawCell(Sender: TObject; ACol,
+  ARow: Integer; Rect: TRect; State: TGridDrawState);
+  var
+    R: TRect;
+begin
+  if (ARow > 0)AND((ACol=1)OR(ACol=2)) then
+  begin
+    R := Rect;
+    R.Left := R.Left - 4;
+    try
+      //Atual
+      if (StrToFloat(RLICPM.Cells[ACol,ARow])>StrToFloat(RLICPM.Cells[6,ARow]))then
+      begin
+        RLICPM.Canvas.Brush.Color := clLime;
+        RLICPM.Canvas.Font.Style := [];
+        RLICPM.Canvas.FillRect(R);
+        DrawText(RLICPM.Canvas.Handle, PChar(RLICPM.Cells[ACol, ARow]),
+        -1, R, DT_Center);
+      end
+      else
+      begin
+        RLICPM.Canvas.Brush.Color := clRed;
+        RLICPM.Canvas.Font.Style := [];
+        RLICPM.Canvas.FillRect(R);
+        DrawText(RLICPM.Canvas.Handle, PChar(RLICPM.Cells[ACol, ARow]),
+        -1, R, DT_Center);
+      end
+    except
+    end;
+  end
+  else if (ARow > 0) then
+  begin
+    R := Rect;
+    R.Left := R.Left - 4;
+    RLICPM.Canvas.Brush.Color := clInfoBk;
+    RLICPM.Canvas.Font.Style := [];
+    RLICPM.Canvas.FillRect(R);
+    DrawText(RLICPM.Canvas.Handle, PChar(RLICPM.Cells[ACol, ARow]),-1, R, DT_Center);
+  end;
+end;
+
+procedure TFrmIndicadoresManutencao.RLICPMSODrawCell(Sender: TObject; ACol,
+  ARow: Integer; Rect: TRect; State: TGridDrawState);
+  var
+    R: TRect;
+begin
+  if (ARow > 0)AND((ACol=1)OR(ACol=2)) then
+  begin
+    R := Rect;
+    R.Left := R.Left - 4;
+    try
+      //Atual
+      if (StrToFloat(RLICPMSO.Cells[ACol,ARow])>StrToFloat(RLICPMSO.Cells[5,ARow]))then
+      begin
+        RLICPMSO.Canvas.Brush.Color := clLime;
+        RLICPMSO.Canvas.Font.Style := [];
+        RLICPMSO.Canvas.FillRect(R);
+        DrawText(RLICPMSO.Canvas.Handle, PChar(RLICPMSO.Cells[ACol, ARow]),-1, R, DT_Center);
+      end
+      else
+      begin
+        RLICPMSO.Canvas.Brush.Color := clRed;
+        RLICPMSO.Canvas.Font.Style := [];
+        RLICPMSO.Canvas.FillRect(R);
+        DrawText(RLICPMSO.Canvas.Handle, PChar(RLICPMSO.Cells[ACol, ARow]),-1, R, DT_Center);
+      end
+    except
+    end;
+  end
+  else if (ARow > 0) then
+  begin
+    R := Rect;
+    R.Left := R.Left - 4;
+    RLICPMSO.Canvas.Brush.Color := clInfoBk;
+    RLICPMSO.Canvas.Font.Style := [];
+    RLICPMSO.Canvas.FillRect(R);
+    DrawText(RLICPMSO.Canvas.Handle, PChar(RLICPMSO.Cells[ACol, ARow]),-1, R, DT_Center);
+  end;
+end;
+
+procedure TFrmIndicadoresManutencao.RLResumoDrawCell(Sender: TObject; ACol,
+  ARow: Integer; Rect: TRect; State: TGridDrawState);
+  var
+    R: TRect;
+begin
+  if (ARow > 0)AND(ACol>=2) then
+  begin
+    R := Rect;
+    R.Left := R.Left - 4;
+    try
+      //Atual
+      if (StrToFloat(RLResumo.Cells[ACol,ARow])>StrToFloat(RLResumo.Cells[1,ARow]))then
+      begin
+        RLResumo.Canvas.Brush.Color := clLime;
+        RLResumo.Canvas.Font.Style := [];
+        RLResumo.Canvas.FillRect(R);
+        DrawText(RLResumo.Canvas.Handle, PChar(RLResumo.Cells[ACol, ARow]),
+        -1, R, DT_Center);
+      end
+      else
+      begin
+        RLResumo.Canvas.Brush.Color := clRed;
+        RLResumo.Canvas.Font.Style := [];
+        RLResumo.Canvas.FillRect(R);
+        DrawText(RLResumo.Canvas.Handle, PChar(RLResumo.Cells[ACol, ARow]),
+        -1, R, DT_Center);
+      end
+    except
+    end;
+  end
+  else if (ARow > 0) then
+  begin
+    R := Rect;
+    R.Left := R.Left - 4;
+    RLResumo.Canvas.Brush.Color := clInfoBk;
+    RLResumo.Canvas.Font.Style := [];
+    RLResumo.Canvas.FillRect(R);
+    DrawText(RLResumo.Canvas.Handle, PChar(RLResumo.Cells[ACol, ARow]),-1, R, DT_Center);
+  end;
+end;
+
+procedure TFrmIndicadoresManutencao.WMMDIACTIVATE(var msg: TWMMDIACTIVATE);
+var
+  active: TWinControl;
+  idx: Integer;
+begin
+  active := FindControl(msg.ActiveWnd) ;
+
+  if Assigned(active) then
+  begin
+    idx := FrmPrincipal.mdiChildrenTabs.Tabs.IndexOfObject(TObject(msg.ActiveWnd));
+    FrmPrincipal.mdiChildrenTabs.Tag := -1;
+    FrmPrincipal.mdiChildrenTabs.TabIndex := idx;
+    FrmPrincipal.mdiChildrenTabs.Tag := 0;
+  end;
+end;
+
+end.

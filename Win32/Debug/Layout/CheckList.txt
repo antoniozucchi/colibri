@@ -1,0 +1,33 @@
+TAB1;Chek-List
+TAB1;Erro
+TAB1;Ciente
+TAB1;Plataforma
+TAB1;Sistema
+TAB1;Descrição da Variavel
+TAB1;TAG
+TAB1;Valor Médio (Período)
+TAB1;Valor Atual
+TAB1;Unidade [PI]
+TAB1;Limite Inferior
+TAB1;Limite Superior
+TAB1;Var. Limite
+TAB1;Tipo Var. [PI]
+TAB1;Check-List Por
+TAB1;Data Check-List
+TAB1;Computador
+TAB1;Histórico (Dias)
+TAB1;Root Path [PI]
+TAB1;Código Limite
+TAB1;Limite Vinculado
+TAB1;Tolerância Inferior
+TAB1;Tolerância Superior
+TAB1;Observações sobre o Limite Operacional
+TAB1;Local Instalação SAP
+TAB1;Denomin. Local Instalação SAP
+TAB1;Avaliado Por
+TAB1;Data Atualização
+TAB1;Computador Atualização
+TAB1;Código
+TAB1;____TAG-PI____
+TAB1;LocalInstalacao
+TAB1;DenominacaoLocalInstalacao

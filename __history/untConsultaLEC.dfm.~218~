@@ -1,0 +1,1832 @@
+object FrmConsultaLEC: TFrmConsultaLEC
+  Left = 0
+  Top = 0
+  Caption = 'Local de Instala'#231#227'o do SAP [LEC]'
+  ClientHeight = 625
+  ClientWidth = 953
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  FormStyle = fsMDIChild
+  OldCreateOrder = False
+  Visible = True
+  WindowState = wsMaximized
+  OnClose = FormClose
+  OnCreate = FormCreate
+  OnDestroy = FormDestroy
+  PixelsPerInch = 96
+  TextHeight = 13
+  object PageControlGeral: TPageControl
+    Left = 0
+    Top = 0
+    Width = 953
+    Height = 625
+    ActivePage = TabSheet4
+    Align = alClient
+    TabOrder = 0
+    object TabSheet4: TTabSheet
+      Caption = 'Local de Instala'#231#227'o [SAP]'
+      object Splitter1: TSplitter
+        Left = 653
+        Top = 25
+        Height = 572
+        Align = alRight
+        ExplicitLeft = 709
+        ExplicitTop = 22
+        ExplicitHeight = 378
+      end
+      object PanelTitulo: TPanel
+        Left = 0
+        Top = 0
+        Width = 945
+        Height = 25
+        Align = alTop
+        Caption = 'Local de Instala'#231#227'o [SAP]'
+        Color = clGradientActiveCaption
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -13
+        Font.Name = 'Tahoma'
+        Font.Style = [fsBold]
+        ParentBackground = False
+        ParentFont = False
+        TabOrder = 0
+      end
+      object PanelResultados: TPanel
+        Left = 0
+        Top = 25
+        Width = 653
+        Height = 572
+        Align = alClient
+        TabOrder = 1
+        object Splitter7: TSplitter
+          Left = 1
+          Top = 432
+          Width = 651
+          Height = 3
+          Cursor = crVSplit
+          Align = alBottom
+          ExplicitTop = 30
+          ExplicitWidth = 386
+        end
+        object ColunasLayoutSAP: TStringGrid
+          Left = 72
+          Top = 134
+          Width = 113
+          Height = 94
+          ColCount = 2
+          DefaultRowHeight = 21
+          TabOrder = 0
+          Visible = False
+          RowHeights = (
+            21
+            21
+            21
+            21
+            21)
+        end
+        object ToolBar1: TToolBar
+          Left = 1
+          Top = 1
+          Width = 651
+          Height = 29
+          ButtonHeight = 21
+          Caption = 'ToolBar1'
+          DrawingStyle = dsGradient
+          EdgeBorders = [ebLeft, ebTop, ebRight, ebBottom]
+          TabOrder = 1
+          object BitBtn3: TBitBtn
+            Left = 0
+            Top = 0
+            Width = 70
+            Height = 21
+            Action = actExcelSAP
+            Caption = 'Exportar'
+            ParentShowHint = False
+            ShowHint = True
+            TabOrder = 2
+          end
+          object BitBtn1: TBitBtn
+            Left = 70
+            Top = 0
+            Width = 70
+            Height = 21
+            Action = actLimparFiltros
+            Caption = 'Limpar'
+            ParentShowHint = False
+            ShowHint = True
+            TabOrder = 1
+          end
+          object BitBtn4: TBitBtn
+            Left = 140
+            Top = 0
+            Width = 70
+            Height = 21
+            Action = actFiltrosTabela
+            Caption = 'Filtros'
+            ParentShowHint = False
+            ShowHint = True
+            TabOrder = 3
+          end
+          object BitBtn13: TBitBtn
+            Left = 210
+            Top = 0
+            Width = 79
+            Height = 21
+            Action = actBooleanLEC
+            Caption = 'LEC Todos'
+            ParentShowHint = False
+            ShowHint = True
+            TabOrder = 4
+          end
+          object BitBtn15: TBitBtn
+            Left = 289
+            Top = 0
+            Width = 112
+            Height = 21
+            Action = actLECSelecionado
+            Caption = 'LEC Selecionado'
+            ParentShowHint = False
+            ShowHint = True
+            TabOrder = 6
+          end
+          object BitBtn16: TBitBtn
+            Left = 401
+            Top = 0
+            Width = 96
+            Height = 21
+            Action = actItemManutencao
+            Caption = 'Plano Manut.'
+            ParentShowHint = False
+            ShowHint = True
+            TabOrder = 7
+          end
+          object BitBtn2: TBitBtn
+            Left = 497
+            Top = 0
+            Width = 80
+            Height = 21
+            Action = actSAPIF
+            Caption = 'Alterar IF'
+            ParentShowHint = False
+            ShowHint = True
+            TabOrder = 0
+          end
+          object DBEdit3: TDBEdit
+            Left = 577
+            Top = 0
+            Width = 40
+            Height = 21
+            DataField = 'LocalInstalacao'
+            DataSource = FrmDataModule.DataSourceLocalInstalacaoSAP
+            TabOrder = 5
+            Visible = False
+            OnChange = actProcurarItemManutencaoExecute
+          end
+        end
+        object PanelItemManutencao: TPanel
+          Left = 1
+          Top = 435
+          Width = 651
+          Height = 136
+          Align = alBottom
+          TabOrder = 2
+          object RLItemManutencao: TStringGrid
+            Left = 1
+            Top = 30
+            Width = 649
+            Height = 105
+            Align = alClient
+            FixedCols = 0
+            TabOrder = 0
+          end
+          object ToolBar11: TToolBar
+            Left = 1
+            Top = 1
+            Width = 649
+            Height = 29
+            ButtonHeight = 23
+            Caption = 'ToolBar11'
+            DrawingStyle = dsGradient
+            EdgeBorders = [ebLeft, ebTop, ebRight, ebBottom]
+            Images = FrmPrincipal.ImageList1
+            TabOrder = 1
+            object btnMostrarOcultar: TToolButton
+              Left = 0
+              Top = 0
+              Action = actMostrar
+            end
+            object BitBtn14: TBitBtn
+              Left = 23
+              Top = 0
+              Width = 70
+              Height = 23
+              Action = actExcelItemManutencao
+              Caption = 'Exportar'
+              ParentShowHint = False
+              ShowHint = True
+              TabOrder = 0
+            end
+          end
+        end
+        object Panel8: TPanel
+          Left = 1
+          Top = 30
+          Width = 651
+          Height = 402
+          Align = alClient
+          TabOrder = 3
+          object DBGridSAP: TDBGrid
+            Left = 1
+            Top = 1
+            Width = 649
+            Height = 381
+            Align = alClient
+            DataSource = FrmDataModule.DataSourceLocalInstalacaoSAP
+            ReadOnly = True
+            TabOrder = 0
+            TitleFont.Charset = DEFAULT_CHARSET
+            TitleFont.Color = clWindowText
+            TitleFont.Height = -11
+            TitleFont.Name = 'Tahoma'
+            TitleFont.Style = []
+            OnDrawColumnCell = DBGridSAPDrawColumnCell
+            OnTitleClick = DBGridSAPTitleClick
+            Columns = <
+              item
+                Alignment = taCenter
+                Expanded = False
+                FieldName = 'BooleanLEC'
+                Title.Alignment = taCenter
+                Title.Caption = 'LEC'
+                Visible = True
+              end
+              item
+                Alignment = taCenter
+                Expanded = False
+                FieldName = 'BooleanCritico'
+                Title.Alignment = taCenter
+                Title.Caption = 'Cr'#237'tico'
+                Visible = True
+              end
+              item
+                Alignment = taCenter
+                Expanded = False
+                FieldName = 'BooleanItem'
+                Title.Alignment = taCenter
+                Title.Caption = 'Plan.'
+                Visible = True
+              end
+              item
+                Alignment = taCenter
+                Expanded = False
+                FieldName = 'ImpactoFalha'
+                Title.Alignment = taCenter
+                Title.Caption = 'IF'
+                Width = 57
+                Visible = True
+              end
+              item
+                Expanded = False
+                FieldName = 'Plataforma'
+                Title.Alignment = taCenter
+                Title.Caption = 'Instala'#231#227'o'
+                Width = 233
+                Visible = True
+              end
+              item
+                Expanded = False
+                FieldName = 'LocalInstalacao'
+                Title.Alignment = taCenter
+                Title.Caption = 'Local Instala'#231#227'o'
+                Width = 183
+                Visible = True
+              end
+              item
+                Expanded = False
+                FieldName = 'DenominacaoLocalInstalacao'
+                Title.Alignment = taCenter
+                Title.Caption = 'Denomin. Local Instala'#231#227'o'
+                Width = 232
+                Visible = True
+              end
+              item
+                Alignment = taCenter
+                Expanded = False
+                FieldName = 'PerfilCatalogo'
+                Title.Alignment = taCenter
+                Title.Caption = 'Perfil Catalogo'
+                Width = 87
+                Visible = True
+              end
+              item
+                Expanded = False
+                FieldName = 'Fabricante'
+                Title.Alignment = taCenter
+                Visible = True
+              end
+              item
+                Expanded = False
+                FieldName = 'NPFabricante'
+                Title.Alignment = taCenter
+                Title.Caption = 'NP do Fabricante'
+                Visible = True
+              end
+              item
+                Expanded = False
+                FieldName = 'DenominacaoTipo'
+                Title.Alignment = taCenter
+                Title.Caption = 'Denomina'#231#227'o Tipo'
+                Visible = True
+              end
+              item
+                Expanded = False
+                FieldName = 'NSerie'
+                Title.Alignment = taCenter
+                Title.Caption = 'N'#176' Serie'
+                Visible = True
+              end
+              item
+                Expanded = False
+                FieldName = 'Classe'
+                Title.Alignment = taCenter
+                Visible = True
+              end
+              item
+                Alignment = taCenter
+                Expanded = False
+                FieldName = 'CampoSelecao'
+                Title.Alignment = taCenter
+                Title.Caption = 'Campo Sele'#231#227'o'
+                Width = 125
+                Visible = True
+              end
+              item
+                Expanded = False
+                FieldName = 'Sala'
+                Title.Alignment = taCenter
+                Visible = True
+              end
+              item
+                Alignment = taCenter
+                Expanded = False
+                FieldName = 'StatusSistema'
+                Title.Alignment = taCenter
+                Title.Caption = 'Status Sistema'
+                Width = 76
+                Visible = True
+              end
+              item
+                Alignment = taCenter
+                Expanded = False
+                FieldName = 'CentroCusto'
+                Title.Alignment = taCenter
+                Title.Caption = 'Centro de Custo'
+                Visible = True
+              end
+              item
+                Alignment = taCenter
+                Expanded = False
+                FieldName = 'CentroTrabalho'
+                Title.Alignment = taCenter
+                Title.Caption = 'Centro Trabalho'
+                Width = 89
+                Visible = True
+              end
+              item
+                Alignment = taCenter
+                Expanded = False
+                FieldName = 'CentroTrabalhoResp'
+                Title.Alignment = taCenter
+                Title.Caption = 'Centro Trabalho Resp.'
+                Width = 114
+                Visible = True
+              end
+              item
+                Alignment = taCenter
+                Expanded = False
+                FieldName = 'Categoria'
+                Title.Alignment = taCenter
+                Visible = True
+              end
+              item
+                Alignment = taCenter
+                Expanded = False
+                FieldName = 'Hierarquia'
+                Title.Alignment = taCenter
+                Visible = True
+              end
+              item
+                Alignment = taCenter
+                Expanded = False
+                FieldName = 'DataImportacao'
+                Title.Alignment = taCenter
+                Title.Caption = 'Data Importa'#231#227'o'
+                Visible = True
+              end
+              item
+                Alignment = taCenter
+                Expanded = False
+                FieldName = 'ImportadoPor'
+                Title.Alignment = taCenter
+                Title.Caption = 'Importado Por'
+                Visible = True
+              end
+              item
+                Alignment = taCenter
+                Expanded = False
+                FieldName = 'ComputadorImportacao'
+                Title.Alignment = taCenter
+                Title.Caption = 'Computador'
+                Visible = True
+              end>
+          end
+          object StatusBarSAP: TStatusBar
+            Left = 1
+            Top = 382
+            Width = 649
+            Height = 19
+            Panels = <
+              item
+                Width = 50
+              end
+              item
+                Width = 50
+              end
+              item
+                Width = 50
+              end
+              item
+                Width = 50
+              end
+              item
+                Width = 50
+              end>
+          end
+        end
+      end
+      object PageControl1: TPageControl
+        Left = 656
+        Top = 25
+        Width = 289
+        Height = 572
+        ActivePage = TabSheet2
+        Align = alRight
+        TabOrder = 2
+        object TabSheet1: TTabSheet
+          Caption = 'Filtro do Usu'#225'rio'
+          object CheckListBoxSistemaFiltro: TCheckListBox
+            Left = 0
+            Top = 29
+            Width = 281
+            Height = 515
+            Align = alClient
+            ItemHeight = 13
+            TabOrder = 0
+            OnClick = actFiltrosExecute
+          end
+          object ToolBar10: TToolBar
+            Left = 0
+            Top = 0
+            Width = 281
+            Height = 29
+            Caption = 'ToolBar2'
+            DrawingStyle = dsGradient
+            EdgeBorders = [ebLeft, ebTop, ebRight, ebBottom]
+            Images = FrmPrincipal.ImageList1
+            TabOrder = 1
+            object ToolButton5: TToolButton
+              Left = 0
+              Top = 0
+              Action = actTudoFiltroUsuario
+            end
+            object ToolButton7: TToolButton
+              Left = 23
+              Top = 0
+              Action = actLimpaFiltroUsuario
+            end
+          end
+        end
+        object TabSheet2: TTabSheet
+          Caption = 'Instala'#231#227'o'
+          ImageIndex = 1
+          object CheckListBoxPlataforma: TCheckListBox
+            Left = 0
+            Top = 29
+            Width = 281
+            Height = 515
+            Align = alClient
+            ItemHeight = 13
+            TabOrder = 0
+            OnClick = actFiltrosExecute
+          end
+          object ToolBar2: TToolBar
+            Left = 0
+            Top = 0
+            Width = 281
+            Height = 29
+            Caption = 'ToolBar2'
+            DrawingStyle = dsGradient
+            EdgeBorders = [ebLeft, ebTop, ebRight, ebBottom]
+            Images = FrmPrincipal.ImageList1
+            TabOrder = 1
+            object ToolButton1: TToolButton
+              Left = 0
+              Top = 0
+              Action = actSelTudoLocalInstalacao
+            end
+            object ToolButton2: TToolButton
+              Left = 23
+              Top = 0
+              Action = actSelLimpaLocalInstalacao
+            end
+          end
+        end
+        object TabSheet3: TTabSheet
+          Caption = 'Estrutura de '#193'rvore'
+          ImageIndex = 2
+          object ToolBar3: TToolBar
+            Left = 0
+            Top = 0
+            Width = 281
+            Height = 29
+            Caption = 'ToolBar3'
+            DrawingStyle = dsGradient
+            EdgeBorders = [ebLeft, ebTop, ebRight, ebBottom]
+            Images = FrmPrincipal.ImageList1
+            TabOrder = 0
+            object ToolButton3: TToolButton
+              Left = 0
+              Top = 0
+              Action = actArvore
+              ParentShowHint = False
+              ShowHint = True
+            end
+            object ToolButton4: TToolButton
+              Left = 23
+              Top = 0
+              Action = actInterromper
+              ParentShowHint = False
+              ShowHint = True
+            end
+            object edtLocalInstalacao: TEdit
+              Left = 46
+              Top = 0
+              Width = 138
+              Height = 22
+              Color = clInfoBk
+              ReadOnly = True
+              TabOrder = 0
+              OnChange = edtLocalInstalacaoChange
+            end
+          end
+          object TreeView: TTreeView
+            Left = 0
+            Top = 29
+            Width = 281
+            Height = 515
+            Align = alClient
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -13
+            Font.Name = 'Tahoma'
+            Font.Style = []
+            Indent = 19
+            ParentFont = False
+            ReadOnly = True
+            RowSelect = True
+            TabOrder = 1
+            OnChange = TreeViewChange
+          end
+        end
+        object TabSheet7: TTabSheet
+          Caption = 'SCRIPT SAP'
+          ImageIndex = 4
+          object ToolBar12: TToolBar
+            Left = 0
+            Top = 0
+            Width = 281
+            Height = 29
+            Caption = 'ToolBar12'
+            DrawingStyle = dsGradient
+            EdgeBorders = [ebLeft, ebTop, ebRight, ebBottom]
+            Images = FrmPrincipal.ImageList1
+            TabOrder = 0
+            object ToolButton8: TToolButton
+              Left = 0
+              Top = 0
+              Action = actSalvarScript
+              ParentShowHint = False
+              ShowHint = True
+            end
+          end
+          object MemoScript: TMemo
+            Left = 0
+            Top = 29
+            Width = 281
+            Height = 515
+            Align = alClient
+            Lines.Strings = (
+              'If Not IsObject(application) Then'
+              '   Set SapGuiAuto  = GetObject("SAPGUI")'
+              '   Set application = SapGuiAuto.GetScriptingEngine'
+              'End If'
+              'If Not IsObject(connection) Then'
+              '   Set connection = application.Children(0)'
+              'End If'
+              'If Not IsObject(session) Then'
+              '   Set session    = connection.Children(0)'
+              'End If'
+              'If IsObject(WScript) Then'
+              '   WScript.ConnectObject session,     "on"'
+              '   WScript.ConnectObject application, "on"'
+              'End If'
+              'session.findById("wnd[0]").maximize'
+              ''
+              ''
+              ''
+              'tam = UBound(Local)'
+              ''
+              'For i=0 To tam'
+              'session.findById("wnd[0]/tbar[0]/okcd").text = "/nil02"'
+              'session.findById("wnd[0]").sendVKey 0'
+              'session.findById("wnd[0]/usr/ctxtIFLO-TPLNR").text = Local(i)'
+              'session.findById("wnd[0]/usr/ctxtRILO0-TPLKZ").text = "e02"'
+              'session.findById("wnd[0]/usr/ctxtRILO0-TPLKZ").setFocus'
+              'session.findById("wnd[0]/usr/ctxtRILO0-TPLKZ").caretPosition = 3'
+              'session.findById("wnd[0]").sendVKey 0'
+              'session.findById("wnd[0]/usr/tabsTABSTRIP/tabpT\03").select'
+              
+                'TextoMsgBox = Right(session.findById("wnd[1]/usr/txtMESSTXT1").T' +
+                'ext, 5)'
+              'If TextoMsgBox = "valor" Then'
+              #9'session.findById("wnd[1]/tbar[0]/btn[0]").press'
+              'End IF'
+              
+                'session.findById("wnd[0]/usr/tabsTABSTRIP/tabpT\03/ssubSUB_DATA:' +
+                'SAPLITO0:0102/subSUB_0102C:SAPLITO0:1080/subXUSR1080:SAPLXTOB:10' +
+                '00/ctxtCI_IFLOT-YYIMPACTO_FALHA").text = ImpactoFalha'
+              
+                'session.findById("wnd[0]/usr/tabsTABSTRIP/tabpT\03/ssubSUB_DATA:' +
+                'SAPLITO0:0102/subSUB_0102C:SAPLITO0:1080/subXUSR1080:SAPLXTOB:10' +
+                '00/ctxtCI_IFLOT-YYIMPACTO_FALHA").setFocus'
+              
+                'session.findById("wnd[0]/usr/tabsTABSTRIP/tabpT\03/ssubSUB_DATA:' +
+                'SAPLITO0:0102/subSUB_0102C:SAPLITO0:1080/subXUSR1080:SAPLXTOB:10' +
+                '00/ctxtCI_IFLOT-YYIMPACTO_FALHA").caretPosition = 1'
+              'session.findById("wnd[0]").sendVKey 0'
+              'session.findById("wnd[0]/tbar[0]/btn[11]").press'
+              'Next')
+            ScrollBars = ssVertical
+            TabOrder = 1
+            WordWrap = False
+          end
+        end
+      end
+    end
+    object TabSheet5: TTabSheet
+      Caption = 'An'#225'lise Lista de Equipamentos Cr'#237'ticos [LEC]'
+      ImageIndex = 1
+      object Panel1: TPanel
+        Left = 0
+        Top = 0
+        Width = 945
+        Height = 25
+        Align = alTop
+        Caption = 'An'#225'lise Lista de Equipamentos Cr'#237'ticos [LEC]'
+        Color = clGradientActiveCaption
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -13
+        Font.Name = 'Tahoma'
+        Font.Style = [fsBold]
+        ParentBackground = False
+        ParentFont = False
+        TabOrder = 0
+      end
+      object PanelResultadosLEC: TPanel
+        Left = 0
+        Top = 25
+        Width = 945
+        Height = 572
+        Align = alClient
+        TabOrder = 1
+        object Splitter3: TSplitter
+          Left = 1
+          Top = 368
+          Width = 943
+          Height = 3
+          Cursor = crVSplit
+          Align = alBottom
+          ExplicitTop = 30
+          ExplicitWidth = 266
+        end
+        object Splitter2: TSplitter
+          Left = 627
+          Top = 30
+          Height = 338
+          Align = alRight
+          ExplicitLeft = 504
+          ExplicitTop = 152
+          ExplicitHeight = 100
+        end
+        object ToolBar5: TToolBar
+          Left = 1
+          Top = 1
+          Width = 943
+          Height = 29
+          Caption = 'ToolBar1'
+          DrawingStyle = dsGradient
+          EdgeBorders = [ebLeft, ebTop, ebRight, ebBottom]
+          Images = FrmPrincipal.ImageList1
+          TabOrder = 0
+          object DBNavigatorLECLista: TDBNavigator
+            Left = 0
+            Top = 0
+            Width = 138
+            Height = 22
+            DataSource = FrmDataModule.DataSourceLECLista
+            VisibleButtons = [nbInsert, nbDelete, nbEdit, nbPost, nbCancel, nbRefresh]
+            Hints.Strings = (
+              'Primeiro'
+              'Anterior'
+              'Pr'#243'ximo'
+              #218'ltimo'
+              'Inserir'
+              'Excluir'
+              'Editar'
+              'Gravar'
+              'Cancelar'
+              'Atualizar'
+              'Aplicar atualiza'#231#245'es'
+              'Calcelar atualiza'#231#245'es')
+            ParentShowHint = False
+            ShowHint = True
+            TabOrder = 5
+          end
+          object BitBtn8: TBitBtn
+            Left = 138
+            Top = 0
+            Width = 70
+            Height = 22
+            Action = actLimparFiltros
+            Caption = 'Limpar'
+            ParentShowHint = False
+            ShowHint = True
+            TabOrder = 1
+          end
+          object BitBtn9: TBitBtn
+            Left = 208
+            Top = 0
+            Width = 70
+            Height = 22
+            Action = actFiltrosTabela
+            Caption = 'Filtros'
+            ParentShowHint = False
+            ShowHint = True
+            TabOrder = 0
+          end
+          object BitBtn6: TBitBtn
+            Left = 278
+            Top = 0
+            Width = 85
+            Height = 22
+            Action = actSAPTodos
+            Caption = 'SAP Todos'
+            ParentShowHint = False
+            ShowHint = True
+            TabOrder = 4
+          end
+          object BitBtn5: TBitBtn
+            Left = 363
+            Top = 0
+            Width = 117
+            Height = 22
+            Action = actSAPItem
+            Caption = 'SAP Selecionado'
+            ParentShowHint = False
+            ShowHint = True
+            TabOrder = 2
+          end
+          object ToolButton6: TToolButton
+            Left = 480
+            Top = 0
+            Hint = 'Importar ou Exportar para o Excel'
+            Caption = 'ToolButton6'
+            DropdownMenu = PopupMenuExcel
+            ImageIndex = 54
+            Style = tbsDropDown
+          end
+          object DBEdit2: TDBEdit
+            Left = 518
+            Top = 0
+            Width = 49
+            Height = 22
+            DataField = 'idLECLista'
+            DataSource = FrmDataModule.DataSourceLECLista
+            TabOrder = 3
+            Visible = False
+            OnChange = actAbrirLocalItemExecute
+          end
+        end
+        object PanelSAP: TPanel
+          Left = 1
+          Top = 371
+          Width = 943
+          Height = 200
+          Align = alBottom
+          TabOrder = 1
+          object Splitter4: TSplitter
+            Left = 481
+            Top = 1
+            Height = 198
+            ExplicitLeft = 440
+            ExplicitTop = 64
+            ExplicitHeight = 100
+          end
+          object Splitter6: TSplitter
+            Left = 961
+            Top = 1
+            Height = 198
+            ExplicitLeft = 736
+            ExplicitTop = 48
+            ExplicitHeight = 100
+          end
+          object PanelSAPLocal: TPanel
+            Left = 1
+            Top = 1
+            Width = 480
+            Height = 198
+            Align = alLeft
+            TabOrder = 0
+            object Panel2: TPanel
+              Left = 1
+              Top = 1
+              Width = 478
+              Height = 22
+              Align = alTop
+              Caption = 'Local de Instala'#231#227'o '
+              Color = clSilver
+              Font.Charset = DEFAULT_CHARSET
+              Font.Color = clWindowText
+              Font.Height = -13
+              Font.Name = 'Tahoma'
+              Font.Style = [fsBold]
+              ParentBackground = False
+              ParentFont = False
+              TabOrder = 0
+            end
+            object ToolBar7: TToolBar
+              Left = 1
+              Top = 23
+              Width = 478
+              Height = 29
+              Caption = 'ToolBar7'
+              DrawingStyle = dsGradient
+              EdgeBorders = [ebLeft, ebTop, ebRight, ebBottom]
+              TabOrder = 1
+              object BitBtn7: TBitBtn
+                Left = 0
+                Top = 0
+                Width = 70
+                Height = 22
+                Action = actExcelSAPLocal
+                Caption = 'Exportar'
+                ParentShowHint = False
+                ShowHint = True
+                TabOrder = 0
+              end
+              object btnExcluirAPLAT: TBitBtn
+                Left = 70
+                Top = 0
+                Width = 68
+                Height = 22
+                Action = actExcluirLocalLEC
+                Caption = 'Excluir'
+                ParentShowHint = False
+                ShowHint = True
+                TabOrder = 1
+              end
+            end
+            object DBGridLECLocalInstalacao: TDBGrid
+              Left = 1
+              Top = 52
+              Width = 478
+              Height = 145
+              Align = alClient
+              DataSource = FrmDataModule.DataSourceLECLocalInstalacao
+              ReadOnly = True
+              TabOrder = 2
+              TitleFont.Charset = DEFAULT_CHARSET
+              TitleFont.Color = clWindowText
+              TitleFont.Height = -11
+              TitleFont.Name = 'Tahoma'
+              TitleFont.Style = []
+              OnCellClick = DBGridLECLocalInstalacaoCellClick
+              OnDrawColumnCell = DBGridLECLocalInstalacaoDrawColumnCell
+              Columns = <
+                item
+                  Alignment = taCenter
+                  Expanded = False
+                  FieldName = 'BooleanSelecao'
+                  Title.Alignment = taCenter
+                  Title.Caption = 'Sele'#231#227'o'
+                  Visible = True
+                end
+                item
+                  Expanded = False
+                  FieldName = 'LocalInstalacao'
+                  Title.Alignment = taCenter
+                  Title.Caption = 'Local Instala'#231#227'o'
+                  Width = 178
+                  Visible = True
+                end
+                item
+                  Expanded = False
+                  FieldName = 'DenominacaoLocalInstalacao'
+                  Title.Alignment = taCenter
+                  Title.Caption = 'Denomin. Local Instala'#231#227'o'
+                  Width = 177
+                  Visible = True
+                end
+                item
+                  Alignment = taCenter
+                  Expanded = False
+                  FieldName = 'ImpactoFalha'
+                  Title.Alignment = taCenter
+                  Title.Caption = 'IF'
+                  Width = 39
+                  Visible = True
+                end>
+            end
+            object ColunasLayoutLECLocalInstalacao: TStringGrid
+              Left = 73
+              Top = 104
+              Width = 113
+              Height = 94
+              ColCount = 2
+              DefaultRowHeight = 21
+              TabOrder = 3
+              Visible = False
+              RowHeights = (
+                21
+                21
+                21
+                21
+                21)
+            end
+          end
+          object PanelSAPItem: TPanel
+            Left = 484
+            Top = 1
+            Width = 477
+            Height = 198
+            Align = alLeft
+            TabOrder = 1
+            object Panel3: TPanel
+              Left = 1
+              Top = 1
+              Width = 475
+              Height = 22
+              Align = alTop
+              Caption = 'Item de Manuten'#231#227'o SAP'
+              Color = clSilver
+              Font.Charset = DEFAULT_CHARSET
+              Font.Color = clWindowText
+              Font.Height = -13
+              Font.Name = 'Tahoma'
+              Font.Style = [fsBold]
+              ParentBackground = False
+              ParentFont = False
+              TabOrder = 0
+            end
+            object ToolBar4: TToolBar
+              Left = 1
+              Top = 23
+              Width = 475
+              Height = 29
+              Caption = 'ToolBar4'
+              DrawingStyle = dsGradient
+              EdgeBorders = [ebLeft, ebTop, ebRight, ebBottom]
+              TabOrder = 1
+              object BitBtn10: TBitBtn
+                Left = 0
+                Top = 0
+                Width = 70
+                Height = 22
+                Action = actExcelSAPItem
+                Caption = 'Exportar'
+                ParentShowHint = False
+                ShowHint = True
+                TabOrder = 0
+              end
+            end
+            object DBGridLECItemManutencao: TDBGrid
+              Left = 1
+              Top = 52
+              Width = 475
+              Height = 145
+              Align = alClient
+              DataSource = FrmDataModule.DataSourceLECItemManutencao
+              ReadOnly = True
+              TabOrder = 2
+              TitleFont.Charset = DEFAULT_CHARSET
+              TitleFont.Color = clWindowText
+              TitleFont.Height = -11
+              TitleFont.Name = 'Tahoma'
+              TitleFont.Style = []
+              OnDrawColumnCell = DBGridLECItemManutencaoDrawColumnCell
+              Columns = <
+                item
+                  Expanded = False
+                  FieldName = 'DescricaoItem'
+                  Title.Alignment = taCenter
+                  Title.Caption = 'Descri'#231#227'o do Item'
+                  Width = 192
+                  Visible = True
+                end
+                item
+                  Expanded = False
+                  FieldName = 'DenominacaoLocalInstalacao'
+                  Title.Alignment = taCenter
+                  Title.Caption = 'Denomin. Local Instala'#231#227'o'
+                  Width = 177
+                  Visible = True
+                end
+                item
+                  Expanded = False
+                  FieldName = 'LocalInstalacao'
+                  Title.Alignment = taCenter
+                  Title.Caption = 'Local Instala'#231#227'o'
+                  Width = 94
+                  Visible = True
+                end
+                item
+                  Expanded = False
+                  FieldName = 'CentroTrabalho'
+                  Title.Alignment = taCenter
+                  Title.Caption = 'Centro Trabalho'
+                  Visible = True
+                end
+                item
+                  Expanded = False
+                  FieldName = 'ItemManutencao'
+                  Title.Alignment = taCenter
+                  Title.Caption = 'Item Manuten'#231#227'o'
+                  Visible = True
+                end
+                item
+                  Expanded = False
+                  FieldName = 'PlanoManutencao'
+                  Title.Alignment = taCenter
+                  Title.Caption = 'Plano Manuten'#231#227'o'
+                  Visible = True
+                end
+                item
+                  Expanded = False
+                  FieldName = 'TipoEtapaServico'
+                  Title.Alignment = taCenter
+                  Title.Caption = 'Tipo Etapa Servi'#231'o'
+                  Visible = True
+                end>
+            end
+            object ColunasLayoutLECItemManutencao: TStringGrid
+              Left = 81
+              Top = 104
+              Width = 113
+              Height = 94
+              ColCount = 2
+              DefaultRowHeight = 21
+              TabOrder = 3
+              Visible = False
+              RowHeights = (
+                21
+                21
+                21
+                21
+                21)
+            end
+          end
+          object PanelSAPFO: TPanel
+            Left = 964
+            Top = 1
+            Width = 509
+            Height = 198
+            Align = alClient
+            TabOrder = 2
+            object Panel9: TPanel
+              Left = 1
+              Top = 1
+              Width = 507
+              Height = 22
+              Align = alTop
+              Caption = 'Equipamentos Fora de Opera'#231#227'o (FO)'
+              Color = clSilver
+              Font.Charset = DEFAULT_CHARSET
+              Font.Color = clWindowText
+              Font.Height = -13
+              Font.Name = 'Tahoma'
+              Font.Style = [fsBold]
+              ParentBackground = False
+              ParentFont = False
+              TabOrder = 0
+            end
+            object RLSAPFO: TStringGrid
+              Left = 1
+              Top = 52
+              Width = 507
+              Height = 145
+              Align = alClient
+              ColCount = 8
+              DefaultRowHeight = 21
+              FixedCols = 0
+              Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goColSizing, goEditing]
+              TabOrder = 1
+            end
+            object ToolBar8: TToolBar
+              Left = 1
+              Top = 23
+              Width = 507
+              Height = 29
+              Caption = 'ToolBar4'
+              DrawingStyle = dsGradient
+              EdgeBorders = [ebLeft, ebTop, ebRight, ebBottom]
+              TabOrder = 2
+              object BitBtn12: TBitBtn
+                Left = 0
+                Top = 0
+                Width = 70
+                Height = 22
+                Action = actExcelSAPItem
+                Caption = 'Exportar'
+                ParentShowHint = False
+                ShowHint = True
+                TabOrder = 0
+              end
+            end
+          end
+        end
+        object PanelFerramentaLEC: TPanel
+          Left = 630
+          Top = 30
+          Width = 314
+          Height = 338
+          Align = alRight
+          TabOrder = 2
+          object Splitter5: TSplitter
+            Left = 1
+            Top = 214
+            Width = 312
+            Height = 3
+            Cursor = crVSplit
+            Align = alBottom
+            ExplicitTop = 162
+            ExplicitWidth = 183
+          end
+          object Panel4: TPanel
+            Left = 1
+            Top = 217
+            Width = 312
+            Height = 120
+            Align = alBottom
+            Caption = 'Panel4'
+            TabOrder = 0
+            object DBMemoCenario: TDBMemo
+              Left = 1
+              Top = 23
+              Width = 310
+              Height = 96
+              Align = alClient
+              DataField = 'Cenario'
+              DataSource = FrmDataModule.DataSourceLECLista
+              TabOrder = 0
+            end
+            object Panel5: TPanel
+              Left = 1
+              Top = 1
+              Width = 310
+              Height = 22
+              Align = alTop
+              Caption = 'Cen'#225'rio'
+              Color = clSilver
+              Font.Charset = DEFAULT_CHARSET
+              Font.Color = clWindowText
+              Font.Height = -13
+              Font.Name = 'Tahoma'
+              Font.Style = [fsBold]
+              ParentBackground = False
+              ParentFont = False
+              TabOrder = 1
+            end
+          end
+          object PanelCadastroListas: TPanel
+            Left = 1
+            Top = 1
+            Width = 312
+            Height = 213
+            Align = alClient
+            Caption = 'PanelCadastroListas'
+            TabOrder = 1
+            object ColunasLayoutLECControle: TStringGrid
+              Left = 72
+              Top = -35
+              Width = 113
+              Height = 94
+              ColCount = 2
+              DefaultRowHeight = 21
+              TabOrder = 0
+              Visible = False
+              RowHeights = (
+                21
+                21
+                21
+                21
+                21)
+            end
+            object DBGridLECControle: TDBGrid
+              Left = 1
+              Top = 52
+              Width = 310
+              Height = 141
+              Align = alClient
+              DataSource = FrmDataModule.DataSourceLECControle
+              TabOrder = 1
+              TitleFont.Charset = DEFAULT_CHARSET
+              TitleFont.Color = clWindowText
+              TitleFont.Height = -11
+              TitleFont.Name = 'Tahoma'
+              TitleFont.Style = []
+              OnDrawColumnCell = DBGridLECControleDrawColumnCell
+              OnKeyDown = DBGridLECControleKeyDown
+              OnTitleClick = DBGridLECControleTitleClick
+              Columns = <
+                item
+                  Expanded = False
+                  FieldName = 'Numero'
+                  Title.Alignment = taCenter
+                  Title.Caption = 'N'#250'mero'
+                  Width = 89
+                  Visible = True
+                end
+                item
+                  Expanded = False
+                  FieldName = 'Titulo'
+                  Title.Alignment = taCenter
+                  Title.Caption = 'T'#237'tulo'
+                  Width = 79
+                  Visible = True
+                end
+                item
+                  Expanded = False
+                  FieldName = 'Revisao'
+                  Title.Alignment = taCenter
+                  Title.Caption = 'Revis'#227'o'
+                  Width = 49
+                  Visible = True
+                end
+                item
+                  Expanded = False
+                  FieldName = 'Aplicacao'
+                  Title.Alignment = taCenter
+                  Title.Caption = 'Aplica'#231#227'o'
+                  Width = 60
+                  Visible = True
+                end>
+            end
+            object ToolBar6: TToolBar
+              Left = 1
+              Top = 23
+              Width = 310
+              Height = 29
+              ButtonHeight = 21
+              Caption = 'ToolBar6'
+              DrawingStyle = dsGradient
+              EdgeBorders = [ebLeft, ebTop, ebRight, ebBottom]
+              TabOrder = 2
+              object DBNavigatorLECControle: TDBNavigator
+                Left = 0
+                Top = 0
+                Width = 138
+                Height = 21
+                DataSource = FrmDataModule.DataSourceLECControle
+                VisibleButtons = [nbInsert, nbDelete, nbEdit, nbPost, nbCancel, nbRefresh]
+                Hints.Strings = (
+                  'Primeiro'
+                  'Anterior'
+                  'Pr'#243'ximo'
+                  #218'ltimo'
+                  'Inserir'
+                  'Excluir'
+                  'Editar'
+                  'Gravar'
+                  'Cancelar'
+                  'Atualizar'
+                  'Aplicar atualiza'#231#245'es'
+                  'Calcelar atualiza'#231#245'es')
+                ParentShowHint = False
+                ShowHint = True
+                TabOrder = 2
+              end
+              object BitBtn11: TBitBtn
+                Left = 138
+                Top = 0
+                Width = 70
+                Height = 21
+                Action = actExcelLECControle
+                Caption = 'Exportar'
+                ParentShowHint = False
+                ShowHint = True
+                TabOrder = 1
+              end
+              object DBEdit1: TDBEdit
+                Left = 208
+                Top = 0
+                Width = 49
+                Height = 21
+                DataField = 'idLECControle'
+                DataSource = FrmDataModule.DataSourceLECControle
+                TabOrder = 0
+                Visible = False
+                OnChange = actProcurarLECListaExecute
+              end
+            end
+            object Panel6: TPanel
+              Left = 1
+              Top = 1
+              Width = 310
+              Height = 22
+              Align = alTop
+              Caption = 'Cadastro de Listas'
+              Color = clSilver
+              Font.Charset = DEFAULT_CHARSET
+              Font.Color = clWindowText
+              Font.Height = -13
+              Font.Name = 'Tahoma'
+              Font.Style = [fsBold]
+              ParentBackground = False
+              ParentFont = False
+              TabOrder = 3
+            end
+            object StatusBarLECControle: TStatusBar
+              Left = 1
+              Top = 193
+              Width = 310
+              Height = 19
+              Panels = <
+                item
+                  Width = 50
+                end
+                item
+                  Width = 50
+                end
+                item
+                  Width = 50
+                end
+                item
+                  Width = 50
+                end
+                item
+                  Width = 50
+                end>
+            end
+          end
+        end
+        object Panel7: TPanel
+          Left = 1
+          Top = 30
+          Width = 626
+          Height = 338
+          Align = alClient
+          Caption = 'Panel7'
+          TabOrder = 3
+          object DBGridLECLista: TDBGrid
+            Left = 1
+            Top = 1
+            Width = 624
+            Height = 317
+            Align = alClient
+            DataSource = FrmDataModule.DataSourceLECLista
+            TabOrder = 0
+            TitleFont.Charset = DEFAULT_CHARSET
+            TitleFont.Color = clWindowText
+            TitleFont.Height = -11
+            TitleFont.Name = 'Tahoma'
+            TitleFont.Style = []
+            OnDrawColumnCell = DBGridLECListaDrawColumnCell
+            OnKeyDown = DBGridLECListaKeyDown
+            OnTitleClick = DBGridLECListaTitleClick
+            Columns = <
+              item
+                Expanded = False
+                FieldName = 'BooleanLocalInstalacao'
+                Title.Alignment = taCenter
+                Title.Caption = 'Local'
+                Visible = True
+              end
+              item
+                Alignment = taCenter
+                Expanded = False
+                FieldName = 'BooleanItemManutencao'
+                Title.Alignment = taCenter
+                Title.Caption = 'Plan.'
+                Visible = True
+              end
+              item
+                Alignment = taCenter
+                Expanded = False
+                FieldName = 'Item'
+                Title.Alignment = taCenter
+                Visible = True
+              end
+              item
+                Expanded = False
+                FieldName = 'TAG'
+                Title.Alignment = taCenter
+                Title.Caption = 'TAG [Busca]'
+                Width = 173
+                Visible = True
+              end
+              item
+                Expanded = False
+                FieldName = 'InstalacaoBusca'
+                Title.Alignment = taCenter
+                Title.Caption = 'Instala'#231#227'o [Busca]'
+                Width = 107
+                Visible = True
+              end
+              item
+                Expanded = False
+                FieldName = 'Observacao'
+                Title.Alignment = taCenter
+                Title.Caption = 'Observa'#231#227'o'
+                Width = 237
+                Visible = True
+              end
+              item
+                Expanded = False
+                FieldName = 'ElementoCritico'
+                Title.Alignment = taCenter
+                Title.Caption = 'Elemento Cr'#237'tico'
+                Width = 129
+                Visible = True
+              end
+              item
+                Expanded = False
+                FieldName = 'LocalSistemaProducao'
+                Title.Alignment = taCenter
+                Title.Caption = 'Local ou Sistema de Produ'#231#227'o'
+                Width = 162
+                Visible = True
+              end
+              item
+                Expanded = False
+                FieldName = 'CriterioAceitacaoControle'
+                Title.Alignment = taCenter
+                Title.Caption = 'Crit'#233'rio de Aceita'#231#227'o ou Controle'
+                Width = 201
+                Visible = True
+              end
+              item
+                Expanded = False
+                FieldName = 'Contingenciamento'
+                Title.Alignment = taCenter
+                Width = 200
+                Visible = True
+              end
+              item
+                Expanded = False
+                FieldName = 'Cenario'
+                Title.Alignment = taCenter
+                Title.Caption = 'Cen'#225'rio'
+                Visible = True
+              end
+              item
+                Expanded = False
+                FieldName = 'AvaliadoPor'
+                Title.Alignment = taCenter
+                Title.Caption = 'Avaliado Por'
+                Visible = True
+              end
+              item
+                Expanded = False
+                FieldName = 'DataAtualizacao'
+                Title.Alignment = taCenter
+                Title.Caption = 'Data Atualiza'#231#227'o'
+                Width = 92
+                Visible = True
+              end
+              item
+                Alignment = taCenter
+                Expanded = False
+                FieldName = 'Computador'
+                Title.Alignment = taCenter
+                Visible = True
+              end>
+          end
+          object ColunasLayoutLECLista: TStringGrid
+            Left = 73
+            Top = 134
+            Width = 113
+            Height = 94
+            ColCount = 2
+            DefaultRowHeight = 21
+            TabOrder = 1
+            Visible = False
+            RowHeights = (
+              21
+              21
+              21
+              21
+              21)
+          end
+          object StatusBarLECLista: TStatusBar
+            Left = 1
+            Top = 318
+            Width = 624
+            Height = 19
+            Panels = <
+              item
+                Width = 50
+              end
+              item
+                Width = 50
+              end
+              item
+                Width = 50
+              end
+              item
+                Width = 50
+              end
+              item
+                Width = 50
+              end>
+          end
+        end
+      end
+    end
+  end
+  object ActionManager1: TActionManager
+    Images = FrmPrincipal.ImageList1
+    Left = 232
+    Top = 150
+    StyleName = 'Platform Default'
+    object actProcurarSAP: TAction
+      Category = 'Procurar'
+      Hint = 'Procurar'
+      ImageIndex = 28
+      ShortCut = 116
+      OnExecute = actProcurarSAPExecute
+    end
+    object actExcelLECLista: TAction
+      Category = 'Excel'
+      Caption = 'Exportar para o Excel'
+      Hint = 'Exportar para o Excel'
+      ImageIndex = 54
+      OnExecute = actExcelLECListaExecute
+    end
+    object actFiltroInserir: TAction
+      Category = 'Tabela'
+      Caption = 'actFiltroInserir'
+      OnExecute = actFiltroInserirExecute
+    end
+    object actGridASC: TAction
+      Category = 'Tabela'
+      Caption = 'actGridASC'
+      OnExecute = actGridASCExecute
+    end
+    object actGridDESC: TAction
+      Category = 'Tabela'
+      Caption = 'actGridDESC'
+      OnExecute = actGridDESCExecute
+    end
+    object actSubstituirPor: TAction
+      Category = 'Tabela'
+      Caption = 'actSubstituirPor'
+      OnExecute = actSubstituirPorExecute
+    end
+    object actLimparFiltros: TAction
+      Category = 'Tabela'
+      Caption = 'Limpar'
+      Hint = 'Limpar Filtros'
+      ImageIndex = 469
+      OnExecute = actLimparFiltrosExecute
+    end
+    object actFiltrosTabela: TAction
+      Category = 'Tabela'
+      Caption = 'Filtros'
+      Hint = 'Visualizar tabela de filtros'
+      ImageIndex = 470
+      OnExecute = actFiltrosTabelaExecute
+    end
+    object actProcuraFiltrosTabela: TAction
+      Category = 'Tabela'
+      Caption = 'actProcuraFiltrosTabela'
+      OnExecute = actProcuraFiltrosTabelaExecute
+    end
+    object actFiltros: TAction
+      Caption = 'actFiltros'
+      OnExecute = actFiltrosExecute
+    end
+    object actSelTudoLocalInstalacao: TAction
+      Hint = 'Selecionar todos'
+      ImageIndex = 154
+      OnExecute = actSelTudoLocalInstalacaoExecute
+    end
+    object actSelLimpaLocalInstalacao: TAction
+      Hint = 'Limpar sele'#231#227'o'
+      ImageIndex = 155
+      OnExecute = actSelLimpaLocalInstalacaoExecute
+    end
+    object actArvore: TAction
+      Category = 'Local Instala'#231#227'o'
+      Caption = 'actArvore'
+      Hint = 'Popular estrutura de '#225'rvore'
+      ImageIndex = 161
+      OnExecute = actArvoreExecute
+    end
+    object actProcurarLECLista: TAction
+      Category = 'Procurar'
+      Caption = 'actProcurarLECLista'
+      OnExecute = actProcurarLECListaExecute
+    end
+    object actProcurarLECControle: TAction
+      Category = 'Procurar'
+      Caption = 'actProcurarLECControle'
+      OnExecute = actProcurarLECControleExecute
+    end
+    object actExcelImportar: TAction
+      Category = 'Excel'
+      Caption = 'Importar do Excel'
+      Hint = 'Importar do Excel'
+      ImageIndex = 251
+      OnExecute = actExcelImportarExecute
+    end
+    object actExcelSAP: TAction
+      Category = 'Excel'
+      Caption = 'Exportar'
+      Hint = 'Exportar para o Excel'
+      ImageIndex = 54
+      OnExecute = actExcelSAPExecute
+    end
+    object actBooleanLEC: TAction
+      Category = 'Local Instala'#231#227'o'
+      Caption = 'LEC Todos'
+      Hint = 'Verificar TAG se consta na LEC'
+      ImageIndex = 474
+      OnExecute = actBooleanLECExecute
+    end
+    object actSAPTodos: TAction
+      Category = 'LEC'
+      Caption = 'SAP Todos'
+      Hint = 
+        'Buscar Item de Manuten'#231#227'o e Local de Instala'#231#227'o para todos os it' +
+        'ens'
+      ImageIndex = 463
+      OnExecute = actSAPTodosExecute
+    end
+    object actAbrirLocalItem: TAction
+      Category = 'LEC'
+      Caption = 'actAbrirLocalItem'
+      OnExecute = actAbrirLocalItemExecute
+    end
+    object actSAPSelecionado: TAction
+      Category = 'LEC'
+      Hint = 
+        'Buscar Item de Manuten'#231#227'o e Local de Instala'#231#227'o para o item sele' +
+        'cionado'
+      ImageIndex = 463
+      OnExecute = actSAPSelecionadoExecute
+    end
+    object actSAPItem: TAction
+      Category = 'LEC'
+      Caption = 'SAP Selecionado'
+      Hint = 
+        'Buscar Item de Manuten'#231#227'o e Local de Instala'#231#227'o para o item sele' +
+        'cionado'
+      ImageIndex = 463
+      ShortCut = 115
+      OnExecute = actSAPItemExecute
+    end
+    object actExcelLECControle: TAction
+      Category = 'Excel'
+      Caption = 'Exportar'
+      Hint = 'Exportar para o Excel'
+      ImageIndex = 54
+      OnExecute = actExcelLECControleExecute
+    end
+    object actExcelSAPItem: TAction
+      Category = 'Excel'
+      Caption = 'Exportar'
+      Hint = 'Exportar para o Excel'
+      ImageIndex = 54
+      OnExecute = actExcelSAPItemExecute
+    end
+    object actExcelSAPLocal: TAction
+      Category = 'Excel'
+      Caption = 'Exportar'
+      Hint = 'Exportar para o Excel'
+      ImageIndex = 54
+      OnExecute = actExcelSAPLocalExecute
+    end
+    object actInterromper: TAction
+      Category = 'Local Instala'#231#227'o'
+      Caption = 'actInterromper'
+      Hint = 'Interromper processo'
+      ImageIndex = 164
+      OnExecute = actInterromperExecute
+    end
+    object actLECSelecionado: TAction
+      Category = 'Local Instala'#231#227'o'
+      Caption = 'LEC Selecionado'
+      Hint = 'Verificar TAG se consta na LEC Selecionado'
+      ImageIndex = 474
+      OnExecute = actLECSelecionadoExecute
+    end
+    object actExcluirLocalLEC: TAction
+      Category = 'LEC'
+      Caption = 'Excluir'
+      Hint = 'Excluir item selecionado'
+      ImageIndex = 324
+      OnExecute = actExcluirLocalLECExecute
+    end
+    object actTudoFiltroUsuario: TAction
+      Caption = 'actTudoFiltroUsuario'
+      Hint = 'Selecionar todos'
+      ImageIndex = 154
+      OnExecute = actTudoFiltroUsuarioExecute
+    end
+    object actLimpaFiltroUsuario: TAction
+      Caption = 'actLimpaFiltroUsuario'
+      Hint = 'Limpar sele'#231#227'o'
+      ImageIndex = 155
+      OnExecute = actLimpaFiltroUsuarioExecute
+    end
+    object actProcurarItemManutencao: TAction
+      Category = 'Local Instala'#231#227'o'
+      Caption = 'actProcurarItemManutencao'
+      OnExecute = actProcurarItemManutencaoExecute
+    end
+    object actExcelItemManutencao: TAction
+      Category = 'Excel'
+      Caption = 'Exportar'
+      Hint = 'Exportar para o Excel'
+      ImageIndex = 54
+      OnExecute = actExcelItemManutencaoExecute
+    end
+    object actOcultar: TAction
+      Category = 'Local Instala'#231#227'o'
+      Caption = 'actOcultar'
+      Hint = 'Mostrar Itens de Manuten'#231#227'o'
+      ImageIndex = 125
+      OnExecute = actOcultarExecute
+    end
+    object actMostrar: TAction
+      Category = 'Local Instala'#231#227'o'
+      Caption = 'actMostrar'
+      Hint = 'Ocultar Item de Manuten'#231#227'o'
+      ImageIndex = 126
+      OnExecute = actMostrarExecute
+    end
+    object actItemManutencao: TAction
+      Category = 'Local Instala'#231#227'o'
+      Caption = 'Plano Manut.'
+      Hint = 'Avaliar itens de manuten'#231#227'o vinculados ao local de instala'#231#227'o'
+      ImageIndex = 463
+      OnExecute = actItemManutencaoExecute
+    end
+    object actSAPIF: TAction
+      Category = 'Local Instala'#231#227'o'
+      Caption = 'Alterar IF'
+      Hint = 'Alterar impacto de falha (IF)'
+      ImageIndex = 463
+      OnExecute = actSAPIFExecute
+    end
+    object actSalvarScript: TAction
+      Category = 'Local Instala'#231#227'o'
+      Caption = 'actSalvarScript'
+      Hint = 'Salvar Script SAP'
+      ImageIndex = 18
+      OnExecute = actSalvarScriptExecute
+    end
+    object actExecutarScript: TAction
+      Category = 'Local Instala'#231#227'o'
+      Caption = 'actExecutarScript'
+      Hint = 'Exceutar Script SAP'
+      ImageIndex = 30
+      OnExecute = actExecutarScriptExecute
+    end
+  end
+  object PopupMenuExcel: TPopupMenu
+    Left = 316
+    Top = 265
+    object Exportar1: TMenuItem
+      Action = actExcelLECLista
+    end
+    object Importar1: TMenuItem
+      Action = actExcelImportar
+    end
+  end
+end

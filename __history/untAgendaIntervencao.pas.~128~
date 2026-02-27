@@ -1,0 +1,492 @@
+﻿unit untAgendaIntervencao;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ExtCtrls, Vcl.Grids,
+  Vcl.ToolWin, Vcl.ComCtrls,DateUtils, System.Actions, Vcl.ActnList,Data.DB,
+  Vcl.PlatformDefaultStyleActnCtrls, Vcl.ActnMan, Vcl.StdCtrls, Vcl.Buttons,ComOBJ;
+
+type
+  TFrmAgendaIntervencao = class(TForm)
+    Panel7: TPanel;
+    StringGrid: TStringGrid;
+    Panel3: TPanel;
+    dataInicio: TDateTimePicker;
+    Panel4: TPanel;
+    dataFim: TDateTimePicker;
+    Panel8: TPanel;
+    ActionManager1: TActionManager;
+    actAgendaProgramacao: TAction;
+    ToolBar1: TToolBar;
+    BitBtn9: TBitBtn;
+    actAgendaResumo: TAction;
+    BitBtn1: TBitBtn;
+    BitBtn13: TBitBtn;
+    actExcel: TAction;
+    actCompararRealizacao: TAction;
+    BitBtn2: TBitBtn;
+    BitBtn3: TBitBtn;
+    actEmbarcacao: TAction;
+    Edit1: TEdit;
+    ToolButton1: TToolButton;
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure FormDestroy(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+    procedure actAgendaProgramacaoExecute(Sender: TObject);
+    procedure StringGridFixedCellClick(Sender: TObject; ACol, ARow: Integer);
+    procedure StringGridDrawCell(Sender: TObject; ACol, ARow: Integer;
+      Rect: TRect; State: TGridDrawState);
+    procedure actAgendaResumoExecute(Sender: TObject);
+    procedure actExcelExecute(Sender: TObject);
+    procedure actCompararRealizacaoExecute(Sender: TObject);
+    procedure actEmbarcacaoExecute(Sender: TObject);
+  private
+    { Private declarations }
+    booComparar: Boolean;
+    procedure WMMDIACTIVATE(var msg: TWMMDIACTIVATE);message WM_MDIACTIVATE;
+  public
+    { Public declarations }
+  end;
+
+var
+  FrmAgendaIntervencao: TFrmAgendaIntervencao;
+
+implementation
+  uses untPrincipal,untDataModule;
+{$R *.dfm}
+
+procedure TFrmAgendaIntervencao.actAgendaProgramacaoExecute(Sender: TObject);
+  var
+    TotalDias,i,j,k,TotalLinhas: Integer;
+    DataProcura,SQLBase,DiaSemana: String;
+begin
+  booComparar:= false;
+  FrmPrincipal.limparStringGrid(StringGrid);
+  TotalDias:= TRUNC(dataFim.Date-dataInicio.Date);
+  StringGrid.ColCount:=  (TotalDias+1)*3;
+  k:= 0;
+  for i := 0 to TotalDias do
+  begin
+    DataProcura:= DateToStr(IncDay(dataInicio.Date,i));
+    DiaSemana:= FormatDateTime('DDDD',IncDay(dataInicio.Date,i));
+    SQLBase:= 'SELECT tblProgramacaoDiaria.* FROM tblProgramacaoDiaria '+
+    'WHERE ((DataProgramacao LIKE '+QuotedStr(Dataprocura)+'))'+
+    ' ORDER BY txtTipoEtapaServico,txtDestino;';
+    FrmDataModule.ADOQueryTemporarioDBColibri.Close;
+    FrmDataModule.ADOQueryTemporarioDBColibri.SQL.Clear;
+    FrmDataModule.ADOQueryTemporarioDBColibri.SQL.Add(SQLBase);
+    FrmDataModule.ADOQueryTemporarioDBColibri.Open;
+    TotalLinhas:= FrmDataModule.ADOQueryTemporarioDBColibri.RecordCount+1;
+    FrmPrincipal.ProgressBarIncializa(TotalLinhas,
+    'Programação: '+IntToStr(i+1)+' de '+IntToStr(TotalDias+1));
+
+    if StringGrid.RowCount < TotalLinhas then
+      StringGrid.RowCount := TotalLinhas;
+
+    j:= 2;
+    while not FrmDataModule.ADOQueryTemporarioDBColibri.Eof do
+    begin
+      StringGrid.Cells[k,j]:= FrmDataModule.DataSourceTemporarioDBColibri.DataSet.
+      FieldByName('txtDestino').AsString;
+      StringGrid.Cells[k+1,j]:= FrmDataModule.DataSourceTemporarioDBColibri.DataSet.
+      FieldByName('txtTipoEtapaServico').AsString;
+      StringGrid.Cells[k+2,j]:= FrmDataModule.DataSourceTemporarioDBColibri.DataSet.
+      FieldByName('NumAprovados').AsString;
+      FrmDataModule.ADOQueryTemporarioDBColibri.Next;
+      FrmPrincipal.ProgressBarIncremento(1);
+      j:= j+1;
+    end;
+    StringGrid.Cells[k+1,0]:= DataProcura;
+    StringGrid.Cells[k,0]:= DiaSemana;
+    StringGrid.Cells[k,1]:= 'Destino';
+    StringGrid.Cells[k+1,1]:= 'Tipo de Etapa de Serviço';
+    StringGrid.Cells[k+2,1]:= 'N° Aprov.';
+    k:= k+3;
+    FrmPrincipal.ProgressBarAtualizar;
+  end;
+  FrmPrincipal.AutoFitGrade(StringGrid);
+  try
+    StringGrid.FixedRows:= 1;
+  except
+    StringGrid.FixedRows:= 0;
+  end;
+end;
+
+procedure TFrmAgendaIntervencao.actAgendaResumoExecute(Sender: TObject);
+ var
+    DataProcura,Destino1,Destino2,SQLBase,PCM09,TMIB,DiaSemana: String;
+    TotalDias,i,j,k,TotalLinhas,Total_PCM9,Total_TMIB,Total_Plataforma: Integer;
+begin
+  booComparar:= false;
+  FrmPrincipal.limparStringGrid(StringGrid);
+  TotalDias:= TRUNC(dataFim.Date-dataInicio.Date);
+  StringGrid.ColCount:=  (TotalDias+1)*3;
+  k:= 0;
+  StringGrid.FixedRows:= 0;
+  StringGrid.RowCount:= 3;
+  TotalLinhas:= 3;
+  for i := 0 to TotalDias do
+  begin
+    Total_PCM9:= 0;
+    Total_TMIB:= 0;
+    DataProcura:= DateToStr(IncDay(dataInicio.Date,i));
+    DiaSemana:= FormatDateTime('DDDD',IncDay(dataInicio.Date,i));
+    SQLBase:=
+    'SELECT tblProgramacaoDiaria.txtDestino, tblProgramacaoDiaria.DataProgramacao, '+
+    'tblProgramacaoExecutante.StatusProgramacao, tblProgramacaoExecutante.Origem '+
+    'FROM tblProgramacaoDiaria INNER JOIN '+
+    'tblProgramacaoExecutante ON tblProgramacaoDiaria.idProgramacaoDiaria = '+
+    'tblProgramacaoExecutante.CodigoProgramacaoDiaria GROUP BY '+
+    'tblProgramacaoDiaria.txtDestino, tblProgramacaoDiaria.DataProgramacao, '+
+    'tblProgramacaoExecutante.StatusProgramacao, tblProgramacaoExecutante.Origem '+
+    'HAVING ((tblProgramacaoDiaria.DataProgramacao LIKE '+
+    QuotedStr(DataProcura)+
+    ')AND(tblProgramacaoExecutante.StatusProgramacao LIKE "Aprovado")'+
+    'AND((tblProgramacaoExecutante.Origem LIKE "PCM-09")'+
+    'OR(tblProgramacaoExecutante.Origem LIKE "TMIB")));';
+    FrmDataModule.ADOQueryTemporarioDBColibri.Close;
+    FrmDataModule.ADOQueryTemporarioDBColibri.SQL.Clear;
+    FrmDataModule.ADOQueryTemporarioDBColibri.SQL.Add(SQLBase);
+    FrmDataModule.ADOQueryTemporarioDBColibri.Open;
+    FrmPrincipal.ProgressBarIncializa(FrmDataModule.ADOQueryTemporarioDBColibri.RecordCount,
+    'Programação: '+IntToStr(i+1)+' de '+IntToStr(TotalDias+1));
+    Destino1:= 'aaaa';
+    j:= 2;
+    Total_Plataforma:= 0;
+    while not FrmDataModule.ADOQueryTemporarioDBColibri.Eof do
+    begin
+      Destino2:= FrmDataModule.DataSourceTemporarioDBColibri.
+      DataSet.FieldByName('txtDestino').AsString;
+      if Destino1<>Destino2 then
+      begin
+        Total_Plataforma:= Total_Plataforma+1;
+        //======================================================
+        FrmDataModule.ADOQueryPassageirosTM_SIM.Active := false;
+        FrmDataModule.ADOQueryPassageirosTM_SIM.Parameters.Items[0].Value:= Dataprocura;
+        FrmDataModule.ADOQueryPassageirosTM_SIM.Parameters.Items[1].Value:= 'PCM-09';
+        FrmDataModule.ADOQueryPassageirosTM_SIM.Parameters.Items[2].Value:= Destino2;
+        FrmDataModule.ADOQueryPassageirosTM_SIM.Active := true;
+        PCM09:= IntToStr(FrmDataModule.ADOQueryPassageirosTM_SIM.RecordCount);
+        if Destino2 <> 'PCM-09' then
+          Total_PCM9:= Total_PCM9+FrmDataModule.ADOQueryPassageirosTM_SIM.RecordCount;
+        //======================================================
+        FrmDataModule.ADOQueryPassageirosTM_SIM.Active := false;
+        FrmDataModule.ADOQueryPassageirosTM_SIM.Parameters.Items[0].Value:= Dataprocura;
+        FrmDataModule.ADOQueryPassageirosTM_SIM.Parameters.Items[1].Value:= 'TMIB';
+        FrmDataModule.ADOQueryPassageirosTM_SIM.Parameters.Items[2].Value:= Destino2;
+        FrmDataModule.ADOQueryPassageirosTM_SIM.Active := true;
+        TMIB:= IntToStr(FrmDataModule.ADOQueryPassageirosTM_SIM.RecordCount);
+        Total_TMIB:= Total_TMIB+FrmDataModule.ADOQueryPassageirosTM_SIM.RecordCount;
+        StringGrid.Cells[k,j]:= Destino2;
+        StringGrid.Cells[k+1,j]:= PCM09;
+        StringGrid.Cells[k+2,j]:= TMIB;
+        Destino1:= Destino2;
+        j:= j+1;
+        if TotalLinhas < j then
+        begin
+          TotalLinhas:= j+1;
+          StringGrid.RowCount:= TotalLinhas;
+        end;
+      end;
+      FrmDataModule.ADOQueryTemporarioDBColibri.Next;
+      FrmPrincipal.ProgressBarIncremento(1);
+    end;
+    StringGrid.Cells[k+1,0]:= DataProcura;
+    StringGrid.Cells[k,0]:= DiaSemana;
+    StringGrid.Cells[k,1]:= 'Plataforma';
+    StringGrid.Cells[k+1,1]:= 'PCM-09';
+    StringGrid.Cells[k+2,1]:= 'TMIB';
+    if StringGrid.RowCount < j+2 then
+      StringGrid.RowCount:= j+2;
+
+    StringGrid.Cells[k,j]:= '∑: '+IntToStr(Total_Plataforma);
+    StringGrid.Cells[k+1,j]:= '∑: '+IntToStr(Total_PCM9);
+    StringGrid.Cells[k+2,j]:= '∑: '+IntToStr(Total_TMIB);
+    StringGrid.Cells[k+2,j+1]:= '∑total: '+IntToStr(Total_TMIB+Total_PCM9);
+
+    k:= k+3;
+    FrmPrincipal.ProgressBarAtualizar;
+  end;
+  try
+    StringGrid.FixedRows:= 1;
+  except
+  end;
+  FrmPrincipal.AutoFitGrade(StringGrid);
+end;
+
+procedure TFrmAgendaIntervencao.actCompararRealizacaoExecute(Sender: TObject);
+  var
+    SQLBase,DataProcuraIncio,DataProcuraFim,
+    DataProgramacao,DataGravacao: String;
+    txtTipoEtapaServico,txtDestino: String;
+    Linha,NumAprovadosPlan,NumAprovadosReal: Integer;
+begin
+  booComparar:= true;
+  DataProcuraIncio:= (FormatDateTime('mm/dd/yyyy',dataInicio.Date));
+  DataProcuraFim:= (FormatDateTime('mm/dd/yyyy',dataFim.Date));
+  SQLBase:= 'SELECT DataProgramacao,txtDestino,txtTipoEtapaServico FROM tblCarteiraPIOP GROUP BY DataProgramacao,txtDestino,txtTipoEtapaServico'+
+  ' HAVING (DataProgramacao BETWEEN #'+DataProcuraIncio+'# and #'+DataProcuraFim+'#)'+
+  ' ORDER BY DataProgramacao,txtDestino,txtTipoEtapaServico;';
+  FrmDataModule.ADOQueryGravarCarteiraPIOP.Close;
+  FrmDataModule.ADOQueryGravarCarteiraPIOP.SQL.Clear;
+  FrmDataModule.ADOQueryGravarCarteiraPIOP.SQL.Add(SQLBase);
+  FrmDataModule.ADOQueryGravarCarteiraPIOP.Open;
+  StringGrid.ColCount:= 7;
+  StringGrid.RowCount:= 1;
+  StringGrid.Cells[0,0]:= 'Data Gravação';
+  StringGrid.Cells[1,0]:= 'Data Programação';
+  StringGrid.Cells[2,0]:= 'Tipo Etapa Serviço';
+  StringGrid.Cells[3,0]:= 'Destino';
+  StringGrid.Cells[4,0]:= 'Plan.';
+  StringGrid.Cells[5,0]:= 'Real.';
+  StringGrid.Cells[6,0]:= 'Dif.';
+  FrmPrincipal.ProgressBarIncializa(FrmDataModule.ADOQueryGravarCarteiraPIOP.RecordCount,
+  'Carregando dados...');
+  while not FrmDataModule.ADOQueryGravarCarteiraPIOP.Eof do
+  begin
+    DataProgramacao:= FrmDataModule.DataSourceGravarCarteiraPIOP.
+    DataSet.FieldByName('DataProgramacao').AsString;
+    txtTipoEtapaServico:= FrmDataModule.DataSourceGravarCarteiraPIOP.
+    DataSet.FieldByName('txtTipoEtapaServico').AsString;
+    txtDestino:= FrmDataModule.DataSourceGravarCarteiraPIOP.
+    DataSet.FieldByName('txtDestino').AsString;
+    //============================================================
+    SQLBase:= 'SELECT tblCarteiraPIOP.* FROM tblCarteiraPIOP '+
+    'WHERE ((DataProgramacao LIKE "'+DataProgramacao+
+    '")AND(txtDestino LIKE "'+txtDestino+
+    '")AND(txtTipoEtapaServico LIKE "'+txtTipoEtapaServico+'"));';
+    FrmDataModule.ADOQueryTemporarioDBOperacao.Close;
+    FrmDataModule.ADOQueryTemporarioDBOperacao.SQL.Clear;
+    FrmDataModule.ADOQueryTemporarioDBOperacao.SQL.Add(SQLBase);
+    FrmDataModule.ADOQueryTemporarioDBOperacao.Open;
+    DataGravacao:= FrmDataModule.DataSourceTemporarioDBOperacao.
+    DataSet.FieldByName('DataGravacao').AsString;
+    NumAprovadosPlan:= 0;
+    while not FrmDataModule.ADOQueryTemporarioDBOperacao.Eof do
+    begin
+      NumAprovadosPlan:= NumAprovadosPlan+FrmDataModule.DataSourceTemporarioDBOperacao.
+      DataSet.FieldByName('NumAprovados').AsInteger;
+      FrmDataModule.ADOQueryTemporarioDBOperacao.Next;
+    end;
+    //============================================================
+    Linha:= StringGrid.RowCount;
+    StringGrid.RowCount:= StringGrid.RowCount+1;
+    StringGrid.Cells[0,Linha]:= DataGravacao;
+    StringGrid.Cells[1,Linha]:= DataProgramacao;
+    StringGrid.Cells[2,Linha]:= txtTipoEtapaServico;
+    StringGrid.Cells[3,Linha]:= txtDestino;
+    StringGrid.Cells[4,Linha]:= IntToStr(NumAprovadosPlan);
+    //============================================================
+    DataProgramacao:= FrmDataModule.DataSourceGravarCarteiraPIOP.
+    DataSet.FieldByName('DataProgramacao').AsString;
+    txtTipoEtapaServico:= FrmDataModule.DataSourceGravarCarteiraPIOP.
+    DataSet.FieldByName('txtTipoEtapaServico').AsString;
+    txtDestino:= FrmDataModule.DataSourceGravarCarteiraPIOP.
+    DataSet.FieldByName('txtDestino').AsString;
+    SQLBase:= 'SELECT tblProgramacaoDiaria.* FROM tblProgramacaoDiaria '+
+    'WHERE ((DataProgramacao LIKE "'+DataProgramacao+
+    '")AND(txtDestino LIKE "'+txtDestino+
+    '")AND(txtTipoEtapaServico LIKE "'+txtTipoEtapaServico+'"));';
+    FrmDataModule.ADOQueryTemporarioDBColibri.Close;
+    FrmDataModule.ADOQueryTemporarioDBColibri.SQL.Clear;
+    FrmDataModule.ADOQueryTemporarioDBColibri.SQL.Add(SQLBase);
+    FrmDataModule.ADOQueryTemporarioDBColibri.Open;
+    NumAprovadosReal:= 0;
+    while not FrmDataModule.ADOQueryTemporarioDBColibri.Eof do
+    begin
+      NumAprovadosReal:= NumAprovadosReal+FrmDataModule.DataSourceTemporarioDBColibri.
+      DataSet.FieldByName('NumAprovados').AsInteger;
+      FrmDataModule.ADOQueryTemporarioDBColibri.Next;
+    end;
+    if NumAprovadosReal <> 0 then
+    begin
+      StringGrid.Cells[5,Linha]:= IntToStr(NumAprovadosReal);
+      StringGrid.Cells[6,Linha]:= IntToStr(NumAprovadosReal - NumAprovadosPlan);
+    end
+    else
+    begin
+      StringGrid.Cells[5,Linha]:= 'NP';
+      StringGrid.Cells[6,Linha]:= 'NP';
+    end;
+    FrmDataModule.ADOQueryGravarCarteiraPIOP.Next;
+    FrmPrincipal.ProgressBarIncremento(1);
+  end;
+  FrmPrincipal.AutoFitGrade(StringGrid);
+  try
+    StringGrid.FixedRows:= 1;
+  except
+    StringGrid.FixedRows:= 0;
+  end;
+  FrmPrincipal.ProgressBarAtualizar;
+end;
+
+procedure TFrmAgendaIntervencao.actEmbarcacaoExecute(Sender: TObject);
+ var
+    DataProcura,SQLBase,NomeEmbarcacao,DiaSemana: String;
+    TotalDias,i,j,TotalLinhas: Integer;
+begin
+  FrmPrincipal.limparStringGrid(StringGrid);
+  TotalDias:= TRUNC(dataFim.Date-dataInicio.Date);
+  StringGrid.ColCount:=  (TotalDias+1);
+  StringGrid.FixedRows:= 0;
+  StringGrid.RowCount:= 1;
+  for i := 0 to TotalDias do
+  begin
+    DataProcura:= DateToStr(IncDay(dataInicio.Date,i));
+    StringGrid.Cells[i,0]:= DataProcura;
+    DiaSemana:= FormatDateTime('DDDD',IncDay(dataInicio.Date,i));
+    SQLBase:=
+    'SELECT tblRoteamento.NomeEmbarcacao, tblRoteamento.DataRoteamento FROM tblRoteamento '+
+    'GROUP BY tblRoteamento.NomeEmbarcacao, tblRoteamento.DataRoteamento '+
+    'HAVING (DataRoteamento LIKE '+QuotedStr(DataProcura)+
+    ') ORDER BY NomeEmbarcacao;';
+
+    FrmDataModule.ADOQueryTemporarioDBColibri.Close;
+    FrmDataModule.ADOQueryTemporarioDBColibri.SQL.Clear;
+    FrmDataModule.ADOQueryTemporarioDBColibri.SQL.Add(SQLBase);
+    FrmDataModule.ADOQueryTemporarioDBColibri.Open;
+    FrmPrincipal.ProgressBarIncializa(FrmDataModule.ADOQueryTemporarioDBColibri.RecordCount,
+    'Programação: '+IntToStr(i+1)+' de '+IntToStr(TotalDias+1));
+    j:= 1;
+    while not FrmDataModule.ADOQueryTemporarioDBColibri.Eof do
+    begin
+      TotalLinhas:= StringGrid.RowCount;
+      if TotalLinhas < j+1 then
+        StringGrid.RowCount:= TotalLinhas+1;
+      NomeEmbarcacao:= FrmDataModule.DataSourceTemporarioDBColibri.
+      DataSet.FieldByName('NomeEmbarcacao').AsString;
+      StringGrid.Cells[i,j]:= NomeEmbarcacao;
+      j:= j+1;
+
+      FrmDataModule.ADOQueryTemporarioDBColibri.Next;
+      FrmPrincipal.ProgressBarIncremento(1);
+    end;
+    FrmPrincipal.ProgressBarAtualizar;
+  end;
+  try
+    StringGrid.FixedRows:= 1;
+  except
+  end;
+  FrmPrincipal.AutoFitGrade(StringGrid);
+end;
+
+procedure TFrmAgendaIntervencao.actExcelExecute(Sender: TObject);
+begin
+  FrmPrincipal.ExcelStringGrid(StringGrid,'Agenda de Intervenção',
+  '','',1);
+end;
+
+procedure TFrmAgendaIntervencao.FormClose(Sender: TObject;
+  var Action: TCloseAction);
+begin
+  Action:= caFree;
+  FrmAgendaIntervencao:=nil;
+end;
+
+procedure TFrmAgendaIntervencao.FormCreate(Sender: TObject);
+begin
+  FrmPrincipal.MDIChildCreated(self.Handle);
+  dataInicio.Date:= now;
+  dataFim.Date:= IncDay(now,15);
+  booComparar:= false;
+end;
+
+procedure TFrmAgendaIntervencao.FormDestroy(Sender: TObject);
+begin
+  FrmPrincipal.MDIChildDestroyed(self.Handle);
+end;
+
+procedure TFrmAgendaIntervencao.StringGridDrawCell(Sender: TObject; ACol,
+  ARow: Integer; Rect: TRect; State: TGridDrawState);
+var
+  R: TRect;
+begin
+  R := Rect;
+  R.Left := R.Left - 4;
+  if (ARow = 0) then
+  begin
+    try
+      StringGrid.Canvas.Brush.Color := clGray;
+      StringGrid.Canvas.Font.Style := [];
+      StringGrid.Canvas.FillRect(R);
+      DrawText(StringGrid.Canvas.Handle, PChar(StringGrid.Cells[ACol, ARow]),
+      -1, R, DT_Center);
+    except
+    end;
+  end;
+  if (booComparar)AND(ARow > 0) then
+  begin
+    if (ACol = 5)AND(StringGrid.Cells[ACol,ARow] = 'NP') then
+    begin
+      try
+        StringGrid.Canvas.Brush.Color := clRed;
+        StringGrid.Canvas.Font.Style := [];
+        StringGrid.Canvas.FillRect(R);
+        DrawText(StringGrid.Canvas.Handle, PChar(StringGrid.Cells[ACol, ARow]),
+        -1, R, DT_Center);
+      except
+      end;
+    end
+    else if (ACol = 6) then
+    begin
+      try
+        if StrToInt(StringGrid.Cells[ACol,ARow]) = 0 then
+        begin
+          StringGrid.Canvas.Brush.Color := clLime;
+          StringGrid.Canvas.Font.Style := [];
+          StringGrid.Canvas.FillRect(R);
+          DrawText(StringGrid.Canvas.Handle, PChar(StringGrid.Cells[ACol, ARow]),
+          -1, R, DT_Center);
+        end
+        else if StrToInt(StringGrid.Cells[ACol,ARow]) < 0 then
+        begin
+          StringGrid.Canvas.Brush.Color := clYellow;
+          StringGrid.Canvas.Font.Style := [];
+          StringGrid.Canvas.FillRect(R);
+          DrawText(StringGrid.Canvas.Handle, PChar(StringGrid.Cells[ACol, ARow]),
+          -1, R, DT_Center);
+        end
+        else if StrToInt(StringGrid.Cells[ACol,ARow]) > 0 then
+        begin
+          StringGrid.Canvas.Brush.Color := clAqua;
+          StringGrid.Canvas.Font.Style := [];
+          StringGrid.Canvas.FillRect(R);
+          DrawText(StringGrid.Canvas.Handle, PChar(StringGrid.Cells[ACol, ARow]),
+          -1, R, DT_Center);
+        end;
+      except
+        StringGrid.Canvas.Brush.Color := clRed;
+        StringGrid.Canvas.Font.Style := [];
+        StringGrid.Canvas.FillRect(R);
+        DrawText(StringGrid.Canvas.Handle, PChar(StringGrid.Cells[ACol, ARow]),
+        -1, R, DT_Center);
+      end;
+    end;
+  end;
+end;
+
+procedure TFrmAgendaIntervencao.StringGridFixedCellClick(Sender: TObject; ACol,
+  ARow: Integer);
+begin
+  FrmPrincipal.clasifica(StringGrid,ACol,true);
+end;
+
+procedure TFrmAgendaIntervencao.WMMDIACTIVATE(var msg: TWMMDIACTIVATE);
+ var
+  active: TWinControl;
+  idx: Integer;
+begin
+  active := FindControl(msg.ActiveWnd) ;
+
+  if Assigned(active) then
+  begin
+    idx := FrmPrincipal.mdiChildrenTabs.Tabs.IndexOfObject(TObject(msg.ActiveWnd));
+    FrmPrincipal.mdiChildrenTabs.Tag := -1;
+    FrmPrincipal.mdiChildrenTabs.TabIndex := idx;
+    FrmPrincipal.mdiChildrenTabs.Tag := 0;
+  end;
+end;
+
+end.

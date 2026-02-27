@@ -1,0 +1,443 @@
+object FrmPadraoLEC: TFrmPadraoLEC
+  Left = 0
+  Top = 0
+  Caption = 'Padr'#227'o de Controle e Procedimentos de Conting'#234'ncia [LEC]'
+  ClientHeight = 456
+  ClientWidth = 1036
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  FormStyle = fsMDIChild
+  OldCreateOrder = False
+  Visible = True
+  WindowState = wsMaximized
+  OnClose = FormClose
+  OnCreate = FormCreate
+  OnDestroy = FormDestroy
+  PixelsPerInch = 96
+  TextHeight = 13
+  object Splitter1: TSplitter
+    Left = 0
+    Top = 210
+    Width = 1036
+    Height = 3
+    Cursor = crVSplit
+    Align = alBottom
+    ExplicitLeft = -201
+    ExplicitTop = 335
+    ExplicitWidth = 1049
+  end
+  object Splitter2: TSplitter
+    Left = 0
+    Top = 333
+    Width = 1036
+    Height = 3
+    Cursor = crVSplit
+    Align = alBottom
+    ExplicitLeft = -1
+    ExplicitTop = 342
+    ExplicitWidth = 848
+  end
+  object PanelTitulo: TPanel
+    Left = 0
+    Top = 0
+    Width = 1036
+    Height = 25
+    Align = alTop
+    Caption = 'Padr'#227'o de Controle e Procedimentos de Conting'#234'ncia [LEC]'
+    Color = clGradientActiveCaption
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -13
+    Font.Name = 'Tahoma'
+    Font.Style = [fsBold]
+    ParentBackground = False
+    ParentFont = False
+    TabOrder = 0
+  end
+  object DBGridPadraoLEC: TDBGrid
+    Left = 0
+    Top = 54
+    Width = 1036
+    Height = 156
+    Align = alClient
+    DataSource = FrmDataModule.DataSourcePadraoLEC
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Tahoma'
+    Font.Style = []
+    ParentFont = False
+    TabOrder = 1
+    TitleFont.Charset = DEFAULT_CHARSET
+    TitleFont.Color = clWindowText
+    TitleFont.Height = -11
+    TitleFont.Name = 'Tahoma'
+    TitleFont.Style = []
+    OnDrawColumnCell = DBGridPadraoLECDrawColumnCell
+    OnTitleClick = DBGridPadraoLECTitleClick
+    Columns = <
+      item
+        Alignment = taCenter
+        Expanded = False
+        FieldName = 'Linha'
+        Title.Alignment = taCenter
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'TAGBusca'
+        Title.Alignment = taCenter
+        Title.Caption = 'TAG de Busca'
+        Width = 191
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'PlataformaBusca'
+        Title.Alignment = taCenter
+        Title.Caption = 'Plataforma de Busca'
+        Width = 114
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'ElementosCriticos'
+        Title.Alignment = taCenter
+        Title.Caption = 'Elementos Cr'#237'ticos'
+        Width = 133
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'Aplicacao'
+        Title.Alignment = taCenter
+        Title.Caption = 'Aplica'#231#227'o'
+        Width = 85
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'Descricao'
+        Title.Alignment = taCenter
+        Title.Caption = 'Descri'#231#227'o'
+        Width = 141
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'Salvaguarda'
+        Title.Alignment = taCenter
+        Width = 107
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'SistemaAssociado'
+        Title.Alignment = taCenter
+        Title.Caption = 'Sistema Associado'
+        Width = 96
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'GerenciaResponsavel'
+        Title.Alignment = taCenter
+        Title.Caption = 'Ger'#234'ncia Respons'#225'vel'
+        Width = 147
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'AcaoAdotadaControle'
+        Title.Alignment = taCenter
+        Title.Caption = 'A'#231#227'o Adotada (Aceita'#231#227'o/Controle)'
+        Width = 234
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'GerenciaResponsavelAcionamento'
+        Title.Alignment = taCenter
+        Title.Caption = 'Ger'#234'ncia Respons'#225'vel Acionamento'
+        Width = 196
+        Visible = True
+      end
+      item
+        Alignment = taCenter
+        Expanded = False
+        FieldName = 'PrazoToleravel'
+        Title.Alignment = taCenter
+        Title.Caption = 'Prazo Toler'#193'vel (Dias)'
+        Width = 126
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'AcaoAdotadaIndisponibilidade'
+        Title.Alignment = taCenter
+        Title.Caption = 'A'#231#227'o Adotada Durante Indisponibilidade'
+        Width = 209
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'Observacao'
+        Title.Alignment = taCenter
+        Title.Caption = 'Observa'#231#227'o'
+        Width = 85
+        Visible = True
+      end>
+  end
+  object PanelNotas: TPanel
+    Left = 0
+    Top = 213
+    Width = 1036
+    Height = 120
+    Align = alBottom
+    TabOrder = 2
+    object DBMemoAcao: TDBMemo
+      Left = 1
+      Top = 19
+      Width = 1034
+      Height = 100
+      Align = alClient
+      DataField = 'AcaoAdotadaIndisponibilidade'
+      DataSource = FrmDataModule.DataSourcePadraoLEC
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -13
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentFont = False
+      ScrollBars = ssVertical
+      TabOrder = 0
+    end
+    object Panel2: TPanel
+      Left = 1
+      Top = 1
+      Width = 1034
+      Height = 18
+      Align = alTop
+      Caption = 'A'#231#227'o Adotada Durante Indisponibilidade'
+      Color = clGradientActiveCaption
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -13
+      Font.Name = 'Tahoma'
+      Font.Style = [fsBold]
+      ParentBackground = False
+      ParentFont = False
+      TabOrder = 1
+    end
+  end
+  object ToolBar1: TToolBar
+    Left = 0
+    Top = 25
+    Width = 1036
+    Height = 29
+    Caption = 'ToolBar1'
+    DrawingStyle = dsGradient
+    EdgeBorders = [ebLeft, ebTop, ebRight, ebBottom]
+    Images = FrmPrincipal.ImageList1
+    TabOrder = 3
+    object DBNavigator1: TDBNavigator
+      Left = 0
+      Top = 0
+      Width = 138
+      Height = 22
+      DataSource = FrmDataModule.DataSourcePadraoLEC
+      VisibleButtons = [nbInsert, nbDelete, nbEdit, nbPost, nbCancel, nbRefresh]
+      Hints.Strings = (
+        'Primeiro'
+        'Anterior'
+        'Pr'#243'ximo'
+        #218'ltimo'
+        'Inserir'
+        'Excluir'
+        'Editar'
+        'Gravar'
+        'Cancelar'
+        'Atualizar'
+        'Aplicar atualiza'#231#245'es'
+        'Calcelar atualiza'#231#245'es')
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 0
+    end
+    object BitBtn2: TBitBtn
+      Left = 138
+      Top = 0
+      Width = 80
+      Height = 22
+      Action = actExcel
+      Align = alLeft
+      Caption = 'Exportar'
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 1
+    end
+    object BitBtn4: TBitBtn
+      Left = 218
+      Top = 0
+      Width = 64
+      Height = 22
+      Action = actLimparFiltros
+      Align = alLeft
+      Caption = 'Limpar'
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 2
+    end
+    object BitBtn1: TBitBtn
+      Left = 282
+      Top = 0
+      Width = 64
+      Height = 22
+      Action = actFiltrosTabela
+      Align = alLeft
+      Caption = 'Filtros'
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 3
+    end
+  end
+  object ColunasLayout: TStringGrid
+    Left = 96
+    Top = 112
+    Width = 89
+    Height = 97
+    FixedCols = 0
+    Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goDrawFocusSelected, goRowSizing, goColSizing, goEditing]
+    TabOrder = 4
+    Visible = False
+    RowHeights = (
+      24
+      24
+      21
+      24
+      24)
+  end
+  object Panel1: TPanel
+    Left = 0
+    Top = 336
+    Width = 1036
+    Height = 120
+    Align = alBottom
+    TabOrder = 5
+    object DBMemoObservacao: TDBMemo
+      Left = 1
+      Top = 19
+      Width = 1034
+      Height = 81
+      Align = alClient
+      DataField = 'Observacao'
+      DataSource = FrmDataModule.DataSourcePadraoLEC
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -13
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentFont = False
+      ScrollBars = ssVertical
+      TabOrder = 0
+    end
+    object Panel3: TPanel
+      Left = 1
+      Top = 1
+      Width = 1034
+      Height = 18
+      Align = alTop
+      Caption = 'Observa'#231#245'es'
+      Color = clGradientActiveCaption
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -13
+      Font.Name = 'Tahoma'
+      Font.Style = [fsBold]
+      ParentBackground = False
+      ParentFont = False
+      TabOrder = 1
+    end
+    object StatusBar1: TStatusBar
+      Left = 1
+      Top = 100
+      Width = 1034
+      Height = 19
+      Panels = <
+        item
+          Width = 50
+        end
+        item
+          Width = 50
+        end
+        item
+          Width = 50
+        end
+        item
+          Width = 50
+        end
+        item
+          Width = 50
+        end>
+    end
+  end
+  object ActionManager1: TActionManager
+    Images = FrmPrincipal.ImageList1
+    Left = 344
+    Top = 176
+    StyleName = 'Platform Default'
+    object actProcurar: TAction
+      Caption = 'actProcurar'
+      OnExecute = actProcurarExecute
+    end
+    object actExcel: TAction
+      Caption = 'Exportar'
+      Hint = 'Exportar para o Excel'
+      ImageIndex = 54
+      OnExecute = actExcelExecute
+    end
+    object actFiltroInserir: TAction
+      Category = 'Tabela'
+      Caption = 'Inserir'
+      OnExecute = actFiltroInserirExecute
+    end
+    object actGridASC: TAction
+      Category = 'Tabela'
+      Caption = 'actGridASC'
+      OnExecute = actGridASCExecute
+    end
+    object actGridDESC: TAction
+      Category = 'Tabela'
+      Caption = 'actGridDESC'
+      OnExecute = actGridDESCExecute
+    end
+    object actSubstituirPor: TAction
+      Category = 'Tabela'
+      Caption = 'actSubstituirPor'
+      OnExecute = actSubstituirPorExecute
+    end
+    object actLimparFiltros: TAction
+      Category = 'Tabela'
+      Caption = 'Limpar'
+      Hint = 'Limpar Filtros'
+      ImageIndex = 469
+      OnExecute = actLimparFiltrosExecute
+    end
+    object actFiltrosTabela: TAction
+      Category = 'Tabela'
+      Caption = 'Filtros'
+      Hint = 'Visualizar tabela de filtros'
+      ImageIndex = 470
+      OnExecute = actFiltrosTabelaExecute
+    end
+    object actProcuraFiltrosTabela: TAction
+      Category = 'Tabela'
+      Caption = 'actProcuraFiltrosTabela'
+      OnExecute = actProcuraFiltrosTabelaExecute
+    end
+  end
+end

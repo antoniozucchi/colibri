@@ -1,0 +1,20 @@
+TAB1;Ativo
+TAB1;Turma
+TAB1;Nome do Executante
+TAB1;Origem Cadastro
+TAB1;Chave
+TAB1;Código SAP
+TAB1;Função
+TAB1;Empresa
+TAB1;CPF
+TAB1;Outro Documento
+TAB1;Tipo de Etapa de Serviço
+TAB1;Código Tipo de Servico
+TAB1;Requisitante PT
+TAB1;Centro de Custo
+TAB1;Data Validade PT
+TAB1;Curso CESS
+TAB1;Data Validade CESS
+TAB1;Data Atualização
+TAB1;Avaliado Por
+TAB1;Computador

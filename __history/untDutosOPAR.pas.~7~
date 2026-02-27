@@ -1,0 +1,189 @@
+unit untDutosOPAR;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Data.DB, System.Actions, Vcl.ActnList,
+  Vcl.PlatformDefaultStyleActnCtrls, Vcl.ActnMan, Vcl.Grids, Vcl.DBGrids,
+  Vcl.StdCtrls, Vcl.Buttons, Vcl.DBCtrls, Vcl.ToolWin, Vcl.ComCtrls,
+  Vcl.ExtCtrls;
+
+type
+  TFrmDutosOPAR = class(TForm)
+    PanelTitulo: TPanel;
+    ToolBar1: TToolBar;
+    DBNavigator1: TDBNavigator;
+    BitBtn2: TBitBtn;
+    BitBtn4: TBitBtn;
+    BitBtn1: TBitBtn;
+    DBGridDutosOPAR: TDBGrid;
+    ColunasLayout: TStringGrid;
+    ActionManager1: TActionManager;
+    actProcurar: TAction;
+    actExcel: TAction;
+    actFiltroInserir: TAction;
+    actGridASC: TAction;
+    actGridDESC: TAction;
+    actSubstituirPor: TAction;
+    actLimparFiltros: TAction;
+    actFiltrosTabela: TAction;
+    actProcuraFiltrosTabela: TAction;
+    StatusBar1: TStatusBar;
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure FormCreate(Sender: TObject);
+    procedure FormDestroy(Sender: TObject);
+    procedure actProcurarExecute(Sender: TObject);
+    procedure actExcelExecute(Sender: TObject);
+    procedure actFiltroInserirExecute(Sender: TObject);
+    procedure actGridASCExecute(Sender: TObject);
+    procedure actGridDESCExecute(Sender: TObject);
+    procedure actSubstituirPorExecute(Sender: TObject);
+    procedure actLimparFiltrosExecute(Sender: TObject);
+    procedure actFiltrosTabelaExecute(Sender: TObject);
+    procedure actProcuraFiltrosTabelaExecute(Sender: TObject);
+    procedure DBGridDutosOPARDrawColumnCell(Sender: TObject; const Rect: TRect;
+      DataCol: Integer; Column: TColumn; State: TGridDrawState);
+    procedure DBGridDutosOPARTitleClick(Column: TColumn);
+    procedure DBGridDutosOPARKeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+  private
+    { Private declarations }
+    procedure WMMDIACTIVATE(var msg: TWMMDIACTIVATE);message WM_MDIACTIVATE;
+  public
+    { Public declarations }
+  end;
+
+var
+  FrmDutosOPAR: TFrmDutosOPAR;
+
+implementation
+uses untPrincipal,untDataModule;
+{$R *.dfm}
+
+procedure TFrmDutosOPAR.actExcelExecute(Sender: TObject);
+begin
+  FrmPrincipal.GerarExcel(DBGridDutosOPAR,'Dutos');
+end;
+
+procedure TFrmDutosOPAR.actFiltroInserirExecute(Sender: TObject);
+begin
+  FrmPrincipal.inserirProcura(DBGridDutosOPAR,ColunasLayout);
+  actProcurar.Execute;
+  if (FrmPrincipal.PanelFiltrosTabela.Visible)AND(FrmPrincipal.PanelAjuda1.Visible) then
+    actFiltrosTabela.Execute;
+end;
+
+procedure TFrmDutosOPAR.actFiltrosTabelaExecute(Sender: TObject);
+begin
+  FrmPrincipal.btnProcurarFiltrosTabela.Action:= actProcuraFiltrosTabela;
+  FrmPrincipal.FiltrosTabela(DBGridDutosOPAR,ColunasLayout);
+end;
+
+procedure TFrmDutosOPAR.actGridASCExecute(Sender: TObject);
+begin
+  FrmPrincipal.ClassificaDBGrid(DBGridDutosOPAR,
+  FrmDataModule.ADOQueryDutosOPAR,0);
+end;
+
+procedure TFrmDutosOPAR.actGridDESCExecute(Sender: TObject);
+begin
+  FrmPrincipal.ClassificaDBGrid(DBGridDutosOPAR,
+  FrmDataModule.ADOQueryPadraoLEC,1);
+end;
+
+procedure TFrmDutosOPAR.actLimparFiltrosExecute(Sender: TObject);
+begin
+  FrmPrincipal.LimparColunasFiltro(DBGridDutosOPAR,ColunasLayout);
+  actProcurar.Execute;
+  if (FrmPrincipal.PanelFiltrosTabela.Visible)AND(FrmPrincipal.PanelAjuda1.Visible) then
+    actFiltrosTabela.Execute;
+end;
+
+procedure TFrmDutosOPAR.actProcuraFiltrosTabelaExecute(Sender: TObject);
+begin
+  frmPrincipal.CarregaFiltrosProcura(ColunasLayout);
+  actProcurar.Execute;
+end;
+
+procedure TFrmDutosOPAR.actProcurarExecute(Sender: TObject);
+  var
+    SQLString,SQLBase: String;
+begin
+  SQLString:= frmPrincipal.SQLStringFiltroTabela(ColunasLayout,true);
+  SQLBase:= 'SELECT tblDutosOPAR.* FROM tblDutosOPAR '+
+  SQLString+' ORDER BY TAG_Duto;';
+  FrmPrincipal.ProcuraQuery(SQLBase,FrmDataModule.ADOQueryDutosOPAR,StatusBar1);
+end;
+
+procedure TFrmDutosOPAR.actSubstituirPorExecute(Sender: TObject);
+begin
+  FrmPrincipal.SubstituirPor(DBGridDutosOPAR,FrmDataModule.ADOQueryDutosOPAR,
+  FrmDataModule.DataSourceDutosOPAR);
+end;
+
+procedure TFrmDutosOPAR.DBGridDutosOPARDrawColumnCell(Sender: TObject;
+  const Rect: TRect; DataCol: Integer; Column: TColumn; State: TGridDrawState);
+begin
+  FrmPrincipal.GridZebrado(DBGridDutosOPAR,ColunasLayout,State,Rect,DataCol,Column);
+end;
+
+procedure TFrmDutosOPAR.DBGridDutosOPARKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+  if (Key in [VK_DOWN]) AND (DBGridDutosOPAR.DataSource.DataSet.RecNo=
+  DBGridDutosOPAR.DataSource.DataSet.RecordCount) then
+    Abort;
+end;
+
+procedure TFrmDutosOPAR.DBGridDutosOPARTitleClick(Column: TColumn);
+begin
+  FrmPrincipal.configurarFiltro(1,Column.FieldName,IntToStr(Column.Index),
+  Column.ReadOnly,actFiltroInserir,actGridASC,actGridDESC,actSubstituirPor);
+  //======================================================
+  FrmPrincipal.titleGrid(ColunasLayout,
+  FrmDataModule.ADOQueryDutosOPAR,StatusBar1,'Operacao');
+end;
+
+procedure TFrmDutosOPAR.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+  Action:= caFree;
+  FrmDutosOPAR:=nil;
+end;
+
+procedure TFrmDutosOPAR.FormCreate(Sender: TObject);
+begin
+  FrmPrincipal.MDIChildCreated(self.Handle);
+  //Incicialização
+  FrmPrincipal.SetUpColunasLayout(DBGridDutosOPAR, ColunasLayout);
+  actProcurar.Execute;
+  if FrmPrincipal.logPerfil = 'Administrador' then
+  begin
+    DBNavigator1.Enabled:= true;
+  end
+  else
+    DBNavigator1.Enabled:= false;;
+end;
+
+procedure TFrmDutosOPAR.FormDestroy(Sender: TObject);
+begin
+  FrmPrincipal.MDIChildDestroyed(self.Handle);
+end;
+
+procedure TFrmDutosOPAR.WMMDIACTIVATE(var msg: TWMMDIACTIVATE);
+var
+  active: TWinControl;
+  idx: Integer;
+begin
+  active := FindControl(msg.ActiveWnd) ;
+
+  if Assigned(active) then
+  begin
+    idx := FrmPrincipal.mdiChildrenTabs.Tabs.IndexOfObject(TObject(msg.ActiveWnd));
+    FrmPrincipal.mdiChildrenTabs.Tag := -1;
+    FrmPrincipal.mdiChildrenTabs.TabIndex := idx;
+    FrmPrincipal.mdiChildrenTabs.Tag := 0;
+  end;
+end;
+
+end.

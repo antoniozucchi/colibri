@@ -1,0 +1,393 @@
+object FrmSituacaoEquipamentoAcesso: TFrmSituacaoEquipamentoAcesso
+  Left = 0
+  Top = 0
+  Caption = 'Situa'#231#227'o dos Equipamentos e Acessos das Plataformas'
+  ClientHeight = 362
+  ClientWidth = 823
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  FormStyle = fsMDIChild
+  OldCreateOrder = False
+  Visible = True
+  WindowState = wsMaximized
+  OnClose = FormClose
+  OnCreate = FormCreate
+  OnDestroy = FormDestroy
+  PixelsPerInch = 96
+  TextHeight = 13
+  object Splitter1: TSplitter
+    Left = 0
+    Top = 232
+    Width = 823
+    Height = 3
+    Cursor = crVSplit
+    Align = alBottom
+    ExplicitLeft = 1
+    ExplicitTop = 204
+    ExplicitWidth = 726
+  end
+  object ToolBar1: TToolBar
+    Left = 0
+    Top = 25
+    Width = 823
+    Height = 29
+    Caption = 'ToolBar1'
+    DrawingStyle = dsGradient
+    EdgeBorders = [ebLeft, ebTop, ebRight, ebBottom]
+    TabOrder = 0
+    ExplicitTop = 19
+    object DBNavigator: TDBNavigator
+      Left = 0
+      Top = 0
+      Width = 132
+      Height = 22
+      DataSource = FrmDataModule.DataSourcePlataformaControle
+      VisibleButtons = [nbEdit, nbPost, nbCancel, nbRefresh]
+      Enabled = False
+      Hints.Strings = (
+        'Primeiro'
+        'Anterior'
+        'Pr'#243'ximo'
+        #218'ltimo'
+        'Inserir'
+        'Excluir'
+        'Editar'
+        'Gravar'
+        'Cancelar'
+        'Atualizar'
+        'Aplicar atualiza'#231#245'es'
+        'Calcelar atualiza'#231#245'es')
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 3
+    end
+    object BitBtn4: TBitBtn
+      Left = 132
+      Top = 0
+      Width = 75
+      Height = 22
+      Action = actExcel
+      Align = alLeft
+      Caption = 'Exportar'
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 0
+    end
+    object BitBtn2: TBitBtn
+      Left = 207
+      Top = 0
+      Width = 64
+      Height = 22
+      Action = actLimparFiltros
+      Align = alLeft
+      Caption = 'Limpar'
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 2
+    end
+    object BitBtn1: TBitBtn
+      Left = 271
+      Top = 0
+      Width = 64
+      Height = 22
+      Action = actFiltrosTabela
+      Align = alLeft
+      Caption = 'Filtros'
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 1
+    end
+  end
+  object PanelTitulo: TPanel
+    Left = 0
+    Top = 0
+    Width = 823
+    Height = 25
+    Align = alTop
+    Caption = 'Situa'#231#227'o dos Equipamentos e Acessos das Plataformas'
+    Color = clGradientActiveCaption
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -13
+    Font.Name = 'Tahoma'
+    Font.Style = [fsBold]
+    ParentBackground = False
+    ParentFont = False
+    TabOrder = 1
+  end
+  object DBGridSituacaoEquipamentoAcesso: TDBGrid
+    Left = 0
+    Top = 54
+    Width = 823
+    Height = 178
+    Align = alClient
+    DataSource = FrmDataModule.DataSourcePlataformaControle
+    ReadOnly = True
+    TabOrder = 2
+    TitleFont.Charset = DEFAULT_CHARSET
+    TitleFont.Color = clWindowText
+    TitleFont.Height = -11
+    TitleFont.Name = 'Tahoma'
+    TitleFont.Style = []
+    OnDrawColumnCell = DBGridSituacaoEquipamentoAcessoDrawColumnCell
+    OnKeyPress = DBGridSituacaoEquipamentoAcessoKeyPress
+    OnTitleClick = DBGridSituacaoEquipamentoAcessoTitleClick
+    Columns = <
+      item
+        Alignment = taCenter
+        Expanded = False
+        FieldName = 'Plataforma'
+        Title.Alignment = taCenter
+        Title.Caption = 'Local de Instala'#231#227'o'
+        Width = 106
+        Visible = True
+      end
+      item
+        Alignment = taCenter
+        Expanded = False
+        FieldName = 'SituacaoGD'
+        Title.Alignment = taCenter
+        Title.Caption = 'GD'
+        Width = 75
+        Visible = True
+      end
+      item
+        Alignment = taCenter
+        Expanded = False
+        FieldName = 'CapPrincipal'
+        Title.Caption = 'SWL Prin. (t)'
+        Visible = True
+      end
+      item
+        Alignment = taCenter
+        Expanded = False
+        FieldName = 'CapAuxiliar'
+        Title.Caption = 'SWL Aux. (t)'
+        Visible = True
+      end
+      item
+        Alignment = taCenter
+        Expanded = False
+        FieldName = 'SituacaoBCI'
+        Title.Alignment = taCenter
+        Title.Caption = 'BCI'
+        Width = 75
+        Visible = True
+      end
+      item
+        Alignment = taCenter
+        Expanded = False
+        FieldName = 'SituacaoLinhaBCI'
+        Title.Alignment = taCenter
+        Title.Caption = 'Linha BCI'
+        Width = 75
+        Visible = True
+      end
+      item
+        Alignment = taCenter
+        Expanded = False
+        FieldName = 'SituacaoAgua'
+        Title.Alignment = taCenter
+        Title.Caption = 'Ab.'#193'gua'
+        Width = 75
+        Visible = True
+      end
+      item
+        Alignment = taCenter
+        Expanded = False
+        FieldName = 'SituacaoBalsa'
+        Title.Alignment = taCenter
+        Title.Caption = 'Balsa'
+        Width = 75
+        Visible = True
+      end
+      item
+        Alignment = taCenter
+        Expanded = False
+        FieldName = 'SituacaoAcesso'
+        Title.Alignment = taCenter
+        Title.Caption = 'Int.Acesso'
+        Width = 75
+        Visible = True
+      end
+      item
+        Alignment = taCenter
+        Expanded = False
+        FieldName = 'SituacaoDegraus'
+        Title.Alignment = taCenter
+        Title.Caption = 'Limp.Degraus'
+        Width = 75
+        Visible = True
+      end
+      item
+        Alignment = taCenter
+        Expanded = False
+        FieldName = 'DataRealizacaoDegraus'
+        Title.Alignment = taCenter
+        Title.Caption = 'Data Realiza'#231#227'o'
+        Visible = True
+      end
+      item
+        Alignment = taCenter
+        Expanded = False
+        FieldName = 'AvaliadoPor'
+        Title.Alignment = taCenter
+        Title.Caption = 'Avaliado Por'
+        Visible = True
+      end
+      item
+        Alignment = taCenter
+        Expanded = False
+        FieldName = 'DataAtualizacao'
+        Title.Alignment = taCenter
+        Title.Caption = 'Data Atualiza'#231#227'o'
+        Visible = True
+      end
+      item
+        Alignment = taCenter
+        Expanded = False
+        FieldName = 'Computador'
+        Title.Alignment = taCenter
+        Visible = True
+      end>
+  end
+  object StatusBar1: TStatusBar
+    Left = 0
+    Top = 343
+    Width = 823
+    Height = 19
+    Panels = <
+      item
+        Width = 50
+      end
+      item
+        Width = 50
+      end
+      item
+        Width = 50
+      end
+      item
+        Width = 50
+      end
+      item
+        Width = 50
+      end>
+  end
+  object ColunasLayout: TStringGrid
+    Left = 48
+    Top = 102
+    Width = 113
+    Height = 94
+    ColCount = 2
+    DefaultRowHeight = 21
+    TabOrder = 4
+    Visible = False
+    RowHeights = (
+      21
+      21
+      21
+      21
+      21)
+  end
+  object Panel2: TPanel
+    Left = 0
+    Top = 235
+    Width = 823
+    Height = 108
+    Align = alBottom
+    Caption = 'Panel2'
+    TabOrder = 5
+    object PanelTituloNotas: TPanel
+      Left = 1
+      Top = 1
+      Width = 821
+      Height = 20
+      Align = alTop
+      Caption = 'Observa'#231#245'es'
+      Color = clMenuBar
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -13
+      Font.Name = 'Tahoma'
+      Font.Style = [fsBold]
+      ParentBackground = False
+      ParentFont = False
+      TabOrder = 0
+    end
+    object DBMemo1: TDBMemo
+      Left = 1
+      Top = 21
+      Width = 821
+      Height = 86
+      Align = alClient
+      DataField = 'SituacaoNotas'
+      DataSource = FrmDataModule.DataSourcePlataformaControle
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -13
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentFont = False
+      TabOrder = 1
+    end
+  end
+  object ActionManager1: TActionManager
+    Images = FrmPrincipal.ImageList1
+    Left = 312
+    Top = 150
+    StyleName = 'Platform Default'
+    object actProcurar: TAction
+      Caption = 'actProcurar'
+      OnExecute = actProcurarExecute
+    end
+    object actExcel: TAction
+      Caption = 'Exportar'
+      Hint = 'Exportar para o Excel'
+      ImageIndex = 54
+      OnExecute = actExcelExecute
+    end
+    object actFiltroInserir: TAction
+      Category = 'Tabela'
+      Caption = 'actFiltroInserir'
+      OnExecute = actFiltroInserirExecute
+    end
+    object actGridASC: TAction
+      Category = 'Tabela'
+      Caption = 'actGridASC'
+      OnExecute = actGridASCExecute
+    end
+    object actGridDESC: TAction
+      Category = 'Tabela'
+      Caption = 'actGridDESC'
+      OnExecute = actGridDESCExecute
+    end
+    object actSubstituirPor: TAction
+      Category = 'Tabela'
+      Caption = 'actSubstituirPor'
+      OnExecute = actSubstituirPorExecute
+    end
+    object actLimparFiltros: TAction
+      Category = 'Tabela'
+      Caption = 'Limpar'
+      Hint = 'Limpar Filtros'
+      ImageIndex = 469
+      OnExecute = actLimparFiltrosExecute
+    end
+    object actFiltrosTabela: TAction
+      Category = 'Tabela'
+      Caption = 'Filtros'
+      Hint = 'Visualizar tabela de filtros'
+      ImageIndex = 470
+      OnExecute = actFiltrosTabelaExecute
+    end
+    object actProcuraFiltrosTabela: TAction
+      Category = 'Tabela'
+      Caption = 'actProcuraFiltrosTabela'
+      OnExecute = actProcuraFiltrosTabelaExecute
+    end
+  end
+end

@@ -1,0 +1,243 @@
+unit untProgramacaoCalendario;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ToolWin, Vcl.ComCtrls, Vcl.ExtCtrls,
+  Vcl.Grids, Vcl.Buttons, Data.DB, Vcl.DBGrids,DateUtils, System.Actions,
+  Vcl.ActnList, Vcl.PlatformDefaultStyleActnCtrls, Vcl.ActnMan, Vcl.StdCtrls,
+  Vcl.DBCtrls, Vcl.Mask, DBDateTimePicker, Vcl.CheckLst, SDL_matrix, Vcl.Menus;
+
+type
+  TFrmProgramacaoCalendario = class(TForm)
+    PanelCalendario: TPanel;
+    PanelNomeMes: TPanel;
+    btnAnoProximo: TSpeedButton;
+    btnMesProximo: TSpeedButton;
+    btnAnoAnterior: TSpeedButton;
+    btnMesAnterior: TSpeedButton;
+    CalendarMar: TStringGrid;
+    Memo1: TMemo;
+    Panel1: TPanel;
+    DBMemoEditar: TDBMemo;
+    ToolBar1: TToolBar;
+    DBNavigatorVersao: TDBNavigator;
+    Splitter1: TSplitter;
+    Panel7: TPanel;
+    PageControl1: TPageControl;
+    TabSheet1: TTabSheet;
+    TabSheet2: TTabSheet;
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure FormCreate(Sender: TObject);
+    procedure FormDestroy(Sender: TObject);
+    procedure CalendarMarDrawCell(Sender: TObject; ACol, ARow: Integer;
+      Rect: TRect; State: TGridDrawState);
+    procedure btnMesAnteriorClick(Sender: TObject);
+    procedure btnMesProximoClick(Sender: TObject);
+    procedure btnAnoAnteriorClick(Sender: TObject);
+    procedure btnAnoProximoClick(Sender: TObject);
+    procedure CalendarMarSelectCell(Sender: TObject; ACol, ARow: Integer;
+      var CanSelect: Boolean);
+    procedure FormResize(Sender: TObject);
+  private
+    { Private declarations }
+    PrimeiroDiaMes: TDateTime;
+    AColSelect,ARowSelect: Integer;
+    procedure WMMDIACTIVATE(var msg: TWMMDIACTIVATE);message WM_MDIACTIVATE;
+  public
+    { Public declarations }
+  end;
+
+var
+  FrmProgramacaoCalendario: TFrmProgramacaoCalendario;
+
+implementation
+  uses untPrincipal,untDataModule;
+{$R *.dfm}
+
+procedure TFrmProgramacaoCalendario.btnAnoAnteriorClick(Sender: TObject);
+begin
+  PrimeiroDiaMes := IncYear(PrimeiroDiaMes, -1);
+  FrmPrincipal.DesenharCalendario(CalendarMar,PanelNomeMes,PrimeiroDiaMes);
+end;
+
+procedure TFrmProgramacaoCalendario.btnAnoProximoClick(Sender: TObject);
+begin
+  PrimeiroDiaMes := IncYear(PrimeiroDiaMes, 1);
+  FrmPrincipal.DesenharCalendario(CalendarMar,PanelNomeMes,PrimeiroDiaMes);
+end;
+
+procedure TFrmProgramacaoCalendario.btnMesAnteriorClick(Sender: TObject);
+begin
+  PrimeiroDiaMes := IncMonth(PrimeiroDiaMes, -1);
+  FrmPrincipal.DesenharCalendario(CalendarMar,PanelNomeMes,PrimeiroDiaMes);
+end;
+
+procedure TFrmProgramacaoCalendario.btnMesProximoClick(Sender: TObject);
+begin
+  PrimeiroDiaMes := IncMonth(PrimeiroDiaMes, 1);
+  FrmPrincipal.DesenharCalendario(CalendarMar,PanelNomeMes,PrimeiroDiaMes);
+end;
+
+procedure TFrmProgramacaoCalendario.CalendarMarDrawCell(Sender: TObject; ACol,
+  ARow: Integer; Rect: TRect; State: TGridDrawState);
+var
+  DiaGrid,SQLBase: string;
+  AlturaGrid, LarguraGrid, TopGrid, LeftGrid,i : Integer;
+  Data : TDateTime;
+begin
+  with CalendarMar do
+  begin
+    //Limpando o Calendário Para Recria-lo
+    Canvas.Brush.Color := clWhite;
+    Canvas.Pen.Color   := clWhite;
+    Canvas.Font.Style  := [];
+    Canvas.Font.Color  := clBlack;
+    Canvas.FillRect(Rect);
+    DiaGrid := Cells[aCol, aRow];
+    //Senão for Cabeçalho dos Dias da Semana
+    if aRow > 0 then
+    begin
+      Data := StrToDate(DiaGrid);
+      DiaGrid := IntToStr(DayOf(Data));
+      Memo1.Lines.Clear;
+      Memo1.Lines.Add(DiaGrid);
+      //Verificar registros para a data
+      SQLBase:= 'SELECT tblProgramacaoCalendario.* FROM tblProgramacaoCalendario '+
+      'WHERE ((DataProgramacao LIKE '+QuotedStr(DateToStr(Data))+'));';
+      FrmDataModule.ADOQueryTemporarioDBColibri.Close;
+      FrmDataModule.ADOQueryTemporarioDBColibri.SQL.Clear;
+      FrmDataModule.ADOQueryTemporarioDBColibri.SQL.Add(SQLBase);
+      FrmDataModule.ADOQueryTemporarioDBColibri.Open;
+      Memo1.Lines.Add(FrmDataModule.ADOQueryTemporarioDBColibri.FieldByName('Registro').AsString);
+      //Checa se os Dias São do Mês Selecionado
+      if MonthOf(Data) = MonthOf(PrimeiroDiaMes) then
+      begin
+        //Pintando a Data Atual
+        if Data = Date then
+        begin
+          Canvas.Brush.Color := clMoneyGreen;
+          Canvas.Font.Style  := [fsBold];
+          Canvas.Rectangle(Rect);
+        end;
+        //Pintando Data Selecionada
+        if gdSelected in State then
+        begin
+          Canvas.Brush.Color := $00FFC794;
+          Canvas.Font.Color  := clBlack;
+          Canvas.Font.Style  := [fsBold];
+          Canvas.Rectangle(Rect);
+        end;
+      end
+      else
+      begin
+        //Deixando Cinza as Dia Que Não São do Mês Selecionado
+        Canvas.Brush.Color :=clWhite;
+        Canvas.Font.Color  :=clSilver;
+      end;
+      //Desenhando o Calendario e Colocando os Dias, Altura, Largura e Posição
+      LarguraGrid := Canvas.TextWidth(DiaGrid);
+      LeftGrid    := Rect.Left + (ColWidths[ACol]  - LarguraGrid) div 2;
+      TopGrid     := Rect.Top +5 ;
+      Canvas.Rectangle(Classes.Rect(Rect.Left + 2, Rect.Top + 2, Rect.Right - 2, Rect.Bottom - 2));
+      for I := 0 to Memo1.Lines.Count-1 do
+      begin
+        if i = 0 Then
+          Canvas.TextOut(LeftGrid, TopGrid, Memo1.Lines[i])
+        else
+          Canvas.TextOut(Rect.Left+5, TopGrid+(i*15), Memo1.Lines[i]);
+      end;
+    end
+    //Se for Cabeçalho dos Dias da Semana
+    else
+    begin
+      Canvas.Font.Color := clRed;
+      Canvas.Font.Style :=[fsBold];
+      //Desenhando o Calendario e Colocando os Dias, Altura, Largura e Posição
+      AlturaGrid  := Canvas.TextHeight(DiaGrid);
+      LarguraGrid := Canvas.TextWidth(DiaGrid);
+      LeftGrid    := Rect.Left + (ColWidths[ACol]  - LarguraGrid) div 2;
+      TopGrid     := Rect.Top + (RowHeights[ARow] - AlturaGrid) div 2;
+      Canvas.Rectangle(Classes.Rect(Rect.Left + 2, Rect.Top + 2, Rect.Right - 2, Rect.Bottom - 2));
+      Canvas.TextOut(LeftGrid, TopGrid, DiaGrid);
+    end;
+  end;
+end;
+
+procedure TFrmProgramacaoCalendario.CalendarMarSelectCell(Sender: TObject; ACol,
+  ARow: Integer; var CanSelect: Boolean);
+  var
+    SQLBase,ProcurarData: String;
+    DataProgramacao:TDateTime;
+begin
+  AColSelect:= ACol;
+  ARowSelect:= ARow;
+  ProcurarData:= CalendarMar.Cells[ACol,ARow];
+  DataProgramacao:= StrToDate(ProcurarData);
+  SQLBase:= 'SELECT tblProgramacaoCalendario.* FROM tblProgramacaoCalendario '+
+  'WHERE ((DataProgramacao LIKE '+QuotedStr(DateToStr(DataProgramacao))+'));';
+  FrmDataModule.ADOQueryProgramacaoCalendario.Close;
+  FrmDataModule.ADOQueryProgramacaoCalendario.SQL.Clear;
+  FrmDataModule.ADOQueryProgramacaoCalendario.SQL.Add(SQLBase);
+  FrmDataModule.ADOQueryProgramacaoCalendario.Open;
+  if FrmDataModule.ADOQueryProgramacaoCalendario.IsEmpty then
+  begin
+    FrmDataModule.ADOQueryProgramacaoCalendario.Insert;
+    FrmDataModule.ADOQueryProgramacaoCalendario.FieldByName('DataProgramacao').AsDateTime:=DataProgramacao;
+    FrmDataModule.ADOQueryProgramacaoCalendario.Post;
+  end;
+end;
+
+procedure TFrmProgramacaoCalendario.FormClose(Sender: TObject;
+  var Action: TCloseAction);
+begin
+  Action:= caFree;
+  FrmProgramacaoCalendario:=nil;
+end;
+
+procedure TFrmProgramacaoCalendario.FormCreate(Sender: TObject);
+begin
+  //======ADICIONAR TABSET DO FOMRMDI=======
+  FrmPrincipal.MDIChildCreated(self.Handle);
+  //========================================
+  CalendarMar.Cells[0,0]:= 'Dom';
+  CalendarMar.Cells[1,0]:= 'Seg';
+  CalendarMar.Cells[2,0]:= 'Ter';
+  CalendarMar.Cells[3,0]:= 'Qua';
+  CalendarMar.Cells[4,0]:= 'Qui';
+  CalendarMar.Cells[5,0]:= 'Sex';
+  CalendarMar.Cells[6,0]:= 'Sab';
+  PrimeiroDiaMes := RecodeDay(Date, 1);
+  FrmPrincipal.DesenharCalendario(CalendarMar,PanelNomeMes,PrimeiroDiaMes)
+end;
+
+procedure TFrmProgramacaoCalendario.FormDestroy(Sender: TObject);
+begin
+  FrmPrincipal.MDIChildDestroyed(self.Handle);
+end;
+
+procedure TFrmProgramacaoCalendario.FormResize(Sender: TObject);
+begin
+  CalendarMar.DefaultRowHeight:=  trunc((CalendarMar.Height-30)/6);
+  CalendarMar.DefaultColWidth:=  trunc((CalendarMar.Width-20)/7);
+  CalendarMar.RowHeights[0]:= 25;
+end;
+
+procedure TFrmProgramacaoCalendario.WMMDIACTIVATE(var msg: TWMMDIACTIVATE);
+ var
+  active: TWinControl;
+  idx: Integer;
+begin
+  active := FindControl(msg.ActiveWnd) ;
+
+  if Assigned(active) then
+  begin
+    idx := FrmPrincipal.mdiChildrenTabs.Tabs.IndexOfObject(TObject(msg.ActiveWnd));
+    FrmPrincipal.mdiChildrenTabs.Tag := -1;
+    FrmPrincipal.mdiChildrenTabs.TabIndex := idx;
+    FrmPrincipal.mdiChildrenTabs.Tag := 0;
+  end;
+end;
+
+end.

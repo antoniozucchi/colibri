@@ -1,0 +1,2543 @@
+object FrmDataModule: TFrmDataModule
+  OldCreateOrder = False
+  Height = 534
+  Width = 1394
+  object ADOQueryProgramacaoServico_Cadastro: TADOQuery
+    Connection = ADOConnectionColibri
+    CursorType = ctStatic
+    LockType = ltPessimistic
+    Parameters = <
+      item
+        Name = '@Servico'
+        Attributes = [paNullable]
+        DataType = ftWideString
+        NumericScale = 255
+        Precision = 255
+        Size = 510
+        Value = '1'
+      end>
+    SQL.Strings = (
+      'SELECT tblProgramacaoServico.*'
+      'FROM tblProgramacaoServico'
+      'WHERE (CodigoProgramacaoDiaria=@Servico);')
+    Left = 48
+    Top = 8
+  end
+  object ADOQueryProgramacaoExecutante_Cadastro: TADOQuery
+    Connection = ADOConnectionColibri
+    CursorType = ctStatic
+    LockType = ltPessimistic
+    Parameters = <
+      item
+        Name = '@CodigoProgramacaoDiaria'
+        Attributes = [paNullable]
+        DataType = ftWideString
+        NumericScale = 255
+        Precision = 255
+        Size = 510
+        Value = '1'
+      end>
+    SQL.Strings = (
+      'SELECT tblProgramacaoExecutante.*'
+      'FROM tblProgramacaoExecutante'
+      'WHERE (CodigoProgramacaoDiaria=@CodigoProgramacaoDiaria)'
+      'ORDER BY NomeExecutante;')
+    Left = 8
+    Top = 8
+  end
+  object ADOQueryProgramacaoDiaria_Consulta: TADOQuery
+    Connection = ADOConnectionColibri
+    CursorType = ctStatic
+    LockType = ltPessimistic
+    Parameters = <>
+    SQL.Strings = (
+      'SELECT tblProgramacaoDiaria.*'
+      'FROM tblProgramacaoDiaria;')
+    Left = 80
+    Top = 8
+  end
+  object DataSourceProgramacaoDiaria_Consulta: TDataSource
+    DataSet = ADOQueryProgramacaoDiaria_Consulta
+    Left = 8
+    Top = 448
+  end
+  object DataSourceProgramacaoExecutante_Cadastro: TDataSource
+    DataSet = ADOQueryProgramacaoExecutante_Cadastro
+    Left = 40
+    Top = 448
+  end
+  object DataSourceProgramacaoServico_Cadastro: TDataSource
+    DataSet = ADOQueryProgramacaoServico_Cadastro
+    Left = 200
+    Top = 488
+  end
+  object ADOConnectionColibri: TADOConnection
+    ConnectionString = 
+      'Provider=Microsoft.Jet.OLEDB.4.0;User ID=Admin;Data Source=C:\Us' +
+      'ers\augus\Documents\Projetos\Colibri\Banco de dados\UO-SEAL-ATP-' +
+      'OP-SM\bdColibri.colibri;Mode=Share Deny None;Persist Security In' +
+      'fo=False;Jet OLEDB:System database="";Jet OLEDB:Registry Path=""' +
+      ';Jet OLEDB:Database Password="";Jet OLEDB:Engine Type=5;Jet OLED' +
+      'B:Database Locking Mode=1;Jet OLEDB:Global Partial Bulk Ops=2;Je' +
+      't OLEDB:Global Bulk Transactions=1;Jet OLEDB:New Database Passwo' +
+      'rd="";Jet OLEDB:Create System Database=False;Jet OLEDB:Encrypt D' +
+      'atabase=False;Jet OLEDB:Don'#39't Copy Locale on Compact=False;Jet O' +
+      'LEDB:Compact Without Replica Repair=False;Jet OLEDB:SFP=False;'
+    KeepConnection = False
+    LoginPrompt = False
+    Provider = 'Microsoft.Jet.OLEDB.4.0'
+    Left = 8
+    Top = 176
+  end
+  object ADOQueryPlataforma: TADOQuery
+    Connection = ADOConnectionConsulta
+    CursorType = ctStatic
+    LockType = ltPessimistic
+    BeforePost = ADOQueryPlataformaBeforePost
+    AfterRefresh = ADOQueryPlataformaAfterRefresh
+    Parameters = <>
+    SQL.Strings = (
+      'SELECT tblPlataforma.*'
+      'FROM tblPlataforma'
+      'ORDER BY Plataforma;')
+    Left = 1040
+    Top = 80
+  end
+  object DataSourcePlataforma: TDataSource
+    DataSet = ADOQueryPlataforma
+    Left = 232
+    Top = 488
+  end
+  object ADOQueryExecutante: TADOQuery
+    Connection = ADOConnectionConsulta
+    CursorType = ctStatic
+    LockType = ltPessimistic
+    BeforePost = ADOQueryExecutanteBeforePost
+    Parameters = <>
+    SQL.Strings = (
+      'SELECT tblExecutante.*'
+      'FROM tblExecutante'
+      'ORDER BY NomeExecutante;')
+    Left = 1136
+    Top = 80
+  end
+  object DataSourceExecutante: TDataSource
+    DataSet = ADOQueryExecutante
+    Left = 72
+    Top = 448
+  end
+  object ADOQueryUsuario: TADOQuery
+    Connection = ADOConnectionColibri
+    CursorType = ctStatic
+    LockType = ltPessimistic
+    Parameters = <>
+    SQL.Strings = (
+      'SELECT tblUsuario.*'
+      'FROM tblUsuario'
+      'ORDER BY Chave;')
+    Left = 112
+    Top = 8
+  end
+  object DataSourceUsuario: TDataSource
+    DataSet = ADOQueryUsuario
+    Left = 168
+    Top = 488
+  end
+  object ADOQueryCarregaExecutanteAPLAT: TADOQuery
+    Connection = ADOConnectionMemoria
+    CursorType = ctStatic
+    LockType = ltPessimistic
+    Parameters = <
+      item
+        Name = '@DataProcura'
+        Attributes = [paNullable]
+        DataType = ftWideString
+        NumericScale = 255
+        Precision = 255
+        Size = 510
+        Value = '01/01/2016'
+      end>
+    SQL.Strings = (
+      'SELECT tblExecutanteAPLAT.*'
+      'FROM tblExecutanteAPLAT'
+      
+        'WHERE ((DataEmbarque <= @DataProcura) AND (DataDesembarque >=@Da' +
+        'taProcura));')
+    Left = 760
+  end
+  object DataSourceCarregaExecutanteAPLAT: TDataSource
+    DataSet = ADOQueryCarregaExecutanteAPLAT
+    Left = 752
+    Top = 352
+  end
+  object ADOQueryCarregaExecutanteSAP: TADOQuery
+    Connection = ADOConnectionMemoria
+    CursorType = ctStatic
+    LockType = ltPessimistic
+    Parameters = <
+      item
+        Name = '@DataProcura'
+        Attributes = [paNullable]
+        DataType = ftWideString
+        NumericScale = 255
+        Precision = 255
+        Size = 510
+        Value = '01/01/2016'
+      end>
+    SQL.Strings = (
+      'SELECT tblExecutanteSAP.*'
+      'FROM tblExecutanteSAP'
+      'WHERE (DataEmbarque LIKE @DataProcura);')
+    Left = 784
+  end
+  object DataSourceCarregaExecutanteSAP: TDataSource
+    DataSet = ADOQueryCarregaExecutanteSAP
+    Left = 768
+    Top = 488
+  end
+  object DataSourceProgramacaoDiaria_Cadastro: TDataSource
+    DataSet = ADOQueryProgramacaoDiaria_Cadastro
+    Left = 336
+    Top = 400
+  end
+  object ADOQueryProgramacaoDiaria_Cadastro: TADOQuery
+    Connection = ADOConnectionColibri
+    CursorType = ctStatic
+    LockType = ltPessimistic
+    Parameters = <
+      item
+        Name = '@TipoEtapaServico'
+        Attributes = [paNullable]
+        DataType = ftWideString
+        NumericScale = 255
+        Precision = 255
+        Size = 510
+        Value = '1'
+      end>
+    SQL.Strings = (
+      'SELECT tblProgramacaoDiaria.*'
+      'FROM tblProgramacaoDiaria'
+      'WHERE (txtTipoEtapaServico = @TipoEtapaServico)'
+      'ORDER BY txtDestino;')
+    Left = 208
+    Top = 8
+  end
+  object ADOQueryImportarExecutanteAPLAT: TADOQuery
+    Connection = ADOConnectionMemoria
+    CursorType = ctStatic
+    LockType = ltPessimistic
+    BeforePost = ADOQueryImportarExecutanteAPLATBeforePost
+    Parameters = <>
+    SQL.Strings = (
+      'SELECT tblExecutanteAPLAT.*'
+      'FROM tblExecutanteAPLAT'
+      'ORDER BY NomeExecutante;')
+    Left = 736
+    Top = 40
+  end
+  object DataSourceImportarExecutanteAPLAT: TDataSource
+    DataSet = ADOQueryImportarExecutanteAPLAT
+    Left = 728
+    Top = 392
+  end
+  object ADOQueryImportarExecutanteSAP: TADOQuery
+    Connection = ADOConnectionMemoria
+    CursorType = ctStatic
+    LockType = ltPessimistic
+    BeforePost = ADOQueryImportarExecutanteSAPBeforePost
+    Parameters = <>
+    SQL.Strings = (
+      'SELECT tblExecutanteSAP.*'
+      'FROM tblExecutanteSAP'
+      'ORDER BY NomeExecutante;')
+    Left = 760
+    Top = 40
+  end
+  object DataSourceImportarExecutanteSAP: TDataSource
+    DataSet = ADOQueryImportarExecutanteSAP
+    Left = 848
+    Top = 312
+  end
+  object ADOQueryImportarCarteiraTrabalho: TADOQuery
+    Connection = ADOConnectionMemoria
+    CursorType = ctStatic
+    LockType = ltPessimistic
+    Parameters = <>
+    SQL.Strings = (
+      'SELECT tblCarteiraTrabalho.*'
+      'FROM tblCarteiraTrabalho'
+      'ORDER BY Plataforma;')
+    Left = 712
+    Top = 40
+  end
+  object DataSourceImportarCarteiraTrabalho: TDataSource
+    DataSet = ADOQueryImportarCarteiraTrabalho
+    Left = 704
+    Top = 392
+  end
+  object ADOQueryConsultaExecutante_DataCodigoSAP: TADOQuery
+    Connection = ADOConnectionColibri
+    CursorType = ctStatic
+    LockType = ltPessimistic
+    Parameters = <
+      item
+        Name = '@CodigoSAP'
+        Attributes = [paNullable]
+        DataType = ftWideString
+        NumericScale = 255
+        Precision = 255
+        Size = 510
+        Value = '1'
+      end
+      item
+        Name = '@DataProgramacao'
+        Attributes = [paNullable]
+        DataType = ftWideString
+        NumericScale = 255
+        Precision = 255
+        Size = 510
+        Value = '01/01/2019'
+      end>
+    SQL.Strings = (
+      
+        'SELECT tblProgramacaoExecutante.*, tblProgramacaoDiaria.DataProg' +
+        'ramacao'
+      
+        'FROM tblProgramacaoDiaria INNER JOIN tblProgramacaoExecutante ON' +
+        ' tblProgramacaoDiaria.idProgramacaoDiaria = tblProgramacaoExecut' +
+        'ante.CodigoProgramacaoDiaria'
+      
+        'WHERE ((tblProgramacaoExecutante.CodigoSAP= @CodigoSAP)AND(tblPr' +
+        'ogramacaoDiaria.DataProgramacao=@DataProgramacao));')
+    Left = 8
+    Top = 56
+  end
+  object DataSourceConsultaExecutante_DataCodigoSAP: TDataSource
+    DataSet = ADOQueryConsultaExecutante_DataCodigoSAP
+    Left = 8
+    Top = 400
+  end
+  object DataSourceInserirExecutante: TDataSource
+    DataSet = ADOQueryInserirExecutante1
+    Left = 72
+    Top = 352
+  end
+  object ADOQueryInserirExecutante1: TADOQuery
+    Connection = ADOConnectionColibri
+    CursorType = ctStatic
+    LockType = ltPessimistic
+    Parameters = <>
+    SQL.Strings = (
+      'SELECT tblProgramacaoExecutante.*'
+      'FROM tblProgramacaoExecutante'
+      'WHERE (CodigoProgramacaoDiaria= 0);')
+    Left = 328
+    Top = 96
+  end
+  object DataSourceInserirServico: TDataSource
+    DataSet = ADOQueryInserirServico
+    Left = 104
+    Top = 352
+  end
+  object ADOQueryInserirServico: TADOQuery
+    Connection = ADOConnectionColibri
+    CursorType = ctStatic
+    LockType = ltPessimistic
+    Parameters = <>
+    SQL.Strings = (
+      'SELECT tblProgramacaoServico.*'
+      'FROM tblProgramacaoServico'
+      'WHERE (CodigoProgramacaoDiaria= 0);')
+    Left = 368
+    Top = 8
+  end
+  object DataSourceInserirProgramacao: TDataSource
+    DataSet = ADOQueryInserirProgramacao
+    Left = 136
+    Top = 352
+  end
+  object ADOQueryInserirProgramacao: TADOQuery
+    Connection = ADOConnectionColibri
+    CursorType = ctStatic
+    LockType = ltPessimistic
+    Parameters = <>
+    SQL.Strings = (
+      'SELECT tblProgramacaoDiaria.*'
+      'FROM tblProgramacaoDiaria;')
+    Left = 400
+    Top = 8
+  end
+  object ADOQueryConsultaProgramacao_ID: TADOQuery
+    Connection = ADOConnectionColibri
+    CursorType = ctStatic
+    LockType = ltPessimistic
+    Parameters = <
+      item
+        Name = '@ProgramacaoDiaria'
+        Attributes = [paNullable]
+        DataType = ftWideString
+        NumericScale = 255
+        Precision = 255
+        Size = 510
+        Value = '1'
+      end>
+    SQL.Strings = (
+      'SELECT tblProgramacaoDiaria.*'
+      'FROM tblProgramacaoDiaria'
+      'WHERE (idProgramacaoDiaria = @ProgramacaoDiaria);')
+    Left = 176
+    Top = 8
+  end
+  object DataSourceConsultaProgramacao_ID: TDataSource
+    DataSet = ADOQueryConsultaProgramacao_ID
+    Left = 304
+    Top = 400
+  end
+  object DataSourceConsultaPlataforma: TDataSource
+    DataSet = ADOQueryConsultaPlataforma
+    Left = 200
+    Top = 400
+  end
+  object ADOQueryConsultaPlataforma: TADOQuery
+    Connection = ADOConnectionConsulta
+    CursorType = ctStatic
+    LockType = ltPessimistic
+    Parameters = <>
+    SQL.Strings = (
+      'SELECT tblPlataforma.*'
+      'FROM tblPlataforma'
+      'ORDER BY Plataforma;')
+    Left = 1104
+    Top = 80
+  end
+  object DataSourceInserirExecutanteCadastro: TDataSource
+    DataSet = ADOQueryInserirExecutanteCadastro
+    Left = 168
+    Top = 400
+  end
+  object ADOQueryInserirExecutanteCadastro: TADOQuery
+    Connection = ADOConnectionConsulta
+    CursorType = ctStatic
+    LockType = ltPessimistic
+    Parameters = <>
+    SQL.Strings = (
+      'SELECT tblExecutante.*'
+      'FROM tblExecutante;')
+    Left = 1072
+    Top = 80
+  end
+  object DataSourceConsultaExecutante_TipoEtapaServico: TDataSource
+    DataSet = ADOQueryConsultaExecutante_TipoEtapaServico
+    Left = 40
+    Top = 352
+  end
+  object ADOQueryConsultaExecutante_TipoEtapaServico: TADOQuery
+    Connection = ADOConnectionConsulta
+    CursorType = ctStatic
+    LockType = ltPessimistic
+    Parameters = <
+      item
+        Name = '@TipoEtapaServico'
+        Attributes = [paNullable]
+        DataType = ftWideString
+        NumericScale = 255
+        Precision = 255
+        Size = 510
+        Value = '1'
+      end>
+    SQL.Strings = (
+      'SELECT tblExecutante.*'
+      'FROM tblExecutante'
+      'WHERE (codigoTipoEtapaServico=@TipoEtapaServico)'
+      'ORDER BY NomeExecutante;')
+    Left = 1096
+    Top = 40
+  end
+  object ADOQueryConsultaCodigoTipoEtapaServico_TipoEtapaServico: TADOQuery
+    Connection = ADOConnectionConsulta
+    CursorType = ctStatic
+    LockType = ltPessimistic
+    Parameters = <
+      item
+        Name = '@TipoEtapaServico'
+        Attributes = [paNullable]
+        DataType = ftWideString
+        NumericScale = 255
+        Precision = 255
+        Size = 510
+        Value = '1'
+      end>
+    SQL.Strings = (
+      'SELECT tblTipoEtapaServico.*'
+      'FROM tblTipoEtapaServico'
+      'WHERE (TipoEtapaServico= @TipoEtapaServico);')
+    Left = 1064
+    Top = 40
+  end
+  object DataSourceConsultaCodigoTipoEtapaServico_TipoEtapaServico: TDataSource
+    DataSet = ADOQueryConsultaCodigoTipoEtapaServico_TipoEtapaServico
+    Left = 168
+    Top = 352
+  end
+  object ADOQueryTipoEtapaServico: TADOQuery
+    Connection = ADOConnectionConsulta
+    CursorType = ctStatic
+    LockType = ltPessimistic
+    BeforePost = ADOQueryTipoEtapaServicoBeforePost
+    Parameters = <>
+    SQL.Strings = (
+      'SELECT tblTipoEtapaServico.*'
+      'FROM tblTipoEtapaServico'
+      'ORDER BY TipoEtapaServico;')
+    Left = 1168
+    Top = 80
+  end
+  object DataSourceTipoEtapaServico: TDataSource
+    DataSet = ADOQueryTipoEtapaServico
+    Left = 136
+    Top = 488
+  end
+  object ADOQueryConsultaTipoEtapaServico_ID: TADOQuery
+    Connection = ADOConnectionConsulta
+    CursorType = ctStatic
+    LockType = ltPessimistic
+    Parameters = <
+      item
+        Name = '@TipoEtapaServico'
+        Attributes = [paNullable]
+        DataType = ftWideString
+        NumericScale = 255
+        Precision = 255
+        Size = 510
+        Value = '1'
+      end>
+    SQL.Strings = (
+      'SELECT tblTipoEtapaServico.*'
+      'FROM tblTipoEtapaServico'
+      'WHERE (idTipoEtapaServico= @TipoEtapaServico);')
+    Left = 1120
+    Top = 40
+  end
+  object DataSourceConsultaTipoEtapaServico_ID: TDataSource
+    DataSet = ADOQueryConsultaTipoEtapaServico_ID
+    Left = 8
+    Top = 352
+  end
+  object ADOQueryCarteiraOM: TADOQuery
+    Connection = ADOConnectionMemoria
+    CursorType = ctStatic
+    LockType = ltPessimistic
+    Parameters = <>
+    SQL.Strings = (
+      'SELECT tblCarteiraTrabalho.*'
+      'FROM tblCarteiraTrabalho;')
+    Left = 808
+  end
+  object DataSourceCarteiraOM: TDataSource
+    DataSet = ADOQueryCarteiraOM
+    Left = 792
+    Top = 488
+  end
+  object ADOQueryGerenciarSolicitacoes: TADOQuery
+    Connection = ADOConnectionColibri
+    CursorType = ctStatic
+    LockType = ltPessimistic
+    Parameters = <
+      item
+        Name = '@DataProgramacao'
+        Attributes = [paNullable]
+        DataType = ftWideString
+        NumericScale = 255
+        Precision = 255
+        Size = 510
+        Value = '01/09/2016'
+      end>
+    SQL.Strings = (
+      
+        'SELECT tblProgramacaoDiaria.txtDestino, tblProgramacaoDiaria.Dat' +
+        'aProgramacao'
+      'FROM tblProgramacaoDiaria'
+      
+        'GROUP BY tblProgramacaoDiaria.txtDestino, tblProgramacaoDiaria.D' +
+        'ataProgramacao'
+      'HAVING (DataProgramacao like @DataProgramacao);')
+    Left = 432
+    Top = 8
+  end
+  object DataSourceGerenciarSolicitacoes: TDataSource
+    DataSet = ADOQueryGerenciarSolicitacoes
+    Left = 200
+    Top = 352
+  end
+  object ADOQueryConsultaPlataforma_Nome: TADOQuery
+    Connection = ADOConnectionConsulta
+    CursorType = ctStatic
+    LockType = ltPessimistic
+    Parameters = <
+      item
+        Name = '@Plataforma'
+        Attributes = [paNullable]
+        DataType = ftWideString
+        NumericScale = 255
+        Precision = 255
+        Size = 510
+        Value = '1'
+      end>
+    SQL.Strings = (
+      'SELECT tblPlataforma.*'
+      'FROM tblPlataforma'
+      'WHERE (Plataforma LIKE @Plataforma);')
+    Left = 1040
+    Top = 40
+  end
+  object DataSourceConsultaPlataforma_Nome: TDataSource
+    DataSet = ADOQueryConsultaPlataforma_Nome
+    Left = 232
+    Top = 352
+  end
+  object DataSourceGerenciarExecutante: TDataSource
+    DataSet = ADOQueryGerenciarExecutante
+    Left = 264
+    Top = 352
+  end
+  object ADOQueryGerenciarExecutante: TADOQuery
+    Connection = ADOConnectionColibri
+    CursorType = ctStatic
+    LockType = ltPessimistic
+    Parameters = <>
+    SQL.Strings = (
+      'SELECT tblProgramacaoDiaria.*, tblProgramacaoExecutante.* '
+      
+        'FROM tblProgramacaoDiaria INNER JOIN tblProgramacaoExecutante ON' +
+        ' '
+      
+        'tblProgramacaoDiaria.idProgramacaoDiaria = tblProgramacaoExecuta' +
+        'nte.CodigoProgramacaoDiaria '
+      
+        'WHERE (((tblProgramacaoDiaria.DataProgramacao LIKE '#39'01/01/2016'#39')' +
+        ') '
+      
+        'AND (tblProgramacaoDiaria.txtDestino LIKE '#39'PCM-09'#39')) ORDER BY Or' +
+        'igem;')
+    Left = 40
+    Top = 56
+  end
+  object DataSourceGerenciarServico: TDataSource
+    DataSet = ADOQueryGerenciarServico
+    Left = 296
+    Top = 352
+  end
+  object ADOQueryGerenciarServico: TADOQuery
+    Connection = ADOConnectionColibri
+    CursorType = ctStatic
+    LockType = ltPessimistic
+    Parameters = <
+      item
+        Name = '@Servico'
+        Attributes = [paNullable]
+        DataType = ftWideString
+        NumericScale = 255
+        Precision = 255
+        Size = 510
+        Value = '1'
+      end>
+    SQL.Strings = (
+      'SELECT tblProgramacaoServico.*'
+      'FROM tblProgramacaoServico'
+      'WHERE (CodigoProgramacaoDiaria=@Servico);')
+    Left = 72
+    Top = 96
+  end
+  object DataSourceGerenciarProgramacao: TDataSource
+    DataSet = ADOQueryGerenciarProgramacao
+    Left = 328
+    Top = 352
+  end
+  object ADOQueryGerenciarProgramacao: TADOQuery
+    Connection = ADOConnectionColibri
+    CursorType = ctStatic
+    LockType = ltPessimistic
+    Parameters = <
+      item
+        Name = '@DataProcura'
+        Attributes = [paNullable]
+        DataType = ftWideString
+        NumericScale = 255
+        Precision = 255
+        Size = 510
+        Value = '1'
+      end
+      item
+        Name = '@Destino'
+        Attributes = [paNullable]
+        DataType = ftWideString
+        NumericScale = 255
+        Precision = 255
+        Size = 510
+        Value = '1'
+      end>
+    SQL.Strings = (
+      'SELECT tblProgramacaoDiaria.*'
+      'FROM tblProgramacaoDiaria'
+      
+        'WHERE ((DataProgramacao like @DataProcura) AND (txtDestino like ' +
+        '@Destino))'
+      'ORDER BY txtTipoEtapaServico;')
+    Left = 104
+    Top = 96
+  end
+  object DataSourceConsultaProgramacao_Destino_DataProgramacao: TDataSource
+    DataSet = ADOQueryConsultaProgramacao_Destino_DataProgramacao
+    Left = 360
+    Top = 352
+  end
+  object ADOQueryConsultaProgramacao_Destino_DataProgramacao: TADOQuery
+    Connection = ADOConnectionColibri
+    CursorType = ctStatic
+    LockType = ltPessimistic
+    Parameters = <
+      item
+        Name = '@DataProcura'
+        Attributes = [paNullable]
+        DataType = ftWideString
+        NumericScale = 255
+        Precision = 255
+        Size = 510
+        Value = '1'
+      end
+      item
+        Name = '@Destino'
+        Attributes = [paNullable]
+        DataType = ftWideString
+        NumericScale = 255
+        Precision = 255
+        Size = 510
+        Value = '1'
+      end>
+    SQL.Strings = (
+      'SELECT tblProgramacaoDiaria.*'
+      'FROM tblProgramacaoDiaria'
+      
+        'WHERE ((DataProgramacao like @DataProcura) AND (txtDestino like ' +
+        '@Destino))'
+      'ORDER BY txtTipoEtapaServico;')
+    Left = 136
+    Top = 96
+  end
+  object DataSourceConsultaProgramacaoExecutante_ID: TDataSource
+    DataSet = ADOQueryConsultaProgramacaoExecutante_ID
+    Left = 392
+    Top = 352
+  end
+  object ADOQueryConsultaProgramacaoExecutante_ID: TADOQuery
+    Connection = ADOConnectionColibri
+    CursorType = ctStatic
+    LockType = ltPessimistic
+    Parameters = <
+      item
+        Name = '@idProgramacaoExecutante'
+        Attributes = [paNullable]
+        DataType = ftWideString
+        NumericScale = 255
+        Precision = 255
+        Size = 510
+        Value = '1'
+      end>
+    SQL.Strings = (
+      'SELECT tblProgramacaoExecutante.*'
+      'FROM tblProgramacaoExecutante'
+      'WHERE (idProgramacaoExecutante = @idProgramacaoExecutante );')
+    Left = 168
+    Top = 96
+  end
+  object DataSourceEmbarcacoes: TDataSource
+    DataSet = ADOQueryEmbarcacoes
+    Left = 40
+    Top = 400
+  end
+  object ADOQueryEmbarcacoes: TADOQuery
+    Connection = ADOConnectionConsulta
+    CursorType = ctStatic
+    LockType = ltPessimistic
+    BeforePost = ADOQueryEmbarcacoesBeforePost
+    Parameters = <>
+    SQL.Strings = (
+      'SELECT tblEmbarcacao.*'
+      'FROM tblEmbarcacao'
+      'ORDER BY NomeEmbarcacao;')
+    Left = 1040
+    Top = 120
+  end
+  object ADOQueryTM_Embarcacao: TADOQuery
+    Connection = ADOConnectionConsulta
+    CursorType = ctStatic
+    LockType = ltPessimistic
+    Parameters = <>
+    SQL.Strings = (
+      'SELECT tblEmbarcacao.*'
+      'FROM tblEmbarcacao'
+      'WHERE ((TipoEmbarcacao like '#39'Lancha de Passageiros'#39') AND'
+      '(StatusEmbarcacao like '#39'Operando'#39'))'
+      'ORDER BY NomeEmbarcacao;')
+    Left = 1112
+    Top = 120
+  end
+  object DataSourceTM_Embarcacao: TDataSource
+    DataSet = ADOQueryTM_Embarcacao
+    Left = 72
+    Top = 400
+  end
+  object ADOQueryRoteamento: TADOQuery
+    Connection = ADOConnectionColibri
+    CursorType = ctStatic
+    LockType = ltPessimistic
+    BeforePost = ADOQueryRoteamentoBeforePost
+    Parameters = <
+      item
+        Name = '@DataRoteamento'
+        Attributes = [paNullable]
+        DataType = ftWideString
+        NumericScale = 255
+        Precision = 255
+        Size = 510
+        Value = '01/01/2017'
+      end>
+    SQL.Strings = (
+      'SELECT tblRoteamento.*'
+      'FROM tblRoteamento'
+      'WHERE (DataRoteamento LIKE @DataRoteamento)'
+      'ORDER BY NomeRota,HoraRoteamento;')
+    Left = 200
+    Top = 56
+  end
+  object DataSourceRoteamento: TDataSource
+    DataSet = ADOQueryRoteamento
+    Left = 104
+    Top = 400
+  end
+  object ADOQueryTM_Plataformas: TADOQuery
+    Connection = ADOConnectionConsulta
+    CursorType = ctStatic
+    LockType = ltPessimistic
+    Parameters = <>
+    SQL.Strings = (
+      'SELECT tblPlataforma.*'
+      'FROM tblPlataforma'
+      'ORDER BY Plataforma;')
+    Left = 1168
+  end
+  object DataSourceTM_Plataformas: TDataSource
+    DataSet = ADOQueryTM_Plataformas
+    Left = 400
+    Top = 400
+  end
+  object ADOQueryTM_RotaExecutantes: TADOQuery
+    Connection = ADOConnectionColibri
+    CursorType = ctStatic
+    LockType = ltPessimistic
+    Parameters = <
+      item
+        Name = '@CodigoRoteamento'
+        Attributes = [paNullable]
+        DataType = ftWideString
+        NumericScale = 255
+        Precision = 255
+        Size = 510
+        Value = '1'
+      end>
+    SQL.Strings = (
+      
+        'SELECT tblRoteamento.*, tblAux_Rota_Distribuicao.*, tblProgramac' +
+        'aoExecutante.*, tblProgramacaoDiaria.*'
+      
+        'FROM tblProgramacaoDiaria INNER JOIN (tblRoteamento INNER JOIN (' +
+        'tblProgramacaoExecutante INNER JOIN tblAux_Rota_Distribuicao ON ' +
+        'tblProgramacaoExecutante.idProgramacaoExecutante = tblAux_Rota_D' +
+        'istribuicao.CodigoProgramacaoExecutante) ON tblRoteamento.idRote' +
+        'amento = tblAux_Rota_Distribuicao.CodigoRota) ON tblProgramacaoD' +
+        'iaria.idProgramacaoDiaria = tblProgramacaoExecutante.CodigoProgr' +
+        'amacaoDiaria'
+      'WHERE (tblAux_Rota_Distribuicao.CodigoRota=@CodigoRoteamento)'
+      'ORDER BY NomeExecutante;')
+    Left = 200
+    Top = 96
+  end
+  object DataSourceTM_RotaExecutantes: TDataSource
+    DataSet = ADOQueryTM_RotaExecutantes
+    Left = 136
+    Top = 400
+  end
+  object DataSourceExecutantesDisponiveis: TDataSource
+    DataSet = ADOQueryExecutantesDisponiveis
+    Left = 424
+    Top = 352
+  end
+  object ADOQueryExecutantesDisponiveis: TADOQuery
+    Connection = ADOConnectionColibri
+    CursorType = ctStatic
+    LockType = ltPessimistic
+    Parameters = <
+      item
+        Name = '@DataProcura'
+        Attributes = [paNullable]
+        DataType = ftWideString
+        NumericScale = 255
+        Precision = 255
+        Size = 510
+        Value = '1'
+      end>
+    SQL.Strings = (
+      'SELECT tblProgramacaoDiaria.*, tblProgramacaoExecutante.* '
+      
+        'FROM tblProgramacaoDiaria INNER JOIN tblProgramacaoExecutante ON' +
+        ' tblProgramacaoDiaria.idProgramacaoDiaria = tblProgramacaoExecut' +
+        'ante.CodigoProgramacaoDiaria '
+      
+        'WHERE (tblProgramacaoExecutante.InseridoProgramacaoTransporte LI' +
+        'KE FALSE) '
+      
+        'AND (tblProgramacaoDiaria.txtDestino <> tblProgramacaoExecutante' +
+        '.Origem) '
+      
+        'AND (tblProgramacaoExecutante.StatusProgramacao LIKE '#39'Aprovado'#39')' +
+        ' '
+      'AND (tblProgramacaoDiaria.DataProgramacao LIKE @DataProcura) '
+      'ORDER BY tblProgramacaoDiaria.txtDestino;')
+    Left = 232
+    Top = 96
+  end
+  object ADOQueryConsultaExecutantes_DataProgramacao: TADOQuery
+    Connection = ADOConnectionColibri
+    CursorType = ctStatic
+    LockType = ltPessimistic
+    Parameters = <
+      item
+        Name = '@DataProgramacao'
+        Attributes = [paNullable]
+        DataType = ftWideString
+        NumericScale = 255
+        Precision = 255
+        Size = 510
+        Value = '1'
+      end>
+    SQL.Strings = (
+      'SELECT tblProgramacaoExecutante.*, tblProgramacaoDiaria.*'
+      
+        'FROM tblProgramacaoDiaria INNER JOIN tblProgramacaoExecutante ON' +
+        ' tblProgramacaoDiaria.idProgramacaoDiaria = tblProgramacaoExecut' +
+        'ante.CodigoProgramacaoDiaria'
+      
+        'WHERE (tblProgramacaoDiaria.DataProgramacao LIKE @DataProgramaca' +
+        'o);')
+    Left = 72
+    Top = 56
+  end
+  object DataSourceConsultaExecutantes_DataProgramacao: TDataSource
+    DataSet = ADOQueryConsultaExecutantes_DataProgramacao
+    Left = 272
+    Top = 400
+  end
+  object ADOQueryAux_Rota_Distribuicao: TADOQuery
+    Connection = ADOConnectionColibri
+    CursorType = ctStatic
+    LockType = ltPessimistic
+    Parameters = <>
+    SQL.Strings = (
+      'SELECT tblAux_Rota_Distribuicao.*'
+      'FROM tblAux_Rota_Distribuicao;')
+    Left = 104
+    Top = 56
+  end
+  object DataSourceAux_Rota_Distribuicao: TDataSource
+    DataSet = ADOQueryAux_Rota_Distribuicao
+    Left = 416
+    Top = 496
+  end
+  object ADOQueryExcluirVinculoExecutante: TADOQuery
+    Connection = ADOConnectionColibri
+    CursorType = ctStatic
+    LockType = ltPessimistic
+    Parameters = <
+      item
+        Name = '@idAux_Rota_Distribuicao'
+        Attributes = [paNullable]
+        DataType = ftWideString
+        NumericScale = 255
+        Precision = 255
+        Size = 510
+        Value = '1'
+      end>
+    SQL.Strings = (
+      'SELECT tblAux_Rota_Distribuicao.*'
+      'FROM tblAux_Rota_Distribuicao'
+      'WHERE (idAux_Rota_Distribuicao= @idAux_Rota_Distribuicao);')
+    Left = 136
+    Top = 56
+  end
+  object DataSourceExcluirVinculoExecutante: TDataSource
+    DataSet = ADOQueryExcluirVinculoExecutante
+    Left = 368
+    Top = 400
+  end
+  object ADOQueryTemporarioDBColibri: TADOQuery
+    Connection = ADOConnectionColibri
+    CursorType = ctStatic
+    LockType = ltPessimistic
+    Parameters = <
+      item
+        Name = '@CodigoSAP'
+        Attributes = [paNullable]
+        DataType = ftWideString
+        NumericScale = 255
+        Precision = 255
+        Size = 510
+        Value = '0'
+      end
+      item
+        Name = '@DataProgramacao'
+        Attributes = [paNullable]
+        DataType = ftWideString
+        NumericScale = 255
+        Precision = 255
+        Size = 510
+        Value = '01/01/2016'
+      end>
+    SQL.Strings = (
+      
+        'SELECT tblProgramacaoExecutante.*, tblProgramacaoDiaria.DataProg' +
+        'ramacao'
+      
+        'FROM tblProgramacaoDiaria INNER JOIN tblProgramacaoExecutante ON' +
+        ' tblProgramacaoDiaria.idProgramacaoDiaria = tblProgramacaoExecut' +
+        'ante.CodigoProgramacaoDiaria'
+      
+        'WHERE ((tblProgramacaoExecutante.CodigoSAP= @CodigoSAP) AND (tbl' +
+        'ProgramacaoDiaria.DataProgramacao=@DataProgramacao));')
+    Left = 168
+    Top = 56
+  end
+  object DataSourceTemporarioDBColibri: TDataSource
+    DataSet = ADOQueryTemporarioDBColibri
+    Left = 112
+    Top = 448
+  end
+  object ADOQueryConsultaServicosProgramados: TADOQuery
+    Connection = ADOConnectionColibri
+    CursorType = ctStatic
+    LockType = ltPessimistic
+    Parameters = <
+      item
+        Name = '@DataProgramacao'
+        Attributes = [paNullable]
+        DataType = ftWideString
+        NumericScale = 255
+        Precision = 255
+        Size = 510
+        Value = '01/09/2016'
+      end>
+    SQL.Strings = (
+      'SELECT tblProgramacaoDiaria.*, tblProgramacaoServico.*'
+      
+        'FROM tblProgramacaoDiaria INNER JOIN tblProgramacaoServico ON tb' +
+        'lProgramacaoDiaria.idProgramacaoDiaria = tblProgramacaoServico.C' +
+        'odigoProgramacaoDiaria'
+      'WHERE (tblProgramacaoDiaria.DataProgramacao = @DataProgramacao)'
+      'ORDER BY tblProgramacaoDiaria.txtTipoEtapaServico;')
+    Left = 232
+    Top = 56
+  end
+  object DataSourceConsultaServicosProgramados: TDataSource
+    DataSet = ADOQueryConsultaServicosProgramados
+    Left = 144
+    Top = 448
+  end
+  object DataSourceExecutantesSAP: TDataSource
+    DataSet = ADOQueryExecutantesSAP
+    Left = 840
+    Top = 488
+  end
+  object ADOQueryExecutantesSAP: TADOQuery
+    Connection = ADOConnectionMemoria
+    CursorType = ctStatic
+    LockType = ltPessimistic
+    Parameters = <
+      item
+        Name = '@DataProcura'
+        Attributes = [paNullable]
+        DataType = ftWideString
+        NumericScale = 255
+        Precision = 255
+        Size = 510
+        Value = Null
+      end>
+    SQL.Strings = (
+      'SELECT tblExecutanteSAP.*'
+      'FROM tblExecutanteSAP'
+      'WHERE (DataEmbarque LIKE @DataProcura)'
+      'ORDER BY NomeExecutante;')
+    Left = 856
+  end
+  object ADOQueryConsultaEmbarcacao: TADOQuery
+    Connection = ADOConnectionConsulta
+    CursorType = ctStatic
+    LockType = ltPessimistic
+    Parameters = <>
+    SQL.Strings = (
+      'SELECT tblEmbarcacao.*'
+      'FROM tblEmbarcacao'
+      'ORDER BY NomeEmbarcacao;')
+    Left = 1088
+    Top = 120
+  end
+  object DataSourceConsultaEmbarcacao: TDataSource
+    DataSet = ADOQueryConsultaEmbarcacao
+    Left = 200
+    Top = 448
+  end
+  object ADOQueryConsultaExecutantesProgramados: TADOQuery
+    Connection = ADOConnectionColibri
+    CursorType = ctStatic
+    LockType = ltPessimistic
+    Parameters = <
+      item
+        Name = '@DataProgramacao'
+        Attributes = [paNullable]
+        DataType = ftWideString
+        NumericScale = 255
+        Precision = 255
+        Size = 510
+        Value = '1'
+      end>
+    SQL.Strings = (
+      'SELECT tblProgramacaoExecutante.*, tblProgramacaoDiaria.*'
+      
+        'FROM tblProgramacaoDiaria INNER JOIN tblProgramacaoExecutante ON' +
+        ' tblProgramacaoDiaria.idProgramacaoDiaria = tblProgramacaoExecut' +
+        'ante.CodigoProgramacaoDiaria'
+      
+        'WHERE (tblProgramacaoDiaria.DataProgramacao LIKE @DataProgramaca' +
+        'o);')
+    Left = 256
+    Top = 56
+  end
+  object DataSourceConsultaExecutantesProgramados: TDataSource
+    DataSet = ADOQueryConsultaExecutantesProgramados
+    Left = 232
+    Top = 448
+  end
+  object DataSourceForaOperacao: TDataSource
+    DataSet = ADOQueryForaOperacao
+    Left = 680
+    Top = 392
+  end
+  object DataSourceColibri: TDataSource
+    DataSet = ADOQueryColibri
+    Left = 264
+    Top = 448
+  end
+  object DataSourceGeradores: TDataSource
+    DataSet = ADOQueryGeradores
+    Left = 264
+    Top = 488
+  end
+  object ADOQueryForaOperacao: TADOQuery
+    Connection = ADOConnectionMemoria
+    CursorType = ctStatic
+    LockType = ltPessimistic
+    BeforePost = ADOQueryForaOperacaoBeforePost
+    Parameters = <>
+    SQL.Strings = (
+      'SELECT tblNotaManutencao.* '
+      'FROM tblNotaManutencao'
+      'ORDER BY Plataforma;')
+    Left = 688
+    Top = 40
+  end
+  object ADOQueryColibri: TADOQuery
+    Connection = ADOConnectionColibri
+    CursorType = ctStatic
+    LockType = ltPessimistic
+    Parameters = <>
+    SQL.Strings = (
+      'SELECT tblColibri.* '
+      'FROM tblColibri;')
+    Left = 288
+    Top = 56
+  end
+  object ADOQueryGeradores: TADOQuery
+    Connection = ADOConnectionConsulta
+    CursorType = ctStatic
+    LockType = ltPessimistic
+    BeforePost = ADOQueryGeradoresBeforePost
+    Parameters = <>
+    SQL.Strings = (
+      'SELECT tblGerador.* '
+      'FROM tblGerador'
+      'ORDER BY NomeGerador;')
+    Left = 1008
+    Top = 120
+  end
+  object ADOQueryConsultaExecutante_CodigoSAP: TADOQuery
+    Connection = ADOConnectionConsulta
+    CursorType = ctStatic
+    LockType = ltPessimistic
+    BeforePost = ADOQueryGeradoresBeforePost
+    Parameters = <
+      item
+        Name = '@CodigoSAP'
+        Attributes = [paNullable]
+        DataType = ftWideString
+        NumericScale = 255
+        Precision = 255
+        Size = 510
+        Value = '1'
+      end>
+    SQL.Strings = (
+      'SELECT tblExecutante.*'
+      'FROM tblExecutante'
+      'WHERE (CodigoSAP = @CodigoSAP);')
+    Left = 1152
+    Top = 40
+  end
+  object DataSourceConsultaExecutante_CodigoSAP: TDataSource
+    DataSet = ADOQueryConsultaExecutante_CodigoSAP
+    Left = 432
+    Top = 400
+  end
+  object DataSourceImportarNotaManutencao: TDataSource
+    DataSet = ADOQueryImportarNotaManutencao
+    Left = 752
+    Top = 392
+  end
+  object ADOQueryImportarNotaManutencao: TADOQuery
+    Connection = ADOConnectionMemoria
+    CursorType = ctStatic
+    LockType = ltPessimistic
+    Parameters = <>
+    SQL.Strings = (
+      'SELECT tblNotaManutencao.*'
+      'FROM tblNotaManutencao;')
+    Left = 784
+    Top = 40
+  end
+  object DataSourceConsultaProgramacaoServico_ID: TDataSource
+    DataSet = ADOQueryConsultaProgramacaoServico_ID
+    Left = 328
+    Top = 448
+  end
+  object ADOQueryConsultaProgramacaoServico_ID: TADOQuery
+    Connection = ADOConnectionColibri
+    CursorType = ctStatic
+    LockType = ltPessimistic
+    Parameters = <
+      item
+        Name = 'idProgramacaoServico'
+        Attributes = [paNullable]
+        DataType = ftWideString
+        NumericScale = 255
+        Precision = 255
+        Size = 510
+        Value = '1'
+      end>
+    SQL.Strings = (
+      'SELECT tblProgramacaoServico.*'
+      'FROM tblProgramacaoServico'
+      'WHERE (idProgramacaoServico = @idProgramacaoServico);')
+    Left = 320
+    Top = 56
+  end
+  object DataSourceContarExecCancelados_ID: TDataSource
+    DataSet = ADOQueryNumAprovado
+    Left = 360
+    Top = 448
+  end
+  object ADOQueryNumAprovado: TADOQuery
+    Connection = ADOConnectionColibri
+    CursorType = ctStatic
+    LockType = ltPessimistic
+    Parameters = <
+      item
+        Name = '@CodigoProgramacaoDiaria'
+        Attributes = [paNullable]
+        DataType = ftWideString
+        NumericScale = 255
+        Precision = 255
+        Size = 510
+        Value = '1'
+      end>
+    SQL.Strings = (
+      'SELECT tblProgramacaoExecutante.*'
+      'FROM tblProgramacaoExecutante'
+      'WHERE ((CodigoProgramacaoDiaria LIKE @CodigoProgramacaoDiaria)'
+      'AND(StatusProgramacao LIKE '#39'Aprovado'#39'));')
+    Left = 352
+    Top = 56
+  end
+  object ADOQueryNumCancelado: TADOQuery
+    Connection = ADOConnectionColibri
+    CursorType = ctStatic
+    LockType = ltPessimistic
+    Parameters = <
+      item
+        Name = '@CodigoProgramacaoDiaria'
+        Attributes = [paNullable]
+        DataType = ftWideString
+        NumericScale = 255
+        Precision = 255
+        Size = 510
+        Value = '1'
+      end>
+    SQL.Strings = (
+      'SELECT tblProgramacaoExecutante.*'
+      'FROM tblProgramacaoExecutante'
+      'WHERE ((CodigoProgramacaoDiaria= @CodigoProgramacaoDiaria)AND'
+      '(StatusProgramacao = '#39'Cancelado'#39'));')
+    Left = 384
+    Top = 56
+  end
+  object DataSourceContarExecTotal_ID: TDataSource
+    DataSet = ADOQueryNumCancelado
+    Left = 392
+    Top = 448
+  end
+  object ADOQueryProgramacaoExecutante_Consulta: TADOQuery
+    Connection = ADOConnectionColibri
+    CursorType = ctStatic
+    LockType = ltPessimistic
+    Parameters = <
+      item
+        Name = '@CodigoProgramacaoDiaria'
+        Attributes = [paNullable]
+        DataType = ftWideString
+        NumericScale = 255
+        Precision = 255
+        Size = 510
+        Value = '1'
+      end>
+    SQL.Strings = (
+      'SELECT tblProgramacaoExecutante.*'
+      'FROM tblProgramacaoExecutante'
+      'WHERE (CodigoProgramacaoDiaria=@CodigoProgramacaoDiaria)'
+      'ORDER BY NomeExecutante;')
+    Left = 416
+    Top = 56
+  end
+  object DataSourceProgramacaoExecutante_Consulta: TDataSource
+    DataSet = ADOQueryProgramacaoExecutante_Consulta
+    Left = 424
+    Top = 448
+  end
+  object DataSourceServicosSAP_TipoEtapaServico_Destino: TDataSource
+    DataSet = ADOQueryServicosSAP_TipoEtapaServico_Destino
+    Left = 656
+    Top = 352
+  end
+  object ADOQueryServicosSAP_TipoEtapaServico_Destino: TADOQuery
+    Connection = ADOConnectionMemoria
+    CursorType = ctStatic
+    LockType = ltPessimistic
+    Parameters = <
+      item
+        Name = '@TipoEtapaServico'
+        Attributes = [paNullable]
+        DataType = ftWideString
+        NumericScale = 255
+        Precision = 255
+        Size = 510
+        Value = '1'
+      end
+      item
+        Name = '@Destino'
+        Attributes = [paNullable]
+        DataType = ftWideString
+        NumericScale = 255
+        Precision = 255
+        Size = 510
+        Value = '1'
+      end>
+    SQL.Strings = (
+      'SELECT tblCarteiraTrabalho.* FROM tblCarteiraTrabalho '
+      'WHERE ((txtTipoEtapaServicoOP LIKE  @TipoEtapaServico)AND'
+      '(Plataforma LIKE @Destino)AND(StatusUsuarioOM LIKE "%GIOP%"));')
+    Left = 664
+  end
+  object DataSourceProgramacaoServico_Consulta: TDataSource
+    DataSet = ADOQueryProgramacaoServico_Consulta
+    Left = 456
+    Top = 448
+  end
+  object ADOQueryProgramacaoServico_Consulta: TADOQuery
+    Connection = ADOConnectionColibri
+    CursorType = ctStatic
+    LockType = ltPessimistic
+    Parameters = <
+      item
+        Name = '@Servico'
+        Attributes = [paNullable]
+        DataType = ftWideString
+        NumericScale = 255
+        Precision = 255
+        Size = 510
+        Value = '1'
+      end>
+    SQL.Strings = (
+      'SELECT tblProgramacaoServico.*'
+      'FROM tblProgramacaoServico'
+      'WHERE (CodigoProgramacaoDiaria=@Servico);')
+    Left = 144
+    Top = 8
+  end
+  object ADOQueryNumExecutantes: TADOQuery
+    Connection = ADOConnectionColibri
+    CursorType = ctStatic
+    LockType = ltPessimistic
+    Parameters = <
+      item
+        Name = '@CodigoProgramacaoDiaria'
+        Attributes = [paNullable]
+        DataType = ftWideString
+        NumericScale = 255
+        Precision = 255
+        Size = 510
+        Value = Null
+      end>
+    SQL.Strings = (
+      'SELECT tblProgramacaoExecutante.*'
+      'FROM tblProgramacaoExecutante'
+      'WHERE (CodigoProgramacaoDiaria=@CodigoProgramacaoDiaria);')
+    Left = 360
+    Top = 96
+  end
+  object DataSourceNumExecutantes: TDataSource
+    DataSet = ADOQueryNumExecutantes
+    Left = 360
+    Top = 488
+  end
+  object ADOQueryImportarTextoLongoCarteira: TADOQuery
+    Connection = ADOConnectionMemoria
+    CursorType = ctStatic
+    LockType = ltPessimistic
+    Parameters = <>
+    SQL.Strings = (
+      'SELECT tblTextoLongoCarteira.*'
+      'FROM tblTextoLongoCarteira;')
+    Left = 808
+    Top = 40
+  end
+  object DataSourceImportarTextoLongoCarteira: TDataSource
+    DataSet = ADOQueryImportarTextoLongoCarteira
+    Left = 776
+    Top = 312
+  end
+  object ADOQueryProgramados: TADOQuery
+    Connection = ADOConnectionColibri
+    CursorType = ctStatic
+    LockType = ltPessimistic
+    Parameters = <>
+    SQL.Strings = (
+      
+        'SELECT tblProgramacaoDiaria.*, tblProgramacaoExecutante.*, tblRo' +
+        'teamento.* '
+      
+        'FROM tblRoteamento INNER JOIN ((tblProgramacaoDiaria INNER JOIN ' +
+        'tblProgramacaoExecutante ON tblProgramacaoDiaria.idProgramacaoDi' +
+        'aria = '
+      
+        'tblProgramacaoExecutante.CodigoProgramacaoDiaria) INNER JOIN tbl' +
+        'Aux_Rota_Distribuicao ON tblProgramacaoExecutante.idProgramacaoE' +
+        'xecutante = '
+      
+        'tblAux_Rota_Distribuicao.CodigoProgramacaoExecutante) ON tblRote' +
+        'amento.idRoteamento = tblAux_Rota_Distribuicao.CodigoRota '
+      'WHERE (tblProgramacaoDiaria.DataProgramacao LIKE '#39'05/06/2017'#39') '
+      
+        'AND (tblProgramacaoDiaria.txtDestino <> tblProgramacaoExecutante' +
+        '.Origem) '
+      
+        'AND (((tblProgramacaoExecutante.StatusProgramacao like '#39'Aprovado' +
+        #39'))) '
+      'ORDER BY NomeRota,txtDestino,txtTipoEtapaServico;')
+    Left = 8
+    Top = 96
+  end
+  object DataSourceProgramados: TDataSource
+    DataSet = ADOQueryProgramados
+    Left = 296
+    Top = 488
+  end
+  object ADOQueryCarteiraOP: TADOQuery
+    Connection = ADOConnectionMemoria
+    CursorType = ctStatic
+    LockType = ltPessimistic
+    Parameters = <>
+    SQL.Strings = (
+      'SELECT tblCarteiraTrabalho.*'
+      'FROM tblCarteiraTrabalho;')
+    Left = 832
+  end
+  object DataSourceCarteiraOP: TDataSource
+    DataSet = ADOQueryCarteiraOP
+    Left = 816
+    Top = 488
+  end
+  object DataSourceCentroTrabalho_Descricao: TDataSource
+    DataSet = ADOQueryCentroTrabalho_Descricao
+    Left = 240
+    Top = 400
+  end
+  object ADOQueryCentroTrabalho_Descricao: TADOQuery
+    Connection = ADOConnectionConsulta
+    CursorType = ctStatic
+    LockType = ltPessimistic
+    Parameters = <
+      item
+        Name = '@CentroTrabalho'
+        Attributes = [paNullable]
+        DataType = ftWideString
+        NumericScale = 255
+        Precision = 255
+        Size = 510
+        Value = '1'
+      end
+      item
+        Name = '@txtTipoEtapaServico'
+        Attributes = [paNullable]
+        DataType = ftWideString
+        NumericScale = 255
+        Precision = 255
+        Size = 510
+        Value = '1'
+      end>
+    SQL.Strings = (
+      'SELECT tblCentroTrabalho.*'
+      'FROM tblCentroTrabalho'
+      'WHERE ((CentroTrabalho = @CentroTrabalho)'
+      'AND(txtTipoEtapaServico = @txtTipoEtapaServico));')
+    Left = 1008
+    Top = 80
+  end
+  object DataSourceTipoEtapaServico_Carteira: TDataSource
+    DataSet = ADOQueryTipoEtapaServico_Carteira
+    Left = 384
+    Top = 488
+  end
+  object ADOQueryTipoEtapaServico_Carteira: TADOQuery
+    Connection = ADOConnectionConsulta
+    CursorType = ctStatic
+    LockType = ltPessimistic
+    Parameters = <>
+    SQL.Strings = (
+      'SELECT tblTipoEtapaServico.*'
+      'FROM tblTipoEtapaServico'
+      'WHERE (BooleanCarteira = true)'
+      'ORDER BY TipoEtapaServico;')
+    Left = 1176
+    Top = 120
+  end
+  object ADOQueryPrioridadeForcada: TADOQuery
+    Connection = ADOConnectionMemoria
+    CursorType = ctStatic
+    LockType = ltPessimistic
+    BeforePost = ADOQueryPrioridadeForcadaBeforePost
+    Parameters = <>
+    SQL.Strings = (
+      'SELECT tblPrioridadeForcada.*'
+      'FROM tblPrioridadeForcada'
+      'ORDER BY Prioridade;')
+    Left = 736
+  end
+  object DataSourcePrioridadeForcada: TDataSource
+    DataSet = ADOQueryPrioridadeForcada
+    Left = 728
+    Top = 352
+  end
+  object ADOQueryLocalInstalacaoSAP: TADOQuery
+    Connection = ADOConnectionMemoria
+    CursorType = ctStatic
+    LockType = ltPessimistic
+    Parameters = <>
+    SQL.Strings = (
+      'SELECT tblLocalInstalacao.* '
+      'FROM tblLocalInstalacao '
+      'ORDER BY LocalInstalacao;')
+    Left = 632
+    Top = 80
+  end
+  object DataSourceLocalInstalacaoSAP: TDataSource
+    DataSet = ADOQueryLocalInstalacaoSAP
+    Left = 40
+    Top = 488
+  end
+  object ADOConnectionMemoria: TADOConnection
+    ConnectionString = 
+      'Provider=Microsoft.Jet.OLEDB.4.0;User ID=Admin;Data Source=C:\Us' +
+      'ers\augus\Documents\Projetos\Colibri\Banco de dados\UO-SEAL-ATP-' +
+      'OP-SM\dbMemoria.mdb;Mode=Share Deny None;Persist Security Info=F' +
+      'alse;Jet OLEDB:System database="";Jet OLEDB:Registry Path="";Jet' +
+      ' OLEDB:Database Password="";Jet OLEDB:Engine Type=5;Jet OLEDB:Da' +
+      'tabase Locking Mode=1;Jet OLEDB:Global Partial Bulk Ops=2;Jet OL' +
+      'EDB:Global Bulk Transactions=1;Jet OLEDB:New Database Password="' +
+      '";Jet OLEDB:Create System Database=False;Jet OLEDB:Encrypt Datab' +
+      'ase=False;Jet OLEDB:Don'#39't Copy Locale on Compact=False;Jet OLEDB' +
+      ':Compact Without Replica Repair=False;Jet OLEDB:SFP=False;'
+    KeepConnection = False
+    LoginPrompt = False
+    Provider = 'Microsoft.Jet.OLEDB.4.0'
+    Left = 40
+    Top = 176
+  end
+  object DataSourceIW37N: TDataSource
+    DataSet = ADOQueryIW37N
+    Left = 824
+    Top = 312
+  end
+  object ADOQueryIW37N: TADOQuery
+    Connection = ADOConnectionMemoria
+    CursorType = ctStatic
+    LockType = ltPessimistic
+    Parameters = <>
+    SQL.Strings = (
+      'SELECT tblCarteiraTrabalho.*'
+      'FROM tblCarteiraTrabalho;')
+    Left = 856
+    Top = 40
+  end
+  object DataSourceCadastroUsuario: TDataSource
+    DataSet = ADOQueryCadastroUsuario
+    Left = 104
+    Top = 488
+  end
+  object ADOQueryCadastroUsuario: TADOQuery
+    Connection = ADOConnectionColibri
+    CursorType = ctStatic
+    LockType = ltPessimistic
+    BeforePost = ADOQueryCadastroUsuarioBeforePost
+    Parameters = <>
+    SQL.Strings = (
+      'SELECT tblUsuario.*'
+      'FROM tblUsuario'
+      'ORDER BY Chave;')
+    Left = 40
+    Top = 96
+  end
+  object DataSourceTemporarioDBConsulta1: TDataSource
+    DataSet = ADOQueryTemporarioDBConsulta1
+    Left = 680
+    Top = 352
+  end
+  object ADOQueryTemporarioDBConsulta1: TADOQuery
+    Connection = ADOConnectionConsulta
+    CursorType = ctStatic
+    LockType = ltPessimistic
+    Parameters = <>
+    SQL.Strings = (
+      'SELECT tblCentroTrabalho.*'
+      'FROM tblCentroTrabalho;')
+    Left = 1208
+    Top = 40
+  end
+  object ADOQueryRestricaoOperacional: TADOQuery
+    Connection = ADOConnectionMemoria
+    CursorType = ctStatic
+    LockType = ltPessimistic
+    Parameters = <>
+    SQL.Strings = (
+      'SELECT tblCarteiraTrabalho.*'
+      'FROM tblCarteiraTrabalho'
+      'WHERE (TextoBreveOM LIKE "RO:%")'
+      'ORDER BY Plataforma, txtTipoEtapaServicoOM;')
+    Left = 656
+    Top = 40
+  end
+  object DataSourceRestricaoOperacional: TDataSource
+    DataSet = ADOQueryRestricaoOperacional
+    Left = 648
+    Top = 392
+  end
+  object ADOQueryTotalCampo: TADOQuery
+    Connection = ADOConnectionColibri
+    CursorType = ctStatic
+    LockType = ltPessimistic
+    Parameters = <
+      item
+        Name = '@Dataprocura'
+        Attributes = [paNullable]
+        DataType = ftWideString
+        NumericScale = 255
+        Precision = 255
+        Size = 510
+        Value = '1'
+      end
+      item
+        Name = '@Campo'
+        Attributes = [paNullable]
+        DataType = ftWideString
+        NumericScale = 255
+        Precision = 255
+        Size = 510
+        Value = '1'
+      end
+      item
+        Name = '@Status'
+        Attributes = [paNullable]
+        DataType = ftWideString
+        NumericScale = 255
+        Precision = 255
+        Size = 510
+        Value = '1'
+      end>
+    SQL.Strings = (
+      'SELECT tblProgramacaoDiaria.*, tblProgramacaoExecutante.* '
+      
+        'FROM tblProgramacaoDiaria INNER JOIN tblProgramacaoExecutante ON' +
+        ' tblProgramacaoDiaria.idProgramacaoDiaria = tblProgramacaoExecut' +
+        'ante.CodigoProgramacaoDiaria '
+      'WHERE ((tblProgramacaoDiaria.DataProgramacao  LIKE @Dataprocura)'
+      'AND(tblProgramacaoDiaria.txtDestino LIKE @Campo)'
+      'AND(tblProgramacaoExecutante.StatusProgramacao LIKE @Status)'
+      
+        'AND((tblProgramacaoExecutante.Origem LIKE "TMIB")OR(tblProgramac' +
+        'aoExecutante.Origem LIKE "PCM-09")));')
+    Left = 336
+    Top = 8
+  end
+  object DataSourceTotalCampo: TDataSource
+    DataSet = ADOQueryTotalCampo
+    Left = 656
+    Top = 440
+  end
+  object ADOQueryTotalOrigem: TADOQuery
+    Connection = ADOConnectionColibri
+    CursorType = ctStatic
+    LockType = ltPessimistic
+    Parameters = <
+      item
+        Name = '@DataProcura'
+        Attributes = [paNullable]
+        DataType = ftWideString
+        NumericScale = 255
+        Precision = 255
+        Size = 510
+        Value = '1'
+      end
+      item
+        Name = '@Origem'
+        Attributes = [paNullable]
+        DataType = ftWideString
+        NumericScale = 255
+        Precision = 255
+        Size = 510
+        Value = '1'
+      end>
+    SQL.Strings = (
+      'SELECT tblProgramacaoDiaria.*, tblProgramacaoExecutante.* '
+      
+        'FROM tblProgramacaoDiaria INNER JOIN tblProgramacaoExecutante ON' +
+        ' tblProgramacaoDiaria.idProgramacaoDiaria = tblProgramacaoExecut' +
+        'ante.CodigoProgramacaoDiaria '
+      'WHERE ((tblProgramacaoDiaria.DataProgramacao  LIKE @DataProcura)'
+      'AND(tblProgramacaoExecutante.Origem LIKE @Origem)'
+      
+        'AND(tblProgramacaoExecutante.StatusProgramacao LIKE "Aprovado"))' +
+        ';')
+    Left = 304
+    Top = 8
+  end
+  object DataSourceTotalOrigem: TDataSource
+    DataSet = ADOQueryTotalOrigem
+    Left = 688
+    Top = 440
+  end
+  object ADOQueryPassageirosTM_SIM: TADOQuery
+    Connection = ADOConnectionColibri
+    CursorType = ctStatic
+    LockType = ltPessimistic
+    Parameters = <
+      item
+        Name = '@Dataprocura'
+        Attributes = [paNullable]
+        DataType = ftWideString
+        NumericScale = 255
+        Precision = 255
+        Size = 510
+        Value = Null
+      end
+      item
+        Name = '@Origem'
+        Attributes = [paNullable]
+        DataType = ftWideString
+        NumericScale = 255
+        Precision = 255
+        Size = 510
+        Value = Null
+      end
+      item
+        Name = '@Destino'
+        Attributes = [paNullable]
+        DataType = ftWideString
+        NumericScale = 255
+        Precision = 255
+        Size = 510
+        Value = Null
+      end>
+    SQL.Strings = (
+      'SELECT tblProgramacaoDiaria.*, tblProgramacaoExecutante.*  '
+      
+        'FROM tblProgramacaoDiaria INNER JOIN tblProgramacaoExecutante ON' +
+        ' tblProgramacaoDiaria.idProgramacaoDiaria = tblProgramacaoExecut' +
+        'ante.CodigoProgramacaoDiaria '
+      'WHERE ((tblProgramacaoDiaria.DataProgramacao LIKE @Dataprocura)'
+      'AND(tblProgramacaoExecutante.Origem LIKE @Origem)'
+      'AND(tblProgramacaoDiaria.txtDestino LIKE @Destino)'
+      
+        'AND(tblProgramacaoExecutante.StatusProgramacao LIKE "Aprovado"))' +
+        ';')
+    Left = 272
+    Top = 8
+  end
+  object DataSourcePassageirosTM_SIM: TDataSource
+    DataSet = ADOQueryPassageirosTM_SIM
+    Left = 720
+    Top = 440
+  end
+  object ADOQueryPassageirosTM_NAO: TADOQuery
+    Connection = ADOConnectionColibri
+    CursorType = ctStatic
+    LockType = ltPessimistic
+    Parameters = <
+      item
+        Name = '@Dataprocura'
+        Attributes = [paNullable]
+        DataType = ftWideString
+        NumericScale = 255
+        Precision = 255
+        Size = 510
+        Value = Null
+      end
+      item
+        Name = '@Origem'
+        Attributes = [paNullable]
+        DataType = ftWideString
+        NumericScale = 255
+        Precision = 255
+        Size = 510
+        Value = Null
+      end
+      item
+        Name = '@Destino'
+        Attributes = [paNullable]
+        DataType = ftWideString
+        NumericScale = 255
+        Precision = 255
+        Size = 510
+        Value = Null
+      end>
+    SQL.Strings = (
+      'SELECT tblProgramacaoDiaria.*, tblProgramacaoExecutante.*  '
+      
+        'FROM tblProgramacaoDiaria INNER JOIN tblProgramacaoExecutante ON' +
+        ' tblProgramacaoDiaria.idProgramacaoDiaria = tblProgramacaoExecut' +
+        'ante.CodigoProgramacaoDiaria '
+      'WHERE ((tblProgramacaoDiaria.DataProgramacao LIKE @Dataprocura)'
+      'AND(tblProgramacaoExecutante.Origem LIKE @Origem)'
+      'AND(tblProgramacaoDiaria.txtDestino LIKE @Destino)'
+      'AND(tblProgramacaoExecutante.StatusProgramacao LIKE "Aprovado")'
+      
+        'AND(tblProgramacaoExecutante.InseridoProgramacaoTransporte LIKE ' +
+        'False));')
+    Left = 240
+    Top = 8
+  end
+  object DataSourcePassageirosTM_NAO: TDataSource
+    DataSet = ADOQueryPassageirosTM_NAO
+    Left = 752
+    Top = 440
+  end
+  object DataSourceImportarLocalInstalacao: TDataSource
+    DataSet = ADOQueryImportarLocalInstalacao
+    Left = 624
+    Top = 352
+  end
+  object ADOQueryImportarLocalInstalacao: TADOQuery
+    Connection = ADOConnectionMemoria
+    CursorType = ctStatic
+    LockType = ltPessimistic
+    BeforePost = ADOQueryImportarLocalInstalacaoBeforePost
+    Parameters = <>
+    SQL.Strings = (
+      'SELECT tblLocalInstalacao.* '
+      'FROM tblLocalInstalacao'
+      'ORDER BY LocalInstalacao;')
+    Left = 632
+  end
+  object DataSourceRECLocalSAP: TDataSource
+    DataSet = ADOQueryRECLocalSAP
+    Left = 592
+    Top = 352
+  end
+  object ADOQueryRECLocalSAP: TADOQuery
+    Connection = ADOConnectionMemoria
+    CursorType = ctStatic
+    LockType = ltPessimistic
+    Parameters = <
+      item
+        Name = '@Plataforma'
+        Attributes = [paNullable]
+        DataType = ftWideString
+        NumericScale = 255
+        Precision = 255
+        Size = 510
+        Value = '1'
+      end
+      item
+        Name = '@TAG'
+        Attributes = [paNullable]
+        DataType = ftWideString
+        NumericScale = 255
+        Precision = 255
+        Size = 510
+        Value = '1'
+      end>
+    SQL.Strings = (
+      'SELECT tblLocalInstalacao.*'
+      'FROM tblLocalInstalacao'
+      'WHERE ((Plataforma LIKE @Plataforma) AND'
+      ' (DenominacaoLocalInstalacao LIKE @TAG));')
+    Left = 600
+  end
+  object DataSourceForaFSMC: TDataSource
+    DataSet = ADOQueryForaFSMC
+    Left = 560
+    Top = 352
+  end
+  object ADOQueryForaFSMC: TADOQuery
+    Connection = ADOConnectionMemoria
+    CursorType = ctStatic
+    LockType = ltPessimistic
+    Parameters = <
+      item
+        Name = 'DenominacaoLocalInstalacao'
+        Attributes = [paNullable]
+        DataType = ftWideString
+        NumericScale = 255
+        Precision = 255
+        Size = 510
+        Value = Null
+      end>
+    SQL.Strings = (
+      'SELECT tblNotaManutencao.* FROM tblNotaManutencao'
+      'WHERE (((TextoBreveNOTA LIKE "FO:%"))'
+      'AND((FimAvaria IS NULL))'
+      'AND((LocalInstalacao LIKE "%FSMC%"))'
+      'AND((DenominacaoLocalInstalacao NOT LIKE "%Enquip%"))'
+      'AND((DenominacaoLocalInstalacao NOT LIKE "%Apoio%")));')
+    Left = 568
+  end
+  object DataSourceForaFSCI: TDataSource
+    DataSet = ADOQueryForaFSCI
+    Left = 616
+    Top = 392
+  end
+  object ADOQueryForaFSCI: TADOQuery
+    Connection = ADOConnectionMemoria
+    CursorType = ctStatic
+    LockType = ltPessimistic
+    Parameters = <>
+    SQL.Strings = (
+      'SELECT tblNotaManutencao.* FROM tblNotaManutencao'
+      'WHERE (((TextoBreveNOTA LIKE "FO:%"))AND((FimAvaria IS NULL))AND'
+      '((LocalInstalacao LIKE "%FSCI%")));')
+    Left = 568
+    Top = 40
+  end
+  object DataSourcePendenciaSAP: TDataSource
+    DataSet = ADOQueryPendenciaSAP
+    Left = 560
+    Top = 440
+  end
+  object ADOQueryPendenciaSAP: TADOQuery
+    Connection = ADOConnectionMemoria
+    CursorType = ctStatic
+    LockType = ltPessimistic
+    Parameters = <>
+    SQL.Strings = (
+      'SELECT tblCarteiraTrabalho.*'
+      'FROM tblCarteiraTrabalho;')
+    Left = 600
+    Top = 40
+  end
+  object ADOQueryTextoLongoOM: TADOQuery
+    Connection = ADOConnectionMemoria
+    CursorType = ctStatic
+    LockType = ltPessimistic
+    Parameters = <
+      item
+        Name = '@OrdemManutencao'
+        Attributes = [paNullable]
+        DataType = ftWideString
+        NumericScale = 255
+        Precision = 255
+        Size = 510
+        Value = '1'
+      end>
+    SQL.Strings = (
+      'SELECT tblTextoLongoCarteira.* '
+      'FROM tblTextoLongoCarteira '
+      'WHERE (OrdemManutencao LIKE @OrdemManutencao);')
+    Left = 568
+    Top = 80
+  end
+  object DataSourceTextoLongoOM: TDataSource
+    DataSet = ADOQueryTextoLongoOM
+    Left = 528
+    Top = 440
+  end
+  object DataSourceAnalisarTipoEtapaServico: TDataSource
+    DataSet = ADOQueryAnalisarTipoEtapaServico
+    Left = 496
+    Top = 400
+  end
+  object ADOQueryAnalisarTipoEtapaServico: TADOQuery
+    Connection = ADOConnectionMemoria
+    CursorType = ctStatic
+    LockType = ltPessimistic
+    Parameters = <>
+    SQL.Strings = (
+      'SELECT tblCarteiraTrabalho.*'
+      'FROM tblCarteiraTrabalho;')
+    Left = 600
+    Top = 80
+  end
+  object DataSourcePreventivaAtrasada: TDataSource
+    DataSet = ADOQueryPreventivaAtrasada
+    Left = 528
+    Top = 352
+  end
+  object ADOQueryPreventivaAtrasada: TADOQuery
+    Connection = ADOConnectionMemoria
+    CursorType = ctStatic
+    LockType = ltPessimistic
+    Parameters = <>
+    SQL.Strings = (
+      'SELECT tblCarteiraTrabalho.*'
+      'FROM tblCarteiraTrabalho'
+      'WHERE (TextoBreveOM LIKE "RO:%")'
+      'ORDER BY Plataforma, txtTipoEtapaServicoOM;')
+    Left = 624
+    Top = 40
+  end
+  object DataSourceConsultaExecutante_Documento_Data: TDataSource
+    DataSet = ADOQueryConsultaExecutante_Documento_Data
+    Left = 488
+    Top = 440
+  end
+  object ADOQueryConsultaExecutante_Documento_Data: TADOQuery
+    Connection = ADOConnectionColibri
+    CursorType = ctStatic
+    LockType = ltPessimistic
+    Parameters = <
+      item
+        Name = '@CPF'
+        Attributes = [paNullable]
+        DataType = ftWideString
+        NumericScale = 255
+        Precision = 255
+        Size = 510
+        Value = '1'
+      end
+      item
+        Name = '@DataProgramacao'
+        Attributes = [paNullable]
+        DataType = ftWideString
+        NumericScale = 255
+        Precision = 255
+        Size = 510
+        Value = '01/01/2019'
+      end>
+    SQL.Strings = (
+      
+        'SELECT tblProgramacaoExecutante.*, tblProgramacaoDiaria.DataProg' +
+        'ramacao'
+      
+        'FROM tblProgramacaoDiaria INNER JOIN tblProgramacaoExecutante ON' +
+        ' tblProgramacaoDiaria.idProgramacaoDiaria = tblProgramacaoExecut' +
+        'ante.CodigoProgramacaoDiaria'
+      
+        'WHERE ((tblProgramacaoExecutante.Documento= @CPF)AND(tblPrograma' +
+        'caoDiaria.DataProgramacao=@DataProgramacao));')
+    Left = 296
+    Top = 96
+  end
+  object ADOConnectionImportar: TADOConnection
+    ConnectionString = 
+      'Provider=Microsoft.Jet.OLEDB.4.0;User ID=Admin;Data Source=C:\Us' +
+      'ers\augus\Documents\Projetos\Colibri\Banco de dados\UO-SEAL-ATP-' +
+      'OP-SM\bdColibri.colibri;Mode=Share Deny None;Persist Security In' +
+      'fo=False;Jet OLEDB:System database="";Jet OLEDB:Registry Path=""' +
+      ';Jet OLEDB:Database Password="";Jet OLEDB:Engine Type=5;Jet OLED' +
+      'B:Database Locking Mode=1;Jet OLEDB:Global Partial Bulk Ops=2;Je' +
+      't OLEDB:Global Bulk Transactions=1;Jet OLEDB:New Database Passwo' +
+      'rd="";Jet OLEDB:Create System Database=False;Jet OLEDB:Encrypt D' +
+      'atabase=False;Jet OLEDB:Don'#39't Copy Locale on Compact=False;Jet O' +
+      'LEDB:Compact Without Replica Repair=False;Jet OLEDB:SFP=False'
+    KeepConnection = False
+    LoginPrompt = False
+    Provider = 'Microsoft.Jet.OLEDB.4.0'
+    Left = 144
+    Top = 152
+  end
+  object DataSourceProgramacaoDiaria_Importar: TDataSource
+    DataSet = ADOQueryProgramacaoDiaria_Importar
+    Left = 448
+    Top = 496
+  end
+  object ADOQueryProgramacaoDiaria_Importar: TADOQuery
+    Connection = ADOConnectionImportar
+    CursorType = ctStatic
+    LockType = ltPessimistic
+    Parameters = <>
+    SQL.Strings = (
+      'SELECT tblProgramacaoDiaria.*'
+      'FROM tblProgramacaoDiaria;')
+    Left = 528
+    Top = 176
+  end
+  object DataSourceProgramacaoExecutante_Importar: TDataSource
+    DataSet = ADOQueryProgramacaoExecutante_Importar
+    Left = 464
+    Top = 400
+  end
+  object ADOQueryProgramacaoExecutante_Importar: TADOQuery
+    Connection = ADOConnectionImportar
+    CursorType = ctStatic
+    LockType = ltPessimistic
+    Parameters = <
+      item
+        Name = '@CodigoProgramacaoDiaria'
+        Attributes = [paNullable]
+        DataType = ftWideString
+        NumericScale = 255
+        Precision = 255
+        Size = 510
+        Value = '1'
+      end>
+    SQL.Strings = (
+      'SELECT tblProgramacaoExecutante.*'
+      'FROM tblProgramacaoExecutante'
+      'WHERE (CodigoProgramacaoDiaria=@CodigoProgramacaoDiaria)'
+      'ORDER BY NomeExecutante;')
+    Left = 816
+    Top = 176
+  end
+  object DataSourceProgramacaoServico_Importar: TDataSource
+    DataSet = ADOQueryProgramacaoServico_Importar
+    Left = 488
+    Top = 352
+  end
+  object ADOQueryProgramacaoServico_Importar: TADOQuery
+    Connection = ADOConnectionImportar
+    CursorType = ctStatic
+    LockType = ltPessimistic
+    Parameters = <
+      item
+        Name = '@Servico'
+        Attributes = [paNullable]
+        DataType = ftWideString
+        NumericScale = 255
+        Precision = 255
+        Size = 510
+        Value = '1'
+      end>
+    SQL.Strings = (
+      'SELECT tblProgramacaoServico.*'
+      'FROM tblProgramacaoServico'
+      'WHERE (CodigoProgramacaoDiaria=@Servico);')
+    Left = 784
+    Top = 176
+  end
+  object DataSourceTemporarioDBImportar: TDataSource
+    DataSet = ADOQueryTemporarioDBImportar
+    Left = 528
+    Top = 400
+  end
+  object ADOQueryTemporarioDBImportar: TADOQuery
+    Connection = ADOConnectionImportar
+    CursorType = ctStatic
+    LockType = ltPessimistic
+    Parameters = <>
+    SQL.Strings = (
+      'SELECT tblProgramacaoDiaria.*'
+      'FROM tblProgramacaoDiaria;')
+    Left = 1080
+    Top = 176
+  end
+  object ADOConnectionConsulta: TADOConnection
+    ConnectionString = 
+      'Provider=Microsoft.Jet.OLEDB.4.0;User ID=Admin;Data Source=C:\Us' +
+      'ers\augus\Documents\Projetos\Colibri\Banco de dados\UO-SEAL-ATP-' +
+      'OP-SM\dbConsulta.mdb;Mode=Share Deny None;Persist Security Info=' +
+      'False;Jet OLEDB:System database="";Jet OLEDB:Registry Path="";Je' +
+      't OLEDB:Database Password="";Jet OLEDB:Engine Type=5;Jet OLEDB:D' +
+      'atabase Locking Mode=1;Jet OLEDB:Global Partial Bulk Ops=2;Jet O' +
+      'LEDB:Global Bulk Transactions=1;Jet OLEDB:New Database Password=' +
+      '"";Jet OLEDB:Create System Database=False;Jet OLEDB:Encrypt Data' +
+      'base=False;Jet OLEDB:Don'#39't Copy Locale on Compact=False;Jet OLED' +
+      'B:Compact Without Replica Repair=False;Jet OLEDB:SFP=False;'
+    KeepConnection = False
+    LoginPrompt = False
+    Provider = 'Microsoft.Jet.OLEDB.4.0'
+    Left = 208
+    Top = 200
+  end
+  object DataSourceTemporarioDBMemoria: TDataSource
+    DataSet = ADOQueryTemporarioDBMemoria
+    Left = 176
+    Top = 448
+  end
+  object ADOQueryTemporarioDBMemoria: TADOQuery
+    Connection = ADOConnectionMemoria
+    CursorType = ctStatic
+    LockType = ltPessimistic
+    Parameters = <>
+    SQL.Strings = (
+      'SELECT tblLocalInstalacao.* '
+      'FROM tblLocalInstalacao;')
+    Left = 688
+  end
+  object ADOConnectionGantt: TADOConnection
+    ConnectionString = 
+      'Provider=Microsoft.Jet.OLEDB.4.0;User ID=Admin;Data Source=C:\Us' +
+      'ers\ZUCHI\Documents\Projetos\Colibri\Win32\Debug\Arquivos\dbGant' +
+      't.mdb;Mode=Share Deny None;Persist Security Info=False;Jet OLEDB' +
+      ':System database="";Jet OLEDB:Registry Path="";Jet OLEDB:Databas' +
+      'e Password="";Jet OLEDB:Engine Type=5;Jet OLEDB:Database Locking' +
+      ' Mode=0;Jet OLEDB:Global Partial Bulk Ops=2;Jet OLEDB:Global Bul' +
+      'k Transactions=1;Jet OLEDB:New Database Password="";Jet OLEDB:Cr' +
+      'eate System Database=False;Jet OLEDB:Encrypt Database=False;Jet ' +
+      'OLEDB:Don'#39't Copy Locale on Compact=False;Jet OLEDB:Compact Witho' +
+      'ut Replica Repair=False;Jet OLEDB:SFP=False;'
+    KeepConnection = False
+    LoginPrompt = False
+    Provider = 'Microsoft.Jet.OLEDB.4.0'
+    Left = 136
+    Top = 264
+  end
+  object ADOQueryGantt: TADOQuery
+    Connection = ADOConnectionGantt
+    CursorType = ctStatic
+    LockType = ltPessimistic
+    Parameters = <>
+    SQL.Strings = (
+      'SELECT tblGanttCarteira.*'
+      'FROM tblGanttCarteira;')
+    Left = 1032
+    Top = 224
+  end
+  object DataSourceGantt: TDataSource
+    DataSet = ADOQueryGantt
+    Left = 408
+    Top = 296
+  end
+  object DataSourceNotaManutencao: TDataSource
+    DataSet = ADOQueryNotaManutencao
+    Left = 880
+    Top = 312
+  end
+  object ADOQueryNotaManutencao: TADOQuery
+    Connection = ADOConnectionMemoria
+    CursorType = ctStatic
+    LockType = ltPessimistic
+    Parameters = <>
+    SQL.Strings = (
+      'SELECT tblNotaManutencao.*'
+      'FROM tblNotaManutencao'
+      'ORDER BY Plataforma;')
+    Left = 664
+    Top = 80
+  end
+  object DataSourceExecutante_TipoEtapaServico: TDataSource
+    DataSet = ADOQueryExecutante_TipoEtapaServico
+    Left = 40
+    Top = 320
+  end
+  object ADOQueryExecutante_TipoEtapaServico: TADOQuery
+    Connection = ADOConnectionConsulta
+    CursorType = ctStatic
+    LockType = ltPessimistic
+    Parameters = <
+      item
+        Name = '@TipoEtapaServico'
+        Attributes = [paNullable]
+        DataType = ftWideString
+        NumericScale = 255
+        Precision = 255
+        Size = 510
+        Value = '1'
+      end>
+    SQL.Strings = (
+      'SELECT tblExecutante.*'
+      'FROM tblExecutante'
+      'WHERE ((txtTipoEtapaServico=@TipoEtapaServico)AND(Ativo = True))'
+      'ORDER BY NomeExecutante;')
+    Left = 1232
+    Top = 80
+  end
+  object DataSourceImportarTextoLongoOperacao: TDataSource
+    DataSet = ADOQueryImportarTextoLongoOperacao
+    Left = 872
+    Top = 488
+  end
+  object ADOQueryImportarTextoLongoOperacao: TADOQuery
+    Connection = ADOConnectionMemoria
+    CursorType = ctStatic
+    LockType = ltPessimistic
+    Parameters = <>
+    SQL.Strings = (
+      'SELECT tblTextoLongoOperacao.*'
+      'FROM tblTextoLongoOperacao;')
+    Left = 888
+    Top = 40
+  end
+  object DataSourceAnaliseGM: TDataSource
+    DataSet = ADOQueryAnaliseGM
+    Left = 632
+    Top = 496
+  end
+  object ADOQueryAnaliseGM: TADOQuery
+    Connection = ADOConnectionMemoria
+    CursorType = ctStatic
+    LockType = ltPessimistic
+    Parameters = <>
+    SQL.Strings = (
+      'SELECT tblNotaManutencao.* '
+      'FROM tblNotaManutencao'
+      'ORDER BY Plataforma;')
+    Left = 760
+    Top = 80
+  end
+  object DataSourceRestricaoFSMC: TDataSource
+    DataSet = ADOQueryRestricaoFSMC
+    Left = 728
+    Top = 496
+  end
+  object ADOQueryRestricaoFSMC: TADOQuery
+    Connection = ADOConnectionMemoria
+    CursorType = ctStatic
+    LockType = ltPessimistic
+    Parameters = <>
+    SQL.Strings = (
+      'SELECT tblCarteiraTrabalho.* FROM tblCarteiraTrabalho'
+      'WHERE ((TextoBreveOM LIKE "RO:%")'
+      'AND(LocalInstalacao LIKE "%FSMC%")'
+      'AND(StatusUsuarioOM NOT LIKE "%AENT%")'
+      'AND(DenominacaoLocalInstalacao NOT LIKE "%Enquip%")'
+      'AND(DenominacaoLocalInstalacao NOT LIKE "%Apoio%"));')
+    Left = 544
+  end
+  object DataSourceMovimentacaoCarga: TDataSource
+    DataSet = ADOQueryMovimentacaoCarga
+    Left = 936
+    Top = 488
+  end
+  object ADOQueryMovimentacaoCarga: TADOQuery
+    Connection = ADOConnectionConsulta
+    CursorType = ctStatic
+    LockType = ltPessimistic
+    BeforePost = ADOQueryMovimentacaoCargaBeforePost
+    Parameters = <>
+    SQL.Strings = (
+      'SELECT tblMovimentacaoCarga.*'
+      'FROM tblMovimentacaoCarga'
+      'ORDER BY DataNecessidade;')
+    Left = 1264
+    Top = 120
+  end
+  object DataSourceCondicaoMar: TDataSource
+    DataSet = ADOQueryCondicaoMar
+    Left = 832
+    Top = 416
+  end
+  object ADOQueryCondicaoMar: TADOQuery
+    Connection = ADOConnectionConsulta
+    CursorType = ctStatic
+    LockType = ltPessimistic
+    BeforePost = ADOQueryCondicaoMarBeforePost
+    Parameters = <>
+    SQL.Strings = (
+      'SELECT tblCondicaoMar.*'
+      'FROM tblCondicaoMar'
+      'ORDER BY DataCondicaoMar;')
+    Left = 688
+    Top = 224
+  end
+  object DataSourceCondicaoEmbarcacao: TDataSource
+    DataSet = ADOQueryCondicaoEmbarcacao
+    Left = 800
+    Top = 416
+  end
+  object ADOQueryCondicaoEmbarcacao: TADOQuery
+    Connection = ADOConnectionConsulta
+    CursorType = ctStatic
+    LockType = ltPessimistic
+    BeforePost = ADOQueryCondicaoEmbarcacaoBeforePost
+    Parameters = <>
+    SQL.Strings = (
+      'SELECT tblCondicaoEmbarcacao.*'
+      'FROM tblCondicaoEmbarcacao'
+      'ORDER BY DataCondicaoEmbarcacao;')
+    Left = 656
+    Top = 224
+  end
+  object DataSourceProgramacaoNotas: TDataSource
+    DataSet = ADOQueryProgramacaoNotas
+    Left = 976
+    Top = 368
+  end
+  object ADOQueryProgramacaoNotas: TADOQuery
+    Connection = ADOConnectionColibri
+    CursorType = ctStatic
+    LockType = ltPessimistic
+    BeforePost = ADOQueryProgramacaoNotasBeforePost
+    Parameters = <
+      item
+        Name = '@DataProgramacao'
+        Attributes = [paNullable]
+        DataType = ftWideString
+        NumericScale = 255
+        Precision = 255
+        Size = 510
+        Value = '01/01/2019'
+      end>
+    SQL.Strings = (
+      'SELECT tblProgramacaoNotas.* '
+      'FROM tblProgramacaoNotas'
+      'WHERE (DataProgramacao LIKE @DataProgramacao);')
+    Left = 720
+    Top = 224
+  end
+  object DataSourceImportarItemManutencao: TDataSource
+    DataSet = ADOQueryImportarItemManutencao
+    Left = 880
+    Top = 496
+  end
+  object ADOQueryImportarItemManutencao: TADOQuery
+    Connection = ADOConnectionMemoria
+    CursorType = ctStatic
+    LockType = ltPessimistic
+    Parameters = <>
+    SQL.Strings = (
+      'SELECT tblItemManutencao.* '
+      'FROM tblItemManutencao'
+      'ORDER BY DescricaoItem;')
+    Left = 888
+  end
+  object ADOQueryContadorSolicitacao: TADOQuery
+    Connection = ADOConnectionConsulta
+    CursorType = ctStatic
+    LockType = ltPessimistic
+    Parameters = <
+      item
+        Name = 'Descricao'
+        Attributes = [paNullable]
+        DataType = ftWideString
+        NumericScale = 255
+        Precision = 255
+        Size = 510
+        Value = Null
+      end>
+    SQL.Strings = (
+      'SELECT tblContadorSolicitacao.*'
+      'FROM tblContadorSolicitacao'
+      'ORDER BY Descricao;')
+    Left = 688
+    Top = 176
+  end
+  object DataSourceContadorSolicitacao: TDataSource
+    DataSet = ADOQueryContadorSolicitacao
+    Left = 696
+    Top = 296
+  end
+  object DataSourceProgramacaoCalendario: TDataSource
+    DataSet = ADOQueryProgramacaoCalendario
+    Left = 976
+    Top = 280
+  end
+  object ADOQueryProgramacaoCalendario: TADOQuery
+    Connection = ADOConnectionColibri
+    CursorType = ctStatic
+    LockType = ltPessimistic
+    Parameters = <>
+    SQL.Strings = (
+      'SELECT tblProgramacaoCalendario.*'
+      'FROM tblProgramacaoCalendario'
+      'ORDER BY DataProgramacao;')
+    Left = 1016
+    Top = 176
+  end
+  object ADOQueryPlataformaControle: TADOQuery
+    Connection = ADOConnectionConsulta
+    CursorType = ctStatic
+    LockType = ltPessimistic
+    BeforePost = ADOQueryPlataformaControleBeforePost
+    Parameters = <>
+    SQL.Strings = (
+      'SELECT tblPlataforma.*'
+      'FROM tblPlataforma'
+      'WHERE (BooleanPlataforma = True) '
+      'ORDER BY Plataforma;')
+    Left = 1200
+    Top = 80
+  end
+  object DataSourcePlataformaControle: TDataSource
+    DataSet = ADOQueryPlataformaControle
+    Left = 1008
+    Top = 488
+  end
+  object DataSourceImportarMemoria: TDataSource
+    DataSet = ADOQueryImportarMemoria
+    Left = 912
+    Top = 360
+  end
+  object ADOQueryImportarMemoria: TADOQuery
+    Connection = ADOConnectionMemoria
+    CursorType = ctStatic
+    LockType = ltPessimistic
+    Parameters = <>
+    SQL.Strings = (
+      'SELECT tblNotaManutencao.*'
+      'FROM tblNotaManutencao;')
+    Left = 920
+    Top = 40
+  end
+  object DataSourceImportarICPM: TDataSource
+    DataSet = ADOQueryImportarICPM
+    Left = 1040
+    Top = 488
+  end
+  object ADOQueryImportarICPM: TADOQuery
+    Connection = ADOConnectionMemoria
+    CursorType = ctStatic
+    LockType = ltPessimistic
+    Parameters = <>
+    SQL.Strings = (
+      'SELECT tblICPM.* '
+      'FROM tblICPM;')
+    Left = 920
+  end
+  object ADOQueryPalavraChave: TADOQuery
+    Connection = ADOConnectionConsulta
+    CursorType = ctStatic
+    LockType = ltPessimistic
+    Parameters = <>
+    SQL.Strings = (
+      'SELECT tblPalavraChave.*'
+      'FROM tblPalavraChave;')
+    Left = 936
+    Top = 224
+  end
+  object DataSourcePalavraChave: TDataSource
+    DataSet = ADOQueryPalavraChave
+    Left = 944
+    Top = 368
+  end
+end

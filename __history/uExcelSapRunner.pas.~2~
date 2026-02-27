@@ -1,0 +1,226 @@
+unit uExcelSapRunner;
+
+interface
+
+uses
+  System.SysUtils, System.Variants, System.Classes, Winapi.Windows, ComObj;
+
+type
+  TRtR3Row = record
+    Descricao: string;
+    TipoNota: string;
+    Centro: string;
+    GrupoPlan: string;
+    Requisitante: string;
+    Chave: string;
+    Matricula: string;
+    RotaRamal: string;
+    DataInicio: TDateTime;
+    HoraInicio: TDateTime; // pode ser só a parte de hora
+    DataFim: TDateTime;
+    HoraFim: TDateTime;
+    LocalOrigem: string;
+    LocalDestino: string;
+    Modal: string;
+    Classe: string;
+    CentroCusto: string;
+    RtCobertura: string;
+
+    // retorno
+    RtGerada: string;
+    Status: string;
+    Erro: string;
+  end;
+
+  TExcelSapRunner = class
+  private
+    class function GetExeDir: string; static;
+    class function FindHeaderCol(const WS: OleVariant; HeaderRow: Integer; const Header: string): Integer; static;
+    class procedure SetCell(const WS: OleVariant; Row, Col: Integer; const V: Variant); static;
+    class function GetCell(const WS: OleVariant; Row, Col: Integer): Variant; static;
+  public
+    /// <summary>
+    /// Abre o XLSM ao lado do EXE, preenche a planilha e roda a macro.
+    /// SheetName: nome da aba onde estão os dados (ex.: "Plan7" ou "RT")
+    /// MacroName: nome da macro (ex.: "Criar_RTs_R3_PorLinha")
+    /// </summary>
+    class procedure RunRtR3ViaExcelMacro(var Rows: TArray<TRtR3Row>;
+      const XlsmFileName, SheetName, MacroName: string;
+      Visible: Boolean = False);
+  end;
+
+implementation
+
+class function TExcelSapRunner.GetExeDir: string;
+begin
+  Result := IncludeTrailingPathDelimiter(ExtractFilePath(ParamStr(0)));
+end;
+
+class procedure TExcelSapRunner.SetCell(const WS: OleVariant; Row, Col: Integer; const V: Variant);
+begin
+  WS.Cells[Row, Col].Value := V;
+end;
+
+class function TExcelSapRunner.GetCell(const WS: OleVariant; Row, Col: Integer): Variant;
+begin
+  Result := WS.Cells[Row, Col].Value;
+end;
+
+class function TExcelSapRunner.FindHeaderCol(const WS: OleVariant; HeaderRow: Integer; const Header: string): Integer;
+var
+  LastCol, C: Integer;
+  S: string;
+begin
+  Result := 0;
+
+  // acha a última coluna usada na linha do cabeçalho
+  LastCol := WS.Cells[HeaderRow, WS.Columns.Count].End(-4159 {xlToLeft}).Column;
+
+  for C := 1 to LastCol do
+  begin
+    S := Trim(VarToStr(WS.Cells[HeaderRow, C].Value));
+    if SameText(S, Header) then
+    begin
+      Result := C;
+      Exit;
+    end;
+  end;
+end;
+
+class procedure TExcelSapRunner.RunRtR3ViaExcelMacro(var Rows: TArray<TRtR3Row>;
+  const XlsmFileName, SheetName, MacroName: string; Visible: Boolean);
+const
+  HEADER_ROW = 2;
+  FIRST_DATA_ROW = 3;
+var
+  ExcelApp, WB, WS: OleVariant;
+  FullPath: string;
+
+  // colunas (por cabeçalho)
+  cDescricao, cTipoNota, cCentro, cGrupoPlan, cRequisitante, cChave, cMatricula, cRotaRamal: Integer;
+  cDataIni, cHoraIni, cDataFim, cHoraFim, cLocOrig, cLocDest, cModal, cClasse, cCentroCusto, cRtCob: Integer;
+  cRT, cStatus, cErro: Integer;
+
+  I, R: Integer;
+  MacroCallName: string;
+begin
+  FullPath := GetExeDir + XlsmFileName;
+  if not FileExists(FullPath) then
+    raise Exception.CreateFmt('Arquivo XLSM não encontrado: %s', [FullPath]);
+
+  ExcelApp := Unassigned;
+  WB := Unassigned;
+  WS := Unassigned;
+
+  try
+    ExcelApp := CreateOleObject('Excel.Application');
+    ExcelApp.Visible := Visible;
+    ExcelApp.DisplayAlerts := False;
+    ExcelApp.ScreenUpdating := False;
+
+    // Abre workbook
+    WB := ExcelApp.Workbooks.Open(FullPath);
+
+    // Seleciona aba
+    WS := WB.Worksheets[SheetName];
+
+    // Mapeia colunas pelo texto do cabeçalho (linha 2)
+    cDescricao    := FindHeaderCol(WS, HEADER_ROW, 'Descrição');
+    cTipoNota     := FindHeaderCol(WS, HEADER_ROW, 'Tipo Nota');
+    cCentro       := FindHeaderCol(WS, HEADER_ROW, 'Centro');
+    cGrupoPlan    := FindHeaderCol(WS, HEADER_ROW, 'Grupo plan');
+    cRequisitante := FindHeaderCol(WS, HEADER_ROW, 'Requisitante');
+    cChave        := FindHeaderCol(WS, HEADER_ROW, 'Chave');
+    cMatricula    := FindHeaderCol(WS, HEADER_ROW, 'Matricula');
+    cRotaRamal    := FindHeaderCol(WS, HEADER_ROW, 'RotaRamal');
+    cDataIni      := FindHeaderCol(WS, HEADER_ROW, 'Data início');
+    cHoraIni      := FindHeaderCol(WS, HEADER_ROW, 'Hora início');
+    cDataFim      := FindHeaderCol(WS, HEADER_ROW, 'Data fim');
+    cHoraFim      := FindHeaderCol(WS, HEADER_ROW, 'Hora fim');
+    cLocOrig      := FindHeaderCol(WS, HEADER_ROW, 'Local Origem');
+    cLocDest      := FindHeaderCol(WS, HEADER_ROW, 'Local destino');
+    cModal        := FindHeaderCol(WS, HEADER_ROW, 'Modal');
+    cClasse       := FindHeaderCol(WS, HEADER_ROW, 'Classe');
+    cCentroCusto  := FindHeaderCol(WS, HEADER_ROW, 'Centro de custo');
+    cRtCob        := FindHeaderCol(WS, HEADER_ROW, 'RT de cobertura');
+
+    cRT           := FindHeaderCol(WS, HEADER_ROW, 'RT');
+    cStatus       := FindHeaderCol(WS, HEADER_ROW, 'Status');
+    cErro         := FindHeaderCol(WS, HEADER_ROW, 'Erro');
+
+    // Checagem mínima
+    if (cDescricao = 0) or (cMatricula = 0) or (cRT = 0) or (cStatus = 0) or (cErro = 0) then
+      raise Exception.Create('Cabeçalhos não encontrados. Confira se estão na linha 2 e com o texto exato (incluindo acentos).');
+
+    // Preenche as linhas
+    for I := 0 to High(Rows) do
+    begin
+      R := FIRST_DATA_ROW + I;
+
+      SetCell(WS, R, cDescricao,    Rows[I].Descricao);
+      SetCell(WS, R, cTipoNota,     Rows[I].TipoNota);
+      SetCell(WS, R, cCentro,       Rows[I].Centro);
+      SetCell(WS, R, cGrupoPlan,    Rows[I].GrupoPlan);
+      SetCell(WS, R, cRequisitante, Rows[I].Requisitante);
+      SetCell(WS, R, cChave,        Rows[I].Chave);
+      SetCell(WS, R, cMatricula,    Rows[I].Matricula);
+      SetCell(WS, R, cRotaRamal,    Rows[I].RotaRamal);
+
+      // Datas/horas: pode mandar DateTime que o Excel entende
+      SetCell(WS, R, cDataIni,      Rows[I].DataInicio);
+      SetCell(WS, R, cHoraIni,      Rows[I].HoraInicio);
+      SetCell(WS, R, cDataFim,      Rows[I].DataFim);
+      SetCell(WS, R, cHoraFim,      Rows[I].HoraFim);
+
+      SetCell(WS, R, cLocOrig,      Rows[I].LocalOrigem);
+      SetCell(WS, R, cLocDest,      Rows[I].LocalDestino);
+      SetCell(WS, R, cModal,        Rows[I].Modal);
+      SetCell(WS, R, cClasse,       Rows[I].Classe);
+      SetCell(WS, R, cCentroCusto,  Rows[I].CentroCusto);
+      SetCell(WS, R, cRtCob,        Rows[I].RtCobertura);
+
+      // zera retornos
+      SetCell(WS, R, cRT, '');
+      SetCell(WS, R, cStatus, '');
+      SetCell(WS, R, cErro, '');
+    end;
+
+    // (opcional) limpa linhas abaixo se quiser evitar lixo antigo
+    // WS.Range[WS.Cells[FIRST_DATA_ROW + Length(Rows), 1], WS.Cells[1499, cErro]].ClearContents;
+
+    WB.Save;
+
+    // Chama macro
+    // Macro pode ser "Criar_RTs_R3_PorLinha" (no workbook atual) ou "'Arquivo.xlsm'!Criar_RTs_R3_PorLinha"
+    MacroCallName := Format('''%s''!%s', [ExtractFileName(FullPath), MacroName]);
+    ExcelApp.Run(MacroCallName);
+
+    // Lê retorno por linha
+    for I := 0 to High(Rows) do
+    begin
+      R := FIRST_DATA_ROW + I;
+      Rows[I].RtGerada := VarToStr(GetCell(WS, R, cRT));
+      Rows[I].Status   := VarToStr(GetCell(WS, R, cStatus));
+      Rows[I].Erro     := VarToStr(GetCell(WS, R, cErro));
+    end;
+
+    WB.Save;
+  finally
+    // Fecha limpamente
+    try
+      if not VarIsEmpty(WB) then WB.Close(False);
+    except end;
+
+    try
+      if not VarIsEmpty(ExcelApp) then ExcelApp.Quit;
+    except end;
+
+    // solta referências COM
+    WS := Unassigned;
+    WB := Unassigned;
+    ExcelApp := Unassigned;
+  end;
+end;
+
+end.
+

@@ -1,0 +1,181 @@
+unit untPadraoLEC;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ExtCtrls, Data.DB, Vcl.Mask,
+  Vcl.DBCtrls, Vcl.StdCtrls, Vcl.Buttons, Vcl.ToolWin, Vcl.ComCtrls,
+  Vcl.DBGrids, Vcl.Grids, System.Actions, Vcl.ActnList,
+  Vcl.PlatformDefaultStyleActnCtrls, Vcl.ActnMan;
+
+type
+  TFrmPadraoLEC = class(TForm)
+    PanelTitulo: TPanel;
+    ActionManager1: TActionManager;
+    actProcurar: TAction;
+    actExcel: TAction;
+    actFiltroInserir: TAction;
+    actGridASC: TAction;
+    actGridDESC: TAction;
+    actSubstituirPor: TAction;
+    actLimparFiltros: TAction;
+    actFiltrosTabela: TAction;
+    actProcuraFiltrosTabela: TAction;
+    DBGridPadraoLEC: TDBGrid;
+    PanelNotas: TPanel;
+    DBMemoAcao: TDBMemo;
+    Panel2: TPanel;
+    Splitter1: TSplitter;
+    ToolBar1: TToolBar;
+    DBNavigator1: TDBNavigator;
+    BitBtn2: TBitBtn;
+    BitBtn4: TBitBtn;
+    BitBtn1: TBitBtn;
+    ColunasLayout: TStringGrid;
+    Panel1: TPanel;
+    DBMemoObservacao: TDBMemo;
+    Panel3: TPanel;
+    StatusBar1: TStatusBar;
+    Splitter2: TSplitter;
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure FormCreate(Sender: TObject);
+    procedure FormDestroy(Sender: TObject);
+    procedure actProcurarExecute(Sender: TObject);
+    procedure actFiltroInserirExecute(Sender: TObject);
+    procedure actGridASCExecute(Sender: TObject);
+    procedure actGridDESCExecute(Sender: TObject);
+    procedure actSubstituirPorExecute(Sender: TObject);
+    procedure actLimparFiltrosExecute(Sender: TObject);
+    procedure actFiltrosTabelaExecute(Sender: TObject);
+    procedure actProcuraFiltrosTabelaExecute(Sender: TObject);
+    procedure actExcelExecute(Sender: TObject);
+    procedure DBGridPadraoLECTitleClick(Column: TColumn);
+    procedure DBGridPadraoLECDrawColumnCell(Sender: TObject; const Rect: TRect;
+      DataCol: Integer; Column: TColumn; State: TGridDrawState);
+  private
+    { Private declarations }
+    procedure WMMDIACTIVATE(var msg: TWMMDIACTIVATE);message WM_MDIACTIVATE;
+  public
+    { Public declarations }
+  end;
+
+var
+  FrmPadraoLEC: TFrmPadraoLEC;
+
+implementation
+  uses untPrincipal,untDataModule;
+{$R *.dfm}
+
+procedure TFrmPadraoLEC.actExcelExecute(Sender: TObject);
+begin
+  FrmPrincipal.GerarExcel(DBGridPadraoLEC,'Padrão LEC');
+end;
+
+procedure TFrmPadraoLEC.actFiltroInserirExecute(Sender: TObject);
+begin
+  FrmPrincipal.inserirProcura(DBGridPadraoLEC,ColunasLayout);
+  actProcurar.Execute;
+  if (FrmPrincipal.PanelFiltrosTabela.Visible)AND(FrmPrincipal.PanelAjuda1.Visible) then
+    actFiltrosTabela.Execute;
+end;
+
+procedure TFrmPadraoLEC.actFiltrosTabelaExecute(Sender: TObject);
+begin
+  FrmPrincipal.btnProcurarFiltrosTabela.Action:= actProcuraFiltrosTabela;
+  FrmPrincipal.FiltrosTabela(DBGridPadraoLEC,ColunasLayout);
+end;
+
+procedure TFrmPadraoLEC.actGridASCExecute(Sender: TObject);
+begin
+  FrmPrincipal.ClassificaDBGrid(DBGridPadraoLEC,
+  FrmDataModule.ADOQueryPadraoLEC,0);
+end;
+
+procedure TFrmPadraoLEC.actGridDESCExecute(Sender: TObject);
+begin
+  FrmPrincipal.ClassificaDBGrid(DBGridPadraoLEC,
+  FrmDataModule.ADOQueryPadraoLEC,1);
+end;
+
+procedure TFrmPadraoLEC.actLimparFiltrosExecute(Sender: TObject);
+begin
+  FrmPrincipal.LimparColunasFiltro(DBGridPadraoLEC,ColunasLayout);
+  actProcurar.Execute;
+  if (FrmPrincipal.PanelFiltrosTabela.Visible)AND(FrmPrincipal.PanelAjuda1.Visible) then
+    actFiltrosTabela.Execute;
+end;
+
+procedure TFrmPadraoLEC.actProcuraFiltrosTabelaExecute(Sender: TObject);
+begin
+  frmPrincipal.CarregaFiltrosProcura(ColunasLayout);
+  actProcurar.Execute;
+end;
+
+procedure TFrmPadraoLEC.actProcurarExecute(Sender: TObject);
+  var
+    SQLString,SQLBase: String;
+begin
+  SQLString:= frmPrincipal.SQLStringFiltroTabela(ColunasLayout,true);
+  SQLBase:= 'SELECT tblPadraoLEC.* FROM tblPadraoLEC '+
+  SQLString+' ORDER BY Linha;';
+  FrmPrincipal.ProcuraQuery(SQLBase,FrmDataModule.ADOQueryPadraoLEC,StatusBar1);
+end;
+
+procedure TFrmPadraoLEC.actSubstituirPorExecute(Sender: TObject);
+begin
+  FrmPrincipal.SubstituirPor(DBGridPadraoLEC,FrmDataModule.ADOQueryPadraoLEC,
+  FrmDataModule.DataSourcePadraoLEC);
+end;
+
+procedure TFrmPadraoLEC.DBGridPadraoLECDrawColumnCell(Sender: TObject;
+  const Rect: TRect; DataCol: Integer; Column: TColumn; State: TGridDrawState);
+begin
+  FrmPrincipal.GridZebrado(DBGridPadraoLEC,ColunasLayout,State,Rect,DataCol,Column);
+end;
+
+procedure TFrmPadraoLEC.DBGridPadraoLECTitleClick(Column: TColumn);
+begin
+  FrmPrincipal.configurarFiltro(1,Column.FieldName,IntToStr(Column.Index),
+  Column.ReadOnly,actFiltroInserir,actGridASC,actGridDESC,actSubstituirPor);
+  //======================================================
+  FrmPrincipal.titleGrid(ColunasLayout,
+  FrmDataModule.ADOQueryPadraoLEC,StatusBar1,'Operacao');
+end;
+
+procedure TFrmPadraoLEC.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+  Action:= caFree;
+  FrmPadraoLEC:=nil;
+end;
+
+procedure TFrmPadraoLEC.FormCreate(Sender: TObject);
+begin
+  FrmPrincipal.MDIChildCreated(self.Handle);
+  //Incicialização
+  FrmPrincipal.SetUpColunasLayout(DBGridPadraoLEC, ColunasLayout);
+  actProcurar.Execute;
+end;
+
+procedure TFrmPadraoLEC.FormDestroy(Sender: TObject);
+begin
+  FrmPrincipal.MDIChildDestroyed(self.Handle);
+end;
+
+procedure TFrmPadraoLEC.WMMDIACTIVATE(var msg: TWMMDIACTIVATE);
+var
+  active: TWinControl;
+  idx: Integer;
+begin
+  active := FindControl(msg.ActiveWnd) ;
+
+  if Assigned(active) then
+  begin
+    idx := FrmPrincipal.mdiChildrenTabs.Tabs.IndexOfObject(TObject(msg.ActiveWnd));
+    FrmPrincipal.mdiChildrenTabs.Tag := -1;
+    FrmPrincipal.mdiChildrenTabs.TabIndex := idx;
+    FrmPrincipal.mdiChildrenTabs.Tag := 0;
+  end;
+end;
+
+end.

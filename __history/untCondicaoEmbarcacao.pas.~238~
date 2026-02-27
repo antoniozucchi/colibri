@@ -1,0 +1,1484 @@
+unit untCondicaoEmbarcacao;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ToolWin, Vcl.ComCtrls, Vcl.ExtCtrls,
+  Vcl.Grids, Vcl.Buttons, Data.DB, Vcl.DBGrids,DateUtils, System.Actions,
+  Vcl.ActnList, Vcl.PlatformDefaultStyleActnCtrls, Vcl.ActnMan, Vcl.StdCtrls,
+  Vcl.DBCtrls, Vcl.Mask, DBDateTimePicker, Vcl.CheckLst, SDL_matrix, Vcl.Menus;
+
+type
+  TFrmCondicaoEmbarcacao = class(TForm)
+    PageControl1: TPageControl;
+    TabSheet1: TTabSheet;
+    TabSheet2: TTabSheet;
+    Panel7: TPanel;
+    ActionManager1: TActionManager;
+    actFiltroInserir: TAction;
+    actGridASC: TAction;
+    actGridDESC: TAction;
+    actSubstituirPor: TAction;
+    actLimparFiltros: TAction;
+    actFiltrosTabela: TAction;
+    actProcuraFiltrosTabela: TAction;
+    actProcurarMar: TAction;
+    actExcelCondicaoMar: TAction;
+    PanelMes: TPanel;
+    PanelCalendario: TPanel;
+    PanelNomeMesMar: TPanel;
+    btnAnoProximo: TSpeedButton;
+    CalendarMar: TStringGrid;
+    PanelTabelaCondicaoMar: TPanel;
+    ToolBar1: TToolBar;
+    BitBtn4: TBitBtn;
+    DBGridCondicaoMar: TDBGrid;
+    ColunasLayoutMar: TStringGrid;
+    StatusBarCondicaoMar: TStatusBar;
+    PanelAno: TPanel;
+    Splitter1: TSplitter;
+    ToolBar2: TToolBar;
+    RLMar: TStringGrid;
+    actExcelCalendarioMar: TAction;
+    BitBtn1: TBitBtn;
+    btnMesProximo: TSpeedButton;
+    btnAnoAnterior: TSpeedButton;
+    btnMesAnterior: TSpeedButton;
+    Splitter2: TSplitter;
+    Panel1: TPanel;
+    Panel2: TPanel;
+    PanelNomeMesEmbarcacao: TPanel;
+    SpeedButton1: TSpeedButton;
+    SpeedButton2: TSpeedButton;
+    SpeedButton3: TSpeedButton;
+    SpeedButton4: TSpeedButton;
+    CalendarioEmbarcacao: TStringGrid;
+    Panel4: TPanel;
+    ToolBar3: TToolBar;
+    BitBtn2: TBitBtn;
+    DBGridCondicaoEmbarcacao: TDBGrid;
+    ColunasLayoutEmbarcacao: TStringGrid;
+    StatusBarCondicaoEmbarcacao: TStatusBar;
+    Panel5: TPanel;
+    ToolBar4: TToolBar;
+    BitBtn3: TBitBtn;
+    RLEmbarcacao: TStringGrid;
+    actProcurarEmbarcacao: TAction;
+    BitBtn5: TBitBtn;
+    BitBtn6: TBitBtn;
+    actExcelCalendarioEmbarcacao: TAction;
+    PanelAjuda: TPanel;
+    PanelTituloAjuda1: TPanel;
+    SpeedButton5: TSpeedButton;
+    PanelEmbarcacaoIndisponivel: TPanel;
+    actLimparAjuda: TAction;
+    ToolBar5: TToolBar;
+    Panel71: TPanel;
+    Panel72: TPanel;
+    Panel73: TPanel;
+    DBEdit1: TDBEdit;
+    Panel3: TPanel;
+    Panel6: TPanel;
+    Panel8: TPanel;
+    DBEditPrevisto: TDBEdit;
+    Panel9: TPanel;
+    Panel10: TPanel;
+    Panel11: TPanel;
+    Panel12: TPanel;
+    Panel13: TPanel;
+    Panel14: TPanel;
+    DBEditIndisponivel: TDBEdit;
+    DBDateTimePicker1: TDBDateTimePicker;
+    actGravar: TAction;
+    actCancelar: TAction;
+    BitBtn7: TBitBtn;
+    BitBtn8: TBitBtn;
+    actDadosMar: TAction;
+    BitBtn10: TBitBtn;
+    actSelLimparMar: TAction;
+    actSelTudoMar: TAction;
+    Panel15: TPanel;
+    ToolBar6: TToolBar;
+    ToolButton1: TToolButton;
+    ToolButton2: TToolButton;
+    CheckListBoxMar: TCheckListBox;
+    actSalvarListaMar: TAction;
+    ToolButton3: TToolButton;
+    Panel16: TPanel;
+    ToolBar7: TToolBar;
+    ToolButton4: TToolButton;
+    ToolButton5: TToolButton;
+    ToolButton6: TToolButton;
+    CheckListBoxEmbarcacao: TCheckListBox;
+    actSelLimparEmbarcacao: TAction;
+    actSelTudoEmbarcacao: TAction;
+    actSalvarListaEmbarcacao: TAction;
+    actDadosEmbarcacao: TAction;
+    actAtualizarEmbarcacao: TAction;
+    BitBtn11: TBitBtn;
+    BitBtn9: TBitBtn;
+    RLGeral: TStringGrid;
+    RLPrevisto: TStringGrid;
+    actGraficoGeral: TAction;
+    ToolButton7: TToolButton;
+    PopupMenuGeral: TPopupMenu;
+    GRF1: TMenuItem;
+    GRF2: TMenuItem;
+    actExcelIndisponibilidadeEmbarcacaco: TAction;
+    procedure FormCreate(Sender: TObject);
+    procedure btnMesAnteriorClick(Sender: TObject);
+    procedure CalendarMarDrawCell(Sender: TObject; ACol, ARow: Integer;
+      Rect: TRect; State: TGridDrawState);
+    procedure actFiltroInserirExecute(Sender: TObject);
+    procedure actGridASCExecute(Sender: TObject);
+    procedure actGridDESCExecute(Sender: TObject);
+    procedure actSubstituirPorExecute(Sender: TObject);
+    procedure actLimparFiltrosExecute(Sender: TObject);
+    procedure actFiltrosTabelaExecute(Sender: TObject);
+    procedure actProcuraFiltrosTabelaExecute(Sender: TObject);
+    procedure actProcurarMarExecute(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure FormDestroy(Sender: TObject);
+    procedure DBGridCondicaoMarDrawColumnCell(Sender: TObject;
+      const Rect: TRect; DataCol: Integer; Column: TColumn;
+      State: TGridDrawState);
+    procedure DBGridCondicaoMarTitleClick(Column: TColumn);
+    procedure actExcelCondicaoMarExecute(Sender: TObject);
+    procedure CalendarMarDblClick(Sender: TObject);
+    procedure CalendarMarSelectCell(Sender: TObject; ACol, ARow: Integer;
+      var CanSelect: Boolean);
+    procedure RLMarDrawCell(Sender: TObject; ACol, ARow: Integer;
+      Rect: TRect; State: TGridDrawState);
+    procedure actExcelCalendarioMarExecute(Sender: TObject);
+    procedure btnAnoAnteriorClick(Sender: TObject);
+    procedure btnMesProximoClick(Sender: TObject);
+    procedure btnAnoProximoClick(Sender: TObject);
+    procedure actProcurarEmbarcacaoExecute(Sender: TObject);
+    procedure PageControl1Change(Sender: TObject);
+    procedure DBGridCondicaoEmbarcacaoDrawColumnCell(Sender: TObject;
+      const Rect: TRect; DataCol: Integer; Column: TColumn;
+      State: TGridDrawState);
+    procedure DBGridCondicaoEmbarcacaoTitleClick(Column: TColumn);
+    procedure CalendarioEmbarcacaoDrawCell(Sender: TObject; ACol, ARow: Integer;
+      Rect: TRect; State: TGridDrawState);
+    procedure RLEmbarcacaoDrawCell(Sender: TObject; ACol, ARow: Integer;
+      Rect: TRect; State: TGridDrawState);
+    procedure actExcelCalendarioEmbarcacaoExecute(Sender: TObject);
+    procedure CalendarioEmbarcacaoSelectCell(Sender: TObject; ACol,
+      ARow: Integer; var CanSelect: Boolean);
+    procedure CalendarioEmbarcacaoDblClick(Sender: TObject);
+    procedure actLimparAjudaExecute(Sender: TObject);
+    procedure SpeedButton5Click(Sender: TObject);
+    procedure PanelTituloAjuda1MouseDown(Sender: TObject; Button: TMouseButton;
+      Shift: TShiftState; X, Y: Integer);
+    procedure PanelTituloAjuda1MouseMove(Sender: TObject; Shift: TShiftState; X,
+      Y: Integer);
+    procedure PanelTituloAjuda1MouseUp(Sender: TObject; Button: TMouseButton;
+      Shift: TShiftState; X, Y: Integer);
+    procedure actGravarExecute(Sender: TObject);
+    procedure actCancelarExecute(Sender: TObject);
+    procedure actDadosMarExecute(Sender: TObject);
+    procedure actSelTudoMarExecute(Sender: TObject);
+    procedure actSelLimparMarExecute(Sender: TObject);
+    procedure actSalvarListaMarExecute(Sender: TObject);
+    procedure actSelLimparEmbarcacaoExecute(Sender: TObject);
+    procedure actSelTudoEmbarcacaoExecute(Sender: TObject);
+    procedure actSalvarListaEmbarcacaoExecute(Sender: TObject);
+    procedure actDadosEmbarcacaoExecute(Sender: TObject);
+    procedure actAtualizarEmbarcacaoExecute(Sender: TObject);
+    procedure CheckListBoxEmbarcacaoClick(Sender: TObject);
+    procedure CheckListBoxMarClick(Sender: TObject);
+    procedure actGraficoGeralExecute(Sender: TObject);
+    procedure GRF1Click(Sender: TObject);
+    procedure GRF2Click(Sender: TObject);
+    procedure RLGeralDrawCell(Sender: TObject; ACol, ARow: Integer; Rect: TRect;
+      State: TGridDrawState);
+    procedure actExcelIndisponibilidadeEmbarcacacoExecute(Sender: TObject);
+  private
+    { Private declarations }
+    PrimeiroDiaMes: TDateTime;
+    AColSelect,ARowSelect,TabelaIndex: Integer;
+    procedure WMMDIACTIVATE(var msg: TWMMDIACTIVATE);message WM_MDIACTIVATE;
+  public
+    { Public declarations }
+  end;
+
+var
+  FrmCondicaoEmbarcacao: TFrmCondicaoEmbarcacao;
+
+implementation
+  uses untPrincipal,untDataModule;
+
+{$R *.dfm}
+
+procedure TFrmCondicaoEmbarcacao.actAtualizarEmbarcacaoExecute(Sender: TObject);
+begin
+actProcurarEmbarcacao.Execute;
+actDadosEmbarcacao.Execute;
+end;
+
+procedure TFrmCondicaoEmbarcacao.actCancelarExecute(Sender: TObject);
+begin
+  PanelAjuda.Visible:= false;
+  FrmDataModule.ADOQueryCondicaoEmbarcacao.Cancel;
+end;
+
+procedure TFrmCondicaoEmbarcacao.actDadosEmbarcacaoExecute(Sender: TObject);
+  var
+    SQLBase,Ano: String;
+    Mes1,Mes2,Dia,Linha,TotalIndisponivel,Previsto,Indisponivel,
+    i,j,DiasMes,NumEmbarcacaoPrevista,NumEmbarcacaoIndisponivel: Integer;
+    DataCondicaoEmbarcacao,DataTeste: TDateTime;
+    Media,Disponivel: Double;
+begin
+  GRF2.Checked:= false;
+  GRF1.Checked:= true;
+  RLEmbarcacao.Visible:= true;
+  RLGeral.Visible:= false;
+  RLEmbarcacao.Align:= alClient;
+  Ano:= IntToStr(YearOf(PrimeiroDiaMes));
+  SQLBase:= 'SELECT tblCondicaoEmbarcacao.* FROM tblCondicaoEmbarcacao '+
+  'WHERE(Year(DataCondicaoEmbarcacao)='+Ano+') ORDER BY DataCondicaoEmbarcacao;';
+  FrmDataModule.ADOQueryTemporarioDBConsulta1.Close;
+  FrmDataModule.ADOQueryTemporarioDBConsulta1.SQL.Text:= SQLBase;
+  FrmDataModule.ADOQueryTemporarioDBConsulta1.Open;
+  //==================================================================
+  CheckListBoxEmbarcacao.Items.Clear;
+  Linha:= 1;
+  Mes1:= 0;
+  RLEmbarcacao.RowCount:= 1;
+  RLPrevisto.RowCount:= 1;
+  FrmDataModule.ADOQueryTemporarioDBConsulta1.First;
+  while not FrmDataModule.ADOQueryTemporarioDBConsulta1.Eof do
+  begin
+    DataCondicaoEmbarcacao:= FrmDataModule.ADOQueryTemporarioDBConsulta1.
+    FieldByName('DataCondicaoEmbarcacao').AsDateTime;
+    NumEmbarcacaoPrevista:= FrmDataModule.ADOQueryTemporarioDBConsulta1.
+    FieldByName('NumEmbarcacaoPrevista').AsInteger;
+    NumEmbarcacaoIndisponivel:= FrmDataModule.ADOQueryTemporarioDBConsulta1.
+    FieldByName('NumEmbarcacaoIndisponivel').AsInteger;
+    if (NumEmbarcacaoIndisponivel>0) then
+    begin
+      CheckListBoxEmbarcacao.Items.Add(DateToStr(DataCondicaoEmbarcacao));
+      Dia:= DayOf(DataCondicaoEmbarcacao);
+      Mes2:= MonthOf(DataCondicaoEmbarcacao);
+      if Mes1<>Mes2 then
+      begin
+        Linha:= RLEmbarcacao.RowCount;
+        RLEmbarcacao.RowCount:= RLEmbarcacao.RowCount+1;
+        RLPrevisto.RowCount:= RLEmbarcacao.RowCount;
+        Ano:= IntToStr(YearOf(DataCondicaoEmbarcacao));
+        RLEmbarcacao.Cells[0,Linha]:= IntToStr(Mes2)+'/'+Ano;
+        for I := 2 to 33 do
+        begin
+          RLEmbarcacao.Cells[i,Linha]:= '0';
+          RLPrevisto.Cells[i,Linha]:= '0';
+        end;
+      end;
+      RLEmbarcacao.Cells[Dia+1,Linha]:= IntToStr(NumEmbarcacaoIndisponivel+
+      StrToInt(RLEmbarcacao.Cells[Dia+1,Linha]));
+      RLPrevisto.Cells[Dia+1,Linha]:= IntToStr(NumEmbarcacaoPrevista);
+      Mes1:= Mes2;
+    end;
+    FrmDataModule.ADOQueryTemporarioDBConsulta1.Next;
+  end;
+  FrmDataModule.ADOQueryTemporarioDBConsulta1.First;
+  //===========================================================
+  for j := 1 to RLEmbarcacao.RowCount-1 do
+  begin
+    TotalIndisponivel:= 0;
+    Media:= 0;
+    DataTeste:= StrToDate('1/'+RLEmbarcacao.Cells[0,j]);
+    DiasMes:= DaysInMonth(DataTeste);
+    if ((MonthOf(now) = MonthOf(DataTeste))AND(YearOf(now) = YearOf(DataTeste))) then
+      DiasMes:= DayOf(now);
+    for I := 2 to DiasMes+1 do
+    begin
+      Indisponivel:= StrToInt(RLEmbarcacao.Cells[i,j]);
+      Previsto:= StrToInt(RLPrevisto.Cells[i,j]);
+      Disponivel:= Previsto-Indisponivel;
+      if (Disponivel = 0)AND(Indisponivel=0) then
+        Disponivel:= 100
+      else
+        Disponivel:= (Disponivel*100)/Previsto;
+      Media:= Media+Disponivel;
+      TotalIndisponivel:= TotalIndisponivel+Indisponivel;
+    end;
+    RLEmbarcacao.Cells[1,j]:= IntToStr(TotalIndisponivel);
+    RLEmbarcacao.Cells[33,j]:= FormatFloat('0.00%',Media/DiasMes);
+    RLEmbarcacao.Cells[34,j]:= FormatFloat('0.00%',100-(Media/DiasMes));
+  end;
+  CalendarioEmbarcacao.Repaint;
+end;
+
+procedure TFrmCondicaoEmbarcacao.actDadosMarExecute(Sender: TObject);
+  var
+    SQLBase,Ano: String;
+    Mes1,Mes2,Dia,Linha,TotalDias,i,j,DiasMes: Integer;
+    DataCondicaoMar,DataTeste: TDateTime;
+begin
+  Ano:= IntToStr(YearOf(PrimeiroDiaMes));
+  SQLBase:= 'SELECT tblCondicaoMar.* FROM tblCondicaoMar '+
+  'WHERE(Year(DataCondicaoMar)='+Ano+') ORDER BY DataCondicaoMar;';
+  FrmDataModule.ADOQueryTemporarioDBConsulta1.Close;
+  FrmDataModule.ADOQueryTemporarioDBConsulta1.SQL.Text:= SQLBase;
+  FrmDataModule.ADOQueryTemporarioDBConsulta1.Open;
+  //=========================================================
+  CheckListBoxMar.Items.Clear;
+  Linha:= 1;
+  Mes1:= 0;
+  RLMar.RowCount:= 1;
+  FrmDataModule.ADOQueryTemporarioDBConsulta1.First;
+  while not FrmDataModule.ADOQueryTemporarioDBConsulta1.Eof do
+  begin
+    DataCondicaoMar:= FrmDataModule.ADOQueryTemporarioDBConsulta1.FieldByName('DataCondicaoMar').AsDateTime;
+    CheckListBoxMar.Items.Add(DateToStr(DataCondicaoMar));
+    Dia:= DayOf(DataCondicaoMar);
+    Mes2:= MonthOf(DataCondicaoMar);
+    if Mes1<>Mes2 then
+    begin
+      Linha:= RLMar.RowCount;
+      RLMar.RowCount:= RLMar.RowCount+1;
+      Ano:= IntToStr(YearOf(DataCondicaoMar));
+      RLMar.Cells[0,Linha]:= IntToStr(Mes2)+'/'+Ano;
+      for I := 2 to 33 do
+        RLMar.Cells[i,Linha]:= '0';
+    end;
+    RLMar.Cells[Dia+1,Linha]:= '1';
+    Mes1:= Mes2;
+    FrmDataModule.ADOQueryTemporarioDBConsulta1.Next;
+  end;
+  //=======================================================
+  for j := 1 to RLMar.RowCount-1 do
+  begin
+    TotalDias:= 0;
+    for I := 2 to 32 do
+    begin
+      TotalDias:= TotalDias+StrToInt(RLMar.Cells[i,j]);
+    end;
+    DataTeste:= StrToDate('1/'+RLMar.Cells[0,j]);
+    DiasMes:= DaysInMonth(DataTeste);
+    if MonthOf(now) = MonthOf(DataTeste) then
+      DiasMes:= DayOf(now);
+    RLMar.Cells[1,j]:= IntToStr(TotalDias);
+    RLMar.Cells[33,j]:= FormatFloat('0.0%',(TotalDias*100)/DiasMes);
+    RLMar.Cells[34,j]:= FormatFloat('0.0%',100-(TotalDias*100)/DiasMes);
+  end;
+  CalendarMar.Repaint;
+end;
+
+procedure TFrmCondicaoEmbarcacao.actExcelCalendarioEmbarcacaoExecute(
+  Sender: TObject);
+begin
+  if GRF1.Checked then
+    FrmPrincipal.ExcelStringGrid(RLEmbarcacao,'Embarcação Anual','','',1)
+  else
+    FrmPrincipal.ExcelStringGrid(RLGeral,'Sobreposição','','',1)
+end;
+
+procedure TFrmCondicaoEmbarcacao.actExcelCalendarioMarExecute(Sender: TObject);
+begin
+  FrmPrincipal.ExcelStringGrid(RLMar,'Condição de Mar Anual',
+  '','',1);
+end;
+
+procedure TFrmCondicaoEmbarcacao.actExcelCondicaoMarExecute(Sender: TObject);
+begin
+  FrmPrincipal.GerarExcel(DBGridCondicaoMar,'Condição de Mar');
+end;
+
+procedure TFrmCondicaoEmbarcacao.actExcelIndisponibilidadeEmbarcacacoExecute(
+  Sender: TObject);
+begin
+  FrmPrincipal.GerarExcel(DBGridCondicaoEmbarcacao,'Indisponibilidade');
+end;
+
+procedure TFrmCondicaoEmbarcacao.actFiltroInserirExecute(Sender: TObject);
+begin
+  case TabelaIndex of
+    0:
+    begin
+      FrmPrincipal.inserirProcura(DBGridCondicaoMar,ColunasLayoutMar);
+      actProcurarMar.Execute;
+    end;
+    1:
+    begin
+      FrmPrincipal.inserirProcura(DBGridCondicaoEmbarcacao,ColunasLayoutEmbarcacao);
+      actProcurarEmbarcacao.Execute;
+    end;
+  end;
+  if (FrmPrincipal.PanelFiltrosTabela.Visible)AND(FrmPrincipal.PanelAjuda1.Visible) then
+    actFiltrosTabela.Execute;
+end;
+
+procedure TFrmCondicaoEmbarcacao.actFiltrosTabelaExecute(Sender: TObject);
+begin
+  FrmPrincipal.btnProcurarFiltrosTabela.Action:= actProcuraFiltrosTabela;
+  case TabelaIndex of
+    0:
+    begin
+      FrmPrincipal.FiltrosTabela(DBGridCondicaoMar,ColunasLayoutMar);
+    end;
+    1:
+    begin
+      FrmPrincipal.FiltrosTabela(DBGridCondicaoEmbarcacao,ColunasLayoutEmbarcacao);
+    end;
+  end;
+end;
+
+procedure TFrmCondicaoEmbarcacao.actGraficoGeralExecute(Sender: TObject);
+  var
+    SQLBase,Ano,DataProcura,NumEmbarcacaoIndisponivel: String;
+    mes,dia,TotalDias,DiasMes: Integer;
+    Lista: TStringList;
+begin
+  GRF2.Checked:= true;
+  GRF1.Checked:= false;
+  RLEmbarcacao.Visible:= false;
+  RLGeral.Visible:= true;
+  RLGeral.Align:= alClient;
+  Ano:= IntToStr(YearOf(PrimeiroDiaMes));
+  FrmPrincipal.ProgressBarIncializa(12,'Gráfico geral');
+  RLGeral.Cells[0,0]:= 'Mês/Ano';
+  RLGeral.Cells[1,0]:= 'Total Dias';
+  RLGeral.Cells[33,0]:= 'Dias Perdidos';
+  RLGeral.Cells[34,0]:= 'Dias Trab.';
+  //Inicialização
+  for mes := 1 to 12 do
+    RLGeral.Rows[mes].Clear;
+  for dia := 2 to 32 do
+    RLGeral.Cells[dia,0]:= IntToStr(dia-1);
+  //================================================
+  for mes := 1 to 12 do
+  begin
+    RLGeral.Cells[0,mes]:= IntToStr(mes)+'/'+Ano;
+    TotalDias:= 0;
+    DiasMes:= DaysInMonth(StrToDate('01/'+FormatFloat('00',mes)+'/'+Ano));
+    for dia := 1 to 31 do
+    begin
+      DataProcura:= FormatFloat('00',dia)+'/'+FormatFloat('00',mes)+'/'+Ano;
+      try
+        if (StrToDate(DataProcura) <= now) then
+        begin
+          //=================================================================
+          SQLBase:= 'SELECT tblCondicaoEmbarcacao.* FROM tblCondicaoEmbarcacao '+
+          'WHERE(DataCondicaoEmbarcacao LIKE '+QuotedStr(DataProcura)+');';
+          FrmDataModule.ADOQueryTemporarioDBConsulta1.Close;
+          FrmDataModule.ADOQueryTemporarioDBConsulta1.SQL.Text:= SQLBase;
+          FrmDataModule.ADOQueryTemporarioDBConsulta1.Open;
+          NumEmbarcacaoIndisponivel:= FrmDataModule.ADOQueryTemporarioDBConsulta1.
+          FieldByName('NumEmbarcacaoIndisponivel').AsString;
+          if not FrmDataModule.ADOQueryTemporarioDBConsulta1.IsEmpty then
+            RLGeral.Cells[dia+1,mes]:= NumEmbarcacaoIndisponivel
+          else
+            RLGeral.Cells[dia+1,mes]:= '0';
+          //=================================================================
+          SQLBase:= 'SELECT tblCondicaoMar.* FROM tblCondicaoMar '+
+          'WHERE(DataCondicaoMar LIKE '+QuotedStr(DataProcura)+');';
+          FrmDataModule.ADOQueryTemporarioDBConsulta1.Close;
+          FrmDataModule.ADOQueryTemporarioDBConsulta1.SQL.Text:= SQLBase;
+          FrmDataModule.ADOQueryTemporarioDBConsulta1.Open;
+          if not FrmDataModule.ADOQueryTemporarioDBConsulta1.IsEmpty then
+            RLGeral.Cells[dia+1,mes]:= RLGeral.Cells[dia+1,mes]+';R'
+          else
+            RLGeral.Cells[dia+1,mes]:= RLGeral.Cells[dia+1,mes]+';B';
+          //Contar
+          Lista:= FrmPrincipal.incialListaBusca(RLGeral.Cells[dia+1,mes]);
+          if ((StrToInt(Lista[0])>0)OR(Lista[1]='R')) then
+            TotalDias:= TotalDias+1;
+        end;
+      except
+      end;
+    end;
+    RLGeral.Cells[1,mes]:= IntToStr(TotalDias);
+    RLGeral.Cells[33,mes]:= FormatFloat('0.0%',(TotalDias*100)/DiasMes);
+    RLGeral.Cells[34,mes]:= FormatFloat('0.0%',100-(TotalDias*100)/DiasMes);
+    FrmPrincipal.ProgressBarIncremento(1);
+  end;
+  FrmPrincipal.AutoFitGrade(RLGeral);
+  FrmPrincipal.ProgressBarAtualizar;
+end;
+
+procedure TFrmCondicaoEmbarcacao.actGravarExecute(Sender: TObject);
+begin
+  if (DBEditPrevisto.Text <> '')AND(DBEditIndisponivel.Text <> '') then
+  begin
+    FrmDataModule.ADOQueryCondicaoEmbarcacao.Post;
+    PanelAjuda.Visible:= false;
+    actProcurarEmbarcacao.Execute;
+    actDadosEmbarcacao.Execute;
+  end
+  else
+     MessageBox(0,'Os campos  "N° Previsto:" e  "N° Indisponivel:" são obrigatórios!',
+     '.::ATENÇÃO::.',MB_ICONERROR);
+end;
+
+procedure TFrmCondicaoEmbarcacao.actGridASCExecute(Sender: TObject);
+begin
+  case TabelaIndex of
+    0: FrmPrincipal.ClassificaDBGrid(DBGridCondicaoMar,
+    FrmDataModule.ADOQueryCondicaoMar,0);
+    1: FrmPrincipal.ClassificaDBGrid(DBGridCondicaoEmbarcacao,
+    FrmDataModule.ADOQueryCondicaoEmbarcacao,0);
+  end;
+end;
+
+procedure TFrmCondicaoEmbarcacao.actGridDESCExecute(Sender: TObject);
+begin
+  case TabelaIndex of
+    0: FrmPrincipal.ClassificaDBGrid(DBGridCondicaoMar,
+    FrmDataModule.ADOQueryCondicaoMar,1);
+    1: FrmPrincipal.ClassificaDBGrid(DBGridCondicaoEmbarcacao,
+    FrmDataModule.ADOQueryCondicaoEmbarcacao,1);
+  end;
+end;
+
+procedure TFrmCondicaoEmbarcacao.actSalvarListaEmbarcacaoExecute(
+  Sender: TObject);
+begin
+  FrmPrincipal.SaveDialog1.Filter := 'Texto|*.txt';
+  FrmPrincipal.SaveDialog1.DefaultExt := '*.txt';
+  FrmPrincipal.SaveDialog1.FileName:= 'Datas Disponibilidade Embarcações';
+  if FrmPrincipal.SaveDialog1.Execute then
+  begin
+    CheckListBoxEmbarcacao.Items.SaveToFile(FrmPrincipal.SaveDialog1.FileName);
+  end;
+end;
+
+procedure TFrmCondicaoEmbarcacao.actSalvarListaMarExecute(Sender: TObject);
+begin
+  FrmPrincipal.SaveDialog1.Filter := 'Texto|*.txt';
+  FrmPrincipal.SaveDialog1.DefaultExt := '*.txt';
+  FrmPrincipal.SaveDialog1.FileName:= 'Datas Condição de Mar';
+  if FrmPrincipal.SaveDialog1.Execute then
+  begin
+    CheckListBoxMar.Items.SaveToFile(FrmPrincipal.SaveDialog1.FileName);
+  end;
+end;
+
+procedure TFrmCondicaoEmbarcacao.actSelLimparEmbarcacaoExecute(Sender: TObject);
+var
+  I: Integer;
+  txtString: String;
+begin
+  for I := 0 to CheckListBoxEmbarcacao.Count-1 do
+    CheckListBoxEmbarcacao.Checked[i]:= false;
+  //Filtro Check-list
+  txtString:= '';
+  for i := 0 to CheckListBoxEmbarcacao.Items.Count-1 do
+  begin
+    if CheckListBoxEmbarcacao.Checked[i] then
+    begin
+      if txtString <> '' then
+        txtString:= txtString+';'+CheckListBoxEmbarcacao.Items[i]
+      else
+        txtString:= CheckListBoxEmbarcacao.Items[i];
+    end;
+  end;
+  ColunasLayoutEmbarcacao.Cells[4,0]:= txtString;
+  ColunasLayoutEmbarcacao.Cells[5,0]:= 'Contem';
+  actProcurarEmbarcacao.Execute;
+end;
+
+procedure TFrmCondicaoEmbarcacao.actSelLimparMarExecute(Sender: TObject);
+var
+  I: Integer;
+  txtString: String;
+begin
+  for I := 0 to CheckListBoxMar.Count-1 do
+    CheckListBoxMar.Checked[i]:= false;
+  //Filtro Check-list
+  txtString:= '';
+  for i := 0 to CheckListBoxMar.Items.Count-1 do
+  begin
+    if CheckListBoxMar.Checked[i] then
+    begin
+      if txtString <> '' then
+        txtString:= txtString+';'+CheckListBoxMar.Items[i]
+      else
+        txtString:= CheckListBoxMar.Items[i];
+    end;
+  end;
+  ColunasLayoutMar.Cells[4,0]:= txtString;
+  ColunasLayoutMar.Cells[5,0]:= 'Contem';
+  actProcurarMar.Execute;
+end;
+
+procedure TFrmCondicaoEmbarcacao.actLimparAjudaExecute(Sender: TObject);
+begin
+  PanelAjuda.Visible:= false;
+  PanelEmbarcacaoIndisponivel.Visible:= false;
+end;
+
+procedure TFrmCondicaoEmbarcacao.actLimparFiltrosExecute(Sender: TObject);
+begin
+  case TabelaIndex of
+    0:
+    begin
+      FrmPrincipal.LimparColunasFiltro(DBGridCondicaoMar,ColunasLayoutMar);
+      actProcurarMar.Execute;
+    end;
+    1:
+    begin
+      FrmPrincipal.LimparColunasFiltro(DBGridCondicaoEmbarcacao,ColunasLayoutEmbarcacao);
+      actProcurarEmbarcacao.Execute;
+    end;
+  end;
+  if (FrmPrincipal.PanelFiltrosTabela.Visible)AND(FrmPrincipal.PanelAjuda1.Visible) then
+  actFiltrosTabela.Execute;
+end;
+
+procedure TFrmCondicaoEmbarcacao.actProcuraFiltrosTabelaExecute(
+  Sender: TObject);
+begin
+  case TabelaIndex of
+    0:
+    begin
+      FrmPrincipal.CarregaFiltrosProcura(ColunasLayoutMar);
+      actProcurarMar.Execute;
+    end;
+    1:
+    begin
+      FrmPrincipal.CarregaFiltrosProcura(ColunasLayoutEmbarcacao);
+      actProcurarEmbarcacao.Execute;
+    end;
+  end;
+end;
+
+procedure TFrmCondicaoEmbarcacao.actProcurarEmbarcacaoExecute(Sender: TObject);
+  var
+    SQLString,SQLBase: String;
+begin
+  //====================================================
+  SQLString:= FrmPrincipal.SQLStringFiltroTabela(ColunasLayoutEmbarcacao,true);
+  SQLBase:= 'SELECT tblCondicaoEmbarcacao.* FROM tblCondicaoEmbarcacao '+
+  SQLString+' ORDER BY DataCondicaoEmbarcacao;';
+  FrmPrincipal.ProcuraQuery(SQLBase,FrmDataModule.ADOQueryCondicaoEmbarcacao,StatusBarCondicaoEmbarcacao);
+end;
+
+procedure TFrmCondicaoEmbarcacao.actProcurarMarExecute(Sender: TObject);
+  var
+    SQLString,SQLBase: String;
+begin
+  //====================================================
+  SQLString:= FrmPrincipal.SQLStringFiltroTabela(ColunasLayoutMar,true);
+  SQLBase:= 'SELECT tblCondicaoMar.* FROM tblCondicaoMar '+
+  SQLString+' ORDER BY DataCondicaoMar;';
+  FrmPrincipal.ProcuraQuery(SQLBase,FrmDataModule.ADOQueryCondicaoMar,StatusBarCondicaoMar);
+end;
+
+procedure TFrmCondicaoEmbarcacao.actSelTudoEmbarcacaoExecute(Sender: TObject);
+var
+  I: Integer;
+  txtString: String;
+begin
+  for I := 0 to CheckListBoxEmbarcacao.Count-1 do
+    CheckListBoxEmbarcacao.Checked[i]:= true;
+  //Filtro Check-list
+  txtString:= '';
+  for i := 0 to CheckListBoxEmbarcacao.Items.Count-1 do
+  begin
+    if CheckListBoxEmbarcacao.Checked[i] then
+    begin
+      if txtString <> '' then
+        txtString:= txtString+';'+CheckListBoxEmbarcacao.Items[i]
+      else
+        txtString:= CheckListBoxEmbarcacao.Items[i];
+    end;
+  end;
+  ColunasLayoutEmbarcacao.Cells[4,0]:= txtString;
+  ColunasLayoutEmbarcacao.Cells[5,0]:= 'Contem';
+  actProcurarEmbarcacao.Execute;
+end;
+
+procedure TFrmCondicaoEmbarcacao.actSelTudoMarExecute(Sender: TObject);
+var
+  I: Integer;
+  txtString: String;
+begin
+  for I := 0 to CheckListBoxMar.Count-1 do
+    CheckListBoxMar.Checked[i]:= true;
+  //Filtro Check-list
+  txtString:= '';
+  for i := 0 to CheckListBoxMar.Items.Count-1 do
+  begin
+    if CheckListBoxMar.Checked[i] then
+    begin
+      if txtString <> '' then
+        txtString:= txtString+';'+CheckListBoxMar.Items[i]
+      else
+        txtString:= CheckListBoxMar.Items[i];
+    end;
+  end;
+  ColunasLayoutMar.Cells[4,0]:= txtString;
+  ColunasLayoutMar.Cells[5,0]:= 'Contem';
+  actProcurarMar.Execute;
+end;
+
+procedure TFrmCondicaoEmbarcacao.actSubstituirPorExecute(Sender: TObject);
+begin
+  case TabelaIndex of
+    0: FrmPrincipal.SubstituirPor(DBGridCondicaoMar,FrmDataModule.ADOQueryCondicaoMar,
+    FrmDataModule.DataSourceCondicaoMar);
+    1: FrmPrincipal.SubstituirPor(DBGridCondicaoEmbarcacao,FrmDataModule.ADOQueryCondicaoEmbarcacao,
+    FrmDataModule.DataSourceCondicaoEmbarcacao);
+  end;
+end;
+
+procedure TFrmCondicaoEmbarcacao.GRF2Click(Sender: TObject);
+begin
+  actGraficoGeral.Execute;
+end;
+
+procedure TFrmCondicaoEmbarcacao.CalendarioEmbarcacaoDblClick(Sender: TObject);
+  var
+    ProcurarData,SQLBase: String;
+    DataCondicaoEmbarcacao: TDateTime;
+    i: Integer;
+    booleanExiste: Boolean;
+begin
+  if (FrmPrincipal.logPerfil = 'Administrador')OR
+  (FrmPrincipal.logPerfil = 'PIOP')OR
+  (FrmPrincipal.logPerfil = 'Programação') then
+  begin
+    ProcurarData:= CalendarioEmbarcacao.Cells[AColSelect,ARowSelect];
+    DataCondicaoEmbarcacao:= StrToDate(ProcurarData);
+    if DataCondicaoEmbarcacao > now then
+      MessageBox(0,'Não é permitido inserir uma data no futuro!','.::ATENÇÃO::.',MB_ICONERROR)
+    else
+    begin
+      booleanExiste:= false;
+      for I := 0 to CheckListBoxEmbarcacao.Items.Count-1 do
+      begin
+        if CheckListBoxEmbarcacao.Items[i] = ProcurarData then
+        begin
+          booleanExiste:= true;
+          break;
+        end;
+      end;
+      if booleanExiste then
+      begin
+        if Application.MessageBox(PChar(
+        'Deseja realmente excluir a data '+ProcurarData+'?'),
+        '.::ATENÇÃO::.',36) = 6 then
+        begin
+          ProcurarData:= FormatDateTime('dd/mm/yyyy',DataCondicaoEmbarcacao);
+          SQLBase:= 'SELECT tblCondicaoEmbarcacao.* FROM tblCondicaoEmbarcacao '+
+          'WHERE (DataCondicaoEmbarcacao LIKE '+QuotedStr(ProcurarData)+');';
+          FrmDataModule.ADOQueryTemporarioDBConsulta1.Close;
+          FrmDataModule.ADOQueryTemporarioDBConsulta1.SQL.Text:= SQLBase;
+          FrmDataModule.ADOQueryTemporarioDBConsulta1.Open;
+          FrmDataModule.ADOQueryTemporarioDBConsulta1.Delete;
+          for I := 0 to CheckListBoxEmbarcacao.Items.Count-1 do
+          begin
+            if CheckListBoxEmbarcacao.Items[i] = ProcurarData then
+            begin
+              //CheckListBoxMar.DeleteSelected;
+            end;
+          end;
+          actDadosEmbarcacao.Execute;
+          actProcurarEmbarcacao.Execute;
+        end;
+      end
+      else
+      begin
+        if Application.MessageBox(PChar(
+        'Deseja realmente incluir está data como indisponibilidade de embarcação?'),
+        '.::ATENÇÃO::.',36) = 6 then
+        begin
+          actLimparAjuda.Execute;
+          FrmDataModule.ADOQueryCondicaoEmbarcacao.Insert;
+          FrmDataModule.ADOQueryCondicaoEmbarcacao.FieldByName('DataCondicaoEmbarcacao').
+          AsDateTime:= DataCondicaoEmbarcacao;
+          PanelTituloAjuda1.Caption:= 'Inserir Embarcação Indisponíel';
+          PanelEmbarcacaoIndisponivel.Align:= alClient;
+          PanelEmbarcacaoIndisponivel.Visible:= true;
+          PanelAjuda.Top:= 100;
+          PanelAjuda.Left:= 200;
+          PanelAjuda.Height:= 165;
+          PanelAjuda.Width:= 500;
+          PanelAjuda.Visible:= true;
+        end;
+      end;
+    end;
+  end;
+end;
+
+procedure TFrmCondicaoEmbarcacao.CalendarioEmbarcacaoDrawCell(Sender: TObject;
+  ACol, ARow: Integer; Rect: TRect; State: TGridDrawState);
+var
+  DiaGrid : string;
+  AlturaGrid, LarguraGrid, TopGrid, LeftGrid : Integer;
+  Data : TDateTime;
+begin
+  with CalendarioEmbarcacao do
+  begin
+    //Limpando o Calendário Para Recria-lo
+    Canvas.Brush.Color := clWhite;
+    Canvas.Pen.Color   := clWhite;
+    Canvas.Font.Style  := [];
+    Canvas.Font.Color  := clBlack;
+    Canvas.FillRect(Rect);
+    DiaGrid := Cells[aCol, aRow];
+    //Senão for Cabeçalho dos Dias da Semana
+    if aRow > 0 then
+    begin
+      Data := StrToDate(DiaGrid);
+      DiaGrid := IntToStr(DayOf(Data));
+      //Checa se os Dias São do Mês Selecionado
+      if MonthOf(Data) = MonthOf(PrimeiroDiaMes) then
+      begin
+        //Pintando a Data Atual
+        if Data = Date then
+        begin
+          Canvas.Brush.Color := clMoneyGreen;
+          Canvas.Font.Style  := [fsBold];
+          Canvas.Rectangle(Rect);
+        end;
+        //Pintando Data Selecionada
+        if gdSelected in State then
+        begin
+          Canvas.Brush.Color := $00FFC794;
+          Canvas.Font.Color  := clBlack;
+          Canvas.Font.Style  := [fsBold];
+          Canvas.Rectangle(Rect);
+        end;
+        // se existir evento na data
+        if CheckListBoxEmbarcacao.Items.IndexOf(DateToStr(Data)) >= 0 then
+        begin
+          if gdSelected in State then
+          begin
+            Canvas.Brush.Color :=$000BAED7; //Cor de Fundo
+            Canvas.Font.Color  :=clRed;     //Cor da Fonte
+          end
+          else
+          begin
+            Canvas.Brush.Color :=$006BDEFF; //Cor de Fundo
+            Canvas.Font.Color  :=clRed;     //Cor da Fonte
+          end;
+          Canvas.Font.Style  :=[fsBold];  //Fonte em Negrito
+          Canvas.Rectangle(Rect);         //Pintando em Forma de Retangulo
+        end;
+      end
+      else
+      begin
+        //Deixando Cinza as Dia Que Não São do Mês Selecionado
+        Canvas.Brush.Color :=clWhite;
+        Canvas.Font.Color  :=clSilver;
+      end;
+    end
+    //Se for Cabeçalho dos Dias da Semana
+    else
+    begin
+      Canvas.Font.Color := clRed;
+      Canvas.Font.Style :=[fsBold];
+    end;
+    //Desenhando o Calendario e Colocando os Dias, Altura, Largura e Posição
+    AlturaGrid  := Canvas.TextHeight(DiaGrid);
+    LarguraGrid := Canvas.TextWidth(DiaGrid);
+    LeftGrid    := Rect.Left + (ColWidths[ACol]  - LarguraGrid) div 2;
+    TopGrid     := Rect.Top  + (RowHeights[ARow] - AlturaGrid) div 2;
+    Canvas.Rectangle(Classes.Rect(Rect.Left + 2, Rect.Top + 2, Rect.Right - 2, Rect.Bottom - 2));
+    Canvas.TextOut(LeftGrid, TopGrid, DiaGrid);
+  end;
+end;
+
+procedure TFrmCondicaoEmbarcacao.CalendarioEmbarcacaoSelectCell(Sender: TObject;
+  ACol, ARow: Integer; var CanSelect: Boolean);
+begin
+  AColSelect:= ACol;
+  ARowSelect:= ARow;
+end;
+
+procedure TFrmCondicaoEmbarcacao.CalendarMarDblClick(Sender: TObject);
+  var
+    ProcurarData,SQLBase: String;
+    DataCondicaoMar: TDateTime;
+    i: Integer;
+    booleanExiste: Boolean;
+begin
+  if (FrmPrincipal.logPerfil = 'Administrador')OR
+  (FrmPrincipal.logPerfil = 'PIOP')OR
+  (FrmPrincipal.logPerfil = 'Programação') then
+  begin
+    ProcurarData:= CalendarMar.Cells[AColSelect,ARowSelect];
+    DataCondicaoMar:= StrToDate(ProcurarData);
+    if DataCondicaoMar > now then
+      MessageBox(0,'Não é permitido inserir uma data no futuro!','.::ATENÇÃO::.',MB_ICONERROR)
+    else
+    begin
+      booleanExiste:= false;
+      for I := 0 to CheckListBoxMar.Items.Count-1 do
+      begin
+        if CheckListBoxMar.Items[i] = ProcurarData then
+        begin
+          booleanExiste:= true;
+          break;
+        end;
+      end;
+      if booleanExiste then
+      begin
+        if Application.MessageBox(PChar(
+        'Deseja realmente excluir a data '+ProcurarData+'?'),
+        '.::ATENÇÃO::.',36) = 6 then
+        begin
+          ProcurarData:= FormatDateTime('dd/mm/yyyy',DataCondicaoMar);
+          SQLBase:= 'SELECT tblCondicaoMar.* FROM tblCondicaoMar '+
+          'WHERE (DataCondicaoMar LIKE '+QuotedStr(ProcurarData)+');';
+          FrmDataModule.ADOQueryTemporarioDBConsulta1.Close;
+          FrmDataModule.ADOQueryTemporarioDBConsulta1.SQL.Text:= SQLBase;
+          FrmDataModule.ADOQueryTemporarioDBConsulta1.Open;
+          FrmDataModule.ADOQueryTemporarioDBConsulta1.Delete;
+          for I := 0 to CheckListBoxMar.Items.Count-1 do
+          begin
+            if CheckListBoxMar.Items[i] = ProcurarData then
+            begin
+              //CheckListBoxMar.DeleteSelected;
+            end;
+          end;
+          actDadosMar.Execute;
+          actProcurarMar.Execute;
+        end;
+      end
+      else
+      begin
+        if Application.MessageBox(PChar(
+        'Deseja realmente incluir está data como condição de mar?'),
+        '.::ATENÇÃO::.',36) = 6 then
+        begin
+          FrmDataModule.ADOQueryCondicaoMar.Insert;
+          FrmDataModule.DataSourceCondicaoMar.DataSet.
+          FieldByName('DataCondicaoMar').AsDateTime:=DataCondicaoMar;
+          FrmDataModule.ADOQueryCondicaoMar.Post;
+        end;
+        actDadosMar.Execute;
+      end;
+    end;
+  end;
+end;
+
+procedure TFrmCondicaoEmbarcacao.CalendarMarDrawCell(Sender: TObject; ACol,
+  ARow: Integer; Rect: TRect; State: TGridDrawState);
+var
+  DiaGrid : string;
+  AlturaGrid, LarguraGrid, TopGrid, LeftGrid : Integer;
+  Data : TDateTime;
+begin
+  with CalendarMar do
+  begin
+    //Limpando o Calendário Para Recria-lo
+    Canvas.Brush.Color := clWhite;
+    Canvas.Pen.Color   := clWhite;
+    Canvas.Font.Style  := [];
+    Canvas.Font.Color  := clBlack;
+    Canvas.FillRect(Rect);
+    DiaGrid := Cells[aCol, aRow];
+    //Senão for Cabeçalho dos Dias da Semana
+    if aRow > 0 then
+    begin
+      Data := StrToDate(DiaGrid);
+      DiaGrid := IntToStr(DayOf(Data));
+      //Checa se os Dias São do Mês Selecionado
+      if MonthOf(Data) = MonthOf(PrimeiroDiaMes) then
+      begin
+        //Pintando a Data Atual
+        if Data = Date then
+        begin
+          Canvas.Brush.Color := clMoneyGreen;
+          Canvas.Font.Style  := [fsBold];
+          Canvas.Rectangle(Rect);
+        end;
+        //Pintando Data Selecionada
+        if gdSelected in State then
+        begin
+          Canvas.Brush.Color := $00FFC794;
+          Canvas.Font.Color  := clBlack;
+          Canvas.Font.Style  := [fsBold];
+          Canvas.Rectangle(Rect);
+        end;
+        // se existir evento na data
+        if CheckListBoxMar.Items.IndexOf(DateToStr(Data)) >= 0 then
+        begin
+          if gdSelected in State then
+          begin
+            Canvas.Brush.Color :=$000BAED7; //Cor de Fundo
+            Canvas.Font.Color  :=clRed;     //Cor da Fonte
+          end
+          else
+          begin
+            Canvas.Brush.Color :=$006BDEFF; //Cor de Fundo
+            Canvas.Font.Color  :=clRed;     //Cor da Fonte
+          end;
+          Canvas.Font.Style  :=[fsBold];  //Fonte em Negrito
+          Canvas.Rectangle(Rect);         //Pintando em Forma de Retangulo
+        end;
+      end
+      else
+      begin
+        //Deixando Cinza as Dia Que Não São do Mês Selecionado
+        Canvas.Brush.Color :=clWhite;
+        Canvas.Font.Color  :=clSilver;
+      end;
+    end
+    //Se for Cabeçalho dos Dias da Semana
+    else
+    begin
+      Canvas.Font.Color := clRed;
+      Canvas.Font.Style :=[fsBold];
+    end;
+    //Desenhando o Calendario e Colocando os Dias, Altura, Largura e Posição
+    AlturaGrid  := Canvas.TextHeight(DiaGrid);
+    LarguraGrid := Canvas.TextWidth(DiaGrid);
+    LeftGrid    := Rect.Left + (ColWidths[ACol]  - LarguraGrid) div 2;
+    TopGrid     := Rect.Top  + (RowHeights[ARow] - AlturaGrid) div 2;
+    Canvas.Rectangle(Classes.Rect(Rect.Left + 2, Rect.Top + 2, Rect.Right - 2, Rect.Bottom - 2));
+    Canvas.TextOut(LeftGrid, TopGrid, DiaGrid);
+  end;
+end;
+
+procedure TFrmCondicaoEmbarcacao.CalendarMarSelectCell(Sender: TObject; ACol,
+  ARow: Integer; var CanSelect: Boolean);
+begin
+  AColSelect:= ACol;
+  ARowSelect:= ARow;
+end;
+
+procedure TFrmCondicaoEmbarcacao.CheckListBoxEmbarcacaoClick(Sender: TObject);
+    var
+      i: Integer;
+      txtString: String;
+begin
+  //Filtro Check-list
+  txtString:= '';
+  for i := 0 to CheckListBoxEmbarcacao.Items.Count-1 do
+  begin
+    if CheckListBoxEmbarcacao.Checked[i] then
+    begin
+      if txtString <> '' then
+        txtString:= txtString+';'+CheckListBoxEmbarcacao.Items[i]
+      else
+        txtString:= CheckListBoxEmbarcacao.Items[i];
+    end;
+  end;
+  ColunasLayoutEmbarcacao.Cells[4,0]:= txtString;
+  ColunasLayoutEmbarcacao.Cells[5,0]:= 'Contem';
+  actProcurarEmbarcacao.Execute;
+end;
+
+procedure TFrmCondicaoEmbarcacao.CheckListBoxMarClick(Sender: TObject);
+  var
+    i: Integer;
+    txtString: String;
+begin
+  //Filtro Check-list
+  txtString:= '';
+  for i := 0 to CheckListBoxMar.Items.Count-1 do
+  begin
+    if CheckListBoxMar.Checked[i] then
+    begin
+      if txtString <> '' then
+        txtString:= txtString+';'+CheckListBoxMar.Items[i]
+      else
+        txtString:= CheckListBoxMar.Items[i];
+    end;
+  end;
+  ColunasLayoutMar.Cells[4,0]:= txtString;
+  ColunasLayoutMar.Cells[5,0]:= 'Contem';
+  actProcurarMar.Execute;
+end;
+
+procedure TFrmCondicaoEmbarcacao.DBGridCondicaoEmbarcacaoDrawColumnCell(
+  Sender: TObject; const Rect: TRect; DataCol: Integer; Column: TColumn;
+  State: TGridDrawState);
+begin
+  FrmPrincipal.GridZebrado(DBGridCondicaoEmbarcacao,
+  ColunasLayoutEmbarcacao,State,Rect,DataCol,Column);
+end;
+
+procedure TFrmCondicaoEmbarcacao.DBGridCondicaoEmbarcacaoTitleClick(
+  Column: TColumn);
+begin
+  TabelaIndex:= 1;
+  FrmPrincipal.configurarFiltro(1,Column.FieldName,IntToStr(Column.Index),
+  Column.ReadOnly,actFiltroInserir,actGridASC,actGridDESC,actSubstituirPor);
+  //======================================================
+  FrmPrincipal.titleGrid(ColunasLayoutEmbarcacao,'Consulta',
+  FrmDataModule.ADOQueryCondicaoEmbarcacao.SQL.Text);
+end;
+
+procedure TFrmCondicaoEmbarcacao.DBGridCondicaoMarDrawColumnCell(
+  Sender: TObject; const Rect: TRect; DataCol: Integer; Column: TColumn;
+  State: TGridDrawState);
+begin
+  FrmPrincipal.GridZebrado(DBGridCondicaoMar,ColunasLayoutMar,State,Rect,DataCol,Column);
+end;
+
+procedure TFrmCondicaoEmbarcacao.DBGridCondicaoMarTitleClick(Column: TColumn);
+begin
+  TabelaIndex:= 0;
+  FrmPrincipal.configurarFiltro(1,Column.FieldName,IntToStr(Column.Index),
+  Column.ReadOnly,actFiltroInserir,actGridASC,actGridDESC,actSubstituirPor);
+  //======================================================
+  FrmPrincipal.titleGrid(ColunasLayoutMar,'Consulta',
+  FrmDataModule.ADOQueryCondicaoMar.SQL.Text);
+end;
+
+procedure TFrmCondicaoEmbarcacao.GRF1Click(
+  Sender: TObject);
+begin
+  actDadosEmbarcacao.Execute;
+end;
+
+procedure TFrmCondicaoEmbarcacao.FormClose(Sender: TObject;
+  var Action: TCloseAction);
+begin
+  Action:= caFree;
+  FrmCondicaoEmbarcacao:=nil;
+end;
+
+procedure TFrmCondicaoEmbarcacao.FormCreate(Sender: TObject);
+  var
+    i: Integer;
+begin
+  if (FrmPrincipal.logPerfil = 'Administrador')OR
+  (FrmPrincipal.logPerfil = 'Supervisor')OR
+  (FrmPrincipal.logPerfil = 'PIOP')OR
+  (FrmPrincipal.logPerfil = 'SEG-PIOP') then
+  begin
+    DBGridCondicaoEmbarcacao.ReadOnly:= false;
+  end
+  else
+  begin
+    DBGridCondicaoEmbarcacao.ReadOnly:= true;
+  end;
+  //===========================================
+  CalendarMar.Cells[0,0]:= 'Dom';
+  CalendarMar.Cells[1,0]:= 'Seg';
+  CalendarMar.Cells[2,0]:= 'Ter';
+  CalendarMar.Cells[3,0]:= 'Qua';
+  CalendarMar.Cells[4,0]:= 'Qui';
+  CalendarMar.Cells[5,0]:= 'Sex';
+  CalendarMar.Cells[6,0]:= 'Sab';
+  //===========================================
+  RLMar.Cells[0,0]:= 'Mês/Ano';
+  RLMar.Cells[1,0]:= 'Total Dias';
+  RLMar.Cells[33,0]:= 'Dias Perdidos';
+  RLMar.Cells[34,0]:= 'Dias Trab.';
+  for I := 1 to 31 do
+    RLMar.Cells[i+1,0]:= IntToStr(i);
+
+  RLMar.ColWidths[0]:= 80;
+  RLMar.ColWidths[1]:= 65;
+  RLMar.ColWidths[33]:= 90;
+  RLMar.ColWidths[34]:= 90;
+  //===========================================
+  RLEmbarcacao.Cells[0,0]:= 'Mês/Ano';
+  RLEmbarcacao.Cells[1,0]:= 'Total Indisp.';
+  RLEmbarcacao.Cells[33,0]:= 'Média Disp.';
+  RLEmbarcacao.Cells[34,0]:= 'Média Indisp.';
+  for I := 1 to 31 do
+    RLEmbarcacao.Cells[i+1,0]:= IntToStr(i);
+
+  RLEmbarcacao.ColWidths[0]:= 80;
+  RLEmbarcacao.ColWidths[1]:= 65;
+  RLEmbarcacao.ColWidths[33]:= 90;
+  RLEmbarcacao.ColWidths[34]:= 90;
+  //===========================================
+  FrmPrincipal.MDIChildCreated(self.Handle);
+  PrimeiroDiaMes := RecodeDay(Date, 1);
+  FrmPrincipal.DesenharCalendario(CalendarMar,PanelNomeMesMar,PrimeiroDiaMes);
+  FrmPrincipal.DesenharCalendario(CalendarioEmbarcacao,PanelNomeMesEmbarcacao,PrimeiroDiaMes);
+  //Incicialização
+  FrmPrincipal.SetUpColunasLayout(DBGridCondicaoMar, ColunasLayoutMar);
+  FrmPrincipal.SetUpColunasLayout(DBGridCondicaoEmbarcacao, ColunasLayoutEmbarcacao);
+  actProcurarMar.Execute;
+  actDadosMar.Execute;
+end;
+
+procedure TFrmCondicaoEmbarcacao.FormDestroy(Sender: TObject);
+begin
+  FrmPrincipal.MDIChildDestroyed(self.Handle);
+end;
+
+procedure TFrmCondicaoEmbarcacao.PageControl1Change(Sender: TObject);
+begin
+  case PageControl1.TabIndex of
+    0:
+    begin
+      actProcurarMar.Execute;
+      actDadosMar.Execute;
+    end;
+    1:
+    begin
+      actProcurarEmbarcacao.Execute;
+      actDadosEmbarcacao.Execute;
+    end;
+  end;
+end;
+
+procedure TFrmCondicaoEmbarcacao.PanelTituloAjuda1MouseDown(Sender: TObject;
+  Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
+begin
+  FrmPrincipal.Capturing := true;
+  FrmPrincipal.MouseDownSpot.X := X;
+  FrmPrincipal.MouseDownSpot.Y := Y;
+end;
+
+procedure TFrmCondicaoEmbarcacao.PanelTituloAjuda1MouseMove(Sender: TObject;
+  Shift: TShiftState; X, Y: Integer);
+begin
+  if FrmPrincipal.Capturing then
+  begin
+    PanelAjuda.Left := PanelAjuda.Left - (FrmPrincipal.MouseDownSpot.X - X);
+    PanelAjuda.Top := PanelAjuda.Top - (FrmPrincipal.MouseDownSpot.Y - Y);
+  end;
+end;
+
+procedure TFrmCondicaoEmbarcacao.PanelTituloAjuda1MouseUp(Sender: TObject;
+  Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
+begin
+  if FrmPrincipal.Capturing then
+  begin
+    FrmPrincipal.Capturing := false;
+    PanelAjuda.Left := PanelAjuda.Left - (FrmPrincipal.MouseDownSpot.X - X);
+    PanelAjuda.Top := PanelAjuda.Top - (FrmPrincipal.MouseDownSpot.Y - Y);
+  end;
+end;
+
+procedure TFrmCondicaoEmbarcacao.RLEmbarcacaoDrawCell(Sender: TObject; ACol,
+  ARow: Integer; Rect: TRect; State: TGridDrawState);
+var
+  R: TRect;
+  DataTeste: TDateTime;
+  Numero,DiasMes,DiaColuna: Integer;
+begin
+  try
+    DiaColuna:= StrToInt(RLEmbarcacao.Cells[ACol,0]);
+  except
+    DiaColuna:= 0;
+  end;
+  if (ACol>1)AND(ACol<33)AND(ARow>0) then
+  begin
+    R := Rect;
+    R.Left := R.Left - 4;
+    Numero:= StrToInt(RLEmbarcacao.Cells[ACol,ARow]);
+    try
+      DataTeste:= StrToDate(IntToStr(DiaColuna)+'/'+RLEmbarcacao.Cells[0,ARow]);
+      DiasMes:= DaysInMonth(DataTeste);
+    except
+      DiasMes:= 1;
+      DataTeste:= now;
+    end;
+    if (Numero > 0) then
+    begin
+      RLEmbarcacao.Canvas.Brush.Color := clRed;
+      RLEmbarcacao.Canvas.Font.Style := [];
+      RLEmbarcacao.Canvas.FillRect(R);
+      DrawText(RLEmbarcacao.Canvas.Handle, PChar(RLEmbarcacao.Cells[ACol, ARow]),
+      -1, R, DT_Center);
+    end
+    else if ((Numero = 0)AND(DataTeste>now)OR((Numero = 0)AND((DiaColuna)>DiasMes))) then
+    begin
+      RLEmbarcacao.Canvas.Brush.Color := clSilver;
+      RLEmbarcacao.Canvas.Font.Style := [];
+      RLEmbarcacao.Canvas.FillRect(R);
+      DrawText(RLEmbarcacao.Canvas.Handle, PChar(RLEmbarcacao.Cells[ACol, ARow]),
+      -1, R, DT_Center);
+    end
+    else if (Numero = 0) then
+    begin
+      RLEmbarcacao.Canvas.Brush.Color := clLime;
+      RLEmbarcacao.Canvas.Font.Style := [];
+      RLEmbarcacao.Canvas.FillRect(R);
+      DrawText(RLEmbarcacao.Canvas.Handle, PChar(RLEmbarcacao.Cells[ACol, ARow]),
+      -1, R, DT_Center);
+    end;
+  end;
+end;
+
+procedure TFrmCondicaoEmbarcacao.RLGeralDrawCell(Sender: TObject; ACol,
+  ARow: Integer; Rect: TRect; State: TGridDrawState);
+var
+  R: TRect;
+  DataTeste: TDateTime;
+  Embarcacao,DiasMes,DiaColuna: Integer;
+  Lista: TStringList;
+  Mar: String;
+begin
+  try
+    DiaColuna:= StrToInt(RLGeral.Cells[ACol,0]);
+  except
+    DiaColuna:= 0;
+  end;
+  if (ACol>1)AND(ACol<33)AND(ARow>0) then
+  begin
+    R := Rect;
+    R.Left := R.Left - 4;
+    Lista:= FrmPrincipal.incialListaBusca(RLGeral.Cells[ACol,ARow]);
+    if Lista.Count>1 then
+    begin
+      Embarcacao:= StrToInt(Lista[0]);
+      Mar:= Lista[1];
+      try
+        DataTeste:= StrToDate(IntToStr(DiaColuna)+'/'+RLGeral.Cells[0,ARow]);
+        DiasMes:= DaysInMonth(DataTeste);
+      except
+        DiasMes:= 1;
+        DataTeste:= now;
+      end;
+      if ((DataTeste>now)OR(DiaColuna>DiasMes)) then
+      begin
+        RLGeral.Canvas.Brush.Color := clSilver;
+        RLGeral.Canvas.Font.Style := [];
+        RLGeral.Canvas.FillRect(R);
+        DrawText(RLGeral.Canvas.Handle, PChar(RLGeral.Cells[ACol, ARow]),
+        -1, R, DT_Center);
+      end
+      else if ((Embarcacao = 0)AND(Mar='B')) then
+      begin
+        RLGeral.Canvas.Brush.Color := clLime;
+        RLGeral.Canvas.Font.Style := [];
+        RLGeral.Canvas.FillRect(R);
+        DrawText(RLGeral.Canvas.Handle, PChar(RLGeral.Cells[ACol, ARow]),
+        -1, R, DT_Center);
+      end
+      else if ((Embarcacao = 1)AND(Mar='B')) then
+      begin
+        RLGeral.Canvas.Brush.Color := clYellow;
+        RLGeral.Canvas.Font.Style := [];
+        RLGeral.Canvas.FillRect(R);
+        DrawText(RLGeral.Canvas.Handle, PChar(RLGeral.Cells[ACol, ARow]),
+        -1, R, DT_Center);
+      end
+      else if ((Embarcacao > 1)OR(Mar='R')) then
+      begin
+        RLGeral.Canvas.Brush.Color := clRed;
+        RLGeral.Canvas.Font.Style := [];
+        RLGeral.Canvas.FillRect(R);
+        DrawText(RLGeral.Canvas.Handle, PChar(RLGeral.Cells[ACol, ARow]),
+        -1, R, DT_Center);
+      end;
+    end
+    else
+    begin
+      RLGeral.Canvas.Brush.Color := clSilver;
+      RLGeral.Canvas.Font.Style := [];
+      RLGeral.Canvas.FillRect(R);
+      DrawText(RLGeral.Canvas.Handle, PChar(RLGeral.Cells[ACol, ARow]),
+      -1, R, DT_Center);
+    end;
+  end;
+end;
+
+procedure TFrmCondicaoEmbarcacao.RLMarDrawCell(Sender: TObject; ACol,
+  ARow: Integer; Rect: TRect; State: TGridDrawState);
+var
+  R: TRect;
+  DataTeste: TDateTime;
+  NumeroMar,DiasMes,DiaColuna: Integer;
+begin
+  try
+    DiaColuna:= StrToInt(RLMar.Cells[ACol,0]);
+  except
+    DiaColuna:= 0;
+  end;
+  if (ACol>1)AND(ACol<33)AND(ARow>0) then
+  begin
+    R := Rect;
+    R.Left := R.Left - 4;
+    NumeroMar:= StrToInt(RLMar.Cells[ACol,ARow]);
+    try
+      DataTeste:= StrToDate(IntToStr(DiaColuna)+'/'+RLMar.Cells[0,ARow]);
+      DiasMes:= DaysInMonth(DataTeste);
+    except
+      DiasMes:= 1;
+      DataTeste:= now;
+    end;
+    //=========================================================================
+    if (NumeroMar > 0) then
+    begin
+      RLMar.Canvas.Brush.Color := clRed;
+      RLMar.Canvas.Font.Style := [];
+      RLMar.Canvas.FillRect(R);
+      DrawText(RLMar.Canvas.Handle, PChar(RLMar.Cells[ACol, ARow]),
+      -1, R, DT_Center);
+    end
+    else if ((NumeroMar = 0)AND(DataTeste>now)OR((NumeroMar = 0)AND((DiaColuna)>DiasMes))) then
+    begin
+      RLMar.Canvas.Brush.Color := clSilver;
+      RLMar.Canvas.Font.Style := [];
+      RLMar.Canvas.FillRect(R);
+      DrawText(RLMar.Canvas.Handle, PChar(RLMar.Cells[ACol, ARow]),
+      -1, R, DT_Center);
+    end
+    else if (NumeroMar = 0) then
+    begin
+      RLMar.Canvas.Brush.Color := clLime;
+      RLMar.Canvas.Font.Style := [];
+      RLMar.Canvas.FillRect(R);
+      DrawText(RLMar.Canvas.Handle, PChar(RLMar.Cells[ACol, ARow]),
+      -1, R, DT_Center);
+    end;
+  end;
+end;
+
+procedure TFrmCondicaoEmbarcacao.SpeedButton5Click(Sender: TObject);
+begin
+  PanelAjuda.Visible:= false;
+  FrmDataModule.ADOQueryCondicaoEmbarcacao.Cancel;
+end;
+
+procedure TFrmCondicaoEmbarcacao.btnMesAnteriorClick(Sender: TObject);
+begin
+  PrimeiroDiaMes := IncMonth(PrimeiroDiaMes, -1);
+  FrmPrincipal.DesenharCalendario(CalendarMar,PanelNomeMesMar,PrimeiroDiaMes);
+  FrmPrincipal.DesenharCalendario(CalendarioEmbarcacao,PanelNomeMesEmbarcacao,PrimeiroDiaMes);
+  actDadosMar.Execute;
+  actDadosEmbarcacao.Execute;
+end;
+
+procedure TFrmCondicaoEmbarcacao.btnMesProximoClick(Sender: TObject);
+begin
+  PrimeiroDiaMes := IncMonth(PrimeiroDiaMes, 1);
+  FrmPrincipal.DesenharCalendario(CalendarMar,PanelNomeMesMar,PrimeiroDiaMes);
+  FrmPrincipal.DesenharCalendario(CalendarioEmbarcacao,PanelNomeMesEmbarcacao,PrimeiroDiaMes);
+  actDadosMar.Execute;
+  actDadosEmbarcacao.Execute;
+end;
+
+procedure TFrmCondicaoEmbarcacao.btnAnoAnteriorClick(Sender: TObject);
+begin
+  PrimeiroDiaMes := IncYear(PrimeiroDiaMes, -1);
+  FrmPrincipal.DesenharCalendario(CalendarMar,PanelNomeMesMar,PrimeiroDiaMes);
+  FrmPrincipal.DesenharCalendario(CalendarioEmbarcacao,PanelNomeMesEmbarcacao,PrimeiroDiaMes);
+  actDadosMar.Execute;
+  actDadosEmbarcacao.Execute;
+end;
+
+procedure TFrmCondicaoEmbarcacao.btnAnoProximoClick(Sender: TObject);
+begin
+  PrimeiroDiaMes := IncYear(PrimeiroDiaMes, 1);
+  FrmPrincipal.DesenharCalendario(CalendarMar,PanelNomeMesMar,PrimeiroDiaMes);
+  FrmPrincipal.DesenharCalendario(CalendarioEmbarcacao,PanelNomeMesEmbarcacao,PrimeiroDiaMes);
+  actDadosMar.Execute;
+  actDadosEmbarcacao.Execute;
+end;
+
+procedure TFrmCondicaoEmbarcacao.WMMDIACTIVATE(var msg: TWMMDIACTIVATE);
+ var
+  active: TWinControl;
+  idx: Integer;
+begin
+  active := FindControl(msg.ActiveWnd) ;
+
+  if Assigned(active) then
+  begin
+    idx := FrmPrincipal.mdiChildrenTabs.Tabs.IndexOfObject(TObject(msg.ActiveWnd));
+    FrmPrincipal.mdiChildrenTabs.Tag := -1;
+    FrmPrincipal.mdiChildrenTabs.TabIndex := idx;
+    FrmPrincipal.mdiChildrenTabs.Tag := 0;
+  end;
+end;
+
+end.

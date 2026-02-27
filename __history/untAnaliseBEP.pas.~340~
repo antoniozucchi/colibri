@@ -1,0 +1,1372 @@
+unit untAnaliseBEP;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ComCtrls,MSHTML, Vcl.OleCtrls,
+  SHDocVw, Vcl.StdCtrls, Vcl.ToolWin, System.ImageList, Vcl.ImgList,WBFuncs,Registry,Clipbrd,
+  System.Actions, Vcl.ActnList, Vcl.PlatformDefaultStyleActnCtrls, Vcl.ActnMan,ComOBJ,
+  Vcl.Buttons, Vcl.ExtCtrls,Data.DB, Vcl.Grids, Vcl.DBGrids,DateUtils,
+  Vcl.DBCtrls, Vcl.CheckLst, Vcl.Menus;
+
+type
+  TFrmAnaliseBEP = class(TForm)
+    PageControl1: TPageControl;
+    TabSheet1: TTabSheet;
+    TabSheet2: TTabSheet;
+    ImageList1: TImageList;
+    CoolBar1: TCoolBar;
+    ToolBar1: TToolBar;
+    btnvoltar: TToolButton;
+    btnavancar: TToolButton;
+    btnparar: TToolButton;
+    btnatualizar: TToolButton;
+    ToolButton10: TToolButton;
+    btnhome: TToolButton;
+    btnprocurar: TToolButton;
+    ToolButton11: TToolButton;
+    btnimprimir: TToolButton;
+    ComboBox1: TComboBox;
+    WebBrowser1: TWebBrowser;
+    StatusBar1: TStatusBar;
+    ProgressBar1: TProgressBar;
+    ActionManager1: TActionManager;
+    actCopiarPagina: TAction;
+    actBaixarArquivo: TAction;
+    ToolBar3: TToolBar;
+    BitBtn1: TBitBtn;
+    actPesquisar: TAction;
+    actExportarExcel: TAction;
+    TimerPesquisar: TTimer;
+    TimerExcel: TTimer;
+    actImportarExcel: TAction;
+    OpenDialog1: TOpenDialog;
+    actFiltroInserir: TAction;
+    actGridASC: TAction;
+    actGridDESC: TAction;
+    actSubstituirPor: TAction;
+    actLimparFiltros: TAction;
+    actFiltrosTabela: TAction;
+    actProcuraFiltrosTabela: TAction;
+    actProcurarAnaliseBep: TAction;
+    StatusBarAnaliseBEP: TStatusBar;
+    actExcel: TAction;
+    actImportarCopia: TAction;
+    actExcluirFiltrados: TAction;
+    ToolBar2: TToolBar;
+    BitBtn3: TBitBtn;
+    BitBtn9: TBitBtn;
+    BitBtn2: TBitBtn;
+    BitBtn5: TBitBtn;
+    TabSheet3: TTabSheet;
+    Panel1: TPanel;
+    Splitter1: TSplitter;
+    DBMemoPendencia: TDBMemo;
+    DBGridAnaliseBEP: TDBGrid;
+    ColunasLayoutAnaliseBEP: TStringGrid;
+    PanelFiltros: TPanel;
+    Splitter2: TSplitter;
+    PanelCima: TPanel;
+    Splitter3: TSplitter;
+    Splitter4: TSplitter;
+    PanelBaixo: TPanel;
+    ToolBar4: TToolBar;
+    DBGridTarefa: TDBGrid;
+    Panel5: TPanel;
+    DBGridResponsavel: TDBGrid;
+    ToolBar5: TToolBar;
+    ColunasLayoutResponsavel: TStringGrid;
+    ColunasLayoutTarefa: TStringGrid;
+    StatusBarResponsavel: TStatusBar;
+    StatusBarTarefa: TStatusBar;
+    actProcurarTarefa: TAction;
+    actProcurarResponsavel: TAction;
+    actConfigFiltro: TAction;
+    actConfigPickList: TAction;
+    DBNavigatorResponsavel: TDBNavigator;
+    DBNavigatorTarefa: TDBNavigator;
+    ToolButton1: TToolButton;
+    ToolButton2: TToolButton;
+    ToolButton3: TToolButton;
+    ToolButton4: TToolButton;
+    ToolButton5: TToolButton;
+    ToolButton6: TToolButton;
+    Panel6: TPanel;
+    CheckListBoxPlataforma: TCheckListBox;
+    ToolBar6: TToolBar;
+    ToolButton7: TToolButton;
+    ToolButton8: TToolButton;
+    actSelTudo: TAction;
+    actSelLimpar: TAction;
+    PanelTitulo: TPanel;
+    ToolBar7: TToolBar;
+    btnMostrarOcultar: TToolButton;
+    actOcultar: TAction;
+    actMostrar: TAction;
+    actSAP: TAction;
+    actCimaTudo: TAction;
+    actBaixoTudo: TAction;
+    actBaixo: TAction;
+    actCima: TAction;
+    actSalvarLayout: TAction;
+    actLayoutJanela: TAction;
+    BitBtn6: TBitBtn;
+    ToolButton9: TToolButton;
+    ToolButton12: TToolButton;
+    actZoomMais: TAction;
+    actZoomMenos: TAction;
+    actAutoFit: TAction;
+    actExcluirSelecao: TAction;
+    ToolButton13: TToolButton;
+    PopupMenuExcluir: TPopupMenu;
+    Excluirtodososregistrosfiltrados1: TMenuItem;
+    Excluirregistroselecionado1: TMenuItem;
+    procedure btnvoltarClick(Sender: TObject);
+    procedure btnavancarClick(Sender: TObject);
+    procedure btnpararClick(Sender: TObject);
+    procedure btnatualizarClick(Sender: TObject);
+    procedure btnhomeClick(Sender: TObject);
+    procedure btnprocurarClick(Sender: TObject);
+    procedure btnimprimirClick(Sender: TObject);
+    procedure ComboBox1KeyPress(Sender: TObject; var Key: Char);
+    procedure WebBrowser1BeforeNavigate2(ASender: TObject;
+      const pDisp: IDispatch; const URL, Flags, TargetFrameName, PostData,
+      Headers: OleVariant; var Cancel: WordBool);
+    procedure WebBrowser1CommandStateChange(ASender: TObject; Command: Integer;
+      Enable: WordBool);
+    procedure WebBrowser1ProgressChange(ASender: TObject; Progress,
+      ProgressMax: Integer);
+    procedure WebBrowser1StatusTextChange(ASender: TObject;
+      const Text: WideString);
+    procedure WebBrowser1TitleChange(ASender: TObject; const Text: WideString);
+    procedure FormCreate(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure FormDestroy(Sender: TObject);
+    procedure FormResize(Sender: TObject);
+    procedure WebBrowser1DocumentComplete(ASender: TObject;
+      const pDisp: IDispatch; const URL: OleVariant);
+    procedure actCopiarPaginaExecute(Sender: TObject);
+    procedure actBaixarArquivoExecute(Sender: TObject);
+    procedure actPesquisarExecute(Sender: TObject);
+    procedure actExportarExcelExecute(Sender: TObject);
+    procedure actFiltroInserirExecute(Sender: TObject);
+    procedure actProcurarAnaliseBepExecute(Sender: TObject);
+    procedure actGridASCExecute(Sender: TObject);
+    procedure actGridDESCExecute(Sender: TObject);
+    procedure actLimparFiltrosExecute(Sender: TObject);
+    procedure actFiltrosTabelaExecute(Sender: TObject);
+    procedure actProcuraFiltrosTabelaExecute(Sender: TObject);
+    procedure DBGridAnaliseBEPTitleClick(Column: TColumn);
+    procedure DBGridAnaliseBEPDrawColumnCell(Sender: TObject; const Rect: TRect;
+      DataCol: Integer; Column: TColumn; State: TGridDrawState);
+    procedure actExcelExecute(Sender: TObject);
+    procedure actImportarCopiaExecute(Sender: TObject);
+    procedure actExcluirFiltradosExecute(Sender: TObject);
+    procedure DBGridResponsavelDrawColumnCell(Sender: TObject;
+      const Rect: TRect; DataCol: Integer; Column: TColumn;
+      State: TGridDrawState);
+    procedure DBGridTarefaDrawColumnCell(Sender: TObject; const Rect: TRect;
+      DataCol: Integer; Column: TColumn; State: TGridDrawState);
+    procedure DBGridTarefaTitleClick(Column: TColumn);
+    procedure actProcurarTarefaExecute(Sender: TObject);
+    procedure actProcurarResponsavelExecute(Sender: TObject);
+    procedure actSubstituirPorExecute(Sender: TObject);
+    procedure DBGridResponsavelTitleClick(Column: TColumn);
+    procedure DBGridResponsavelCellClick(Column: TColumn);
+    procedure DBGridTarefaCellClick(Column: TColumn);
+    procedure actConfigFiltroExecute(Sender: TObject);
+    procedure actConfigPickListExecute(Sender: TObject);
+    procedure DBGridAnaliseBEPKeyPress(Sender: TObject; var Key: Char);
+    procedure actSelTudoExecute(Sender: TObject);
+    procedure actSelLimparExecute(Sender: TObject);
+    procedure DBGridAnaliseBEPKeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure actOcultarExecute(Sender: TObject);
+    procedure actMostrarExecute(Sender: TObject);
+    procedure actSAPExecute(Sender: TObject);
+    procedure actCimaTudoExecute(Sender: TObject);
+    procedure actBaixoTudoExecute(Sender: TObject);
+    procedure actBaixoExecute(Sender: TObject);
+    procedure actCimaExecute(Sender: TObject);
+    procedure actSalvarLayoutExecute(Sender: TObject);
+    procedure actLayoutJanelaExecute(Sender: TObject);
+    procedure DBGridAnaliseBEPColumnMoved(Sender: TObject; FromIndex,
+      ToIndex: Integer);
+    procedure actZoomMaisExecute(Sender: TObject);
+    procedure actAutoFitExecute(Sender: TObject);
+    procedure actZoomMenosExecute(Sender: TObject);
+    procedure actExcluirSelecaoExecute(Sender: TObject);
+  private
+    { Private declarations }
+    TipoEvento,TabIndex: Integer;
+    baixarExcel: Boolean;
+    ExcelPagina, SheetPagina: Variant;
+    procedure WMMDIACTIVATE(var msg: TWMMDIACTIVATE);message WM_MDIACTIVATE;
+    procedure ExibirURLsVisitadas(Urls: TStrings);
+    Function ExisteRegistro(Plataforma,Tarefa,Poco,Duto: String): Boolean;
+    procedure GravarRegistro(CorColuna: Integer; Plataforma,Poco,Duto,Tarefa,
+    Realizacao,Vencimento,Dias: String);
+  public
+    { Public declarations }
+  end;
+
+var
+  FrmAnaliseBEP: TFrmAnaliseBEP;
+
+implementation
+  uses untPrincipal,untDataModule;
+{$R *.dfm}
+
+procedure TFrmAnaliseBEP.actBaixarArquivoExecute(Sender: TObject);
+begin
+  FrmPrincipal.ProgressBarIncializa(5,'Baixar Excel do BEP');
+  //Pesquisa por Realização Mensal
+  ComboBox1.Text:= 'bep2.petrobras.com.br/Consulta/ConsultaRealizacaoTarefas.aspx';
+  webbrowser1.Navigate(ComboBox1.Text);
+  //===============================================
+  TipoEvento:= 2;
+  baixarExcel:= true;
+end;
+
+procedure TFrmAnaliseBEP.actBaixoExecute(Sender: TObject);
+begin
+  FrmPrincipal.moveBaixo(DBGridAnaliseBEP, ColunasLayoutAnaliseBEP);
+  actLimparFiltros.Execute;
+end;
+
+procedure TFrmAnaliseBEP.actBaixoTudoExecute(Sender: TObject);
+begin
+  FrmPrincipal.botaoMoveTudo(FrmDataModule.ADOConnectionOperacao,
+  'AnaliseBEP.txt','tblAnaliseBEP','TAB2;',
+  DBGridAnaliseBEP,ColunasLayoutAnaliseBEP);
+  actLimparFiltros.Execute;
+end;
+
+procedure TFrmAnaliseBEP.actCimaExecute(Sender: TObject);
+begin
+  FrmPrincipal.moveCima(DBGridAnaliseBEP, ColunasLayoutAnaliseBEP);
+  actLimparFiltros.Execute;
+end;
+
+procedure TFrmAnaliseBEP.actCimaTudoExecute(Sender: TObject);
+begin
+  FrmPrincipal.botaoMoveTudo(FrmDataModule.ADOConnectionOperacao,
+  'AnaliseBEP.txt','tblAnaliseBEP','TAB1;',
+  DBGridAnaliseBEP,ColunasLayoutAnaliseBEP);
+  actLimparFiltros.Execute;
+end;
+
+procedure TFrmAnaliseBEP.actConfigFiltroExecute(Sender: TObject);
+  var
+    PalavraLista,PalavraBusca: String;
+    i: Integer;
+begin
+  PalavraBusca:= '';
+  PalavraLista:= '';
+  FrmDataModule.ADOQueryTemporarioDBOperacao.Close;
+  FrmDataModule.ADOQueryTemporarioDBOperacao.SQL.Clear;
+  FrmDataModule.ADOQueryTemporarioDBOperacao.SQL.Add(
+  'SELECT tblTarefa.* FROM tblTarefa '+
+  'WHERE ((BooleanSelecao = True));');
+  FrmDataModule.ADOQueryTemporarioDBOperacao.Open;
+  while not FrmDataModule.ADOQueryTemporarioDBOperacao.Eof  do
+  begin
+    PalavraLista:= FrmDataModule.DataSourceTemporarioDBOperacao.DataSet.FieldByName('Tarefa').AsString;
+    if PalavraBusca <> '' then
+      PalavraBusca:= PalavraBusca+';'+PalavraLista
+    else
+      PalavraBusca:= PalavraLista;
+
+    FrmDataModule.ADOQueryTemporarioDBOperacao.Next;
+  end;
+  FrmPrincipal.buscaFiledGrid1('Tarefa',PalavraBusca,'Contem',ColunasLayoutAnaliseBEP,4,false);
+  //============================================================================
+  PalavraBusca:= '';
+  PalavraLista:= '';
+  FrmDataModule.ADOQueryTemporarioDBOperacao.Close;
+  FrmDataModule.ADOQueryTemporarioDBOperacao.SQL.Clear;
+  FrmDataModule.ADOQueryTemporarioDBOperacao.SQL.Add(
+  'SELECT tblResponsavel.* FROM tblResponsavel '+
+  'WHERE ((BooleanSelecao = True));');
+  FrmDataModule.ADOQueryTemporarioDBOperacao.Open;
+  while not FrmDataModule.ADOQueryTemporarioDBOperacao.Eof  do
+  begin
+    PalavraLista:= FrmDataModule.DataSourceTemporarioDBOperacao.DataSet.FieldByName('Responsavel').AsString;
+    if PalavraBusca <> '' then
+      PalavraBusca:= PalavraBusca+';'+PalavraLista
+    else
+      PalavraBusca:= PalavraLista;
+
+    FrmDataModule.ADOQueryTemporarioDBOperacao.Next;
+  end;
+  FrmPrincipal.buscaFiledGrid1('Responsavel',PalavraBusca,'Contem',ColunasLayoutAnaliseBEP,4,false);
+  //=============================================================================
+    //Plataformas
+  PalavraBusca:= '';
+  for I := 0 to CheckListBoxPlataforma.Count-1 do
+  begin
+    if CheckListBoxPlataforma.Checked[i] then
+    begin
+      PalavraLista:= CheckListBoxPlataforma.Items[i];
+      if PalavraBusca <> '' then
+        PalavraBusca:= PalavraBusca+';'+PalavraLista
+      else
+        PalavraBusca:= PalavraLista;
+    end;
+  end;
+  FrmPrincipal.buscaFiledGrid1('Plataforma',PalavraBusca,'Contem',ColunasLayoutAnaliseBEP,4,false);
+end;
+
+procedure TFrmAnaliseBEP.actConfigPickListExecute(Sender: TObject);
+  var
+    ListaGroup: TStringList;
+begin
+  FrmPrincipal.SetupGridPickListSQL(FrmDataModule.ADOConnectionOperacao,
+  'Responsavel','SELECT tblResponsavel.* FROM tblResponsavel ORDER BY Responsavel;',
+  DBGridAnaliseBEP,2);
+
+  //================================================================
+  ListaGroup:=TStringList.Create;
+  FrmDataModule.ADOQueryTemporarioDBOperacao.Close;
+  FrmDataModule.ADOQueryTemporarioDBOperacao.SQL.Clear;
+  FrmDataModule.ADOQueryTemporarioDBOperacao.SQL.Add(
+  'SELECT Plataforma FROM tblAnaliseBEP '+
+  'GROUP BY Plataforma ORDER BY Plataforma;');
+  FrmDataModule.ADOQueryTemporarioDBOperacao.Open;
+  while not FrmDataModule.ADOQueryTemporarioDBOperacao.Eof do
+  begin
+    ListaGroup.Add(FrmDataModule.ADOQueryTemporarioDBOperacao.FieldByName('Plataforma').AsString);
+    FrmDataModule.ADOQueryTemporarioDBOperacao.Next;
+  end;
+  FrmPrincipal.SetupCheckListSQL1('Plataforma','',CheckListBoxPlataforma,
+  ListaGroup);
+end;
+
+procedure TFrmAnaliseBEP.actCopiarPaginaExecute(Sender: TObject);
+begin
+  FrmPrincipal.ProgressBarIncializa(7,'Copiar dados do BEP');
+  //Prepara planilha Excel
+  ExcelPagina := CreateOleObject('Excel.Application');
+  ExcelPagina.Workbooks.Add;
+  ExcelPagina.Workbooks[1].WorkSheets[1].Name := 'BEPColibri';
+  SheetPagina := ExcelPagina.Workbooks[1].WorkSheets['BEPColibri'];
+  FrmPrincipal.ProgressBarIncremento(1);
+  ExcelPagina.Caption := 'BEPColibri';
+  // Abrir a primeira planilha do arquivo
+  SheetPagina := ExcelPagina.WorkSheets[1];
+  FrmPrincipal.ProgressBarIncremento(1);
+  //Pesquisa por Realização Mensal
+  ComboBox1.Text:= 'bep2.petrobras.com.br/Consulta/ConsultaRealizacaoTarefas.aspx';
+  webbrowser1.Navigate(ComboBox1.Text);
+  FrmPrincipal.ProgressBarIncremento(1);
+  //===============================================
+  TipoEvento:= 2;
+  baixarExcel:= false;
+end;
+
+procedure TFrmAnaliseBEP.actExcelExecute(Sender: TObject);
+begin
+  FrmPrincipal.GerarExcel(DBGridAnaliseBEP,'Análise BEP');
+end;
+
+procedure TFrmAnaliseBEP.actExcluirFiltradosExecute(Sender: TObject);
+begin
+  if Application.MessageBox(PChar(
+  'Deseja realmente excluir todos os registros "FILTRADOS"?'),
+  '.::ATENÇÃO::.',36) = 6 then
+  begin
+    FrmPrincipal.deleteQuery(FrmDataModule.ADOQueryAnaliseBEP,
+    'Analise BEP');
+  end;
+end;
+
+procedure TFrmAnaliseBEP.actExcluirSelecaoExecute(Sender: TObject);
+begin
+  FrmDataModule.ADOQueryAnaliseBEP.Delete;
+end;
+
+procedure TFrmAnaliseBEP.actExportarExcelExecute(Sender: TObject);
+  var
+    vaIn, vaOut:  OleVariant;
+begin
+  if baixarExcel then
+  begin
+    try
+      ((WebBrowser1.Document as IHTMLDocument2).body as IHTMLElement2).focus();
+      WebBrowser1.OleObject.Document.GetElementByID('ctl00_ContentPlaceHolder1_btnExportarTodos').click;
+      FrmPrincipal.ProgressBarIncremento(1);
+    except
+      TimerExcel.Enabled:= false;
+    end;
+  end
+  else
+  begin
+    try
+      TipoEvento:= 0;
+      FrmPrincipal.ProgressBarIncremento(1);
+      WebBrowser1.ExecWB(OLECMDID_SELECTALL, OLECMDEXECOPT_PROMPTUSER, vaIn, vaOut);
+      WB_Copy(webbrowser1);
+      SheetPagina.Range['A1'].Select;
+      SheetPagina.Paste;
+      TimerExcel.Enabled:= false;
+      actImportarCopia.Execute;
+    except
+      TimerExcel.Enabled:= false;
+    end;
+  end;
+  baixarExcel := false;
+  FrmPrincipal.ProgressBarAtualizar;
+end;
+
+procedure TFrmAnaliseBEP.actFiltroInserirExecute(Sender: TObject);
+begin
+  case TabIndex of
+    0:
+    begin
+      FrmPrincipal.inserirProcura(DBGridAnaliseBEP,ColunasLayoutAnaliseBEP);
+      actProcurarAnaliseBep.Execute;
+    end;
+    1:
+    begin
+      FrmPrincipal.inserirProcura(DBGridTarefa,ColunasLayoutTarefa);
+      actProcurarTarefa.Execute;
+    end;
+    2:
+    begin
+      FrmPrincipal.inserirProcura(DBGridResponsavel,ColunasLayoutResponsavel);
+      actProcurarResponsavel.Execute;
+    end;
+  end;
+  if (FrmPrincipal.PanelFiltrosTabela.Visible)AND(FrmPrincipal.PanelAjuda1.Visible) then
+    actFiltrosTabela.Execute;
+end;
+
+procedure TFrmAnaliseBEP.actFiltrosTabelaExecute(Sender: TObject);
+begin
+  FrmPrincipal.btnProcurarFiltrosTabela.Action:= actProcuraFiltrosTabela;
+  case TabIndex of
+    0:
+    begin
+      FrmPrincipal.FiltrosTabela(DBGridAnaliseBEP,ColunasLayoutAnaliseBEP);
+    end;
+    1:
+    begin
+      FrmPrincipal.FiltrosTabela(DBGridTarefa,ColunasLayoutTarefa);
+    end;
+    2:
+    begin
+      FrmPrincipal.FiltrosTabela(DBGridResponsavel,ColunasLayoutResponsavel);
+    end;
+  end;
+end;
+
+procedure TFrmAnaliseBEP.actGridASCExecute(Sender: TObject);
+begin
+  case TabIndex of
+    0:
+    begin
+      FrmPrincipal.ClassificaDBGrid(DBGridAnaliseBEP,
+      FrmDataModule.ADOQueryAnaliseBEP,0);
+    end;
+    1:
+    begin
+      FrmPrincipal.ClassificaDBGrid(DBGridTarefa,
+      FrmDataModule.ADOQueryBEPTarefa,0);
+    end;
+    2:
+    begin
+      FrmPrincipal.ClassificaDBGrid(DBGridResponsavel,
+      FrmDataModule.ADOQueryBEPResponsavel,0);
+    end;
+  end;
+end;
+
+procedure TFrmAnaliseBEP.actGridDESCExecute(Sender: TObject);
+begin
+  case TabIndex of
+    0:
+    begin
+      FrmPrincipal.ClassificaDBGrid(DBGridAnaliseBEP,
+      FrmDataModule.ADOQueryAnaliseBEP,1);
+    end;
+    1:
+    begin
+      FrmPrincipal.ClassificaDBGrid(DBGridTarefa,
+      FrmDataModule.ADOQueryBEPTarefa,1);
+    end;
+    2:
+    begin
+      FrmPrincipal.ClassificaDBGrid(DBGridResponsavel,
+      FrmDataModule.ADOQueryBEPResponsavel,1);
+    end;
+  end;
+end;
+
+procedure TFrmAnaliseBEP.actImportarCopiaExecute(Sender: TObject);
+var
+  i,matrizLinha,ARow,CorColuna,Contar: Integer;
+  Realizacao, Plataforma, Tarefa,Poco,Duto,Dias,Vencimento,Celula: String;
+begin
+  {OpenDialog1.Filter := 'Microsoft Excel |*.xlsx|Microsoft Excel 97-2003|*.xls';
+  OpenDialog1.DefaultExt := '*.xlsx';
+  if OpenDialog1.Execute then
+  begin
+    ExcelPagina := CreateOleObject('Excel.Application');
+    ExcelPagina.Workbooks.Open(OpenDialog1.FileName);
+    SheetPagina := ExcelPagina.WorkSheets[1];
+    ExcelPagina.visible:= true;
+  end; }
+  FrmDataModule.ADOQueryImportarBEP.Active:= false;
+  FrmDataModule.ADOQueryImportarBEP.Active:= true;
+  try
+    try
+      ARow:= 1;
+      Contar:= 0;
+      //Procurar linha inicial
+      for i := ARow to 100 do
+      begin
+        Plataforma:= ExcelPagina.Workbooks[1].Sheets[1].Cells[i,1];
+        if Plataforma = 'Instalação' then
+          Contar:= Contar+1;
+        if Contar = 2 then
+        begin
+          ARow:= i+1;
+          break
+        end;
+      end;
+      // ============================================
+      //Verificar a ultima Linha
+      // ============================================
+      matrizLinha:= (SheetPagina.Cells.SpecialCells(11).Row)-4;
+      // Inicializar ProgressBar
+      FrmPrincipal.ProgressBarIncializa(matrizLinha-ARow,
+      'Importando dados da página BEP...');
+      // ============================================
+      // Preencher as planilhas
+      // ============================================
+      for i := ARow to matrizLinha do
+      begin
+        Celula:=      'G'+IntToStr(i);
+        Plataforma:=  ExcelPagina.Workbooks[1].Sheets[1].Cells[i,1];
+        Poco:=        ExcelPagina.Workbooks[1].Sheets[1].Cells[i,2];
+        Duto:=        ExcelPagina.Workbooks[1].Sheets[1].Cells[i,3];
+        Tarefa:=      ExcelPagina.Workbooks[1].Sheets[1].Cells[i,4];
+        Realizacao:=  ExcelPagina.Workbooks[1].Sheets[1].Cells[i,5];
+        Vencimento:=  ExcelPagina.Workbooks[1].Sheets[1].Cells[i,6];
+        Dias:=        ExcelPagina.Workbooks[1].Sheets[1].Cells[i,7];
+        CorColuna:=   SheetPagina.Range[Celula].Interior.Color;
+
+        GravarRegistro(CorColuna,Plataforma,Poco,Duto,Tarefa,Realizacao,Vencimento,Dias);
+        // Incremento ProgressBar
+        FrmPrincipal.ProgressBarIncremento(1);
+        Application.ProcessMessages;
+      end;
+      // Atualizar ProgressBar
+      FrmPrincipal.ProgressBarAtualizar;
+    finally
+      actProcurarAnaliseBep.Execute;
+      //Fechar Excel
+      ExcelPagina.Application.DisplayAlerts := False; // Alle Rückfragen ausstellen
+      ExcelPagina.Quit;
+      ExcelPagina := Unassigned;
+      FreeAndNil(ExcelPagina);
+      ExcelPagina := 0;
+    end;
+  except
+    actProcurarAnaliseBep.Execute;
+    // Atualizar ProgressBar
+    FrmPrincipal.ProgressBarAtualizar;
+    //Fechar Excel
+    ExcelPagina.Application.DisplayAlerts := False; // Alle Rückfragen ausstellen
+    ExcelPagina.Quit;
+    ExcelPagina := Unassigned;
+    FreeAndNil(ExcelPagina);
+    ExcelPagina := 0;
+  end;
+end;
+
+procedure TFrmAnaliseBEP.actLayoutJanelaExecute(Sender: TObject);
+begin
+  FrmPrincipal.btnCima.Action:= actCima;
+  FrmPrincipal.btnBaixo.Action:= actBaixo;
+  FrmPrincipal.btnBaixoTudo.Action:= actBaixoTudo;
+  FrmPrincipal.btnCimaTudo.Action:= actCimaTudo;
+  FrmPrincipal.btnSalvarLayout.Action:= actSalvarLayout;
+  FrmPrincipal.btnSalvarLayout.Visible:= false;
+  FrmPrincipal.CarregarRLColunas('AnaliseBEP.txt',ColunasLayoutAnaliseBEP);
+  FrmPrincipal.actConfigPanelLayout.Execute;
+end;
+
+procedure TFrmAnaliseBEP.actLimparFiltrosExecute(Sender: TObject);
+begin
+  case TabIndex of
+    0:
+    begin
+      FrmPrincipal.LimparColunasFiltro(DBGridAnaliseBEP,ColunasLayoutAnaliseBEP);
+      actProcurarAnaliseBep.Execute;
+    end;
+    1:
+    begin
+      FrmPrincipal.LimparColunasFiltro(DBGridTarefa,ColunasLayoutTarefa);
+      actProcurarTarefa.Execute;
+    end;
+    2:
+    begin
+      FrmPrincipal.LimparColunasFiltro(DBGridResponsavel,ColunasLayoutResponsavel);
+      actProcurarResponsavel.Execute;
+    end;
+  end;
+  if (FrmPrincipal.PanelFiltrosTabela.Visible)AND(FrmPrincipal.PanelAjuda1.Visible) then
+    actFiltrosTabela.Execute;
+end;
+
+procedure TFrmAnaliseBEP.actMostrarExecute(Sender: TObject);
+begin
+  PanelFiltros.Width:= 400;
+  PanelCima.Visible:= true;
+  PanelBaixo.Visible:= true;
+  btnMostrarOcultar.Action:= actOcultar;
+end;
+
+procedure TFrmAnaliseBEP.actOcultarExecute(Sender: TObject);
+begin
+  PanelFiltros.Width:= 25;
+  PanelCima.Visible:= false;
+  PanelBaixo.Visible:= false;
+  btnMostrarOcultar.Action:= actMostrar;
+end;
+
+procedure TFrmAnaliseBEP.actPesquisarExecute(Sender: TObject);
+begin
+  FrmPrincipal.ProgressBarIncremento(1);
+  ((WebBrowser1.Document as IHTMLDocument2).body as IHTMLElement2).focus();
+  WebBrowser1.OleObject.Document.GetElementByID('ctl00_ContentPlaceHolder1_btnPesquisar').click;
+  FrmPrincipal.ProgressBarIncremento(1);
+  TimerPesquisar.Enabled:= false;
+  TimerExcel.Enabled:= true
+end;
+
+procedure TFrmAnaliseBEP.actProcuraFiltrosTabelaExecute(Sender: TObject);
+begin
+  case TabIndex of
+    0:
+    begin
+      FrmPrincipal.CarregaFiltrosProcura(ColunasLayoutAnaliseBEP);
+      actProcurarAnaliseBep.Execute;
+    end;
+    1:
+    begin
+      FrmPrincipal.CarregaFiltrosProcura(ColunasLayoutTarefa);
+      actProcurarTarefa.Execute;
+    end;
+    2:
+    begin
+      FrmPrincipal.CarregaFiltrosProcura(ColunasLayoutResponsavel);
+      actProcurarResponsavel.Execute;
+    end;
+  end;
+end;
+
+procedure TFrmAnaliseBEP.actProcurarAnaliseBepExecute(Sender: TObject);
+  var
+    SQLString,SQLBase: String;
+begin
+  actConfigFiltro.Execute;
+  SQLString:= frmPrincipal.SQLStringFiltroTabela(ColunasLayoutAnaliseBEP,true);
+  SQLBase:= 'SELECT tblAnaliseBEP.* FROM tblAnaliseBEP '+
+  SQLString+' ORDER BY Dias;';
+  FrmPrincipal.ProcuraQuery(SQLBase,FrmDataModule.ADOQueryAnaliseBEP,StatusBarAnaliseBEP);
+end;
+
+procedure TFrmAnaliseBEP.actProcurarResponsavelExecute(Sender: TObject);
+  var
+    SQLString,SQLBase: String;
+begin
+  SQLString:= frmPrincipal.SQLStringFiltroTabela(ColunasLayoutResponsavel,true);
+  SQLBase:= 'SELECT tblResponsavel.* FROM tblResponsavel '+
+  SQLString+' ORDER BY Responsavel;';
+  FrmPrincipal.ProcuraQuery(SQLBase,FrmDataModule.ADOQueryBEPResponsavel,StatusBarResponsavel);
+end;
+
+procedure TFrmAnaliseBEP.actProcurarTarefaExecute(Sender: TObject);
+  var
+    SQLString,SQLBase: String;
+begin
+  SQLString:= frmPrincipal.SQLStringFiltroTabela(ColunasLayoutTarefa,true);
+  SQLBase:= 'SELECT tblTarefa.* FROM tblTarefa '+
+  SQLString+' ORDER BY Tarefa;';
+  FrmPrincipal.ProcuraQuery(SQLBase,FrmDataModule.ADOQueryBEPTarefa,StatusBarTarefa);
+end;
+
+procedure TFrmAnaliseBEP.actSalvarLayoutExecute(Sender: TObject);
+begin
+  FrmPrincipal.SalvarRLColunasCarregaGRID(FrmDataModule.ADOConnectionOperacao,
+  'AnaliseBEP.txt','tblAnaliseBEP',
+  DBGridAnaliseBEP,ColunasLayoutAnaliseBEP);
+  actLimparFiltros.Execute;
+end;
+
+procedure TFrmAnaliseBEP.actSAPExecute(Sender: TObject);
+  var
+    NotaManutencao,OrdemManutencao,SQLBase,Pendencia: String;
+begin
+  NotaManutencao:= FrmDataModule.DataSourceAnaliseBEP.DataSet.FieldByName('NotaManutencao').AsString;
+  OrdemManutencao:= FrmDataModule.DataSourceAnaliseBEP.DataSet.FieldByName('OrdemManutencao').AsString;
+  if NotaManutencao <> '' then
+  begin
+    SQLBase:= 'SELECT tblCarteiraTrabalho.* FROM tblCarteiraTrabalho '+
+    'WHERE ((NotaManutencao LIKE '+NotaManutencao+'));';
+    FrmDataModule.ADOQueryTemporarioDBMemoria.Close;
+    FrmDataModule.ADOQueryTemporarioDBMemoria.SQL.Clear;
+    FrmDataModule.ADOQueryTemporarioDBMemoria.SQL.Add(SQLBase);
+    FrmDataModule.ADOQueryTemporarioDBMemoria.Open;
+    if not FrmDataModule.ADOQueryAnaliseBEP.IsEmpty then
+    begin
+      FrmDataModule.ADOQueryAnaliseBEP.Edit;
+      OrdemManutencao:= FrmDataModule.DataSourceTemporarioDBMemoria.DataSet.FieldByName('OrdemManutencao').AsString;
+      FrmDataModule.DataSourceAnaliseBEP.DataSet.FieldByName('OrdemManutencao').AsString:=
+      OrdemManutencao;
+      Pendencia:= DBMemoPendencia.Text+#13+
+      FrmDataModule.DataSourceTemporarioDBMemoria.DataSet.FieldByName('TextoBreveOM').AsString+#13+
+      FrmPrincipal.verificaTextoLongoCarteira(OrdemManutencao);
+
+      FrmDataModule.DataSourceAnaliseBEP.DataSet.FieldByName('Pendencia').AsString:= Pendencia;
+
+      FrmDataModule.ADOQueryAnaliseBEP.Post;
+    end;
+  end
+  else if OrdemManutencao <> '' then
+  begin
+    SQLBase:= 'SELECT tblCarteiraTrabalho.* FROM tblCarteiraTrabalho '+
+    'WHERE ((OrdemManutencao LIKE '+OrdemManutencao+'));';
+    FrmDataModule.ADOQueryTemporarioDBMemoria.Close;
+    FrmDataModule.ADOQueryTemporarioDBMemoria.SQL.Clear;
+    FrmDataModule.ADOQueryTemporarioDBMemoria.SQL.Add(SQLBase);
+    FrmDataModule.ADOQueryTemporarioDBMemoria.Open;
+    if not FrmDataModule.ADOQueryAnaliseBEP.IsEmpty then
+    begin
+      FrmDataModule.ADOQueryAnaliseBEP.Edit;
+      NotaManutencao:= FrmDataModule.DataSourceTemporarioDBMemoria.DataSet.FieldByName('NotaManutencao').AsString;
+      FrmDataModule.DataSourceAnaliseBEP.DataSet.FieldByName('NotaManutencao').AsString:=
+      NotaManutencao;
+      Pendencia:= DBMemoPendencia.Text+#13+
+      FrmDataModule.DataSourceTemporarioDBMemoria.DataSet.FieldByName('TextoBreveOM').AsString+#13+
+      FrmPrincipal.verificaTextoLongoCarteira(OrdemManutencao);
+      FrmDataModule.DataSourceAnaliseBEP.DataSet.FieldByName('Pendencia').AsString:= Pendencia;
+      FrmDataModule.ADOQueryAnaliseBEP.Post;
+    end;
+  end
+  else
+    MessageBox(0,PChar('Necessário informar a "Nota de Manutenção" ou a "Ordem de Manutenção"'),'Colibri',MB_ICONEXCLAMATION);
+end;
+
+procedure TFrmAnaliseBEP.actSelLimparExecute(Sender: TObject);
+var
+  I: Integer;
+begin
+  for I := 0 to CheckListBoxPlataforma.Count-1 do
+    CheckListBoxPlataforma.Checked[i]:= false;
+
+  actConfigFiltro.Execute;
+end;
+
+procedure TFrmAnaliseBEP.actSelTudoExecute(Sender: TObject);
+var
+  I: Integer;
+begin
+  for I := 0 to CheckListBoxPlataforma.Count-1 do
+    CheckListBoxPlataforma.Checked[i]:= true;
+
+  actConfigFiltro.Execute;
+end;
+
+procedure TFrmAnaliseBEP.actSubstituirPorExecute(Sender: TObject);
+begin
+  case TabIndex of
+    0:
+    begin
+      FrmPrincipal.SubstituirPor(DBGridAnaliseBEP,FrmDataModule.ADOQueryAnaliseBEP,
+      FrmDataModule.DataSourceAnaliseBEP);
+    end;
+    1:
+    begin
+      FrmPrincipal.SubstituirPor(DBGridTarefa,FrmDataModule.ADOQueryBEPTarefa,
+      FrmDataModule.DataSourceBEPTarefa);
+    end;
+    2:
+    begin
+      FrmPrincipal.SubstituirPor(DBGridResponsavel,FrmDataModule.ADOQueryBEPResponsavel,
+      FrmDataModule.DataSourceBEPResponsavel);
+    end;
+  end;
+end;
+
+procedure TFrmAnaliseBEP.actAutoFitExecute(Sender: TObject);
+begin
+  FrmPrincipal.AutoSizeDBGrid(DBGridAnaliseBEP);
+  FrmPrincipal.AutoSizeDBGrid(DBGridTarefa);
+  FrmPrincipal.AutoSizeDBGrid(DBGridResponsavel);
+  FrmPrincipal.AutoFitStatusBar(StatusBarAnaliseBEP);
+  FrmPrincipal.AutoFitStatusBar(StatusBarResponsavel);
+  FrmPrincipal.AutoFitStatusBar(StatusBarTarefa);
+end;
+
+procedure TFrmAnaliseBEP.actZoomMaisExecute(Sender: TObject);
+begin
+  DBGridAnaliseBEP.Font.Size:= DBGridAnaliseBEP.Font.Size+1;
+  DBGridTarefa.Font.Size:= DBGridTarefa.Font.Size+1;
+  DBGridResponsavel.Font.Size:= DBGridResponsavel.Font.Size+1;
+  CheckListBoxPlataforma.Font.Size:= CheckListBoxPlataforma.Font.Size+1;
+  DBMemoPendencia.Font.Size:= DBMemoPendencia.Font.Size+1;
+  //StatusBarTotal
+  StatusBarAnaliseBEP.Height:= StatusBarAnaliseBEP.Height+2;
+  StatusBarAnaliseBEP.Font.Size:= StatusBarAnaliseBEP.Font.Size+1;
+  StatusBarResponsavel.Height:= StatusBarResponsavel.Height+2;
+  StatusBarResponsavel.Font.Size:= StatusBarResponsavel.Font.Size+1;
+  StatusBarTarefa.Height:= StatusBarTarefa.Height+2;
+  StatusBarTarefa.Font.Size:= StatusBarTarefa.Font.Size+1;
+  //AutoFit
+  actAutoFit.Execute;
+end;
+
+procedure TFrmAnaliseBEP.actZoomMenosExecute(Sender: TObject);
+begin
+  if DBGridAnaliseBEP.Font.Size > 5 then
+  begin
+    DBGridAnaliseBEP.Font.Size:= DBGridAnaliseBEP.Font.Size-1;
+    DBGridTarefa.Font.Size:= DBGridTarefa.Font.Size-1;
+    DBGridResponsavel.Font.Size:= DBGridResponsavel.Font.Size-1;
+    CheckListBoxPlataforma.Font.Size:= CheckListBoxPlataforma.Font.Size-1;
+    DBMemoPendencia.Font.Size:= DBMemoPendencia.Font.Size-1;
+    //StatusBarTotal
+    StatusBarAnaliseBEP.Height:= StatusBarAnaliseBEP.Height-2;
+    StatusBarAnaliseBEP.Font.Size:= StatusBarAnaliseBEP.Font.Size-1;
+    StatusBarResponsavel.Height:= StatusBarResponsavel.Height-2;
+    StatusBarResponsavel.Font.Size:= StatusBarResponsavel.Font.Size-1;
+    StatusBarTarefa.Height:= StatusBarTarefa.Height-2;
+    StatusBarTarefa.Font.Size:= StatusBarTarefa.Font.Size-1;
+    //AutoFit
+    actAutoFit.Execute;
+  end;
+end;
+
+procedure TFrmAnaliseBEP.btnatualizarClick(Sender: TObject);
+begin
+  //Serve para Atualizar a página Atual
+  webbrowser1.Refresh;
+end;
+
+procedure TFrmAnaliseBEP.btnavancarClick(Sender: TObject);
+begin
+  //Serve para vançar para a próxima página.
+  webbrowser1.GoForward;
+end;
+
+procedure TFrmAnaliseBEP.btnhomeClick(Sender: TObject);
+begin
+  //Serve para ir até a página inicial da internet
+  webbrowser1.GoHome;
+end;
+
+procedure TFrmAnaliseBEP.btnimprimirClick(Sender: TObject);
+begin
+  WB_ShowPrintDialog(WebBrowser1);
+end;
+
+procedure TFrmAnaliseBEP.btnpararClick(Sender: TObject);
+begin
+  //Serve para parar a página que está sendo carregada.
+  webbrowser1.Stop;
+end;
+
+procedure TFrmAnaliseBEP.btnprocurarClick(Sender: TObject);
+begin
+  // Essa função, abre a página de pesquisa padrão do IE.
+  webbrowser1.GoSearch;
+end;
+
+procedure TFrmAnaliseBEP.btnvoltarClick(Sender: TObject);
+begin
+  //Serve para Voltar à página anteriormente visitada.
+  webbrowser1.goback;
+end;
+
+procedure TFrmAnaliseBEP.ComboBox1KeyPress(Sender: TObject; var Key: Char);
+begin
+  if (key=#13) then
+  begin
+    webbrowser1.Navigate(combobox1.Text);
+  end;
+end;
+
+procedure TFrmAnaliseBEP.DBGridAnaliseBEPColumnMoved(Sender: TObject; FromIndex,
+  ToIndex: Integer);
+begin
+  FrmPrincipal.CarregarRLColunasAtivasGRID(DBGridAnaliseBEP);
+  FrmPrincipal.GravarRLColunas('AnaliseBEP.txt');
+end;
+
+procedure TFrmAnaliseBEP.DBGridAnaliseBEPDrawColumnCell(Sender: TObject;
+  const Rect: TRect; DataCol: Integer; Column: TColumn; State: TGridDrawState);
+  var
+    CorColuna: Integer;
+begin
+  FrmPrincipal.GridZebrado(DBGridAnaliseBEP,ColunasLayoutAnaliseBEP,State,Rect,DataCol,Column);
+
+  if (Column.Field.FieldName = 'Dias') then
+  begin
+    try
+      CorColuna:= FrmDataModule.DataSourceAnaliseBEP.DataSet.
+      FieldByName('CorColuna').AsInteger;
+      DBGridAnaliseBEP.Canvas.Brush.Color:= CorColuna;
+      if CorColuna = 65535 then
+        DBGridAnaliseBEP.Canvas.Font.Color:= clBlack
+      else
+        DBGridAnaliseBEP.Canvas.Font.Color:= clWhite;
+      DBGridAnaliseBEP.Canvas.FillRect(Rect);
+      DBGridAnaliseBEP.DefaultDrawColumnCell(Rect, DataCol,Column, State);
+    except
+    end;
+  end;
+end;
+
+procedure TFrmAnaliseBEP.DBGridAnaliseBEPKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+  if (Key in [VK_DOWN]) AND (DBGridAnaliseBEP.DataSource.DataSet.RecNo=
+  DBGridAnaliseBEP.DataSource.DataSet.RecordCount) then
+    Abort;
+end;
+
+procedure TFrmAnaliseBEP.DBGridAnaliseBEPKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+  if (DBGridAnaliseBEP.SelectedField.FieldName = 'Responsavel') then
+    Key:= #0
+end;
+
+procedure TFrmAnaliseBEP.DBGridAnaliseBEPTitleClick(Column: TColumn);
+begin
+  TabIndex:= 0;
+  FrmPrincipal.configurarFiltro(1,Column.FieldName,IntToStr(Column.Index),
+  Column.ReadOnly,actFiltroInserir,actGridASC,actGridDESC,actSubstituirPor);
+  //======================================================
+  FrmPrincipal.titleGrid(ColunasLayoutAnaliseBEP,FrmDataModule.ADOQueryAnaliseBEP,
+  StatusBarAnaliseBEP,'Operacao');
+end;
+
+procedure TFrmAnaliseBEP.DBGridResponsavelCellClick(Column: TColumn);
+begin
+  try
+    if (Self.DBGridResponsavel.SelectedField.DataType = ftBoolean)AND
+    (Column.Field.FieldName = 'BooleanSelecao') then
+    begin
+      DBGridResponsavel.Options:=
+      [dgTitles,dgIndicator,dgColumnResize,dgColLines,dgRowLines,dgTabs,dgAlwaysShowSelection,dgTitleClick,dgTitleHotTrack];
+      FrmDataModule.ADOQueryBEPResponsavel.Edit;
+      FrmDataModule.DataSourceBEPResponsavel.DataSet.
+      FieldByName('BooleanSelecao').AsBoolean:= not Self.DBGridResponsavel.SelectedField.AsBoolean;
+      FrmDataModule.ADOQueryBEPResponsavel.Post;
+    end
+    else
+      DBGridResponsavel.Options:=
+      [dgEditing,dgTitles,dgIndicator,dgColumnResize,dgColLines,dgRowLines,
+      dgTabs,dgConfirmDelete,dgCancelOnExit,dgTitleClick,dgTitleHotTrack];
+  except
+  end;
+  actProcurarAnaliseBep.Execute;
+end;
+
+procedure TFrmAnaliseBEP.DBGridResponsavelDrawColumnCell(Sender: TObject;
+  const Rect: TRect; DataCol: Integer; Column: TColumn; State: TGridDrawState);
+    var
+      CheckBoxRectangle : TRect;
+    Const
+    CtrlState : array[Boolean] of Integer = (DFCS_BUTTONCHECK,
+    DFCS_BUTTONCHECK or DFCS_CHECKED);
+begin
+  FrmPrincipal.GridZebrado(DBGridResponsavel,ColunasLayoutResponsavel,State,Rect,DataCol,Column);
+  if (Column.Field.FieldName = 'BooleanSelecao') then   //  mudança no código
+  begin
+    Self.DBGridResponsavel.Canvas.FillRect(Rect);
+    CheckBoxRectangle.Left := Rect.Left + 2;
+    CheckBoxRectangle.Right := Rect.Right - 2;
+    CheckBoxRectangle.Top := Rect.Top + 2;
+    CheckBoxRectangle.Bottom := Rect.Bottom - 2;
+    DrawFrameControl(Self.DBGridResponsavel.Canvas.Handle,
+    CheckBoxRectangle, DFC_BUTTON,
+    CtrlState[Column.Field.AsBoolean]);
+  end;
+end;
+
+procedure TFrmAnaliseBEP.DBGridResponsavelTitleClick(Column: TColumn);
+begin
+  TabIndex:= 2;
+  FrmPrincipal.configurarFiltro(1,Column.FieldName,IntToStr(Column.Index),
+  Column.ReadOnly,actFiltroInserir,actGridASC,actGridDESC,actSubstituirPor);
+  //======================================================
+  FrmPrincipal.titleGrid(ColunasLayoutResponsavel,FrmDataModule.ADOQueryBEPResponsavel,
+  StatusBarResponsavel,'Operacao');
+end;
+
+procedure TFrmAnaliseBEP.DBGridTarefaCellClick(Column: TColumn);
+begin
+  try
+    if (Self.DBGridTarefa.SelectedField.DataType = ftBoolean)AND
+    (Column.Field.FieldName = 'BooleanSelecao') then
+    begin
+      DBGridTarefa.Options:=
+      [dgTitles,dgIndicator,dgColumnResize,dgColLines,dgRowLines,dgTabs,dgAlwaysShowSelection,dgTitleClick,dgTitleHotTrack];
+      FrmDataModule.ADOQueryBEPTarefa.Edit;
+      FrmDataModule.DataSourceBEPTarefa.DataSet.
+      FieldByName('BooleanSelecao').AsBoolean:= not Self.DBGridTarefa.SelectedField.AsBoolean;
+      FrmDataModule.ADOQueryBEPTarefa.Post;
+    end
+    else
+      DBGridTarefa.Options:=
+      [dgEditing,dgTitles,dgIndicator,dgColumnResize,dgColLines,dgRowLines,
+      dgTabs,dgConfirmDelete,dgCancelOnExit,dgTitleClick,dgTitleHotTrack];
+  except
+  end;
+  actProcurarAnaliseBep.Execute;
+end;
+
+procedure TFrmAnaliseBEP.DBGridTarefaDrawColumnCell(Sender: TObject;
+  const Rect: TRect; DataCol: Integer; Column: TColumn; State: TGridDrawState);
+    var
+      CheckBoxRectangle : TRect;
+    Const
+    CtrlState : array[Boolean] of Integer = (DFCS_BUTTONCHECK,
+    DFCS_BUTTONCHECK or DFCS_CHECKED);
+begin
+  FrmPrincipal.GridZebrado(DBGridTarefa,ColunasLayoutTarefa,State,Rect,DataCol,Column);
+  if (Column.Field.FieldName = 'BooleanSelecao') then   //  mudança no código
+  begin
+    Self.DBGridTarefa.Canvas.FillRect(Rect);
+    CheckBoxRectangle.Left := Rect.Left + 2;
+    CheckBoxRectangle.Right := Rect.Right - 2;
+    CheckBoxRectangle.Top := Rect.Top + 2;
+    CheckBoxRectangle.Bottom := Rect.Bottom - 2;
+    DrawFrameControl(Self.DBGridTarefa.Canvas.Handle,
+    CheckBoxRectangle, DFC_BUTTON,
+    CtrlState[Column.Field.AsBoolean]);
+  end;
+end;
+
+procedure TFrmAnaliseBEP.DBGridTarefaTitleClick(Column: TColumn);
+begin
+  TabIndex:= 1;
+  FrmPrincipal.configurarFiltro(1,Column.FieldName,IntToStr(Column.Index),
+  Column.ReadOnly,actFiltroInserir,actGridASC,actGridDESC,actSubstituirPor);
+  //======================================================
+  FrmPrincipal.titleGrid(ColunasLayoutTarefa,FrmDataModule.ADOQueryBEPTarefa,
+  StatusBarTarefa,'Operacao');
+end;
+
+procedure TFrmAnaliseBEP.ExibirURLsVisitadas(Urls: TStrings);
+  var
+    Reg: TRegistry;
+    S: TStringList;
+    i: Integer;
+begin
+  Reg := TRegistry.Create;
+  try
+    Reg.RootKey := HKEY_CURRENT_USER;
+    if Reg.OpenKey(
+    'http://portalpetrobras.petrobras.com.br/PetrobrasPortal/appmanager/portal/'+
+    'desktop?_nfpb=true&_pageLabel=home_a_petrobras', False) then
+    begin
+      S := TStringList.Create;
+      try
+        reg.GetValueNames(S);
+        for i := 0 to S.Count - 1 do
+        begin
+          Urls.Add(reg.ReadString(S.Strings[i]));
+        end;
+      finally
+        S.Free;
+      end;
+      Reg.CloseKey;
+    end;
+  finally
+    Reg.Free;
+  end;
+end;
+
+Function TFrmAnaliseBEP.ExisteRegistro(Plataforma,Tarefa,Poco,Duto: String): Boolean;
+begin
+  FrmDataModule.ADOQueryExisteBEP.Active:= false;
+  FrmDataModule.ADOQueryExisteBEP.Parameters.Items[0].Value:= Plataforma;
+  FrmDataModule.ADOQueryExisteBEP.Parameters.Items[1].Value:= Tarefa;
+  FrmDataModule.ADOQueryExisteBEP.Parameters.Items[2].Value:= Poco;
+  FrmDataModule.ADOQueryExisteBEP.Parameters.Items[3].Value:= Duto;
+  FrmDataModule.ADOQueryExisteBEP.Active:= true;
+  if FrmDataModule.ADOQueryExisteBEP.IsEmpty then
+    Result:= false
+  else
+    Result:= true;
+end;
+
+procedure TFrmAnaliseBEP.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+  Action:= caFree;
+  FrmAnaliseBEP:=nil;
+end;
+
+procedure TFrmAnaliseBEP.FormCreate(Sender: TObject);
+begin
+  FrmPrincipal.MDIChildCreated(self.Handle);
+  ExibirURLsVisitadas(combobox1.Items);
+  ComboBox1.Text:= 'bep2.petrobras.com.br';
+  webbrowser1.Navigate(ComboBox1.Text);
+  TipoEvento:= 1;
+  //Incicialização
+  FrmPrincipal.SetUpColunasLayout(DBGridAnaliseBEP, ColunasLayoutAnaliseBEP);
+  FrmPrincipal.SetUpColunasLayout(DBGridTarefa, ColunasLayoutTarefa);
+  FrmPrincipal.SetUpColunasLayout(DBGridResponsavel, ColunasLayoutResponsavel);
+  //Layout
+  FrmPrincipal.CarregarRLColunas('AnaliseBEP.txt', ColunasLayoutAnaliseBEP);
+  FrmPrincipal.CarregarColunasGRID(FrmDataModule.ADOConnectionOperacao,
+  'tblAnaliseBEP',DBGridAnaliseBEP,ColunasLayoutAnaliseBEP);
+  //Filtro dias
+  FrmPrincipal.buscaFiledGrid1('Dias','Vazia','Diferente',ColunasLayoutAnaliseBEP,4,false);
+  actProcurarAnaliseBep.Execute;
+  actProcurarTarefa.Execute;
+  actProcurarResponsavel.Execute;
+  actConfigPickList.Execute;
+  if (FrmPrincipal.logPerfil = 'PIOP')OR
+  (FrmPrincipal.logPerfil = 'Administrador')OR
+  (FrmPrincipal.logPerfil = 'CIC-Mar')OR
+  (FrmPrincipal.logPerfil = 'Supervisor') then
+  begin
+    actCopiarPagina.Enabled:= true;
+    actExcluirFiltrados.Enabled:= true;
+    actExcluirSelecao.Enabled:= true;
+    DBNavigatorResponsavel.Enabled:= true;
+    DBNavigatorTarefa.Enabled:= true;
+    DBGridAnaliseBEP.ReadOnly:= false;
+    DBGridTarefa.ReadOnly:= false;
+    DBMemoPendencia.ReadOnly:= false;
+    DBGridResponsavel.ReadOnly:= false;
+  end
+  else
+  begin
+    actCopiarPagina.Enabled:= false;
+    actExcluirFiltrados.Enabled:= false;
+    actExcluirSelecao.Enabled:= false;
+    DBNavigatorResponsavel.Enabled:= false;
+    DBNavigatorTarefa.Enabled:= false;
+    DBGridAnaliseBEP.ReadOnly:= true;
+    DBGridTarefa.ReadOnly:= true;
+    DBMemoPendencia.ReadOnly:= true;
+    DBGridResponsavel.ReadOnly:= true;
+  end;
+
+end;
+
+procedure TFrmAnaliseBEP.FormDestroy(Sender: TObject);
+begin
+  FrmPrincipal.MDIChildDestroyed(self.Handle);
+end;
+
+procedure TFrmAnaliseBEP.FormResize(Sender: TObject);
+var
+  r: TRect;
+const
+  SB_GETRECT = WM_USER + 10;
+begin
+  // Set Progressbar Position
+  Statusbar1.Perform(SB_GETRECT, 1, Integer(@R));
+  ProgressBar1.Parent := Statusbar1;
+  ProgressBar1.SetBounds(r.Left, r.Top,
+  r.Right - r.Left - 5, r.Bottom - r.Top);
+end;
+
+procedure TFrmAnaliseBEP.GravarRegistro(CorColuna: Integer; Plataforma, Poco, Duto, Tarefa,
+  Realizacao, Vencimento, Dias: String);
+begin
+  if ExisteRegistro(Plataforma,Tarefa,Poco,Duto) then
+  begin
+    try
+      // Editar registro existente na tabela de dados
+      FrmDataModule.ADOQueryExisteBEP.Edit;
+      // Preencher as colunas do registro na tabela de dados
+      FrmDataModule.DataSourceExisteBEP.DataSet.
+      FieldByName('Duto').AsString := Duto;
+      FrmDataModule.DataSourceExisteBEP.DataSet.
+      FieldByName('Realizacao').AsString := Realizacao;
+      FrmDataModule.DataSourceExisteBEP.DataSet.
+      FieldByName('Vencimento').AsString := Vencimento;
+      FrmDataModule.DataSourceExisteBEP.DataSet.
+      FieldByName('Dias').AsString := Dias;
+      FrmDataModule.DataSourceExisteBEP.DataSet.
+      FieldByName('CorColuna').AsInteger := CorColuna;
+
+      //Usuário
+      FrmDataModule.DataSourceExisteBEP.DataSet.
+      FieldByName('ImportadoPor').asString:= FrmPrincipal.logChave;
+      FrmDataModule.DataSourceExisteBEP.DataSet.
+      FieldByName('DataImportacao').AsDateTime:= now;
+      FrmDataModule.DataSourceExisteBEP.DataSet.
+      FieldByName('Computador').AsString:= FrmPrincipal.logMaquina;
+
+      FrmDataModule.ADOQueryExisteBEP.Post;
+    except
+      FrmDataModule.ADOQueryExisteBEP.Cancel;
+    end;
+  end
+  else
+  begin
+    try
+      // Inserir novo registro na tabela de dados
+      FrmDataModule.ADOQueryImportarBEP.Insert;
+      // Preencher as colunas do registro na tabela de dados
+      FrmDataModule.DataSourceImportarBEP.DataSet.
+      FieldByName('Plataforma').AsString := Plataforma;
+      FrmDataModule.DataSourceImportarBEP.DataSet.
+      FieldByName('Poco').AsString := Poco;
+      FrmDataModule.DataSourceImportarBEP.DataSet.
+      FieldByName('Duto').AsString := Duto;
+      FrmDataModule.DataSourceImportarBEP.DataSet.
+      FieldByName('Tarefa').AsString := Tarefa;
+      FrmDataModule.DataSourceImportarBEP.DataSet.
+      FieldByName('Realizacao').AsString := Realizacao;
+      FrmDataModule.DataSourceImportarBEP.DataSet.
+      FieldByName('Vencimento').AsString := Vencimento;
+      FrmDataModule.DataSourceImportarBEP.DataSet.
+      FieldByName('Dias').AsString := Dias;
+      FrmDataModule.DataSourceImportarBEP.DataSet.
+      FieldByName('CorColuna').AsInteger := CorColuna;
+
+      //Usuário
+      FrmDataModule.DataSourceImportarBEP.DataSet.
+      FieldByName('ImportadoPor').asString:= FrmPrincipal.logChave;
+      FrmDataModule.DataSourceImportarBEP.DataSet.
+      FieldByName('DataImportacao').AsDateTime:= now;
+      FrmDataModule.DataSourceImportarBEP.DataSet.
+      FieldByName('Computador').AsString:= FrmPrincipal.logMaquina;
+
+      FrmDataModule.ADOQueryImportarBEP.Post;
+    except
+      FrmDataModule.ADOQueryImportarBEP.Cancel;
+    end;
+  end;
+end;
+
+procedure TFrmAnaliseBEP.WebBrowser1BeforeNavigate2(ASender: TObject;
+  const pDisp: IDispatch; const URL, Flags, TargetFrameName, PostData,
+  Headers: OleVariant; var Cancel: WordBool);
+begin
+  {Ao Nevagar uma página, ele coloca automaticamente
+  o endereço dela no combobox, para sabermos que página
+  estamos entrando, o endereço da mesma}
+  combobox1.Text:=url;
+end;
+
+procedure TFrmAnaliseBEP.WebBrowser1CommandStateChange(ASender: TObject;
+  Command: Integer; Enable: WordBool);
+begin
+  case Command of
+    CSC_NAVIGATEBACK:
+    begin
+      //Ativa e Desativa Automaticamente o Botão Voltar,
+      //Caso tenha alguma página para voltar
+      BtnVoltar.Enabled := Enable;
+    end;
+    CSC_NAVIGATEFORWARD:
+    begin
+      //Ativa e Desativa Automaticamente o Botão Avançar,
+      //Caso tenha alguma página para voltar
+      BtnAvancar.Enabled := Enable;
+    end;
+  end;
+end;
+
+procedure TFrmAnaliseBEP.WebBrowser1DocumentComplete(ASender: TObject;
+  const pDisp: IDispatch; const URL: OleVariant);
+//var
+  //LYear, LMonth, LDay: Word;
+begin
+  try
+    ((WebBrowser1.Document as IHTMLDocument2).body as IHTMLElement2).focus();
+    case TipoEvento of
+      1://Página de login
+      begin
+        TipoEvento:= 0;
+        //preencher chave
+        WebBrowser1.OleObject.Document.GetElementByID('Login1_UserName').value := FrmPrincipal.logChave;
+        //preencher unidade
+        WebBrowser1.OleObject.Document.GetElementByID('Login1_ddlAtivo').Value := '8301_120';
+        //preencher senha
+        //WebBrowser1.OleObject.Document.GetElementByID('Login1_Password').value := 'aURORA79';
+        //Clicar no botão de busca
+        //WebBrowser1.OleObject.Document.GetElementByID('Login1_btnLogin').click;
+      end;
+      2://Pesquisa por Realização Mensal
+      begin
+        TipoEvento:= 0;
+        //DecodeDate(now, LYear, LMonth, LDay);
+        //Preencher o Mês
+        //WebBrowser1.OleObject.Document.GetElementByID('ctl00_ContentPlaceHolder1_ddlMes').value:= LMonth;
+        //Preencher o Ano
+        //WebBrowser1.OleObject.Document.GetElementByID('ctl00_ContentPlaceHolder1_ddlAno').value:= LYear;
+        //Programavel TODOS
+        //WebBrowser1.OleObject.Document.GetElementByID('ctl00_ContentPlaceHolder1_rbtnTarefaProgramavel_2').click;
+        TimerPesquisar.Enabled:= true;
+      end;
+    end;
+  except
+
+  end;
+end;
+
+procedure TFrmAnaliseBEP.WebBrowser1ProgressChange(ASender: TObject; Progress,
+  ProgressMax: Integer);
+begin
+{Ele faz um rotina para saber se o valor Maximo do
+Progressbar é maior que 1 e o valor minimo tbem
+se for, então ele faz a rotina}
+  If (Progress>=1) and (ProgressMax>1) then
+  begin
+    //Ele tira uma valor percentual para colocar
+    //no Progressbar
+    ProgressBar1.Position := Round((Progress * 100) Div ProgressMax);
+    ProgressBar1.Visible  := True;
+  end
+  else
+  begin
+    ProgressBar1.Position := 1;
+    ProgressBar1.Visible  := False;
+  end;
+end;
+
+procedure TFrmAnaliseBEP.WebBrowser1StatusTextChange(ASender: TObject;
+  const Text: WideString);
+begin
+  StatusBar1.Panels[0].Text:=text;
+end;
+
+procedure TFrmAnaliseBEP.WebBrowser1TitleChange(ASender: TObject;
+  const Text: WideString);
+begin
+  FrmAnaliseBEP.Caption:= text;
+end;
+
+procedure TFrmAnaliseBEP.WMMDIACTIVATE(var msg: TWMMDIACTIVATE);
+var
+  active: TWinControl;
+  idx: Integer;
+begin
+  active := FindControl(msg.ActiveWnd) ;
+
+  if Assigned(active) then
+  begin
+    idx := FrmPrincipal.mdiChildrenTabs.Tabs.IndexOfObject(TObject(msg.ActiveWnd));
+    FrmPrincipal.mdiChildrenTabs.Tag := -1;
+    FrmPrincipal.mdiChildrenTabs.TabIndex := idx;
+    FrmPrincipal.mdiChildrenTabs.Tag := 0;
+  end;
+end;
+
+end.

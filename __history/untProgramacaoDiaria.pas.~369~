@@ -1,0 +1,2357 @@
+unit untProgramacaoDiaria;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Data.DB, Vcl.Grids, Vcl.DBGrids,
+  Vcl.StdCtrls, Vcl.DBCtrls, Vcl.Mask, Vcl.ComCtrls, Vcl.ToolWin, Vcl.ExtCtrls,
+  System.Actions, Vcl.ActnList, Vcl.PlatformDefaultStyleActnCtrls, Vcl.ActnMan,
+  Vcl.Buttons, System.ImageList, Vcl.ImgList,DateUtils, SDL_matrix,UITypes,
+  Vcl.Menus, untDBGridFilter;
+
+type
+  TFrmProgramacaoDiaria = class(TForm)
+    ActionManager1: TActionManager;
+    actConfigGRID: TAction;
+    PanelTitulo: TPanel;
+    actProcurarProgramacao: TAction;
+    actAtualizarCombo: TAction;
+    actInserirServico: TAction;
+    actAjudaLimpar: TAction;
+    actInserirProgramacao: TAction;
+    actGravarProgramacao: TAction;
+    actcalcelarProgramacao: TAction;
+    actInserirProgramacaoBranco: TAction;
+    actEditarProgramacao: TAction;
+    actExcluirProgramacao: TAction;
+    PanelCriacao: TPanel;
+    PanelResultados: TPanel;
+    Splitter2: TSplitter;
+    PanelExecutante: TPanel;
+    DBGridExecutante: TFilterDBGrid;
+    ToolBar4: TToolBar;
+    Panel19: TPanel;
+    PanelServico: TPanel;
+    DBGridServico: TFilterDBGrid;
+    Panel20: TPanel;
+    Panel6: TPanel;
+    ToolBar3: TToolBar;
+    BitBtn12: TBitBtn;
+    BitBtn11: TBitBtn;
+    DBEditProgramacao: TDBEdit;
+    DBGridProgramacao: TFilterDBGrid;
+    Splitter3: TSplitter;
+    PanelProgramacao: TPanel;
+    Splitter1: TSplitter;
+    ToolBar1: TToolBar;
+    BitBtn22: TBitBtn;
+    btnInserirEditarProgramacao: TBitBtn;
+    PanelSelecaoExecutante: TPanel;
+    PanelTipoEtapaServico: TPanel;
+    Panel5: TPanel;
+    PanelDestino: TPanel;
+    Panel2: TPanel;
+    PanelDataProgramacao: TPanel;
+    Panel3: TPanel;
+    DateTimePickerProgramacao2: TDateTimePicker;
+    PanelSelecaoServico: TPanel;
+    ToolBar6: TToolBar;
+    ToolButton2: TToolButton;
+    PanelAjuda: TPanel;
+    PanelTituloAjuda: TPanel;
+    SpeedButton4: TSpeedButton;
+    PanelAjudaInserirServico: TPanel;
+    Panel23: TPanel;
+    Panel24: TPanel;
+    edtServicoPT: TEdit;
+    Panel25: TPanel;
+    Panel26: TPanel;
+    edtTextoBreveOM: TEdit;
+    actCopiarProgramacaoSELECAO: TAction;
+    Panel7: TPanel;
+    BitBtn21: TBitBtn;
+    actExecutantesServicos: TAction;
+    ComboBoxDestino: TComboBox;
+    actConfigBotoes1: TAction;
+    ComboBoxTipoEtapaServico: TComboBox;
+    ToolButton1: TToolButton;
+    actEditarServico: TAction;
+    actServicoInserir: TAction;
+    BitBtn1: TBitBtn;
+    BitBtn2: TBitBtn;
+    actServicoEditar: TAction;
+    PanelTituloExecutantes: TPanel;
+    Panel9: TPanel;
+    StatusBarExecutantes: TStatusBar;
+    StatusBarServicos: TStatusBar;
+    StatusBarDisponivelExecutantes: TStatusBar;
+    StatusBarDisponivelServicos: TStatusBar;
+    actNumSelecao: TAction;
+    RLExecutantes: TStringGrid;
+    RLServicos: TStringGrid;
+    ToolButton3: TToolButton;
+    ToolButton4: TToolButton;
+    actSelecaoServicos: TAction;
+    actSelecaoServicosLimpar: TAction;
+    actSelecaoExecutantes: TAction;
+    actSelecaoExecutantesLimpar: TAction;
+    ToolBar2: TToolBar;
+    ToolButton5: TToolButton;
+    ToolButton6: TToolButton;
+    StatusBarProgramacao: TStatusBar;
+    ToolButton7: TToolButton;
+    ToolButton8: TToolButton;
+    actExcluirProgramacaoTodos: TAction;
+    PopupMenuExcluir: TPopupMenu;
+    PopupMenuCopiar: TPopupMenu;
+    Excluirselecionado1: TMenuItem;
+    Excluirtodos1: TMenuItem;
+    Importarselecionado1: TMenuItem;
+    PanelNaoEncontrados: TPanel;
+    ToolBar5: TToolBar;
+    RLNaoEncontrados: TStringGrid;
+    actExcelNaoEncontrado: TAction;
+    BitBtn4: TBitBtn;
+    actNaoEncontrados: TAction;
+    ColunasLayoutProgramacao: TStringGrid;
+    ColunasLayoutExecutante: TStringGrid;
+    ColunasLayoutServico: TStringGrid;
+    DateProgramacao: TDateTimePicker;
+    BitBtn5: TBitBtn;
+    actFiltroInserir: TAction;
+    actGridASC: TAction;
+    actGridDESC: TAction;
+    actLimparFiltros: TAction;
+    actFiltrosTabela: TAction;
+    actProcuraFiltrosTabela: TAction;
+    Panel4: TPanel;
+    Panel11: TPanel;
+    edtOperacao: TEdit;
+    ToolButton9: TToolButton;
+    ToolButton10: TToolButton;
+    actZoomMais: TAction;
+    actZoomMenos: TAction;
+    actAutoFit: TAction;
+    actCopiarProgramacaoTODAS: TAction;
+    Importarsemverificao1: TMenuItem;
+    actServicoInserir1: TAction;
+    actServicoExcluir: TAction;
+    actExecutanteExcluir: TAction;
+    ToolBar7: TToolBar;
+    BitBtn15: TBitBtn;
+    BitBtn14: TBitBtn;
+    actConfigurarExecutante: TAction;
+    BitBtn9: TBitBtn;
+    Panel1: TPanel;
+    Panel8: TPanel;
+    edtOrdemManutencao: TEdit;
+    ComboBoxOrigem: TComboBox;
+    ToolButton11: TToolButton;
+    actServicosNaoEncontrados: TAction;
+    actExecutantesNaoEncontrados: TAction;
+    ToolButton12: TToolButton;
+    Panel10: TPanel;
+    Panel12: TPanel;
+    edtTextoBreveOP: TEdit;
+    PanelLogAcao: TPanel;
+    ToolBar8: TToolBar;
+    DBMemoLogAcao: TDBMemo;
+    actLogAcao: TAction;
+    PanelConfigurarExecutante: TPanel;
+    ToolBar9: TToolBar;
+    DBNavigator1: TDBNavigator;
+    Panel83: TPanel;
+    Panel84: TPanel;
+    Panel85: TPanel;
+    DBEditTurma: TDBEdit;
+    Panel86: TPanel;
+    Panel87: TPanel;
+    Panel88: TPanel;
+    CheckBoxTurma: TCheckBox;
+    actCarregarExecutantes: TAction;
+    actCarregarServico: TAction;
+    actAtualizar: TAction;
+    BitBtn7: TBitBtn;
+    btnFiltroClearProgramacao: TToolButton;
+    btnFiltroClearExecutante: TToolButton;
+    btnFiltroClearServicos: TToolButton;
+    actProcurarExecutantes: TAction;
+    actProcurarServicos: TAction;
+    procedure FormCreate(Sender: TObject);
+    procedure FormDestroy(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure actConfigGRIDExecute(Sender: TObject);
+    procedure DBEditProgramacaoChange(Sender: TObject);
+    procedure DBGridExecutanteDrawColumnCell(Sender: TObject; const Rect: TRect;
+      DataCol: Integer; Column: TColumn; State: TGridDrawState);
+    procedure DBGridServicoDrawColumnCell(Sender: TObject; const Rect: TRect;
+      DataCol: Integer; Column: TColumn; State: TGridDrawState);
+    procedure actProcurarProgramacaoExecute(Sender: TObject);
+    procedure DBGridProgramacaoDrawColumnCell(Sender: TObject;
+      const Rect: TRect; DataCol: Integer; Column: TColumn;
+      State: TGridDrawState);
+    procedure actAtualizarComboExecute(Sender: TObject);
+    procedure SpeedButton4Click(Sender: TObject);
+    procedure actAjudaLimparExecute(Sender: TObject);
+    procedure actInserirServicoExecute(Sender: TObject);
+    procedure DateTimePickerProgramacao2Change(Sender: TObject);
+    procedure actInserirProgramacaoBrancoExecute(Sender: TObject);
+    procedure DateTimePickerProgramacao2CloseUp(Sender: TObject);
+    procedure actExcluirProgramacaoExecute(Sender: TObject);
+    procedure actcalcelarProgramacaoExecute(Sender: TObject);
+    procedure actEditarProgramacaoExecute(Sender: TObject);
+    procedure PanelTituloAjudaMouseDown(Sender: TObject; Button: TMouseButton;
+      Shift: TShiftState; X, Y: Integer);
+    procedure PanelTituloAjudaMouseMove(Sender: TObject; Shift: TShiftState; X,
+      Y: Integer);
+    procedure PanelTituloAjudaMouseUp(Sender: TObject; Button: TMouseButton;
+      Shift: TShiftState; X, Y: Integer);
+    procedure actInserirProgramacaoExecute(Sender: TObject);
+    procedure DateProgramacaoChange(Sender: TObject);
+    procedure actExecutantesServicosExecute(Sender: TObject);
+    procedure actCopiarProgramacaoSELECAOExecute(Sender: TObject);
+    procedure actConfigBotoes1Execute(Sender: TObject);
+    procedure ComboBoxDestinoKeyPress(Sender: TObject; var Key: Char);
+    procedure ComboBoxTipoEtapaServicoKeyPress(Sender: TObject; var Key: Char);
+    procedure actGravarProgramacaoExecute(Sender: TObject);
+    procedure actEditarServicoExecute(Sender: TObject);
+    procedure actServicoInserirExecute(Sender: TObject);
+    procedure actServicoEditarExecute(Sender: TObject);
+    procedure RLExecutantesSelectCell(Sender: TObject; ACol, ARow: Integer;
+      var CanSelect: Boolean);
+    procedure ComboBoxOrigemCloseUp(Sender: TObject);
+    procedure ComboBoxOrigemMouseLeave(Sender: TObject);
+    procedure actNumSelecaoExecute(Sender: TObject);
+    procedure DBGridServicoKeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure ComboBoxEmbarcacaoKeyPress(Sender: TObject; var Key: Char);
+    procedure RLServicosDrawCell(Sender: TObject; ACol, ARow: Integer;
+      Rect: TRect; State: TGridDrawState);
+    procedure RLExecutantesDrawCell(Sender: TObject; ACol, ARow: Integer;
+      Rect: TRect; State: TGridDrawState);
+    procedure actSelecaoServicosExecute(Sender: TObject);
+    procedure actSelecaoServicosLimparExecute(Sender: TObject);
+    procedure actSelecaoExecutantesLimparExecute(Sender: TObject);
+    procedure actSelecaoExecutantesExecute(Sender: TObject);
+    procedure RLExecutantesFixedCellClick(Sender: TObject; ACol, ARow: Integer);
+    procedure actExcluirProgramacaoTodosExecute(Sender: TObject);
+    procedure RLNaoEncontradosFixedCellClick(Sender: TObject; ACol,
+      ARow: Integer);
+    procedure actExcelNaoEncontradoExecute(Sender: TObject);
+    procedure actNaoEncontradosExecute(Sender: TObject);
+    procedure actFiltroInserirExecute(Sender: TObject);
+    procedure actGridASCExecute(Sender: TObject);
+    procedure actGridDESCExecute(Sender: TObject);
+    procedure actLimparFiltrosExecute(Sender: TObject);
+    procedure actFiltrosTabelaExecute(Sender: TObject);
+    procedure actProcuraFiltrosTabelaExecute(Sender: TObject);
+    procedure DBGridProgramacaoTitleClick(Column: TColumn);
+    procedure RLServicosFixedCellClick(Sender: TObject; ACol, ARow: Integer);
+    procedure RLExecutantesMouseDown(Sender: TObject; Button: TMouseButton;
+      Shift: TShiftState; X, Y: Integer);
+    procedure RLServicosMouseDown(Sender: TObject; Button: TMouseButton;
+      Shift: TShiftState; X, Y: Integer);
+    procedure actZoomMaisExecute(Sender: TObject);
+    procedure actAutoFitExecute(Sender: TObject);
+    procedure actZoomMenosExecute(Sender: TObject);
+    procedure actCopiarProgramacaoTODASExecute(Sender: TObject);
+    procedure actServicoExcluirExecute(Sender: TObject);
+    procedure actExecutanteExcluirExecute(Sender: TObject);
+    procedure actServicoInserir1Execute(Sender: TObject);
+    procedure DBGridExecutanteKeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure DBGridServicoKeyPress(Sender: TObject; var Key: Char);
+    procedure RLExecutantesKeyPress(Sender: TObject; var Key: Char);
+    procedure actServicosNaoEncontradosExecute(Sender: TObject);
+    procedure actExecutantesNaoEncontradosExecute(Sender: TObject);
+    procedure actLogAcaoExecute(Sender: TObject);
+    procedure actConfigurarExecutanteExecute(Sender: TObject);
+    procedure CheckBoxTurmaClick(Sender: TObject);
+    procedure actCarregarExecutantesExecute(Sender: TObject);
+    procedure DBGridExecutanteKeyPress(Sender: TObject; var Key: Char);
+    procedure actCarregarServicoExecute(Sender: TObject);
+    procedure actAtualizarExecute(Sender: TObject);
+    procedure actProcurarExecutantesExecute(Sender: TObject);
+    procedure actProcurarServicosExecute(Sender: TObject);
+    type
+      TExecutante = record
+        NomeExecutante,txtTipopEtapaServico,txtEmpresa,txtFuncao,TipoNota,RT: String;
+        Boolean1: Boolean;
+    end;
+    type
+      TExecutanteProgramado = record
+        ListaDestinos: TStrings;
+        booleanProgramado: Boolean;
+        StatusProgramacao,MotivoProgramacao,PalavraChaveProgramacao,AvaliadoPorProgramacao,
+        DataAvaliacaoProgramacao,ComputadorProgramacao: String;
+    end;
+    type
+      TTipoEmbarque = record
+        RT,TipoEmbarque: String;
+    end;
+    type
+      TMemoriaExecutante = record
+        idProgramacaoExecutante: Integer;
+        Origem, NomeExecutante, Funcao, Empresa,
+        CodigoSAP, Documento, RequisitantePT: String
+    end;
+
+  private
+    { Private declarations }
+    booleanModoInserir: Boolean;
+    ListaExecutanteNaoEncontrado,ListaServicoNaoEncontrado: TStringList;
+    procedure WMMDIACTIVATE(var msg: TWMMDIACTIVATE);message WM_MDIACTIVATE;
+    procedure incluirExecutante(NomeExecutante,Origem,Funcao,Empresa,
+    codigoSAP,CPF,RequisitantePT,RT,TipoEmbarque,txtDestino,RT_CentroCusto: String);
+    procedure incluirServico(ServicoPT,TextoBreveOP,TextoBreveOM,OrdemManutencao,Operacao,CentroTrabalhoOP,selecao: String);
+    procedure editarServico(ServicoPT,TextoBreveOP,TextoBreveOM,OrdemManutencao,Operacao,CentroTrabalhoOP: String);
+    procedure abrirAjuda(strTitulo: String; panel: TPanel; larura,Altura: Integer);
+    function existeExecutante: Boolean;
+    function existeServico: Boolean;
+    function selecionarExecutante(NomeExecutante,CodigoSAP,Origem,Funcao,Empresa: String): Boolean;
+
+    procedure AbrirEdicaoProgramacao(tipo: Integer);
+    procedure GravarInserirProgramacao(Tipo: Integer;ImportarTudo: Boolean);
+
+    function executanteProgramado(NomeExecutante,Funcao,codigoSAP,CPF,dataProcura,txtDestino: String): TExecutanteProgramado;
+    function verificaTipoEmbarque(NomeExecutante,Funcao: String): TTipoEmbarque;
+    function verificaAPLAT(NomeExecutante,Funcao: String): Boolean;
+    function verificaSAPT31(NomeExecutante,Funcao: String): TTipoEmbarque;
+
+  public
+    { Public declarations }
+  end;
+
+var
+  FrmProgramacaoDiaria: TFrmProgramacaoDiaria;
+
+implementation
+  uses untDataModule,untPrincipal;
+
+{$R *.dfm}
+
+procedure TFrmProgramacaoDiaria.abrirAjuda(strTitulo: String; panel: TPanel;
+larura,Altura: Integer);
+begin
+  PanelTituloAjuda.Caption := strTitulo;
+  actAjudaLimpar.Execute;
+  panel.Visible:= true;
+  panel.Align:= alClient;
+  PanelAjuda.Width:= larura;
+  PanelAjuda.Height:= Altura;
+
+  PanelAjuda.Top:= 220;
+  PanelAjuda.Left:= 450;
+  PanelAjuda.Visible:= true;
+end;
+
+procedure TFrmProgramacaoDiaria.AbrirEdicaoProgramacao(tipo: Integer);
+  var
+    DestinoPlataforma: String;
+begin
+  actConfigGRID.Execute;
+  PanelCriacao.Visible:= false;
+  PanelProgramacao.Visible:= true;
+  PanelProgramacao.Align:= alClient;
+  DestinoPlataforma:= FrmDataModule.DataSourceProgramacaoDiaria_Cadastro.DataSet.
+  FieldByName('txtDestino').AsString;
+  case tipo of
+    0: //Editar
+    begin
+      PanelTitulo.Caption:= 'Editar Programação';
+      DateTimePickerProgramacao2.Date:= FrmDataModule.DataSourceProgramacaoDiaria_Cadastro.DataSet.
+      FieldByName('DataProgramacao').AsDateTime;
+      BitBtn22.Action:= actCalcelarProgramacao;
+      BitBtn22.Visible:= true;
+      btnInserirEditarProgramacao.Action:= actGravarProgramacao;
+      btnInserirEditarProgramacao.Visible:= true;
+      booleanModoInserir:= false;
+    end;
+    1: //Inserir
+    begin
+      DateTimePickerProgramacao2.Date:= IncDay(now,1);
+      DateTimePickerProgramacao2.Time:= 0;
+      BitBtn22.Action:= actCalcelarProgramacao;
+      BitBtn22.Visible:= true;
+      btnInserirEditarProgramacao.Action:= actInserirProgramacao;
+      btnInserirEditarProgramacao.Visible:= true;
+      booleanModoInserir:= true;
+    end;
+  end;
+  FrmPrincipal.selComboBox(ComboBoxDestino,DestinoPlataforma);
+  FrmPrincipal.selComboBox(ComboBoxTipoEtapaServico,
+  FrmDataModule.DataSourceProgramacaoDiaria_Cadastro.DataSet.
+  FieldByName('txtTipoEtapaServico').AsString);
+  //===============================================
+  actExecutantesServicos.Execute;
+  actNumSelecao.Execute;
+  FrmPrincipal.clasifica(RLServicos,0,true);
+  FrmPrincipal.clasifica(RLServicos,0,true);
+  FrmPrincipal.AutoFitGrade(RLServicos);
+end;
+
+procedure TFrmProgramacaoDiaria.actAjudaLimparExecute(Sender: TObject);
+begin
+  PanelAjuda.Visible:= false;
+  PanelAjudaInserirServico.Visible:= false;
+  PanelNaoEncontrados.Visible:= false;
+  PanelLogAcao.Visible:= false;
+  PanelConfigurarExecutante.Visible:= false;
+end;
+
+procedure TFrmProgramacaoDiaria.actAtualizarComboExecute(Sender: TObject);
+begin
+  FrmPrincipal.carregarComboBox(FrmDataModule.ADOConnectionConsulta,'Plataforma',
+  'SELECT Plataforma FROM tblPlataforma ORDER BY Plataforma;',ComboBoxDestino);
+  FrmPrincipal.carregarComboBox(FrmDataModule.ADOConnectionConsulta,'Plataforma',
+  'SELECT Plataforma FROM tblPlataforma ORDER BY Plataforma;',ComboBoxOrigem);
+  FrmPrincipal.carregarComboBox(FrmDataModule.ADOConnectionConsulta,'TipoEtapaServico',
+  'SELECT TipoEtapaServico FROM tblTipoEtapaServico ORDER BY TipoEtapaServico;',ComboBoxTipoEtapaServico);
+end;
+
+procedure TFrmProgramacaoDiaria.actAtualizarExecute(Sender: TObject);
+begin
+FrmPrincipal.actMatrizExecutanteCadastro.Execute;
+actExecutantesServicos.Execute;
+end;
+
+procedure TFrmProgramacaoDiaria.actAutoFitExecute(Sender: TObject);
+begin
+  FrmPrincipal.AutoSizeDBGrid(DBGridExecutante);
+  FrmPrincipal.AutoSizeDBGrid(DBGridServico);
+  FrmPrincipal.AutoSizeDBGrid(DBGridProgramacao);
+  FrmPrincipal.AutoFitGrade(RLExecutantes);
+  FrmPrincipal.AutoFitGrade(RLServicos);
+  FrmPrincipal.AutoFitGrade(RLNaoEncontrados);
+  FrmPrincipal.AutoFitStatusBar(StatusBarExecutantes);
+  FrmPrincipal.AutoFitStatusBar(StatusBarServicos);
+  FrmPrincipal.AutoFitStatusBar(StatusBarDisponivelExecutantes);
+  FrmPrincipal.AutoFitStatusBar(StatusBarDisponivelServicos);
+  FrmPrincipal.AutoFitStatusBar(StatusBarProgramacao);
+end;
+
+procedure TFrmProgramacaoDiaria.actCalcelarProgramacaoExecute(Sender: TObject);
+begin
+  DateProgramacao.Date:= DateTimePickerProgramacao2.Date;
+  PanelProgramacao.Visible:= false;
+  PanelCriacao.Visible:= true;
+  PanelCriacao.Align:= alClient;
+  PanelTitulo.Caption:= 'Programação diária';
+  actProcurarProgramacao.Execute;
+end;
+
+procedure TFrmProgramacaoDiaria.actCarregarExecutantesExecute(Sender: TObject);
+  var
+    NomeExecutante,OrigemCadastro,txtFuncao,txtEmpresa,CodigoSAP,
+    CPF,RequisitantePT,txtTipoEtapaServico,DataProcura,Turma,txtDestino,
+    Origem,RT_CentroCusto: String;
+    TipoEmbarque: TTipoEmbarque;
+    i: integer;
+begin
+  //=========================================================================
+  RLExecutantes.RowCount:= 1;
+  RLExecutantes.ColCount:= 18;
+  RLExecutantes.Cells[0,0]:= 'Seleção';
+  RLExecutantes.Cells[1,0]:= 'Nome do Executante';
+  RLExecutantes.Cells[2,0]:= 'Origem';
+  RLExecutantes.Cells[3,0]:= 'Função';
+  RLExecutantes.Cells[4,0]:= 'Empresa';
+  RLExecutantes.Cells[5,0]:= 'Código SAP';
+  RLExecutantes.Cells[6,0]:= 'CPF';
+  RLExecutantes.Cells[7,0]:= 'Req. PT';
+  RLExecutantes.Cells[8,0]:= 'Programação';
+  RLExecutantes.Cells[9,0]:= 'RT';
+  RLExecutantes.Cells[10,0]:= 'Tipo Embarque';
+  RLExecutantes.Cells[11,0]:= 'Status [Programação]';
+  RLExecutantes.Cells[12,0]:= 'Motivo [Programação]';
+  RLExecutantes.Cells[13,0]:= 'Palavras Chave [Programação]';
+  RLExecutantes.Cells[14,0]:= 'Avaliação [Programação]';
+  RLExecutantes.Cells[15,0]:= 'Data [Programação]';
+  RLExecutantes.Cells[16,0]:= 'Computador [Programação]';
+  RLExecutantes.Cells[17,0]:= 'Centro de Custo';
+  //=========================================================================
+  ListaExecutanteNaoEncontrado:= TStringList.Create;
+  ListaExecutanteNaoEncontrado.Clear;
+  txtTipoEtapaServico:= ComboBoxTipoEtapaServico.Text;
+  txtDestino:= ComboBoxDestino.Text;
+  DataProcura:= FrmPrincipal.corrigirData(DateTimePickerProgramacao2.Date);
+  Turma:= FrmDataModule.ADOQueryColibri.FieldByName('Turma').AsString;
+  //=========================================================================
+  if CheckBoxTurma.Checked then
+  begin
+    for i := 0 to High(FrmPrincipal.MatrizExecutanteCadastro[0]) do
+    begin
+      if ((FrmPrincipal.MatrizExecutanteCadastro[2,i] = txtTipoEtapaServico)AND
+      (FrmPrincipal.MatrizExecutanteCadastro[0,i] = Turma)) then
+      begin
+        CodigoSAP:= FrmPrincipal.MatrizExecutanteCadastro[5,i];
+        NomeExecutante:= FrmPrincipal.MatrizExecutanteCadastro[1,i];
+        OrigemCadastro:= FrmPrincipal.MatrizExecutanteCadastro[6,i];
+        txtFuncao:= FrmPrincipal.MatrizExecutanteCadastro[3,i];
+        txtEmpresa:= FrmPrincipal.MatrizExecutanteCadastro[4,i];
+        CPF:= FrmPrincipal.MatrizExecutanteCadastro[8,i];
+        RT_CentroCusto:= FrmPrincipal.MatrizExecutanteCadastro[10,i];
+        TipoEmbarque:= verificaTipoEmbarque(NomeExecutante,txtFuncao);
+        //Requisitante PT
+        if FrmPrincipal.MatrizExecutanteCadastro[9,i] = 'TRUE' then
+          RequisitantePT:= '   '
+        else
+          RequisitantePT:= '    ';
+
+        incluirExecutante(NomeExecutante,OrigemCadastro,txtFuncao,txtEmpresa,
+        codigoSAP,CPF,RequisitantePT,TipoEmbarque.RT,TipoEmbarque.TipoEmbarque,txtDestino,RT_CentroCusto);
+      end;
+    end;
+  end
+  else
+  begin
+    for i := 0 to High(FrmPrincipal.MatrizExecutanteCadastro[0]) do
+    begin
+      if ((FrmPrincipal.MatrizExecutanteCadastro[2,i] = txtTipoEtapaServico)) then
+      begin
+        CodigoSAP:= FrmPrincipal.MatrizExecutanteCadastro[5,i];
+        NomeExecutante:= FrmPrincipal.MatrizExecutanteCadastro[1,i];
+        OrigemCadastro:= FrmPrincipal.MatrizExecutanteCadastro[6,i];
+        txtFuncao:= FrmPrincipal.MatrizExecutanteCadastro[3,i];
+        txtEmpresa:= FrmPrincipal.MatrizExecutanteCadastro[4,i];
+        CPF:= FrmPrincipal.MatrizExecutanteCadastro[8,i];
+        RT_CentroCusto:= FrmPrincipal.MatrizExecutanteCadastro[10,i];
+        TipoEmbarque:= verificaTipoEmbarque(NomeExecutante,txtFuncao);
+        //Requisitante PT
+        if FrmPrincipal.MatrizExecutanteCadastro[9,i] = 'TRUE' then
+          RequisitantePT:= '   '
+        else
+          RequisitantePT:= '    ';
+
+        incluirExecutante(NomeExecutante,OrigemCadastro,txtFuncao,txtEmpresa,
+        codigoSAP,CPF,RequisitantePT,TipoEmbarque.RT,TipoEmbarque.TipoEmbarque,txtDestino,RT_CentroCusto);
+      end;
+    end;
+  end;
+  try
+    RLExecutantes.FixedRows:= 1;
+  except
+    RLExecutantes.FixedRows:= 0;
+    RLExecutantes.RowCount:= 1;
+  end;
+  FrmPrincipal.ProgressBarAtualizar;
+  FrmPrincipal.AutoFitGrade(RLExecutantes);
+  //=========================================================================
+  //Seleção de Executantes
+  if btnInserirEditarProgramacao.Action = actGravarProgramacao then
+  begin
+    FrmDataModule.ADOQueryProgramacaoExecutante_Cadastro.First;
+    while not FrmDataModule.ADOQueryProgramacaoExecutante_Cadastro.Eof do
+    begin
+      CodigoSAP:= FrmDataModule.DataSourceProgramacaoExecutante_Cadastro.DataSet.
+      FieldByName('CodigoSAP').AsString;
+      Origem:= FrmDataModule.DataSourceProgramacaoExecutante_Cadastro.DataSet.
+      FieldByName('Origem').AsString;
+      txtFuncao:= FrmDataModule.DataSourceProgramacaoExecutante_Cadastro.DataSet.
+      FieldByName('Funcao').AsString;
+      txtEmpresa:= FrmDataModule.DataSourceProgramacaoExecutante_Cadastro.DataSet.
+      FieldByName('Empresa').AsString;
+      NomeExecutante:= FrmDataModule.DataSourceProgramacaoExecutante_Cadastro.DataSet.
+      FieldByName('NomeExecutante').AsString;
+      if selecionarExecutante(NomeExecutante,CodigoSAP,Origem,txtFuncao,txtEmpresa) = false then
+        ListaExecutanteNaoEncontrado.Add(NomeExecutante);
+
+      FrmDataModule.ADOQueryProgramacaoExecutante_Cadastro.Next;
+    end;
+    //=========================================================================
+    if ListaExecutanteNaoEncontrado.Count > 0 then
+    begin
+      actExecutantesNaoEncontrados.Enabled:= true;
+      actExecutantesNaoEncontrados.Execute;
+    end
+    else
+    begin
+      actExecutantesNaoEncontrados.Enabled:= false;
+    end;
+  end;
+end;
+
+procedure TFrmProgramacaoDiaria.actCarregarServicoExecute(Sender: TObject);
+  var
+    TipoEtapaServicoOP,Destino,
+    ServicoPT,TextoBreveOP,TextoBreveOM,OrdemManutencao,Operacao,
+    ServicoPadrao,CentroTrabalhoOP: String;
+begin
+  ListaServicoNaoEncontrado:= TStringList.Create;
+  ListaServicoNaoEncontrado.Clear;
+  RLServicos.FixedRows:= 0;
+  RLServicos.RowCount:= 1;
+  TipoEtapaServicoOP:= ComboBoxTipoEtapaServico.Text;
+  Destino:= ComboBoxDestino.Text;
+  //==========================================================
+  //Carregar serviço padrão
+  if booleanModoInserir then
+  begin
+    ServicoPadrao:= FrmPrincipal.incluirServicoPadrao(TipoEtapaServicoOP);
+    incluirServico('',ServicoPadrao,'','','','',' ');
+  end;
+  //==========================================================
+  try
+    RLServicos.FixedRows:= 1;
+  except
+    RLServicos.FixedRows:= 0;
+    RLServicos.RowCount:= 1;
+  end;
+  // Atualizar ProgressBar
+  FrmPrincipal.AutoFitGrade(RLServicos);
+  //========================================================================
+  //Seleção de Serviços
+  if btnInserirEditarProgramacao.Action = actGravarProgramacao then
+  begin
+    FrmDataModule.ADOQueryProgramacaoServico_Cadastro.First;
+    while not FrmDataModule.ADOQueryProgramacaoServico_Cadastro.Eof do
+    begin
+      ServicoPT:= FrmDataModule.DataSourceProgramacaoServico_Cadastro.DataSet.
+      FieldByName('CampoSelecao').AsString;
+      TextoBreveOP:= FrmDataModule.DataSourceProgramacaoServico_Cadastro.DataSet.
+      FieldByName('TextoBreveOP').AsString;
+      TextoBreveOM:= FrmDataModule.DataSourceProgramacaoServico_Cadastro.DataSet.
+      FieldByName('TextoBreveOM').AsString;
+      OrdemManutencao:= FrmDataModule.DataSourceProgramacaoServico_Cadastro.DataSet.
+      FieldByName('OrdemManutencao').AsString;
+      Operacao:= FrmDataModule.DataSourceProgramacaoServico_Cadastro.DataSet.
+      FieldByName('Operacao').AsString;
+      CentroTrabalhoOP:= FrmDataModule.DataSourceProgramacaoServico_Cadastro.DataSet.
+      FieldByName('CentroTrabalhoOP').AsString;
+      if FrmPrincipal.selecionarServico(RLServicos,ServicoPT,TextoBreveOP,OrdemManutencao) = false then
+      begin
+        ListaServicoNaoEncontrado.Add(TextoBreveOP+'/ OM: '+OrdemManutencao+'/ PT: '+ServicoPT);
+        incluirServico(ServicoPT,TextoBreveOP,TextoBreveOM,OrdemManutencao,Operacao,CentroTrabalhoOP,' ');
+        FrmPrincipal.selecionarServico(RLServicos,ServicoPT,TextoBreveOP,OrdemManutencao);
+      end;
+      FrmDataModule.ADOQueryProgramacaoServico_Cadastro.Next;
+    end;
+    //========================================================================
+    if ListaServicoNaoEncontrado.Count > 0 then
+    begin
+      actServicosNaoEncontrados.Enabled:= true;
+    end
+    else
+    begin
+      actServicosNaoEncontrados.Enabled:= false;
+    end;
+  end;
+end;
+
+procedure TFrmProgramacaoDiaria.actConfigBotoes1Execute(Sender: TObject);
+begin
+  if (DateProgramacao.DateTime < FrmPrincipal.carregaDataMinima(false))OR
+  (FrmDataModule.ADOQueryProgramacaoDiaria_Cadastro.IsEmpty) then
+  begin
+    actEditarProgramacao.Enabled:= false;
+    actExcluirProgramacao.Enabled:= false;
+    actExcluirProgramacaoTodos.Enabled:= false;
+  end
+  else
+  begin
+    actEditarProgramacao.Enabled:= true;
+    actExcluirProgramacao.Enabled:= true;
+    actExcluirProgramacaoTodos.Enabled:= true;
+  end;
+end;
+
+procedure TFrmProgramacaoDiaria.actConfigGRIDExecute(Sender: TObject);
+begin
+  RLExecutantes.ColCount:= 11;
+  RLExecutantes.Cells[0,0]:= 'Seleção';
+  RLExecutantes.Cells[1,0]:= 'Nome do Executante';
+  RLExecutantes.Cells[2,0]:= 'Origem';
+  RLExecutantes.Cells[3,0]:= 'Função';
+  RLExecutantes.Cells[4,0]:= 'Empresa';
+  RLExecutantes.Cells[5,0]:= 'Código SAP';
+  RLExecutantes.Cells[6,0]:= 'CPF';
+  RLExecutantes.Cells[7,0]:= 'Req. PT';
+  RLExecutantes.Cells[8,0]:= 'Programação';
+  RLExecutantes.Cells[9,0]:= 'RT';
+  RLExecutantes.Cells[10,0]:= 'Tipo Embarque';
+
+  RLServicos.ColCount:= 7;
+  RLServicos.Cells[0,0]:= 'Seleção';
+  RLServicos.Cells[1,0]:= 'Servico/Ano-Etapa';
+  RLServicos.Cells[2,0]:= 'Texto Breve de Operacao';
+  RLServicos.Cells[3,0]:= 'Texto Breve de Ordem';
+  RLServicos.Cells[4,0]:= 'Ordem de Manutenção';
+  RLServicos.Cells[5,0]:= 'Operação';
+  RLServicos.Cells[6,0]:= 'Centro Trabalho [OP]';
+end;
+
+procedure TFrmProgramacaoDiaria.actConfigurarExecutanteExecute(Sender: TObject);
+begin
+  if CheckBoxTurma.Checked then
+  begin
+    DBEditTurma.Enabled:= true;
+    DBEditTurma.Color:= clWhite;
+  end
+  else
+  begin
+    DBEditTurma.Enabled:= false;
+    DBEditTurma.Color:= clSilver;
+  end;
+  actAjudaLimpar.Execute;
+  PanelConfigurarExecutante.Visible:= true;
+  PanelConfigurarExecutante.Align:= alClient;
+  PanelTituloAjuda.Caption:= 'Configuração de pesquisa de executantes';
+  PanelAjuda.Width:= 350;
+  PanelAjuda.Height:= 120;
+  PanelAjuda.Top:= 250;
+  PanelAjuda.Left:= 200;
+  PanelAjuda.Visible:= true;
+end;
+
+procedure TFrmProgramacaoDiaria.actEditarProgramacaoExecute(Sender: TObject);
+begin
+  AbrirEdicaoProgramacao(0);
+end;
+
+procedure TFrmProgramacaoDiaria.actEditarServicoExecute(Sender: TObject);
+  var
+    ARowIndex: Integer;
+begin
+  BitBtn1.Action:= actServicoEditar;
+  ARowIndex:=  RLServicos.Row;
+  edtServicoPT.Text:= (RLServicos.Cells[1,ARowIndex]);
+  edtTextoBreveOP.Text:= (RLServicos.Cells[2,ARowIndex]);
+  edtTextoBreveOM.Text:= (RLServicos.Cells[3,ARowIndex]);
+  edtOrdemManutencao.Text:= (RLServicos.Cells[4,ARowIndex]);
+  edtOperacao.Text:= (RLServicos.Cells[5,ARowIndex]);
+  abrirAjuda('Editar Serviço',PanelAjudaInserirServico,500,160);
+end;
+
+procedure TFrmProgramacaoDiaria.actExcelNaoEncontradoExecute(Sender: TObject);
+begin
+  FrmPrincipal.ExcelStringGrid(RLNaoEncontrados,'Executantes',
+  (FormatDateTime('dd/mm/yyyy',DateProgramacao.Date)),'',3);
+end;
+
+procedure TFrmProgramacaoDiaria.actExcluirProgramacaoExecute(Sender: TObject);
+  var
+    DataProgramacao: TDateTime;
+begin
+  DataProgramacao:= FrmDataModule.DataSourceProgramacaoDiaria_Cadastro.DataSet.
+  FieldByName('DataProgramacao').AsDateTime;
+
+  if DataProgramacao >= FrmPrincipal.carregaDataMinima(false) then
+  begin
+    if Application.MessageBox(PChar(
+    'Deseja realmente excluir a programação selecionada?'),'.::ATENÇÃO::.',36) = 6 then
+      FrmDataModule.ADOQueryProgramacaoDiaria_Cadastro.Delete;
+  end
+  else
+    MessageBox(0, 'Não é possivel alterar uma programação do passado!',
+    'Colibri', MB_ICONERROR);
+
+  actProcurarProgramacao.Execute;
+end;
+
+procedure TFrmProgramacaoDiaria.actExcluirProgramacaoTodosExecute(
+  Sender: TObject);
+  var
+    DataProgramacao: TDateTime;
+begin
+  DataProgramacao:= FrmDataModule.DataSourceProgramacaoDiaria_Cadastro.DataSet.
+  FieldByName('DataProgramacao').AsDateTime;
+
+  if DataProgramacao >= FrmPrincipal.carregaDataMinima(false) then
+  begin
+    if Application.MessageBox(PChar(
+    'Deseja realmente excluir todas programações?'),'.::ATENÇÃO::.',36) = 6 then
+    begin
+      FrmPrincipal.ProgressBarIncializa(FrmDataModule.ADOQueryProgramacaoDiaria_Cadastro.RecordCount,
+      'Excluindo programações filtradas...');
+      FrmDataModule.ADOQueryProgramacaoDiaria_Cadastro.First;
+      while not FrmDataModule.ADOQueryProgramacaoDiaria_Cadastro.Eof do
+      begin
+        FrmDataModule.ADOQueryProgramacaoDiaria_Cadastro.Delete;
+        FrmPrincipal.ProgressBarIncremento(1);
+      end;
+      FrmPrincipal.ProgressBarAtualizar;
+    end;
+  end
+  else
+    MessageBox(0, 'Não é possivel alterar uma programação do passado!',
+    'Colibri', MB_ICONERROR);
+
+  actProcurarProgramacao.Execute;
+end;
+
+procedure TFrmProgramacaoDiaria.actNaoEncontradosExecute(Sender: TObject);
+begin
+  //Lista de executantes não encontrados
+  if RLNaoEncontrados.RowCount > 1 then
+  begin
+    abrirAjuda('Executantes não encontrados',PanelNaoEncontrados,650,400);
+    FrmPrincipal.AutoFitGrade(RLNaoEncontrados);
+    try
+      RLNaoEncontrados.FixedRows:= 1;
+    except
+    end;
+  end
+  else
+  MessageBox(0,
+  'Não existem registros de "Executantes não encontrados" durante a última importação!',
+  'Colibri',MB_ICONINFORMATION);
+end;
+
+procedure TFrmProgramacaoDiaria.actNumSelecaoExecute(Sender: TObject);
+begin
+  StatusBarDisponivelExecutantes.Panels[0].Text:=
+  'N° Selecionados: '+(IntToStr(FrmPrincipal.CountChecked(RLExecutantes)));
+  FrmPrincipal.AutoFitStatusBar(StatusBarDisponivelExecutantes);
+  StatusBarDisponivelServicos.Panels[0].Text:=
+  'N° Selecionados: '+(IntToStr(FrmPrincipal.CountChecked(RLServicos)));
+  FrmPrincipal.AutoFitStatusBar(StatusBarDisponivelServicos);
+end;
+
+procedure TFrmProgramacaoDiaria.actExecutantesNaoEncontradosExecute(
+  Sender: TObject);
+  var
+    i: integer;
+    TextoMSG: String;
+begin
+  TextoMSG:= '';
+  for I := 0 to ListaExecutanteNaoEncontrado.Count -1 do
+    TextoMSG:= TextoMSG+#13+IntToStr(i)+'. '+ListaExecutanteNaoEncontrado[i];
+
+  MessageBox(0,PChar('Executantes não encontrados:'+TextoMSG),'Colibri',MB_ICONINFORMATION);
+end;
+
+procedure TFrmProgramacaoDiaria.actExecutantesServicosExecute(Sender: TObject);
+begin
+  if (ComboBoxDestino.Text = '')OR(ComboBoxTipoEtapaServico.Text = '') then
+    ShowMessage('Selecione antes um "Destino" e um "Tipo de Etapa de Serviço".')
+  else
+  begin
+    FrmPrincipal.ProgressBarIncializa(2,'Carregando...');
+    actCarregarExecutantes.Execute;
+    FrmPrincipal.ProgressBarIncremento(1);
+    actCarregarServico.Execute;
+    FrmPrincipal.ProgressBarAtualizar;
+  end;
+  //=============================================
+  StatusBarDisponivelServicos.Panels[0].Text:=
+  'N° Selecionados: '+(IntToStr(FrmPrincipal.CountChecked(RLServicos)));
+  StatusBarDisponivelServicos.Panels[1].Text:=
+  'N° Registros: '+(IntToStr(RLServicos.RowCount-1));
+  FrmPrincipal.AutoFitStatusBar(StatusBarDisponivelServicos);
+  //=============================================
+  StatusBarDisponivelExecutantes.Panels[0].Text:=
+  'N° Selecionados: '+(IntToStr(FrmPrincipal.CountChecked(RLExecutantes)));
+  StatusBarDisponivelExecutantes.Panels[1].Text:=
+  'N° Registros: '+(IntToStr(RLExecutantes.RowCount-1));
+  FrmPrincipal.AutoFitStatusBar(StatusBarDisponivelExecutantes);
+end;
+
+procedure TFrmProgramacaoDiaria.actExecutanteExcluirExecute(Sender: TObject);
+var
+    DataProgramacao: TDateTime;
+begin
+  try
+    DataProgramacao:= FrmDataModule.DataSourceProgramacaoDiaria_Cadastro.DataSet.
+    FieldByName('DataProgramacao').AsDateTime;
+
+    if DataProgramacao >= FrmPrincipal.carregaDataMinima(false) then
+    begin
+      FrmDataModule.ADOQueryProgramacaoExecutante_Cadastro.Delete;
+      FrmDataModule.ADOQueryProgramacaoDiaria_Cadastro.Edit;
+      FrmDataModule.DataSourceProgramacaoDiaria_Cadastro.DataSet.
+      FieldByName('NumExecutantes').AsInteger:= FrmDataModule.DataSourceProgramacaoDiaria_Cadastro.DataSet.
+      FieldByName('NumExecutantes').AsInteger-1;
+      FrmDataModule.DataSourceProgramacaoDiaria_Cadastro.DataSet.
+      FieldByName('NumAprovados').AsInteger:= FrmDataModule.DataSourceProgramacaoDiaria_Cadastro.DataSet.
+      FieldByName('NumAprovados').AsInteger-1;
+      FrmDataModule.ADOQueryProgramacaoDiaria_Cadastro.Post;
+    end
+    else
+      MessageBox(0, 'Não é possivel alterar uma programação do passado!',
+      'Colibri', MB_ICONERROR);
+  except
+    try
+      FrmDataModule.ADOQueryProgramacaoExecutante_Cadastro.Refresh;
+    except
+    end;
+  end;
+end;
+
+procedure TFrmProgramacaoDiaria.actFiltroInserirExecute(Sender: TObject);
+begin
+  FrmPrincipal.inserirProcura(DBGridProgramacao,ColunasLayoutProgramacao);
+  actProcurarProgramacao.Execute;
+  if (FrmPrincipal.PanelFiltrosTabela.Visible)AND(FrmPrincipal.PanelAjuda1.Visible) then
+    actFiltrosTabela.Execute;
+end;
+
+procedure TFrmProgramacaoDiaria.actFiltrosTabelaExecute(Sender: TObject);
+begin
+  FrmPrincipal.btnProcurarFiltrosTabela.Action:= actProcuraFiltrosTabela;
+  FrmPrincipal.FiltrosTabela(DBGridProgramacao,ColunasLayoutProgramacao);
+end;
+
+procedure TFrmProgramacaoDiaria.actGravarProgramacaoExecute(Sender: TObject);
+begin
+  GravarInserirProgramacao(1,false);
+end;
+
+procedure TFrmProgramacaoDiaria.actGridASCExecute(Sender: TObject);
+begin
+  FrmPrincipal.ClassificaDBGrid(DBGridProgramacao,FrmDataModule.ADOQueryProgramacaoDiaria_Cadastro,0);
+end;
+
+procedure TFrmProgramacaoDiaria.actGridDESCExecute(Sender: TObject);
+begin
+  FrmPrincipal.ClassificaDBGrid(DBGridProgramacao,FrmDataModule.ADOQueryProgramacaoDiaria_Cadastro,1);
+end;
+
+procedure TFrmProgramacaoDiaria.actCopiarProgramacaoTODASExecute(Sender: TObject);
+  var
+    DataProgramacao: String;
+begin
+  DataProgramacao:= FormatDateTime('dd/mm/yyyy',IncDay(now,1));
+  if InputQuery('Data da Programação','Entre com a data da programação',
+  DataProgramacao) then
+  begin
+    if FrmPrincipal.isData(DataProgramacao) then
+    begin
+      FrmDataModule.ADOQueryInserirProgramacao.Active:= false;
+      FrmDataModule.ADOQueryInserirProgramacao.Active:= true;
+      FrmDataModule.ADOQueryProgramacaoDiaria_Cadastro.First;
+      while not FrmDataModule.ADOQueryProgramacaoDiaria_Cadastro.Eof do
+      begin
+        FrmPrincipal.CopiarProgramacao(DataProgramacao,FrmDataModule.DataSourceProgramacaoDiaria_Cadastro);
+        FrmDataModule.ADOQueryProgramacaoDiaria_Cadastro.Next;
+      end;
+    end;
+  end;
+  DateProgramacao.DateTime:= StrToDate(DataProgramacao);
+  actConfigBotoes1.Execute;
+  actProcurarProgramacao.Execute;
+end;
+
+procedure TFrmProgramacaoDiaria.actCopiarProgramacaoSELECAOExecute(Sender: TObject);
+  var
+    DataProgramacao: String;
+begin
+  DataProgramacao:= FormatDateTime('dd/mm/yyyy',IncDay(now,1));
+  if InputQuery('Data da Programação','Entre com a data da programação',
+  DataProgramacao) then
+  begin
+    if FrmPrincipal.isData(DataProgramacao) then
+      FrmPrincipal.CopiarProgramacao(DataProgramacao,FrmDataModule.DataSourceProgramacaoDiaria_Cadastro);
+  end;
+  DateProgramacao.DateTime:= StrToDate(DataProgramacao);
+  actConfigBotoes1.Execute;
+  actProcurarProgramacao.Execute;
+end;
+
+procedure TFrmProgramacaoDiaria.actInserirProgramacaoBrancoExecute(
+  Sender: TObject);
+begin
+  booleanModoInserir:= true;
+  DateTimePickerProgramacao2.Date:= IncDay(now,1);
+  PanelCriacao.Visible:= false;
+  PanelProgramacao.Visible:= true;
+  PanelProgramacao.Align:= alClient;
+  PanelTitulo.Caption:= 'Inserir Nova Programação';
+  RLExecutantes.RowCount:= 2;
+  RLExecutantes.FixedRows:= 1;
+  RLExecutantes.Rows[1].Clear;
+  RLServicos.RowCount:= 2;
+  RLServicos.FixedRows:= 1;
+  RLServicos.Rows[1].Clear;
+  BitBtn22.Action:= actCalcelarProgramacao;
+  BitBtn22.Visible:= true;
+  btnInserirEditarProgramacao.Action:= actInserirProgramacao;
+  btnInserirEditarProgramacao.Visible:= true;
+  actConfigGRID.Execute;
+  actAtualizarCombo.Execute;
+  ComboBoxOrigem.Visible:= false;
+end;
+
+procedure TFrmProgramacaoDiaria.actInserirProgramacaoExecute(Sender: TObject);
+begin
+  GravarInserirProgramacao(0,false);
+end;
+
+procedure TFrmProgramacaoDiaria.actInserirServicoExecute(Sender: TObject);
+begin
+  BitBtn1.Action:= actServicoInserir;
+  abrirAjuda('Inserir Serviço',PanelAjudaInserirServico,500,190);
+end;
+
+procedure TFrmProgramacaoDiaria.actLimparFiltrosExecute(Sender: TObject);
+begin
+  FrmPrincipal.LimparColunasFiltro(DBGridProgramacao,ColunasLayoutProgramacao);
+  actProcurarProgramacao.Execute;
+  if (FrmPrincipal.PanelFiltrosTabela.Visible)AND(FrmPrincipal.PanelAjuda1.Visible) then
+    actFiltrosTabela.Execute;
+end;
+
+procedure TFrmProgramacaoDiaria.actLogAcaoExecute(Sender: TObject);
+begin
+  abrirAjuda('Log de Ação - Histórico',PanelLogAcao,650,300);
+end;
+
+procedure TFrmProgramacaoDiaria.actSelecaoExecutantesExecute(Sender: TObject);
+begin
+  FrmPrincipal.selecaoGrid(RLExecutantes,StatusBarDisponivelExecutantes,' ');
+end;
+
+procedure TFrmProgramacaoDiaria.actSelecaoExecutantesLimparExecute(
+  Sender: TObject);
+begin
+  FrmPrincipal.selecaoGrid(RLExecutantes,StatusBarDisponivelExecutantes,'  ');
+end;
+
+procedure TFrmProgramacaoDiaria.actSelecaoServicosExecute(Sender: TObject);
+begin
+  FrmPrincipal.selecaoGrid(RLServicos,StatusBarDisponivelServicos,' ');
+end;
+
+procedure TFrmProgramacaoDiaria.actSelecaoServicosLimparExecute(
+  Sender: TObject);
+begin
+  FrmPrincipal.selecaoGrid(RLServicos,StatusBarDisponivelServicos,'  ');
+end;
+
+procedure TFrmProgramacaoDiaria.actProcuraFiltrosTabelaExecute(Sender: TObject);
+begin
+  frmPrincipal.CarregaFiltrosProcura(ColunasLayoutProgramacao);
+  actProcurarProgramacao.Execute;
+end;
+
+procedure TFrmProgramacaoDiaria.actProcurarExecutantesExecute(Sender: TObject);
+  var
+    SQLString,SQLBase: String;
+    CodigoProgramacaoDiaria: Integer;
+begin
+  CodigoProgramacaoDiaria:= FrmDataModule.ADOQueryProgramacaoDiaria_Cadastro.FieldByName('idProgramacaoDiaria').AsInteger;
+  SQLString:= frmPrincipal.SQLStringFiltroTabela(ColunasLayoutExecutante,false);
+  if SQLString <> '' then
+    SQLString:= ' AND '+SQLString;
+  SQLBase:=
+  'SELECT tblProgramacaoExecutante.* FROM tblProgramacaoExecutante '+
+  'WHERE (CodigoProgramacaoDiaria = '+IntToStr(CodigoProgramacaoDiaria)+') '+
+  SQLString+' ORDER BY NomeExecutante;';
+  FrmPrincipal.ProcuraQuery(SQLBase,FrmDataModule.ADOQueryProgramacaoExecutante_Cadastro,StatusBarExecutantes);
+end;
+
+procedure TFrmProgramacaoDiaria.actProcurarProgramacaoExecute(Sender: TObject);
+  var
+    SQLString,SQLBase,DataProcura: String;
+begin
+  DataProcura:= DateToStr(DateProgramacao.Date);
+  SQLString:= frmPrincipal.SQLStringFiltroTabela(ColunasLayoutProgramacao,false);
+  if SQLString <> '' then
+    SQLString:= ' AND '+SQLString;
+  SQLBase:=
+  'SELECT tblProgramacaoDiaria.* FROM tblProgramacaoDiaria '+
+  'WHERE (DataProgramacao LIKE '+QuotedStr(Dataprocura)+') '+
+  SQLString+' ORDER BY txtTipoEtapaServico,txtDestino;';
+  FrmPrincipal.ProcuraQuery(SQLBase,FrmDataModule.ADOQueryProgramacaoDiaria_Cadastro,StatusBarProgramacao);
+end;
+
+procedure TFrmProgramacaoDiaria.actProcurarServicosExecute(Sender: TObject);
+  var
+    SQLString,SQLBase: String;
+    CodigoProgramacaoDiaria: Integer;
+begin
+  CodigoProgramacaoDiaria:= FrmDataModule.ADOQueryProgramacaoDiaria_Cadastro.FieldByName('idProgramacaoDiaria').AsInteger;
+  SQLString:= frmPrincipal.SQLStringFiltroTabela(ColunasLayoutServico,false);
+  if SQLString <> '' then
+    SQLString:= ' AND '+SQLString;
+  SQLBase:=
+  'SELECT tblProgramacaoServico.* FROM tblProgramacaoServico '+
+  'WHERE (CodigoProgramacaoDiaria = '+IntToStr(CodigoProgramacaoDiaria)+') '+
+  SQLString+';';
+  FrmPrincipal.ProcuraQuery(SQLBase,FrmDataModule.ADOQueryProgramacaoServico_Cadastro,StatusBarServicos);
+end;
+
+procedure TFrmProgramacaoDiaria.actServicoEditarExecute(Sender: TObject);
+begin
+  editarServico(edtServicoPT.Text,edtTextoBreveOP.Text,edtTextoBreveOM.Text,
+  edtOrdemManutencao.Text,'','');
+end;
+
+procedure TFrmProgramacaoDiaria.actServicoExcluirExecute(Sender: TObject);
+  var
+    DataProgramacao: TDateTime;
+begin
+  try
+    DataProgramacao:= FrmDataModule.DataSourceProgramacaoDiaria_Cadastro.DataSet.
+    FieldByName('DataProgramacao').AsDateTime;
+
+    if DataProgramacao >= FrmPrincipal.carregaDataMinima(false) then
+      FrmDataModule.ADOQueryProgramacaoServico_Cadastro.Delete
+    else
+      MessageBox(0, 'Não é possivel alterar uma programação do passado!',
+      'Colibri', MB_ICONERROR);
+
+    except
+      try
+        FrmDataModule.ADOQueryProgramacaoServico_Cadastro.Refresh;
+      except
+      end;
+    end;
+end;
+
+procedure TFrmProgramacaoDiaria.actServicoInserir1Execute(Sender: TObject);
+  var
+    DataProgramacao: TDateTime;
+begin
+  try
+    DataProgramacao:= FrmDataModule.DataSourceProgramacaoDiaria_Cadastro.DataSet.
+    FieldByName('DataProgramacao').AsDateTime;
+
+    if DataProgramacao >= FrmPrincipal.carregaDataMinima(false) then
+    begin
+      FrmDataModule.ADOQueryProgramacaoServico_Cadastro.Insert;
+      FrmDataModule.DataSourceProgramacaoServico_Cadastro.DataSet.FieldByName('CodigoProgramacaoDiaria').AsInteger:=
+      FrmDataModule.DataSourceProgramacaoDiaria_Cadastro.DataSet.FieldByName('idProgramacaoDiaria').AsInteger;
+      FrmDataModule.DataSourceProgramacaoServico_Cadastro.DataSet.FieldByName('TextoBreveOP').AsString:=
+      FrmPrincipal.incluirServicoPadrao(FrmDataModule.DataSourceProgramacaoDiaria_Cadastro.
+      DataSet.FieldByName('txtTipoEtapaServico').AsString);
+      FrmDataModule.ADOQueryProgramacaoServico_Cadastro.Post;
+    end
+    else
+      MessageBox(0, 'Não é possivel alterar uma programação do passado!',
+      'Colibri', MB_ICONERROR);
+  except
+  end;
+end;
+
+procedure TFrmProgramacaoDiaria.actServicoInserirExecute(Sender: TObject);
+begin
+  incluirServico(edtServicoPT.Text,edtTextoBreveOP.Text,edtTextoBreveOM.Text,
+  edtOrdemManutencao.Text,edtOperacao.Text,'',' ');
+end;
+
+procedure TFrmProgramacaoDiaria.actServicosNaoEncontradosExecute(
+  Sender: TObject);
+  var
+    i: integer;
+    TextoMSG: String;
+begin
+  TextoMSG:= '';
+  for I := 0 to ListaServicoNaoEncontrado.Count -1 do
+    TextoMSG:= TextoMSG+#13+IntToStr(i)+'. '+ListaServicoNaoEncontrado[i];
+
+  MessageBox(0,PChar('Serviços não encontrados:'+TextoMSG),'Colibri',MB_ICONINFORMATION);
+end;
+
+procedure TFrmProgramacaoDiaria.actZoomMaisExecute(Sender: TObject);
+begin
+  DBGridExecutante.Font.Size:= DBGridExecutante.Font.Size+1;
+  DBGridServico.Font.Size:= DBGridServico.Font.Size+1;
+  DBGridProgramacao.Font.Size:= DBGridProgramacao.Font.Size+1;
+  //=================================================
+  RLExecutantes.Font.Size:= RLExecutantes.Font.Size+1;
+  RLExecutantes.DefaultRowHeight:= RLExecutantes.DefaultRowHeight+1;
+  FrmPrincipal.AutoFitGrade(RLExecutantes);
+  //=================================================
+  RLServicos.Font.Size:= RLServicos.Font.Size+1;
+  RLServicos.DefaultRowHeight:= RLServicos.DefaultRowHeight+1;
+  FrmPrincipal.AutoFitGrade(RLServicos);
+  //=================================================
+  RLNaoEncontrados.Font.Size:= RLNaoEncontrados.Font.Size+1;
+  RLNaoEncontrados.DefaultRowHeight:= RLNaoEncontrados.DefaultRowHeight+1;
+  FrmPrincipal.AutoFitGrade(RLNaoEncontrados);
+  //=================================================
+  StatusBarExecutantes.Height:= StatusBarExecutantes.Height+2;
+  StatusBarExecutantes.Font.Size:= StatusBarExecutantes.Font.Size+1;
+  //=================================================
+  StatusBarServicos.Height:= StatusBarServicos.Height+2;
+  StatusBarServicos.Font.Size:= StatusBarServicos.Font.Size+1;
+  //=================================================
+  StatusBarDisponivelExecutantes.Height:= StatusBarDisponivelExecutantes.Height+2;
+  StatusBarDisponivelExecutantes.Font.Size:= StatusBarDisponivelExecutantes.Font.Size+1;
+  //=================================================
+  StatusBarDisponivelServicos.Height:= StatusBarDisponivelServicos.Height+2;
+  StatusBarDisponivelServicos.Font.Size:= StatusBarDisponivelServicos.Font.Size+1;
+  //=================================================
+  StatusBarProgramacao.Height:= StatusBarProgramacao.Height+2;
+  StatusBarProgramacao.Font.Size:= StatusBarProgramacao.Font.Size+1;
+  //=================================================
+  ComboBoxDestino.Font.Size:= ComboBoxDestino.Font.Size+1;
+  ComboBoxDestino.ItemHeight:= ComboBoxDestino.ItemHeight+2;
+  ComboBoxTipoEtapaServico.Font.Size:= ComboBoxTipoEtapaServico.Font.Size+1;
+  ComboBoxTipoEtapaServico.ItemHeight:= ComboBoxTipoEtapaServico.ItemHeight+2;
+  ComboBoxOrigem.Font.Size:= ComboBoxOrigem.Font.Size+1;
+  ComboBoxOrigem.ItemHeight:= ComboBoxOrigem.ItemHeight+2;
+  //=================================================
+  DateTimePickerProgramacao2.Font.Size:= DateTimePickerProgramacao2.Font.Size+1;
+  //=================================================
+  PanelTipoEtapaServico.Height:= PanelTipoEtapaServico.Height+2;
+  PanelDestino.Height:= PanelDestino.Height+2;
+  PanelDataProgramacao.Height:= PanelDataProgramacao.Height+2;
+  //=================================================
+  actAutoFit.Execute;
+end;
+
+procedure TFrmProgramacaoDiaria.actZoomMenosExecute(Sender: TObject);
+begin
+  if DBGridExecutante.Font.Size > 5 then
+  begin
+    DBGridExecutante.Font.Size:= DBGridExecutante.Font.Size-1;
+    DBGridServico.Font.Size:= DBGridServico.Font.Size-1;
+    DBGridProgramacao.Font.Size:= DBGridProgramacao.Font.Size-1;
+    //=================================================
+    RLExecutantes.Font.Size:= RLExecutantes.Font.Size-1;
+    RLExecutantes.DefaultRowHeight:= RLExecutantes.DefaultRowHeight-1;
+    FrmPrincipal.AutoFitGrade(RLExecutantes);
+    //=================================================
+    RLServicos.Font.Size:= RLServicos.Font.Size-1;
+    RLServicos.DefaultRowHeight:= RLServicos.DefaultRowHeight-1;
+    FrmPrincipal.AutoFitGrade(RLServicos);
+    //=================================================
+    RLNaoEncontrados.Font.Size:= RLNaoEncontrados.Font.Size-1;
+    RLNaoEncontrados.DefaultRowHeight:= RLNaoEncontrados.DefaultRowHeight-1;
+    FrmPrincipal.AutoFitGrade(RLNaoEncontrados);
+    //=================================================
+    StatusBarExecutantes.Height:= StatusBarExecutantes.Height-2;
+    StatusBarExecutantes.Font.Size:= StatusBarExecutantes.Font.Size-1;
+    //=================================================
+    StatusBarServicos.Height:= StatusBarServicos.Height-2;
+    StatusBarServicos.Font.Size:= StatusBarServicos.Font.Size-1;
+    //=================================================
+    StatusBarDisponivelExecutantes.Height:= StatusBarDisponivelExecutantes.Height-2;
+    StatusBarDisponivelExecutantes.Font.Size:= StatusBarDisponivelExecutantes.Font.Size-1;
+    //=================================================
+    StatusBarDisponivelServicos.Height:= StatusBarDisponivelServicos.Height-2;
+    StatusBarDisponivelServicos.Font.Size:= StatusBarDisponivelServicos.Font.Size-1;
+    //=================================================
+    StatusBarProgramacao.Height:= StatusBarProgramacao.Height-2;
+    StatusBarProgramacao.Font.Size:= StatusBarProgramacao.Font.Size-1;
+    //=================================================
+    ComboBoxDestino.Font.Size:= ComboBoxDestino.Font.Size-1;
+    ComboBoxDestino.Height:= ComboBoxDestino.Height-2;
+    ComboBoxTipoEtapaServico.Font.Size:= ComboBoxTipoEtapaServico.Font.Size-1;
+    ComboBoxTipoEtapaServico.Height:= ComboBoxTipoEtapaServico.Height-2;
+    ComboBoxOrigem.Font.Size:= ComboBoxOrigem.Font.Size-1;
+    ComboBoxOrigem.Height:= ComboBoxOrigem.Height-2;
+    //=================================================
+    DateTimePickerProgramacao2.Font.Size:= DateTimePickerProgramacao2.Font.Size-1;
+    //=================================================
+    PanelTipoEtapaServico.Height:= PanelTipoEtapaServico.Height-2;
+    PanelDestino.Height:= PanelDestino.Height-2;
+    PanelDataProgramacao.Height:= PanelDataProgramacao.Height-2;
+    //=================================================
+    actAutoFit.Execute;
+  end;
+end;
+
+procedure TFrmProgramacaoDiaria.CheckBoxTurmaClick(Sender: TObject);
+begin
+if CheckBoxTurma.Checked then
+  begin
+    DBEditTurma.Enabled:= true;
+    DBEditTurma.Color:= clWhite;
+  end
+  else
+  begin
+    DBEditTurma.Enabled:= false;
+    DBEditTurma.Color:= clSilver;
+  end;
+end;
+
+procedure TFrmProgramacaoDiaria.ComboBoxDestinoKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+  Key:= #0;
+end;
+
+procedure TFrmProgramacaoDiaria.ComboBoxEmbarcacaoKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+  Key:= #0;
+end;
+
+procedure TFrmProgramacaoDiaria.ComboBoxOrigemCloseUp(Sender: TObject);
+begin
+  RLExecutantes.Cells[2,RLExecutantes.Row]:= (ComboBoxOrigem.Text);
+  ComboBoxOrigem.Visible := False;
+end;
+
+procedure TFrmProgramacaoDiaria.ComboBoxOrigemMouseLeave(Sender: TObject);
+begin
+  ComboBoxOrigem.Visible := False;
+end;
+
+procedure TFrmProgramacaoDiaria.ComboBoxTipoEtapaServicoKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+  Key:= #0;
+end;
+
+procedure TFrmProgramacaoDiaria.DateProgramacaoChange(
+  Sender: TObject);
+begin
+  actConfigBotoes1.Execute;
+  actProcurarProgramacao.Execute;
+end;
+
+procedure TFrmProgramacaoDiaria.DateTimePickerProgramacao2Change(
+  Sender: TObject);
+  var
+    dataMinima: TDateTime;
+begin
+  dataMinima:= FrmPrincipal.carregaDataMinima(false);
+  if DateTimePickerProgramacao2.DateTime < dataMinima then
+    DateTimePickerProgramacao2.DateTime := dataMinima;
+end;
+
+procedure TFrmProgramacaoDiaria.DateTimePickerProgramacao2CloseUp(
+  Sender: TObject);
+  var
+    dataMinima: TDateTime;
+begin
+  dataMinima:= FrmPrincipal.carregaDataMinima(false);
+  if DateTimePickerProgramacao2.DateTime < dataMinima then
+    DateTimePickerProgramacao2.DateTime := dataMinima;
+end;
+
+procedure TFrmProgramacaoDiaria.DBEditProgramacaoChange(Sender: TObject);
+begin
+  actProcurarExecutantes.Execute;
+  actProcurarServicos.Execute;
+end;
+
+procedure TFrmProgramacaoDiaria.DBGridExecutanteDrawColumnCell(Sender: TObject;
+  const Rect: TRect; DataCol: Integer; Column: TColumn; State: TGridDrawState);
+begin
+  FrmPrincipal.GridZebrado(DBGridExecutante,ColunasLayoutExecutante,State,Rect,DataCol,Column);
+  if (Column.Field.FieldName = 'StatusProgramacao')OR
+  (Column.Field.FieldName = 'NomeExecutante') then
+  begin
+    if FrmDataModule.DataSourceProgramacaoExecutante_Cadastro.DataSet.
+    FieldByName('StatusProgramacao').AsString = 'Aprovado' then
+    begin
+      DBGridExecutante.Canvas.Brush.Color:= clLime;
+      DBGridExecutante.Font.Color:= clBlack;
+      DBGridExecutante.Canvas.FillRect(Rect);
+      DBGridExecutante.DefaultDrawColumnCell(Rect, DataCol,Column, State);
+    end
+    else if FrmDataModule.DataSourceProgramacaoExecutante_Cadastro.DataSet.
+    FieldByName('StatusProgramacao').AsString = 'Cancelado' then
+    begin
+      DBGridExecutante.Canvas.Brush.Color:= clRed;
+      DBGridExecutante.Font.Color:= clBlack;
+      DBGridExecutante.Canvas.FillRect(Rect);
+      DBGridExecutante.DefaultDrawColumnCell(Rect, DataCol,Column, State);
+    end
+    else if FrmDataModule.DataSourceProgramacaoExecutante_Cadastro.DataSet.
+    FieldByName('StatusProgramacao').AsString = 'Mudança' then
+    begin
+      DBGridExecutante.Canvas.Brush.Color:= clYellow;
+      DBGridExecutante.Font.Color:= clBlack;
+      DBGridExecutante.Canvas.FillRect(Rect);
+      DBGridExecutante.DefaultDrawColumnCell(Rect, DataCol,Column, State);
+    end;
+  end
+  else if (Column.Field.FieldName = 'RequisitantePT') then
+  begin
+    if FrmDataModule.DataSourceProgramacaoExecutante_Cadastro.DataSet.
+    FieldByName('RequisitantePT').AsBoolean then
+    begin
+      TDBGrid(Sender).Canvas.FillRect(Rect);
+      FrmPrincipal.ImageList1.Draw(TDBGrid(Sender).Canvas, Rect.Left +10,Rect.Top + 1, 92);
+    end
+    else
+    begin
+      TDBGrid(Sender).Canvas.FillRect(Rect);
+      FrmPrincipal.ImageList1.Draw(TDBGrid(Sender).Canvas, Rect.Left +10,Rect.Top + 1, 93);
+    end;
+  end;
+end;
+
+procedure TFrmProgramacaoDiaria.DBGridExecutanteKeyDown(Sender: TObject;
+  var Key: Word; Shift: TShiftState);
+begin
+  if (Key in [VK_DOWN]) AND (DBGridExecutante.DataSource.DataSet.RecNo=
+  DBGridExecutante.DataSource.DataSet.RecordCount) then
+    Abort;
+end;
+
+procedure TFrmProgramacaoDiaria.DBGridExecutanteKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+  Key:= #0;
+end;
+
+procedure TFrmProgramacaoDiaria.DBGridProgramacaoDrawColumnCell(Sender: TObject;
+  const Rect: TRect; DataCol: Integer; Column: TColumn; State: TGridDrawState);
+  var
+    NumCancelados,NumAprovados,NumExecutantes: Integer;
+begin
+  NumCancelados:= FrmDataModule.DataSourceProgramacaoDiaria_Cadastro.DataSet.
+  FieldByName('NumCancelados').AsInteger;
+  NumAprovados:= FrmDataModule.DataSourceProgramacaoDiaria_Cadastro.DataSet.
+  FieldByName('NumAprovados').AsInteger;
+  NumExecutantes:= FrmDataModule.DataSourceProgramacaoDiaria_Cadastro.DataSet.
+  FieldByName('NumExecutantes').AsInteger;
+  FrmPrincipal.GridZebrado(DBGridProgramacao,ColunasLayoutProgramacao,State,Rect,DataCol,Column);
+  if (Column.Field.FieldName = 'booleanFavorito') then
+  begin
+    if (FrmDataModule.DataSourceProgramacaoDiaria_Cadastro.DataSet.
+    FieldByName('booleanFavorito').AsBoolean) then
+    begin
+      TDBGrid(Sender).Canvas.FillRect(Rect);
+      FrmPrincipal.ImageList1.Draw(TDBGrid(Sender).Canvas, Rect.Left +15,Rect.Top + 1, 486);
+    end
+    else
+    begin
+      TDBGrid(Sender).Canvas.FillRect(Rect);
+      FrmPrincipal.ImageList1.Draw(TDBGrid(Sender).Canvas, Rect.Left +15,Rect.Top + 1, 485);
+    end;
+  end
+  else if (Column.Field.FieldName = 'NumCancelados') then
+  begin
+    if (NumCancelados > 0) then
+    begin
+      DBGridProgramacao.Canvas.Brush.Color:= clRed;
+      DBGridProgramacao.Font.Color:= clBlack;
+      DBGridProgramacao.Canvas.FillRect(Rect);
+      DBGridProgramacao.DefaultDrawColumnCell(Rect, DataCol,Column, State);
+    end;
+  end
+  else if (Column.Field.FieldName = 'NumAprovados') then
+  begin
+    if (NumAprovados > 0) then
+    begin
+      DBGridProgramacao.Canvas.Brush.Color:= clLime;
+      DBGridProgramacao.Font.Color:= clBlack;
+      DBGridProgramacao.Canvas.FillRect(Rect);
+      DBGridProgramacao.DefaultDrawColumnCell(Rect, DataCol,Column, State);
+    end;
+  end
+  else if (Column.Field.FieldName = 'NumExecutantes') then
+  begin
+    if ((NumExecutantes-(NumAprovados+NumCancelados))>0) then
+    begin
+      DBGridProgramacao.Canvas.Brush.Color:= clYellow;
+      DBGridProgramacao.Font.Color:= clBlack;
+      DBGridProgramacao.Canvas.FillRect(Rect);
+      DBGridProgramacao.DefaultDrawColumnCell(Rect, DataCol,Column, State);
+    end;
+  end;
+end;
+
+procedure TFrmProgramacaoDiaria.DBGridProgramacaoTitleClick(Column: TColumn);
+begin
+  FrmPrincipal.configurarFiltro(0,Column.FieldName,IntToStr(Column.Index),
+  Column.ReadOnly,actFiltroInserir,actGridASC,actGridDESC,actGridDESC);
+  //======================================================
+  FrmPrincipal.titleGrid(ColunasLayoutProgramacao,'Colibri',FrmDataModule.ADOQueryProgramacaoDiaria_Cadastro.SQL.Text);
+end;
+
+procedure TFrmProgramacaoDiaria.DBGridServicoDrawColumnCell(Sender: TObject;
+  const Rect: TRect; DataCol: Integer; Column: TColumn; State: TGridDrawState);
+begin
+  FrmPrincipal.GridZebrado(DBGridServico,ColunasLayoutServico,State,Rect,DataCol,Column);
+end;
+
+procedure TFrmProgramacaoDiaria.DBGridServicoKeyDown(Sender: TObject;
+  var Key: Word; Shift: TShiftState);
+begin
+  if (Key in [VK_DOWN]) AND (DBGridServico.DataSource.DataSet.RecNo=
+  DBGridServico.DataSource.DataSet.RecordCount) then
+    Abort;
+end;
+
+procedure TFrmProgramacaoDiaria.DBGridServicoKeyPress(Sender: TObject;
+  var Key: Char);
+  var
+    DataProgramacao: TDateTime;
+begin
+  DataProgramacao:= FrmDataModule.DataSourceProgramacaoDiaria_Cadastro.DataSet.
+  FieldByName('DataProgramacao').AsDateTime;
+  if DataProgramacao < FrmPrincipal.carregaDataMinima(true) then
+    key:= #0;
+end;
+
+procedure TFrmProgramacaoDiaria.editarServico(ServicoPT, TextoBreveOP,TextoBreveOM,
+  OrdemManutencao,Operacao,CentroTrabalhoOP: String);
+  var
+    ARowIndex: Integer;
+begin
+  ARowIndex:=  RLServicos.Row;
+  //Preencher valores
+  RLServicos.Cells[0,ARowIndex]:= ' ';
+  RLServicos.Cells[1,ARowIndex]:= ServicoPT;
+  RLServicos.Cells[2,ARowIndex]:= TextoBreveOP;
+  RLServicos.Cells[3,ARowIndex]:= TextoBreveOM;
+  RLServicos.Cells[4,ARowIndex]:= OrdemManutencao;
+  RLServicos.Cells[5,ARowIndex]:= Operacao;
+  RLServicos.Cells[6,ARowIndex]:= CentroTrabalhoOP;
+
+  actAjudaLimpar.Execute;
+  FrmPrincipal.AutoFitGrade(RLServicos);
+end;
+
+function TFrmProgramacaoDiaria.executanteProgramado(NomeExecutante,Funcao,codigoSAP,CPF,
+  dataProcura,txtDestino: String): TExecutanteProgramado;
+  var
+    CodigoProgramacaoDiaria: Integer;
+    SQLBase,DestinoADD,StatusProgramacao: String;
+begin
+  Result.ListaDestinos:= TStringList.Create;
+  Result.ListaDestinos.Clear;
+  if (codigoSAP <> 'NA') then
+  begin
+    FrmDataModule.ADOQueryConsultaExecutante_DataCodigoSAP.Active:= false;
+    FrmDataModule.ADOQueryConsultaExecutante_DataCodigoSAP.Parameters.Items[0].Value:= codigoSAP;
+    FrmDataModule.ADOQueryConsultaExecutante_DataCodigoSAP.Parameters.Items[1].Value:= dataProcura;
+    FrmDataModule.ADOQueryConsultaExecutante_DataCodigoSAP.Active:= true;
+
+    if not FrmDataModule.ADOQueryConsultaExecutante_DataCodigoSAP.IsEmpty then
+    begin
+      FrmDataModule.ADOQueryConsultaExecutante_DataCodigoSAP.First;
+      while not FrmDataModule.ADOQueryConsultaExecutante_DataCodigoSAP.Eof do
+      begin
+        CodigoProgramacaoDiaria:= FrmDataModule.DataSourceConsultaExecutante_DataCodigoSAP.
+        DataSet.FieldByName('CodigoProgramacaoDiaria').AsInteger;
+        FrmDataModule.ADOQueryConsultaProgramacao_ID.Active:= false;
+        FrmDataModule.ADOQueryConsultaProgramacao_ID.Parameters.Items[0].Value:=
+        CodigoProgramacaoDiaria;
+        FrmDataModule.ADOQueryConsultaProgramacao_ID.Active:= true;
+        //=================================================
+        StatusProgramacao:= FrmDataModule.DataSourceConsultaExecutante_DataCodigoSAP.
+        DataSet.FieldByName('StatusProgramacao').AsString;
+        DestinoADD:= FrmDataModule.DataSourceConsultaProgramacao_ID.DataSet.
+        FieldByName('txtDestino').AsString;
+        if StatusProgramacao = 'Aprovado' then
+        begin
+          Result.ListaDestinos.Add(DestinoADD);
+          Result.booleanProgramado:= true;
+        end;
+        //=================================================
+        if DestinoADD = txtDestino then
+        begin
+          Result.MotivoProgramacao:= FrmDataModule.DataSourceConsultaExecutante_DataCodigoSAP.
+          DataSet.FieldByName('MotivoProgramacao').AsString;
+          Result.PalavraChaveProgramacao:= FrmDataModule.DataSourceConsultaExecutante_DataCodigoSAP.
+          DataSet.FieldByName('PalavraChaveProgramacao').AsString;
+          //========================================================
+          Result.StatusProgramacao:= FrmDataModule.DataSourceConsultaExecutante_DataCodigoSAP.
+          DataSet.FieldByName('StatusProgramacao').AsString;
+          Result.AvaliadoPorProgramacao:= FrmDataModule.DataSourceConsultaExecutante_DataCodigoSAP.
+          DataSet.FieldByName('AvaliadoPorProgramacao').AsString;
+          Result.DataAvaliacaoProgramacao:= FrmDataModule.DataSourceConsultaExecutante_DataCodigoSAP.
+          DataSet.FieldByName('DataAvaliacaoProgramacao').AsString;
+          Result.ComputadorProgramacao:= FrmDataModule.DataSourceConsultaExecutante_DataCodigoSAP.
+          DataSet.FieldByName('ComputadorProgramacao').AsString;
+        end;
+        //=================================================
+        FrmDataModule.ADOQueryConsultaExecutante_DataCodigoSAP.Next;
+      end;
+    end
+    else
+    begin
+      Result.booleanProgramado:= false;
+    end;
+  end
+  else if CPF <> '000.000.000-00' then
+  begin
+    FrmDataModule.ADOQueryConsultaExecutante_Documento_Data.Active:= false;
+    FrmDataModule.ADOQueryConsultaExecutante_Documento_Data.Parameters.Items[0].Value:= CPF;
+    FrmDataModule.ADOQueryConsultaExecutante_Documento_Data.Parameters.Items[1].Value:= dataProcura;
+    FrmDataModule.ADOQueryConsultaExecutante_Documento_Data.Active:= true;
+
+    if not FrmDataModule.ADOQueryConsultaExecutante_Documento_Data.IsEmpty then
+    begin
+      FrmDataModule.ADOQueryConsultaExecutante_Documento_Data.First;
+      while not FrmDataModule.ADOQueryConsultaExecutante_Documento_Data.Eof do
+      begin
+        CodigoProgramacaoDiaria:= FrmDataModule.DataSourceConsultaExecutante_Documento_Data.
+        DataSet.FieldByName('CodigoProgramacaoDiaria').AsInteger;
+        FrmDataModule.ADOQueryConsultaProgramacao_ID.Active:= false;
+        FrmDataModule.ADOQueryConsultaProgramacao_ID.Parameters.Items[0].Value:=
+        CodigoProgramacaoDiaria;
+        FrmDataModule.ADOQueryConsultaProgramacao_ID.Active:= true;
+        //=================================================
+        StatusProgramacao:= FrmDataModule.DataSourceConsultaExecutante_Documento_Data.
+        DataSet.FieldByName('StatusProgramacao').AsString;
+        DestinoADD:= FrmDataModule.DataSourceConsultaProgramacao_ID.DataSet.
+        FieldByName('txtDestino').AsString;
+        if StatusProgramacao = 'Aprovado' then
+        begin
+          Result.ListaDestinos.Add(DestinoADD);
+          Result.booleanProgramado:= true;
+        end;
+        //=================================================
+        if DestinoADD = txtDestino then
+        begin
+          Result.MotivoProgramacao:= FrmDataModule.DataSourceConsultaExecutante_Documento_Data.
+          DataSet.FieldByName('MotivoProgramacao').AsString;
+          Result.PalavraChaveProgramacao:= FrmDataModule.DataSourceConsultaExecutante_Documento_Data.
+          DataSet.FieldByName('PalavraChaveProgramacao').AsString;
+          //========================================================
+          Result.StatusProgramacao:= FrmDataModule.DataSourceConsultaExecutante_Documento_Data.
+          DataSet.FieldByName('StatusProgramacao').AsString;
+          Result.AvaliadoPorProgramacao:= FrmDataModule.DataSourceConsultaExecutante_Documento_Data.
+          DataSet.FieldByName('AvaliadoPorProgramacao').AsString;
+          Result.DataAvaliacaoProgramacao:= FrmDataModule.DataSourceConsultaExecutante_Documento_Data.
+          DataSet.FieldByName('DataAvaliacaoProgramacao').AsString;
+          Result.ComputadorProgramacao:= FrmDataModule.DataSourceConsultaExecutante_Documento_Data.
+          DataSet.FieldByName('ComputadorProgramacao').AsString;
+        end;
+        //=================================================
+        FrmDataModule.ADOQueryConsultaExecutante_Documento_Data.Next;
+      end;
+    end
+    else
+    begin
+      Result.booleanProgramado:= false;
+    end;
+  end
+  else
+  begin
+    FrmDataModule.ADOQueryTemporarioDBColibri.Close;
+    FrmDataModule.ADOQueryTemporarioDBColibri.SQL.Clear;
+    SQLBase:= 'SELECT tblProgramacaoExecutante.*, tblProgramacaoDiaria.* '+
+    'FROM tblProgramacaoDiaria INNER JOIN tblProgramacaoExecutante ON tblProgramacaoDiaria.'+
+    'idProgramacaoDiaria = tblProgramacaoExecutante.CodigoProgramacaoDiaria '+
+    'WHERE ((tblProgramacaoExecutante.NomeExecutante LIKE "'+NomeExecutante+
+    '")AND(tblProgramacaoExecutante.Funcao LIKE "'+Funcao+
+    '")AND(tblProgramacaoDiaria.DataProgramacao LIKE '+QuotedStr(Dataprocura)+'));';
+    FrmDataModule.ADOQueryTemporarioDBColibri.SQL.Add(SQLBase);
+    FrmDataModule.ADOQueryTemporarioDBColibri.Open;
+
+    if not FrmDataModule.ADOQueryTemporarioDBColibri.IsEmpty then
+    begin
+      FrmDataModule.ADOQueryTemporarioDBColibri.First;
+      while not FrmDataModule.ADOQueryTemporarioDBColibri.Eof do
+      begin
+        CodigoProgramacaoDiaria:= FrmDataModule.DataSourceTemporarioDBColibri.
+        DataSet.FieldByName('CodigoProgramacaoDiaria').AsInteger;
+        FrmDataModule.ADOQueryConsultaProgramacao_ID.Active:= false;
+        FrmDataModule.ADOQueryConsultaProgramacao_ID.Parameters.Items[0].Value:=
+        CodigoProgramacaoDiaria;
+        FrmDataModule.ADOQueryConsultaProgramacao_ID.Active:= true;
+        //=================================================
+        StatusProgramacao:= FrmDataModule.DataSourceTemporarioDBColibri.
+        DataSet.FieldByName('StatusProgramacao').AsString;
+        DestinoADD:= FrmDataModule.DataSourceTemporarioDBColibri.DataSet.
+        FieldByName('txtDestino').AsString;
+        if StatusProgramacao = 'Aprovado' then
+        begin
+          Result.ListaDestinos.Add(DestinoADD);
+          Result.booleanProgramado:= true;
+        end;
+        //=================================================
+        if DestinoADD = txtDestino then
+        begin
+          Result.MotivoProgramacao:= FrmDataModule.DataSourceTemporarioDBColibri.
+          DataSet.FieldByName('MotivoProgramacao').AsString;
+          Result.PalavraChaveProgramacao:= FrmDataModule.DataSourceTemporarioDBColibri.
+          DataSet.FieldByName('PalavraChaveProgramacao').AsString;
+          //========================================================
+          Result.StatusProgramacao:= FrmDataModule.DataSourceTemporarioDBColibri.
+          DataSet.FieldByName('StatusProgramacao').AsString;
+          Result.AvaliadoPorProgramacao:= FrmDataModule.DataSourceTemporarioDBColibri.
+          DataSet.FieldByName('AvaliadoPorProgramacao').AsString;
+          Result.DataAvaliacaoProgramacao:= FrmDataModule.DataSourceTemporarioDBColibri.
+          DataSet.FieldByName('DataAvaliacaoProgramacao').AsString;
+          Result.ComputadorProgramacao:= FrmDataModule.DataSourceTemporarioDBColibri.
+          DataSet.FieldByName('ComputadorProgramacao').AsString;
+        end;
+        //=================================================
+        FrmDataModule.ADOQueryTemporarioDBColibri.Next;
+      end;
+    end
+    else
+    begin
+      Result.booleanProgramado:= false;
+    end;
+  end;
+end;
+
+function TFrmProgramacaoDiaria.existeExecutante: Boolean;
+  var
+    i: integer;
+begin
+  Result:= false;
+  for i := 1 to RLExecutantes.RowCount-1 do
+  begin
+    if RLExecutantes.Cells[0,i] = ' ' then
+    begin
+      Result:= true;
+      Exit;
+    end;
+  end;
+end;
+
+function TFrmProgramacaoDiaria.existeServico: Boolean;
+  var
+    i: integer;
+begin
+  Result:= false;
+  for i := 1 to RLServicos.RowCount-1 do
+  begin
+    if RLServicos.Cells[0,i] = ' ' then
+    begin
+      Result:= true;
+      Exit;
+    end;
+  end;
+end;
+
+procedure TFrmProgramacaoDiaria.FormClose(Sender: TObject;
+  var Action: TCloseAction);
+begin
+  Action:= caFree;
+  FrmProgramacaoDiaria:=nil;
+end;
+
+procedure TFrmProgramacaoDiaria.FormCreate(Sender: TObject);
+begin
+  FrmPrincipal.MDIChildCreated(self.Handle);
+  { Ajusta a altura do ComboBox com a altura da linha do StringGrid}
+  ComboBoxOrigem.Height:= RLExecutantes.DefaultRowHeight;
+  {Esconde o ComboBox}
+  ComboBoxOrigem.Visible := False;
+  DateProgramacao.Date:= IncDay(now,1);
+  PanelProgramacao.Visible:= false;
+  PanelCriacao.Visible:= true;
+  PanelCriacao.Align:= alClient;
+  FrmPrincipal.ProgressBarIncializa(10,'Inicializando....');
+  FrmDataModule.ADOQueryConsultaEmbarcacao.Active:= false;
+  FrmDataModule.ADOQueryConsultaEmbarcacao.Active:= true;
+  FrmPrincipal.ProgressBarIncremento(1);
+  FrmDataModule.ADOQueryInserirServico.Active:= false;
+  FrmDataModule.ADOQueryInserirServico.Active:= true;
+  FrmPrincipal.ProgressBarIncremento(1);
+  FrmDataModule.ADOQueryInserirExecutante1.Active:= false;
+  FrmDataModule.ADOQueryInserirExecutante1.Active:= true;
+  FrmPrincipal.ProgressBarIncremento(1);
+  actAtualizarCombo.Execute;
+  //Incicialização
+  FrmDataModule.setFilterDBGrid(DBGridProgramacao);
+  FrmDataModule.setFilterDBGrid(DBGridExecutante);
+  FrmDataModule.setFilterDBGrid(DBGridServico);
+  FrmPrincipal.ProgressBarIncremento(1);
+  //=========================================
+  FrmPrincipal.SetupGridFilterPickListSQL(FrmDataModule.ADOConnectionConsulta,'Origem',
+  'SELECT Plataforma FROM tblPlataforma WHERE (BooleanOrigem = True);',
+  DBGridExecutante,false);
+  FrmPrincipal.ProgressBarIncremento(1);
+  //Abrir programação
+  actProcurarProgramacao.Execute;
+  FrmPrincipal.ProgressBarIncremento(1);
+  //Matriz de executante embarcados e com RT de embarque
+  FrmPrincipal.actMatrizExecutanteAPLAT.Execute;
+  FrmPrincipal.ProgressBarIncremento(1);
+  FrmPrincipal.actMatrizExecutanteT31.Execute;
+  FrmPrincipal.ProgressBarIncremento(1);
+  FrmPrincipal.actMatrizExecutanteCadastro.Execute;
+  FrmPrincipal.ProgressBarAtualizar;
+end;
+
+procedure TFrmProgramacaoDiaria.FormDestroy(Sender: TObject);
+begin
+  FrmPrincipal.MDIChildDestroyed(self.Handle);
+end;
+
+procedure TFrmProgramacaoDiaria.GravarInserirProgramacao(Tipo: Integer;ImportarTudo: Boolean);
+  var
+    CodigoProgramacaoDiaria,i,NumExecutantes,NumCancelados,NumAprovados: Integer;
+    DataProgramacao,StatusProgramacao,AvaliadoPorProgramacao,
+    ComputadorProgramacao: String;
+    myString,LogAcao: String;
+    wideChars: array[0..99] of WideChar;
+    booleanReqPT: Boolean;
+    DataAvaliacaoProgramacao: TDateTime;
+begin
+  if ((existeExecutante)AND (existeServico)) then
+  begin
+    FrmPrincipal.ProgressBarIncializa(15,'Inserindo programação...');
+    CodigoProgramacaoDiaria:= 0;
+    DataProgramacao:= FrmPrincipal.corrigirData(DateTimePickerProgramacao2.Date);
+    //Inlcuir a programação primeiro e depois vincular Executantes e Serviços
+    case Tipo of
+      0:
+      begin
+        CodigoProgramacaoDiaria:= FrmPrincipal.incluirProgramacao(
+        DataProgramacao,ComboBoxDestino.Text,ComboBoxTipoEtapaServico.Text,
+        FrmPrincipal.logChave,FrmPrincipal.logMaquina,now);
+        FrmPrincipal.ProgressBarIncremento(1);
+      end;
+      1:
+      begin
+        CodigoProgramacaoDiaria:= FrmDataModule.DataSourceProgramacaoDiaria_Cadastro.DataSet.
+        FieldByName('idProgramacaoDiaria').AsInteger;
+        FrmDataModule.ADOQueryProgramacaoDiaria_Cadastro.Edit;
+        FrmDataModule.DataSourceProgramacaoDiaria_Cadastro.DataSet.
+        FieldByName('txtTipoEtapaServico').AsString:= ComboBoxTipoEtapaServico.Text;
+        FrmDataModule.DataSourceProgramacaoDiaria_Cadastro.DataSet.
+        FieldByName('txtDestino').AsString:= ComboBoxDestino.Text;
+        FrmDataModule.DataSourceProgramacaoDiaria_Cadastro.DataSet.
+        FieldByName('DataProgramacao').AsString:= DataProgramacao;
+        //==========================================
+        FrmDataModule.DataSourceProgramacaoDiaria_Cadastro.DataSet.
+        FieldByName('AvaliadoPor').AsString:= FrmPrincipal.logChave;
+        FrmDataModule.DataSourceProgramacaoDiaria_Cadastro.DataSet.
+        FieldByName('DataAtualizacao').AsDateTime:= now;
+        FrmDataModule.DataSourceProgramacaoDiaria_Cadastro.DataSet.
+        FieldByName('ComputadorAtualizacao').AsString:= FrmPrincipal.logMaquina;
+        //==========================================
+        LogAcao:= 'Programação: '+DataProgramacao+#9+ComboBoxDestino.Text+#9+ComboBoxTipoEtapaServico.Text+#9+
+        '['+FrmPrincipal.logChave+'; '+DateToStr(now)+'; '+FrmPrincipal.logMaquina+'; Atualização]';
+        DBMemoLogAcao.Lines.Add(LogAcao);
+        //==========================================
+        FrmDataModule.ADOQueryProgramacaoDiaria_Cadastro.Post;
+        FrmPrincipal.ProgressBarIncremento(1);
+      end;
+    end;
+    if CodigoProgramacaoDiaria <> 0 then
+    begin
+      //Excluir todos os Executantes existentes anteriormente
+      FrmDataModule.ADOQueryProgramacaoExecutante_Cadastro.Active := false;
+      FrmDataModule.ADOQueryProgramacaoExecutante_Cadastro.Parameters.Items[0].Value:= CodigoProgramacaoDiaria;
+      FrmDataModule.ADOQueryProgramacaoExecutante_Cadastro.Active := true;
+      FrmPrincipal.deleteQuery(FrmDataModule.ADOQueryProgramacaoExecutante_Cadastro,'Executantes');
+      FrmPrincipal.ProgressBarIncremento(4);
+      //Inserir os Executantes
+      for i := 1 to RLExecutantes.RowCount-1 do
+      begin
+        if RLExecutantes.Cells[0,i] = ' ' then
+        begin
+          try
+            if RLExecutantes.Cells[7,i] = '   ' then
+              booleanReqPT:= true
+            else
+              booleanReqPT:= false;
+            //=============================================================
+            StatusProgramacao:= RLExecutantes.Cells[11,i];
+            AvaliadoPorProgramacao:= RLExecutantes.Cells[14,i];
+            try
+              DataAvaliacaoProgramacao:= StrToDateTime(RLExecutantes.Cells[15,i]);
+            except
+              DataAvaliacaoProgramacao:= now;
+            end;
+            ComputadorProgramacao:= RLExecutantes.Cells[16,i];
+            if (StatusProgramacao <> 'Cancelado')AND
+            (StatusProgramacao <> 'Mudança')AND
+            (StatusProgramacao <> 'Aprovado') then
+            begin
+              StatusProgramacao:= 'Aprovado';
+              AvaliadoPorProgramacao:= FrmPrincipal.logChave;
+              DataAvaliacaoProgramacao:= now;
+              ComputadorProgramacao:= FrmPrincipal.logMaquina;
+            end;
+            FrmDataModule.ADOQueryInserirExecutante1.Insert;
+            FrmDataModule.DataSourceInserirExecutante.DataSet.
+            FieldByName('CodigoProgramacaoDiaria').AsInteger:= CodigoProgramacaoDiaria;
+            FrmDataModule.DataSourceInserirExecutante.DataSet.
+            FieldByName('NomeExecutante').AsString:= (RLExecutantes.Cells[1,i]);
+            FrmDataModule.DataSourceInserirExecutante.DataSet.
+            FieldByName('Origem').AsString:= (RLExecutantes.Cells[2,i]);
+            FrmDataModule.DataSourceInserirExecutante.DataSet.
+            FieldByName('Funcao').AsString:= (RLExecutantes.Cells[3,i]);
+            FrmDataModule.DataSourceInserirExecutante.DataSet.
+            FieldByName('Empresa').AsString:= (RLExecutantes.Cells[4,i]);
+            FrmDataModule.DataSourceInserirExecutante.DataSet.
+            FieldByName('CodigoSAP').AsString:= (RLExecutantes.Cells[5,i]);
+            FrmDataModule.DataSourceInserirExecutante.DataSet.
+            FieldByName('Documento').AsString:= (RLExecutantes.Cells[6,i]);
+            FrmDataModule.DataSourceInserirExecutante.DataSet.
+            FieldByName('RequisitantePT').AsBoolean:= booleanReqPT;
+            FrmDataModule.DataSourceInserirExecutante.DataSet.
+            FieldByName('RT').AsString:= 'SEM RT';
+            FrmDataModule.DataSourceInserirExecutante.DataSet.
+            FieldByName('TipoEmbarque').AsString:= 'SEM RT';
+            FrmDataModule.DataSourceInserirExecutante.DataSet.
+            FieldByName('StatusProgramacao').AsString:= StatusProgramacao;
+            FrmDataModule.DataSourceInserirExecutante.DataSet.
+            FieldByName('MotivoProgramacao').AsString:= RLExecutantes.Cells[12,i];
+            FrmDataModule.DataSourceInserirExecutante.DataSet.
+            FieldByName('PalavraChaveProgramacao').AsString:= RLExecutantes.Cells[13,i];
+            FrmDataModule.DataSourceInserirExecutante.DataSet.
+            FieldByName('StatusExecucao').AsString:= 'Executado';
+            FrmDataModule.DataSourceInserirExecutante.DataSet.
+            FieldByName('AvaliadoPorProgramacao').AsString:= AvaliadoPorProgramacao;
+            FrmDataModule.DataSourceInserirExecutante.DataSet.
+            FieldByName('DataAvaliacaoProgramacao').AsDateTime:= DataAvaliacaoProgramacao;
+            FrmDataModule.DataSourceInserirExecutante.DataSet.
+            FieldByName('ComputadorProgramacao').AsString:= ComputadorProgramacao;
+
+            FrmDataModule.DataSourceInserirExecutante.DataSet.
+            FieldByName('RT_CentroCusto').AsString:= RLExecutantes.Cells[17,i];
+
+            FrmDataModule.ADOQueryInserirExecutante1.Post;
+          except
+            ShowMessage('Erro ao iserir executante: '+RLExecutantes.Cells[1,i]);
+          end;
+        end;
+      end;
+      FrmPrincipal.ProgressBarIncremento(4);
+      //Excluir todos os Serviços existentes anteriormente
+      FrmDataModule.ADOQueryProgramacaoServico_Cadastro.Active := false;
+      FrmDataModule.ADOQueryProgramacaoServico_Cadastro.Parameters.Items[0].Value:= CodigoProgramacaoDiaria;
+      FrmDataModule.ADOQueryProgramacaoServico_Cadastro.Active := true;
+      FrmPrincipal.deleteQuery(FrmDataModule.ADOQueryProgramacaoServico_Cadastro,'Serviços');
+      //Inserir os Serviços
+      for i := 1 to RLServicos.RowCount - 1 do
+      begin
+        if RLServicos.Cells[0,i] = ' ' then
+        begin
+          try
+            FrmDataModule.ADOQueryInserirServico.Insert;
+            FrmDataModule.DataSourceInserirServico.DataSet.
+            FieldByName('CodigoProgramacaoDiaria').AsInteger:= CodigoProgramacaoDiaria;
+            FrmDataModule.DataSourceInserirServico.DataSet.
+            FieldByName('CampoSelecao').AsString:= (RLServicos.Cells[1,i]);
+            FrmDataModule.DataSourceInserirServico.DataSet.
+            FieldByName('TextoBreveOP').AsString:= (RLServicos.Cells[2,i]);
+            FrmDataModule.DataSourceInserirServico.DataSet.
+            FieldByName('TextoBreveOM').AsString:= (RLServicos.Cells[3,i]);
+            FrmDataModule.DataSourceInserirServico.DataSet.
+            FieldByName('OrdemManutencao').AsString:= (RLServicos.Cells[4,i]);
+            FrmDataModule.DataSourceInserirServico.DataSet.
+            FieldByName('Operacao').AsString:= (RLServicos.Cells[5,i]);
+            FrmDataModule.DataSourceInserirServico.DataSet.
+            FieldByName('CentroTrabalhoOP').AsString:= (RLServicos.Cells[6,i]);
+            FrmDataModule.ADOQueryInserirServico.Post;
+          except
+
+          end;
+        end;
+      end;
+    end;
+    FrmPrincipal.ProgressBarAtualizar;
+    try
+    //====================================================================
+    NumCancelados:= FrmPrincipal.CalcNumCanceladosAprovado(CodigoProgramacaoDiaria,0);
+    NumAprovados:= FrmPrincipal.CalcNumCanceladosAprovado(CodigoProgramacaoDiaria,1);
+    NumExecutantes:= FrmPrincipal.CalcNumExecutantes(CodigoProgramacaoDiaria);
+    //Gravar resultados
+    FrmDataModule.ADOQueryConsultaProgramacao_ID.Active := false;
+    FrmDataModule.ADOQueryConsultaProgramacao_ID.Parameters.Items[0].Value:= CodigoProgramacaoDiaria;
+    FrmDataModule.ADOQueryConsultaProgramacao_ID.Active := true;
+    //====================================================================
+    FrmDataModule.ADOQueryConsultaProgramacao_ID.Edit;
+    FrmDataModule.DataSourceConsultaProgramacao_ID.DataSet.
+    FieldByName('NumExecutantes').AsInteger:= NumExecutantes;
+    FrmDataModule.DataSourceConsultaProgramacao_ID.DataSet.
+    FieldByName('NumCancelados').AsInteger:= NumCancelados;
+    FrmDataModule.DataSourceConsultaProgramacao_ID.DataSet.
+    FieldByName('NumAprovados').AsInteger:= NumAprovados;
+    FrmDataModule.ADOQueryConsultaProgramacao_ID.Post;
+    finally
+      if ImportarTudo = false then
+        actCalcelarProgramacao.Execute;
+    end;
+  end;
+  if ((existeExecutante=false)OR(existeServico=false)) then
+  begin
+    myString:= 'Necessário inserir pelo menos um Excecutante e um Serviço.'+#13+
+    'Operação cancelada!';
+    MessageBox(0, StringToWideChar(myString,wideChars,100),
+    'Colibri', MB_ICONINFORMATION);
+  end;
+end;
+
+procedure TFrmProgramacaoDiaria.incluirExecutante(
+  NomeExecutante,Origem,Funcao,Empresa,
+  codigoSAP,CPF,RequisitantePT,RT,TipoEmbarque,txtDestino,RT_CentroCusto: String);
+  var
+    numLinhas,i: Integer;
+    DataProcura,Itinerario: String;
+    Executante: TExecutanteProgramado;
+begin
+  //Verificar primeiro se o executante já foi programado para esta data
+  DataProcura:= FrmPrincipal.corrigirData(DateTimePickerProgramacao2.Date);
+  Executante:= executanteProgramado(NomeExecutante,Funcao,codigoSAP,CPF,DataProcura,txtDestino);
+
+  numLinhas:= RLExecutantes.RowCount;
+  RLExecutantes.RowCount:= numLinhas+1;
+  //Preencher valores
+  RLExecutantes.Cells[0,numLinhas]:= '  ';
+  RLExecutantes.Cells[1,numLinhas]:= (NomeExecutante);
+  RLExecutantes.Cells[2,numLinhas]:= (Origem);
+  RLExecutantes.Cells[3,numLinhas]:= (Funcao);
+  RLExecutantes.Cells[4,numLinhas]:= (Empresa);
+  RLExecutantes.Cells[5,numLinhas]:= (codigoSAP);
+  RLExecutantes.Cells[6,numLinhas]:= (CPF);
+  RLExecutantes.Cells[7,numLinhas]:= (RequisitantePT);
+  RLExecutantes.Cells[9,numLinhas]:= (RT);
+  RLExecutantes.Cells[10,numLinhas]:= (TipoEmbarque);
+  RLExecutantes.Cells[11,numLinhas]:= Executante.StatusProgramacao;
+  RLExecutantes.Cells[12,numLinhas]:= Executante.MotivoProgramacao;
+  RLExecutantes.Cells[13,numLinhas]:= Executante.PalavraChaveProgramacao;
+  RLExecutantes.Cells[14,numLinhas]:= Executante.AvaliadoPorProgramacao;
+  RLExecutantes.Cells[15,numLinhas]:= Executante.DataAvaliacaoProgramacao;
+  RLExecutantes.Cells[16,numLinhas]:= Executante.ComputadorProgramacao;
+
+  if Executante.booleanProgramado then
+  begin
+    Itinerario:= '';
+    for I := 0 to Executante.ListaDestinos.Count-1 do
+    begin
+      if i > 0 then
+        Itinerario:= Itinerario + ',';
+      Itinerario:= Itinerario + Executante.ListaDestinos[i];
+    end;
+    RLExecutantes.Cells[8,numLinhas]:= (Itinerario);
+  end
+  else
+    RLExecutantes.Cells[8,numLinhas]:= 'NADA';
+end;
+
+procedure TFrmProgramacaoDiaria.incluirServico(
+ServicoPT,TextoBreveOP,TextoBreveOM,OrdemManutencao,Operacao,CentroTrabalhoOP,selecao: String);
+  var
+    numLinhas: Integer;
+begin
+  numLinhas:= FrmPrincipal.InsertRow1(RLServicos,1);
+  //Preencher valores
+  RLServicos.Cells[0,numLinhas]:= selecao;
+  RLServicos.Cells[1,numLinhas]:= ServicoPT;
+  RLServicos.Cells[2,numLinhas]:= TextoBreveOP;
+  RLServicos.Cells[3,numLinhas]:= TextoBreveOM;
+  RLServicos.Cells[4,numLinhas]:= OrdemManutencao;
+  RLServicos.Cells[5,numLinhas]:= Operacao;
+  RLServicos.Cells[6,numLinhas]:= CentroTrabalhoOP;
+end;
+
+procedure TFrmProgramacaoDiaria.PanelTituloAjudaMouseDown(Sender: TObject;
+  Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
+begin
+  FrmPrincipal.Capturing := true;
+  FrmPrincipal.MouseDownSpot.X := X;
+  FrmPrincipal.MouseDownSpot.Y := Y;
+end;
+
+procedure TFrmProgramacaoDiaria.PanelTituloAjudaMouseMove(Sender: TObject;
+  Shift: TShiftState; X, Y: Integer);
+begin
+  if FrmPrincipal.Capturing then
+  begin
+    PanelAjuda.Left := PanelAjuda.Left - (FrmPrincipal.MouseDownSpot.X - X);
+    PanelAjuda.Top := PanelAjuda.Top - (FrmPrincipal.MouseDownSpot.Y - Y);
+  end;
+end;
+
+procedure TFrmProgramacaoDiaria.PanelTituloAjudaMouseUp(Sender: TObject;
+  Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
+begin
+  if FrmPrincipal.Capturing then
+  begin
+    FrmPrincipal.Capturing := false;
+    PanelAjuda.Left := PanelAjuda.Left - (FrmPrincipal.MouseDownSpot.X - X);
+    PanelAjuda.Top := PanelAjuda.Top - (FrmPrincipal.MouseDownSpot.Y - Y);
+  end;
+end;
+
+procedure TFrmProgramacaoDiaria.RLExecutantesDrawCell(Sender: TObject; ACol,
+  ARow: Integer; Rect: TRect; State: TGridDrawState);
+  var
+  R: TRect;
+begin
+  if (ACol = 0)AND(ARow > 0) then
+  begin
+    //Selecionado
+    if RLExecutantes.Cells[ACol,ARow] = ' ' then
+      FrmPrincipal.ImageList1.Draw(RLExecutantes.Canvas,
+      Rect.Left+14,Rect.Top+4,232)
+    //Não selecionado
+    else if RLExecutantes.Cells[ACol,ARow] = '  ' then
+      FrmPrincipal.ImageList1.Draw(RLExecutantes.Canvas,
+      Rect.Left+14,Rect.Top+4,231);
+  end
+  else if (ACol = 7)AND(ARow > 0) then
+  begin
+    //Requisitante de PT
+    if RLExecutantes.Cells[ACol,ARow] = '   ' then
+      FrmPrincipal.ImageList1.Draw(RLExecutantes.Canvas,
+      Rect.Left+14,Rect.Top+4,92)
+    //NÃO Requisitante de PT
+    else if RLExecutantes.Cells[ACol,ARow] = '    ' then
+      FrmPrincipal.ImageList1.Draw(RLExecutantes.Canvas,
+      Rect.Left+14,Rect.Top+4,93);
+  end;
+  if (ARow > 0) then
+  begin
+    R := Rect;
+    R.Left := R.Left - 4;
+    try
+      //N° Aprovado
+      if ((RLExecutantes.Cells[8,ARow] = 'NADA')AND(ACol=8)) then
+      begin
+        RLExecutantes.Canvas.Brush.Color := clLime;
+        RLExecutantes.Canvas.Font.Style := [];
+        RLExecutantes.Canvas.FillRect(R);
+        DrawText(RLExecutantes.Canvas.Handle, PChar(RLExecutantes.Cells[ACol, ARow]),
+        -1, R, DT_Center);
+      end
+      else if ((RLExecutantes.Cells[8,ARow] <> 'NADA')AND(ACol=8)) then
+      begin
+        RLExecutantes.Canvas.Brush.Color := clRed;
+        RLExecutantes.Canvas.Font.Style := [];
+        RLExecutantes.Canvas.FillRect(R);
+        DrawText(RLExecutantes.Canvas.Handle, PChar(RLExecutantes.Cells[ACol, ARow]),
+        -1, R, DT_Center);
+      end
+      else if ((RLExecutantes.Cells[11,ARow] = 'Aprovado')AND(ACol=11)) then
+      begin
+        RLExecutantes.Canvas.Brush.Color := clLime;
+        RLExecutantes.Canvas.Font.Style := [];
+        RLExecutantes.Canvas.FillRect(R);
+        DrawText(RLExecutantes.Canvas.Handle, PChar(RLExecutantes.Cells[ACol, ARow]),
+        -1, R, DT_Center);
+      end
+      else if ((RLExecutantes.Cells[11,ARow] = 'Mudança')AND(ACol=11)) then
+      begin
+        RLExecutantes.Canvas.Brush.Color := clYellow;
+        RLExecutantes.Canvas.Font.Style := [];
+        RLExecutantes.Canvas.FillRect(R);
+        DrawText(RLExecutantes.Canvas.Handle, PChar(RLExecutantes.Cells[ACol, ARow]),
+        -1, R, DT_Center);
+      end
+      else if ((RLExecutantes.Cells[11,ARow] = 'Cancelado')AND(ACol=11)) then
+      begin
+        RLExecutantes.Canvas.Brush.Color := clRed;
+        RLExecutantes.Canvas.Font.Style := [];
+        RLExecutantes.Canvas.FillRect(R);
+        DrawText(RLExecutantes.Canvas.Handle, PChar(RLExecutantes.Cells[ACol, ARow]),
+        -1, R, DT_Center);
+      end;
+    except
+    end;
+  end;
+end;
+
+procedure TFrmProgramacaoDiaria.RLExecutantesFixedCellClick(Sender: TObject;
+  ACol, ARow: Integer);
+begin
+  FrmPrincipal.clasifica(RLExecutantes,ACol,true);
+  FrmPrincipal.AutoFitGrade(RLExecutantes);
+end;
+
+procedure TFrmProgramacaoDiaria.RLExecutantesKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+  if key = #32 then
+  begin
+    if RLExecutantes.Cells[0,RLExecutantes.Row] = '  ' then
+      RLExecutantes.Cells[0,RLExecutantes.Row]:= ' '
+    else if RLExecutantes.Cells[0,RLExecutantes.Row] = ' ' then
+      RLExecutantes.Cells[0,RLExecutantes.Row]:= '  ';
+
+    StatusBarDisponivelExecutantes.Panels[0].Text:=
+    'N° Selecionados: '+(IntToStr(FrmPrincipal.CountChecked(RLExecutantes)));
+    StatusBarDisponivelExecutantes.Panels[1].Text:=
+    'N° Registros: '+(IntToStr(RLExecutantes.RowCount-1));
+    FrmPrincipal.AutoFitStatusBar(StatusBarDisponivelExecutantes);
+  end;
+end;
+
+procedure TFrmProgramacaoDiaria.RLExecutantesMouseDown(Sender: TObject;
+  Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
+  var
+    ACol,ARow: Integer;
+    pt: TPoint;
+begin
+  GetCursorPos(pt);
+  pt:= RLExecutantes.ScreenToClient(pt);
+  RLExecutantes.MouseToCell(pt.X,pt.Y,ACol, ARow);
+  if (ACol = 0)AND(ARow > 0) then
+  begin
+    if RLExecutantes.Cells[ACol,ARow] = '  ' then
+      RLExecutantes.Cells[ACol,ARow]:= ' '
+    else if RLExecutantes.Cells[ACol,ARow] = ' ' then
+      RLExecutantes.Cells[ACol,ARow]:= '  ';
+  end;
+  StatusBarDisponivelExecutantes.Panels[0].Text:=
+  'N° Selecionados: '+(IntToStr(FrmPrincipal.CountChecked(RLExecutantes)));
+  StatusBarDisponivelExecutantes.Panels[1].Text:=
+  'N° Registros: '+(IntToStr(RLExecutantes.RowCount-1));
+  FrmPrincipal.AutoFitStatusBar(StatusBarDisponivelExecutantes);
+end;
+
+procedure TFrmProgramacaoDiaria.RLExecutantesSelectCell(Sender: TObject; ACol,
+  ARow: Integer; var CanSelect: Boolean);
+  var
+    R: TRect;
+begin
+  if ((ACol = 2) AND(ARow > 0)) then
+  begin
+    R := RLExecutantes.CellRect(ACol, ARow);
+    R.Left := R.Left + RLExecutantes.Left;
+    R.Right := R.Right + RLExecutantes.Left;
+    R.Top := R.Top + RLExecutantes.Top;
+    R.Bottom := R.Bottom + RLExecutantes.Top;
+    ComboBoxOrigem.Left := R.Left + 1;
+    ComboBoxOrigem.Top := R.Top + 1;
+    ComboBoxOrigem.Width := (R.Right + 1) - R.Left;
+    ComboBoxOrigem.Height := (R.Bottom + 1) - R.Top;
+    ComboBoxOrigem.Visible := True;
+    FrmPrincipal.selComboBox(ComboBoxOrigem,(RLExecutantes.Cells[2, ARow]));
+    ComboBoxOrigem.SetFocus;
+  end;
+  CanSelect := True;
+end;
+
+procedure TFrmProgramacaoDiaria.RLServicosDrawCell(Sender: TObject; ACol,
+  ARow: Integer; Rect: TRect; State: TGridDrawState);
+begin
+  if ((ACol = 0)AND(ARow > 0)) then
+  begin
+    if RLServicos.Cells[ACol,ARow] = ' ' then
+      FrmPrincipal.ImageList1.Draw(RLServicos.Canvas,
+      Rect.Left+4,Rect.Top+4,232)
+    else if RLServicos.Cells[ACol,ARow] = '  ' then
+      FrmPrincipal.ImageList1.Draw(RLServicos.Canvas,
+      Rect.Left+4,Rect.Top+4,231);
+  end;
+end;
+
+procedure TFrmProgramacaoDiaria.RLServicosFixedCellClick(Sender: TObject; ACol,
+  ARow: Integer);
+begin
+  FrmPrincipal.clasifica(RLServicos,ACol,true);
+  FrmPrincipal.AutoFitGrade(RLServicos);
+end;
+
+procedure TFrmProgramacaoDiaria.RLServicosMouseDown(Sender: TObject;
+  Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
+  var
+    ACol,ARow: Integer;
+    pt: TPoint;
+begin
+  GetCursorPos(pt);
+  pt:= RLServicos.ScreenToClient(pt);
+  RLServicos.MouseToCell(pt.X,pt.Y,ACol, ARow);
+  if ((ACol = 0)AND(ARow > 0)) then
+  begin
+    if RLServicos.Cells[ACol,ARow] = '  ' then
+      RLServicos.Cells[ACol,ARow]:= ' '
+    else if RLServicos.Cells[ACol,ARow] = ' ' then
+      RLServicos.Cells[ACol,ARow]:= '  ';
+  end;
+  StatusBarDisponivelServicos.Panels[0].Text:=
+  'N° Selecionados: '+(IntToStr(FrmPrincipal.CountChecked(RLServicos)));
+  StatusBarDisponivelServicos.Panels[1].Text:=
+  'N° Registros: '+(IntToStr(RLServicos.RowCount-1));
+  FrmPrincipal.AutoFitStatusBar(StatusBarDisponivelServicos);
+end;
+
+function TFrmProgramacaoDiaria.selecionarExecutante(NomeExecutante,CodigoSAP,Origem,
+Funcao,Empresa: String): Boolean;
+  var
+    i: Integer;
+begin
+  Result:= false;
+  for i := 1 to RLExecutantes.RowCount-1 do
+  begin
+    if ((CodigoSAP=(RLExecutantes.Cells[5,i]))AND(CodigoSAP<>'NA')) then
+    begin
+      RLExecutantes.Cells[0,i]:= ' ';
+      RLExecutantes.Cells[2,i]:= (Origem);
+      Result:= true;
+      Break;
+    end
+    else if ((NomeExecutante=(RLExecutantes.Cells[1,i]))AND(NomeExecutante<>'')) then
+    begin
+      RLExecutantes.Cells[0,i]:= ' ';
+      RLExecutantes.Cells[2,i]:= (Origem);
+      RLExecutantes.Cells[3,i]:= (Funcao);
+      RLExecutantes.Cells[4,i]:= (Empresa);
+      Result:= true;
+      Break;
+    end;
+  end;
+end;
+
+procedure TFrmProgramacaoDiaria.SpeedButton4Click(Sender: TObject);
+begin
+  PanelAjuda.Visible := false;
+end;
+
+function TFrmProgramacaoDiaria.verificaAPLAT(NomeExecutante,
+  Funcao: String): Boolean;
+  var
+    i: Integer;
+begin
+  Result:= false;
+  for i := 0 to High(FrmPrincipal.MatrizExecutanteAPLAT[0]) do
+    if ((FrmPrincipal.MatrizExecutanteAPLAT[3,i] = NomeExecutante)AND
+    (FrmPrincipal.MatrizExecutanteAPLAT[1,i] = Funcao)) then
+    begin
+      Result:= true;
+      break
+    end;
+end;
+
+function TFrmProgramacaoDiaria.verificaSAPT31(NomeExecutante,
+  Funcao: String): TTipoEmbarque;
+  var
+    i: Integer;
+begin
+  Result.RT:= '';
+  Result.TipoEmbarque:= '';
+  for i := 0 to High(FrmPrincipal.MatrizExecutanteT31[0]) do
+  begin
+    if ((FrmPrincipal.MatrizExecutanteT31[3,i] = NomeExecutante)AND
+    (FrmPrincipal.MatrizExecutanteT31[1,i] = Funcao)) then
+    begin
+      Result.TipoEmbarque:= FrmPrincipal.MatrizExecutanteT31[6,i];//TipoNota
+      Result.RT:= FrmPrincipal.MatrizExecutanteT31[7,i];//Nota
+      break
+    end;
+  end;
+end;
+
+function TFrmProgramacaoDiaria.verificaTipoEmbarque(NomeExecutante,Funcao: String): TTipoEmbarque;
+  var
+    TipoEmbarqueT31: TTipoEmbarque;
+begin
+  if verificaAPLAT(NomeExecutante,Funcao) then
+  begin
+    Result.TipoEmbarque:= 'APLAT';
+    Result.RT:= 'SEM RT';
+  end
+  else
+  begin
+    TipoEmbarqueT31:= verificaSAPT31(NomeExecutante,Funcao);
+    if TipoEmbarqueT31.RT <> '' then
+    begin
+      Result.TipoEmbarque:= TipoEmbarqueT31.TipoEmbarque;
+      Result.RT:= TipoEmbarqueT31.RT;
+    end
+    else
+    begin
+      Result.RT:= 'SEM RT';
+      Result.TipoEmbarque:= 'SEM RT';
+    end;
+  end;
+end;
+
+procedure TFrmProgramacaoDiaria.RLNaoEncontradosFixedCellClick(
+  Sender: TObject; ACol, ARow: Integer);
+begin
+  FrmPrincipal.clasifica(RLNaoEncontrados,ACol,true);
+  FrmPrincipal.AutoFitGrade(RLNaoEncontrados);
+end;
+
+procedure TFrmProgramacaoDiaria.WMMDIACTIVATE(var msg: TWMMDIACTIVATE);
+ var
+  active: TWinControl;
+  idx: Integer;
+begin
+  active := FindControl(msg.ActiveWnd) ;
+
+  if Assigned(active) then
+  begin
+    idx := FrmPrincipal.mdiChildrenTabs.Tabs.IndexOfObject(TObject(msg.ActiveWnd));
+    FrmPrincipal.mdiChildrenTabs.Tag := -1;
+    FrmPrincipal.mdiChildrenTabs.TabIndex := idx;
+    FrmPrincipal.mdiChildrenTabs.Tag := 0;
+  end;
+end;
+
+end.

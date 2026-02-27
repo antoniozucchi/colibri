@@ -1,0 +1,37 @@
+TAB1;Data Retificado
+TAB1;Retificado
+TAB1;Condição Plataforma
+TAB1;Plataforma
+TAB1;Relatório
+TAB1;Item
+TAB1;Data Vencimento
+TAB1;Vencimento Carta
+TAB1;Atendido
+TAB1;Data Atendimento
+TAB1;Tipo de Etapa de Serviço
+TAB1;Gerência
+TAB1;Responsável
+TAB1;Prorrogação
+TAB1;Validade Declar. Plat.
+TAB1;Tipo Relatório
+TAB1;Data Perícia
+TAB1;Declaração Plataforma
+TAB1;Criado Por
+TAB1;Data Criação
+TAB1;Computador Criação
+TAB1;Avaliado Por
+TAB1;Data Atualização
+TAB1;Computador Atualização
+TAB1;Descrição do Item
+TAB1;Texto Longo OM
+TAB1;Observações
+TAB1;Ordem de Manutencao
+TAB1;Prorrogações
+TAB1;Prazo Atendimento
+TAB1;Porque não atendemos
+TAB1;O que foi feito
+TAB1;Mitigação
+TAB1;Observação Carta
+TAB1;N° Prorrogações
+TAB1;Data Ref. Flag State
+TAB1;Relatório Ref. Flag State

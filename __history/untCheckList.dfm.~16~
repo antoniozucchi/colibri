@@ -1,0 +1,2058 @@
+object FrmCheckList: TFrmCheckList
+  Left = 0
+  Top = 0
+  Caption = 'Check-List: ATP-SM/OP-AR/CIC-MAR'
+  ClientHeight = 399
+  ClientWidth = 767
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  FormStyle = fsMDIChild
+  OldCreateOrder = False
+  Visible = True
+  WindowState = wsMaximized
+  OnClose = FormClose
+  OnCreate = FormCreate
+  OnDestroy = FormDestroy
+  PixelsPerInch = 96
+  TextHeight = 13
+  object PanelTitulo: TPanel
+    Left = 0
+    Top = 0
+    Width = 767
+    Height = 25
+    Align = alTop
+    Caption = 'Check-List: ATP-SM/OP-AR/CIC-MAR'
+    Color = clGradientActiveCaption
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -13
+    Font.Name = 'Tahoma'
+    Font.Style = [fsBold]
+    ParentBackground = False
+    ParentFont = False
+    TabOrder = 0
+  end
+  object PageControl1: TPageControl
+    Left = 0
+    Top = 54
+    Width = 767
+    Height = 345
+    ActivePage = TabSheet1
+    Align = alClient
+    TabOrder = 1
+    OnChange = actAualizaPlanilhasExecute
+    object TabSheet1: TTabSheet
+      Caption = '1. Check-List'
+      object Panel2: TPanel
+        Left = 0
+        Top = 0
+        Width = 759
+        Height = 317
+        Align = alClient
+        Caption = 'Panel2'
+        TabOrder = 0
+        object ColunasLayoutCheckList: TStringGrid
+          Left = 61
+          Top = 118
+          Width = 113
+          Height = 94
+          ColCount = 2
+          DefaultRowHeight = 21
+          TabOrder = 0
+          Visible = False
+          RowHeights = (
+            21
+            21
+            21
+            21
+            21)
+        end
+        object ToolBar1: TToolBar
+          Left = 1
+          Top = 1
+          Width = 757
+          Height = 29
+          Caption = 'ToolBar1'
+          DrawingStyle = dsGradient
+          EdgeBorders = [ebLeft, ebTop, ebRight, ebBottom]
+          TabOrder = 1
+          object BitBtn14: TBitBtn
+            Left = 0
+            Top = 0
+            Width = 77
+            Height = 22
+            Action = actExcelGeralPI
+            Align = alLeft
+            Caption = 'Exportar'
+            ParentShowHint = False
+            ShowHint = True
+            TabOrder = 0
+          end
+          object BitBtn15: TBitBtn
+            Left = 77
+            Top = 0
+            Width = 64
+            Height = 22
+            Action = actLimparFiltros
+            Align = alLeft
+            Caption = 'Limpar'
+            ParentShowHint = False
+            ShowHint = True
+            TabOrder = 1
+          end
+          object BitBtn17: TBitBtn
+            Left = 141
+            Top = 0
+            Width = 64
+            Height = 22
+            Action = actFiltrosTabela
+            Align = alLeft
+            Caption = 'Filtros'
+            ParentShowHint = False
+            ShowHint = True
+            TabOrder = 3
+          end
+          object BitBtn16: TBitBtn
+            Left = 205
+            Top = 0
+            Width = 64
+            Height = 22
+            Action = actAjustar
+            Align = alLeft
+            Caption = 'Ajustar'
+            ParentShowHint = False
+            ShowHint = True
+            TabOrder = 2
+          end
+          object BitBtn5: TBitBtn
+            Left = 269
+            Top = 0
+            Width = 64
+            Height = 22
+            Action = actLayoutJanela
+            Align = alLeft
+            Caption = 'Layout'
+            ParentShowHint = False
+            ShowHint = True
+            TabOrder = 4
+          end
+          object BitBtn19: TBitBtn
+            Left = 333
+            Top = 0
+            Width = 64
+            Height = 22
+            Action = actGravarCheck
+            Align = alLeft
+            Caption = 'Gravar'
+            ParentShowHint = False
+            ShowHint = True
+            TabOrder = 6
+          end
+          object BitBtn3: TBitBtn
+            Left = 397
+            Top = 0
+            Width = 108
+            Height = 22
+            Action = actPendenciaSAP
+            Align = alLeft
+            Caption = 'Pend'#234'ncias SAP'
+            ParentShowHint = False
+            ShowHint = True
+            TabOrder = 5
+          end
+        end
+        object StatusBarCheckList: TStatusBar
+          Left = 1
+          Top = 208
+          Width = 757
+          Height = 19
+          Panels = <
+            item
+              Width = 50
+            end
+            item
+              Width = 50
+            end
+            item
+              Width = 50
+            end
+            item
+              Width = 50
+            end
+            item
+              Width = 50
+            end>
+        end
+        object DBGridCheckList: TDBGrid
+          Left = 1
+          Top = 30
+          Width = 757
+          Height = 178
+          Align = alClient
+          DataSource = FrmDataModule.DataSourceCheckList
+          TabOrder = 3
+          TitleFont.Charset = DEFAULT_CHARSET
+          TitleFont.Color = clWindowText
+          TitleFont.Height = -11
+          TitleFont.Name = 'Tahoma'
+          TitleFont.Style = []
+          OnCellClick = DBGridCheckListCellClick
+          OnColumnMoved = DBGridCheckListColumnMoved
+          OnDrawColumnCell = DBGridCheckListDrawColumnCell
+          OnKeyDown = DBGridCheckListKeyDown
+          OnKeyPress = DBGridCheckListKeyPress
+          OnTitleClick = DBGridCheckListTitleClick
+          Columns = <
+            item
+              Alignment = taCenter
+              Expanded = False
+              FieldName = 'BooleanErro'
+              ReadOnly = True
+              Title.Alignment = taCenter
+              Title.Caption = 'Erro'
+              Width = 40
+              Visible = True
+            end
+            item
+              Expanded = False
+              FieldName = 'Ciente'
+              Title.Alignment = taCenter
+              Width = 67
+              Visible = True
+            end
+            item
+              Alignment = taCenter
+              Expanded = False
+              FieldName = 'Plataforma'
+              ReadOnly = True
+              Title.Alignment = taCenter
+              Width = 75
+              Visible = True
+            end
+            item
+              Expanded = False
+              FieldName = 'Sistema'
+              ReadOnly = True
+              Title.Alignment = taCenter
+              Width = 120
+              Visible = True
+            end
+            item
+              Expanded = False
+              FieldName = 'NomeVariavel'
+              ReadOnly = True
+              Title.Alignment = taCenter
+              Title.Caption = 'Descri'#231#227'o da Variavel'
+              Width = 180
+              Visible = True
+            end
+            item
+              Alignment = taCenter
+              Expanded = False
+              FieldName = 'TAG'
+              ReadOnly = True
+              Title.Alignment = taCenter
+              Width = 70
+              Visible = True
+            end
+            item
+              Alignment = taCenter
+              Expanded = False
+              FieldName = 'ValorMedio'
+              ReadOnly = True
+              Title.Alignment = taCenter
+              Title.Caption = 'Valor M'#233'dio (Per'#237'odo)'
+              Width = 111
+              Visible = True
+            end
+            item
+              Alignment = taCenter
+              Expanded = False
+              FieldName = 'ValorAtual'
+              ReadOnly = True
+              Title.Alignment = taCenter
+              Title.Caption = 'Valor Atual'
+              Width = 75
+              Visible = True
+            end
+            item
+              Alignment = taCenter
+              Expanded = False
+              FieldName = 'UnidadePI'
+              ReadOnly = True
+              Title.Alignment = taCenter
+              Title.Caption = 'Unidade [PI]'
+              Width = 66
+              Visible = True
+            end
+            item
+              Alignment = taCenter
+              Expanded = False
+              FieldName = 'LimiteInferior'
+              ReadOnly = True
+              Title.Alignment = taCenter
+              Title.Caption = 'Limite Inferior'
+              Width = 85
+              Visible = True
+            end
+            item
+              Alignment = taCenter
+              Expanded = False
+              FieldName = 'LimiteSuperior'
+              ReadOnly = True
+              Title.Alignment = taCenter
+              Title.Caption = 'Limite Superior'
+              Width = 85
+              Visible = True
+            end
+            item
+              Alignment = taCenter
+              Expanded = False
+              FieldName = 'TipoVariavel'
+              ReadOnly = True
+              Title.Alignment = taCenter
+              Title.Caption = 'Var. Limite'
+              Width = 118
+              Visible = True
+            end
+            item
+              Alignment = taCenter
+              Expanded = False
+              FieldName = 'TipoVarPI'
+              ReadOnly = True
+              Title.Alignment = taCenter
+              Title.Caption = 'Tipo Var. [PI]'
+              Width = 77
+              Visible = True
+            end
+            item
+              Alignment = taCenter
+              Expanded = False
+              FieldName = 'CheckPor'
+              ReadOnly = True
+              Title.Alignment = taCenter
+              Title.Caption = 'Check-List Por'
+              Width = 91
+              Visible = True
+            end
+            item
+              Expanded = False
+              FieldName = 'DataCheck'
+              ReadOnly = True
+              Title.Alignment = taCenter
+              Title.Caption = 'Data Check-List'
+              Width = 92
+              Visible = True
+            end
+            item
+              Alignment = taCenter
+              Expanded = False
+              FieldName = 'ComputadorCheck'
+              ReadOnly = True
+              Title.Alignment = taCenter
+              Title.Caption = 'Computador'
+              Width = 71
+              Visible = True
+            end
+            item
+              Alignment = taCenter
+              Expanded = False
+              FieldName = 'DiasHistorico'
+              ReadOnly = True
+              Title.Alignment = taCenter
+              Title.Caption = 'Hist'#243'rico (Dias)'
+              Width = 83
+              Visible = True
+            end
+            item
+              Expanded = False
+              FieldName = 'RootPath'
+              ReadOnly = True
+              Title.Alignment = taCenter
+              Title.Caption = 'Root Path [PI]'
+              Width = 113
+              Visible = True
+            end
+            item
+              Alignment = taCenter
+              Expanded = False
+              FieldName = 'CodigoLimiteOperacional'
+              ReadOnly = True
+              Title.Alignment = taCenter
+              Title.Caption = 'C'#243'digo Limite'
+              Width = 72
+              Visible = True
+            end
+            item
+              Expanded = False
+              FieldName = 'LimiteVinculado'
+              ReadOnly = True
+              Title.Alignment = taCenter
+              Title.Caption = 'Limite Vinculado'
+              Width = 150
+              Visible = True
+            end
+            item
+              Alignment = taCenter
+              Expanded = False
+              FieldName = 'ToleranciaInferior'
+              ReadOnly = True
+              Title.Alignment = taCenter
+              Title.Caption = 'Toler'#226'ncia Inferior'
+              Visible = True
+            end
+            item
+              Alignment = taCenter
+              Expanded = False
+              FieldName = 'ToleranciaSuperior'
+              ReadOnly = True
+              Title.Alignment = taCenter
+              Title.Caption = 'Toler'#226'ncia Superior'
+              Visible = True
+            end
+            item
+              Expanded = False
+              FieldName = 'Notas'
+              ReadOnly = True
+              Title.Alignment = taCenter
+              Title.Caption = 'Observa'#231#245'es sobre o Limite Operacional'
+              Width = 175
+              Visible = True
+            end
+            item
+              Expanded = False
+              FieldName = 'LocalInstalacao'
+              ReadOnly = True
+              Title.Alignment = taCenter
+              Title.Caption = 'Local Instala'#231#227'o SAP'
+              Width = 151
+              Visible = True
+            end
+            item
+              Expanded = False
+              FieldName = 'DenominacaoLocalInstalacao'
+              ReadOnly = True
+              Title.Alignment = taCenter
+              Title.Caption = 'Denomin. Local Instala'#231#227'o SAP'
+              Width = 161
+              Visible = True
+            end
+            item
+              Alignment = taCenter
+              Expanded = False
+              FieldName = 'AtualizadoPorPI'
+              ReadOnly = True
+              Title.Alignment = taCenter
+              Title.Caption = 'Avaliado Por'
+              Width = 71
+              Visible = True
+            end
+            item
+              Expanded = False
+              FieldName = 'DataAtualizacaoPI'
+              ReadOnly = True
+              Title.Alignment = taCenter
+              Title.Caption = 'Data Atualiza'#231#227'o'
+              Width = 106
+              Visible = True
+            end
+            item
+              Alignment = taCenter
+              Expanded = False
+              FieldName = 'ComputadorAtualizacaoPI'
+              ReadOnly = True
+              Title.Alignment = taCenter
+              Title.Caption = 'Computador Atualiza'#231#227'o'
+              Width = 133
+              Visible = True
+            end
+            item
+              Alignment = taCenter
+              Expanded = False
+              FieldName = 'idPICadastro'
+              ReadOnly = True
+              Title.Alignment = taCenter
+              Title.Caption = 'C'#243'digo'
+              Visible = True
+            end
+            item
+              Expanded = False
+              FieldName = 'TAGPI'
+              ReadOnly = True
+              Title.Alignment = taCenter
+              Title.Caption = 'TAG-PI'
+              Width = 113
+              Visible = True
+            end
+            item
+              Expanded = False
+              FieldName = 'LocalInstalacao'
+              ReadOnly = True
+              Title.Alignment = taCenter
+              Title.Caption = 'Local Instala'#231#227'o'
+              Width = 220
+              Visible = True
+            end
+            item
+              Expanded = False
+              FieldName = 'DenominacaoLocalInstalacao'
+              ReadOnly = True
+              Title.Alignment = taCenter
+              Title.Caption = 'Denomin. Local Instala'#231#227'o'
+              Width = 200
+              Visible = True
+            end>
+        end
+        object MemoCheck: TMemo
+          Left = 1
+          Top = 227
+          Width = 757
+          Height = 89
+          Align = alBottom
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -13
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          Lines.Strings = (
+            'MemoCheck')
+          ParentFont = False
+          ScrollBars = ssBoth
+          TabOrder = 4
+          Visible = False
+          WordWrap = False
+        end
+      end
+    end
+    object TabSheet7: TTabSheet
+      Caption = '2. Cadastro de vari'#225'veis'
+      ImageIndex = 6
+      object ToolBar6: TToolBar
+        Left = 0
+        Top = 0
+        Width = 759
+        Height = 29
+        Caption = 'ToolBar2'
+        DrawingStyle = dsGradient
+        EdgeBorders = [ebLeft, ebTop, ebRight, ebBottom]
+        Images = FrmPrincipal.ImageList1
+        TabOrder = 0
+        object DBNavigatorCadastroPI: TDBNavigator
+          Left = 0
+          Top = 0
+          Width = 156
+          Height = 22
+          DataSource = FrmDataModule.DataSourceCadastroPI
+          VisibleButtons = [nbInsert, nbDelete, nbEdit, nbPost, nbCancel, nbRefresh]
+          Hints.Strings = (
+            'Primeiro'
+            'Anterior'
+            'Pr'#243'ximo'
+            #218'ltimo'
+            'Inserir'
+            'Excluir'
+            'Editar'
+            'Gravar'
+            'Cancelar'
+            'Atualizar'
+            'Aplicar atualiza'#231#245'es'
+            'Calcelar atualiza'#231#245'es')
+          ParentShowHint = False
+          ShowHint = True
+          TabOrder = 3
+        end
+        object BitBtn11: TBitBtn
+          Left = 156
+          Top = 0
+          Width = 77
+          Height = 22
+          Action = actExcelGeralPI
+          Align = alLeft
+          Caption = 'Exportar'
+          ParentShowHint = False
+          ShowHint = True
+          TabOrder = 2
+        end
+        object BitBtn2: TBitBtn
+          Left = 233
+          Top = 0
+          Width = 64
+          Height = 22
+          Action = actLimparFiltros
+          Align = alLeft
+          Caption = 'Limpar'
+          ParentShowHint = False
+          ShowHint = True
+          TabOrder = 0
+        end
+        object BitBtn7: TBitBtn
+          Left = 297
+          Top = 0
+          Width = 64
+          Height = 22
+          Action = actFiltrosTabela
+          Align = alLeft
+          Caption = 'Filtros'
+          ParentShowHint = False
+          ShowHint = True
+          TabOrder = 1
+        end
+        object BitBtn9: TBitBtn
+          Left = 361
+          Top = 0
+          Width = 81
+          Height = 22
+          Action = actImportarGeralPI
+          Align = alLeft
+          Caption = 'Importar'
+          ParentShowHint = False
+          ShowHint = True
+          TabOrder = 5
+        end
+        object BitBtn6: TBitBtn
+          Left = 442
+          Top = 0
+          Width = 81
+          Height = 22
+          Action = actCalcularPI
+          Align = alLeft
+          Caption = 'Calcular'
+          ParentShowHint = False
+          ShowHint = True
+          TabOrder = 4
+        end
+        object BitBtn12: TBitBtn
+          Left = 523
+          Top = 0
+          Width = 87
+          Height = 22
+          Action = actAtualizarLimiteVinculado
+          Align = alLeft
+          Caption = 'Texto Limite'
+          ParentShowHint = False
+          ShowHint = True
+          TabOrder = 6
+        end
+        object ToolButton5: TToolButton
+          Left = 610
+          Top = 0
+          Hint = 'Preencher o Local de Instala'#231#227'o do SAP'
+          Caption = 'ToolButton5'
+          DropdownMenu = PopupMenuSAP
+          ImageIndex = 463
+          Style = tbsDropDown
+        end
+      end
+      object DBGridCadastroPI: TDBGrid
+        Left = 0
+        Top = 29
+        Width = 759
+        Height = 269
+        Align = alClient
+        DataSource = FrmDataModule.DataSourceCadastroPI
+        TabOrder = 1
+        TitleFont.Charset = DEFAULT_CHARSET
+        TitleFont.Color = clWindowText
+        TitleFont.Height = -11
+        TitleFont.Name = 'Tahoma'
+        TitleFont.Style = []
+        OnCellClick = DBGridCadastroPICellClick
+        OnDrawColumnCell = DBGridCadastroPIDrawColumnCell
+        OnKeyDown = DBGridCadastroPIKeyDown
+        OnTitleClick = DBGridCadastroPITitleClick
+        Columns = <
+          item
+            Alignment = taCenter
+            Expanded = False
+            FieldName = 'BooleanChekList'
+            Title.Alignment = taCenter
+            Title.Caption = 'Chek-List'
+            Width = 55
+            Visible = True
+          end
+          item
+            Alignment = taCenter
+            Expanded = False
+            FieldName = 'CodigoLimiteOperacional'
+            Title.Alignment = taCenter
+            Title.Caption = 'C'#243'digo Limite'
+            Width = 72
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'LimiteVinculado'
+            ReadOnly = True
+            Title.Alignment = taCenter
+            Title.Caption = 'Limite Vinculado'
+            Width = 150
+            Visible = True
+          end
+          item
+            Alignment = taCenter
+            Expanded = False
+            FieldName = 'BooleanErro'
+            ReadOnly = True
+            Title.Alignment = taCenter
+            Title.Caption = 'Erro'
+            Width = 40
+            Visible = True
+          end
+          item
+            Alignment = taCenter
+            Expanded = False
+            FieldName = 'Ciente'
+            ReadOnly = True
+            Title.Alignment = taCenter
+            Width = 67
+            Visible = True
+          end
+          item
+            Alignment = taCenter
+            Expanded = False
+            FieldName = 'Plataforma'
+            Title.Alignment = taCenter
+            Width = 75
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'Sistema'
+            Title.Alignment = taCenter
+            Width = 138
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'NomeVariavel'
+            Title.Alignment = taCenter
+            Title.Caption = 'Descri'#231#227'o da Variavel'
+            Width = 180
+            Visible = True
+          end
+          item
+            Alignment = taCenter
+            Expanded = False
+            FieldName = 'TAG'
+            Title.Alignment = taCenter
+            Width = 70
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'TAGPI'
+            Title.Alignment = taCenter
+            Title.Caption = 'TAG-PI'
+            Width = 138
+            Visible = True
+          end
+          item
+            Alignment = taCenter
+            Expanded = False
+            FieldName = 'ValorMedio'
+            ReadOnly = True
+            Title.Alignment = taCenter
+            Title.Caption = 'Valor M'#233'dio (Per'#237'odo)'
+            Width = 111
+            Visible = True
+          end
+          item
+            Alignment = taCenter
+            Expanded = False
+            FieldName = 'ValorAtual'
+            ReadOnly = True
+            Title.Alignment = taCenter
+            Title.Caption = 'Valor Atual'
+            Width = 75
+            Visible = True
+          end
+          item
+            Alignment = taCenter
+            Expanded = False
+            FieldName = 'UnidadePI'
+            ReadOnly = True
+            Title.Alignment = taCenter
+            Title.Caption = 'Unidade [PI]'
+            Width = 71
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'DescricaoPI'
+            ReadOnly = True
+            Title.Alignment = taCenter
+            Title.Caption = 'Descricao [PI]'
+            Width = 172
+            Visible = True
+          end
+          item
+            Alignment = taCenter
+            Expanded = False
+            FieldName = 'TipoVarPI'
+            ReadOnly = True
+            Title.Alignment = taCenter
+            Title.Caption = 'Tipo Var. [PI]'
+            Visible = True
+          end
+          item
+            Alignment = taCenter
+            Expanded = False
+            FieldName = 'LimiteInferior'
+            ReadOnly = True
+            Title.Alignment = taCenter
+            Title.Caption = 'Limite Inferior'
+            Width = 95
+            Visible = True
+          end
+          item
+            Alignment = taCenter
+            Expanded = False
+            FieldName = 'LimiteSuperior'
+            ReadOnly = True
+            Title.Alignment = taCenter
+            Title.Caption = 'Limite Superior'
+            Width = 95
+            Visible = True
+          end
+          item
+            Alignment = taCenter
+            Expanded = False
+            FieldName = 'DiasHistorico'
+            Title.Alignment = taCenter
+            Title.Caption = 'Hist'#243'rico (Dias)'
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'RootPath'
+            Title.Alignment = taCenter
+            Width = 113
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'LocalInstalacao'
+            Title.Alignment = taCenter
+            Title.Caption = 'Local Instala'#231#227'o SAP'
+            Width = 151
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'DenominacaoLocalInstalacao'
+            Title.Alignment = taCenter
+            Title.Caption = 'Denomin. Local Instala'#231#227'o SAP'
+            Width = 167
+            Visible = True
+          end
+          item
+            Alignment = taCenter
+            Expanded = False
+            FieldName = 'AtualizadoPorPI'
+            ReadOnly = True
+            Title.Alignment = taCenter
+            Title.Caption = 'Avaliado Por'
+            Visible = True
+          end
+          item
+            Alignment = taCenter
+            Expanded = False
+            FieldName = 'DataAtualizacaoPI'
+            ReadOnly = True
+            Title.Alignment = taCenter
+            Title.Caption = 'Data Atualiza'#231#227'o'
+            Visible = True
+          end
+          item
+            Alignment = taCenter
+            Expanded = False
+            FieldName = 'ComputadorAtualizacaoPI'
+            ReadOnly = True
+            Title.Alignment = taCenter
+            Visible = True
+          end
+          item
+            Alignment = taCenter
+            Expanded = False
+            FieldName = 'idPICadastro'
+            ReadOnly = True
+            Title.Alignment = taCenter
+            Title.Caption = 'C'#243'digo'
+            Visible = True
+          end>
+      end
+      object ColunasLayoutCadastroPI: TStringGrid
+        Left = 29
+        Top = 118
+        Width = 113
+        Height = 94
+        ColCount = 2
+        DefaultRowHeight = 21
+        TabOrder = 2
+        Visible = False
+        RowHeights = (
+          21
+          21
+          21
+          21
+          21)
+      end
+      object StatusBarCadastroPI: TStatusBar
+        Left = 0
+        Top = 298
+        Width = 759
+        Height = 19
+        Panels = <
+          item
+            Width = 50
+          end
+          item
+            Width = 50
+          end
+          item
+            Width = 50
+          end
+          item
+            Width = 50
+          end
+          item
+            Width = 50
+          end>
+      end
+      object DBLookupComboBox_Limite: TDBLookupComboBox
+        Left = 184
+        Top = 82
+        Width = 172
+        Height = 21
+        Color = clWhite
+        DataField = 'CodigoLimiteOperacional'
+        DataSource = FrmDataModule.DataSourceCadastroPI
+        DropDownRows = 12
+        KeyField = 'idPILimiteOperacional'
+        ListField = 'DescricaoLimite'
+        ListSource = FrmDataModule.DataSourceLimiteOperacional
+        TabOrder = 4
+        Visible = False
+        OnCloseUp = DBLookupComboBox_LimiteCloseUp
+      end
+    end
+    object TabSheet5: TTabSheet
+      Caption = '3. Limites Operacionais'
+      ImageIndex = 4
+      object ToolBar2: TToolBar
+        Left = 0
+        Top = 0
+        Width = 759
+        Height = 29
+        Caption = 'ToolBar2'
+        DrawingStyle = dsGradient
+        EdgeBorders = [ebLeft, ebTop, ebRight, ebBottom]
+        TabOrder = 0
+        object DBNavigatorLimiteOperacional: TDBNavigator
+          Left = 0
+          Top = 0
+          Width = 156
+          Height = 22
+          DataSource = FrmDataModule.DataSourceLimiteOperacional
+          VisibleButtons = [nbInsert, nbDelete, nbEdit, nbPost, nbCancel, nbRefresh]
+          Hints.Strings = (
+            'Primeiro'
+            'Anterior'
+            'Pr'#243'ximo'
+            #218'ltimo'
+            'Inserir'
+            'Excluir'
+            'Editar'
+            'Gravar'
+            'Cancelar'
+            'Atualizar'
+            'Aplicar atualiza'#231#245'es'
+            'Calcelar atualiza'#231#245'es')
+          ParentShowHint = False
+          ShowHint = True
+          TabOrder = 2
+        end
+        object BitBtn1: TBitBtn
+          Left = 156
+          Top = 0
+          Width = 77
+          Height = 22
+          Action = actExcelLimiteOperacional
+          Align = alLeft
+          Caption = 'Exportar'
+          ParentShowHint = False
+          ShowHint = True
+          TabOrder = 1
+        end
+        object BitBtn4: TBitBtn
+          Left = 233
+          Top = 0
+          Width = 64
+          Height = 22
+          Action = actLimparFiltros
+          Align = alLeft
+          Caption = 'Limpar'
+          ParentShowHint = False
+          ShowHint = True
+          TabOrder = 0
+        end
+        object BitBtn10: TBitBtn
+          Left = 297
+          Top = 0
+          Width = 64
+          Height = 22
+          Action = actFiltrosTabela
+          Align = alLeft
+          Caption = 'Filtros'
+          ParentShowHint = False
+          ShowHint = True
+          TabOrder = 3
+        end
+      end
+      object DBGridLimiteOperacional: TDBGrid
+        Left = 0
+        Top = 29
+        Width = 759
+        Height = 269
+        Align = alClient
+        DataSource = FrmDataModule.DataSourceLimiteOperacional
+        TabOrder = 1
+        TitleFont.Charset = DEFAULT_CHARSET
+        TitleFont.Color = clWindowText
+        TitleFont.Height = -11
+        TitleFont.Name = 'Tahoma'
+        TitleFont.Style = []
+        OnDrawColumnCell = DBGridLimiteOperacionalDrawColumnCell
+        OnTitleClick = DBGridLimiteOperacionalTitleClick
+        Columns = <
+          item
+            Alignment = taCenter
+            Expanded = False
+            FieldName = 'idPILimiteOperacional'
+            ReadOnly = True
+            Title.Alignment = taCenter
+            Title.Caption = 'C'#243'digo'
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'DescricaoLimite'
+            Title.Alignment = taCenter
+            Title.Caption = 'Descri'#231#227'o do Limite'
+            Width = 221
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'TipoVariavel'
+            Title.Alignment = taCenter
+            Title.Caption = 'Var. Limite'
+            Width = 90
+            Visible = True
+          end
+          item
+            Alignment = taCenter
+            Expanded = False
+            FieldName = 'ToleranciaInferior'
+            Title.Alignment = taCenter
+            Title.Caption = 'Toler'#226'ncia Inferior'
+            Width = 100
+            Visible = True
+          end
+          item
+            Alignment = taCenter
+            Expanded = False
+            FieldName = 'ToleranciaSuperior'
+            Title.Alignment = taCenter
+            Title.Caption = 'Toler'#226'ncia Superior'
+            Width = 100
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'Notas'
+            Title.Alignment = taCenter
+            Title.Caption = 'Observa'#231#245'es sobre o Limite Operacional'
+            Width = 250
+            Visible = True
+          end
+          item
+            Alignment = taCenter
+            Expanded = False
+            FieldName = 'AvaliadoPorLIMITE'
+            ReadOnly = True
+            Title.Alignment = taCenter
+            Title.Caption = 'Avaliado Por'
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'DataAtualizacaoLIMITE'
+            ReadOnly = True
+            Title.Alignment = taCenter
+            Title.Caption = 'Data Atualiza'#231#227'o'
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'ComputadorLIMITE'
+            ReadOnly = True
+            Title.Alignment = taCenter
+            Visible = True
+          end>
+      end
+      object ColunasLayoutLimites: TStringGrid
+        Left = 21
+        Top = 110
+        Width = 113
+        Height = 94
+        ColCount = 2
+        DefaultRowHeight = 21
+        TabOrder = 2
+        Visible = False
+        RowHeights = (
+          21
+          21
+          21
+          21
+          21)
+      end
+      object StatusBarLimiteOperacional: TStatusBar
+        Left = 0
+        Top = 298
+        Width = 759
+        Height = 19
+        Panels = <
+          item
+            Width = 50
+          end
+          item
+            Width = 50
+          end
+          item
+            Width = 50
+          end
+          item
+            Width = 50
+          end
+          item
+            Width = 50
+          end>
+      end
+    end
+    object TabSheet6: TTabSheet
+      Caption = '4. Relat'#243'rios'
+      ImageIndex = 5
+      object Splitter1: TSplitter
+        Left = 525
+        Top = 42
+        Height = 256
+        Align = alRight
+        ExplicitLeft = 544
+        ExplicitTop = 112
+        ExplicitHeight = 100
+      end
+      object edtTitulo2: TEdit
+        Left = 0
+        Top = 21
+        Width = 759
+        Height = 21
+        Align = alTop
+        Alignment = taCenter
+        Color = clGradientActiveCaption
+        TabOrder = 0
+      end
+      object edtTitulo1: TEdit
+        Left = 0
+        Top = 0
+        Width = 759
+        Height = 21
+        Align = alTop
+        Alignment = taCenter
+        Color = clGradientActiveCaption
+        TabOrder = 1
+      end
+      object PanelRegistros: TPanel
+        Left = 528
+        Top = 42
+        Width = 231
+        Height = 256
+        Align = alRight
+        TabOrder = 2
+        object ToolBar4: TToolBar
+          Left = 1
+          Top = 1
+          Width = 229
+          Height = 29
+          Caption = 'ToolBar4'
+          DrawingStyle = dsGradient
+          EdgeBorders = [ebLeft, ebTop, ebRight, ebBottom]
+          Images = FrmPrincipal.ImageList1
+          TabOrder = 0
+          object ToolButton1: TToolButton
+            Left = 0
+            Top = 0
+            Action = actAbrirCheckList
+            ParentShowHint = False
+            ShowHint = True
+          end
+          object ToolButton2: TToolButton
+            Left = 23
+            Top = 0
+            Action = actImprimirCheck
+            ParentShowHint = False
+            ShowHint = True
+          end
+          object ToolButton3: TToolButton
+            Left = 46
+            Top = 0
+            Action = actLimparFiltros
+            ParentShowHint = False
+            ShowHint = True
+          end
+          object ToolButton4: TToolButton
+            Left = 69
+            Top = 0
+            Action = actFiltrosTabela
+            ParentShowHint = False
+            ShowHint = True
+          end
+          object DBNavigatorRegisros: TDBNavigator
+            Left = 92
+            Top = 0
+            Width = 96
+            Height = 22
+            DataSource = FrmDataModule.DataSourcePIRegistros
+            VisibleButtons = [nbDelete, nbPost, nbCancel, nbRefresh]
+            Hints.Strings = (
+              'Primeiro'
+              'Anterior'
+              'Pr'#243'ximo'
+              #218'ltimo'
+              'Inserir'
+              'Excluir'
+              'Editar'
+              'Gravar'
+              'Cancelar'
+              'Atualizar'
+              'Aplicar atualiza'#231#245'es'
+              'Calcelar atualiza'#231#245'es')
+            ParentShowHint = False
+            ShowHint = True
+            TabOrder = 0
+          end
+        end
+        object DBGridRegistros: TDBGrid
+          Left = 1
+          Top = 30
+          Width = 229
+          Height = 206
+          Align = alClient
+          DataSource = FrmDataModule.DataSourceSIGMRegistros
+          ReadOnly = True
+          TabOrder = 1
+          TitleFont.Charset = DEFAULT_CHARSET
+          TitleFont.Color = clWindowText
+          TitleFont.Height = -11
+          TitleFont.Name = 'Tahoma'
+          TitleFont.Style = []
+          OnDrawColumnCell = DBGridRegistrosDrawColumnCell
+          OnTitleClick = DBGridRegistrosTitleClick
+          Columns = <
+            item
+              Alignment = taCenter
+              Expanded = False
+              FieldName = 'DataRegistro'
+              Title.Alignment = taCenter
+              Title.Caption = 'Data Check-List'
+              Visible = True
+            end
+            item
+              Expanded = False
+              FieldName = 'AvaliadoPor'
+              Title.Alignment = taCenter
+              Title.Caption = 'Check-List Por'
+              Visible = True
+            end
+            item
+              Expanded = False
+              FieldName = 'Computador'
+              Title.Alignment = taCenter
+              Title.Caption = 'Computador Check-List'
+              Visible = True
+            end
+            item
+              Expanded = False
+              FieldName = 'PI_AtualizadoPor'
+              Title.Alignment = taCenter
+              Title.Caption = 'Atualizado PI Por'
+              Visible = True
+            end
+            item
+              Expanded = False
+              FieldName = 'PI_DataAtualizacao'
+              Title.Alignment = taCenter
+              Title.Caption = 'Data Atualiza'#231#227'o PI'
+              Visible = True
+            end
+            item
+              Expanded = False
+              FieldName = 'PI_Computador'
+              Title.Alignment = taCenter
+              Title.Caption = 'Computador Atualiza'#231#227'o PI'
+              Visible = True
+            end
+            item
+              Expanded = False
+              FieldName = 'Resultados'
+              Title.Alignment = taCenter
+              Visible = True
+            end>
+        end
+        object ColunasLayoutRegistros: TStringGrid
+          Left = 37
+          Top = 63
+          Width = 113
+          Height = 94
+          ColCount = 2
+          DefaultRowHeight = 21
+          TabOrder = 2
+          Visible = False
+          RowHeights = (
+            21
+            21
+            21
+            21
+            21)
+        end
+        object StatusBarRegistros: TStatusBar
+          Left = 1
+          Top = 236
+          Width = 229
+          Height = 19
+          Panels = <
+            item
+              Width = 50
+            end
+            item
+              Width = 50
+            end
+            item
+              Width = 50
+            end
+            item
+              Width = 50
+            end
+            item
+              Width = 50
+            end>
+        end
+      end
+      object StatusBarImpressao: TStatusBar
+        Left = 0
+        Top = 298
+        Width = 759
+        Height = 19
+        Panels = <
+          item
+            Width = 50
+          end>
+      end
+      object PanelRelatorio: TPanel
+        Left = 0
+        Top = 42
+        Width = 525
+        Height = 256
+        Align = alClient
+        TabOrder = 4
+        object Splitter2: TSplitter
+          Left = 1
+          Top = 178
+          Width = 523
+          Height = 3
+          Cursor = crVSplit
+          Align = alBottom
+          ExplicitTop = 1
+          ExplicitWidth = 165
+        end
+        object RLImpressao: TStringGrid
+          Left = 1
+          Top = 1
+          Width = 523
+          Height = 177
+          Align = alClient
+          FixedCols = 0
+          RowCount = 2
+          Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goDrawFocusSelected, goColSizing, goRowMoving, goColMoving, goEditing, goFixedRowClick]
+          TabOrder = 0
+          OnFixedCellClick = RLImpressaoFixedCellClick
+          ColWidths = (
+            64
+            64
+            64
+            64
+            64)
+        end
+        object DBMemoOBS: TDBMemo
+          Left = 1
+          Top = 181
+          Width = 523
+          Height = 74
+          Align = alBottom
+          DataField = 'OBS'
+          DataSource = FrmDataModule.DataSourcePIRegistros
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -13
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          ParentFont = False
+          ScrollBars = ssBoth
+          TabOrder = 1
+        end
+      end
+    end
+    object TabSheet2: TTabSheet
+      Caption = 'Pend'#234'nicas [SAP/R3]'
+      ImageIndex = 4
+      object ToolBar5: TToolBar
+        Left = 0
+        Top = 0
+        Width = 759
+        Height = 29
+        ButtonHeight = 21
+        Caption = 'ToolBar5'
+        DrawingStyle = dsGradient
+        EdgeBorders = [ebLeft, ebTop, ebRight, ebBottom]
+        TabOrder = 0
+        object BitBtn20: TBitBtn
+          Left = 0
+          Top = 0
+          Width = 77
+          Height = 21
+          Action = actExcelGeralPI
+          Align = alLeft
+          Caption = 'Exportar'
+          ParentShowHint = False
+          ShowHint = True
+          TabOrder = 0
+        end
+        object BitBtn21: TBitBtn
+          Left = 77
+          Top = 0
+          Width = 64
+          Height = 21
+          Action = actLimparFiltros
+          Align = alLeft
+          Caption = 'Limpar'
+          ParentShowHint = False
+          ShowHint = True
+          TabOrder = 1
+        end
+        object BitBtn22: TBitBtn
+          Left = 141
+          Top = 0
+          Width = 64
+          Height = 21
+          Action = actFiltrosTabela
+          Align = alLeft
+          Caption = 'Filtros'
+          ParentShowHint = False
+          ShowHint = True
+          TabOrder = 2
+        end
+        object DBEdit1: TDBEdit
+          Left = 205
+          Top = 0
+          Width = 121
+          Height = 21
+          DataField = 'OrdemManutencao'
+          DataSource = FrmDataModule.DataSourcePendenciaSAP
+          TabOrder = 3
+          Visible = False
+          OnChange = DBEdit1Change
+        end
+      end
+      object DBGridPendenciaSAP: TDBGrid
+        Left = 0
+        Top = 29
+        Width = 759
+        Height = 180
+        Align = alClient
+        DataSource = FrmDataModule.DataSourcePendenciaSAP
+        ReadOnly = True
+        TabOrder = 1
+        TitleFont.Charset = DEFAULT_CHARSET
+        TitleFont.Color = clWindowText
+        TitleFont.Height = -11
+        TitleFont.Name = 'Tahoma'
+        TitleFont.Style = []
+        OnDrawColumnCell = DBGridPendenciaSAPDrawColumnCell
+        OnTitleClick = DBGridPendenciaSAPTitleClick
+        Columns = <
+          item
+            Alignment = taCenter
+            Expanded = False
+            FieldName = 'Plataforma'
+            Title.Alignment = taCenter
+            Width = 76
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'LocalInstalacao'
+            Title.Alignment = taCenter
+            Title.Caption = 'Local Instala'#231#227'o'
+            Width = 163
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'DenominacaoLocalInstalacao'
+            Title.Alignment = taCenter
+            Title.Caption = 'Denomin. Local Instala'#231#227'o'
+            Width = 161
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'txtTipoEtapaServicoOM'
+            Title.Alignment = taCenter
+            Title.Caption = 'Tipo Etapa Servi'#231'o [OM]'
+            Width = 140
+            Visible = True
+          end
+          item
+            Alignment = taCenter
+            Expanded = False
+            FieldName = 'OrdemManutencao'
+            Title.Alignment = taCenter
+            Title.Caption = 'Ordem Manuten'#231#227'o'
+            Width = 100
+            Visible = True
+          end
+          item
+            Alignment = taCenter
+            Expanded = False
+            FieldName = 'DataBaseInicio'
+            Title.Alignment = taCenter
+            Title.Caption = 'Data Base In'#237'cio'
+            Width = 88
+            Visible = True
+          end
+          item
+            Alignment = taCenter
+            Expanded = False
+            FieldName = 'DataBaseFim'
+            Title.Alignment = taCenter
+            Title.Caption = 'Data Base Fim'
+            Width = 81
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'TextoBreveOM'
+            Title.Alignment = taCenter
+            Title.Caption = 'Texto Breve [OM]'
+            Width = 220
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'CampoSelecao'
+            Title.Alignment = taCenter
+            Title.Caption = 'Servi'#231'o/Ano-Etapa'
+            Width = 100
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'Sala'
+            Title.Alignment = taCenter
+            Width = 83
+            Visible = True
+          end
+          item
+            Alignment = taCenter
+            Expanded = False
+            FieldName = 'TipoAtvMnt'
+            Title.Alignment = taCenter
+            Visible = True
+          end
+          item
+            Alignment = taCenter
+            Expanded = False
+            FieldName = 'GrupoPlanejamento'
+            Title.Alignment = taCenter
+            Title.Caption = 'Grp.Plnj.PM'
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'CentroTrabalhoOM'
+            Title.Alignment = taCenter
+            Title.Caption = 'Centro Trabalho [OM]'
+            Width = 82
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'StatusUsuarioOM'
+            Title.Alignment = taCenter
+            Title.Caption = 'Status Usu'#225'rio [OM]'
+            Width = 130
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'StatusSistemaOM'
+            Title.Alignment = taCenter
+            Title.Caption = 'Status Sistema [OM]'
+            Width = 100
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'NotaManutencao'
+            Title.Alignment = taCenter
+            Title.Caption = 'Nota Manuten'#231#227'o'
+            Width = 91
+            Visible = True
+          end
+          item
+            Alignment = taCenter
+            Expanded = False
+            FieldName = 'PlanoManutencao'
+            Title.Alignment = taCenter
+            Title.Caption = 'Plano Manuten'#231#227'o'
+            Width = 96
+            Visible = True
+          end
+          item
+            Alignment = taCenter
+            Expanded = False
+            FieldName = 'Equipamento'
+            Title.Alignment = taCenter
+            Width = 68
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'CriadoPor'
+            Title.Alignment = taCenter
+            Title.Caption = 'Criado Por'
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'DataReferencia'
+            Title.Alignment = taCenter
+            Title.Caption = 'Data Refer'#234'ncia'
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'DataEntrada'
+            Title.Alignment = taCenter
+            Title.Caption = 'Data Entrada'
+            Visible = True
+          end>
+      end
+      object MemoTextoLongoOM: TMemo
+        Left = 0
+        Top = 209
+        Width = 759
+        Height = 89
+        Align = alBottom
+        Lines.Strings = (
+          'MemoTextoLongoOM')
+        TabOrder = 2
+      end
+      object ColunasLayoutPendenciaSAP: TStringGrid
+        Left = 117
+        Top = 87
+        Width = 113
+        Height = 94
+        ColCount = 2
+        DefaultRowHeight = 21
+        TabOrder = 3
+        Visible = False
+        RowHeights = (
+          21
+          21
+          21
+          21
+          21)
+      end
+      object StatusBarPendenciaSAP: TStatusBar
+        Left = 0
+        Top = 298
+        Width = 759
+        Height = 19
+        Panels = <
+          item
+            Width = 50
+          end
+          item
+            Width = 50
+          end
+          item
+            Width = 50
+          end
+          item
+            Width = 50
+          end
+          item
+            Width = 50
+          end>
+      end
+    end
+  end
+  object ToolBar3: TToolBar
+    Left = 0
+    Top = 25
+    Width = 767
+    Height = 29
+    Caption = 'ToolBar3'
+    EdgeBorders = [ebLeft, ebTop, ebRight, ebBottom]
+    Images = FrmPrincipal.ImageList1
+    TabOrder = 2
+    object BitBtn13: TBitBtn
+      Left = 0
+      Top = 0
+      Width = 80
+      Height = 22
+      Action = actSincronizar_PI
+      Align = alLeft
+      Caption = 'Sincronizar'
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 5
+    end
+    object BitBtn8: TBitBtn
+      Left = 80
+      Top = 0
+      Width = 96
+      Height = 22
+      Action = actAtualizarPI
+      Align = alLeft
+      Caption = 'Atualizar [PI]'
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 0
+    end
+    object DBEditAtualizadoPor: TDBEdit
+      Left = 176
+      Top = 0
+      Width = 72
+      Height = 22
+      Hint = 'Chave de quem atualizou o PI a '#250'ltima vez.'
+      Color = clInfoBk
+      DataField = 'PI_AtualizadoPor'
+      DataSource = FrmDataModule.DataSourceColibri
+      ParentShowHint = False
+      ReadOnly = True
+      ShowHint = True
+      TabOrder = 2
+    end
+    object DBEditDataAtualizacao: TDBEdit
+      Left = 248
+      Top = 0
+      Width = 121
+      Height = 22
+      Hint = #218'ltima atualiza'#231#227'o do PI'
+      Color = clInfoBk
+      DataField = 'PI_DataAtualizacao'
+      DataSource = FrmDataModule.DataSourceColibri
+      ParentShowHint = False
+      ReadOnly = True
+      ShowHint = True
+      TabOrder = 1
+    end
+    object DBEditComputador: TDBEdit
+      Left = 369
+      Top = 0
+      Width = 99
+      Height = 22
+      Hint = 'Computador da atualiza'#231#227'o com o PI'
+      Color = clInfoBk
+      DataField = 'PI_Computador'
+      DataSource = FrmDataModule.DataSourceColibri
+      ParentShowHint = False
+      ReadOnly = True
+      ShowHint = True
+      TabOrder = 4
+    end
+    object DBEdit2: TDBEdit
+      Left = 468
+      Top = 0
+      Width = 53
+      Height = 22
+      Hint = 'N'#250'mero de sincroniza'#231#245'es'
+      Color = clInfoBk
+      DataField = 'PI_Sincronizar'
+      DataSource = FrmDataModule.DataSourceColibri
+      ParentShowHint = False
+      ReadOnly = True
+      ShowHint = True
+      TabOrder = 3
+    end
+  end
+  object ActionManager1: TActionManager
+    Images = FrmPrincipal.ImageList1
+    Left = 376
+    Top = 184
+    StyleName = 'Platform Default'
+    object actFiltroInserir: TAction
+      Category = 'Tabela'
+      Caption = 'actFiltroInserir'
+      OnExecute = actFiltroInserirExecute
+    end
+    object actGridASC: TAction
+      Category = 'Tabela'
+      Caption = 'actGridASC'
+      OnExecute = actGridASCExecute
+    end
+    object actGridDESC: TAction
+      Category = 'Tabela'
+      Caption = 'actGridDESC'
+      OnExecute = actGridDESCExecute
+    end
+    object actSubstituirPor: TAction
+      Category = 'Tabela'
+      Caption = 'actSubstituirPor'
+      OnExecute = actSubstituirPorExecute
+    end
+    object actLimparFiltros: TAction
+      Category = 'Tabela'
+      Caption = 'Limpar'
+      Hint = 'Limpar Filtros'
+      ImageIndex = 469
+      OnExecute = actLimparFiltrosExecute
+    end
+    object actFiltrosTabela: TAction
+      Category = 'Tabela'
+      Caption = 'Filtros'
+      Hint = 'Visualizar tabela de filtros'
+      ImageIndex = 470
+      OnExecute = actFiltrosTabelaExecute
+    end
+    object actProcuraFiltrosTabela: TAction
+      Category = 'Tabela'
+      Caption = 'actProcuraFiltrosTabela'
+      OnExecute = actProcuraFiltrosTabelaExecute
+    end
+    object actProcurarLimiteOperacional: TAction
+      Category = 'Procurar'
+      Caption = 'actProcurarLimiteOperacional'
+      OnExecute = actProcurarLimiteOperacionalExecute
+    end
+    object actProcurarCadastroPI: TAction
+      Category = 'Procurar'
+      Caption = 'actProcurarCadastroPI'
+      OnExecute = actProcurarCadastroPIExecute
+    end
+    object actImportarGeralPI: TAction
+      Category = 'Cadastro'
+      Caption = 'Importar'
+      Hint = 'Importar planilha de comunica'#231#227'o com o PI'
+      ImageIndex = 206
+      OnExecute = actImportarGeralPIExecute
+    end
+    object actAtualizarPI: TAction
+      Category = 'Configura'#231#227'o'
+      Caption = 'Atualizar [PI]'
+      Hint = 'Atualizar dados do PI'
+      ImageIndex = 252
+      OnExecute = actAtualizarPIExecute
+    end
+    object actAtualizarLimiteVinculado: TAction
+      Category = 'Cadastro'
+      Caption = 'Texto Limite'
+      Hint = 'Atualizar texto do limite vinculado em fun'#231#227'o do c'#243'digo'
+      ImageIndex = 238
+      OnExecute = actAtualizarLimiteVinculadoExecute
+    end
+    object actExcelLimiteOperacional: TAction
+      Category = 'Excel'
+      Caption = 'Exportar'
+      Hint = 'Exportar para o Excel'
+      ImageIndex = 54
+      OnExecute = actExcelLimiteOperacionalExecute
+    end
+    object actExcelGeralPI: TAction
+      Category = 'Excel'
+      Caption = 'Exportar'
+      Hint = 'Exportar para o Excel'
+      ImageIndex = 54
+      OnExecute = actExcelGeralPIExecute
+    end
+    object actCalcularPI: TAction
+      Category = 'Cadastro'
+      Caption = 'Calcular'
+      Hint = 
+        'Calcular: (Toler'#226'ncia Superior e Toler'#226'nica Inferior) e verifica' +
+        'r necess'#237'dade de Check-List'
+      ImageIndex = 35
+      OnExecute = actCalcularPIExecute
+    end
+    object actSincronizar_PI: TAction
+      Category = 'Configura'#231#227'o'
+      Caption = 'Sincronizar'
+      Hint = 'Sincronizar banco de dados com arquivo de conex'#227'o com o PI'
+      ImageIndex = 247
+      OnExecute = actSincronizar_PIExecute
+    end
+    object actFecharConexao: TAction
+      Category = 'Configura'#231#227'o'
+      Caption = 'actFecharConexao'
+      OnExecute = actFecharConexaoExecute
+    end
+    object actExcelCheckList: TAction
+      Category = 'Excel'
+      Caption = 'Exportar'
+      Hint = 'Exportar para o Excel'
+      ImageIndex = 54
+      OnExecute = actExcelCheckListExecute
+    end
+    object actProcurarCheckList: TAction
+      Category = 'Procurar'
+      Caption = 'actProcurarCheckList'
+      OnExecute = actProcurarCheckListExecute
+    end
+    object actCimaTudo: TAction
+      Category = 'Layout'
+      Caption = 'actCimaTudo'
+      OnExecute = actCimaTudoExecute
+    end
+    object actBaixoTudo: TAction
+      Category = 'Layout'
+      Caption = 'actBaixoTudo'
+      OnExecute = actBaixoTudoExecute
+    end
+    object actBaixo: TAction
+      Category = 'Layout'
+      Caption = 'actBaixo'
+      OnExecute = actBaixoExecute
+    end
+    object actCima: TAction
+      Category = 'Layout'
+      Caption = 'actCima'
+      OnExecute = actCimaExecute
+    end
+    object actSalvarLayout: TAction
+      Category = 'Layout'
+      Caption = 'actSalvarLayout'
+      OnExecute = actSalvarLayoutExecute
+    end
+    object actLayoutJanela: TAction
+      Category = 'Layout'
+      Caption = 'Layout'
+      Hint = 'Layout da tabela'
+      ImageIndex = 466
+      OnExecute = actLayoutJanelaExecute
+    end
+    object actAbrirCheckList: TAction
+      Category = 'Relat'#243'rio'
+      Caption = 'Abrir'
+      Hint = 'Abrir Check-List'
+      ImageIndex = 20
+      OnExecute = actAbrirCheckListExecute
+    end
+    object actGravarCheck: TAction
+      Category = 'Check-List'
+      Caption = 'Gravar'
+      Hint = 'Gravar Check-List'
+      ImageIndex = 18
+      OnExecute = actGravarCheckExecute
+    end
+    object actImprimirCheck: TAction
+      Category = 'Relat'#243'rio'
+      Caption = 'Imprimir'
+      Hint = 'Imprimir Check-List'
+      ImageIndex = 21
+      OnExecute = actImprimirCheckExecute
+    end
+    object actExcluir: TAction
+      Category = 'Relat'#243'rio'
+      Caption = 'actExcluir'
+      Hint = 'Excluir registro selecionado'
+      ImageIndex = 324
+      OnExecute = actExcluirExecute
+    end
+    object actProcurarRegistros: TAction
+      Category = 'Procurar'
+      Caption = 'actProcurarRegistros'
+      OnExecute = actProcurarRegistrosExecute
+    end
+    object actAualizaPlanilhas: TAction
+      Category = 'Configura'#231#227'o'
+      Caption = 'actAualizaPlanilhas'
+      OnExecute = actAualizaPlanilhasExecute
+    end
+    object actSAPSelecionado: TAction
+      Category = 'Cadastro'
+      Caption = 'Local de Instala'#231#227'o SAP (Selecionado)'
+      Hint = 
+        'Preencher o Local de Instala'#231#227'o e Denomina'#231#227'o do Local de Instal' +
+        'a'#231#227'o do SAP'
+      ImageIndex = 463
+      OnExecute = actSAPSelecionadoExecute
+    end
+    object actSAPFiltrados: TAction
+      Category = 'Cadastro'
+      Caption = 'Local de Instala'#231#227'o SAP (Filtrados)'
+      ImageIndex = 463
+      OnExecute = actSAPFiltradosExecute
+    end
+    object actAjustar: TAction
+      Category = 'Check-List'
+      Caption = 'Ajustar'
+      Hint = 'Ajustar colunas'
+      ImageIndex = 84
+      OnExecute = actAjustarExecute
+    end
+    object actPendenciaSAP: TAction
+      Category = 'Check-List'
+      Caption = 'Pend'#234'ncias SAP'
+      Hint = 'Procurar pend'#234'nicas cadastradas no SAP'
+      ImageIndex = 463
+      OnExecute = actPendenciaSAPExecute
+    end
+    object actProcurarPendenciaSAP: TAction
+      Category = 'Procurar'
+      Caption = 'actProcurarPendenciaSAP'
+      OnExecute = actProcurarPendenciaSAPExecute
+    end
+  end
+  object OpenDialog1: TOpenDialog
+    Left = 404
+    Top = 182
+  end
+  object PopupMenuImportar: TPopupMenu
+    Left = 440
+    Top = 184
+    object ImportarVariaveis1: TMenuItem
+      Action = actImportarGeralPI
+    end
+    object ImportarLimiteseVariaveis1: TMenuItem
+      Caption = 'Importar Limites e Variaveis'
+      Hint = 'Importar as planilhas: "Limite Operacional" e "Geral"'
+      ImageIndex = 206
+    end
+  end
+  object PopupMenuSAP: TPopupMenu
+    Left = 468
+    Top = 182
+    object actSalvarLayout1: TMenuItem
+      Action = actSAPSelecionado
+    end
+    object LocaldeInstalaoSAPFiltrados1: TMenuItem
+      Action = actSAPFiltrados
+    end
+  end
+end

@@ -1,0 +1,12 @@
+TAB1;Controle
+TAB1;Origem
+TAB1;Instalação
+TAB1;Coord. X (km)
+TAB1;Coord. Y (km)
+TAB1;Latitude
+TAB1;Longitude
+TAB1;Início da operação
+TAB1;Local de Instalação (SAP)
+TAB1;Avaliado Por
+TAB1;Computador
+TAB1;Data Atualização
