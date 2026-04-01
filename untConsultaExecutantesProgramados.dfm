@@ -1807,6 +1807,11 @@ object FrmConsultaExecutantesProgramados: TFrmConsultaExecutantesProgramados
     object TabSheet5: TTabSheet
       Caption = 'Simulacao Logistica'
       ImageIndex = 4
+      object SplitterSimulacao: TSplitter
+        Left = 445
+        Top = 54
+        Height = 477
+      end
       object GridSimulacaoParametros: TStringGrid
         Left = 0
         Top = 54
@@ -1816,14 +1821,8 @@ object FrmConsultaExecutantesProgramados: TFrmConsultaExecutantesProgramados
         ColCount = 3
         DefaultRowHeight = 22
         FixedCols = 0
-        RowCount = 19
-        FixedRows = 1
+        RowCount = 27
         TabOrder = 0
-      end
-      object SplitterSimulacao: TSplitter
-        Left = 445
-        Top = 54
-        Height = 477
       end
       object MemoSimulacaoRelatorio: TMemo
         Left = 448
@@ -1870,37 +1869,48 @@ object FrmConsultaExecutantesProgramados: TFrmConsultaExecutantesProgramados
           TabOrder = 0
           OnClick = btnSimulacaoPadraoClick
         end
-        object btnSimulacaoRodar: TBitBtn
+        object btnSimulacaoBaseReal: TBitBtn
           Left = 120
+          Top = 0
+          Width = 128
+          Height = 23
+          Caption = 'Carregar base real'
+          ParentShowHint = False
+          ShowHint = True
+          TabOrder = 1
+          OnClick = btnSimulacaoBaseRealClick
+        end
+        object btnSimulacaoRodar: TBitBtn
+          Left = 248
           Top = 0
           Width = 128
           Height = 23
           Caption = 'Rodar simulacao'
           ParentShowHint = False
           ShowHint = True
-          TabOrder = 1
+          TabOrder = 2
           OnClick = btnSimulacaoRodarClick
         end
         object btnSimulacaoComparar: TBitBtn
-          Left = 248
+          Left = 376
           Top = 0
           Width = 132
           Height = 23
           Caption = 'Comparar cenarios'
           ParentShowHint = False
           ShowHint = True
-          TabOrder = 2
+          TabOrder = 3
           OnClick = btnSimulacaoCompararClick
         end
         object btnSimulacaoExportar: TBitBtn
-          Left = 380
+          Left = 508
           Top = 0
           Width = 120
           Height = 23
           Caption = 'Exportar'
           ParentShowHint = False
           ShowHint = True
-          TabOrder = 3
+          TabOrder = 4
           OnClick = btnSimulacaoExportarClick
         end
       end

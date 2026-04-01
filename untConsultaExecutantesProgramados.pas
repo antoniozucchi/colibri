@@ -334,7 +334,18 @@ type
       const ANome: string): Integer;
     function LerFloatSimulacao(const ARow: Integer;
       const ANome: string): Double;
+    function FormatarNumeroSimulacao(const AValor: Double;
+      const ACasas: Integer = 1): string;
     function LerParametrosSimulacaoAtual: TSimulacaoParametros;
+    procedure CarregarParametrosSimulacaoComBaseReal;
+    function ClassificarModalSimulacao(const ANomeEmbarcacao,
+      ATipoEmbarcacao: string; const ACapacidade: Integer;
+      const AUsaBridgeMesmoGrupo: Boolean): string;
+    function EstimarDuracaoRotaModalHoras(const AModal,
+      ARotaSequencia: string; const ATempoTransbordo: Integer): Double;
+    procedure AplicarMetricasModalNaGrade(const AModal: string;
+      const AQtdEmbarcacoes: Integer; const ADisponibilidade,
+      AHorasUteis, AProdutividade: Double);
     function DescreverFrotaSimulacao(
       const AParam: TSimulacaoParametros): string;
     function SimularCenarioLogistico(const ANome: string;
@@ -368,6 +379,14 @@ type
     SIM_ROW_HORAS_SOV         = 16;
     SIM_ROW_HORAS_BAE         = 17;
     SIM_ROW_HORAS_AQUA        = 18;
+    SIM_ROW_DISP_SURFER       = 19;
+    SIM_ROW_DISP_SOV          = 20;
+    SIM_ROW_DISP_BAE          = 21;
+    SIM_ROW_DISP_AQUA         = 22;
+    SIM_ROW_MOB_SURFER        = 23;
+    SIM_ROW_MOB_SOV           = 24;
+    SIM_ROW_MOB_BAE           = 25;
+    SIM_ROW_MOB_AQUA          = 26;
 
     RT_STATUS_NAO_CRIAR        = 'NAO_CRIAR';
     RT_STATUS_PENDENTE         = 'PENDENTE';
@@ -9740,6 +9759,362 @@ begin
   Result := Round(LerFloatSimulacao(ARow, ANome));
 end;
 
+function TFrmConsultaExecutantesProgramados.FormatarNumeroSimulacao(
+  const AValor: Double; const ACasas: Integer): string;
+var
+  FS: TFormatSettings;
+  Mascara: string;
+begin
+  FS := TFormatSettings.Create;
+  Mascara := '0';
+  if ACasas > 0 then
+    Mascara := Mascara + FS.DecimalSeparator + StringOfChar('0', ACasas);
+  Result := FormatFloat(Mascara, AValor, FS);
+end;
+
+function TFrmConsultaExecutantesProgramados.ClassificarModalSimulacao(
+  const ANomeEmbarcacao, ATipoEmbarcacao: string; const ACapacidade: Integer;
+  const AUsaBridgeMesmoGrupo: Boolean): string;
+var
+  NomeUpper, TipoUpper: string;
+begin
+  NomeUpper := UpperCase(Trim(ANomeEmbarcacao));
+  TipoUpper := UpperCase(Trim(ATipoEmbarcacao));
+
+  if (Pos('AQUA', NomeUpper) > 0) or
+     (Pos('HELIX', NomeUpper) > 0) or
+     (ACapacidade >= 100) then
+    Exit('AQUA');
+
+  if (Pos('BAE', NomeUpper) > 0) or
+     (Pos('AUTO', TipoUpper) > 0) or
+     (Pos('ELEV', TipoUpper) > 0) or
+     (Pos('JACK', TipoUpper) > 0) then
+    Exit('BAE');
+
+  if AUsaBridgeMesmoGrupo or
+     (Pos('SOV', NomeUpper) > 0) or
+     (Pos('BRIDGE', NomeUpper) > 0) or
+     (Pos('SOV', TipoUpper) > 0) then
+    Exit('SOV');
+
+  Result := 'SURFER';
+end;
+
+function TFrmConsultaExecutantesProgramados.EstimarDuracaoRotaModalHoras(
+  const AModal, ARotaSequencia: string; const ATempoTransbordo: Integer): Double;
+var
+  Pontos: TStringList;
+  I, QtPontos, MinimoMin, DuracaoMin: Integer;
+begin
+  Pontos := TStringList.Create;
+  try
+    Pontos.Delimiter := ';';
+    Pontos.StrictDelimiter := True;
+    Pontos.DelimitedText := Trim(ARotaSequencia);
+
+    QtPontos := 0;
+    for I := 0 to Pontos.Count - 1 do
+      if Trim(Pontos[I]) <> '' then
+        Inc(QtPontos);
+
+    DuracaoMin := ((QtPontos + 1) * 15) +
+      (Max(0, QtPontos - 1) * Max(0, ATempoTransbordo));
+
+    if SameText(AModal, 'SURFER') then
+      MinimoMin := 60
+    else if SameText(AModal, 'AQUA') then
+      MinimoMin := 40
+    else if SameText(AModal, 'SOV') then
+      MinimoMin := 45
+    else if SameText(AModal, 'BAE') then
+      MinimoMin := 60
+    else
+      MinimoMin := 45;
+
+    Result := Max(MinimoMin, DuracaoMin) / 60;
+  finally
+    Pontos.Free;
+  end;
+end;
+
+procedure TFrmConsultaExecutantesProgramados.AplicarMetricasModalNaGrade(
+  const AModal: string; const AQtdEmbarcacoes: Integer; const ADisponibilidade,
+  AHorasUteis, AProdutividade: Double);
+var
+  RowQtd, RowDisp, RowHoras, RowProd: Integer;
+begin
+  if SameText(AModal, 'SURFER') then
+  begin
+    RowQtd := SIM_ROW_QTD_SURFER;
+    RowDisp := SIM_ROW_DISP_SURFER;
+    RowHoras := SIM_ROW_HORAS_SURFER;
+    RowProd := SIM_ROW_PROD_SURFER;
+  end
+  else if SameText(AModal, 'SOV') then
+  begin
+    RowQtd := SIM_ROW_QTD_SOV;
+    RowDisp := SIM_ROW_DISP_SOV;
+    RowHoras := SIM_ROW_HORAS_SOV;
+    RowProd := SIM_ROW_PROD_SOV;
+  end
+  else if SameText(AModal, 'BAE') then
+  begin
+    RowQtd := SIM_ROW_QTD_BAE;
+    RowDisp := SIM_ROW_DISP_BAE;
+    RowHoras := SIM_ROW_HORAS_BAE;
+    RowProd := SIM_ROW_PROD_BAE;
+  end
+  else if SameText(AModal, 'AQUA') then
+  begin
+    RowQtd := SIM_ROW_QTD_AQUA;
+    RowDisp := SIM_ROW_DISP_AQUA;
+    RowHoras := SIM_ROW_HORAS_AQUA;
+    RowProd := SIM_ROW_PROD_AQUA;
+  end
+  else
+    Exit;
+
+  GridSimulacaoParametros.Cells[SIM_COL_VALOR, RowQtd] := IntToStr(AQtdEmbarcacoes);
+  GridSimulacaoParametros.Cells[SIM_COL_VALOR, RowDisp] :=
+    FormatarNumeroSimulacao(ADisponibilidade, 1);
+  GridSimulacaoParametros.Cells[SIM_COL_VALOR, RowHoras] :=
+    FormatarNumeroSimulacao(AHorasUteis, 1);
+  GridSimulacaoParametros.Cells[SIM_COL_VALOR, RowProd] :=
+    FormatarNumeroSimulacao(AProdutividade, 2);
+end;
+
+procedure TFrmConsultaExecutantesProgramados.CarregarParametrosSimulacaoComBaseReal;
+var
+  QryRotas, QryEmbarcacoes: TADOQuery;
+  InfoEmbarcacoes: TDictionary<string, TInfoEmbarcacaoSimulacao>;
+  Info: TInfoEmbarcacaoSimulacao;
+  MetSurfer, MetSOV, MetBAE, MetAQUA: TMetricasModalReal;
+  MetricasModal: TMetricasModalReal;
+  Modal, NomeEmbarcacao, ChaveEmbarcacao, DataKey, RotaKey: string;
+  BacklogReal, DiasPeriodo, Capacidade, TempoTransbordo: Integer;
+  LogResumo: TStringList;
+  function ObterMetricas(const AModal: string): TMetricasModalReal;
+  begin
+    if SameText(AModal, 'SOV') then
+      Exit(MetSOV);
+    if SameText(AModal, 'BAE') then
+      Exit(MetBAE);
+    if SameText(AModal, 'AQUA') then
+      Exit(MetAQUA);
+    Result := MetSurfer;
+  end;
+  function LerBooleanoNullAsFalse(const AQry: TADOQuery;
+    const ACampo: string): Boolean;
+  begin
+    Result := (AQry.FindField(ACampo) <> nil) and
+      (not VarIsNull(AQry.FieldByName(ACampo).Value)) and
+      AQry.FieldByName(ACampo).AsBoolean;
+  end;
+  function LerInteiroNullAsZero(const AQry: TADOQuery;
+    const ACampo: string): Integer;
+  begin
+    if (AQry.FindField(ACampo) <> nil) and
+       (not VarIsNull(AQry.FieldByName(ACampo).Value)) then
+      Result := AQry.FieldByName(ACampo).AsInteger
+    else
+      Result := 0;
+  end;
+  function CalcularDisponibilidade(const AMetricas: TMetricasModalReal): Double;
+  begin
+    if (AMetricas.Embarcacoes.Count > 0) and (DiasPeriodo > 0) then
+      Result := (AMetricas.EmbarcacaoDiasAtivos.Count /
+        (AMetricas.Embarcacoes.Count * DiasPeriodo)) * 100
+    else
+      Result := 0;
+  end;
+  function CalcularHorasUteis(const AMetricas: TMetricasModalReal): Double;
+  begin
+    if AMetricas.EmbarcacaoDiasAtivos.Count > 0 then
+      Result := AMetricas.TotalHorasRota / AMetricas.EmbarcacaoDiasAtivos.Count
+    else
+      Result := 0;
+  end;
+  function CalcularProdutividade(const AMetricas: TMetricasModalReal): Double;
+  begin
+    if AMetricas.TotalHorasRota > 0 then
+      Result := AMetricas.TotalMovimentacoes / AMetricas.TotalHorasRota
+    else
+      Result := 0;
+  end;
+  procedure AdicionarResumoModal(const ATitulo: string;
+    const AMetricas: TMetricasModalReal);
+  begin
+    LogResumo.Add(Format('%s: embarcacoes=%d | mov=%d | ocupacao media=%.1f%% | disponibilidade=%.1f%% | horas uteis/dia ativo=%.1f | produtividade=%.2f',
+      [ATitulo,
+       AMetricas.Embarcacoes.Count,
+       AMetricas.TotalMovimentacoes,
+       AMetricas.OcupacaoMediaPercentual,
+       CalcularDisponibilidade(AMetricas),
+       CalcularHorasUteis(AMetricas),
+       CalcularProdutividade(AMetricas)]));
+  end;
+begin
+  AtualizarDiasDisponiveisSimulacao;
+  actProcurarProgramacaoExecutante.Execute;
+  DiasPeriodo := LerInteiroSimulacao(SIM_ROW_DIAS_DISPONIVEIS, 'Dias disponiveis');
+
+  if FrmDataModule.ADOQueryConsultaExecutantesProgramados.Active then
+    BacklogReal := Max(0, FrmDataModule.ADOQueryConsultaExecutantesProgramados.RecordCount)
+  else
+    BacklogReal := 0;
+
+  GridSimulacaoParametros.Cells[SIM_COL_VALOR, SIM_ROW_BACKLOG] :=
+    IntToStr(BacklogReal);
+
+  QryRotas := TADOQuery.Create(nil);
+  QryEmbarcacoes := TADOQuery.Create(nil);
+  InfoEmbarcacoes := TDictionary<string, TInfoEmbarcacaoSimulacao>.Create;
+  MetSurfer := TMetricasModalReal.Create;
+  MetSOV := TMetricasModalReal.Create;
+  MetBAE := TMetricasModalReal.Create;
+  MetAQUA := TMetricasModalReal.Create;
+  LogResumo := TStringList.Create;
+  try
+    QryEmbarcacoes.Connection := FrmDataModule.ADOConnectionConsulta;
+    QryEmbarcacoes.SQL.Text :=
+      'SELECT NomeEmbarcacao, TipoEmbarcacao, UsaBridgeMesmoGrupo ' +
+      'FROM tblEmbarcacao';
+    QryEmbarcacoes.Open;
+
+    while not QryEmbarcacoes.Eof do
+    begin
+      ChaveEmbarcacao := UpperCase(Trim(QryEmbarcacoes.FieldByName('NomeEmbarcacao').AsString));
+      if ChaveEmbarcacao <> '' then
+      begin
+        Info := Default(TInfoEmbarcacaoSimulacao);
+        Info.TipoEmbarcacao := Trim(QryEmbarcacoes.FieldByName('TipoEmbarcacao').AsString);
+        Info.UsaBridgeMesmoGrupo := LerBooleanoNullAsFalse(QryEmbarcacoes,
+          'UsaBridgeMesmoGrupo');
+        if InfoEmbarcacoes.ContainsKey(ChaveEmbarcacao) then
+          InfoEmbarcacoes[ChaveEmbarcacao] := Info
+        else
+          InfoEmbarcacoes.Add(ChaveEmbarcacao, Info);
+      end;
+      QryEmbarcacoes.Next;
+    end;
+
+    QryRotas.Connection := FrmDataModule.ADOConnectionColibri;
+    QryRotas.SQL.Text :=
+      'SELECT ' +
+      '  pd.DataProgramacao, ' +
+      '  pe.idProgramacaoExecutante, ' +
+      '  r.idRoteamento, ' +
+      '  r.NomeEmbarcacao, ' +
+      '  r.CapacidadePAX, ' +
+      '  r.RotaSequencia, ' +
+      '  r.TempoTransbordo ' +
+      'FROM ' +
+      '  ((tblProgramacaoDiaria pd ' +
+      '  INNER JOIN tblProgramacaoExecutante pe ' +
+      '    ON pd.idProgramacaoDiaria = pe.CodigoProgramacaoDiaria) ' +
+      '  INNER JOIN (tblRoteamento r ' +
+      '    INNER JOIN tblAux_Rota_Distribuicao ard ' +
+      '      ON r.idRoteamento = ard.CodigoRota) ' +
+      '    ON pe.idProgramacaoExecutante = ard.CodigoProgramacaoExecutante) ' +
+      'WHERE ' +
+      '  pd.DataProgramacao >= :DtIni ' +
+      '  AND pd.DataProgramacao < :DtFimMais1 ' +
+      'ORDER BY pd.DataProgramacao, r.NomeEmbarcacao, r.idRoteamento, pe.idProgramacaoExecutante';
+    QryRotas.Parameters.ParamByName('DtIni').Value := Trunc(dataInicio.Date);
+    QryRotas.Parameters.ParamByName('DtFimMais1').Value := Trunc(dataFim.Date) + 1;
+    QryRotas.Open;
+
+    if QryRotas.IsEmpty then
+    begin
+      MemoSimulacaoRelatorio.Lines.Text :=
+        'Nao foram encontradas alocacoes reais em rota no periodo filtrado.' + sLineBreak +
+        'O backlog foi atualizado com base na consulta atual, mas os demais parametros foram preservados.';
+      StatusBarSimulacao.SimpleText :=
+        'Sem rotas alocadas no periodo para calibrar a base real.';
+      Exit;
+    end;
+
+    while not QryRotas.Eof do
+    begin
+      NomeEmbarcacao := Trim(QryRotas.FieldByName('NomeEmbarcacao').AsString);
+      ChaveEmbarcacao := UpperCase(NomeEmbarcacao);
+      Capacidade := LerInteiroNullAsZero(QryRotas, 'CapacidadePAX');
+      TempoTransbordo := LerInteiroNullAsZero(QryRotas, 'TempoTransbordo');
+
+      if not InfoEmbarcacoes.TryGetValue(ChaveEmbarcacao, Info) then
+        Info := Default(TInfoEmbarcacaoSimulacao);
+
+      Modal := ClassificarModalSimulacao(NomeEmbarcacao, Info.TipoEmbarcacao,
+        Capacidade, Info.UsaBridgeMesmoGrupo);
+      MetricasModal := ObterMetricas(Modal);
+      if MetricasModal <> nil then
+      begin
+        Inc(MetricasModal.TotalMovimentacoes);
+
+        if NomeEmbarcacao <> '' then
+          MetricasModal.Embarcacoes.Add(ChaveEmbarcacao);
+
+        DataKey := FormatDateTime('yyyymmdd',
+          QryRotas.FieldByName('DataProgramacao').AsDateTime);
+        MetricasModal.DiasAtivos.Add(DataKey);
+        MetricasModal.EmbarcacaoDiasAtivos.Add(DataKey + '|' + ChaveEmbarcacao);
+
+        RotaKey := DataKey + '|' + IntToStr(QryRotas.FieldByName('idRoteamento').AsInteger);
+        if MetricasModal.RotasProcessadas.IndexOf(RotaKey) < 0 then
+        begin
+          MetricasModal.RotasProcessadas.Add(RotaKey);
+          if Capacidade > 0 then
+            MetricasModal.TotalCapacidadeOferta := MetricasModal.TotalCapacidadeOferta + Capacidade;
+          MetricasModal.TotalHorasRota := MetricasModal.TotalHorasRota + EstimarDuracaoRotaModalHoras(Modal,
+            QryRotas.FieldByName('RotaSequencia').AsString, TempoTransbordo);
+        end;
+      end;
+
+      QryRotas.Next;
+    end;
+
+    AplicarMetricasModalNaGrade('SURFER', MetSurfer.Embarcacoes.Count,
+      CalcularDisponibilidade(MetSurfer), CalcularHorasUteis(MetSurfer),
+      CalcularProdutividade(MetSurfer));
+    AplicarMetricasModalNaGrade('SOV', MetSOV.Embarcacoes.Count,
+      CalcularDisponibilidade(MetSOV), CalcularHorasUteis(MetSOV),
+      CalcularProdutividade(MetSOV));
+    AplicarMetricasModalNaGrade('BAE', MetBAE.Embarcacoes.Count,
+      CalcularDisponibilidade(MetBAE), CalcularHorasUteis(MetBAE),
+      CalcularProdutividade(MetBAE));
+    AplicarMetricasModalNaGrade('AQUA', MetAQUA.Embarcacoes.Count,
+      CalcularDisponibilidade(MetAQUA), CalcularHorasUteis(MetAQUA),
+      CalcularProdutividade(MetAQUA));
+
+    LogResumo.Add('Base real carregada do banco para o periodo filtrado.');
+    LogResumo.Add(Format('Backlog filtrado atual: %d executantes/movimentacoes.',
+      [BacklogReal]));
+    LogResumo.Add('As quantidades, disponibilidades, horas uteis e produtividades foram sugeridas a partir das alocacoes reais em rota.');
+    LogResumo.Add('Classificacao de modal inferida por cadastro da embarcacao, bridge, nome e capacidade quando necessario.');
+    LogResumo.Add('');
+    AdicionarResumoModal('Surfer', MetSurfer);
+    AdicionarResumoModal('SOV', MetSOV);
+    AdicionarResumoModal('BAE', MetBAE);
+    AdicionarResumoModal('AQUA', MetAQUA);
+    LogResumo.Add('');
+    LogResumo.Add('Custos e mobilizacao permaneceram manuais para revisao contratual.');
+
+    MemoSimulacaoRelatorio.Lines.Text := LogResumo.Text;
+    StatusBarSimulacao.SimpleText :=
+      'Base real carregada do banco. Revise custos e mobilizacao antes de rodar a simulacao.';
+  finally
+    LogResumo.Free;
+    MetAQUA.Free;
+    MetBAE.Free;
+    MetSOV.Free;
+    MetSurfer.Free;
+    InfoEmbarcacoes.Free;
+    QryEmbarcacoes.Free;
+    QryRotas.Free;
+  end;
+end;
+
 function TFrmConsultaExecutantesProgramados.LerParametrosSimulacaoAtual: TSimulacaoParametros;
 begin
   Result.QtdSurfer := LerInteiroSimulacao(SIM_ROW_QTD_SURFER, 'Qtd. Surfer');
@@ -9771,6 +10146,22 @@ begin
     'Horas uteis BAE');
   Result.HorasUteisAQUA := LerFloatSimulacao(SIM_ROW_HORAS_AQUA,
     'Horas uteis AQUA');
+  Result.DisponibilidadeSurfer := LerFloatSimulacao(SIM_ROW_DISP_SURFER,
+    'Disponibilidade Surfer');
+  Result.DisponibilidadeSOV := LerFloatSimulacao(SIM_ROW_DISP_SOV,
+    'Disponibilidade SOV');
+  Result.DisponibilidadeBAE := LerFloatSimulacao(SIM_ROW_DISP_BAE,
+    'Disponibilidade BAE');
+  Result.DisponibilidadeAQUA := LerFloatSimulacao(SIM_ROW_DISP_AQUA,
+    'Disponibilidade AQUA');
+  Result.MobilizacaoSurfer := LerFloatSimulacao(SIM_ROW_MOB_SURFER,
+    'Mobilizacao Surfer');
+  Result.MobilizacaoSOV := LerFloatSimulacao(SIM_ROW_MOB_SOV,
+    'Mobilizacao SOV');
+  Result.MobilizacaoBAE := LerFloatSimulacao(SIM_ROW_MOB_BAE,
+    'Mobilizacao BAE');
+  Result.MobilizacaoAQUA := LerFloatSimulacao(SIM_ROW_MOB_AQUA,
+    'Mobilizacao AQUA');
 end;
 
 function TFrmConsultaExecutantesProgramados.DescreverFrotaSimulacao(
@@ -9820,12 +10211,80 @@ function TFrmConsultaExecutantesProgramados.GerarRelatorioComparativoTexto(
   const ACenarios: array of TSimulacaoCenario): string;
 var
   I: Integer;
+  Base: TSimulacaoCenario;
+  Comparativo: TSimulacaoComparativo;
   Linhas: TStringList;
+  MelhorPrazoIdx: Integer;
+  MelhorResilienciaIdx: Integer;
+  MelhorROIIdx: Integer;
+  MelhorROI: Double;
+  MelhorComparativo: TSimulacaoComparativo;
+  function TextoPrazoComparativo(
+    const AComparativo: TSimulacaoComparativo): string;
+  begin
+    if AComparativo.TornaViavel then
+      Result := 'torna viavel concluir o backlog'
+    else if AComparativo.PrazoGanhoDias > 0 then
+      Result := Format('%d dias mais rapido', [AComparativo.PrazoGanhoDias])
+    else if AComparativo.PrazoGanhoDias < 0 then
+      Result := Format('%d dias mais lento', [Abs(AComparativo.PrazoGanhoDias)])
+    else
+      Result := 'sem ganho de prazo';
+  end;
 begin
+  if Length(ACenarios) = 0 then
+    Exit('');
+
+  Base := ACenarios[Low(ACenarios)];
+  MelhorPrazoIdx := Low(ACenarios);
+  MelhorResilienciaIdx := Low(ACenarios);
+  MelhorROIIdx := -1;
+  MelhorROI := -MaxDouble;
+
+  for I := Low(ACenarios) to High(ACenarios) do
+  begin
+    if (ACenarios[I].Resultado.PrazoEstimado >= 0) and
+       ((ACenarios[MelhorPrazoIdx].Resultado.PrazoEstimado < 0) or
+        (ACenarios[I].Resultado.PrazoEstimado <
+         ACenarios[MelhorPrazoIdx].Resultado.PrazoEstimado)) then
+      MelhorPrazoIdx := I;
+
+    if ACenarios[I].Resultado.IndiceResiliencia >
+       ACenarios[MelhorResilienciaIdx].Resultado.IndiceResiliencia then
+      MelhorResilienciaIdx := I;
+
+    if I > Low(ACenarios) then
+    begin
+      Comparativo := TSimulacaoLogistica.CompararCenarios(Base, ACenarios[I]);
+      if (Comparativo.CustoAdicional > 0) and
+         (Comparativo.ROIOperacional > MelhorROI) then
+      begin
+        MelhorROI := Comparativo.ROIOperacional;
+        MelhorROIIdx := I;
+        MelhorComparativo := Comparativo;
+      end;
+    end;
+  end;
+
   Linhas := TStringList.Create;
   try
     Linhas.Add('--- Comparativo de Cenarios Logistica ---');
-    Linhas.Add('Premissa: cada cenario automatico adiciona embarcacoes ao cenario base informado na grade.');
+    Linhas.Add('Premissas: disponibilidade e mobilizacao entram como proxies de clima, contrato e indisponibilidade.');
+    Linhas.Add('ROI e payback sao proxies calculados pelo custo unitario do cenario Atual.');
+    Linhas.Add('');
+    Linhas.Add('Resumo executivo');
+    Linhas.Add('Melhor prazo projetado: ' + ACenarios[MelhorPrazoIdx].Nome +
+      ' | ' + TSimulacaoLogistica.PrazoComoTexto(
+        ACenarios[MelhorPrazoIdx].Resultado));
+    Linhas.Add(Format('Maior resiliencia: %s | %.1f%%',
+      [ACenarios[MelhorResilienciaIdx].Nome,
+       ACenarios[MelhorResilienciaIdx].Resultado.IndiceResiliencia]));
+    if MelhorROIIdx >= 0 then
+      Linhas.Add('Melhor ROI operacional proxy: ' + ACenarios[MelhorROIIdx].Nome +
+        ' | ' + TSimulacaoLogistica.ROIComoTexto(MelhorComparativo) +
+        ' | Payback: ' + TSimulacaoLogistica.PaybackComoTexto(MelhorComparativo))
+    else
+      Linhas.Add('Melhor ROI operacional proxy: nao houve cenario adicional com custo extra comparavel.');
     Linhas.Add('');
 
     for I := Low(ACenarios) to High(ACenarios) do
@@ -9835,17 +10294,51 @@ begin
       Linhas.Add('   ' + TSimulacaoLogistica.PrazoComoTexto(ACenarios[I].Resultado));
       Linhas.Add(Format('   Movimentacoes por dia: %.1f',
         [ACenarios[I].Resultado.MovimentacoesPorDia]));
+      Linhas.Add(Format('   Horas planejadas/efetivas por dia: %.1f / %.1f',
+        [ACenarios[I].Resultado.HorasPlanejadasPorDia,
+         ACenarios[I].Resultado.HorasEfetivasPorDia]));
+      Linhas.Add(Format('   Resiliencia estimada: %.1f%%',
+        [ACenarios[I].Resultado.IndiceResiliencia]));
+      Linhas.Add(Format('   Custo operacional: R$ %.2f | Mobilizacao: R$ %.2f',
+        [ACenarios[I].Resultado.CustoOperacionalTotal,
+         ACenarios[I].Resultado.CustoMobilizacaoTotal]));
       Linhas.Add(Format('   Custo total: R$ %.2f',
         [ACenarios[I].Resultado.CustoTotal]));
       Linhas.Add(Format('   Horas uteis geradas: %.1f',
         [ACenarios[I].Resultado.HorasUteisGeradas]));
-      Linhas.Add(Format('   Custo por hora util: R$ %.2f',
-        [ACenarios[I].Resultado.CustoPorHoraUtil]));
+      Linhas.Add(Format('   Custo por hora util: R$ %.2f | Custo por movimentacao: R$ %.2f',
+        [ACenarios[I].Resultado.CustoPorHoraUtil,
+         ACenarios[I].Resultado.CustoPorMovimentacao]));
       Linhas.Add(Format('   Backlog atendido: %d (%.1f%%)',
         [ACenarios[I].Resultado.BacklogAtendido,
          ACenarios[I].Resultado.PercentualBacklogAtendido]));
       Linhas.Add(Format('   Backlog restante: %d',
         [ACenarios[I].Resultado.BacklogRestante]));
+
+      if I > Low(ACenarios) then
+      begin
+        Comparativo := TSimulacaoLogistica.CompararCenarios(Base, ACenarios[I]);
+        Linhas.Add('   Comparado ao Atual: ' + TextoPrazoComparativo(Comparativo));
+        Linhas.Add(Format('   Delta de movimentacoes/dia: %.1f (%.1f%%)',
+          [Comparativo.MovimentacoesAdicionaisPorDia,
+           Comparativo.GanhoCapacidadePercentual]));
+        Linhas.Add(Format('   Horas uteis adicionais no periodo: %.1f',
+          [Comparativo.HorasUteisAdicionais]));
+        Linhas.Add(Format('   Backlog adicional atendido: %d',
+          [Comparativo.BacklogAdicionalAtendido]));
+        Linhas.Add(Format('   Custo adicional: R$ %.2f',
+          [Comparativo.CustoAdicional]));
+        if Comparativo.CustoPorDiaGanho > 0 then
+          Linhas.Add(Format('   Custo por dia ganho: R$ %.2f',
+            [Comparativo.CustoPorDiaGanho]));
+        Linhas.Add(Format('   Valor operacional equivalente: R$ %.2f',
+          [Comparativo.ValorOperacionalEquivalente]));
+        Linhas.Add('   ROI operacional proxy: ' +
+          TSimulacaoLogistica.ROIComoTexto(Comparativo));
+        Linhas.Add('   Payback proxy: ' +
+          TSimulacaoLogistica.PaybackComoTexto(Comparativo));
+      end;
+
       Linhas.Add('');
     end;
 
@@ -9859,21 +10352,36 @@ function TFrmConsultaExecutantesProgramados.GerarRelatorioComparativoCSV(
   const ACenarios: array of TSimulacaoCenario): string;
 var
   I: Integer;
+  Comparativo: TSimulacaoComparativo;
   Linhas: TStringList;
   PrazoTexto: string;
+  ROITexto: string;
+  PaybackTexto: string;
 begin
   Linhas := TStringList.Create;
   try
-    Linhas.Add('Cenario;Surfer;SOV;BAE;AQUA;MovimentacoesPorDia;PrazoEstimadoDias;CustoTotal;HorasUteisGeradas;CustoPorHoraUtil;BacklogAtendido;BacklogRestante;PercentualBacklogAtendido');
+    Linhas.Add('Cenario;Surfer;SOV;BAE;AQUA;MovimentacoesPorDia;PrazoEstimadoDias;HorasPlanejadasDia;HorasEfetivasDia;IndiceResiliencia;CustoOperacionalTotal;CustoMobilizacaoTotal;CustoTotal;HorasUteisGeradas;CustoPorHoraUtil;CustoPorMovimentacao;BacklogAtendido;BacklogRestante;PercentualBacklogAtendido;DeltaMovimentacoesDia;PrazoGanhoDias;TornaViavel;CustoAdicional;BacklogAdicionalAtendido;ValorOperacionalEquivalente;ROIProxy;PaybackDias');
 
     for I := Low(ACenarios) to High(ACenarios) do
     begin
+      if I = Low(ACenarios) then
+        Comparativo := Default(TSimulacaoComparativo)
+      else
+        Comparativo := TSimulacaoLogistica.CompararCenarios(
+          ACenarios[Low(ACenarios)], ACenarios[I]);
+
       if ACenarios[I].Resultado.PrazoEstimado < 0 then
         PrazoTexto := 'INVIAVEL'
       else
         PrazoTexto := IntToStr(ACenarios[I].Resultado.PrazoEstimado);
 
-      Linhas.Add(Format('%s;%d;%d;%d;%d;%.1f;%s;%.2f;%.1f;%.2f;%d;%d;%.1f',
+      ROITexto := TSimulacaoLogistica.ROIComoTexto(Comparativo);
+      if Comparativo.PaybackDias < 0 then
+        PaybackTexto := 'NA'
+      else
+        PaybackTexto := Format('%.1f', [Comparativo.PaybackDias]);
+
+      Linhas.Add(Format('%s;%d;%d;%d;%d;%.1f;%s;%.1f;%.1f;%.1f;%.2f;%.2f;%.2f;%.1f;%.2f;%.2f;%d;%d;%.1f;%.1f;%d;%s;%.2f;%d;%.2f;%s;%s',
         [ACenarios[I].Nome,
          ACenarios[I].Parametros.QtdSurfer,
          ACenarios[I].Parametros.QtdSOV,
@@ -9881,12 +10389,26 @@ begin
          ACenarios[I].Parametros.QtdAQUA,
          ACenarios[I].Resultado.MovimentacoesPorDia,
          PrazoTexto,
+         ACenarios[I].Resultado.HorasPlanejadasPorDia,
+         ACenarios[I].Resultado.HorasEfetivasPorDia,
+         ACenarios[I].Resultado.IndiceResiliencia,
+         ACenarios[I].Resultado.CustoOperacionalTotal,
+         ACenarios[I].Resultado.CustoMobilizacaoTotal,
          ACenarios[I].Resultado.CustoTotal,
          ACenarios[I].Resultado.HorasUteisGeradas,
          ACenarios[I].Resultado.CustoPorHoraUtil,
+         ACenarios[I].Resultado.CustoPorMovimentacao,
          ACenarios[I].Resultado.BacklogAtendido,
          ACenarios[I].Resultado.BacklogRestante,
-         ACenarios[I].Resultado.PercentualBacklogAtendido]));
+         ACenarios[I].Resultado.PercentualBacklogAtendido,
+         Comparativo.MovimentacoesAdicionaisPorDia,
+         Comparativo.PrazoGanhoDias,
+         IfThen(Comparativo.TornaViavel, 'SIM', 'NAO'),
+         Comparativo.CustoAdicional,
+         Comparativo.BacklogAdicionalAtendido,
+         Comparativo.ValorOperacionalEquivalente,
+         ROITexto,
+         PaybackTexto]));
     end;
 
     Result := Linhas.Text;
@@ -9951,30 +10473,47 @@ begin
     'Campanha continua');
   DefinirLinhaSimulacao(SIM_ROW_HORAS_AQUA, 'Horas uteis AQUA', '24',
     'Campanha continua');
+  DefinirLinhaSimulacao(SIM_ROW_DISP_SURFER, 'Disponibilidade Surfer (%)', '60',
+    'Proxy clima/janela operacional');
+  DefinirLinhaSimulacao(SIM_ROW_DISP_SOV, 'Disponibilidade SOV (%)', '85',
+    'Melhor tolerancia operacional');
+  DefinirLinhaSimulacao(SIM_ROW_DISP_BAE, 'Disponibilidade BAE (%)', '90',
+    'Campanha mais resiliente');
+  DefinirLinhaSimulacao(SIM_ROW_DISP_AQUA, 'Disponibilidade AQUA (%)', '85',
+    'Gangway telescopica');
+  DefinirLinhaSimulacao(SIM_ROW_MOB_SURFER, 'Mobilizacao Surfer', '0',
+    'Custo fixo por unidade no periodo');
+  DefinirLinhaSimulacao(SIM_ROW_MOB_SOV, 'Mobilizacao SOV', '0',
+    'Preencher custo contratual real');
+  DefinirLinhaSimulacao(SIM_ROW_MOB_BAE, 'Mobilizacao BAE', '0',
+    'Preencher custo contratual real');
+  DefinirLinhaSimulacao(SIM_ROW_MOB_AQUA, 'Mobilizacao AQUA', '0',
+    'Preencher custo contratual real');
 
   AtualizarDiasDisponiveisSimulacao;
 
   MemoSimulacaoRelatorio.Lines.Text :=
     'Cenario base carregado.' + sLineBreak +
-    'Ajuste backlog, custos e produtividade para comparar cenarios.' + sLineBreak +
-    'Os custos de BAE e AQUA ficaram zerados por padrao para evitar premissas indevidas.';
+    'Ajuste backlog, custos, disponibilidade e mobilizacao para comparar cenarios.' + sLineBreak +
+    'Use "Carregar base real" para calibrar a grade com alocacoes observadas no banco.' + sLineBreak +
+    'ROI e payback saem como proxies pela produtividade adicional versus o custo unitario do cenario Atual.';
   StatusBarSimulacao.SimpleText :=
-    'Cenario base pronto. Revise custos de BAE/AQUA antes de usa-los.';
+    'Cenario base pronto. Carregue a base real ou revise custos, disponibilidade e mobilizacao antes de comparar.';
 end;
 
 procedure TFrmConsultaExecutantesProgramados.InicializarSimulacaoLogistica;
 begin
   GridSimulacaoParametros.ColCount := 3;
-  GridSimulacaoParametros.RowCount := SIM_ROW_HORAS_AQUA + 1;
+  GridSimulacaoParametros.RowCount := SIM_ROW_MOB_AQUA + 1;
   GridSimulacaoParametros.FixedRows := 1;
   GridSimulacaoParametros.Options := GridSimulacaoParametros.Options +
     [goEditing, goAlwaysShowEditor];
   GridSimulacaoParametros.Cells[SIM_COL_PARAMETRO, 0] := 'Parametro';
   GridSimulacaoParametros.Cells[SIM_COL_VALOR, 0] := 'Valor';
   GridSimulacaoParametros.Cells[SIM_COL_OBSERVACAO, 0] := 'Observacao';
-  GridSimulacaoParametros.ColWidths[SIM_COL_PARAMETRO] := 180;
-  GridSimulacaoParametros.ColWidths[SIM_COL_VALOR] := 95;
-  GridSimulacaoParametros.ColWidths[SIM_COL_OBSERVACAO] := 170;
+  GridSimulacaoParametros.ColWidths[SIM_COL_PARAMETRO] := 190;
+  GridSimulacaoParametros.ColWidths[SIM_COL_VALOR] := 105;
+  GridSimulacaoParametros.ColWidths[SIM_COL_OBSERVACAO] := 210;
 
   PreencherCenarioBaseSimulacao;
 end;
@@ -10071,6 +10610,17 @@ begin
   PreencherCenarioBaseSimulacao;
 end;
 
+procedure TFrmConsultaExecutantesProgramados.btnSimulacaoBaseRealClick(
+  Sender: TObject);
+begin
+  try
+    CarregarParametrosSimulacaoComBaseReal;
+  except
+    on E: Exception do
+      ShowMessage(E.Message);
+  end;
+end;
+
 procedure TFrmConsultaExecutantesProgramados.btnSimulacaoRodarClick(
   Sender: TObject);
 var
@@ -10089,9 +10639,10 @@ begin
       Resultado.Relatorio;
 
     StatusBarSimulacao.SimpleText := Format(
-      '%s | Backlog atendido: %.1f%% | Custo total: R$ %.2f',
+      '%s | Backlog atendido: %.1f%% | Resiliencia: %.1f%% | Custo/mov: R$ %.2f',
       [TSimulacaoLogistica.PrazoComoTexto(Resultado),
-       Resultado.PercentualBacklogAtendido, Resultado.CustoTotal]);
+       Resultado.PercentualBacklogAtendido, Resultado.IndiceResiliencia,
+       Resultado.CustoPorMovimentacao]);
   except
     on E: Exception do
       ShowMessage(E.Message);
@@ -10116,7 +10667,7 @@ begin
       GerarRelatorioComparativoTexto(Cenarios);
 
     StatusBarSimulacao.SimpleText :=
-      'Comparativo automatico gerado para 5 cenarios.';
+      'Comparativo automatico gerado com ROI e payback proxy versus o cenario Atual.';
   except
     on E: Exception do
       ShowMessage(E.Message);
