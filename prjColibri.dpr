@@ -39,7 +39,8 @@ uses
   untConexaoLOCAL in 'untConexaoLOCAL.pas' {FrmConexaoLOCAL},
   untMotivoCancelamento in 'untMotivoCancelamento.pas' {FrmMotivoCancelamento},
   uDistribuicaoLogistica in 'uDistribuicaoLogistica.pas',
-  uSimulacaoLogistica in 'uSimulacaoLogistica.pas';
+  uSimulacaoLogistica in 'uSimulacaoLogistica.pas',
+  uRTBusinessRules in 'uRTBusinessRules.pas';
 
 {$R *.res}
 

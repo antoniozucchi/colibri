@@ -199,6 +199,7 @@
         </DCCReference>
         <DCCReference Include="uDistribuicaoLogistica.pas"/>
         <DCCReference Include="uSimulacaoLogistica.pas"/>
+        <DCCReference Include="uRTBusinessRules.pas"/>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>
