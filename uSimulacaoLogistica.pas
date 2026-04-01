@@ -52,6 +52,7 @@ type
   TSimulacaoLogistica = class
   public
     class function Simular(const Param: TSimulacaoParametros): TSimulacaoResultado;
+    class function PrazoComoTexto(const Resultado: TSimulacaoResultado): string;
     class function GerarRelatorio(const Resultado: TSimulacaoResultado): string;
   end;
 
@@ -109,17 +110,10 @@ begin
 end;
 
 class function TSimulacaoLogistica.GerarRelatorio(const Resultado: TSimulacaoResultado): string;
-var
-  PrazoTexto: string;
 begin
-  if Resultado.PrazoEstimado < 0 then
-    PrazoTexto := 'Prazo estimado para concluir backlog: inviavel com a capacidade atual'
-  else
-    PrazoTexto := Format('Prazo estimado para concluir backlog: %d dias', [Resultado.PrazoEstimado]);
-
   Result :=
     '--- Relatório de Simulação Logística ---' + sLineBreak +
-    PrazoTexto + sLineBreak +
+    PrazoComoTexto(Resultado) + sLineBreak +
     Format('Movimentações estimadas por dia: %.1f', [Resultado.MovimentacoesPorDia]) + sLineBreak +
     Format('Custo total estimado: R$ %.2f', [Resultado.CustoTotal]) + sLineBreak +
     Format('Horas úteis geradas: %.1f', [Resultado.HorasUteisGeradas]) + sLineBreak +
@@ -127,6 +121,16 @@ begin
     Format('Backlog atendido no período: %d', [Resultado.BacklogAtendido]) + sLineBreak +
     Format('Backlog restante: %d', [Resultado.BacklogRestante]) + sLineBreak +
     Format('%% do backlog atendido: %.1f%%', [Resultado.PercentualBacklogAtendido]) + sLineBreak;
+end;
+
+class function TSimulacaoLogistica.PrazoComoTexto(
+  const Resultado: TSimulacaoResultado): string;
+begin
+  if Resultado.PrazoEstimado < 0 then
+    Result := 'Prazo estimado para concluir backlog: inviavel com a capacidade atual'
+  else
+    Result := Format('Prazo estimado para concluir backlog: %d dias',
+      [Resultado.PrazoEstimado]);
 end;
 
 end.

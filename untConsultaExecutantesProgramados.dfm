@@ -1881,6 +1881,28 @@ object FrmConsultaExecutantesProgramados: TFrmConsultaExecutantesProgramados
           TabOrder = 1
           OnClick = btnSimulacaoRodarClick
         end
+        object btnSimulacaoComparar: TBitBtn
+          Left = 248
+          Top = 0
+          Width = 132
+          Height = 23
+          Caption = 'Comparar cenarios'
+          ParentShowHint = False
+          ShowHint = True
+          TabOrder = 2
+          OnClick = btnSimulacaoCompararClick
+        end
+        object btnSimulacaoExportar: TBitBtn
+          Left = 380
+          Top = 0
+          Width = 120
+          Height = 23
+          Caption = 'Exportar'
+          ParentShowHint = False
+          ShowHint = True
+          TabOrder = 3
+          OnClick = btnSimulacaoExportarClick
+        end
       end
       object PanelSimulacao: TPanel
         Left = 0

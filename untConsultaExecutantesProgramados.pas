@@ -132,6 +132,8 @@ type
     ToolBarSimulacao: TToolBar;
     btnSimulacaoPadrao: TBitBtn;
     btnSimulacaoRodar: TBitBtn;
+    btnSimulacaoComparar: TBitBtn;
+    btnSimulacaoExportar: TBitBtn;
     GridSimulacaoParametros: TStringGrid;
     SplitterSimulacao: TSplitter;
     MemoSimulacaoRelatorio: TMemo;
@@ -182,6 +184,8 @@ type
     procedure actProcurarBuscaEmbarqueExecute(Sender: TObject);
     procedure btnSimulacaoPadraoClick(Sender: TObject);
     procedure btnSimulacaoRodarClick(Sender: TObject);
+    procedure btnSimulacaoCompararClick(Sender: TObject);
+    procedure btnSimulacaoExportarClick(Sender: TObject);
   type
       TDadosRT = record
         idProgramacaoExecutante, idProgramacaoRT, TipoCusto: Integer;
@@ -330,6 +334,17 @@ type
       const ANome: string): Integer;
     function LerFloatSimulacao(const ARow: Integer;
       const ANome: string): Double;
+    function LerParametrosSimulacaoAtual: TSimulacaoParametros;
+    function DescreverFrotaSimulacao(
+      const AParam: TSimulacaoParametros): string;
+    function SimularCenarioLogistico(const ANome: string;
+      const AParam: TSimulacaoParametros): TSimulacaoCenario;
+    procedure MontarCenariosComparativos(
+      const ABase: TSimulacaoParametros; var ACenarios: array of TSimulacaoCenario);
+    function GerarRelatorioComparativoTexto(
+      const ACenarios: array of TSimulacaoCenario): string;
+    function GerarRelatorioComparativoCSV(
+      const ACenarios: array of TSimulacaoCenario): string;
 
   const
     SIM_COL_PARAMETRO         = 0;
@@ -9725,6 +9740,161 @@ begin
   Result := Round(LerFloatSimulacao(ARow, ANome));
 end;
 
+function TFrmConsultaExecutantesProgramados.LerParametrosSimulacaoAtual: TSimulacaoParametros;
+begin
+  Result.QtdSurfer := LerInteiroSimulacao(SIM_ROW_QTD_SURFER, 'Qtd. Surfer');
+  Result.QtdSOV := LerInteiroSimulacao(SIM_ROW_QTD_SOV, 'Qtd. SOV');
+  Result.QtdBAE := LerInteiroSimulacao(SIM_ROW_QTD_BAE, 'Qtd. BAE');
+  Result.QtdAQUA := LerInteiroSimulacao(SIM_ROW_QTD_AQUA, 'Qtd. AQUA');
+  Result.Backlog := LerInteiroSimulacao(SIM_ROW_BACKLOG, 'Backlog');
+  Result.DiasDisponiveis := LerInteiroSimulacao(SIM_ROW_DIAS_DISPONIVEIS,
+    'Dias disponiveis');
+  Result.CustoSurfer := LerFloatSimulacao(SIM_ROW_CUSTO_SURFER,
+    'Custo diario Surfer');
+  Result.CustoSOV := LerFloatSimulacao(SIM_ROW_CUSTO_SOV, 'Custo diario SOV');
+  Result.CustoBAE := LerFloatSimulacao(SIM_ROW_CUSTO_BAE, 'Custo diario BAE');
+  Result.CustoAQUA := LerFloatSimulacao(SIM_ROW_CUSTO_AQUA,
+    'Custo diario AQUA');
+  Result.ProdutividadeSurfer := LerFloatSimulacao(SIM_ROW_PROD_SURFER,
+    'Produtividade Surfer');
+  Result.ProdutividadeSOV := LerFloatSimulacao(SIM_ROW_PROD_SOV,
+    'Produtividade SOV');
+  Result.ProdutividadeBAE := LerFloatSimulacao(SIM_ROW_PROD_BAE,
+    'Produtividade BAE');
+  Result.ProdutividadeAQUA := LerFloatSimulacao(SIM_ROW_PROD_AQUA,
+    'Produtividade AQUA');
+  Result.HorasUteisSurfer := LerFloatSimulacao(SIM_ROW_HORAS_SURFER,
+    'Horas uteis Surfer');
+  Result.HorasUteisSOV := LerFloatSimulacao(SIM_ROW_HORAS_SOV,
+    'Horas uteis SOV');
+  Result.HorasUteisBAE := LerFloatSimulacao(SIM_ROW_HORAS_BAE,
+    'Horas uteis BAE');
+  Result.HorasUteisAQUA := LerFloatSimulacao(SIM_ROW_HORAS_AQUA,
+    'Horas uteis AQUA');
+end;
+
+function TFrmConsultaExecutantesProgramados.DescreverFrotaSimulacao(
+  const AParam: TSimulacaoParametros): string;
+begin
+  Result := Format('Surfer=%d | SOV=%d | BAE=%d | AQUA=%d',
+    [AParam.QtdSurfer, AParam.QtdSOV, AParam.QtdBAE, AParam.QtdAQUA]);
+end;
+
+function TFrmConsultaExecutantesProgramados.SimularCenarioLogistico(
+  const ANome: string; const AParam: TSimulacaoParametros): TSimulacaoCenario;
+begin
+  Result.Nome := ANome;
+  Result.Parametros := AParam;
+  Result.Resultado := TSimulacaoLogistica.Simular(AParam);
+end;
+
+procedure TFrmConsultaExecutantesProgramados.MontarCenariosComparativos(
+  const ABase: TSimulacaoParametros; var ACenarios: array of TSimulacaoCenario);
+var
+  Param: TSimulacaoParametros;
+begin
+  if Length(ACenarios) < 5 then
+    raise Exception.Create('Quantidade insuficiente de cenarios para o comparativo.');
+
+  ACenarios[0] := SimularCenarioLogistico('Atual', ABase);
+
+  Param := ABase;
+  Inc(Param.QtdSOV);
+  ACenarios[1] := SimularCenarioLogistico('Atual + 1 SOV', Param);
+
+  Param := ABase;
+  Inc(Param.QtdBAE);
+  ACenarios[2] := SimularCenarioLogistico('Atual + 1 BAE', Param);
+
+  Param := ABase;
+  Inc(Param.QtdAQUA);
+  ACenarios[3] := SimularCenarioLogistico('Atual + 1 AQUA', Param);
+
+  Param := ABase;
+  Inc(Param.QtdSOV);
+  Inc(Param.QtdBAE);
+  ACenarios[4] := SimularCenarioLogistico('Atual + 1 SOV + 1 BAE', Param);
+end;
+
+function TFrmConsultaExecutantesProgramados.GerarRelatorioComparativoTexto(
+  const ACenarios: array of TSimulacaoCenario): string;
+var
+  I: Integer;
+  Linhas: TStringList;
+begin
+  Linhas := TStringList.Create;
+  try
+    Linhas.Add('--- Comparativo de Cenarios Logistica ---');
+    Linhas.Add('Premissa: cada cenario automatico adiciona embarcacoes ao cenario base informado na grade.');
+    Linhas.Add('');
+
+    for I := Low(ACenarios) to High(ACenarios) do
+    begin
+      Linhas.Add(Format('%d. Cenario: %s', [I + 1, ACenarios[I].Nome]));
+      Linhas.Add('   Frota: ' + DescreverFrotaSimulacao(ACenarios[I].Parametros));
+      Linhas.Add('   ' + TSimulacaoLogistica.PrazoComoTexto(ACenarios[I].Resultado));
+      Linhas.Add(Format('   Movimentacoes por dia: %.1f',
+        [ACenarios[I].Resultado.MovimentacoesPorDia]));
+      Linhas.Add(Format('   Custo total: R$ %.2f',
+        [ACenarios[I].Resultado.CustoTotal]));
+      Linhas.Add(Format('   Horas uteis geradas: %.1f',
+        [ACenarios[I].Resultado.HorasUteisGeradas]));
+      Linhas.Add(Format('   Custo por hora util: R$ %.2f',
+        [ACenarios[I].Resultado.CustoPorHoraUtil]));
+      Linhas.Add(Format('   Backlog atendido: %d (%.1f%%)',
+        [ACenarios[I].Resultado.BacklogAtendido,
+         ACenarios[I].Resultado.PercentualBacklogAtendido]));
+      Linhas.Add(Format('   Backlog restante: %d',
+        [ACenarios[I].Resultado.BacklogRestante]));
+      Linhas.Add('');
+    end;
+
+    Result := Linhas.Text;
+  finally
+    Linhas.Free;
+  end;
+end;
+
+function TFrmConsultaExecutantesProgramados.GerarRelatorioComparativoCSV(
+  const ACenarios: array of TSimulacaoCenario): string;
+var
+  I: Integer;
+  Linhas: TStringList;
+  PrazoTexto: string;
+begin
+  Linhas := TStringList.Create;
+  try
+    Linhas.Add('Cenario;Surfer;SOV;BAE;AQUA;MovimentacoesPorDia;PrazoEstimadoDias;CustoTotal;HorasUteisGeradas;CustoPorHoraUtil;BacklogAtendido;BacklogRestante;PercentualBacklogAtendido');
+
+    for I := Low(ACenarios) to High(ACenarios) do
+    begin
+      if ACenarios[I].Resultado.PrazoEstimado < 0 then
+        PrazoTexto := 'INVIAVEL'
+      else
+        PrazoTexto := IntToStr(ACenarios[I].Resultado.PrazoEstimado);
+
+      Linhas.Add(Format('%s;%d;%d;%d;%d;%.1f;%s;%.2f;%.1f;%.2f;%d;%d;%.1f',
+        [ACenarios[I].Nome,
+         ACenarios[I].Parametros.QtdSurfer,
+         ACenarios[I].Parametros.QtdSOV,
+         ACenarios[I].Parametros.QtdBAE,
+         ACenarios[I].Parametros.QtdAQUA,
+         ACenarios[I].Resultado.MovimentacoesPorDia,
+         PrazoTexto,
+         ACenarios[I].Resultado.CustoTotal,
+         ACenarios[I].Resultado.HorasUteisGeradas,
+         ACenarios[I].Resultado.CustoPorHoraUtil,
+         ACenarios[I].Resultado.BacklogAtendido,
+         ACenarios[I].Resultado.BacklogRestante,
+         ACenarios[I].Resultado.PercentualBacklogAtendido]));
+    end;
+
+    Result := Linhas.Text;
+  finally
+    Linhas.Free;
+  end;
+end;
+
 procedure TFrmConsultaExecutantesProgramados.AtualizarDiasDisponiveisSimulacao;
 var
   DiasDisponiveis: Integer;
@@ -9906,58 +10076,105 @@ procedure TFrmConsultaExecutantesProgramados.btnSimulacaoRodarClick(
 var
   Param: TSimulacaoParametros;
   Resultado: TSimulacaoResultado;
-  PrazoTexto: string;
 begin
   try
-    Param.QtdSurfer := LerInteiroSimulacao(SIM_ROW_QTD_SURFER, 'Qtd. Surfer');
-    Param.QtdSOV := LerInteiroSimulacao(SIM_ROW_QTD_SOV, 'Qtd. SOV');
-    Param.QtdBAE := LerInteiroSimulacao(SIM_ROW_QTD_BAE, 'Qtd. BAE');
-    Param.QtdAQUA := LerInteiroSimulacao(SIM_ROW_QTD_AQUA, 'Qtd. AQUA');
-    Param.Backlog := LerInteiroSimulacao(SIM_ROW_BACKLOG, 'Backlog');
-    Param.DiasDisponiveis := LerInteiroSimulacao(SIM_ROW_DIAS_DISPONIVEIS,
-      'Dias disponiveis');
-    Param.CustoSurfer := LerFloatSimulacao(SIM_ROW_CUSTO_SURFER,
-      'Custo diario Surfer');
-    Param.CustoSOV := LerFloatSimulacao(SIM_ROW_CUSTO_SOV, 'Custo diario SOV');
-    Param.CustoBAE := LerFloatSimulacao(SIM_ROW_CUSTO_BAE, 'Custo diario BAE');
-    Param.CustoAQUA := LerFloatSimulacao(SIM_ROW_CUSTO_AQUA,
-      'Custo diario AQUA');
-    Param.ProdutividadeSurfer := LerFloatSimulacao(SIM_ROW_PROD_SURFER,
-      'Produtividade Surfer');
-    Param.ProdutividadeSOV := LerFloatSimulacao(SIM_ROW_PROD_SOV,
-      'Produtividade SOV');
-    Param.ProdutividadeBAE := LerFloatSimulacao(SIM_ROW_PROD_BAE,
-      'Produtividade BAE');
-    Param.ProdutividadeAQUA := LerFloatSimulacao(SIM_ROW_PROD_AQUA,
-      'Produtividade AQUA');
-    Param.HorasUteisSurfer := LerFloatSimulacao(SIM_ROW_HORAS_SURFER,
-      'Horas uteis Surfer');
-    Param.HorasUteisSOV := LerFloatSimulacao(SIM_ROW_HORAS_SOV,
-      'Horas uteis SOV');
-    Param.HorasUteisBAE := LerFloatSimulacao(SIM_ROW_HORAS_BAE,
-      'Horas uteis BAE');
-    Param.HorasUteisAQUA := LerFloatSimulacao(SIM_ROW_HORAS_AQUA,
-      'Horas uteis AQUA');
-
+    Param := LerParametrosSimulacaoAtual;
     Resultado := TSimulacaoLogistica.Simular(Param);
-
-    if Resultado.PrazoEstimado < 0 then
-      PrazoTexto := 'Prazo inviavel com a capacidade configurada'
-    else
-      PrazoTexto := IntToStr(Resultado.PrazoEstimado) + ' dia(s)';
 
     MemoSimulacaoRelatorio.Lines.Text :=
       'Periodo analisado: ' + FormatDateTime('dd/mm/yyyy', dataInicio.Date) +
       ' a ' + FormatDateTime('dd/mm/yyyy', dataFim.Date) + sLineBreak +
-      'Frota configurada: ' +
-      Format('Surfer=%d | SOV=%d | BAE=%d | AQUA=%d',
-        [Param.QtdSurfer, Param.QtdSOV, Param.QtdBAE, Param.QtdAQUA]) +
+      'Frota configurada: ' + DescreverFrotaSimulacao(Param) +
       sLineBreak + sLineBreak +
       Resultado.Relatorio;
 
     StatusBarSimulacao.SimpleText := Format(
-      'Prazo: %s | Backlog atendido: %.1f%% | Custo total: R$ %.2f',
-      [PrazoTexto, Resultado.PercentualBacklogAtendido, Resultado.CustoTotal]);
+      '%s | Backlog atendido: %.1f%% | Custo total: R$ %.2f',
+      [TSimulacaoLogistica.PrazoComoTexto(Resultado),
+       Resultado.PercentualBacklogAtendido, Resultado.CustoTotal]);
+  except
+    on E: Exception do
+      ShowMessage(E.Message);
+  end;
+end;
+
+procedure TFrmConsultaExecutantesProgramados.btnSimulacaoCompararClick(
+  Sender: TObject);
+var
+  Param: TSimulacaoParametros;
+  Cenarios: array[0..4] of TSimulacaoCenario;
+begin
+  try
+    Param := LerParametrosSimulacaoAtual;
+    MontarCenariosComparativos(Param, Cenarios);
+
+    MemoSimulacaoRelatorio.Lines.Text :=
+      'Periodo analisado: ' + FormatDateTime('dd/mm/yyyy', dataInicio.Date) +
+      ' a ' + FormatDateTime('dd/mm/yyyy', dataFim.Date) + sLineBreak +
+      'Cenario base informado: ' + DescreverFrotaSimulacao(Param) + sLineBreak +
+      sLineBreak +
+      GerarRelatorioComparativoTexto(Cenarios);
+
+    StatusBarSimulacao.SimpleText :=
+      'Comparativo automatico gerado para 5 cenarios.';
+  except
+    on E: Exception do
+      ShowMessage(E.Message);
+  end;
+end;
+
+procedure TFrmConsultaExecutantesProgramados.btnSimulacaoExportarClick(
+  Sender: TObject);
+var
+  Param: TSimulacaoParametros;
+  Cenarios: array[0..4] of TSimulacaoCenario;
+  TextoExportacao: string;
+  Linhas: TStringList;
+  Extensao: string;
+begin
+  try
+    SaveDialog1.Title := 'Exportar simulacao logistica';
+    SaveDialog1.Filter :=
+      'Relatorio de texto (*.txt)|*.txt|Comparativo CSV (*.csv)|*.csv';
+    SaveDialog1.DefaultExt := 'txt';
+    SaveDialog1.FileName :=
+      'simulacao_logistica_' + FormatDateTime('yyyymmdd_hhnnss', Now) + '.txt';
+
+    if not SaveDialog1.Execute then
+      Exit;
+
+    Extensao := LowerCase(ExtractFileExt(SaveDialog1.FileName));
+    if Extensao = '.csv' then
+    begin
+      Param := LerParametrosSimulacaoAtual;
+      MontarCenariosComparativos(Param, Cenarios);
+      TextoExportacao := GerarRelatorioComparativoCSV(Cenarios);
+    end
+    else
+    begin
+      TextoExportacao := MemoSimulacaoRelatorio.Lines.Text;
+      if Trim(TextoExportacao) = '' then
+      begin
+        Param := LerParametrosSimulacaoAtual;
+        TextoExportacao :=
+          'Periodo analisado: ' + FormatDateTime('dd/mm/yyyy', dataInicio.Date) +
+          ' a ' + FormatDateTime('dd/mm/yyyy', dataFim.Date) + sLineBreak +
+          'Frota configurada: ' + DescreverFrotaSimulacao(Param) +
+          sLineBreak + sLineBreak +
+          TSimulacaoLogistica.GerarRelatorio(TSimulacaoLogistica.Simular(Param));
+      end;
+    end;
+
+    Linhas := TStringList.Create;
+    try
+      Linhas.Text := TextoExportacao;
+      Linhas.SaveToFile(SaveDialog1.FileName, TEncoding.UTF8);
+    finally
+      Linhas.Free;
+    end;
+
+    StatusBarSimulacao.SimpleText :=
+      'Relatorio exportado para: ' + SaveDialog1.FileName;
   except
     on E: Exception do
       ShowMessage(E.Message);
