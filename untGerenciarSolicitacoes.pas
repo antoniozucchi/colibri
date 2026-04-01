@@ -1641,147 +1641,80 @@ procedure TFrmGerenciarSolicitacoes.RLDestinoOrigemDrawCell(Sender: TObject;
   ACol, ARow: Integer; Rect: TRect; State: TGridDrawState);
 var
   R: TRect;
-  KIT_PS: Integer;
+  CellText: String;
+  CellValue: Integer;
+
+  procedure PintarCelula(const AColor: TColor);
+  begin
+    RLDestinoOrigem.Canvas.Brush.Color := AColor;
+    RLDestinoOrigem.Canvas.Font.Style := [];
+    RLDestinoOrigem.Canvas.FillRect(R);
+    DrawText(RLDestinoOrigem.Canvas.Handle, PChar(CellText), -1, R, DT_Center);
+  end;
 begin
+  if ARow <= 0 then
+    Exit;
+
+  CellText := RLDestinoOrigem.Cells[ACol,ARow];
+  R := Rect;
+  R.Left := R.Left - 4;
+
   //GD, BCI ou Balsa
   if ((ACol=6)OR(ACol=7)OR(ACol=8)OR(ACol=9)OR(ACol=10)) then
   begin
-    R := Rect;
-    R.Left := R.Left - 4;
     //Fora Operação
-    if RLDestinoOrigem.Cells[ACol,ARow] = 'FO' then
+    if CellText = 'FO' then
     begin
-      RLDestinoOrigem.Canvas.Brush.Color := clRed;
-      RLDestinoOrigem.Canvas.Font.Style := [];
-      RLDestinoOrigem.Canvas.FillRect(R);
-      DrawText(RLDestinoOrigem.Canvas.Handle, PChar(RLDestinoOrigem.Cells[ACol, ARow]),
-      -1, R, DT_Center);
-      //FrmPrincipal.ImageList1.Draw(RLDestinoOrigem.Canvas,Rect.Left+4,Rect.Top+4,93);
+      PintarCelula(clRed);
+      Exit;
     end
     //OK
-    else if RLDestinoOrigem.Cells[ACol,ARow] = 'OK' then
+    else if CellText = 'OK' then
     begin
-      RLDestinoOrigem.Canvas.Brush.Color := clLime;
-      RLDestinoOrigem.Canvas.Font.Style := [];
-      RLDestinoOrigem.Canvas.FillRect(R);
-      DrawText(RLDestinoOrigem.Canvas.Handle, PChar(RLDestinoOrigem.Cells[ACol, ARow]),
-      -1, R, DT_Center);
-      //FrmPrincipal.ImageList1.Draw(RLDestinoOrigem.Canvas,Rect.Left+4,Rect.Top+4,92);
+      PintarCelula(clLime);
+      Exit;
     end
     //Restrição Operacional
-    else if RLDestinoOrigem.Cells[ACol,ARow] = 'RO' then
+    else if CellText = 'RO' then
     begin
-      RLDestinoOrigem.Canvas.Brush.Color := clYellow;
-      RLDestinoOrigem.Canvas.Font.Style := [];
-      RLDestinoOrigem.Canvas.FillRect(R);
-      DrawText(RLDestinoOrigem.Canvas.Handle, PChar(RLDestinoOrigem.Cells[ACol, ARow]),
-      -1, R, DT_Center);
-      //FrmPrincipal.ImageList1.Draw(RLDestinoOrigem.Canvas,Rect.Left+4,Rect.Top+4,454);
+      PintarCelula(clYellow);
+      Exit;
     end
     //N/A
-    else if RLDestinoOrigem.Cells[ACol,ARow] = 'N/A' then
+    else if CellText = 'N/A' then
     begin
-      RLDestinoOrigem.Canvas.Brush.Color := clSilver;
-      RLDestinoOrigem.Canvas.Font.Style := [];
-      RLDestinoOrigem.Canvas.FillRect(R);
-      DrawText(RLDestinoOrigem.Canvas.Handle, PChar(RLDestinoOrigem.Cells[ACol, ARow]),
-      -1, R, DT_Center);
-      //FrmPrincipal.ImageList1.Draw(RLDestinoOrigem.Canvas,Rect.Left+4,Rect.Top+4,454);
+      PintarCelula(clSilver);
+      Exit;
     end;
   end;
-  if (ARow > 0) then
+
+  if (ACol >= 1) and (ACol <= 5) and TryStrToInt(CellText, CellValue) and
+     (CellValue > 0) then
   begin
-    R := Rect;
-    R.Left := R.Left - 4;
-    try
-      //N° Aprovado
-      if (StrToInt(RLDestinoOrigem.Cells[ACol,ARow]) > 0)AND(ACol=1) then
-      begin
-        RLDestinoOrigem.Canvas.Brush.Color := clLime;
-        RLDestinoOrigem.Canvas.Font.Style := [];
-        RLDestinoOrigem.Canvas.FillRect(R);
-        DrawText(RLDestinoOrigem.Canvas.Handle, PChar(RLDestinoOrigem.Cells[ACol, ARow]),
-        -1, R, DT_Center);
-      end
-      //N° Cancelado
-      else if (StrToInt(RLDestinoOrigem.Cells[ACol,ARow]) > 0)AND(ACol=2) then
-      begin
-        RLDestinoOrigem.Canvas.Brush.Color := clRed;
-        RLDestinoOrigem.Canvas.Font.Style := [];
-        RLDestinoOrigem.Canvas.FillRect(R);
-        DrawText(RLDestinoOrigem.Canvas.Handle, PChar(RLDestinoOrigem.Cells[ACol, ARow]),
-        -1, R, DT_Center);
-      end
-      //N° Mudança
-      else if (StrToInt(RLDestinoOrigem.Cells[ACol,ARow]) > 0)AND(ACol=3) then
-      begin
-        RLDestinoOrigem.Canvas.Brush.Color := clYellow;
-        RLDestinoOrigem.Canvas.Font.Style := [];
-        RLDestinoOrigem.Canvas.FillRect(R);
-        DrawText(RLDestinoOrigem.Canvas.Handle, PChar(RLDestinoOrigem.Cells[ACol, ARow]),
-        -1, R, DT_Center);
-      end
-      //TS
-      else if (StrToInt(RLDestinoOrigem.Cells[ACol,ARow]) > 0)AND(ACol=4) then
-      begin
-        RLDestinoOrigem.Canvas.Brush.Color := clAqua;
-        RLDestinoOrigem.Canvas.Font.Style := [];
-        RLDestinoOrigem.Canvas.FillRect(R);
-        DrawText(RLDestinoOrigem.Canvas.Handle, PChar(RLDestinoOrigem.Cells[ACol, ARow]),
-        -1, R, DT_Center);
-      end
-      //OP
-      else if (StrToInt(RLDestinoOrigem.Cells[ACol,ARow]) > 0)AND(ACol=5) then
-      begin
-        RLDestinoOrigem.Canvas.Brush.Color := clMenuHighlight;
-        RLDestinoOrigem.Canvas.Font.Style := [];
-        RLDestinoOrigem.Canvas.FillRect(R);
-        DrawText(RLDestinoOrigem.Canvas.Handle, PChar(RLDestinoOrigem.Cells[ACol, ARow]),
-        -1, R, DT_Center);
-      end
-      //KIT_PS
-      else if (ACol=13) then
-      begin
-        try
-          KIT_PS:= StrToInt(RLDestinoOrigem.Cells[ACol,ARow]);
-          if (KIT_PS = 1) then
-          begin
-            RLDestinoOrigem.Canvas.Brush.Color := clLime;
-            RLDestinoOrigem.Canvas.Font.Style := [];
-            RLDestinoOrigem.Canvas.FillRect(R);
-            DrawText(RLDestinoOrigem.Canvas.Handle, PChar(RLDestinoOrigem.Cells[ACol, ARow]),
-            -1, R, DT_Center);
-          end
-          else
-          begin
-            RLDestinoOrigem.Canvas.Brush.Color := clRed;
-            RLDestinoOrigem.Canvas.Font.Style := [];
-            RLDestinoOrigem.Canvas.FillRect(R);
-            DrawText(RLDestinoOrigem.Canvas.Handle, PChar(RLDestinoOrigem.Cells[ACol, ARow]),
-            -1, R, DT_Center);
-          end;
-        except
-        end;
-      end
-      else if gdSelected in State then
-      begin
-        RLDestinoOrigem.Canvas.Brush.Color := clSkyBlue;
-        RLDestinoOrigem.Canvas.Font.Style := [];
-        RLDestinoOrigem.Canvas.FillRect(R);
-        DrawText(RLDestinoOrigem.Canvas.Handle, PChar(RLDestinoOrigem.Cells[ACol, ARow]),
-        -1, R, DT_Center);
-      end
-      else
-      begin
-        RLDestinoOrigem.Canvas.Brush.Color := clWhite;
-        RLDestinoOrigem.Canvas.Font.Style := [];
-        RLDestinoOrigem.Canvas.FillRect(R);
-        DrawText(RLDestinoOrigem.Canvas.Handle, PChar(RLDestinoOrigem.Cells[ACol, ARow]),
-        -1, R, DT_Center);
-      end;
-    except
+    case ACol of
+      1: PintarCelula(clLime);
+      2: PintarCelula(clRed);
+      3: PintarCelula(clYellow);
+      4: PintarCelula(clAqua);
+      5: PintarCelula(clMenuHighlight);
     end;
+    Exit;
   end;
+
+  //KIT_PS
+  if (ACol = 10) and TryStrToInt(CellText, CellValue) then
+  begin
+    if (CellValue = 1) then
+      PintarCelula(clLime)
+    else
+      PintarCelula(clRed);
+    Exit;
+  end;
+
+  if gdSelected in State then
+    PintarCelula(clSkyBlue)
+  else
+    PintarCelula(clWhite);
 end;
 
 procedure TFrmGerenciarSolicitacoes.RLDestinoOrigemSelectCell(Sender: TObject;
