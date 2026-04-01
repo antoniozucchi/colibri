@@ -74,20 +74,20 @@ object FrmDataModule: TFrmDataModule
   object ADOConnectionColibri: TADOConnection
     ConnectionString = 
       'Provider=Microsoft.Jet.OLEDB.4.0;User ID=Admin;Data Source=C:\De' +
-      'v\Projetos\Colibri\Banco de dados\UO-SEAL-ATP-OP-SM\bdColibri.co' +
-      'libri;Mode=Share Deny None;Persist Security Info=False;Jet OLEDB' +
-      ':System database="";Jet OLEDB:Registry Path="";Jet OLEDB:Databas' +
-      'e Password="";Jet OLEDB:Engine Type=5;Jet OLEDB:Database Locking' +
-      ' Mode=1;Jet OLEDB:Global Partial Bulk Ops=2;Jet OLEDB:Global Bul' +
-      'k Transactions=1;Jet OLEDB:New Database Password="";Jet OLEDB:Cr' +
-      'eate System Database=False;Jet OLEDB:Encrypt Database=False;Jet ' +
-      'OLEDB:Don'#39't Copy Locale on Compact=False;Jet OLEDB:Compact Witho' +
-      'ut Replica Repair=False;Jet OLEDB:SFP=False;'
+      'v\Projetos\Colibri\Banco de dados\bdColibri.colibri;Mode=Share D' +
+      'eny None;Persist Security Info=False;Jet OLEDB:System database="' +
+      '";Jet OLEDB:Registry Path="";Jet OLEDB:Database Password="";Jet ' +
+      'OLEDB:Engine Type=5;Jet OLEDB:Database Locking Mode=1;Jet OLEDB:' +
+      'Global Partial Bulk Ops=2;Jet OLEDB:Global Bulk Transactions=1;J' +
+      'et OLEDB:New Database Password="";Jet OLEDB:Create System Databa' +
+      'se=False;Jet OLEDB:Encrypt Database=False;Jet OLEDB:Don'#39't Copy L' +
+      'ocale on Compact=False;Jet OLEDB:Compact Without Replica Repair=' +
+      'False;Jet OLEDB:SFP=False;'
     KeepConnection = False
     LoginPrompt = False
     Provider = 'Microsoft.Jet.OLEDB.4.0'
-    Left = 282
-    Top = 316
+    Left = 514
+    Top = 380
   end
   object ADOQueryPlataforma: TADOQuery
     Connection = ADOConnectionConsulta
@@ -170,31 +170,6 @@ object FrmDataModule: TFrmDataModule
     Left = 940
     Top = 440
   end
-  object ADOQueryCarregaExecutanteSAP: TADOQuery
-    Connection = ADOConnectionMemoria
-    CursorType = ctStatic
-    LockType = ltPessimistic
-    Parameters = <
-      item
-        Name = '@DataProcura'
-        Attributes = [paNullable]
-        DataType = ftWideString
-        NumericScale = 255
-        Precision = 255
-        Size = 510
-        Value = '01/01/2016'
-      end>
-    SQL.Strings = (
-      'SELECT tblExecutanteSAP.*'
-      'FROM tblExecutanteSAP'
-      'WHERE (DataEmbarque LIKE @DataProcura);')
-    Left = 980
-  end
-  object DataSourceCarregaExecutanteSAP: TDataSource
-    DataSet = ADOQueryCarregaExecutanteSAP
-    Left = 960
-    Top = 610
-  end
   object DataSourceProgramacaoDiaria_Cadastro: TDataSource
     DataSet = ADOQueryProgramacaoDiaria_Cadastro
     Left = 420
@@ -238,41 +213,6 @@ object FrmDataModule: TFrmDataModule
   object DataSourceImportarExecutanteAPLAT: TDataSource
     DataSet = ADOQueryImportarExecutanteAPLAT
     Left = 910
-    Top = 490
-  end
-  object ADOQueryImportarExecutanteSAP: TADOQuery
-    Connection = ADOConnectionMemoria
-    CursorType = ctStatic
-    LockType = ltPessimistic
-    BeforePost = ADOQueryImportarExecutanteSAPBeforePost
-    Parameters = <>
-    SQL.Strings = (
-      'SELECT tblExecutanteSAP.*'
-      'FROM tblExecutanteSAP'
-      'ORDER BY NomeExecutante;')
-    Left = 950
-    Top = 50
-  end
-  object DataSourceImportarExecutanteSAP: TDataSource
-    DataSet = ADOQueryImportarExecutanteSAP
-    Left = 1060
-    Top = 390
-  end
-  object ADOQueryImportarCarteiraTrabalho: TADOQuery
-    Connection = ADOConnectionMemoria
-    CursorType = ctStatic
-    LockType = ltPessimistic
-    Parameters = <>
-    SQL.Strings = (
-      'SELECT tblCarteiraTrabalho.*'
-      'FROM tblCarteiraTrabalho'
-      'ORDER BY Plataforma;')
-    Left = 890
-    Top = 50
-  end
-  object DataSourceImportarCarteiraTrabalho: TDataSource
-    DataSet = ADOQueryImportarCarteiraTrabalho
-    Left = 880
     Top = 490
   end
   object ADOQueryConsultaExecutante_DataCodigoSAP: TADOQuery
@@ -522,21 +462,6 @@ object FrmDataModule: TFrmDataModule
     DataSet = ADOQueryConsultaTipoEtapaServico_ID
     Left = 10
     Top = 440
-  end
-  object ADOQueryCarteiraOM: TADOQuery
-    Connection = ADOConnectionMemoria
-    CursorType = ctStatic
-    LockType = ltPessimistic
-    Parameters = <>
-    SQL.Strings = (
-      'SELECT tblCarteiraTrabalho.*'
-      'FROM tblCarteiraTrabalho;')
-    Left = 1010
-  end
-  object DataSourceCarteiraOM: TDataSource
-    DataSet = ADOQueryCarteiraOM
-    Left = 990
-    Top = 610
   end
   object ADOQueryGerenciarSolicitacoes: TADOQuery
     Connection = ADOConnectionColibri
@@ -1051,32 +976,6 @@ object FrmDataModule: TFrmDataModule
     Left = 180
     Top = 560
   end
-  object DataSourceExecutantesSAP: TDataSource
-    DataSet = ADOQueryExecutantesSAP
-    Left = 1050
-    Top = 610
-  end
-  object ADOQueryExecutantesSAP: TADOQuery
-    Connection = ADOConnectionMemoria
-    CursorType = ctStatic
-    LockType = ltPessimistic
-    Parameters = <
-      item
-        Name = '@DataProcura'
-        Attributes = [paNullable]
-        DataType = ftWideString
-        NumericScale = 255
-        Precision = 255
-        Size = 510
-        Value = Null
-      end>
-    SQL.Strings = (
-      'SELECT tblExecutanteSAP.*'
-      'FROM tblExecutanteSAP'
-      'WHERE (DataEmbarque LIKE @DataProcura)'
-      'ORDER BY NomeExecutante;')
-    Left = 1070
-  end
   object ADOQueryConsultaEmbarcacao: TADOQuery
     Connection = ADOConnectionConsulta
     CursorType = ctStatic
@@ -1125,11 +1024,6 @@ object FrmDataModule: TFrmDataModule
     Left = 290
     Top = 560
   end
-  object DataSourceForaOperacao: TDataSource
-    DataSet = ADOQueryForaOperacao
-    Left = 850
-    Top = 490
-  end
   object DataSourceColibri: TDataSource
     DataSet = ADOQueryColibri
     Left = 330
@@ -1139,19 +1033,6 @@ object FrmDataModule: TFrmDataModule
     DataSet = ADOQueryGeradores
     Left = 330
     Top = 610
-  end
-  object ADOQueryForaOperacao: TADOQuery
-    Connection = ADOConnectionMemoria
-    CursorType = ctStatic
-    LockType = ltPessimistic
-    BeforePost = ADOQueryForaOperacaoBeforePost
-    Parameters = <>
-    SQL.Strings = (
-      'SELECT tblNotaManutencao.* '
-      'FROM tblNotaManutencao'
-      'ORDER BY Plataforma;')
-    Left = 860
-    Top = 50
   end
   object ADOQueryColibri: TADOQuery
     Connection = ADOConnectionColibri
@@ -1203,22 +1084,6 @@ object FrmDataModule: TFrmDataModule
     DataSet = ADOQueryConsultaExecutante_CodigoSAP
     Left = 540
     Top = 500
-  end
-  object DataSourceImportarNotaManutencao: TDataSource
-    DataSet = ADOQueryImportarNotaManutencao
-    Left = 940
-    Top = 490
-  end
-  object ADOQueryImportarNotaManutencao: TADOQuery
-    Connection = ADOConnectionMemoria
-    CursorType = ctStatic
-    LockType = ltPessimistic
-    Parameters = <>
-    SQL.Strings = (
-      'SELECT tblNotaManutencao.*'
-      'FROM tblNotaManutencao;')
-    Left = 980
-    Top = 50
   end
   object DataSourceConsultaProgramacaoServico_ID: TDataSource
     DataSet = ADOQueryConsultaProgramacaoServico_ID
@@ -1327,40 +1192,6 @@ object FrmDataModule: TFrmDataModule
     Left = 530
     Top = 560
   end
-  object DataSourceServicosSAP_TipoEtapaServico_Destino: TDataSource
-    DataSet = ADOQueryServicosSAP_TipoEtapaServico_Destino
-    Left = 820
-    Top = 440
-  end
-  object ADOQueryServicosSAP_TipoEtapaServico_Destino: TADOQuery
-    Connection = ADOConnectionMemoria
-    CursorType = ctStatic
-    LockType = ltPessimistic
-    Parameters = <
-      item
-        Name = '@TipoEtapaServico'
-        Attributes = [paNullable]
-        DataType = ftWideString
-        NumericScale = 255
-        Precision = 255
-        Size = 510
-        Value = '1'
-      end
-      item
-        Name = '@Destino'
-        Attributes = [paNullable]
-        DataType = ftWideString
-        NumericScale = 255
-        Precision = 255
-        Size = 510
-        Value = '1'
-      end>
-    SQL.Strings = (
-      'SELECT tblCarteiraTrabalho.* FROM tblCarteiraTrabalho '
-      'WHERE ((txtTipoEtapaServicoOP LIKE  @TipoEtapaServico)AND'
-      '(Plataforma LIKE @Destino)AND(StatusUsuarioOM LIKE "%GIOP%"));')
-    Left = 830
-  end
   object DataSourceProgramacaoServico_Consulta: TDataSource
     DataSet = ADOQueryProgramacaoServico_Consulta
     Left = 570
@@ -1413,22 +1244,6 @@ object FrmDataModule: TFrmDataModule
     Left = 450
     Top = 610
   end
-  object ADOQueryImportarTextoLongoCarteira: TADOQuery
-    Connection = ADOConnectionMemoria
-    CursorType = ctStatic
-    LockType = ltPessimistic
-    Parameters = <>
-    SQL.Strings = (
-      'SELECT tblTextoLongoCarteira.*'
-      'FROM tblTextoLongoCarteira;')
-    Left = 1010
-    Top = 50
-  end
-  object DataSourceImportarTextoLongoCarteira: TDataSource
-    DataSet = ADOQueryImportarTextoLongoCarteira
-    Left = 970
-    Top = 390
-  end
   object ADOQueryProgramados: TADOQuery
     Connection = ADOConnectionColibri
     CursorType = ctStatic
@@ -1463,21 +1278,6 @@ object FrmDataModule: TFrmDataModule
   object DataSourceProgramados: TDataSource
     DataSet = ADOQueryProgramados
     Left = 370
-    Top = 610
-  end
-  object ADOQueryCarteiraOP: TADOQuery
-    Connection = ADOConnectionMemoria
-    CursorType = ctStatic
-    LockType = ltPessimistic
-    Parameters = <>
-    SQL.Strings = (
-      'SELECT tblCarteiraTrabalho.*'
-      'FROM tblCarteiraTrabalho;')
-    Left = 1040
-  end
-  object DataSourceCarteiraOP: TDataSource
-    DataSet = ADOQueryCarteiraOP
-    Left = 1020
     Top = 610
   end
   object DataSourceCentroTrabalho_Descricao: TDataSource
@@ -1534,73 +1334,23 @@ object FrmDataModule: TFrmDataModule
     Left = 1470
     Top = 150
   end
-  object ADOQueryPrioridadeForcada: TADOQuery
-    Connection = ADOConnectionMemoria
-    CursorType = ctStatic
-    LockType = ltPessimistic
-    BeforePost = ADOQueryPrioridadeForcadaBeforePost
-    Parameters = <>
-    SQL.Strings = (
-      'SELECT tblPrioridadeForcada.*'
-      'FROM tblPrioridadeForcada'
-      'ORDER BY Prioridade;')
-    Left = 920
-  end
-  object DataSourcePrioridadeForcada: TDataSource
-    DataSet = ADOQueryPrioridadeForcada
-    Left = 910
-    Top = 440
-  end
-  object ADOQueryLocalInstalacaoSAP: TADOQuery
-    Connection = ADOConnectionMemoria
-    CursorType = ctStatic
-    LockType = ltPessimistic
-    Parameters = <>
-    SQL.Strings = (
-      'SELECT tblLocalInstalacao.* '
-      'FROM tblLocalInstalacao '
-      'ORDER BY LocalInstalacao;')
-    Left = 790
-    Top = 100
-  end
-  object DataSourceLocalInstalacaoSAP: TDataSource
-    DataSet = ADOQueryLocalInstalacaoSAP
-    Left = 50
-    Top = 610
-  end
   object ADOConnectionMemoria: TADOConnection
     ConnectionString = 
-      'Provider=Microsoft.Jet.OLEDB.4.0;User ID=Admin;Data Source=C:\Us' +
-      'ers\augus\Documents\Projetos\Colibri\Banco de dados\UO-SEAL-ATP-' +
-      'OP-SM\dbMemoria.mdb;Mode=Share Deny None;Persist Security Info=F' +
-      'alse;Jet OLEDB:System database="";Jet OLEDB:Registry Path="";Jet' +
-      ' OLEDB:Database Password="";Jet OLEDB:Engine Type=5;Jet OLEDB:Da' +
-      'tabase Locking Mode=1;Jet OLEDB:Global Partial Bulk Ops=2;Jet OL' +
-      'EDB:Global Bulk Transactions=1;Jet OLEDB:New Database Password="' +
-      '";Jet OLEDB:Create System Database=False;Jet OLEDB:Encrypt Datab' +
-      'ase=False;Jet OLEDB:Don'#39't Copy Locale on Compact=False;Jet OLEDB' +
-      ':Compact Without Replica Repair=False;Jet OLEDB:SFP=False;'
+      'Provider=Microsoft.Jet.OLEDB.4.0;User ID=Admin;Data Source=C:\De' +
+      'v\Projetos\Colibri\Banco de dados\dbMemoria.mdb;Mode=Share Deny ' +
+      'None;Persist Security Info=False;Jet OLEDB:System database="";Je' +
+      't OLEDB:Registry Path="";Jet OLEDB:Database Password="";Jet OLED' +
+      'B:Engine Type=5;Jet OLEDB:Database Locking Mode=1;Jet OLEDB:Glob' +
+      'al Partial Bulk Ops=2;Jet OLEDB:Global Bulk Transactions=1;Jet O' +
+      'LEDB:New Database Password="";Jet OLEDB:Create System Database=F' +
+      'alse;Jet OLEDB:Encrypt Database=False;Jet OLEDB:Don'#39't Copy Local' +
+      'e on Compact=False;Jet OLEDB:Compact Without Replica Repair=Fals' +
+      'e;Jet OLEDB:SFP=False'
     KeepConnection = False
     LoginPrompt = False
     Provider = 'Microsoft.Jet.OLEDB.4.0'
     Left = 50
     Top = 220
-  end
-  object DataSourceIW37N: TDataSource
-    DataSet = ADOQueryIW37N
-    Left = 1030
-    Top = 390
-  end
-  object ADOQueryIW37N: TADOQuery
-    Connection = ADOConnectionMemoria
-    CursorType = ctStatic
-    LockType = ltPessimistic
-    Parameters = <>
-    SQL.Strings = (
-      'SELECT tblCarteiraTrabalho.*'
-      'FROM tblCarteiraTrabalho;')
-    Left = 1070
-    Top = 50
   end
   object DataSourceCadastroUsuario: TDataSource
     DataSet = ADOQueryCadastroUsuario
@@ -1635,24 +1385,6 @@ object FrmDataModule: TFrmDataModule
       'FROM tblCentroTrabalho;')
     Left = 1510
     Top = 50
-  end
-  object ADOQueryRestricaoOperacional: TADOQuery
-    Connection = ADOConnectionMemoria
-    CursorType = ctStatic
-    LockType = ltPessimistic
-    Parameters = <>
-    SQL.Strings = (
-      'SELECT tblCarteiraTrabalho.*'
-      'FROM tblCarteiraTrabalho'
-      'WHERE (TextoBreveOM LIKE "RO:%")'
-      'ORDER BY Plataforma, txtTipoEtapaServicoOM;')
-    Left = 820
-    Top = 50
-  end
-  object DataSourceRestricaoOperacional: TDataSource
-    DataSet = ADOQueryRestricaoOperacional
-    Left = 810
-    Top = 490
   end
   object ADOQueryTotalCampo: TADOQuery
     Connection = ADOConnectionColibri
@@ -1853,145 +1585,6 @@ object FrmDataModule: TFrmDataModule
     Left = 940
     Top = 550
   end
-  object DataSourceImportarLocalInstalacao: TDataSource
-    DataSet = ADOQueryImportarLocalInstalacao
-    Left = 780
-    Top = 440
-  end
-  object ADOQueryImportarLocalInstalacao: TADOQuery
-    Connection = ADOConnectionMemoria
-    CursorType = ctStatic
-    LockType = ltPessimistic
-    BeforePost = ADOQueryImportarLocalInstalacaoBeforePost
-    Parameters = <>
-    SQL.Strings = (
-      'SELECT tblLocalInstalacao.* '
-      'FROM tblLocalInstalacao'
-      'ORDER BY LocalInstalacao;')
-    Left = 790
-  end
-  object DataSourceRECLocalSAP: TDataSource
-    DataSet = ADOQueryRECLocalSAP
-    Left = 740
-    Top = 440
-  end
-  object ADOQueryRECLocalSAP: TADOQuery
-    Connection = ADOConnectionMemoria
-    CursorType = ctStatic
-    LockType = ltPessimistic
-    Parameters = <
-      item
-        Name = '@Plataforma'
-        Attributes = [paNullable]
-        DataType = ftWideString
-        NumericScale = 255
-        Precision = 255
-        Size = 510
-        Value = '1'
-      end
-      item
-        Name = '@TAG'
-        Attributes = [paNullable]
-        DataType = ftWideString
-        NumericScale = 255
-        Precision = 255
-        Size = 510
-        Value = '1'
-      end>
-    SQL.Strings = (
-      'SELECT tblLocalInstalacao.*'
-      'FROM tblLocalInstalacao'
-      'WHERE ((Plataforma LIKE @Plataforma) AND'
-      ' (DenominacaoLocalInstalacao LIKE @TAG));')
-    Left = 750
-  end
-  object DataSourceForaFSMC: TDataSource
-    DataSet = ADOQueryForaFSMC
-    Left = 700
-    Top = 440
-  end
-  object ADOQueryForaFSMC: TADOQuery
-    Connection = ADOConnectionMemoria
-    CursorType = ctStatic
-    LockType = ltPessimistic
-    Parameters = <
-      item
-        Name = 'DenominacaoLocalInstalacao'
-        Attributes = [paNullable]
-        DataType = ftWideString
-        NumericScale = 255
-        Precision = 255
-        Size = 510
-        Value = Null
-      end>
-    SQL.Strings = (
-      'SELECT tblNotaManutencao.* FROM tblNotaManutencao'
-      'WHERE (((TextoBreveNOTA LIKE "FO:%"))'
-      'AND((FimAvaria IS NULL))'
-      'AND((LocalInstalacao LIKE "%FSMC%"))'
-      'AND((DenominacaoLocalInstalacao NOT LIKE "%Enquip%"))'
-      'AND((DenominacaoLocalInstalacao NOT LIKE "%Apoio%")));')
-    Left = 710
-  end
-  object DataSourceForaFSCI: TDataSource
-    DataSet = ADOQueryForaFSCI
-    Left = 770
-    Top = 490
-  end
-  object ADOQueryForaFSCI: TADOQuery
-    Connection = ADOConnectionMemoria
-    CursorType = ctStatic
-    LockType = ltPessimistic
-    Parameters = <>
-    SQL.Strings = (
-      'SELECT tblNotaManutencao.* FROM tblNotaManutencao'
-      'WHERE (((TextoBreveNOTA LIKE "FO:%"))AND((FimAvaria IS NULL))AND'
-      '((LocalInstalacao LIKE "%FSCI%")));')
-    Left = 710
-    Top = 50
-  end
-  object DataSourcePendenciaSAP: TDataSource
-    DataSet = ADOQueryPendenciaSAP
-    Left = 700
-    Top = 550
-  end
-  object ADOQueryPendenciaSAP: TADOQuery
-    Connection = ADOConnectionMemoria
-    CursorType = ctStatic
-    LockType = ltPessimistic
-    Parameters = <>
-    SQL.Strings = (
-      'SELECT tblCarteiraTrabalho.*'
-      'FROM tblCarteiraTrabalho;')
-    Left = 750
-    Top = 50
-  end
-  object ADOQueryTextoLongoOM: TADOQuery
-    Connection = ADOConnectionMemoria
-    CursorType = ctStatic
-    LockType = ltPessimistic
-    Parameters = <
-      item
-        Name = '@OrdemManutencao'
-        Attributes = [paNullable]
-        DataType = ftWideString
-        NumericScale = 255
-        Precision = 255
-        Size = 510
-        Value = '1'
-      end>
-    SQL.Strings = (
-      'SELECT tblTextoLongoCarteira.* '
-      'FROM tblTextoLongoCarteira '
-      'WHERE (OrdemManutencao LIKE @OrdemManutencao);')
-    Left = 710
-    Top = 100
-  end
-  object DataSourceTextoLongoOM: TDataSource
-    DataSet = ADOQueryTextoLongoOM
-    Left = 660
-    Top = 550
-  end
   object DataSourceAnalisarTipoEtapaServico: TDataSource
     DataSet = ADOQueryAnalisarTipoEtapaServico
     Left = 620
@@ -2007,24 +1600,6 @@ object FrmDataModule: TFrmDataModule
       'FROM tblCarteiraTrabalho;')
     Left = 750
     Top = 100
-  end
-  object DataSourcePreventivaAtrasada: TDataSource
-    DataSet = ADOQueryPreventivaAtrasada
-    Left = 660
-    Top = 440
-  end
-  object ADOQueryPreventivaAtrasada: TADOQuery
-    Connection = ADOConnectionMemoria
-    CursorType = ctStatic
-    LockType = ltPessimistic
-    Parameters = <>
-    SQL.Strings = (
-      'SELECT tblCarteiraTrabalho.*'
-      'FROM tblCarteiraTrabalho'
-      'WHERE (TextoBreveOM LIKE "RO:%")'
-      'ORDER BY Plataforma, txtTipoEtapaServicoOM;')
-    Left = 780
-    Top = 50
   end
   object DataSourceConsultaExecutante_Documento_Data: TDataSource
     DataSet = ADOQueryConsultaExecutante_Documento_Data
@@ -2174,15 +1749,15 @@ object FrmDataModule: TFrmDataModule
   object ADOConnectionConsulta: TADOConnection
     ConnectionString = 
       'Provider=Microsoft.Jet.OLEDB.4.0;User ID=Admin;Data Source=C:\De' +
-      'v\Projetos\Colibri\Banco de dados\UO-SEAL-ATP-OP-SM\dbConsulta.m' +
-      'db;Mode=Share Deny None;Persist Security Info=False;Jet OLEDB:Sy' +
-      'stem database="";Jet OLEDB:Registry Path="";Jet OLEDB:Database P' +
-      'assword="";Jet OLEDB:Engine Type=5;Jet OLEDB:Database Locking Mo' +
-      'de=1;Jet OLEDB:Global Partial Bulk Ops=2;Jet OLEDB:Global Bulk T' +
-      'ransactions=1;Jet OLEDB:New Database Password="";Jet OLEDB:Creat' +
-      'e System Database=False;Jet OLEDB:Encrypt Database=False;Jet OLE' +
-      'DB:Don'#39't Copy Locale on Compact=False;Jet OLEDB:Compact Without ' +
-      'Replica Repair=False;Jet OLEDB:SFP=False;'
+      'v\Projetos\Colibri\Banco de dados\dbConsulta.mdb;Mode=Share Deny' +
+      ' None;Persist Security Info=False;Jet OLEDB:System database="";J' +
+      'et OLEDB:Registry Path="";Jet OLEDB:Database Password="";Jet OLE' +
+      'DB:Engine Type=5;Jet OLEDB:Database Locking Mode=1;Jet OLEDB:Glo' +
+      'bal Partial Bulk Ops=2;Jet OLEDB:Global Bulk Transactions=1;Jet ' +
+      'OLEDB:New Database Password="";Jet OLEDB:Create System Database=' +
+      'False;Jet OLEDB:Encrypt Database=False;Jet OLEDB:Don'#39't Copy Loca' +
+      'le on Compact=False;Jet OLEDB:Compact Without Replica Repair=Fal' +
+      'se;Jet OLEDB:SFP=False;'
     KeepConnection = False
     LoginPrompt = False
     Provider = 'Microsoft.Jet.OLEDB.4.0'
@@ -2235,25 +1810,8 @@ object FrmDataModule: TFrmDataModule
   end
   object DataSourceGantt: TDataSource
     DataSet = ADOQueryGantt
-    Left = 510
-    Top = 370
-  end
-  object DataSourceNotaManutencao: TDataSource
-    DataSet = ADOQueryNotaManutencao
-    Left = 1100
-    Top = 390
-  end
-  object ADOQueryNotaManutencao: TADOQuery
-    Connection = ADOConnectionMemoria
-    CursorType = ctStatic
-    LockType = ltPessimistic
-    Parameters = <>
-    SQL.Strings = (
-      'SELECT tblNotaManutencao.*'
-      'FROM tblNotaManutencao'
-      'ORDER BY Plataforma;')
-    Left = 830
-    Top = 100
+    Left = 646
+    Top = 354
   end
   object DataSourceExecutante_TipoEtapaServico: TDataSource
     DataSet = ADOQueryExecutante_TipoEtapaServico
@@ -2281,58 +1839,6 @@ object FrmDataModule: TFrmDataModule
       'ORDER BY NomeExecutante;')
     Left = 1540
     Top = 100
-  end
-  object DataSourceImportarTextoLongoOperacao: TDataSource
-    DataSet = ADOQueryImportarTextoLongoOperacao
-    Left = 1090
-    Top = 610
-  end
-  object ADOQueryImportarTextoLongoOperacao: TADOQuery
-    Connection = ADOConnectionMemoria
-    CursorType = ctStatic
-    LockType = ltPessimistic
-    Parameters = <>
-    SQL.Strings = (
-      'SELECT tblTextoLongoOperacao.*'
-      'FROM tblTextoLongoOperacao;')
-    Left = 1110
-    Top = 50
-  end
-  object DataSourceAnaliseGM: TDataSource
-    DataSet = ADOQueryAnaliseGM
-    Left = 790
-    Top = 620
-  end
-  object ADOQueryAnaliseGM: TADOQuery
-    Connection = ADOConnectionMemoria
-    CursorType = ctStatic
-    LockType = ltPessimistic
-    Parameters = <>
-    SQL.Strings = (
-      'SELECT tblNotaManutencao.* '
-      'FROM tblNotaManutencao'
-      'ORDER BY Plataforma;')
-    Left = 950
-    Top = 100
-  end
-  object DataSourceRestricaoFSMC: TDataSource
-    DataSet = ADOQueryRestricaoFSMC
-    Left = 910
-    Top = 620
-  end
-  object ADOQueryRestricaoFSMC: TADOQuery
-    Connection = ADOConnectionMemoria
-    CursorType = ctStatic
-    LockType = ltPessimistic
-    Parameters = <>
-    SQL.Strings = (
-      'SELECT tblCarteiraTrabalho.* FROM tblCarteiraTrabalho'
-      'WHERE ((TextoBreveOM LIKE "RO:%")'
-      'AND(LocalInstalacao LIKE "%FSMC%")'
-      'AND(StatusUsuarioOM NOT LIKE "%AENT%")'
-      'AND(DenominacaoLocalInstalacao NOT LIKE "%Enquip%")'
-      'AND(DenominacaoLocalInstalacao NOT LIKE "%Apoio%"));')
-    Left = 680
   end
   object DataSourceMovimentacaoCarga: TDataSource
     DataSet = ADOQueryMovimentacaoCarga
@@ -2415,22 +1921,6 @@ object FrmDataModule: TFrmDataModule
     Left = 900
     Top = 280
   end
-  object DataSourceImportarItemManutencao: TDataSource
-    DataSet = ADOQueryImportarItemManutencao
-    Left = 1100
-    Top = 620
-  end
-  object ADOQueryImportarItemManutencao: TADOQuery
-    Connection = ADOConnectionMemoria
-    CursorType = ctStatic
-    LockType = ltPessimistic
-    Parameters = <>
-    SQL.Strings = (
-      'SELECT tblItemManutencao.* '
-      'FROM tblItemManutencao'
-      'ORDER BY DescricaoItem;')
-    Left = 1110
-  end
   object ADOQueryContadorSolicitacao: TADOQuery
     Connection = ADOConnectionConsulta
     CursorType = ctStatic
@@ -2509,21 +1999,6 @@ object FrmDataModule: TFrmDataModule
     Left = 1150
     Top = 50
   end
-  object DataSourceImportarICPM: TDataSource
-    DataSet = ADOQueryImportarICPM
-    Left = 1300
-    Top = 610
-  end
-  object ADOQueryImportarICPM: TADOQuery
-    Connection = ADOConnectionMemoria
-    CursorType = ctStatic
-    LockType = ltPessimistic
-    Parameters = <>
-    SQL.Strings = (
-      'SELECT tblICPM.* '
-      'FROM tblICPM;')
-    Left = 1150
-  end
   object ADOQueryPalavraChave: TADOQuery
     Connection = ADOConnectionConsulta
     CursorType = ctStatic
@@ -2541,7 +2016,7 @@ object FrmDataModule: TFrmDataModule
     Top = 460
   end
   object ADOQueryAuxTabelaRT: TADOQuery
-    Connection = ADOConnectionColibri
+    Connection = ADOConnectionRT
     CursorType = ctStatic
     LockType = ltPessimistic
     Parameters = <
@@ -2557,16 +2032,16 @@ object FrmDataModule: TFrmDataModule
     SQL.Strings = (
       'SELECT  tblProgramacaoRT.* FROM  tblProgramacaoRT'
       'WHERE idPProgramacaoRT = 1;')
-    Left = 218
-    Top = 216
+    Left = 370
+    Top = 272
   end
   object DataSourceAuxTabelaRT: TDataSource
     DataSet = ADOQueryAuxTabelaRT
-    Left = 210
-    Top = 288
+    Left = 346
+    Top = 208
   end
   object ADOQueryCancelarRT: TADOQuery
-    Connection = ADOConnectionColibri
+    Connection = ADOConnectionRT
     CursorType = ctStatic
     LockType = ltPessimistic
     Parameters = <
@@ -2582,16 +2057,16 @@ object FrmDataModule: TFrmDataModule
     SQL.Strings = (
       'SELECT  tblProgramacaoRT.* FROM  tblProgramacaoRT'
       'WHERE idPProgramacaoRT = 1;')
-    Left = 266
-    Top = 216
+    Left = 762
+    Top = 168
   end
   object DataSourceCancelarRT: TDataSource
     DataSet = ADOQueryCancelarRT
-    Left = 258
-    Top = 288
+    Left = 762
+    Top = 240
   end
   object ADOQueryGestaoRT: TADOQuery
-    Connection = ADOConnectionColibri
+    Connection = ADOConnectionRT
     CursorType = ctStatic
     LockType = ltPessimistic
     Parameters = <>
@@ -2603,6 +2078,146 @@ object FrmDataModule: TFrmDataModule
   object DataSourceGestaoRT: TDataSource
     DataSet = ADOQueryGestaoRT
     Left = 306
+    Top = 288
+  end
+  object ADOConnectionRT: TADOConnection
+    ConnectionString = 
+      'Provider=Microsoft.Jet.OLEDB.4.0;User ID=Admin;Data Source=C:\De' +
+      'v\Projetos\Colibri\Banco de dados\dbRT.mdb;Mode=Share Deny None;' +
+      'Persist Security Info=False;Jet OLEDB:System database="";Jet OLE' +
+      'DB:Registry Path="";Jet OLEDB:Database Password="";Jet OLEDB:Eng' +
+      'ine Type=5;Jet OLEDB:Database Locking Mode=1;Jet OLEDB:Global Pa' +
+      'rtial Bulk Ops=2;Jet OLEDB:Global Bulk Transactions=1;Jet OLEDB:' +
+      'New Database Password="";Jet OLEDB:Create System Database=False;' +
+      'Jet OLEDB:Encrypt Database=False;Jet OLEDB:Don'#39't Copy Locale on ' +
+      'Compact=False;Jet OLEDB:Compact Without Replica Repair=False;Jet' +
+      ' OLEDB:SFP=False;'
+    KeepConnection = False
+    LoginPrompt = False
+    Provider = 'Microsoft.Jet.OLEDB.4.0'
+    Left = 306
+    Top = 364
+  end
+  object DataSourceTemporarioRT: TDataSource
+    DataSet = ADOQueryTemporarioRT
+    Left = 66
+    Top = 352
+  end
+  object ADOQueryTemporarioRT: TADOQuery
+    Connection = ADOConnectionRT
+    Parameters = <>
+    Left = 64
+    Top = 296
+  end
+  object ADOQueryConfigRT: TADOQuery
+    Connection = ADOConnectionRT
+    Parameters = <>
+    SQL.Strings = (
+      'SELECT tblConfigRT.*'
+      'FROM tblConfigRT;')
+    Left = 112
+    Top = 296
+  end
+  object DataSourceConfigRT: TDataSource
+    DataSet = ADOQueryConfigRT
+    Left = 114
+    Top = 352
+  end
+  object DataSourceSAPImport: TDataSource
+    DataSet = ADOQuerySAPImport
+    Left = 394
+    Top = 272
+  end
+  object ADOQuerySAPImport: TADOQuery
+    Connection = ADOConnectionRT
+    CursorType = ctStatic
+    LockType = ltPessimistic
+    Parameters = <>
+    SQL.Strings = (
+      'SELECT tblRTSapImport.* FROM tblRTSapImport;')
+    Left = 402
+    Top = 200
+  end
+  object ADOQueryRegrasRecolhimento: TADOQuery
+    Connection = ADOConnectionRT
+    CursorType = ctStatic
+    LockType = ltPessimistic
+    Parameters = <>
+    SQL.Strings = (
+      'SELECT tblRTRegraRecolhimento.*'
+      'FROM tblRTRegraRecolhimento;')
+    Left = 170
+    Top = 216
+  end
+  object DataSourceRegrasRecolhimento: TDataSource
+    DataSet = ADOQueryRegrasRecolhimento
+    Left = 162
+    Top = 288
+  end
+  object ADOQueryFrequenciaResumo: TADOQuery
+    Connection = ADOConnectionColibri
+    CursorType = ctStatic
+    LockType = ltPessimistic
+    Parameters = <>
+    SQL.Strings = (
+      'SELECT'
+      '    tblProgramacaoDiaria.DataProgramacao,'
+      '    tblProgramacaoDiaria.txtDestino,'
+      '    tblProgramacaoExecutante.CodigoSAP,'
+      '    tblProgramacaoExecutante.NomeExecutante,'
+      '    tblProgramacaoExecutante.Funcao,'
+      '    tblProgramacaoExecutante.Empresa,'
+      '    tblRoteamento.DataRoteamento,'
+      '    tblRoteamento.NomeRota,'
+      '    tblRoteamento.HoraRoteamento,'
+      '    tblRoteamento.NomeEmbarcacao,'
+      '    tblRoteamento.CapacidadePAX,'
+      '    tblProgramacaoExecutante.Origem'
+      'FROM'
+      '    ('
+      '        tblProgramacaoDiaria'
+      
+        '        INNER JOIN tblProgramacaoExecutante ON tblProgramacaoDia' +
+        'ria.idProgramacaoDiaria = tblProgramacaoExecutante.CodigoProgram' +
+        'acaoDiaria'
+      '    )'
+      '    INNER JOIN ('
+      '        tblRoteamento'
+      
+        '        INNER JOIN tblAux_Rota_Distribuicao ON tblRoteamento.idR' +
+        'oteamento = tblAux_Rota_Distribuicao.CodigoRota'
+      
+        '    ) ON tblProgramacaoExecutante.idProgramacaoExecutante = tblA' +
+        'ux_Rota_Distribuicao.CodigoProgramacaoExecutante;')
+    Left = 218
+    Top = 216
+  end
+  object DataSourceFrequenciaResumo: TDataSource
+    DataSet = ADOQueryFrequenciaResumo
+    Left = 210
+    Top = 288
+  end
+  object ADOQueryFrequenciaDetalhe: TADOQuery
+    Connection = ADOConnectionColibri
+    CursorType = ctStatic
+    LockType = ltPessimistic
+    Parameters = <
+      item
+        Name = 'pCodigoSAP'
+        Size = -1
+        Value = Null
+      end>
+    SQL.Strings = (
+      'SELECT *'
+      'FROM tblAux_FrequenciaEmbarqueDetalhe'
+      'WHERE CodigoSAP = :pCodigoSAP'
+      'ORDER BY DataAtual;')
+    Left = 258
+    Top = 216
+  end
+  object DataSourceFrequenciaDetalhe: TDataSource
+    DataSet = ADOQueryFrequenciaDetalhe
+    Left = 250
     Top = 288
   end
 end

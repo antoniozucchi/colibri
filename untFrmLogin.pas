@@ -3,159 +3,219 @@ unit untFrmLogin;
 interface
 
 uses
-  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
-  Dialogs, StdCtrls, Buttons, ActnList, PlatformDefaultStyleActnCtrls, ActnMan,
-  ExtCtrls, pngimage, System.Actions, Vcl.Imaging.jpeg;
-  {Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
-  Dialogs, StdCtrls, ExtCtrls, pngimage, Buttons, ActnList,
-  PlatformDefaultStyleActnCtrls, ActnMan, Mask;}
+  Winapi.Windows, Winapi.Messages,
+  System.SysUtils, System.Variants, System.Classes,
+  Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs,
+  Vcl.StdCtrls, Vcl.Buttons, Vcl.ActnList,
+  Vcl.PlatformDefaultStyleActnCtrls, Vcl.ActnMan,
+  Vcl.ExtCtrls, Vcl.Imaging.pngimage, System.Actions,
+  Vcl.Imaging.jpeg, System.UITypes;
 
 type
   TFrmLogin = class(TForm)
-    Panel1: TPanel;
-    BitBtnLogin: TBitBtn;
-    BitBtnCancel: TBitBtn;
-    edtUsuario: TEdit;
-    edtSenha: TEdit;
-    Label1: TLabel;
-    Label2: TLabel;
     ActionManager1: TActionManager;
     actLogin: TAction;
+    GridPanel1: TGridPanel;
+    Label1: TLabel;
+    edtUsuario: TEdit;
+    Label2: TLabel;
+    edtSenha: TEdit;
+    GridPanel2: TGridPanel;
+    BitBtnLogin: TBitBtn;
+    BitBtnCancel: TBitBtn;
     procedure FormCreate(Sender: TObject);
     procedure BitBtnCancelClick(Sender: TObject);
-    procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure actLoginExecute(Sender: TObject);
     procedure FormShow(Sender: TObject);
-    procedure FormDestroy(Sender: TObject);
   private
-    { Private declarations }
-    Function usuarioWindows: string;
-    procedure WMMDIACTIVATE(var msg: TWMMDIACTIVATE);message WM_MDIACTIVATE;
+    FContaErro: Integer;
+    function UsuarioWindows: string;
+    procedure SepararUsuarioEDominio(const ALogin: string; out AUsuario, ADominio: string);
+    procedure FinalizarAplicacao;
   public
-    { Public declarations }
-    fecha : boolean; //DECLARAÇÃO DA VARIÁVEL FECHA
+    Fecha: Boolean;
   end;
 
 var
   FrmLogin: TFrmLogin;
-  contaErro: Integer;
 
 implementation
-uses untPrincipal;
+
+uses
+  untPrincipal;
 
 {$R *.dfm}
 
-function ValidateUserLogonAPI(const UserName: string; const Domain: string;
-  const PassWord: string) : boolean;
+const
+  MAX_TENTATIVAS_LOGIN = 3;
+
+function ValidateUserLogonAPI(const UserName, Domain, Password: string): Boolean;
 var
-  Retvar: boolean;
   LHandle: THandle;
+  PDomain: PChar;
 begin
-  Retvar := LogonUser(PWideChar(UserName),
-                                PWideChar(Domain),
-                                PWideChar(PassWord),
-                                LOGON32_LOGON_NETWORK,
-                                LOGON32_PROVIDER_DEFAULT,
-                                LHandle);
+  LHandle := 0;
 
-  if Retvar then
+  if Trim(Domain) <> '' then
+    PDomain := PChar(Domain)
+  else
+    PDomain := nil;
+
+  Result := LogonUser(
+    PChar(UserName),
+    PDomain,
+    PChar(Password),
+    LOGON32_LOGON_NETWORK,
+    LOGON32_PROVIDER_DEFAULT,
+    LHandle
+  );
+
+  if Result and (LHandle <> 0) then
     CloseHandle(LHandle);
+end;
 
-  Result := Retvar;
+procedure TFrmLogin.SepararUsuarioEDominio(const ALogin: string; out AUsuario, ADominio: string);
+var
+  P: Integer;
+  S: string;
+begin
+  S := Trim(ALogin);
+  AUsuario := S;
+  ADominio := '';
+
+  // Formato: DOMINIO\usuario
+  P := Pos('\', S);
+  if P > 0 then
+  begin
+    ADominio := Copy(S, 1, P - 1);
+    AUsuario := Copy(S, P + 1, MaxInt);
+    Exit;
+  end;
+
+  // Formato UPN: usuario@dominio
+  if Pos('@', S) > 0 then
+  begin
+    AUsuario := S;
+    ADominio := '';
+    Exit;
+  end;
+
+  // Usa o domínio atual do Windows
+  ADominio := Trim(GetEnvironmentVariable('USERDOMAIN'));
+
+  // Fallback para máquina local
+  if ADominio = '' then
+    ADominio := '.';
+end;
+
+procedure TFrmLogin.FinalizarAplicacao;
+begin
+  Fecha := True;
+  Close;
+  Application.Terminate;
 end;
 
 procedure TFrmLogin.actLoginExecute(Sender: TObject);
 var
-  getUsuario, getDominio, getSenha: String;
+  LUsuario, LDominio, LSenha: string;
+  LTentativasRestantes: Integer;
 begin
-  try
-    getUsuario:= UpperCase(edtUsuario.Text);
-    getSenha:= edtSenha.Text;
+  LUsuario := Trim(edtUsuario.Text);
+  LSenha := edtSenha.Text;
 
-    if(contaErro<3) then
+  if LUsuario = '' then
+  begin
+    MessageDlg('Informe o usuário.', mtWarning, [mbOK], 0);
+    edtUsuario.SetFocus;
+    Exit;
+  end;
+
+  if LSenha = '' then
+  begin
+    MessageDlg('Informe a senha.', mtWarning, [mbOK], 0);
+    edtSenha.SetFocus;
+    Exit;
+  end;
+
+  SepararUsuarioEDominio(LUsuario, LUsuario, LDominio);
+
+  try
+    if ValidateUserLogonAPI(LUsuario, LDominio, LSenha) then
     begin
-      if ValidateUserLogonAPI(getUsuario,getDominio,getSenha)=true then
-      begin
-          Fecha := True;
-          FrmLogin.Close;
-          FrmPrincipal.Show;
-          FrmPrincipal.carregarLoginUsuario(edtUsuario.Text);
-      end
-      else
-      begin
-        MessageBox(FrmLogin.Handle,'Senha ou nome de usuário invalidos!',
-        'Login',MB_ICONERROR);
-        contaErro:=contaErro+1;
-      end;
-    end
-    else
-    begin
-      MessageBox(FrmLogin.Handle,'Você excedeu o limite máximo de tentativas de acesso',
-      'Login',MB_ICONERROR);
       Fecha := True;
-      FrmPrincipal.Close;//Isso vai terminar o programa
+      FrmPrincipal.carregarLoginUsuario(Trim(edtUsuario.Text));
+      FrmPrincipal.Show;
+      Close;
+      Exit;
     end;
+
+    Inc(FContaErro);
+
+    if FContaErro >= MAX_TENTATIVAS_LOGIN then
+    begin
+      MessageDlg(
+        'Você excedeu o limite máximo de tentativas de acesso.',
+        mtError, [mbOK], 0
+      );
+      FinalizarAplicacao;
+      Exit;
+    end;
+
+    LTentativasRestantes := MAX_TENTATIVAS_LOGIN - FContaErro;
+
+    MessageDlg(
+      Format('Usuário ou senha inválidos.%sTentativas restantes: %d',
+        [sLineBreak, LTentativasRestantes]),
+      mtError, [mbOK], 0
+    );
+
+    edtSenha.Clear;
+    edtSenha.SetFocus;
+
   except
-    Application.Terminate;
+    on E: Exception do
+    begin
+      MessageDlg(
+        'Erro ao validar login:' + sLineBreak + E.Message,
+        mtError, [mbOK], 0
+      );
+      edtSenha.Clear;
+      edtSenha.SetFocus;
+    end;
   end;
 end;
 
 procedure TFrmLogin.BitBtnCancelClick(Sender: TObject);
 begin
-  Fecha := True;
-  FrmLogin.Close;//Isso vai terminar o programa
-end;
-
-procedure TFrmLogin.FormClose(Sender: TObject; var Action: TCloseAction);
-begin
-  Action:= caFree;
-  FrmLogin:=nil;
+  FinalizarAplicacao;
 end;
 
 procedure TFrmLogin.FormCreate(Sender: TObject);
 begin
-  //======ADICIONAR TABSET DO FOMRMDI=======
-  FrmPrincipal.MDIChildCreated(self.Handle);
-
-  Fecha := false;
-  contaErro := 0;
-  edtUsuario.Text:= usuarioWindows;
-end;
-
-procedure TFrmLogin.FormDestroy(Sender: TObject);
-begin
-  FrmPrincipal.MDIChildDestroyed(self.Handle);
+  Fecha := False;
+  FContaErro := 0;
+  edtUsuario.Text := UsuarioWindows;
+  edtSenha.PasswordChar := '*';
 end;
 
 procedure TFrmLogin.FormShow(Sender: TObject);
 begin
-  edtSenha.SetFocus;
+  if Trim(edtUsuario.Text) = '' then
+    edtUsuario.SetFocus
+  else
+    edtSenha.SetFocus;
 end;
 
-function TFrmLogin.usuarioWindows: string;
-Var
-  NetUserNameLength: DWord;
-Begin
-  NetUserNameLength:=50;
-  SetLength(Result, NetUserNameLength);
-  GetUserName(pChar(Result),NetUserNameLength);
-  SetLength(Result, StrLen(pChar(Result)));
-End;
-
-procedure TFrmLogin.WMMDIACTIVATE(var msg: TWMMDIACTIVATE);
+function TFrmLogin.UsuarioWindows: string;
 var
-  active: TWinControl;
-  idx: Integer;
+  Buffer: array[0..255] of Char;
+  BufferSize: DWORD;
 begin
-  active := FindControl(msg.ActiveWnd) ;
-
-  if Assigned(active) then
-  begin
-    idx := FrmPrincipal.mdiChildrenTabs.Tabs.IndexOfObject(TObject(msg.ActiveWnd));
-    FrmPrincipal.mdiChildrenTabs.Tag := -1;
-    FrmPrincipal.mdiChildrenTabs.TabIndex := idx;
-    FrmPrincipal.mdiChildrenTabs.Tag := 0;
-  end;
+  BufferSize := Length(Buffer);
+  if GetUserName(Buffer, BufferSize) then
+    Result := Trim(Buffer)
+  else
+    Result := '';
 end;
 
 end.

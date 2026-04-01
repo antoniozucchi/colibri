@@ -7,7 +7,8 @@ uses
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ToolWin, Vcl.ComCtrls, Vcl.ExtCtrls,
   Vcl.Grids, Vcl.Buttons, Data.DB, Vcl.DBGrids,DateUtils, System.Actions,
   Vcl.ActnList, Vcl.PlatformDefaultStyleActnCtrls, Vcl.ActnMan, Vcl.StdCtrls,
-  Vcl.DBCtrls, Vcl.Mask, Vcl.CheckLst, SDL_matrix, Vcl.Menus, DBDateTimePicker;
+  Vcl.DBCtrls, Vcl.Mask, Vcl.CheckLst, SDL_matrix, Vcl.Menus, DBDateTimePicker,
+  untDBGridFilter, uZucchi;
 
 type
   TFrmCondicaoEmbarcacao = class(TForm)
@@ -16,15 +17,7 @@ type
     TabSheet2: TTabSheet;
     Panel7: TPanel;
     ActionManager1: TActionManager;
-    actFiltroInserir: TAction;
-    actGridASC: TAction;
-    actGridDESC: TAction;
-    actSubstituirPor: TAction;
-    actLimparFiltros: TAction;
-    actFiltrosTabela: TAction;
-    actProcuraFiltrosTabela: TAction;
     actProcurarMar: TAction;
-    actExcelCondicaoMar: TAction;
     PanelMes: TPanel;
     PanelCalendario: TPanel;
     PanelNomeMesMar: TPanel;
@@ -32,8 +25,7 @@ type
     CalendarMar: TStringGrid;
     PanelTabelaCondicaoMar: TPanel;
     ToolBar1: TToolBar;
-    BitBtn4: TBitBtn;
-    DBGridCondicaoMar: TDBGrid;
+    DBGridCondicaoMar: TFilterDBGrid;
     ColunasLayoutMar: TStringGrid;
     StatusBarCondicaoMar: TStatusBar;
     PanelAno: TPanel;
@@ -56,8 +48,7 @@ type
     CalendarioEmbarcacao: TStringGrid;
     Panel4: TPanel;
     ToolBar3: TToolBar;
-    BitBtn2: TBitBtn;
-    DBGridCondicaoEmbarcacao: TDBGrid;
+    DBGridCondicaoEmbarcacao: TFilterDBGrid;
     ColunasLayoutEmbarcacao: TStringGrid;
     StatusBarCondicaoEmbarcacao: TStatusBar;
     Panel5: TPanel;
@@ -65,8 +56,6 @@ type
     BitBtn3: TBitBtn;
     RLEmbarcacao: TStringGrid;
     actProcurarEmbarcacao: TAction;
-    BitBtn5: TBitBtn;
-    BitBtn6: TBitBtn;
     actExcelCalendarioEmbarcacao: TAction;
     PanelAjuda: TPanel;
     PanelTituloAjuda1: TPanel;
@@ -95,7 +84,6 @@ type
     BitBtn7: TBitBtn;
     BitBtn8: TBitBtn;
     actDadosMar: TAction;
-    BitBtn10: TBitBtn;
     actSelLimparMar: TAction;
     actSelTudoMar: TAction;
     Panel15: TPanel;
@@ -116,7 +104,6 @@ type
     actSalvarListaEmbarcacao: TAction;
     actDadosEmbarcacao: TAction;
     actAtualizarEmbarcacao: TAction;
-    BitBtn11: TBitBtn;
     BitBtn9: TBitBtn;
     RLGeral: TStringGrid;
     RLPrevisto: TStringGrid;
@@ -125,26 +112,21 @@ type
     PopupMenuGeral: TPopupMenu;
     GRF1: TMenuItem;
     GRF2: TMenuItem;
-    actExcelIndisponibilidadeEmbarcacaco: TAction;
+    btnClearFiltro: TToolButton;
+    btnLayout: TToolButton;
+    btnClearFiltroEmbarcacao: TToolButton;
+    btnExcelEmbarcacao: TToolButton;
+    btnExcelMar: TToolButton;
     procedure FormCreate(Sender: TObject);
     procedure btnMesAnteriorClick(Sender: TObject);
     procedure CalendarMarDrawCell(Sender: TObject; ACol, ARow: Integer;
       Rect: TRect; State: TGridDrawState);
-    procedure actFiltroInserirExecute(Sender: TObject);
-    procedure actGridASCExecute(Sender: TObject);
-    procedure actGridDESCExecute(Sender: TObject);
-    procedure actSubstituirPorExecute(Sender: TObject);
-    procedure actLimparFiltrosExecute(Sender: TObject);
-    procedure actFiltrosTabelaExecute(Sender: TObject);
-    procedure actProcuraFiltrosTabelaExecute(Sender: TObject);
     procedure actProcurarMarExecute(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure FormDestroy(Sender: TObject);
     procedure DBGridCondicaoMarDrawColumnCell(Sender: TObject;
       const Rect: TRect; DataCol: Integer; Column: TColumn;
       State: TGridDrawState);
-    procedure DBGridCondicaoMarTitleClick(Column: TColumn);
-    procedure actExcelCondicaoMarExecute(Sender: TObject);
     procedure CalendarMarDblClick(Sender: TObject);
     procedure CalendarMarSelectCell(Sender: TObject; ACol, ARow: Integer;
       var CanSelect: Boolean);
@@ -159,7 +141,6 @@ type
     procedure DBGridCondicaoEmbarcacaoDrawColumnCell(Sender: TObject;
       const Rect: TRect; DataCol: Integer; Column: TColumn;
       State: TGridDrawState);
-    procedure DBGridCondicaoEmbarcacaoTitleClick(Column: TColumn);
     procedure CalendarioEmbarcacaoDrawCell(Sender: TObject; ACol, ARow: Integer;
       Rect: TRect; State: TGridDrawState);
     procedure RLEmbarcacaoDrawCell(Sender: TObject; ACol, ARow: Integer;
@@ -194,11 +175,10 @@ type
     procedure GRF2Click(Sender: TObject);
     procedure RLGeralDrawCell(Sender: TObject; ACol, ARow: Integer; Rect: TRect;
       State: TGridDrawState);
-    procedure actExcelIndisponibilidadeEmbarcacacoExecute(Sender: TObject);
   private
     { Private declarations }
     PrimeiroDiaMes: TDateTime;
-    AColSelect,ARowSelect,TabelaIndex: Integer;
+    AColSelect,ARowSelect: Integer;
     procedure WMMDIACTIVATE(var msg: TWMMDIACTIVATE);message WM_MDIACTIVATE;
   public
     { Public declarations }
@@ -372,59 +352,18 @@ procedure TFrmCondicaoEmbarcacao.actExcelCalendarioEmbarcacaoExecute(
   Sender: TObject);
 begin
   if GRF1.Checked then
-    FrmPrincipal.ExcelStringGrid(RLEmbarcacao,'Embarcação Anual','','',1)
+    ExcelStringGrid(RLEmbarcacao,'Embarcação Anual','','','',false,
+    FrmPrincipal.ProgressBarPrincipal,FrmPrincipal.MemoPrincipal)
   else
-    FrmPrincipal.ExcelStringGrid(RLGeral,'Sobreposição','','',1)
+    ExcelStringGrid(RLGeral,'Sobreposição','','','',false,
+    FrmPrincipal.ProgressBarPrincipal,FrmPrincipal.MemoPrincipal);
 end;
 
 procedure TFrmCondicaoEmbarcacao.actExcelCalendarioMarExecute(Sender: TObject);
 begin
-  FrmPrincipal.ExcelStringGrid(RLMar,'Condição de Mar Anual',
-  '','',1);
-end;
-
-procedure TFrmCondicaoEmbarcacao.actExcelCondicaoMarExecute(Sender: TObject);
-begin
-  FrmPrincipal.GerarExcel(DBGridCondicaoMar,'Condição de Mar');
-end;
-
-procedure TFrmCondicaoEmbarcacao.actExcelIndisponibilidadeEmbarcacacoExecute(
-  Sender: TObject);
-begin
-  FrmPrincipal.GerarExcel(DBGridCondicaoEmbarcacao,'Indisponibilidade');
-end;
-
-procedure TFrmCondicaoEmbarcacao.actFiltroInserirExecute(Sender: TObject);
-begin
-  case TabelaIndex of
-    0:
-    begin
-      FrmPrincipal.inserirProcura(DBGridCondicaoMar,ColunasLayoutMar);
-      actProcurarMar.Execute;
-    end;
-    1:
-    begin
-      FrmPrincipal.inserirProcura(DBGridCondicaoEmbarcacao,ColunasLayoutEmbarcacao);
-      actProcurarEmbarcacao.Execute;
-    end;
-  end;
-  if (FrmPrincipal.PanelFiltrosTabela.Visible)AND(FrmPrincipal.PanelAjuda1.Visible) then
-    actFiltrosTabela.Execute;
-end;
-
-procedure TFrmCondicaoEmbarcacao.actFiltrosTabelaExecute(Sender: TObject);
-begin
-  FrmPrincipal.btnProcurarFiltrosTabela.Action:= actProcuraFiltrosTabela;
-  case TabelaIndex of
-    0:
-    begin
-      FrmPrincipal.FiltrosTabela(DBGridCondicaoMar,ColunasLayoutMar);
-    end;
-    1:
-    begin
-      FrmPrincipal.FiltrosTabela(DBGridCondicaoEmbarcacao,ColunasLayoutEmbarcacao);
-    end;
-  end;
+  ExcelStringGrid(RLMar,'Condição de Mar Anual',
+  '','','',false,
+    FrmPrincipal.ProgressBarPrincipal,FrmPrincipal.MemoPrincipal);
 end;
 
 procedure TFrmCondicaoEmbarcacao.actGraficoGeralExecute(Sender: TObject);
@@ -496,7 +435,7 @@ begin
     RLGeral.Cells[34,mes]:= FormatFloat('0.0%',100-(TotalDias*100)/DiasMes);
     FrmPrincipal.ProgressBarIncremento(1);
   end;
-  FrmPrincipal.AutoFitGrade(RLGeral);
+  AutoFitGrade(RLGeral);
   FrmPrincipal.ProgressBarAtualizar;
 end;
 
@@ -512,26 +451,6 @@ begin
   else
      MessageBox(0,'Os campos  "N° Previsto:" e  "N° Indisponivel:" são obrigatórios!',
      '.::ATENÇÃO::.',MB_ICONERROR);
-end;
-
-procedure TFrmCondicaoEmbarcacao.actGridASCExecute(Sender: TObject);
-begin
-  case TabelaIndex of
-    0: FrmPrincipal.ClassificaDBGrid(DBGridCondicaoMar,
-    FrmDataModule.ADOQueryCondicaoMar,0);
-    1: FrmPrincipal.ClassificaDBGrid(DBGridCondicaoEmbarcacao,
-    FrmDataModule.ADOQueryCondicaoEmbarcacao,0);
-  end;
-end;
-
-procedure TFrmCondicaoEmbarcacao.actGridDESCExecute(Sender: TObject);
-begin
-  case TabelaIndex of
-    0: FrmPrincipal.ClassificaDBGrid(DBGridCondicaoMar,
-    FrmDataModule.ADOQueryCondicaoMar,1);
-    1: FrmPrincipal.ClassificaDBGrid(DBGridCondicaoEmbarcacao,
-    FrmDataModule.ADOQueryCondicaoEmbarcacao,1);
-  end;
 end;
 
 procedure TFrmCondicaoEmbarcacao.actSalvarListaEmbarcacaoExecute(
@@ -611,41 +530,6 @@ begin
   PanelEmbarcacaoIndisponivel.Visible:= false;
 end;
 
-procedure TFrmCondicaoEmbarcacao.actLimparFiltrosExecute(Sender: TObject);
-begin
-  case TabelaIndex of
-    0:
-    begin
-      FrmPrincipal.LimparColunasFiltro(DBGridCondicaoMar,ColunasLayoutMar);
-      actProcurarMar.Execute;
-    end;
-    1:
-    begin
-      FrmPrincipal.LimparColunasFiltro(DBGridCondicaoEmbarcacao,ColunasLayoutEmbarcacao);
-      actProcurarEmbarcacao.Execute;
-    end;
-  end;
-  if (FrmPrincipal.PanelFiltrosTabela.Visible)AND(FrmPrincipal.PanelAjuda1.Visible) then
-  actFiltrosTabela.Execute;
-end;
-
-procedure TFrmCondicaoEmbarcacao.actProcuraFiltrosTabelaExecute(
-  Sender: TObject);
-begin
-  case TabelaIndex of
-    0:
-    begin
-      FrmPrincipal.CarregaFiltrosProcura(ColunasLayoutMar);
-      actProcurarMar.Execute;
-    end;
-    1:
-    begin
-      FrmPrincipal.CarregaFiltrosProcura(ColunasLayoutEmbarcacao);
-      actProcurarEmbarcacao.Execute;
-    end;
-  end;
-end;
-
 procedure TFrmCondicaoEmbarcacao.actProcurarEmbarcacaoExecute(Sender: TObject);
   var
     SQLString,SQLBase: String;
@@ -716,16 +600,6 @@ begin
   actProcurarMar.Execute;
 end;
 
-procedure TFrmCondicaoEmbarcacao.actSubstituirPorExecute(Sender: TObject);
-begin
-  case TabelaIndex of
-    0: FrmPrincipal.SubstituirPor(DBGridCondicaoMar,FrmDataModule.ADOQueryCondicaoMar,
-    FrmDataModule.DataSourceCondicaoMar);
-    1: FrmPrincipal.SubstituirPor(DBGridCondicaoEmbarcacao,FrmDataModule.ADOQueryCondicaoEmbarcacao,
-    FrmDataModule.DataSourceCondicaoEmbarcacao);
-  end;
-end;
-
 procedure TFrmCondicaoEmbarcacao.GRF2Click(Sender: TObject);
 begin
   actGraficoGeral.Execute;
@@ -738,11 +612,10 @@ procedure TFrmCondicaoEmbarcacao.CalendarioEmbarcacaoDblClick(Sender: TObject);
     i: Integer;
     booleanExiste: Boolean;
 begin
-  if ((FrmPrincipal.logPerfil = 'Administrador')OR
-  (FrmPrincipal.logPerfil = 'PIOP')OR
-  (FrmPrincipal.logPerfil = 'Programação')OR
-  (FrmPrincipal.logPerfil = 'Supervisor')OR
-  (FrmPrincipal.logPerfil = 'SEG-PIOP')) then
+  if ((FrmPrincipal.logPerfil = FrmPrincipal.PERFILADM) OR
+  (FrmPrincipal.logPerfil = FrmPrincipal.PERFILPROGRAMACAO) OR
+  (FrmPrincipal.logPerfil = FrmPrincipal.PERFILSUPERVISAO) OR
+  (FrmPrincipal.logPerfil = FrmPrincipal.PERFILRT)) then
   begin
     ProcurarData:= CalendarioEmbarcacao.Cells[AColSelect,ARowSelect];
     DataCondicaoEmbarcacao:= StrToDate(ProcurarData);
@@ -900,11 +773,10 @@ procedure TFrmCondicaoEmbarcacao.CalendarMarDblClick(Sender: TObject);
     i: Integer;
     booleanExiste: Boolean;
 begin
-  if ((FrmPrincipal.logPerfil = 'Administrador')OR
-  (FrmPrincipal.logPerfil = 'PIOP')OR
-  (FrmPrincipal.logPerfil = 'Programação')OR
-  (FrmPrincipal.logPerfil = 'Supervisor')OR
-  (FrmPrincipal.logPerfil = 'SEG-PIOP')) then
+  if ((FrmPrincipal.logPerfil = FrmPrincipal.PERFILADM) OR
+  (FrmPrincipal.logPerfil = FrmPrincipal.PERFILPROGRAMACAO) OR
+  (FrmPrincipal.logPerfil = FrmPrincipal.PERFILSUPERVISAO) OR
+  (FrmPrincipal.logPerfil = FrmPrincipal.PERFILRT)) then
   begin
     ProcurarData:= CalendarMar.Cells[AColSelect,ARowSelect];
     DataCondicaoMar:= StrToDate(ProcurarData);
@@ -1100,32 +972,11 @@ begin
   ColunasLayoutEmbarcacao,State,Rect,DataCol,Column);
 end;
 
-procedure TFrmCondicaoEmbarcacao.DBGridCondicaoEmbarcacaoTitleClick(
-  Column: TColumn);
-begin
-  TabelaIndex:= 1;
-  FrmPrincipal.configurarFiltro(1,Column.FieldName,IntToStr(Column.Index),
-  Column.ReadOnly,actFiltroInserir,actGridASC,actGridDESC,actSubstituirPor);
-  //======================================================
-  FrmPrincipal.titleGrid(ColunasLayoutEmbarcacao,'Consulta',
-  FrmDataModule.ADOQueryCondicaoEmbarcacao.SQL.Text);
-end;
-
 procedure TFrmCondicaoEmbarcacao.DBGridCondicaoMarDrawColumnCell(
   Sender: TObject; const Rect: TRect; DataCol: Integer; Column: TColumn;
   State: TGridDrawState);
 begin
   FrmPrincipal.GridZebrado(DBGridCondicaoMar,ColunasLayoutMar,State,Rect,DataCol,Column);
-end;
-
-procedure TFrmCondicaoEmbarcacao.DBGridCondicaoMarTitleClick(Column: TColumn);
-begin
-  TabelaIndex:= 0;
-  FrmPrincipal.configurarFiltro(1,Column.FieldName,IntToStr(Column.Index),
-  Column.ReadOnly,actFiltroInserir,actGridASC,actGridDESC,actSubstituirPor);
-  //======================================================
-  FrmPrincipal.titleGrid(ColunasLayoutMar,'Consulta',
-  FrmDataModule.ADOQueryCondicaoMar.SQL.Text);
 end;
 
 procedure TFrmCondicaoEmbarcacao.GRF1Click(
@@ -1145,11 +996,10 @@ procedure TFrmCondicaoEmbarcacao.FormCreate(Sender: TObject);
   var
     i: Integer;
 begin
-  if ((FrmPrincipal.logPerfil = 'Administrador')OR
-  (FrmPrincipal.logPerfil = 'PIOP')OR
-  (FrmPrincipal.logPerfil = 'Programação')OR
-  (FrmPrincipal.logPerfil = 'Supervisor')OR
-  (FrmPrincipal.logPerfil = 'SEG-PIOP')) then
+  if ((FrmPrincipal.logPerfil = FrmPrincipal.PERFILADM) OR
+  (FrmPrincipal.logPerfil = FrmPrincipal.PERFILPROGRAMACAO) OR
+  (FrmPrincipal.logPerfil = FrmPrincipal.PERFILSUPERVISAO) OR
+  (FrmPrincipal.logPerfil = FrmPrincipal.PERFILRT)) then
   begin
     DBGridCondicaoEmbarcacao.ReadOnly:= false;
   end
@@ -1195,8 +1045,8 @@ begin
   FrmPrincipal.DesenharCalendario(CalendarMar,PanelNomeMesMar,PrimeiroDiaMes);
   FrmPrincipal.DesenharCalendario(CalendarioEmbarcacao,PanelNomeMesEmbarcacao,PrimeiroDiaMes);
   //Incicialização
-  FrmPrincipal.SetUpColunasLayout(DBGridCondicaoMar, ColunasLayoutMar);
-  FrmPrincipal.SetUpColunasLayout(DBGridCondicaoEmbarcacao, ColunasLayoutEmbarcacao);
+  FrmDataModule.setFilterDBGrid(DBGridCondicaoMar);
+  FrmDataModule.setFilterDBGrid(DBGridCondicaoEmbarcacao);
   actProcurarMar.Execute;
   actDadosMar.Execute;
 end;

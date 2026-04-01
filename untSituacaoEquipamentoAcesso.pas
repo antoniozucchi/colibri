@@ -7,33 +7,25 @@ uses
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Data.DB, Vcl.Grids, Vcl.DBGrids,
   Vcl.ExtCtrls, Vcl.DBCtrls, Vcl.ToolWin, Vcl.ComCtrls, Vcl.StdCtrls, Vcl.Mask,
   System.Actions, Vcl.ActnList, Vcl.PlatformDefaultStyleActnCtrls, Vcl.ActnMan,
-  Vcl.Buttons;
+  Vcl.Buttons, untDBGridFilter;
 
 type
   TFrmSituacaoEquipamentoAcesso = class(TForm)
     ToolBar1: TToolBar;
     PanelTitulo: TPanel;
-    DBGridSituacaoEquipamentoAcesso: TDBGrid;
+    DBGridSituacaoEquipamentoAcesso: TFilterDBGrid;
     ActionManager1: TActionManager;
     actProcurar: TAction;
     StatusBar1: TStatusBar;
-    BitBtn4: TBitBtn;
-    actExcel: TAction;
     ColunasLayout: TStringGrid;
-    actFiltroInserir: TAction;
-    actGridASC: TAction;
-    actGridDESC: TAction;
-    actSubstituirPor: TAction;
-    actLimparFiltros: TAction;
-    actFiltrosTabela: TAction;
-    actProcuraFiltrosTabela: TAction;
-    BitBtn1: TBitBtn;
-    BitBtn2: TBitBtn;
     Splitter1: TSplitter;
     Panel2: TPanel;
     PanelTituloNotas: TPanel;
     DBMemo1: TDBMemo;
     DBNavigator: TDBNavigator;
+    btnClearFiltro: TToolButton;
+    btnLayout: TToolButton;
+    btnExcel: TToolButton;
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
@@ -41,18 +33,12 @@ type
       DataCol: Integer; Column: TColumn; State: TGridDrawState);
     procedure DBGridSituacaoEquipamentoAcessoKeyPress(Sender: TObject; var Key: Char);
     procedure actProcurarExecute(Sender: TObject);
-    procedure actExcelExecute(Sender: TObject);
-    procedure actFiltroInserirExecute(Sender: TObject);
-    procedure actGridASCExecute(Sender: TObject);
-    procedure actGridDESCExecute(Sender: TObject);
-    procedure actSubstituirPorExecute(Sender: TObject);
-    procedure actLimparFiltrosExecute(Sender: TObject);
-    procedure actFiltrosTabelaExecute(Sender: TObject);
-    procedure actProcuraFiltrosTabelaExecute(Sender: TObject);
-    procedure DBGridSituacaoEquipamentoAcessoTitleClick(Column: TColumn);
   private
     { Private declarations }
     procedure WMMDIACTIVATE(var msg: TWMMDIACTIVATE);message WM_MDIACTIVATE;
+    procedure DrawCollumCellDBGrid(Tabela: TFilterDBGrid;
+      Const Rect: TRect; DataCol: Integer;
+      Column: TColumn; State: TGridDrawState; FieldName: String);
   public
     { Public declarations }
   end;
@@ -63,49 +49,6 @@ var
 implementation
   uses untDataModule,untPrincipal;
 {$R *.dfm}
-
-procedure TFrmSituacaoEquipamentoAcesso.actExcelExecute(Sender: TObject);
-begin
-  FrmPrincipal.GerarExcel(DBGridSituacaoEquipamentoAcesso,'Situação Equipamentos Acessos');
-end;
-
-procedure TFrmSituacaoEquipamentoAcesso.actFiltroInserirExecute(Sender: TObject);
-begin
-  FrmPrincipal.inserirProcura(DBGridSituacaoEquipamentoAcesso,ColunasLayout);
-  actProcurar.Execute;
-  if (FrmPrincipal.PanelFiltrosTabela.Visible)AND(FrmPrincipal.PanelAjuda1.Visible) then
-    actFiltrosTabela.Execute;
-end;
-
-procedure TFrmSituacaoEquipamentoAcesso.actFiltrosTabelaExecute(Sender: TObject);
-begin
-  FrmPrincipal.btnProcurarFiltrosTabela.Action:= actProcuraFiltrosTabela;
-  FrmPrincipal.FiltrosTabela(DBGridSituacaoEquipamentoAcesso,ColunasLayout);
-end;
-
-procedure TFrmSituacaoEquipamentoAcesso.actGridASCExecute(Sender: TObject);
-begin
-  FrmPrincipal.ClassificaDBGrid(DBGridSituacaoEquipamentoAcesso,FrmDataModule.ADOQueryPlataformaControle,0);
-end;
-
-procedure TFrmSituacaoEquipamentoAcesso.actGridDESCExecute(Sender: TObject);
-begin
-  FrmPrincipal.ClassificaDBGrid(DBGridSituacaoEquipamentoAcesso,FrmDataModule.ADOQueryPlataformaControle,1);
-end;
-
-procedure TFrmSituacaoEquipamentoAcesso.actLimparFiltrosExecute(Sender: TObject);
-begin
-  FrmPrincipal.LimparColunasFiltro(DBGridSituacaoEquipamentoAcesso,ColunasLayout);
-  actProcurar.Execute;
-  if (FrmPrincipal.PanelFiltrosTabela.Visible)AND(FrmPrincipal.PanelAjuda1.Visible) then
-    actFiltrosTabela.Execute;
-end;
-
-procedure TFrmSituacaoEquipamentoAcesso.actProcuraFiltrosTabelaExecute(Sender: TObject);
-begin
-  frmPrincipal.CarregaFiltrosProcura(ColunasLayout);
-  actProcurar.Execute;
-end;
 
 procedure TFrmSituacaoEquipamentoAcesso.actProcurarExecute(Sender: TObject);
   var
@@ -121,273 +64,58 @@ begin
   FrmPrincipal.ProcuraQuery(SQLBase,FrmDataModule.ADOQueryPlataformaControle,StatusBar1);
 end;
 
-procedure TFrmSituacaoEquipamentoAcesso.actSubstituirPorExecute(Sender: TObject);
+procedure TFrmSituacaoEquipamentoAcesso.DrawCollumCellDBGrid(Tabela: TFilterDBGrid;
+  const Rect: TRect; DataCol: Integer; Column: TColumn; State: TGridDrawState;
+  FieldName: String);
 begin
-  FrmPrincipal.SubstituirPor(DBGridSituacaoEquipamentoAcesso,FrmDataModule.ADOQueryPlataformaControle,
-  FrmDataModule.DataSourcePlataformaControle);
+  if (Column.Field.FieldName = FieldName) then
+  begin
+    if Tabela.DataSource.DataSet.
+    FieldByName(FieldName).AsString = 'OK' then
+    begin
+      Tabela.Canvas.Brush.Color:= clLime;
+      Tabela.Font.Color:= clBlack;
+      Tabela.Canvas.FillRect(Rect);
+      Tabela.DefaultDrawColumnCell(Rect, DataCol,Column, State);
+    end
+    else if Tabela.DataSource.DataSet.
+    FieldByName(FieldName).AsString = 'FO' then
+    begin
+      Tabela.Canvas.Brush.Color:= clRed;
+      Tabela.Font.Color:= clBlack;
+      Tabela.Canvas.FillRect(Rect);
+      Tabela.DefaultDrawColumnCell(Rect, DataCol,Column, State);
+    end
+    else if Tabela.DataSource.DataSet.
+    FieldByName(FieldName).AsString = 'RO' then
+    begin
+      Tabela.Canvas.Brush.Color:= clYellow;
+      Tabela.Font.Color:= clBlack;
+      Tabela.Canvas.FillRect(Rect);
+      Tabela.DefaultDrawColumnCell(Rect, DataCol,Column, State);
+    end
+    else if Tabela.DataSource.DataSet.
+    FieldByName(FieldName).AsString = 'N/A' then
+    begin
+      Tabela.Canvas.Brush.Color:= clSilver;
+      Tabela.Font.Color:= clBlack;
+      Tabela.Canvas.FillRect(Rect);
+      Tabela.DefaultDrawColumnCell(Rect, DataCol,Column, State);
+    end
+  end
 end;
 
 procedure TFrmSituacaoEquipamentoAcesso.DBGridSituacaoEquipamentoAcessoDrawColumnCell(Sender: TObject;
   const Rect: TRect; DataCol: Integer; Column: TColumn; State: TGridDrawState);
 begin
-  FrmPrincipal.GridZebrado(DBGridSituacaoEquipamentoAcesso,ColunasLayout,State,Rect,DataCol,Column);
-  if (Column.Field.FieldName = 'SituacaoGD') then
-  begin
-    if FrmDataModule.DataSourcePlataformaControle.DataSet.
-    FieldByName('SituacaoGD').AsString = 'OK' then
-    begin
-      DBGridSituacaoEquipamentoAcesso.Canvas.Brush.Color:= clLime;
-      DBGridSituacaoEquipamentoAcesso.Font.Color:= clBlack;
-      DBGridSituacaoEquipamentoAcesso.Canvas.FillRect(Rect);
-      DBGridSituacaoEquipamentoAcesso.DefaultDrawColumnCell(Rect, DataCol,Column, State);
-    end
-    else if FrmDataModule.DataSourcePlataformaControle.DataSet.
-    FieldByName('SituacaoGD').AsString = 'FO' then
-    begin
-      DBGridSituacaoEquipamentoAcesso.Canvas.Brush.Color:= clRed;
-      DBGridSituacaoEquipamentoAcesso.Font.Color:= clBlack;
-      DBGridSituacaoEquipamentoAcesso.Canvas.FillRect(Rect);
-      DBGridSituacaoEquipamentoAcesso.DefaultDrawColumnCell(Rect, DataCol,Column, State);
-    end
-    else if FrmDataModule.DataSourcePlataformaControle.DataSet.
-    FieldByName('SituacaoGD').AsString = 'RO' then
-    begin
-      DBGridSituacaoEquipamentoAcesso.Canvas.Brush.Color:= clYellow;
-      DBGridSituacaoEquipamentoAcesso.Font.Color:= clBlack;
-      DBGridSituacaoEquipamentoAcesso.Canvas.FillRect(Rect);
-      DBGridSituacaoEquipamentoAcesso.DefaultDrawColumnCell(Rect, DataCol,Column, State);
-    end
-    else if FrmDataModule.DataSourcePlataformaControle.DataSet.
-    FieldByName('SituacaoGD').AsString = 'N/A' then
-    begin
-      DBGridSituacaoEquipamentoAcesso.Canvas.Brush.Color:= clSilver;
-      DBGridSituacaoEquipamentoAcesso.Font.Color:= clBlack;
-      DBGridSituacaoEquipamentoAcesso.Canvas.FillRect(Rect);
-      DBGridSituacaoEquipamentoAcesso.DefaultDrawColumnCell(Rect, DataCol,Column, State);
-    end
-  end
-  //===========================================================================
-  //===========================================================================
-  else if (Column.Field.FieldName = 'SituacaoBCI') then
-  begin
-    if FrmDataModule.DataSourcePlataformaControle.DataSet.
-    FieldByName('SituacaoBCI').AsString = 'OK' then
-    begin
-      DBGridSituacaoEquipamentoAcesso.Canvas.Brush.Color:= clLime;
-      DBGridSituacaoEquipamentoAcesso.Font.Color:= clBlack;
-      DBGridSituacaoEquipamentoAcesso.Canvas.FillRect(Rect);
-      DBGridSituacaoEquipamentoAcesso.DefaultDrawColumnCell(Rect, DataCol,Column, State);
-    end
-    else if FrmDataModule.DataSourcePlataformaControle.DataSet.
-    FieldByName('SituacaoBCI').AsString = 'FO' then
-    begin
-      DBGridSituacaoEquipamentoAcesso.Canvas.Brush.Color:= clRed;
-      DBGridSituacaoEquipamentoAcesso.Font.Color:= clBlack;
-      DBGridSituacaoEquipamentoAcesso.Canvas.FillRect(Rect);
-      DBGridSituacaoEquipamentoAcesso.DefaultDrawColumnCell(Rect, DataCol,Column, State);
-    end
-    else if FrmDataModule.DataSourcePlataformaControle.DataSet.
-    FieldByName('SituacaoBCI').AsString = 'RO' then
-    begin
-      DBGridSituacaoEquipamentoAcesso.Canvas.Brush.Color:= clYellow;
-      DBGridSituacaoEquipamentoAcesso.Font.Color:= clBlack;
-      DBGridSituacaoEquipamentoAcesso.Canvas.FillRect(Rect);
-      DBGridSituacaoEquipamentoAcesso.DefaultDrawColumnCell(Rect, DataCol,Column, State);
-    end
-    else if FrmDataModule.DataSourcePlataformaControle.DataSet.
-    FieldByName('SituacaoBCI').AsString = 'N/A' then
-    begin
-      DBGridSituacaoEquipamentoAcesso.Canvas.Brush.Color:= clSilver;
-      DBGridSituacaoEquipamentoAcesso.Font.Color:= clBlack;
-      DBGridSituacaoEquipamentoAcesso.Canvas.FillRect(Rect);
-      DBGridSituacaoEquipamentoAcesso.DefaultDrawColumnCell(Rect, DataCol,Column, State);
-    end
-  end
-  //===========================================================================
-  //===========================================================================
-  else if (Column.Field.FieldName = 'SituacaoLinhaBCI') then
-  begin
-    if FrmDataModule.DataSourcePlataformaControle.DataSet.
-    FieldByName('SituacaoLinhaBCI').AsString = 'OK' then
-    begin
-      DBGridSituacaoEquipamentoAcesso.Canvas.Brush.Color:= clLime;
-      DBGridSituacaoEquipamentoAcesso.Font.Color:= clBlack;
-      DBGridSituacaoEquipamentoAcesso.Canvas.FillRect(Rect);
-      DBGridSituacaoEquipamentoAcesso.DefaultDrawColumnCell(Rect, DataCol,Column, State);
-    end
-    else if FrmDataModule.DataSourcePlataformaControle.DataSet.
-    FieldByName('SituacaoLinhaBCI').AsString = 'FO' then
-    begin
-      DBGridSituacaoEquipamentoAcesso.Canvas.Brush.Color:= clRed;
-      DBGridSituacaoEquipamentoAcesso.Font.Color:= clBlack;
-      DBGridSituacaoEquipamentoAcesso.Canvas.FillRect(Rect);
-      DBGridSituacaoEquipamentoAcesso.DefaultDrawColumnCell(Rect, DataCol,Column, State);
-    end
-    else if FrmDataModule.DataSourcePlataformaControle.DataSet.
-    FieldByName('SituacaoLinhaBCI').AsString = 'RO' then
-    begin
-      DBGridSituacaoEquipamentoAcesso.Canvas.Brush.Color:= clYellow;
-      DBGridSituacaoEquipamentoAcesso.Font.Color:= clBlack;
-      DBGridSituacaoEquipamentoAcesso.Canvas.FillRect(Rect);
-      DBGridSituacaoEquipamentoAcesso.DefaultDrawColumnCell(Rect, DataCol,Column, State);
-    end
-    else if FrmDataModule.DataSourcePlataformaControle.DataSet.
-    FieldByName('SituacaoLinhaBCI').AsString = 'N/A' then
-    begin
-      DBGridSituacaoEquipamentoAcesso.Canvas.Brush.Color:= clSilver;
-      DBGridSituacaoEquipamentoAcesso.Font.Color:= clBlack;
-      DBGridSituacaoEquipamentoAcesso.Canvas.FillRect(Rect);
-      DBGridSituacaoEquipamentoAcesso.DefaultDrawColumnCell(Rect, DataCol,Column, State);
-    end
-  end
-  //===========================================================================
-  //===========================================================================
-  else if (Column.Field.FieldName = 'SituacaoAgua') then
-  begin
-    if FrmDataModule.DataSourcePlataformaControle.DataSet.
-    FieldByName('SituacaoAgua').AsString = 'OK' then
-    begin
-      DBGridSituacaoEquipamentoAcesso.Canvas.Brush.Color:= clLime;
-      DBGridSituacaoEquipamentoAcesso.Font.Color:= clBlack;
-      DBGridSituacaoEquipamentoAcesso.Canvas.FillRect(Rect);
-      DBGridSituacaoEquipamentoAcesso.DefaultDrawColumnCell(Rect, DataCol,Column, State);
-    end
-    else if FrmDataModule.DataSourcePlataformaControle.DataSet.
-    FieldByName('SituacaoAgua').AsString = 'FO' then
-    begin
-      DBGridSituacaoEquipamentoAcesso.Canvas.Brush.Color:= clRed;
-      DBGridSituacaoEquipamentoAcesso.Font.Color:= clBlack;
-      DBGridSituacaoEquipamentoAcesso.Canvas.FillRect(Rect);
-      DBGridSituacaoEquipamentoAcesso.DefaultDrawColumnCell(Rect, DataCol,Column, State);
-    end
-    else if FrmDataModule.DataSourcePlataformaControle.DataSet.
-    FieldByName('SituacaoAgua').AsString = 'RO' then
-    begin
-      DBGridSituacaoEquipamentoAcesso.Canvas.Brush.Color:= clYellow;
-      DBGridSituacaoEquipamentoAcesso.Font.Color:= clBlack;
-      DBGridSituacaoEquipamentoAcesso.Canvas.FillRect(Rect);
-      DBGridSituacaoEquipamentoAcesso.DefaultDrawColumnCell(Rect, DataCol,Column, State);
-    end
-    else if FrmDataModule.DataSourcePlataformaControle.DataSet.
-    FieldByName('SituacaoAgua').AsString = 'N/A' then
-    begin
-      DBGridSituacaoEquipamentoAcesso.Canvas.Brush.Color:= clSilver;
-      DBGridSituacaoEquipamentoAcesso.Font.Color:= clBlack;
-      DBGridSituacaoEquipamentoAcesso.Canvas.FillRect(Rect);
-      DBGridSituacaoEquipamentoAcesso.DefaultDrawColumnCell(Rect, DataCol,Column, State);
-    end
-  end
-  //===========================================================================
-  //===========================================================================
-  else if (Column.Field.FieldName = 'SituacaoBalsa') then
-  begin
-    if FrmDataModule.DataSourcePlataformaControle.DataSet.
-    FieldByName('SituacaoBalsa').AsString = 'OK' then
-    begin
-      DBGridSituacaoEquipamentoAcesso.Canvas.Brush.Color:= clLime;
-      DBGridSituacaoEquipamentoAcesso.Font.Color:= clBlack;
-      DBGridSituacaoEquipamentoAcesso.Canvas.FillRect(Rect);
-      DBGridSituacaoEquipamentoAcesso.DefaultDrawColumnCell(Rect, DataCol,Column, State);
-    end
-    else if FrmDataModule.DataSourcePlataformaControle.DataSet.
-    FieldByName('SituacaoBalsa').AsString = 'FO' then
-    begin
-      DBGridSituacaoEquipamentoAcesso.Canvas.Brush.Color:= clRed;
-      DBGridSituacaoEquipamentoAcesso.Font.Color:= clBlack;
-      DBGridSituacaoEquipamentoAcesso.Canvas.FillRect(Rect);
-      DBGridSituacaoEquipamentoAcesso.DefaultDrawColumnCell(Rect, DataCol,Column, State);
-    end
-    else if FrmDataModule.DataSourcePlataformaControle.DataSet.
-    FieldByName('SituacaoBalsa').AsString = 'RO' then
-    begin
-      DBGridSituacaoEquipamentoAcesso.Canvas.Brush.Color:= clYellow;
-      DBGridSituacaoEquipamentoAcesso.Font.Color:= clBlack;
-      DBGridSituacaoEquipamentoAcesso.Canvas.FillRect(Rect);
-      DBGridSituacaoEquipamentoAcesso.DefaultDrawColumnCell(Rect, DataCol,Column, State);
-    end
-    else if FrmDataModule.DataSourcePlataformaControle.DataSet.
-    FieldByName('SituacaoBalsa').AsString = 'N/A' then
-    begin
-      DBGridSituacaoEquipamentoAcesso.Canvas.Brush.Color:= clSilver;
-      DBGridSituacaoEquipamentoAcesso.Font.Color:= clBlack;
-      DBGridSituacaoEquipamentoAcesso.Canvas.FillRect(Rect);
-      DBGridSituacaoEquipamentoAcesso.DefaultDrawColumnCell(Rect, DataCol,Column, State);
-    end
-  end
-  //===========================================================================
-  //===========================================================================
-  else if (Column.Field.FieldName = 'SituacaoAcesso') then
-  begin
-    if FrmDataModule.DataSourcePlataformaControle.DataSet.
-    FieldByName('SituacaoAcesso').AsString = 'OK' then
-    begin
-      DBGridSituacaoEquipamentoAcesso.Canvas.Brush.Color:= clLime;
-      DBGridSituacaoEquipamentoAcesso.Font.Color:= clBlack;
-      DBGridSituacaoEquipamentoAcesso.Canvas.FillRect(Rect);
-      DBGridSituacaoEquipamentoAcesso.DefaultDrawColumnCell(Rect, DataCol,Column, State);
-    end
-    else if FrmDataModule.DataSourcePlataformaControle.DataSet.
-    FieldByName('SituacaoAcesso').AsString = 'FO' then
-    begin
-      DBGridSituacaoEquipamentoAcesso.Canvas.Brush.Color:= clRed;
-      DBGridSituacaoEquipamentoAcesso.Font.Color:= clBlack;
-      DBGridSituacaoEquipamentoAcesso.Canvas.FillRect(Rect);
-      DBGridSituacaoEquipamentoAcesso.DefaultDrawColumnCell(Rect, DataCol,Column, State);
-    end
-    else if FrmDataModule.DataSourcePlataformaControle.DataSet.
-    FieldByName('SituacaoAcesso').AsString = 'RO' then
-    begin
-      DBGridSituacaoEquipamentoAcesso.Canvas.Brush.Color:= clYellow;
-      DBGridSituacaoEquipamentoAcesso.Font.Color:= clBlack;
-      DBGridSituacaoEquipamentoAcesso.Canvas.FillRect(Rect);
-      DBGridSituacaoEquipamentoAcesso.DefaultDrawColumnCell(Rect, DataCol,Column, State);
-    end
-    else if FrmDataModule.DataSourcePlataformaControle.DataSet.
-    FieldByName('SituacaoAcesso').AsString = 'N/A' then
-    begin
-      DBGridSituacaoEquipamentoAcesso.Canvas.Brush.Color:= clSilver;
-      DBGridSituacaoEquipamentoAcesso.Font.Color:= clBlack;
-      DBGridSituacaoEquipamentoAcesso.Canvas.FillRect(Rect);
-      DBGridSituacaoEquipamentoAcesso.DefaultDrawColumnCell(Rect, DataCol,Column, State);
-    end
-  end
-  //===========================================================================
-  //===========================================================================
-  else if (Column.Field.FieldName = 'SituacaoDegraus') then
-  begin
-    if FrmDataModule.DataSourcePlataformaControle.DataSet.
-    FieldByName('SituacaoDegraus').AsString = 'OK' then
-    begin
-      DBGridSituacaoEquipamentoAcesso.Canvas.Brush.Color:= clLime;
-      DBGridSituacaoEquipamentoAcesso.Font.Color:= clBlack;
-      DBGridSituacaoEquipamentoAcesso.Canvas.FillRect(Rect);
-      DBGridSituacaoEquipamentoAcesso.DefaultDrawColumnCell(Rect, DataCol,Column, State);
-    end
-    else if FrmDataModule.DataSourcePlataformaControle.DataSet.
-    FieldByName('SituacaoDegraus').AsString = 'FO' then
-    begin
-      DBGridSituacaoEquipamentoAcesso.Canvas.Brush.Color:= clRed;
-      DBGridSituacaoEquipamentoAcesso.Font.Color:= clBlack;
-      DBGridSituacaoEquipamentoAcesso.Canvas.FillRect(Rect);
-      DBGridSituacaoEquipamentoAcesso.DefaultDrawColumnCell(Rect, DataCol,Column, State);
-    end
-    else if FrmDataModule.DataSourcePlataformaControle.DataSet.
-    FieldByName('SituacaoDegraus').AsString = 'RO' then
-    begin
-      DBGridSituacaoEquipamentoAcesso.Canvas.Brush.Color:= clYellow;
-      DBGridSituacaoEquipamentoAcesso.Font.Color:= clBlack;
-      DBGridSituacaoEquipamentoAcesso.Canvas.FillRect(Rect);
-      DBGridSituacaoEquipamentoAcesso.DefaultDrawColumnCell(Rect, DataCol,Column, State);
-    end
-    else if FrmDataModule.DataSourcePlataformaControle.DataSet.
-    FieldByName('SituacaoDegraus').AsString = 'N/A' then
-    begin
-      DBGridSituacaoEquipamentoAcesso.Canvas.Brush.Color:= clSilver;
-      DBGridSituacaoEquipamentoAcesso.Font.Color:= clBlack;
-      DBGridSituacaoEquipamentoAcesso.Canvas.FillRect(Rect);
-      DBGridSituacaoEquipamentoAcesso.DefaultDrawColumnCell(Rect, DataCol,Column, State);
-    end
-  end
+  DrawCollumCellDBGrid(DBGridSituacaoEquipamentoAcesso,Rect,DataCol,Column,State,'SituacaoGD');
+  DrawCollumCellDBGrid(DBGridSituacaoEquipamentoAcesso,Rect,DataCol,Column,State,'SituacaoBCI');
+  DrawCollumCellDBGrid(DBGridSituacaoEquipamentoAcesso,Rect,DataCol,Column,State,'SituacaoLinhaBCI');
+  DrawCollumCellDBGrid(DBGridSituacaoEquipamentoAcesso,Rect,DataCol,Column,State,'SituacaoBalsa');
+  DrawCollumCellDBGrid(DBGridSituacaoEquipamentoAcesso,Rect,DataCol,Column,State,'SituacaoSurfer');
+  DrawCollumCellDBGrid(DBGridSituacaoEquipamentoAcesso,Rect,DataCol,Column,State,'SituacaoAqua');
+  DrawCollumCellDBGrid(DBGridSituacaoEquipamentoAcesso,Rect,DataCol,Column,State,'SituacaoSOV');
+  DrawCollumCellDBGrid(DBGridSituacaoEquipamentoAcesso,Rect,DataCol,Column,State,'SituacaoDegraus');
 end;
 
 procedure TFrmSituacaoEquipamentoAcesso.DBGridSituacaoEquipamentoAcessoKeyPress(Sender: TObject;
@@ -398,15 +126,6 @@ begin
   begin
     Key:= #0;
   end;
-end;
-
-procedure TFrmSituacaoEquipamentoAcesso.DBGridSituacaoEquipamentoAcessoTitleClick(Column: TColumn);
-begin
-  FrmPrincipal.configurarFiltro(1,Column.FieldName,IntToStr(Column.Index),
-  Column.ReadOnly,actFiltroInserir,actGridASC,actGridDESC,actSubstituirPor);
-  //======================================================
-  FrmPrincipal.titleGrid(ColunasLayout,'Consulta',
-  FrmDataModule.ADOQueryPlataformaControle.SQL.Text);
 end;
 
 procedure TFrmSituacaoEquipamentoAcesso.FormClose(Sender: TObject;
@@ -420,9 +139,9 @@ procedure TFrmSituacaoEquipamentoAcesso.FormCreate(Sender: TObject);
 begin
   FrmPrincipal.MDIChildCreated(self.Handle);
 
-  if (FrmPrincipal.logPerfil = 'Administrador')OR
-  (FrmPrincipal.logPerfil = 'Programação')OR
-  (FrmPrincipal.logPerfil = 'Supervisor') then
+  if (FrmPrincipal.logPerfil = FrmPrincipal.PERFILADM)OR
+  (FrmPrincipal.logPerfil = FrmPrincipal.PERFILPROGRAMACAO)OR
+  (FrmPrincipal.logPerfil = FrmPrincipal.PERFILSUPERVISAO) then
   begin
     DBNavigator.Enabled:= true;
     DBGridSituacaoEquipamentoAcesso.ReadOnly:= false;
@@ -433,7 +152,7 @@ begin
     DBGridSituacaoEquipamentoAcesso.ReadOnly:= true;
   end;
   //Incicialização
-  FrmPrincipal.SetUpColunasLayout(DBGridSituacaoEquipamentoAcesso, ColunasLayout);
+  FrmDataModule.setFilterDBGrid(DBGridSituacaoEquipamentoAcesso);
   actProcurar.Execute;
 end;
 

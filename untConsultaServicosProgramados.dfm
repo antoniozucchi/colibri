@@ -2,8 +2,8 @@ object FrmConsultaServicosProgramados: TFrmConsultaServicosProgramados
   Left = 0
   Top = 0
   Caption = 'Servi'#231'os Programados por Per'#237'odo'
-  ClientHeight = 438
-  ClientWidth = 1362
+  ClientHeight = 414
+  ClientWidth = 1356
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -17,11 +17,11 @@ object FrmConsultaServicosProgramados: TFrmConsultaServicosProgramados
   OnCreate = FormCreate
   OnDestroy = FormDestroy
   TextHeight = 13
-  object DBGridServicosProgramados: TDBGrid
+  object DBGridServicosProgramados: TFilterDBGrid
     Left = 0
-    Top = 53
-    Width = 1362
-    Height = 366
+    Top = 54
+    Width = 1356
+    Height = 341
     Align = alClient
     DataSource = FrmDataModule.DataSourceConsultaServicosProgramados
     ReadOnly = True
@@ -32,7 +32,12 @@ object FrmConsultaServicosProgramados: TFrmConsultaServicosProgramados
     TitleFont.Name = 'Tahoma'
     TitleFont.Style = []
     OnDrawColumnCell = DBGridServicosProgramadosDrawColumnCell
-    OnTitleClick = DBGridServicosProgramadosTitleClick
+    ClearFilterButton = btnClearFiltro
+    SearchAction = actProcurar
+    LayoutGrid = ColunasLayout
+    EnableZebra = False
+    LayoutButton = btnLayout
+    ExcelButton = btnExcel
     Columns = <
       item
         Alignment = taCenter
@@ -138,7 +143,7 @@ object FrmConsultaServicosProgramados: TFrmConsultaServicosProgramados
   object Panel2: TPanel
     Left = 0
     Top = 0
-    Width = 1362
+    Width = 1356
     Height = 25
     Align = alTop
     Caption = 'Servi'#231'os Programados por Per'#237'odo'
@@ -151,114 +156,12 @@ object FrmConsultaServicosProgramados: TFrmConsultaServicosProgramados
     ParentBackground = False
     ParentFont = False
     TabOrder = 1
-    ExplicitWidth = 1360
-  end
-  object PanelDataInicio: TPanel
-    Left = 0
-    Top = 25
-    Width = 1362
-    Height = 28
-    Align = alTop
-    TabOrder = 2
-    ExplicitWidth = 1360
-    object Panel12: TPanel
-      Left = 1
-      Top = 1
-      Width = 1360
-      Height = 26
-      Align = alTop
-      TabOrder = 0
-      ExplicitWidth = 1358
-      object dataInicio: TDateTimePicker
-        Left = 281
-        Top = 1
-        Width = 95
-        Height = 24
-        Hint = 'Data In'#237'cio para filtro'
-        Align = alLeft
-        Date = 42599.000000000000000000
-        Time = 0.462823229157947900
-        ParentShowHint = False
-        ShowHint = True
-        TabOrder = 0
-        OnCloseUp = actProcurarExecute
-      end
-      object Panel24: TPanel
-        Left = 376
-        Top = 1
-        Width = 70
-        Height = 24
-        Align = alLeft
-        Alignment = taLeftJustify
-        Caption = '   Data Fim:'
-        TabOrder = 1
-      end
-      object dataFim: TDateTimePicker
-        Left = 446
-        Top = 1
-        Width = 95
-        Height = 24
-        Hint = 'Data Fim para filtro'
-        Align = alLeft
-        Date = 42599.000000000000000000
-        Time = 0.462823229157947900
-        ParentShowHint = False
-        ShowHint = True
-        TabOrder = 2
-        OnCloseUp = actProcurarExecute
-      end
-      object Panel8: TPanel
-        Left = 211
-        Top = 1
-        Width = 70
-        Height = 24
-        Align = alLeft
-        Alignment = taLeftJustify
-        Caption = '   Data In'#237'cio:'
-        TabOrder = 3
-      end
-      object BitBtn2: TBitBtn
-        Left = 71
-        Top = 1
-        Width = 70
-        Height = 24
-        Action = actLimparFiltros
-        Align = alLeft
-        Caption = 'Limpar'
-        ParentShowHint = False
-        ShowHint = True
-        TabOrder = 4
-      end
-      object BitBtn3: TBitBtn
-        Left = 141
-        Top = 1
-        Width = 70
-        Height = 24
-        Action = actFiltrosTabela
-        Align = alLeft
-        Caption = 'Filtros'
-        ParentShowHint = False
-        ShowHint = True
-        TabOrder = 5
-      end
-      object BitBtn1: TBitBtn
-        Left = 1
-        Top = 1
-        Width = 70
-        Height = 24
-        Action = actExcel
-        Align = alLeft
-        Caption = 'Exportar'
-        ParentShowHint = False
-        ShowHint = True
-        TabOrder = 6
-      end
-    end
+    ExplicitWidth = 1354
   end
   object StatusBar1: TStatusBar
     Left = 0
-    Top = 419
-    Width = 1362
+    Top = 395
+    Width = 1356
     Height = 19
     Panels = <
       item
@@ -276,24 +179,118 @@ object FrmConsultaServicosProgramados: TFrmConsultaServicosProgramados
       item
         Width = 50
       end>
-    ExplicitTop = 411
-    ExplicitWidth = 1360
+    ExplicitTop = 387
+    ExplicitWidth = 1354
   end
   object ColunasLayout: TStringGrid
     Left = 50
     Top = 153
     Width = 113
     Height = 94
-    ColCount = 2
+    ColCount = 7
     DefaultRowHeight = 21
-    TabOrder = 4
+    RowCount = 12
+    TabOrder = 3
     Visible = False
     RowHeights = (
       21
       21
       21
       21
+      21
+      21
+      21
+      21
+      21
+      21
+      21
       21)
+  end
+  object ToolBar1: TToolBar
+    Left = 0
+    Top = 25
+    Width = 1356
+    Height = 29
+    ButtonHeight = 24
+    Caption = 'ToolBar1'
+    Images = FrmPrincipal.ImageList1
+    TabOrder = 4
+    ExplicitWidth = 1354
+    object Panel8: TPanel
+      Left = 0
+      Top = 0
+      Width = 70
+      Height = 24
+      Align = alLeft
+      Alignment = taLeftJustify
+      Caption = '   Data In'#237'cio:'
+      TabOrder = 0
+    end
+    object dataInicio: TDateTimePicker
+      Left = 70
+      Top = 0
+      Width = 95
+      Height = 24
+      Hint = 'Data In'#237'cio para filtro'
+      Align = alLeft
+      Date = 42599.000000000000000000
+      Time = 0.462823229157947900
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 1
+      OnCloseUp = actProcurarExecute
+    end
+    object Panel24: TPanel
+      Left = 165
+      Top = 0
+      Width = 70
+      Height = 24
+      Align = alLeft
+      Alignment = taLeftJustify
+      Caption = '   Data Fim:'
+      TabOrder = 2
+    end
+    object dataFim: TDateTimePicker
+      Left = 235
+      Top = 0
+      Width = 95
+      Height = 24
+      Hint = 'Data Fim para filtro'
+      Align = alLeft
+      Date = 42599.000000000000000000
+      Time = 0.462823229157947900
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 3
+      OnCloseUp = actProcurarExecute
+    end
+    object btnClearFiltro: TToolButton
+      Left = 330
+      Top = 0
+      Hint = 'Limpar filtro'
+      Caption = 'btnClearFiltro'
+      ImageIndex = 225
+      ParentShowHint = False
+      ShowHint = True
+    end
+    object btnLayout: TToolButton
+      Left = 353
+      Top = 0
+      Hint = 'Editar layout de colunas'
+      Caption = 'btnLayout'
+      ImageIndex = 196
+      ParentShowHint = False
+      ShowHint = True
+    end
+    object btnExcel: TToolButton
+      Left = 376
+      Top = 0
+      Hint = 'Exportar dados para o Excel'
+      Caption = 'Exportar'
+      ImageIndex = 54
+      ParentShowHint = False
+      ShowHint = True
+    end
   end
   object ActionManager1: TActionManager
     Images = FrmPrincipal.ImageList1
@@ -301,51 +298,11 @@ object FrmConsultaServicosProgramados: TFrmConsultaServicosProgramados
     Top = 304
     StyleName = 'Platform Default'
     object actProcurar: TAction
-      Caption = 'Procurar '
-      Hint = 'Procurar servi'#231'os programados'
-      ImageIndex = 28
+      Caption = 'Procurar'
+      Hint = 'Buscar registros no banco de dados'
+      ImageIndex = 27
       ShortCut = 116
       OnExecute = actProcurarExecute
-    end
-    object actExcel: TAction
-      Caption = 'Exportar'
-      Hint = 'Exportar para o Excel'
-      ImageIndex = 54
-      OnExecute = actExcelExecute
-    end
-    object actFiltroInserir: TAction
-      Category = 'Tabela'
-      Caption = 'actFiltroInserir'
-      OnExecute = actFiltroInserirExecute
-    end
-    object actGridASC: TAction
-      Category = 'Tabela'
-      Caption = 'actGridASC'
-      OnExecute = actGridASCExecute
-    end
-    object actGridDESC: TAction
-      Category = 'Tabela'
-      Caption = 'actGridDESC'
-      OnExecute = actGridDESCExecute
-    end
-    object actLimparFiltros: TAction
-      Category = 'Tabela'
-      Caption = 'Limpar'
-      Hint = 'Limpar Filtros'
-      ImageIndex = 469
-      OnExecute = actLimparFiltrosExecute
-    end
-    object actFiltrosTabela: TAction
-      Category = 'Tabela'
-      Caption = 'Filtros'
-      Hint = 'Visualizar tabela de filtros'
-      ImageIndex = 470
-      OnExecute = actFiltrosTabelaExecute
-    end
-    object actProcuraFiltrosTabela: TAction
-      Category = 'Tabela'
-      Caption = 'actProcuraFiltrosTabela'
-      OnExecute = actProcuraFiltrosTabelaExecute
     end
   end
 end

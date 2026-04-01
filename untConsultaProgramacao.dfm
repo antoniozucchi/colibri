@@ -2,8 +2,8 @@ object FrmConsultaProgramacao: TFrmConsultaProgramacao
   Left = 0
   Top = 0
   Caption = 'Programa'#231#227'o Di'#225'ria de Servi'#231'os por Per'#237'odo'
-  ClientHeight = 639
-  ClientWidth = 1435
+  ClientHeight = 631
+  ClientWidth = 1433
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -20,23 +20,25 @@ object FrmConsultaProgramacao: TFrmConsultaProgramacao
   object Splitter1: TSplitter
     Left = 713
     Top = 25
-    Height = 597
+    Height = 589
     ExplicitLeft = 698
     ExplicitTop = 34
     ExplicitHeight = 380
   end
   object ProgressBar1: TProgressBar
     Left = 0
-    Top = 622
-    Width = 1435
+    Top = 614
+    Width = 1433
     Height = 17
     Align = alBottom
     TabOrder = 0
+    ExplicitTop = 606
+    ExplicitWidth = 1431
   end
   object PanelTitulo: TPanel
     Left = 0
     Top = 0
-    Width = 1435
+    Width = 1433
     Height = 25
     Align = alTop
     Caption = 'Programa'#231#227'o Di'#225'ria de Servi'#231'os por Per'#237'odo'
@@ -49,14 +51,16 @@ object FrmConsultaProgramacao: TFrmConsultaProgramacao
     ParentBackground = False
     ParentFont = False
     TabOrder = 1
+    ExplicitWidth = 1431
   end
   object PanelProgramacao: TPanel
     Left = 0
     Top = 25
     Width = 713
-    Height = 597
+    Height = 589
     Align = alLeft
     TabOrder = 2
+    ExplicitHeight = 581
     object ToolBar1: TToolBar
       Left = 1
       Top = 26
@@ -77,7 +81,7 @@ object FrmConsultaProgramacao: TFrmConsultaProgramacao
         Caption = 'Inserir'
         ParentShowHint = False
         ShowHint = True
-        TabOrder = 6
+        TabOrder = 3
       end
       object BitBtn23: TBitBtn
         Left = 60
@@ -88,113 +92,10 @@ object FrmConsultaProgramacao: TFrmConsultaProgramacao
         Caption = 'Excluir'
         ParentShowHint = False
         ShowHint = True
-        TabOrder = 5
-      end
-      object BitBtn6: TBitBtn
-        Left = 120
-        Top = 0
-        Width = 70
-        Height = 22
-        Action = actExcelProgramacao
-        Caption = 'Exportar'
-        ParentShowHint = False
-        ShowHint = True
-        TabOrder = 3
-      end
-      object BitBtn5: TBitBtn
-        Left = 190
-        Top = 0
-        Width = 70
-        Height = 22
-        Action = actLimparFiltros
-        Caption = 'Limpar'
-        Glyph.Data = {
-          36040000424D3604000000000000360000002800000010000000100000000100
-          2000000000000004000000000000000000000000000000000000FF00FF00FF00
-          FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FDFDFD029B9B9B643434
-          34CB070707F80D0D0DF2474747B8BDBDBD42FF00FF00FF00FF00FF00FF00FF00
-          FF00FF00FF00FF00FF00FF00FF00FF00FF00FBFBFB04515151AE000000FF0000
-          00FF0C0C0CF3070707F8000000FF010101FE89898976FF00FF00FF00FF00FF00
-          FF00FF00FF00FF00FF00FF00FF00FF00FF008181817E000000FF232323DCC1C1
-          C13EFEFEFE01F9F9F906A1A1A15E0B0B0BF4010101FEBDBDBD42FF00FF00FF00
-          FF00FF00FF00FF00FF00FF00FF00F9F9F906101010EF050505FAD9D9D926FF00
-          FF00FF00FF00FF00FF00FF00FF00A1A1A15E000000FF474747B8FF00FF00FF00
-          FF00FF00FF00FF00FF00FF00FF00CFCFCF30000000FF3F3F3FC0FF00FF00FF00
-          FF00FF00FF00FF00FF00FF00FF00F9F9F906070707F80D0D0DF2FF00FF00FF00
-          FF00FF00FF00FF00FF008B8B8B74181818E7000000FF0A0A0AF5282828D7FF00
-          FF00FF00FF00FF00FF00FF00FF00FF00FF00151515EA000000FFFF00FF00FF00
-          FF00FF00FF00FF00FF007B7B7B84000000FF000000FF000000FF0B0B0BF4FF00
-          FF00FF00FF00FF00FF00FF00FF00FF00FF00151515EA000000FFFF00FF00FDFD
-          FD02C5C5C53AAEAEAE51DBDBDB24F5F5F50AF5F5F50AF5F5F50AF2F2F20DB8B8
-          B847B2B2B24DE6E6E619FF00FF00FF00FF00151515EA000000FFE6E6E6194D4D
-          4DB28F8F8F70A5A5A55A484848B7DCDCDC23FF00FF00FF00FF007474748B9696
-          9669A1A1A15E575757A89191916EFF00FF00151515EA000000FF5F5F5FA0B0B0
-          B04F1E1E1EE1030303FCA5A5A55A484848B7F9F9F906B1B1B14E9292926D3E3E
-          3EC1050505FA787878875F5F5FA0CFCFCF30151515EA000000FF595959A65757
-          57A8000000FF000000FF1E1E1EE1A6A6A659494949B67575758A8A8A8A750000
-          00FF000000FF010101FEA6A6A65988888877151515EA000000FF5B5B5BA45252
-          52AD000000FF000000FF000000FF292929D6878787786262629D020202FD0000
-          00FF000000FF000000FFA6A6A65986868679151515EA000000FF5B5B5BA4ADAD
-          AD52050505FA000000FF000000FF000000FF000000FF000000FF000000FF0000
-          00FF000000FF4E4E4EB179797986C5C5C53A232323DC131313ECD5D5D52A5757
-          57A8B3B3B34C9292926D8F8F8F708F8F8F708F8F8F708F8F8F708F8F8F708F8F
-          8F70A3A3A35C9191916E6B6B6B94FF00FF005C5C5CA35C5C5CA3FF00FF00E4E4
-          E41B777777885D5D5DA25D5D5DA25D5D5DA25D5D5DA25D5D5DA25D5D5DA25D5D
-          5DA25D5D5DA2A6A6A659FEFEFE01FF00FF005C5C5CA35C5C5CA3FF00FF00FF00
-          FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
-          FF00FF00FF00FF00FF00FF00FF00FF00FF002E2E2ED1212121DE}
-        ParentShowHint = False
-        ShowHint = True
-        TabOrder = 1
-      end
-      object BitBtn7: TBitBtn
-        Left = 260
-        Top = 0
-        Width = 70
-        Height = 22
-        Action = actFiltrosTabela
-        Caption = 'Filtros'
-        Glyph.Data = {
-          36040000424D3604000000000000360000002800000010000000100000000100
-          2000000000000004000000000000000000000000000000000000FF00FF00FF00
-          FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
-          FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
-          FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
-          FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
-          FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
-          FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
-          FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
-          FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
-          FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
-          FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FCFC
-          FC03DDDDDD25C6C6C63F9F9F9F6A878686866F6E6EA15B5A5AB794949477E2E2
-          E21FFDFDFD02C4C4C441DEDEDE24FF00FF00FF00FF00FF00FF00E2E2E21F6766
-          66A99D9D9D6D9B9B9B6F87878785373636DF292828EF232222F51C1B1BFF1B1A
-          1AFF383737DE252424F3403F3FD48281818BFF00FF00FF00FF00FEFEFE019594
-          94768585858796959575515050C28181818CE7E7E71AC0C0C0451C1B1BFD1C1B
-          1BFF1C1B1BFF1C1B1BFF1C1B1BFF3F3E3ED6DBDBDB27FF00FF00DDDDDD258D8C
-          8C7FAAA9A95FA6A6A662D0D0D034FF00FF00FF00FF008080808D1C1B1BFF1C1B
-          1BFF1C1B1BFF1C1B1BFF1C1B1BFF282727F05A5959B7E1E0E021FF00FF00FF00
-          FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00E9E9E918A6A6A6626261
-          61AF232222F61C1B1BFF292828EF222121F71C1B1BFFC9C9C93BFF00FF00FF00
-          FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
-          FF00F0F0F010ADACAC5B89898982A8A8A860686868A8EEEEEE12FF00FF00FF00
-          FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
-          FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
-          FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
-          FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
-          FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
-          FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
-          FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
-          FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
-          FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
-          FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00}
-        ParentShowHint = False
-        ShowHint = True
-        TabOrder = 4
+        TabOrder = 2
       end
       object BitBtn29: TBitBtn
-        Left = 330
+        Left = 120
         Top = 0
         Width = 73
         Height = 22
@@ -202,10 +103,10 @@ object FrmConsultaProgramacao: TFrmConsultaProgramacao
         Caption = 'Importar'
         ParentShowHint = False
         ShowHint = True
-        TabOrder = 7
+        TabOrder = 4
       end
       object BitBtn26: TBitBtn
-        Left = 403
+        Left = 193
         Top = 0
         Width = 63
         Height = 22
@@ -213,10 +114,10 @@ object FrmConsultaProgramacao: TFrmConsultaProgramacao
         Caption = 'Gravar'
         ParentShowHint = False
         ShowHint = True
-        TabOrder = 8
+        TabOrder = 5
       end
       object BitBtn1: TBitBtn
-        Left = 466
+        Left = 256
         Top = 0
         Width = 79
         Height = 22
@@ -224,10 +125,10 @@ object FrmConsultaProgramacao: TFrmConsultaProgramacao
         Caption = 'Hist'#243'rico'
         ParentShowHint = False
         ShowHint = True
-        TabOrder = 2
+        TabOrder = 1
       end
       object btnExcluir: TToolButton
-        Left = 545
+        Left = 335
         Top = 0
         Hint = 'Excluir registros'
         Caption = 'btnExcluir'
@@ -237,19 +138,8 @@ object FrmConsultaProgramacao: TFrmConsultaProgramacao
         ShowHint = True
         Style = tbsDropDown
       end
-      object btnStatus: TToolButton
-        Left = 599
-        Top = 0
-        Hint = 'Calcular Status de Programa'#231#227'o'
-        Caption = 'btnStatus'
-        DropdownMenu = PopupMenuStatus
-        ImageIndex = 35
-        ParentShowHint = False
-        ShowHint = True
-        Style = tbsDropDown
-      end
       object ToolButton1: TToolButton
-        Left = 653
+        Left = 389
         Top = 0
         Hint = 'Copiar programa'#231#227'o para data no futuro'
         Caption = 'ToolButton1'
@@ -259,8 +149,26 @@ object FrmConsultaProgramacao: TFrmConsultaProgramacao
         ShowHint = True
         Style = tbsDropDown
       end
+      object btnClearFiltroProgramacao: TToolButton
+        Left = 443
+        Top = 0
+        Hint = 'Limpar filtro'
+        Caption = 'btnClearFiltroProgramacao'
+        ImageIndex = 225
+        ParentShowHint = False
+        ShowHint = True
+      end
+      object btnExcelProgramacao: TToolButton
+        Left = 478
+        Top = 0
+        Hint = 'Exportar dados para o Excel'
+        Caption = 'btnExcelProgramacao'
+        ImageIndex = 54
+        ParentShowHint = False
+        ShowHint = True
+      end
       object DBEditProgramacao: TDBEdit
-        Left = 707
+        Left = 513
         Top = 0
         Width = 26
         Height = 22
@@ -271,11 +179,11 @@ object FrmConsultaProgramacao: TFrmConsultaProgramacao
         OnChange = DBEditProgramacaoChange
       end
     end
-    object DBGridProgramacao: TDBGrid
+    object DBGridProgramacao: TFilterDBGrid
       Left = 1
       Top = 106
       Width = 711
-      Height = 471
+      Height = 463
       Align = alClient
       DataSource = FrmDataModule.DataSourceProgramacaoDiaria_Consulta
       ReadOnly = True
@@ -287,8 +195,11 @@ object FrmConsultaProgramacao: TFrmConsultaProgramacao
       TitleFont.Style = []
       OnCellClick = DBGridProgramacaoCellClick
       OnDrawColumnCell = DBGridProgramacaoDrawColumnCell
-      OnDblClick = actProgramacaoJanelaExecute
-      OnTitleClick = DBGridProgramacaoTitleClick
+      ClearFilterButton = btnClearFiltroProgramacao
+      SearchAction = actProcurarProgramacao
+      LayoutGrid = ColunasLayoutProgramacao
+      EnableZebra = False
+      ExcelButton = btnExcelProgramacao
       Columns = <
         item
           Alignment = taCenter
@@ -351,63 +262,6 @@ object FrmConsultaProgramacao: TFrmConsultaProgramacao
           Title.Alignment = taCenter
           Title.Caption = 'N'#176' Can.'
           Width = 45
-          Visible = True
-        end
-        item
-          Alignment = taCenter
-          Expanded = False
-          FieldName = 'HorarioChegada'
-          Title.Alignment = taCenter
-          Title.Caption = 'Hora Chegada'
-          Visible = True
-        end
-        item
-          Alignment = taCenter
-          Expanded = False
-          FieldName = 'HorarioPT'
-          Title.Alignment = taCenter
-          Title.Caption = 'Hora PT'
-          Visible = True
-        end
-        item
-          Alignment = taCenter
-          Expanded = False
-          FieldName = 'HorarioEncerramento'
-          Title.Alignment = taCenter
-          Title.Caption = 'Hora Encerramento'
-          Visible = True
-        end
-        item
-          Alignment = taCenter
-          Expanded = False
-          FieldName = 'HorarioSaida'
-          Title.Alignment = taCenter
-          Title.Caption = 'Hora Sa'#237'da'
-          Visible = True
-        end
-        item
-          Alignment = taCenter
-          Expanded = False
-          FieldName = 'HorarioSaldo'
-          Title.Alignment = taCenter
-          Title.Caption = 'Trabalho'
-          Visible = True
-        end
-        item
-          Alignment = taCenter
-          Expanded = False
-          FieldName = 'HorarioDemora'
-          Title.Alignment = taCenter
-          Title.Caption = 'Parado'
-          Visible = True
-        end
-        item
-          Expanded = False
-          FieldName = 'HorarioNOTA'
-          ReadOnly = False
-          Title.Alignment = taCenter
-          Title.Caption = 'Motivo Hor'#225'rio'
-          Width = 250
           Visible = True
         end
         item
@@ -479,7 +333,7 @@ object FrmConsultaProgramacao: TFrmConsultaProgramacao
     end
     object StatusBarProgramacao: TStatusBar
       Left = 1
-      Top = 577
+      Top = 569
       Width = 711
       Height = 19
       Panels = <
@@ -498,6 +352,7 @@ object FrmConsultaProgramacao: TFrmConsultaProgramacao
         item
           Width = 50
         end>
+      ExplicitTop = 561
     end
     object PanelFiltrosTodos: TPanel
       Left = 1
@@ -549,7 +404,7 @@ object FrmConsultaProgramacao: TFrmConsultaProgramacao
               ParentShowHint = False
               ShowHint = True
               TabOrder = 0
-              OnCloseUp = actProcurarExecute
+              OnCloseUp = actProcurarProgramacaoExecute
             end
           end
         end
@@ -589,7 +444,7 @@ object FrmConsultaProgramacao: TFrmConsultaProgramacao
               ParentShowHint = False
               ShowHint = True
               TabOrder = 0
-              OnCloseUp = actProcurarExecute
+              OnCloseUp = actProcurarProgramacaoExecute
             end
           end
         end
@@ -611,7 +466,7 @@ object FrmConsultaProgramacao: TFrmConsultaProgramacao
           'Cancelado')
         ParentFont = False
         TabOrder = 1
-        OnClick = actProcurarExecute
+        OnClick = actProcurarProgramacaoExecute
       end
     end
     object ColunasLayoutProgramacao: TStringGrid
@@ -619,11 +474,20 @@ object FrmConsultaProgramacao: TFrmConsultaProgramacao
       Top = 212
       Width = 113
       Height = 94
-      ColCount = 2
+      ColCount = 7
       DefaultRowHeight = 21
+      RowCount = 13
       TabOrder = 5
       Visible = False
       RowHeights = (
+        21
+        21
+        21
+        21
+        21
+        21
+        21
+        21
         21
         21
         21
@@ -634,14 +498,16 @@ object FrmConsultaProgramacao: TFrmConsultaProgramacao
   object PanelResultados: TPanel
     Left = 716
     Top = 25
-    Width = 719
-    Height = 597
+    Width = 717
+    Height = 589
     Align = alClient
     TabOrder = 3
+    ExplicitWidth = 715
+    ExplicitHeight = 581
     object Splitter2: TSplitter
       Left = 1
       Top = 337
-      Width = 719
+      Width = 715
       Height = 3
       Cursor = crVSplit
       Align = alTop
@@ -651,15 +517,15 @@ object FrmConsultaProgramacao: TFrmConsultaProgramacao
     object PanelExecutante: TPanel
       Left = 1
       Top = 1
-      Width = 719
+      Width = 715
       Height = 336
       Align = alTop
       TabOrder = 0
-      ExplicitWidth = 717
-      object DBGridExecutantes: TDBGrid
+      ExplicitWidth = 713
+      object DBGridExecutantes: TFilterDBGrid
         Left = 1
         Top = 55
-        Width = 717
+        Width = 713
         Height = 261
         Align = alClient
         DataSource = FrmDataModule.DataSourceProgramacaoExecutante_Consulta
@@ -673,6 +539,11 @@ object FrmConsultaProgramacao: TFrmConsultaProgramacao
         OnDblClick = actExecutanteJanelaExecute
         OnKeyDown = DBGridExecutantesKeyDown
         OnKeyPress = DBGridExecutantesKeyPress
+        ClearFilterButton = btnClearFiltroExecutante
+        SearchAction = actProcurarExecutante
+        LayoutGrid = ColunasLayoutExecutantes
+        EnableZebra = False
+        ExcelButton = btnExcelExecutante
         Columns = <
           item
             Alignment = taCenter
@@ -718,6 +589,13 @@ object FrmConsultaProgramacao: TFrmConsultaProgramacao
           item
             Alignment = taCenter
             Expanded = False
+            FieldName = 'RT'
+            Title.Alignment = taCenter
+            Visible = True
+          end
+          item
+            Alignment = taCenter
+            Expanded = False
             FieldName = 'CodigoSAP'
             Title.Alignment = taCenter
             Title.Caption = 'C'#243'digo SAP'
@@ -734,28 +612,11 @@ object FrmConsultaProgramacao: TFrmConsultaProgramacao
             Visible = True
           end
           item
-            Alignment = taCenter
-            Expanded = False
-            FieldName = 'StatusExecucao'
-            Title.Alignment = taCenter
-            Title.Caption = 'Status [Execu'#231#227'o]'
-            Width = 100
-            Visible = True
-          end
-          item
             Expanded = False
             FieldName = 'MotivoProgramacao'
             Title.Alignment = taCenter
             Title.Caption = 'Motivo Cancelamento'
             Width = 140
-            Visible = True
-          end
-          item
-            Expanded = False
-            FieldName = 'MotivoNaoExecucao'
-            Title.Alignment = taCenter
-            Title.Caption = 'Motivo N'#227'o Execu'#231#227'o'
-            Width = 149
             Visible = True
           end
           item
@@ -782,58 +643,39 @@ object FrmConsultaProgramacao: TFrmConsultaProgramacao
             Title.Alignment = taCenter
             Title.Caption = 'Computador [Programa'#231#227'o]'
             Visible = True
-          end
-          item
-            Alignment = taCenter
-            Expanded = False
-            FieldName = 'AvaliadoPorExecucao'
-            Title.Alignment = taCenter
-            Title.Caption = 'Avaliado [Execu'#231#227'o]'
-            Visible = True
-          end
-          item
-            Alignment = taCenter
-            Expanded = False
-            FieldName = 'DataAvaliacaoExecucao'
-            Title.Alignment = taCenter
-            Title.Caption = 'Data [Execu'#231#227'o]'
-            Visible = True
-          end
-          item
-            Alignment = taCenter
-            Expanded = False
-            FieldName = 'ComputadorExecucao'
-            Title.Alignment = taCenter
-            Title.Caption = 'Computador [Execu'#231#227'o]'
-            Visible = True
-          end
-          item
-            Alignment = taCenter
-            Expanded = False
-            FieldName = 'RT'
-            Title.Alignment = taCenter
-            Visible = True
-          end
-          item
-            Expanded = False
-            FieldName = 'TipoEmbarque'
-            Title.Caption = 'Tipo de Embarque'
-            Visible = True
           end>
       end
       object ToolBar2: TToolBar
         Left = 1
         Top = 26
-        Width = 717
+        Width = 713
         Height = 29
         Caption = 'ToolBar2'
         DrawingStyle = dsGradient
         EdgeBorders = [ebLeft, ebTop, ebRight, ebBottom]
         Images = FrmPrincipal.ImageList1
         TabOrder = 1
-        ExplicitWidth = 715
-        object BitBtn20: TBitBtn
+        ExplicitWidth = 711
+        object btnClearFiltroExecutante: TToolButton
           Left = 0
+          Top = 0
+          Hint = 'Limpar filtro'
+          Caption = 'btnClearFiltroExecutante'
+          ImageIndex = 225
+          ParentShowHint = False
+          ShowHint = True
+        end
+        object btnExcelExecutante: TToolButton
+          Left = 23
+          Top = 0
+          Hint = 'Exportar dados para o Excel'
+          Caption = 'btnExcelExecutante'
+          ImageIndex = 54
+          ParentShowHint = False
+          ShowHint = True
+        end
+        object BitBtn20: TBitBtn
+          Left = 46
           Top = 0
           Width = 60
           Height = 22
@@ -841,10 +683,10 @@ object FrmConsultaProgramacao: TFrmConsultaProgramacao
           Caption = 'Inserir'
           ParentShowHint = False
           ShowHint = True
-          TabOrder = 1
+          TabOrder = 0
         end
         object BitBtn27: TBitBtn
-          Left = 60
+          Left = 106
           Top = 0
           Width = 60
           Height = 22
@@ -852,38 +694,16 @@ object FrmConsultaProgramacao: TFrmConsultaProgramacao
           Caption = 'Excluir'
           ParentShowHint = False
           ShowHint = True
-          TabOrder = 3
-        end
-        object BitBtn25: TBitBtn
-          Left = 120
-          Top = 0
-          Width = 75
-          Height = 22
-          Action = actExcelExecutante
-          Caption = 'Exportar'
-          ParentShowHint = False
-          ShowHint = True
-          TabOrder = 2
-        end
-        object BitBtn3: TBitBtn
-          Left = 195
-          Top = 0
-          Width = 96
-          Height = 22
-          Action = actLimparExecutantes
-          Caption = 'Limpar Exec.'
-          ParentShowHint = False
-          ShowHint = True
-          TabOrder = 0
+          TabOrder = 1
         end
         object DBEdit2: TDBEdit
-          Left = 291
+          Left = 166
           Top = 0
           Width = 64
           Height = 22
           DataField = 'idProgramacaoExecutante'
           DataSource = FrmDataModule.DataSourceProgramacaoExecutante_Consulta
-          TabOrder = 4
+          TabOrder = 2
           Visible = False
           OnChange = DBEdit2Change
         end
@@ -891,7 +711,7 @@ object FrmConsultaProgramacao: TFrmConsultaProgramacao
       object Panel7: TPanel
         Left = 1
         Top = 1
-        Width = 717
+        Width = 713
         Height = 25
         Align = alTop
         Caption = 'Executantes Programados'
@@ -904,12 +724,12 @@ object FrmConsultaProgramacao: TFrmConsultaProgramacao
         ParentBackground = False
         ParentFont = False
         TabOrder = 2
-        ExplicitWidth = 715
+        ExplicitWidth = 711
       end
       object StatusBarExecutantes: TStatusBar
         Left = 1
         Top = 316
-        Width = 717
+        Width = 713
         Height = 19
         Panels = <
           item
@@ -918,18 +738,26 @@ object FrmConsultaProgramacao: TFrmConsultaProgramacao
           item
             Width = 50
           end>
-        ExplicitWidth = 715
+        ExplicitWidth = 711
       end
       object ColunasLayoutExecutantes: TStringGrid
-        Left = 75
-        Top = 76
-        Width = 113
+        Left = 123
+        Top = 134
+        Width = 142
         Height = 94
-        ColCount = 2
+        ColCount = 7
         DefaultRowHeight = 21
+        RowCount = 12
         TabOrder = 4
         Visible = False
         RowHeights = (
+          21
+          21
+          21
+          21
+          21
+          21
+          21
           21
           21
           21
@@ -940,17 +768,17 @@ object FrmConsultaProgramacao: TFrmConsultaProgramacao
     object PanelServico: TPanel
       Left = 1
       Top = 340
-      Width = 719
-      Height = 264
+      Width = 715
+      Height = 248
       Align = alClient
       TabOrder = 1
-      ExplicitWidth = 717
-      ExplicitHeight = 256
-      object DBGridServicos: TDBGrid
+      ExplicitWidth = 713
+      ExplicitHeight = 240
+      object DBGridServicos: TFilterDBGrid
         Left = 1
         Top = 55
-        Width = 717
-        Height = 189
+        Width = 713
+        Height = 173
         Align = alClient
         DataSource = FrmDataModule.DataSourceProgramacaoServico_Consulta
         TabOrder = 0
@@ -962,6 +790,11 @@ object FrmConsultaProgramacao: TFrmConsultaProgramacao
         OnDrawColumnCell = DBGridServicosDrawColumnCell
         OnKeyDown = DBGridServicosKeyDown
         OnKeyPress = DBGridServicosKeyPress
+        ClearFilterButton = btnClearFiltroServico
+        SearchAction = actProcurarServicos
+        LayoutGrid = ColunasLayoutServicos
+        EnableZebra = False
+        ExcelButton = btnExcelServico
         Columns = <
           item
             Alignment = taCenter
@@ -1016,14 +849,14 @@ object FrmConsultaProgramacao: TFrmConsultaProgramacao
       object ToolBar3: TToolBar
         Left = 1
         Top = 26
-        Width = 717
+        Width = 713
         Height = 29
         Caption = 'ToolBar2'
         DrawingStyle = dsGradient
         EdgeBorders = [ebLeft, ebTop, ebRight, ebBottom]
         Images = FrmPrincipal.ImageList1
         TabOrder = 1
-        ExplicitWidth = 715
+        ExplicitWidth = 711
         object DBNavigator1: TDBNavigator
           Left = 0
           Top = 0
@@ -1046,10 +879,28 @@ object FrmConsultaProgramacao: TFrmConsultaProgramacao
             'Calcelar atualiza'#231#245'es')
           ParentShowHint = False
           ShowHint = True
-          TabOrder = 4
+          TabOrder = 3
+        end
+        object btnClearFiltroServico: TToolButton
+          Left = 138
+          Top = 0
+          Hint = 'Limpar filtro'
+          Caption = 'btnClearFiltroServico'
+          ImageIndex = 225
+          ParentShowHint = False
+          ShowHint = True
+        end
+        object btnExcelServico: TToolButton
+          Left = 161
+          Top = 0
+          Hint = 'Exportar dados para o Excel'
+          Caption = 'btnExcelServico'
+          ImageIndex = 54
+          ParentShowHint = False
+          ShowHint = True
         end
         object BitBtn30: TBitBtn
-          Left = 138
+          Left = 184
           Top = 0
           Width = 81
           Height = 22
@@ -1057,10 +908,10 @@ object FrmConsultaProgramacao: TFrmConsultaProgramacao
           Caption = 'Selecionar'
           ParentShowHint = False
           ShowHint = True
-          TabOrder = 3
+          TabOrder = 2
         end
         object BitBtn15: TBitBtn
-          Left = 219
+          Left = 265
           Top = 0
           Width = 104
           Height = 22
@@ -1068,26 +919,15 @@ object FrmConsultaProgramacao: TFrmConsultaProgramacao
           Caption = 'Servi'#231'o Padr'#227'o'
           ParentShowHint = False
           ShowHint = True
-          TabOrder = 2
+          TabOrder = 1
         end
         object BitBtn14: TBitBtn
-          Left = 323
+          Left = 369
           Top = 0
           Width = 60
           Height = 22
           Action = actServicoExcluir
           Caption = 'Excluir'
-          ParentShowHint = False
-          ShowHint = True
-          TabOrder = 1
-        end
-        object BitBtn4: TBitBtn
-          Left = 383
-          Top = 0
-          Width = 75
-          Height = 22
-          Action = actExcelServico
-          Caption = 'Exportar'
           ParentShowHint = False
           ShowHint = True
           TabOrder = 0
@@ -1096,7 +936,7 @@ object FrmConsultaProgramacao: TFrmConsultaProgramacao
       object Panel10: TPanel
         Left = 1
         Top = 1
-        Width = 717
+        Width = 713
         Height = 25
         Align = alTop
         Caption = 'Servi'#231'os Programados'
@@ -1109,12 +949,12 @@ object FrmConsultaProgramacao: TFrmConsultaProgramacao
         ParentBackground = False
         ParentFont = False
         TabOrder = 2
-        ExplicitWidth = 715
+        ExplicitWidth = 711
       end
       object StatusBarServicos: TStatusBar
         Left = 1
-        Top = 244
-        Width = 717
+        Top = 228
+        Width = 713
         Height = 19
         Panels = <
           item
@@ -1123,19 +963,21 @@ object FrmConsultaProgramacao: TFrmConsultaProgramacao
           item
             Width = 50
           end>
-        ExplicitTop = 236
-        ExplicitWidth = 715
+        ExplicitTop = 220
+        ExplicitWidth = 711
       end
       object ColunasLayoutServicos: TStringGrid
-        Left = 592
-        Top = 61
-        Width = 52
-        Height = 39
-        ColCount = 2
+        Left = 120
+        Top = 104
+        Width = 161
+        Height = 81
+        ColCount = 7
         DefaultRowHeight = 21
+        RowCount = 6
         TabOrder = 4
         Visible = False
         RowHeights = (
+          21
           21
           21
           21
@@ -1147,7 +989,7 @@ object FrmConsultaProgramacao: TFrmConsultaProgramacao
   object PanelAjuda: TPanel
     Left = 300
     Top = 160
-    Width = 400
+    Width = 404
     Height = 385
     Color = clMenu
     ParentBackground = False
@@ -1155,8 +997,8 @@ object FrmConsultaProgramacao: TFrmConsultaProgramacao
     Visible = False
     object PanelTituloAjuda1: TPanel
       Left = 1
-      Top = 1383
-      Width = 398
+      Top = 1123
+      Width = 402
       Height = 26
       Align = alTop
       Caption = 'Alterar Destino dos Executantes da Programa'#231#227'o'
@@ -1172,8 +1014,10 @@ object FrmConsultaProgramacao: TFrmConsultaProgramacao
       OnMouseDown = PanelTituloAjuda1MouseDown
       OnMouseMove = PanelTituloAjuda1MouseMove
       OnMouseUp = PanelTituloAjuda1MouseUp
+      ExplicitTop = 1383
+      ExplicitWidth = 398
       object SpeedButton4: TSpeedButton
-        Left = 374
+        Left = 378
         Top = 1
         Width = 23
         Height = 24
@@ -1224,21 +1068,24 @@ object FrmConsultaProgramacao: TFrmConsultaProgramacao
     end
     object PanelSelecaoServico: TPanel
       Left = 1
-      Top = 629
-      Width = 398
+      Top = 333
+      Width = 402
       Height = 262
       Align = alTop
       TabOrder = 1
+      ExplicitTop = 629
+      ExplicitWidth = 398
       object ToolBar5: TToolBar
         Left = 1
         Top = 1
-        Width = 396
+        Width = 400
         Height = 29
         Caption = 'ToolBar2'
         DrawingStyle = dsGradient
         EdgeBorders = [ebLeft, ebTop, ebRight, ebBottom]
         Images = FrmPrincipal.ImageList1
         TabOrder = 0
+        ExplicitWidth = 396
         object ToolButton2: TToolButton
           Left = 0
           Top = 0
@@ -1289,7 +1136,7 @@ object FrmConsultaProgramacao: TFrmConsultaProgramacao
       object RLSelecionarServicos: TStringGrid
         Left = 1
         Top = 30
-        Width = 278
+        Width = 282
         Height = 212
         Align = alClient
         FixedCols = 0
@@ -1299,11 +1146,12 @@ object FrmConsultaProgramacao: TFrmConsultaProgramacao
         OnFixedCellClick = RLSelecionarServicosFixedCellClick
         OnKeyPress = RLSelecionarServicosKeyPress
         OnMouseDown = RLSelecionarServicosMouseDown
+        ExplicitWidth = 278
       end
       object StatusBarSelecaoServico: TStatusBar
         Left = 1
         Top = 242
-        Width = 396
+        Width = 400
         Height = 19
         Panels = <
           item
@@ -1315,14 +1163,16 @@ object FrmConsultaProgramacao: TFrmConsultaProgramacao
           item
             Width = 50
           end>
+        ExplicitWidth = 396
       end
       object Panel18: TPanel
-        Left = 279
+        Left = 283
         Top = 30
         Width = 118
         Height = 212
         Align = alRight
         TabOrder = 3
+        ExplicitLeft = 279
         object RadioGroup1: TRadioGroup
           Left = 1
           Top = 1
@@ -1343,22 +1193,24 @@ object FrmConsultaProgramacao: TFrmConsultaProgramacao
     object PanelImportar: TPanel
       Left = 1
       Top = 1
-      Width = 398
+      Width = 402
       Height = 218
       Align = alTop
       TabOrder = 2
       Visible = False
+      ExplicitWidth = 398
       object Panel1: TPanel
         Left = 1
         Top = 1
-        Width = 396
+        Width = 400
         Height = 216
         Align = alClient
         TabOrder = 0
-        object DBGridImportar: TDBGrid
+        ExplicitWidth = 396
+        object DBGridImportar: TFilterDBGrid
           Left = 1
           Top = 111
-          Width = 394
+          Width = 398
           Height = 85
           Align = alClient
           DataSource = FrmDataModule.DataSourceProgramacaoDiaria_Importar
@@ -1369,7 +1221,7 @@ object FrmConsultaProgramacao: TFrmConsultaProgramacao
           TitleFont.Name = 'Tahoma'
           TitleFont.Style = []
           OnDrawColumnCell = DBGridImportarDrawColumnCell
-          OnTitleClick = DBGridImportarTitleClick
+          EnableZebra = False
           Columns = <
             item
               Alignment = taCenter
@@ -1462,7 +1314,7 @@ object FrmConsultaProgramacao: TFrmConsultaProgramacao
         object StatusBarImportar: TStatusBar
           Left = 1
           Top = 196
-          Width = 394
+          Width = 398
           Height = 19
           Panels = <
             item
@@ -1480,14 +1332,16 @@ object FrmConsultaProgramacao: TFrmConsultaProgramacao
             item
               Width = 50
             end>
+          ExplicitWidth = 394
         end
         object Panel3: TPanel
           Left = 1
           Top = 60
-          Width = 394
+          Width = 398
           Height = 51
           Align = alTop
           TabOrder = 2
+          ExplicitWidth = 394
           object Panel4: TPanel
             Left = 1
             Top = 1
@@ -1615,10 +1469,11 @@ object FrmConsultaProgramacao: TFrmConsultaProgramacao
         object Panel2: TPanel
           Left = 1
           Top = 1
-          Width = 394
+          Width = 398
           Height = 30
           Align = alTop
           TabOrder = 4
+          ExplicitWidth = 394
           object BitBtn2: TBitBtn
             Left = 1
             Top = 1
@@ -1632,7 +1487,7 @@ object FrmConsultaProgramacao: TFrmConsultaProgramacao
           object MemoImportar: TMemo
             Left = 86
             Top = 1
-            Width = 307
+            Width = 311
             Height = 28
             Hint = 'Endere'#231'o do banco de dados de importa'#231#227'o'
             Align = alClient
@@ -1642,122 +1497,115 @@ object FrmConsultaProgramacao: TFrmConsultaProgramacao
             ScrollBars = ssVertical
             ShowHint = True
             TabOrder = 1
+            ExplicitWidth = 307
           end
         end
         object ToolBar4: TToolBar
           Left = 1
           Top = 31
-          Width = 394
+          Width = 398
           Height = 29
           Caption = 'ToolBar4'
           DrawingStyle = dsGradient
           EdgeBorders = [ebLeft, ebTop, ebRight, ebBottom]
           TabOrder = 5
+          ExplicitWidth = 394
           object BitBtn11: TBitBtn
             Left = 0
             Top = 0
             Width = 70
             Height = 22
-            Action = actExcelImportar
+            Hint = 'Exportar para o Excel'
             Caption = 'Exportar'
+            ImageIndex = 54
+            Glyph.Data = {
+              36040000424D3604000000000000360000002800000010000000100000000100
+              2000000000000004000000000000000000000000000000000000FF00FF00A7C6
+              B400A6C6B400A6C5B300A5C5B300A5C5B300A5C5B200A4C4B200A4C4B200A4C4
+              B200A4C4B200A4C4B200A4C4B100A4C4B100A4C4B100DAE7E000A7C7B5003983
+              5700357F5400327D5100307A4F002D794D002B774B002A764A00287449002773
+              47002673470025724600257246002471450024714500A7C6B400A8C8B5003D85
+              5A00C0CFC200D5DCD300D4DBD200D4DBD100D3DAD100D3DAD000D3DAD000D3D9
+              D000D3D9CF00D3D9CF00D3D9CF00B4C7B70024714500A7C6B400A9C8B6004189
+              5E00D6DDD500EEEBE700EDEAE600ECEAE500ECE9E500EBE9E400EBE8E300E7E5
+              DF00BAC6B800B3C1B200B3C1B200A7BAA90025724600A7C6B400AAC9B700478D
+              6300D5DDD4007AA982006AA0750069A1780068A17A00619472006794760089BD
+              990056AD7200419D57003F934D007EA2870026724700A7C6B400ABCAB8004C92
+              6800D8DFD7008AB69100459D500043A1590042A4620039975C0071B388005FB6
+              7B0043A1590040964D005C8A6600C7D2C70027734700A7C6B500ACCBB9005397
+              6D00D9E0D800F0EDEA007CAF8400459E5100419E590075B98C005FB67B0043A1
+              590041974E002771430021633900ACBEAE0028754900A7C6B500ADCCBA00599D
+              7300DAE1DA00F2EFED00EDECE8006EA8790074B8880060B67B0043A159004198
+              4E005F8D6900CAD4C900C2CFC200C7D3C7002A764A00A8C6B500AFCDBB0061A3
+              7900DCE3DC00F3F1EE00E4E7E10093C5A30060B67B0043A1590042994E003C9A
+              5B002D7F4A00ACBAAB00ECE9E400C8D4C8002C784C00A8C7B500B0CEBC0069A9
+              8000DDE4DE00E8EBE60095C7A50060B67B0043A1590042994E003F98520042A3
+              5F003EA1620033784A00D2D6CC00C9D4C9002F7A4E00A8C7B500B2CFBD0071B0
+              8700D3DFD60096C7A60060B67B0043A1590042974E0092B4990055A0610044A0
+              570042A460003D9D60004B7F5900C5D1C500327D5100A9C7B600B3D0BF007AB8
+              8F00B5CFBF009AC8AA0082B9920086B89000C0D1C200F2F0EE00D9E1D80089B8
+              920080B68E007FB7910080AD8E00C0CDC00036805400A9C8B600B5D2C00084BF
+              9700E1E9E400FAF8F800F8F6F500F7F5F300F5F3F200F4F2F000F3F1EE00F2EF
+              ED00F1EEEB00F0EDEA00EFECE900CBD6CB003A835800A9C8B600B7D3C2008FC8
+              A100C4D8CD00D9E5DE00D8E3DC00D7E1DA00D5E0D800D4DFD600D3DED500D2DC
+              D300D1DBD200D0DAD100CFD9CF00B1C7B7003E865C00AAC8B700B9D5C4009FD6
+              AF0094CDA5008AC59D0082BE960079B78F0072B188006BAB820064A57C005DA0
+              7600579B710051966C004C926800478E6400438B6000ABC9B700DDE9E200B6D3
+              C100B5D2C100B4D1C000B3D0BF00B2CFBE00B1CEBD00B0CDBC00AFCDBB00AECC
+              BB00AECBBA00ADCBB900ACCAB900ACCAB800ABC9B800DCE8E100}
             ParentShowHint = False
             ShowHint = True
-            TabOrder = 3
+            TabOrder = 2
           end
           object BitBtn9: TBitBtn
             Left = 70
             Top = 0
             Width = 70
             Height = 22
-            Action = actLimparFiltrosImportar
+            Hint = 'Limpar Filtros'
             Caption = 'Limpar'
+            ImageIndex = 469
             Glyph.Data = {
               36040000424D3604000000000000360000002800000010000000100000000100
               2000000000000004000000000000000000000000000000000000FF00FF00FF00
-              FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FDFDFD029B9B9B643434
-              34CB070707F80D0D0DF2474747B8BDBDBD42FF00FF00FF00FF00FF00FF00FF00
-              FF00FF00FF00FF00FF00FF00FF00FF00FF00FBFBFB04515151AE000000FF0000
-              00FF0C0C0CF3070707F8000000FF010101FE89898976FF00FF00FF00FF00FF00
-              FF00FF00FF00FF00FF00FF00FF00FF00FF008181817E000000FF232323DCC1C1
-              C13EFEFEFE01F9F9F906A1A1A15E0B0B0BF4010101FEBDBDBD42FF00FF00FF00
-              FF00FF00FF00FF00FF00FF00FF00F9F9F906101010EF050505FAD9D9D926FF00
-              FF00FF00FF00FF00FF00FF00FF00A1A1A15E000000FF474747B8FF00FF00FF00
-              FF00FF00FF00FF00FF00FF00FF00CFCFCF30000000FF3F3F3FC0FF00FF00FF00
-              FF00FF00FF00FF00FF00FF00FF00F9F9F906070707F80D0D0DF2FF00FF00FF00
-              FF00FF00FF00FF00FF008B8B8B74181818E7000000FF0A0A0AF5282828D7FF00
-              FF00FF00FF00FF00FF00FF00FF00FF00FF00151515EA000000FFFF00FF00FF00
-              FF00FF00FF00FF00FF007B7B7B84000000FF000000FF000000FF0B0B0BF4FF00
-              FF00FF00FF00FF00FF00FF00FF00FF00FF00151515EA000000FFFF00FF00FDFD
-              FD02C5C5C53AAEAEAE51DBDBDB24F5F5F50AF5F5F50AF5F5F50AF2F2F20DB8B8
-              B847B2B2B24DE6E6E619FF00FF00FF00FF00151515EA000000FFE6E6E6194D4D
-              4DB28F8F8F70A5A5A55A484848B7DCDCDC23FF00FF00FF00FF007474748B9696
-              9669A1A1A15E575757A89191916EFF00FF00151515EA000000FF5F5F5FA0B0B0
-              B04F1E1E1EE1030303FCA5A5A55A484848B7F9F9F906B1B1B14E9292926D3E3E
-              3EC1050505FA787878875F5F5FA0CFCFCF30151515EA000000FF595959A65757
-              57A8000000FF000000FF1E1E1EE1A6A6A659494949B67575758A8A8A8A750000
-              00FF000000FF010101FEA6A6A65988888877151515EA000000FF5B5B5BA45252
-              52AD000000FF000000FF000000FF292929D6878787786262629D020202FD0000
-              00FF000000FF000000FFA6A6A65986868679151515EA000000FF5B5B5BA4ADAD
-              AD52050505FA000000FF000000FF000000FF000000FF000000FF000000FF0000
-              00FF000000FF4E4E4EB179797986C5C5C53A232323DC131313ECD5D5D52A5757
-              57A8B3B3B34C9292926D8F8F8F708F8F8F708F8F8F708F8F8F708F8F8F708F8F
-              8F70A3A3A35C9191916E6B6B6B94FF00FF005C5C5CA35C5C5CA3FF00FF00E4E4
-              E41B777777885D5D5DA25D5D5DA25D5D5DA25D5D5DA25D5D5DA25D5D5DA25D5D
-              5DA25D5D5DA2A6A6A659FEFEFE01FF00FF005C5C5CA35C5C5CA3FF00FF00FF00
-              FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
-              FF00FF00FF00FF00FF00FF00FF00FF00FF002E2E2ED1212121DE}
+              FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF000000
+              93FF000093FFFF00FF00FF00FF00000093FF000093FFFF00FF00FF00FF00FF00
+              FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00000093FF0029
+              FFFF0033FFFF000093FF000093FF0033FFFF0029FFFF000093FFFF00FF00FF00
+              FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FFFFFFFF0029CAFFFFCC
+              FFFF0029FFFF0033FFFF0033FFFF0029FFFFFFCCFFFF0029CAFFFF00FF00FF00
+              FF00FF00FF00FF00FF00FF00FF00FF00FF00003E5DFF96F8FFFFFFFFFFFF0029
+              CAFF0C4CFFFF0C4CFFFF0C4CFFFF0C4CFFFF0029CAFFFF00FF00FF00FF00FF00
+              FF00FF00FF00FF00FF00FF00FF00FF00FF00005E94FF96F8FFFFFFFFFFFF0000
+              93FF146CFFFF146CFFFF146CFFFF146CFFFF000093FFFF00FF00FF00FF00FF00
+              FF00FF00FF00FF00FF00FF00FF00FF00FF00005E94FFFFFFFFFF000093FF2083
+              FFFF2083FFFFFFCCFFFFFFCCFFFF2083FFFF2083FFFF000093FFFF00FF00FF00
+              FF00FF00FF00FF00FF00FF00FF00FF00FF00005E94FFFFFFFFFF0029CAFFFFCC
+              FFFFFFCCFFFF0029CAFF0029CAFFFFCCFFFFFFCCFFFF0029CAFFFF00FF00FF00
+              FF00FF00FF00FF00FF00FF00FF00FF00FF00005E94FF96F8FFFFFEFEFFFF0029
+              CAFF0029CAFFFF00FF00FF00FF000029CAFF0029CAFFFF00FF00FF00FF00FF00
+              FF00FF00FF00FF00FF00FF00FF00FF00FF00005E94FF00EEFFFF98E8FFFFFFFF
+              FFFFFF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
+              FF00FF00FF00FF00FF00FF00FF00003E5DFF49F8FFFF06C8FFFF1CB2FFFF2AA7
+              FFFF003E5DFFFF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
+              FF00FF00FF00FF00FF00003E5DFF49F8FFFF49F8FFFF00CEFFFF14B8FFFF2AA7
+              FFFF2AA7FFFF003E5DFFFF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
+              FF00FF00FF00003E5DFF49F8FFFF72EBFFFF00FFFFFF00D3FFFF0FBDFFFF23AA
+              FFFF29A9FFFF2AA7FFFF003E5DFFFF00FF00FF00FF00FF00FF00FF00FF00FF00
+              FF00003E5DFF49F8FFFF74ECFFFF30F5FFFF00F7FFFF00D2FFFF0AC2FFFF1AB2
+              FFFF2DA0FFFF27ABFFFF2AA7FFFF003E5DFFFF00FF00FF00FF00FF00FF00003E
+              5DFF49F8FFFF6BEDFFFF45EBFFFF00FFFFFF00ECFFFF00D1FFFF00C4FFFF06B5
+              FFFF1F9CFFFF1E9EFFFF1AA8FFFF2AA7FFFF003E5DFFFF00FF00003E5DFFFFFF
+              FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+              FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF003E5DFF006193FF0063
+              97FF005E94FF005D93FF005D93FF005D93FF005D93FF005D93FF005D93FF005D
+              93FF005D93FF005D93FF005D93FF005E94FF006497FF006293FF}
             ParentShowHint = False
             ShowHint = True
             TabOrder = 1
           end
-          object BitBtn10: TBitBtn
-            Left = 140
-            Top = 0
-            Width = 70
-            Height = 22
-            Action = actFiltrosTabelaImportar
-            Caption = 'Filtros'
-            Glyph.Data = {
-              36040000424D3604000000000000360000002800000010000000100000000100
-              2000000000000004000000000000000000000000000000000000FF00FF00FF00
-              FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
-              FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
-              FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
-              FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
-              FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
-              FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
-              FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
-              FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
-              FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
-              FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FCFC
-              FC03DDDDDD25C6C6C63F9F9F9F6A878686866F6E6EA15B5A5AB794949477E2E2
-              E21FFDFDFD02C4C4C441DEDEDE24FF00FF00FF00FF00FF00FF00E2E2E21F6766
-              66A99D9D9D6D9B9B9B6F87878785373636DF292828EF232222F51C1B1BFF1B1A
-              1AFF383737DE252424F3403F3FD48281818BFF00FF00FF00FF00FEFEFE019594
-              94768585858796959575515050C28181818CE7E7E71AC0C0C0451C1B1BFD1C1B
-              1BFF1C1B1BFF1C1B1BFF1C1B1BFF3F3E3ED6DBDBDB27FF00FF00DDDDDD258D8C
-              8C7FAAA9A95FA6A6A662D0D0D034FF00FF00FF00FF008080808D1C1B1BFF1C1B
-              1BFF1C1B1BFF1C1B1BFF1C1B1BFF282727F05A5959B7E1E0E021FF00FF00FF00
-              FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00E9E9E918A6A6A6626261
-              61AF232222F61C1B1BFF292828EF222121F71C1B1BFFC9C9C93BFF00FF00FF00
-              FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
-              FF00F0F0F010ADACAC5B89898982A8A8A860686868A8EEEEEE12FF00FF00FF00
-              FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
-              FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
-              FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
-              FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
-              FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
-              FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
-              FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
-              FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
-              FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
-              FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00}
-            ParentShowHint = False
-            ShowHint = True
-            TabOrder = 2
-          end
           object BitBtn8: TBitBtn
-            Left = 210
+            Left = 140
             Top = 0
             Width = 78
             Height = 22
@@ -1772,16 +1620,19 @@ object FrmConsultaProgramacao: TFrmConsultaProgramacao
     end
     object PanelCopiar: TPanel
       Left = 1
-      Top = 978
-      Width = 398
-      Height = 200
+      Top = 682
+      Width = 402
+      Height = 236
       Align = alTop
       TabOrder = 3
+      ExplicitTop = 978
+      ExplicitWidth = 398
+      ExplicitHeight = 200
       object MonthCalendar1: TMonthCalendar
         Left = 1
         Top = 30
-        Width = 263
-        Height = 169
+        Width = 267
+        Height = 205
         Align = alClient
         CalColors.TitleBackColor = clRed
         Date = 43813.000000000000000000
@@ -1794,17 +1645,20 @@ object FrmConsultaProgramacao: TFrmConsultaProgramacao
         ParentFont = False
         TabOrder = 0
         OnDblClick = MonthCalendar1DblClick
+        ExplicitWidth = 263
+        ExplicitHeight = 169
       end
       object ToolBar7: TToolBar
         Left = 1
         Top = 1
-        Width = 396
+        Width = 400
         Height = 29
         Caption = 'ToolBar7'
         DrawingStyle = dsGradient
         EdgeBorders = [ebLeft, ebTop, ebRight, ebBottom]
         Images = FrmPrincipal.ImageList1
         TabOrder = 1
+        ExplicitWidth = 396
         object BitBtn32: TBitBtn
           Left = 0
           Top = 0
@@ -1840,10 +1694,10 @@ object FrmConsultaProgramacao: TFrmConsultaProgramacao
         end
       end
       object ListBoxCopiar: TListBox
-        Left = 264
+        Left = 268
         Top = 30
         Width = 133
-        Height = 169
+        Height = 205
         Align = alRight
         Font.Charset = DEFAULT_CHARSET
         Font.Color = clWindowText
@@ -1871,386 +1725,25 @@ object FrmConsultaProgramacao: TFrmConsultaProgramacao
         Visible = False
       end
     end
-    object PanelEditarProgramacao: TPanel
-      Left = 1
-      Top = 219
-      Width = 398
-      Height = 296
-      Align = alTop
-      TabOrder = 4
-      object Panel19: TPanel
-        Left = 1
-        Top = 105
-        Width = 396
-        Height = 25
-        Align = alTop
-        TabOrder = 0
-        object Panel20: TPanel
-          Left = 1
-          Top = 1
-          Width = 135
-          Height = 23
-          Align = alLeft
-          Alignment = taLeftJustify
-          Caption = '  Hora Chegada:'
-          TabOrder = 0
-        end
-        object Panel21: TPanel
-          Left = 136
-          Top = 1
-          Width = 259
-          Height = 23
-          Align = alClient
-          TabOrder = 1
-          object edtHoraChegada: TMaskEdit
-            Left = 1
-            Top = 1
-            Width = 257
-            Height = 21
-            Hint = 'Entre com o hor'#225'rio'
-            Align = alClient
-            EditMask = '!90:00;1;_'
-            MaxLength = 5
-            ParentShowHint = False
-            ShowHint = True
-            TabOrder = 0
-            Text = '  :  '
-            OnKeyDown = edtHoraChegadaKeyDown
-          end
-        end
-      end
-      object Panel22: TPanel
-        Left = 1
-        Top = 180
-        Width = 396
-        Height = 25
-        Align = alTop
-        TabOrder = 1
-        object Panel23: TPanel
-          Left = 1
-          Top = 1
-          Width = 135
-          Height = 23
-          Align = alLeft
-          Alignment = taLeftJustify
-          Caption = '   Hora Sa'#237'da:'
-          TabOrder = 0
-        end
-        object Panel24: TPanel
-          Left = 136
-          Top = 1
-          Width = 259
-          Height = 23
-          Align = alClient
-          TabOrder = 1
-          object edtHoraSaida: TMaskEdit
-            Left = 1
-            Top = 1
-            Width = 257
-            Height = 21
-            Hint = 'Entre com o hor'#225'rio'
-            Align = alClient
-            EditMask = '!90:00;1;_'
-            MaxLength = 5
-            ParentShowHint = False
-            ShowHint = True
-            TabOrder = 0
-            Text = '  :  '
-            OnKeyDown = edtHoraSaidaKeyDown
-          end
-        end
-      end
-      object Panel25: TPanel
-        Left = 1
-        Top = 155
-        Width = 396
-        Height = 25
-        Align = alTop
-        TabOrder = 2
-        object Panel26: TPanel
-          Left = 1
-          Top = 1
-          Width = 135
-          Height = 23
-          Align = alLeft
-          Alignment = taLeftJustify
-          Caption = '   Hora Encerramento:'
-          TabOrder = 0
-        end
-        object Panel27: TPanel
-          Left = 136
-          Top = 1
-          Width = 259
-          Height = 23
-          Align = alClient
-          TabOrder = 1
-          object edtHoraEncerramento: TMaskEdit
-            Left = 1
-            Top = 1
-            Width = 257
-            Height = 21
-            Hint = 'Entre com o hor'#225'rio'
-            Align = alClient
-            EditMask = '!90:00;1;_'
-            MaxLength = 5
-            ParentShowHint = False
-            ShowHint = True
-            TabOrder = 0
-            Text = '  :  '
-            OnKeyDown = edtHoraEncerramentoKeyDown
-          end
-        end
-      end
-      object Panel28: TPanel
-        Left = 1
-        Top = 130
-        Width = 396
-        Height = 25
-        Align = alTop
-        TabOrder = 3
-        object Panel29: TPanel
-          Left = 1
-          Top = 1
-          Width = 135
-          Height = 23
-          Align = alLeft
-          Alignment = taLeftJustify
-          Caption = '   Hora PT:'
-          TabOrder = 0
-        end
-        object Panel30: TPanel
-          Left = 136
-          Top = 1
-          Width = 259
-          Height = 23
-          Align = alClient
-          TabOrder = 1
-          object edtHoraPT: TMaskEdit
-            Left = 1
-            Top = 1
-            Width = 257
-            Height = 21
-            Hint = 'Entre com o hor'#225'rio'
-            Align = alClient
-            EditMask = '!90:00;1;_'
-            MaxLength = 5
-            ParentShowHint = False
-            ShowHint = True
-            TabOrder = 0
-            Text = '  :  '
-            OnKeyDown = edtHoraPTKeyDown
-          end
-        end
-      end
-      object Panel31: TPanel
-        Left = 1
-        Top = 205
-        Width = 396
-        Height = 25
-        Align = alTop
-        TabOrder = 4
-        object Panel32: TPanel
-          Left = 1
-          Top = 1
-          Width = 135
-          Height = 23
-          Align = alLeft
-          Alignment = taLeftJustify
-          Caption = '  Motivo:'
-          TabOrder = 0
-        end
-        object Panel33: TPanel
-          Left = 136
-          Top = 1
-          Width = 259
-          Height = 23
-          Align = alClient
-          TabOrder = 1
-          object edtMotivo: TEdit
-            Left = 1
-            Top = 1
-            Width = 257
-            Height = 21
-            Align = alClient
-            TabOrder = 0
-            OnKeyDown = edtMotivoKeyDown
-          end
-        end
-      end
-      object ToolBar9: TToolBar
-        Left = 1
-        Top = 1
-        Width = 396
-        Height = 29
-        Caption = 'ToolBar9'
-        DrawingStyle = dsGradient
-        EdgeBorders = [ebLeft, ebTop, ebRight, ebBottom]
-        TabOrder = 5
-        object btnProgramacao: TBitBtn
-          Left = 0
-          Top = 0
-          Width = 85
-          Height = 22
-          Action = actProgramacaoGravar
-          Caption = 'Gravar'
-          ParentShowHint = False
-          ShowHint = True
-          TabOrder = 2
-        end
-        object BitBtn37: TBitBtn
-          Left = 85
-          Top = 0
-          Width = 82
-          Height = 22
-          Action = actProgramacaoCancelar
-          Caption = 'Cancelar'
-          ParentShowHint = False
-          ShowHint = True
-          TabOrder = 1
-        end
-        object BitBtn36: TBitBtn
-          Left = 167
-          Top = 0
-          Width = 88
-          Height = 22
-          Action = actLimparHoras
-          Caption = 'Limpa horas'
-          ParentShowHint = False
-          ShowHint = True
-          TabOrder = 0
-        end
-      end
-      object Panel34: TPanel
-        Left = 1
-        Top = 30
-        Width = 396
-        Height = 25
-        Align = alTop
-        TabOrder = 6
-        object Panel35: TPanel
-          Left = 1
-          Top = 1
-          Width = 135
-          Height = 23
-          Align = alLeft
-          Alignment = taLeftJustify
-          Caption = '   Data da programa'#231#227'o:'
-          TabOrder = 0
-        end
-        object Panel36: TPanel
-          Left = 136
-          Top = 1
-          Width = 259
-          Height = 23
-          Align = alClient
-          TabOrder = 1
-          object DateTimePickerProgramacao: TDateTimePicker
-            Left = 1
-            Top = 1
-            Width = 257
-            Height = 21
-            Align = alClient
-            Date = 43503.000000000000000000
-            Time = 0.363879548611294000
-            TabOrder = 0
-          end
-        end
-      end
-      object Panel37: TPanel
-        Left = 1
-        Top = 80
-        Width = 396
-        Height = 25
-        Align = alTop
-        TabOrder = 7
-        object Panel38: TPanel
-          Left = 1
-          Top = 1
-          Width = 135
-          Height = 23
-          Align = alLeft
-          Alignment = taLeftJustify
-          Caption = '   Destino:'
-          TabOrder = 0
-        end
-        object Panel39: TPanel
-          Left = 136
-          Top = 1
-          Width = 259
-          Height = 23
-          Align = alClient
-          TabOrder = 1
-          object ComboBoxDestino: TComboBox
-            Left = 1
-            Top = 1
-            Width = 257
-            Height = 21
-            Align = alClient
-            DoubleBuffered = False
-            DropDownCount = 20
-            ParentDoubleBuffered = False
-            TabOrder = 0
-            OnKeyPress = ComboBoxDestinoKeyPress
-          end
-        end
-      end
-      object Panel43: TPanel
-        Left = 1
-        Top = 55
-        Width = 396
-        Height = 25
-        Align = alTop
-        TabOrder = 8
-        object Panel44: TPanel
-          Left = 1
-          Top = 1
-          Width = 135
-          Height = 23
-          Align = alLeft
-          Alignment = taLeftJustify
-          Caption = '  Tipo de Etapa de Servi'#231'o:'
-          TabOrder = 0
-        end
-        object Panel45: TPanel
-          Left = 136
-          Top = 1
-          Width = 259
-          Height = 23
-          Align = alClient
-          TabOrder = 1
-          object ComboBoxTipoEtapaServico: TComboBox
-            Left = 1
-            Top = 1
-            Width = 257
-            Height = 21
-            Align = alClient
-            DoubleBuffered = False
-            DropDownCount = 20
-            ParentDoubleBuffered = False
-            ParentShowHint = False
-            ShowHint = True
-            TabOrder = 0
-            OnKeyPress = ComboBoxTipoEtapaServicoKeyPress
-          end
-        end
-      end
-    end
     object PanelEditarExecutante: TPanel
       Left = 1
-      Top = 891
-      Width = 398
+      Top = 595
+      Width = 402
       Height = 87
       Align = alTop
-      TabOrder = 5
+      TabOrder = 4
+      ExplicitTop = 891
+      ExplicitWidth = 398
       object ToolBar10: TToolBar
         Left = 1
         Top = 1
-        Width = 396
+        Width = 400
         Height = 29
         Caption = 'ToolBar9'
         DrawingStyle = dsGradient
         EdgeBorders = [ebLeft, ebTop, ebRight, ebBottom]
         TabOrder = 0
+        ExplicitWidth = 396
         object BitBtn38: TBitBtn
           Left = 0
           Top = 0
@@ -2277,10 +1770,11 @@ object FrmConsultaProgramacao: TFrmConsultaProgramacao
       object Panel40: TPanel
         Left = 1
         Top = 55
-        Width = 396
+        Width = 400
         Height = 25
         Align = alTop
         TabOrder = 1
+        ExplicitWidth = 396
         object Panel41: TPanel
           Left = 1
           Top = 1
@@ -2294,14 +1788,15 @@ object FrmConsultaProgramacao: TFrmConsultaProgramacao
         object Panel42: TPanel
           Left = 121
           Top = 1
-          Width = 274
+          Width = 278
           Height = 23
           Align = alClient
           TabOrder = 1
+          ExplicitWidth = 274
           object ComboBoxFuncao1: TComboBox
             Left = 1
             Top = 1
-            Width = 272
+            Width = 276
             Height = 21
             Align = alClient
             DropDownCount = 20
@@ -2313,10 +1808,11 @@ object FrmConsultaProgramacao: TFrmConsultaProgramacao
       object Panel46: TPanel
         Left = 1
         Top = 30
-        Width = 396
+        Width = 400
         Height = 25
         Align = alTop
         TabOrder = 2
+        ExplicitWidth = 396
         object Panel47: TPanel
           Left = 1
           Top = 1
@@ -2330,14 +1826,15 @@ object FrmConsultaProgramacao: TFrmConsultaProgramacao
         object Panel48: TPanel
           Left = 121
           Top = 1
-          Width = 274
+          Width = 278
           Height = 23
           Align = alClient
           TabOrder = 1
+          ExplicitWidth = 274
           object ComboBoxOrigem: TComboBox
             Left = 1
             Top = 1
-            Width = 272
+            Width = 276
             Height = 21
             Align = alClient
             DoubleBuffered = False
@@ -2350,16 +1847,18 @@ object FrmConsultaProgramacao: TFrmConsultaProgramacao
     end
     object PanelLogAcao: TPanel
       Left = 1
-      Top = 1178
-      Width = 398
+      Top = 918
+      Width = 402
       Height = 205
       Align = alTop
       Caption = 'PanelLogAcao'
-      TabOrder = 6
+      TabOrder = 5
+      ExplicitTop = 1178
+      ExplicitWidth = 398
       object DBMemoLogAcao: TDBMemo
         Left = 1
         Top = 30
-        Width = 396
+        Width = 400
         Height = 174
         Align = alClient
         DataField = 'LogAcao'
@@ -2368,34 +1867,39 @@ object FrmConsultaProgramacao: TFrmConsultaProgramacao
         ScrollBars = ssBoth
         TabOrder = 0
         WordWrap = False
+        ExplicitWidth = 396
       end
       object ToolBar11: TToolBar
         Left = 1
         Top = 1
-        Width = 396
+        Width = 400
         Height = 29
         Caption = 'ToolBar8'
         DrawingStyle = dsGradient
         EdgeBorders = [ebLeft, ebTop, ebRight, ebBottom]
         TabOrder = 1
+        ExplicitWidth = 396
       end
     end
     object PanelInserirProgramacao: TPanel
       Left = 1
-      Top = 515
-      Width = 398
+      Top = 219
+      Width = 402
       Height = 114
       Align = alTop
-      TabOrder = 7
+      TabOrder = 6
+      ExplicitTop = 515
+      ExplicitWidth = 398
       object ToolBar12: TToolBar
         Left = 1
         Top = 1
-        Width = 396
+        Width = 400
         Height = 29
         Caption = 'ToolBar5'
         DrawingStyle = dsGradient
         EdgeBorders = [ebLeft, ebTop, ebRight, ebBottom]
         TabOrder = 0
+        ExplicitWidth = 396
         object BitBtn40: TBitBtn
           Left = 0
           Top = 0
@@ -2405,27 +1909,17 @@ object FrmConsultaProgramacao: TFrmConsultaProgramacao
           Caption = 'Inserir'
           ParentShowHint = False
           ShowHint = True
-          TabOrder = 1
-        end
-        object BitBtn41: TBitBtn
-          Left = 69
-          Top = 0
-          Width = 84
-          Height = 22
-          Action = actCancelarProgramacao
-          Caption = 'Cancelar'
-          ParentShowHint = False
-          ShowHint = True
           TabOrder = 0
         end
       end
       object Panel71: TPanel
         Left = 1
         Top = 30
-        Width = 396
+        Width = 400
         Height = 25
         Align = alTop
         TabOrder = 1
+        ExplicitWidth = 396
         object Panel72: TPanel
           Left = 1
           Top = 1
@@ -2439,14 +1933,15 @@ object FrmConsultaProgramacao: TFrmConsultaProgramacao
         object Panel73: TPanel
           Left = 131
           Top = 1
-          Width = 264
+          Width = 268
           Height = 23
           Align = alClient
           TabOrder = 1
+          ExplicitWidth = 264
           object DateTimePickerProgramacao2: TDateTimePicker
             Left = 1
             Top = 1
-            Width = 262
+            Width = 266
             Height = 21
             Hint = 'Selecione a data da programa'#231#227'o para gravar'
             Align = alClient
@@ -2455,16 +1950,18 @@ object FrmConsultaProgramacao: TFrmConsultaProgramacao
             ParentShowHint = False
             ShowHint = True
             TabOrder = 0
+            ExplicitWidth = 262
           end
         end
       end
       object Panel74: TPanel
         Left = 1
         Top = 55
-        Width = 396
+        Width = 400
         Height = 25
         Align = alTop
         TabOrder = 2
+        ExplicitWidth = 396
         object Panel75: TPanel
           Left = 1
           Top = 1
@@ -2478,14 +1975,15 @@ object FrmConsultaProgramacao: TFrmConsultaProgramacao
         object Panel76: TPanel
           Left = 131
           Top = 1
-          Width = 264
+          Width = 268
           Height = 23
           Align = alClient
           TabOrder = 1
+          ExplicitWidth = 264
           object ComboBoxJanelaDestino: TComboBox
             Left = 1
             Top = 1
-            Width = 262
+            Width = 266
             Height = 22
             Hint = 'Selecione o Destino da Programa'#231#227'o'
             Align = alClient
@@ -2505,10 +2003,11 @@ object FrmConsultaProgramacao: TFrmConsultaProgramacao
       object Panel77: TPanel
         Left = 1
         Top = 80
-        Width = 396
+        Width = 400
         Height = 25
         Align = alTop
         TabOrder = 3
+        ExplicitWidth = 396
         object Panel78: TPanel
           Left = 1
           Top = 1
@@ -2522,14 +2021,15 @@ object FrmConsultaProgramacao: TFrmConsultaProgramacao
         object Panel79: TPanel
           Left = 131
           Top = 1
-          Width = 264
+          Width = 268
           Height = 23
           Align = alClient
           TabOrder = 1
+          ExplicitWidth = 264
           object ComboBoxJanelaTipoEtapaServico: TComboBox
             Left = 1
             Top = 1
-            Width = 262
+            Width = 266
             Height = 22
             Hint = 'Selecione o Tipo de Etapa de Servi'#231'o'
             Align = alClient
@@ -2552,34 +2052,13 @@ object FrmConsultaProgramacao: TFrmConsultaProgramacao
     Left = 173
     Top = 193
     StyleName = 'Platform Default'
-    object actProcurar: TAction
+    object actProcurarProgramacao: TAction
       Category = 'Procurar'
       Caption = 'Procurar'
-      Hint = 'Filtrar programa'#231#227'o'
-      ImageIndex = 28
+      Hint = 'Buscar registros no banco de dados'
+      ImageIndex = 27
       ShortCut = 116
-      OnExecute = actProcurarExecute
-    end
-    object actExcelProgramacao: TAction
-      Category = 'Excel'
-      Caption = 'Exportar'
-      Hint = 'Exportar para o Excel'
-      ImageIndex = 54
-      OnExecute = actExcelProgramacaoExecute
-    end
-    object actExcelExecutante: TAction
-      Category = 'Excel'
-      Caption = 'Exportar'
-      Hint = 'Exportar para o Excel'
-      ImageIndex = 54
-      OnExecute = actExcelExecutanteExecute
-    end
-    object actExcelServico: TAction
-      Category = 'Excel'
-      Caption = 'Exportar'
-      Hint = 'Exportar para o Excel'
-      ImageIndex = 54
-      OnExecute = actExcelServicoExecute
+      OnExecute = actProcurarProgramacaoExecute
     end
     object actExcluirSelecionado: TAction
       Category = 'Excluir'
@@ -2600,64 +2079,6 @@ object FrmConsultaProgramacao: TFrmConsultaProgramacao
       Caption = 'Excluir todos os registros de Programa'#231#227'o "FILTRADOS"'
       ImageIndex = 324
       OnExecute = actExcluirFiltradosExecute
-    end
-    object actStatusTODOS: TAction
-      Category = 'Calcular'
-      Caption = 'Calcular Status Programa'#231#227'o "FILTRADOS"'
-      Hint = 
-        'Calcular "N'#176' Exec.", N'#176' Apro." e "N'#176' Canc." para todos os regist' +
-        'ros FILTRADOS'
-      ImageIndex = 35
-      OnExecute = actStatusTODOSExecute
-    end
-    object actStatusSELECIONADO: TAction
-      Category = 'Calcular'
-      Caption = 'Calcular Status Programa'#231#227'o "Selecionado"'
-      Hint = 
-        'Calcular "N'#176' Exec.", N'#176' Apro." e "N'#176' Canc." para o registro sele' +
-        'cionado'
-      ImageIndex = 35
-      ShortCut = 119
-      OnExecute = actStatusSELECIONADOExecute
-    end
-    object actFiltroInserir: TAction
-      Category = 'Tabela'
-      Caption = 'actFiltroInserir'
-      OnExecute = actFiltroInserirExecute
-    end
-    object actGridASC: TAction
-      Category = 'Tabela'
-      Caption = 'actGridASC'
-      OnExecute = actGridASCExecute
-    end
-    object actGridDESC: TAction
-      Category = 'Tabela'
-      Caption = 'actGridDESC'
-      OnExecute = actGridDESCExecute
-    end
-    object actSubstituirPor: TAction
-      Category = 'Tabela'
-      Caption = 'actSubstituirPor'
-      OnExecute = actSubstituirPorExecute
-    end
-    object actProcuraFiltrosTabela: TAction
-      Category = 'Tabela'
-      Caption = 'actProcuraFiltrosTabela'
-      OnExecute = actProcuraFiltrosTabelaExecute
-    end
-    object actLimparFiltros: TAction
-      Category = 'Tabela'
-      Caption = 'Limpar'
-      Hint = 'Limpar Filtros'
-      ImageIndex = 469
-      OnExecute = actLimparFiltrosExecute
-    end
-    object actFiltrosTabela: TAction
-      Category = 'Tabela'
-      Caption = 'Filtros'
-      Hint = 'Visualizar tabela de filtros'
-      ImageIndex = 470
-      OnExecute = actFiltrosTabelaExecute
     end
     object actProcurarImportar: TAction
       Category = 'Procurar'
@@ -2684,27 +2105,6 @@ object FrmConsultaProgramacao: TFrmConsultaProgramacao
       Hint = 'Importar registros de programa'#231#227'o "FILTRADOS"'
       ImageIndex = 23
       OnExecute = actImportarFiltradoExecute
-    end
-    object actLimparFiltrosImportar: TAction
-      Category = 'Tabela'
-      Caption = 'Limpar'
-      Hint = 'Limpar Filtros'
-      ImageIndex = 469
-      OnExecute = actLimparFiltrosImportarExecute
-    end
-    object actFiltrosTabelaImportar: TAction
-      Category = 'Tabela'
-      Caption = 'Filtros'
-      Hint = 'Visualizar tabela de filtros'
-      ImageIndex = 470
-      OnExecute = actFiltrosTabelaImportarExecute
-    end
-    object actExcelImportar: TAction
-      Category = 'Excel'
-      Caption = 'Exportar'
-      Hint = 'Exportar para o Excel'
-      ImageIndex = 54
-      OnExecute = actExcelImportarExecute
     end
     object actGanttImprimir: TAction
       Category = 'Gantt'
@@ -2819,14 +2219,6 @@ object FrmConsultaProgramacao: TFrmConsultaProgramacao
       Hint = 'Abrir janela de sele'#231#227'o de servi'#231'os'
       ImageIndex = 449
       OnExecute = actSelecionarServicosExecute
-    end
-    object actLimparHoras: TAction
-      Category = 'Editar dados'
-      Caption = 'Limpa horas'
-      Hint = 'Limpar horas'
-      ImageIndex = 324
-      ShortCut = 121
-      OnExecute = actLimparHorasExecute
     end
     object actAjudaLimpar: TAction
       Category = 'Ajuda'
@@ -2944,7 +2336,8 @@ object FrmConsultaProgramacao: TFrmConsultaProgramacao
     object actProgramacaoCancelar: TAction
       Category = 'Editar dados'
       Caption = 'Cancelar'
-      ImageIndex = 190
+      Hint = 'Cancelar'
+      ImageIndex = 188
       OnExecute = actProgramacaoCancelarExecute
     end
     object actProgramacaoGravar: TAction
@@ -2952,24 +2345,6 @@ object FrmConsultaProgramacao: TFrmConsultaProgramacao
       Caption = 'Gravar'
       Hint = 'Gravar Programa'#231#227'o'
       ImageIndex = 18
-      OnExecute = actProgramacaoGravarExecute
-    end
-    object actProgramacaoGravarHoras: TAction
-      Category = 'Editar dados'
-      Caption = 'Horas'
-      Hint = 'Gravar registro de horas'
-      ImageIndex = 18
-      OnExecute = actProgramacaoGravarHorasExecute
-    end
-    object actProgramacaoJanela: TAction
-      Category = 'Editar dados'
-      Caption = 'actProgramacaoJanela'
-      OnExecute = actProgramacaoJanelaExecute
-    end
-    object actVerificarAcessoProgramacao: TAction
-      Category = 'Editar dados'
-      Caption = 'actVerificarAcessoProgramacao'
-      OnExecute = actVerificarAcessoProgramacaoExecute
     end
     object actExecutanteJanela: TAction
       Category = 'Editar dados'
@@ -2987,16 +2362,6 @@ object FrmConsultaProgramacao: TFrmConsultaProgramacao
       Hint = 'Gravar registro'
       ImageIndex = 18
       OnExecute = actExecutanteGravarExecute
-    end
-    object actLimparHorasTodos: TAction
-      Category = 'Calcular'
-      Caption = 'Limpar Horas "FILTRADOS"'
-      OnExecute = actLimparHorasTodosExecute
-    end
-    object actCalcularHorasTodos: TAction
-      Category = 'Calcular'
-      Caption = 'Calcular Horas "FILTRADOS"'
-      OnExecute = actCalcularHorasTodosExecute
     end
     object actProcurarServico: TAction
       Category = 'Servi'#231'os'
@@ -3026,10 +2391,22 @@ object FrmConsultaProgramacao: TFrmConsultaProgramacao
       ImageIndex = 190
       OnExecute = actCancelarProgramacaoExecute
     end
+    object actProcurarExecutante: TAction
+      Category = 'Procurar'
+      Caption = 'Procurar'
+      Hint = 'Buscar registros no banco de dados'
+      ImageIndex = 27
+    end
+    object actProcurarServicos: TAction
+      Category = 'Procurar'
+      Caption = 'Procurar'
+      Hint = 'Buscar registros no banco de dados'
+      ImageIndex = 27
+    end
   end
   object PopupMenuExcluir: TPopupMenu
-    Left = 152
-    Top = 249
+    Left = 160
+    Top = 289
     object ExcluirSelecionado1: TMenuItem
       Action = actExcluirSelecionado
     end
@@ -3038,22 +2415,6 @@ object FrmConsultaProgramacao: TFrmConsultaProgramacao
     end
     object ExcluirtodososregistrosdeProgramaoFILTRADOS1: TMenuItem
       Action = actExcluirFiltrados
-    end
-  end
-  object PopupMenuStatus: TPopupMenu
-    Left = 224
-    Top = 273
-    object CalcularStatusExecSelecionado1: TMenuItem
-      Action = actStatusSELECIONADO
-    end
-    object CalcularStatusExec1: TMenuItem
-      Action = actStatusTODOS
-    end
-    object CalcularHorasFILTRADOS1: TMenuItem
-      Action = actCalcularHorasTodos
-    end
-    object LimparHorasFILTRADOS1: TMenuItem
-      Action = actLimparHorasTodos
     end
   end
   object OpenDialog1: TOpenDialog
@@ -3071,8 +2432,8 @@ object FrmConsultaProgramacao: TFrmConsultaProgramacao
     Top = 200
   end
   object PopupMenuCopiar: TPopupMenu
-    Left = 89
-    Top = 370
+    Left = 65
+    Top = 426
     object Importarselecionado1: TMenuItem
       Action = actCopiarProgramacaoSELECAO
       Caption = 'Copiar a programa'#231#227'o "SELECIONADA"'
@@ -3116,8 +2477,8 @@ object FrmConsultaProgramacao: TFrmConsultaProgramacao
     end
   end
   object PopupMenuTipoEtapaServico: TPopupMenu
-    Left = 64
-    Top = 312
+    Left = 72
+    Top = 344
     object IncluirTipoEtapadeServico1: TMenuItem
       Caption = 'Incluir "Tipo Etapa de Servi'#231'o"'
     end

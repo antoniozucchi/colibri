@@ -7,32 +7,24 @@ uses
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Data.DB, Vcl.StdCtrls, Vcl.Buttons,
   Vcl.ToolWin, Vcl.ComCtrls, Vcl.ExtCtrls, Vcl.Grids, Vcl.DBGrids,
   System.Actions, Vcl.ActnList, Vcl.PlatformDefaultStyleActnCtrls, Vcl.ActnMan,
-  Vcl.CheckLst,DateUtils;
+  Vcl.CheckLst,DateUtils, untDBGridFilter;
 
 type
   TFrmConsultaServicosProgramados = class(TForm)
-    DBGridServicosProgramados: TDBGrid;
+    DBGridServicosProgramados: TFilterDBGrid;
     Panel2: TPanel;
     ActionManager1: TActionManager;
     actProcurar: TAction;
-    actExcel: TAction;
-    PanelDataInicio: TPanel;
-    Panel12: TPanel;
+    StatusBar1: TStatusBar;
+    ColunasLayout: TStringGrid;
+    ToolBar1: TToolBar;
+    btnClearFiltro: TToolButton;
+    btnLayout: TToolButton;
+    btnExcel: TToolButton;
+    Panel8: TPanel;
     dataInicio: TDateTimePicker;
     Panel24: TPanel;
     dataFim: TDateTimePicker;
-    Panel8: TPanel;
-    StatusBar1: TStatusBar;
-    ColunasLayout: TStringGrid;
-    actFiltroInserir: TAction;
-    actGridASC: TAction;
-    actGridDESC: TAction;
-    actLimparFiltros: TAction;
-    actFiltrosTabela: TAction;
-    actProcuraFiltrosTabela: TAction;
-    BitBtn2: TBitBtn;
-    BitBtn3: TBitBtn;
-    BitBtn1: TBitBtn;
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
@@ -40,14 +32,6 @@ type
       const Rect: TRect; DataCol: Integer; Column: TColumn;
       State: TGridDrawState);
     procedure actProcurarExecute(Sender: TObject);
-    procedure actExcelExecute(Sender: TObject);
-    procedure DBGridServicosProgramadosTitleClick(Column: TColumn);
-    procedure actFiltroInserirExecute(Sender: TObject);
-    procedure actGridASCExecute(Sender: TObject);
-    procedure actGridDESCExecute(Sender: TObject);
-    procedure actLimparFiltrosExecute(Sender: TObject);
-    procedure actFiltrosTabelaExecute(Sender: TObject);
-    procedure actProcuraFiltrosTabelaExecute(Sender: TObject);
   private
     { Private declarations }
     procedure WMMDIACTIVATE(var msg: TWMMDIACTIVATE);message WM_MDIACTIVATE;
@@ -61,55 +45,6 @@ var
 implementation
   uses untPrincipal,untDataModule;
 {$R *.dfm}
-
-procedure TFrmConsultaServicosProgramados.actExcelExecute(Sender: TObject);
-begin
-  FrmPrincipal.GerarExcel(DBGridServicosProgramados,'Serviços Programados');
-end;
-
-procedure TFrmConsultaServicosProgramados.actFiltroInserirExecute(
-  Sender: TObject);
-begin
-  FrmPrincipal.inserirProcura(DBGridServicosProgramados,ColunasLayout);
-  actProcurar.Execute;
-  if (FrmPrincipal.PanelFiltrosTabela.Visible)AND(FrmPrincipal.PanelAjuda1.Visible) then
-    actFiltrosTabela.Execute;
-end;
-
-procedure TFrmConsultaServicosProgramados.actFiltrosTabelaExecute(
-  Sender: TObject);
-begin
-  FrmPrincipal.btnProcurarFiltrosTabela.Action:= actProcuraFiltrosTabela;
-  FrmPrincipal.FiltrosTabela(DBGridServicosProgramados,ColunasLayout);
-end;
-
-procedure TFrmConsultaServicosProgramados.actGridASCExecute(Sender: TObject);
-begin
-  FrmPrincipal.ClassificaDBGrid(DBGridServicosProgramados,
-  FrmDataModule.ADOQueryConsultaServicosProgramados,0);
-end;
-
-procedure TFrmConsultaServicosProgramados.actGridDESCExecute(Sender: TObject);
-begin
-  FrmPrincipal.ClassificaDBGrid(DBGridServicosProgramados,
-  FrmDataModule.ADOQueryConsultaServicosProgramados,1);
-end;
-
-procedure TFrmConsultaServicosProgramados.actLimparFiltrosExecute(
-  Sender: TObject);
-begin
-  FrmPrincipal.LimparColunasFiltro(DBGridServicosProgramados,ColunasLayout);
-  actProcurar.Execute;
-  if (FrmPrincipal.PanelFiltrosTabela.Visible)AND(FrmPrincipal.PanelAjuda1.Visible) then
-    actFiltrosTabela.Execute;
-end;
-
-procedure TFrmConsultaServicosProgramados.actProcuraFiltrosTabelaExecute(
-  Sender: TObject);
-begin
-  frmPrincipal.CarregaFiltrosProcura(ColunasLayout);
-  actProcurar.Execute;
-end;
 
 procedure TFrmConsultaServicosProgramados.actProcurarExecute(
   Sender: TObject);
@@ -139,15 +74,6 @@ begin
   FrmPrincipal.GridZebrado(DBGridServicosProgramados,ColunasLayout,State,Rect,DataCol,Column);
 end;
 
-procedure TFrmConsultaServicosProgramados.DBGridServicosProgramadosTitleClick(
-  Column: TColumn);
-begin
-  FrmPrincipal.configurarFiltro(0,Column.FieldName,IntToStr(Column.Index),
-  Column.ReadOnly,actFiltroInserir,actGridASC,actGridDESC,actGridDESC);
-  //======================================================
-  FrmPrincipal.titleGrid(ColunasLayout,'Colibri',FrmDataModule.ADOQueryConsultaServicosProgramados.SQL.Text);
-end;
-
 procedure TFrmConsultaServicosProgramados.FormClose(Sender: TObject;
   var Action: TCloseAction);
 begin
@@ -162,7 +88,7 @@ begin
   dataInicio.Date:= IncDay(now,1);
   dataFim.Date:= IncDay(now,1);
   //Incicialização
-  FrmPrincipal.SetUpColunasLayout(DBGridServicosProgramados, ColunasLayout);
+  FrmDataModule.setFilterDBGrid(DBGridServicosProgramados);
   actProcurar.Execute;
 end;
 

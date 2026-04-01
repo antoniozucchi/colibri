@@ -7,7 +7,7 @@ uses
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ExtCtrls, Vcl.Grids,
   Vcl.ToolWin, Vcl.ComCtrls,DateUtils, System.Actions, Vcl.ActnList,Data.DB,
   Vcl.PlatformDefaultStyleActnCtrls, Vcl.ActnMan, Vcl.StdCtrls, Vcl.Buttons,ComOBJ,
-  Vcl.Menus;
+  Vcl.Menus, uZucchi;
 
 type
   TFrmAgendaIntervencao = class(TForm)
@@ -106,7 +106,7 @@ begin
     k:= k+3;
     FrmPrincipal.ProgressBarAtualizar;
   end;
-  FrmPrincipal.AutoFitGrade(StringGrid);
+  AutoFitGrade(StringGrid);
   try
     StringGrid.FixedRows:= 1;
   except
@@ -214,7 +214,7 @@ begin
     StringGrid.FixedRows:= 1;
   except
   end;
-  FrmPrincipal.AutoFitGrade(StringGrid);
+  AutoFitGrade(StringGrid);
 end;
 
 procedure TFrmAgendaIntervencao.actEmbarcacaoExecute(Sender: TObject);
@@ -265,13 +265,14 @@ begin
     StringGrid.FixedRows:= 1;
   except
   end;
-  FrmPrincipal.AutoFitGrade(StringGrid);
+  AutoFitGrade(StringGrid);
 end;
 
 procedure TFrmAgendaIntervencao.actExcelExecute(Sender: TObject);
 begin
-  FrmPrincipal.ExcelStringGrid(StringGrid,'Agenda de Intervenção',
-  '','',1);
+  ExcelStringGrid(StringGrid,'Agenda de Intervenção',
+  '','','',false,
+    FrmPrincipal.ProgressBarPrincipal,FrmPrincipal.MemoPrincipal);
 end;
 
 procedure TFrmAgendaIntervencao.FormClose(Sender: TObject;

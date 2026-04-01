@@ -8,54 +8,32 @@ uses
   Vcl.PlatformDefaultStyleActnCtrls, System.Actions, Vcl.ActnList, Vcl.ActnMan,
   Vcl.ExtCtrls, Data.DB, Vcl.Grids, Vcl.DBGrids, Vcl.StdCtrls,ComOBJ,
   Data.Win.ADODB, Vcl.Buttons,UITYPES, Vcl.DBCtrls,DateUtils,Math,ShellAPI,
-  Vcl.Menus,ActiveX, Vcl.Mask, Vcl.TabNotBk;
+  Vcl.Menus,ActiveX, Vcl.Mask, Vcl.TabNotBk, untDBGridFilter, uZucchi;
 
 type
   TFrmImportacao = class(TForm)
     PageControlImportacao: TPageControl;
     TabSheet1: TTabSheet;
-    TabSheet2: TTabSheet;
     ToolBar1: TToolBar;
     ActionManager1: TActionManager;
     Panel7: TPanel;
     actEnderecoExecutanteAPLAT: TAction;
     OpenDialog1: TOpenDialog;
     actImportarExecutanteAPLAT: TAction;
-    actExcelExecutanteAPLAT: TAction;
-    DBGridExecutanteSAP: TDBGrid;
-    ToolBar2: TToolBar;
-    actExcelExecutanteSAP: TAction;
-    actImportarExecutanteSAP: TAction;
-    actEnderecoExecutanteSAP: TAction;
-    actExecutanteSAP: TAction;
     actExecutanteAPLAT: TAction;
-    Panel1: TPanel;
     Panel2: TPanel;
     actLocalizarAPLATExecutante: TAction;
     actLocalizarSAPExecutante: TAction;
     Edit4: TEdit;
     btnAbrirAPLAT: TSpeedButton;
     edtEnderecoExecutanteAPLAT: TEdit;
-    Edit3: TEdit;
-    btnAbrirSAP: TSpeedButton;
-    edtEnderecoExecutanteSAP: TEdit;
-    BitBtn3: TBitBtn;
-    btnExecSAP: TBitBtn;
     actAnalisaExecutanteAPLAT: TAction;
-    actAnalisaExecutanteSAP: TAction;
     btnExecAPLAT: TBitBtn;
-    btnAnaliseExecSAP: TBitBtn;
-    StatusBarExecSAP: TStatusBar;
     btnNaoDefinidoAPLAT: TBitBtn;
-    BitBtn8: TBitBtn;
     actExcluirAPLAT_Executantes: TAction;
     btnExcluirAPLAT: TBitBtn;
-    actExcluirSAP_Executantes: TAction;
-    btnExcluirSAP: TBitBtn;
     actND_APLAT: TAction;
     btnAnaliseExecAPLAT: TBitBtn;
-    btnNaoDefinidoSAP: TBitBtn;
-    actND_SAP: TAction;
     PanelAjuda: TPanel;
     PanelTituloAjuda: TPanel;
     SpeedButton4: TSpeedButton;
@@ -70,49 +48,29 @@ type
     BitBtn4: TBitBtn;
     Panel4: TPanel;
     StatusBarExecAPLAT: TStatusBar;
-    DBGridExecutanteAPLAT: TDBGrid;
+    DBGridExecutanteAPLAT: TFilterDBGrid;
     Splitter1: TSplitter;
     BitBtn11: TBitBtn;
     BitBtn13: TBitBtn;
     actInterromper: TAction;
     ColunasAPLAT: TStringGrid;
-    ColunasT31: TStringGrid;
-    actFiltroInserir: TAction;
-    actGridASC: TAction;
-    actGridDESC: TAction;
-    actLimparFiltros: TAction;
-    actFiltrosTabela: TAction;
-    actProcuraFiltrosTabela: TAction;
-    BitBtn14: TBitBtn;
-    BitBtn17: TBitBtn;
-    BitBtn18: TBitBtn;
-    BitBtn19: TBitBtn;
     actProcurar: TAction;
     actSubstituirMemoriaLocal: TAction;
     actCopiarMemoriaLocal: TAction;
+    btnClearFiltroAPLAT: TToolButton;
+    btnExcelAPLAT: TToolButton;
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure actEnderecoExecutanteAPLATExecute(Sender: TObject);
     procedure actImportarExecutanteAPLATExecute(Sender: TObject);
-    procedure actExcelExecutanteAPLATExecute(Sender: TObject);
     procedure DBGridExecutanteAPLATDrawColumnCell(Sender: TObject;
       const Rect: TRect; DataCol: Integer; Column: TColumn;
       State: TGridDrawState);
-    procedure DBGridExecutanteSAPDrawColumnCell(Sender: TObject;
-      const Rect: TRect; DataCol: Integer; Column: TColumn;
-      State: TGridDrawState);
-    procedure actExcelExecutanteSAPExecute(Sender: TObject);
-    procedure actImportarExecutanteSAPExecute(Sender: TObject);
-    procedure actEnderecoExecutanteSAPExecute(Sender: TObject);
-    procedure actExecutanteSAPExecute(Sender: TObject);
     procedure actExecutanteAPLATExecute(Sender: TObject);
     procedure actLocalizarAPLATExecutanteExecute(Sender: TObject);
-    procedure actLocalizarSAPExecutanteExecute(Sender: TObject);
-    procedure actAnalisaExecutanteSAPExecute(Sender: TObject);
     procedure actAnalisaExecutanteAPLATExecute(Sender: TObject);
     procedure actExcluirAPLAT_ExecutantesExecute(Sender: TObject);
-    procedure actExcluirSAP_ExecutantesExecute(Sender: TObject);
     procedure actND_APLATExecute(Sender: TObject);
     procedure SpeedButton4Click(Sender: TObject);
     procedure PanelTituloAjudaMouseDown(Sender: TObject; Button: TMouseButton;
@@ -122,20 +80,11 @@ type
     procedure ComboBoxTipoEtapaServicoCloseUp(Sender: TObject);
     procedure actExcluirLinhaExecute(Sender: TObject);
     procedure actInserirExecutantesExecute(Sender: TObject);
-    procedure actND_SAPExecute(Sender: TObject);
     procedure ComboBoxEmpresaCloseUp(Sender: TObject);
     procedure ComboBoxFuncaoCloseUp(Sender: TObject);
     procedure StringGridNDFixedCellClick(Sender: TObject; ACol, ARow: Integer);
     procedure actInterromperExecute(Sender: TObject);
     procedure Timer1Timer(Sender: TObject);
-    procedure actFiltroInserirExecute(Sender: TObject);
-    procedure actGridASCExecute(Sender: TObject);
-    procedure actGridDESCExecute(Sender: TObject);
-    procedure actLimparFiltrosExecute(Sender: TObject);
-    procedure actFiltrosTabelaExecute(Sender: TObject);
-    procedure actProcuraFiltrosTabelaExecute(Sender: TObject);
-    procedure DBGridExecutanteAPLATTitleClick(Column: TColumn);
-    procedure DBGridExecutanteSAPTitleClick(Column: TColumn);
     procedure actProcurarExecute(Sender: TObject);
     procedure actSubstituirMemoriaLocalExecute(Sender: TObject);
     procedure actCopiarMemoriaLocalExecute(Sender: TObject);
@@ -150,7 +99,6 @@ type
     procedure WMMDIACTIVATE(var msg: TWMMDIACTIVATE);message WM_MDIACTIVATE;
     procedure editEndereco(edt: TEdit);
     function AnalisaExecutanteAPLAT(CodigoSAP: String): TExecCadastro;
-    function AnalisaExecutanteSAP(CodigoSAP,Documento: String): TExecCadastro;
     function VerificaCodigoTipoEtapaServico(TipoEtapaServico: String): Integer;
 
   public
@@ -185,69 +133,6 @@ begin
   FrmPrincipal.registroEscrever('POB_APLAT', edtEnderecoExecutanteAPLAT.Text);
 end;
 
-procedure TFrmImportacao.actEnderecoExecutanteSAPExecute(Sender: TObject);
-begin
-  editEndereco(edtEnderecoExecutanteSAP);
-  FrmPrincipal.registroEscrever('RT_SAP', edtEnderecoExecutanteSAP.Text);
-end;
-
-procedure TFrmImportacao.actFiltroInserirExecute(Sender: TObject);
-begin
-  case TabIndexPageControl of
-    0:
-    begin
-      FrmPrincipal.inserirProcura(DBGridExecutanteAPLAT,ColunasAPLAT);
-      actLocalizarAPLATExecutante.Execute;
-    end;
-    1:
-    begin
-      FrmPrincipal.inserirProcura(DBGridExecutanteSAP,ColunasT31);
-      actLocalizarSAPExecutante.Execute;
-    end;
-  end;
-  if (FrmPrincipal.PanelFiltrosTabela.Visible)AND(FrmPrincipal.PanelAjuda1.Visible) then
-    actFiltrosTabela.Execute;
-end;
-
-procedure TFrmImportacao.actFiltrosTabelaExecute(Sender: TObject);
-begin
-  FrmPrincipal.btnProcurarFiltrosTabela.Action:= actProcuraFiltrosTabela;
-  case TabIndexPageControl of
-    0: FrmPrincipal.FiltrosTabela(DBGridExecutanteAPLAT,ColunasAPLAT);
-    1: FrmPrincipal.FiltrosTabela(DBGridExecutanteSAP,ColunasT31);
-  end;
-end;
-
-procedure TFrmImportacao.actGridASCExecute(Sender: TObject);
-begin
-  case TabIndexPageControl of
-    0: FrmPrincipal.ClassificaDBGrid(DBGridExecutanteAPLAT,
-    FrmDataModule.ADOQueryImportarExecutanteAPLAT,0);
-    1: FrmPrincipal.ClassificaDBGrid(DBGridExecutanteSAP,
-    FrmDataModule.ADOQueryImportarExecutanteSAP,0);
-  end;
-end;
-
-procedure TFrmImportacao.actGridDESCExecute(Sender: TObject);
-begin
-  case TabIndexPageControl of
-    0: FrmPrincipal.ClassificaDBGrid(DBGridExecutanteAPLAT,
-    FrmDataModule.ADOQueryImportarExecutanteAPLAT,1);
-    1: FrmPrincipal.ClassificaDBGrid(DBGridExecutanteSAP,
-    FrmDataModule.ADOQueryImportarExecutanteSAP,1);
-  end;
-end;
-
-procedure TFrmImportacao.actExcelExecutanteAPLATExecute(Sender: TObject);
-begin
-  FrmPrincipal.GerarExcel(DBGridExecutanteAPLAT,'Executantes APLAT');
-end;
-
-procedure TFrmImportacao.actExcelExecutanteSAPExecute(Sender: TObject);
-begin
-  FrmPrincipal.GerarExcel(DBGridExecutanteSAP,'Executantes SAP');
-end;
-
 procedure TFrmImportacao.actExcluirAPLAT_ExecutantesExecute(Sender: TObject);
 begin
   if Application.MessageBox(PChar(
@@ -256,17 +141,6 @@ begin
   begin
     FrmPrincipal.deleteQueryRapido(FrmDataModule.ADOQueryImportarExecutanteAPLAT,
     'tblExecutanteAPLAT');
-  end;
-end;
-
-procedure TFrmImportacao.actExcluirSAP_ExecutantesExecute(Sender: TObject);
-begin
-  if Application.MessageBox(PChar(
-  'Deseja realmente excluir todos os registros de Executantes SAP?'),
-  '.::ATENÇÃO::.',36) = 6 then
-  begin
-    FrmPrincipal.deleteQueryRapido(FrmDataModule.ADOQueryImportarExecutanteSAP,
-    'tblExecutanteSAP');
   end;
 end;
 
@@ -341,12 +215,7 @@ begin
       0:
       begin
         actAnalisaExecutanteAPLAT.Execute;
-        actLimparFiltros.Execute;
-      end;
-      1:
-      begin
-        actAnalisaExecutanteSAP.Execute;
-        actLimparFiltros.Execute;
+        btnClearFiltroAPLAT.Click;
       end;
     end;
     MessageBox(0,'Executantes inseridos com sucesso!','Colibri', MB_ICONINFORMATION);
@@ -361,25 +230,7 @@ end;
 procedure TFrmImportacao.actExcluirLinhaExecute(Sender: TObject);
 begin
   FrmPrincipal.DeleteRow(StringGridND,StringGridND.Row);
-  FrmPrincipal.AutoFitGrade(StringGridND);
-end;
-
-procedure TFrmImportacao.actLimparFiltrosExecute(Sender: TObject);
-begin
-  case TabIndexPageControl of
-    0:
-    begin
-      FrmPrincipal.LimparColunasFiltro(DBGridExecutanteAPLAT,ColunasAPLAT);
-      actLocalizarAPLATExecutante.Execute;
-    end;
-    1:
-    begin
-      FrmPrincipal.LimparColunasFiltro(DBGridExecutanteSAP,ColunasT31);
-      actLocalizarSAPExecutante.Execute;
-    end;
-  end;
-  if (FrmPrincipal.PanelFiltrosTabela.Visible)AND(FrmPrincipal.PanelAjuda1.Visible) then
-    actFiltrosTabela.Execute;
+  AutoFitGrade(StringGridND);
 end;
 
 procedure TFrmImportacao.actLocalizarAPLATExecutanteExecute(Sender: TObject);
@@ -391,17 +242,6 @@ begin
   SQLString+' ORDER BY NomeExecutante;';
   FrmPrincipal.ProcuraQuery(SQLBase,FrmDataModule.ADOQueryImportarExecutanteAPLAT,
   StatusBarExecAPLAT);
-end;
-
-procedure TFrmImportacao.actLocalizarSAPExecutanteExecute(Sender: TObject);
-  var
-    SQLString,SQLBase: String;
-begin
-  SQLString:= frmPrincipal.SQLStringFiltroTabela(ColunasT31,true);
-  SQLBase:= 'SELECT tblExecutanteSAP.* FROM tblExecutanteSAP '+
-  SQLString+' ORDER BY NomeExecutante;';
-  FrmPrincipal.ProcuraQuery(SQLBase,FrmDataModule.ADOQueryImportarExecutanteSAP,
-  StatusBarExecSAP);
 end;
 
 procedure TFrmImportacao.actND_APLATExecute(Sender: TObject);
@@ -506,7 +346,7 @@ begin
         StringGridND.FixedRows:= 0;
         StringGridND.RowCount:= 1;
       end;
-      FrmPrincipal.AutoFitGrade(StringGridND);
+      AutoFitGrade(StringGridND);
       StringGridND.ColWidths[2]:= 120;
       StringGridND.ColWidths[3]:= 120;
       PanelAjuda.Visible:= true;
@@ -517,121 +357,7 @@ begin
   else
   begin
     MessageBox(0,'Não existem Executantes "NÃO DEFINIDO"','Colibri', MB_ICONINFORMATION);
-    actLimparFiltros.Execute;
-  end;
-end;
-
-procedure TFrmImportacao.actND_SAPExecute(Sender: TObject);
-  var
-    numLinhas,i: Integer;
-    NomeExecutante,CPF,OutroDocumento: String;
-    ListaNomes: TStringList;
-    inserirExec: Boolean;
-begin
-  RadioGroupOrigem.ItemIndex:= 1;
-  ListaNomes:=TStringList.Create;
-  FrmDataModule.ADOQueryExecutante.Active:= false;
-  FrmDataModule.ADOQueryExecutante.Active:= true;
-  FrmDataModule.ADOQueryImportarExecutanteSAP.Close;
-  FrmDataModule.ADOQueryImportarExecutanteSAP.SQL.Clear;
-  FrmDataModule.ADOQueryImportarExecutanteSAP.SQL.Add(
-  'SELECT tblExecutanteSAP.* '+
-  'FROM tblExecutanteSAP '+
-  'WHERE (txtTipoEtapaServico like '+QuotedStr('NÃO DEFINIDO')+');');
-  FrmDataModule.ADOQueryImportarExecutanteSAP.Open;
-  FrmDataModule.ADOQueryImportarExecutanteSAP.Active:= true;
-  if not FrmDataModule.ADOQueryImportarExecutanteSAP.IsEmpty then
-  begin
-    StringGridND.FixedRows:= 0;
-    StringGridND.RowCount:= 1;
-    StringGridND.ColCount:= 7;
-    StringGridND.Cells[0,0]:= 'Executante';
-    StringGridND.Cells[1,0]:= 'Tipo de Etapa de Serviço';
-    StringGridND.Cells[2,0]:= 'Função';
-    StringGridND.Cells[3,0]:= 'Empresa';
-    StringGridND.Cells[4,0]:= 'Código SAP';
-    StringGridND.Cells[5,0]:= 'CPF';
-    StringGridND.Cells[6,0]:= 'Outro Documento';
-    FrmPrincipal.carregarComboBox(FrmDataModule.ADOConnectionConsulta,'TipoEtapaServico',
-    'SELECT tblTipoEtapaServico.* FROM tblTipoEtapaServico ORDER BY TipoEtapaServico;',
-    ComboBoxTipoEtapaServico);
-    FrmPrincipal.carregarComboBox(FrmDataModule.ADOConnectionConsulta,'txtFuncao',
-    'SELECT tblExecutante.txtFuncao FROM tblExecutante GROUP BY tblExecutante.txtFuncao;',
-    ComboBoxFuncao);
-    FrmPrincipal.carregarComboBox(FrmDataModule.ADOConnectionConsulta,'txtEmpresa',
-    'SELECT tblExecutante.txtEmpresa FROM tblExecutante GROUP BY tblExecutante.txtEmpresa;',
-    ComboBoxEmpresa);
-
-    FrmDataModule.ADOQueryImportarExecutanteSAP.First;
-    while not FrmDataModule.ADOQueryImportarExecutanteSAP.Eof do
-    begin
-      NomeExecutante:= FrmDataModule.DataSourceImportarExecutanteSAP.DataSet.
-      FieldByName('NomeExecutante').AsString;
-      inserirExec:= true;
-      for i := 0 to ListaNomes.Count-1 do
-      begin
-        if ListaNomes[i] = NomeExecutante then
-          inserirExec:= false;
-      end;
-      if inserirExec then
-      begin
-        //Verifica se é um CPF e corrige mascara de CPF
-        CPF:= FrmPrincipal.VerificaCPF(FrmDataModule.DataSourceImportarExecutanteSAP.DataSet.
-        FieldByName('Documento').AsString);
-        if CPF = '' then
-          OutroDocumento:= FrmDataModule.DataSourceImportarExecutanteSAP.DataSet.
-          FieldByName('Documento').AsString
-        else
-          OutroDocumento:= '';
-        //=======================================================
-        numLinhas:= StringGridND.RowCount;
-        StringGridND.RowCount:= numLinhas+1;
-        StringGridND.Cells[0,numLinhas]:= NomeExecutante;
-        StringGridND.Cells[1,numLinhas]:= '';
-        StringGridND.Cells[2,numLinhas]:= '';
-        StringGridND.Cells[3,numLinhas]:= '';
-        StringGridND.Cells[4,numLinhas]:= FrmDataModule.DataSourceImportarExecutanteSAP.
-        DataSet.FieldByName('CodigoSAP').AsString;
-        StringGridND.Cells[5,numLinhas]:= CPF;
-        StringGridND.Cells[6,numLinhas]:= OutroDocumento;
-      end;
-      ListaNomes.Add(NomeExecutante);
-      FrmDataModule.ADOQueryImportarExecutanteSAP.Next;
-    end;
-    try
-      StringGridND.FixedRows:= 1;
-    except
-      StringGridND.FixedRows:= 0;
-      StringGridND.RowCount:= 1;
-    end;
-    FrmPrincipal.AutoFitGrade(StringGridND);
-    StringGridND.ColWidths[2]:= 120;
-    StringGridND.ColWidths[3]:= 120;
-    PanelAjuda.Visible:= true;
-    Splitter1.Visible:= true;
-    Splitter1.Top:= 145;
-  end
-  else
-  begin
-    MessageBox(0,'Não existem Executantes "NÃO DEFINIDO"','Colibri', MB_ICONINFORMATION);
-    actLimparFiltros.Execute;
-  end;
-  actLimparFiltros.Execute;
-end;
-
-procedure TFrmImportacao.actProcuraFiltrosTabelaExecute(Sender: TObject);
-begin
-  case TabIndexPageControl of
-    0:
-    begin
-      frmPrincipal.CarregaFiltrosProcura(ColunasAPLAT);
-      actLocalizarAPLATExecutante.Execute;
-    end;
-    1:
-    begin
-      frmPrincipal.CarregaFiltrosProcura(ColunasT31);
-      actLocalizarSAPExecutante.Execute;
-    end;
+    btnClearFiltroAPLAT.Click;
   end;
 end;
 
@@ -642,12 +368,6 @@ begin
     actLocalizarAPLATExecutante.Execute;
     edtEnderecoExecutanteAPLAT.Text:= FrmPrincipal.registroEndereco('POB_APLAT');
     TabIndexPageControl:= 0;
-  end
-  else if PageControlImportacao.ActivePage.Caption = 'Executantes: Requisição de Transporte [SAP]' then
-  begin
-    actLocalizarSAPExecutante.Execute;
-    edtEnderecoExecutanteSAP.Text:= FrmPrincipal.registroEndereco('RT_SAP');
-    TabIndexPageControl:= 1;
   end;
 end;
 
@@ -664,7 +384,7 @@ begin
   FrmDataModule.ADOConnectionMemoria.Connected:= false;
   CopyFile(PChar(Caminho_Copia), PChar(enderecoMemoria), false);
   FrmPrincipal.conectarBDDireto(enderecoMemoria,FrmDataModule.ADOConnectionMemoria);
-  actLimparFiltros.Execute;
+  btnClearFiltroAPLAT.Click;
 end;
 
 procedure TFrmImportacao.actAnalisaExecutanteAPLATExecute(Sender: TObject);
@@ -723,71 +443,6 @@ begin
   FrmPrincipal.ProgressBarAtualizar;
 end;
 
-procedure TFrmImportacao.actAnalisaExecutanteSAPExecute(Sender: TObject);
-  var
-    ExecutanteSAP: TExecCadastro;
-begin
-  FrmPrincipal.ProgressBarIncializa(FrmDataModule.ADOQueryImportarExecutanteSAP.RecordCount,
-  'Analisando Executantes Cadastrados...');
-  FrmDataModule.ADOQueryImportarExecutanteSAP.Active:= false;
-  FrmDataModule.ADOQueryImportarExecutanteSAP.Active:= true;
-  FrmDataModule.ADOQueryImportarExecutanteSAP.First;
-  FrmDataModule.DataSourceImportarExecutanteSAP.Enabled:= false;
-  actInterromper.Enabled:= true;
-  while not FrmDataModule.ADOQueryImportarExecutanteSAP.Eof do
-  begin
-    try
-      //Interromper Processo
-      Application.ProcessMessages;
-      if Interromper and (Application.MessageBox(PChar('Deseja realmente cancelar o processo?'),
-      '.::ATENÇÃO::.',36) = 6) then
-      begin
-        Interromper := False;
-        break;
-      end
-      else
-        Interromper := False;
-      //=========================================
-      ExecutanteSAP:= AnalisaExecutanteSAP(FrmDataModule.
-      DataSourceImportarExecutanteSAP.DataSet.FieldByName('CodigoSAP').asString,
-      FrmDataModule.DataSourceImportarExecutanteSAP.DataSet.FieldByName('Documento').asString);
-
-      FrmDataModule.ADOQueryImportarExecutanteSAP.Edit;
-      FrmDataModule.DataSourceImportarExecutanteSAP.DataSet.
-      FieldByName('txtTipoetapaServico').asString:= ExecutanteSAP.TipoEtapaServico;
-      FrmDataModule.DataSourceImportarExecutanteSAP.DataSet.
-      FieldByName('txtNomeExecutante').asString:= ExecutanteSAP.NomeExecutante;
-      FrmDataModule.DataSourceImportarExecutanteSAP.DataSet.
-      FieldByName('txtFuncao').asString:= ExecutanteSAP.Funcao;
-      FrmDataModule.DataSourceImportarExecutanteSAP.DataSet.
-      FieldByName('txtEmpresa').asString:= ExecutanteSAP.Empresa;
-      //================================================
-      FrmDataModule.ADOQueryImportarExecutanteSAP.Next;
-      FrmPrincipal.ProgressBarIncremento(1);
-    except
-      FrmDataModule.ADOQueryImportarExecutanteSAP.Cancel;
-      FrmDataModule.ADOQueryImportarExecutanteSAP.Next;
-    end;
-  end;
-  ExecutanteSAP:= AnalisaExecutanteSAP(FrmDataModule.
-  DataSourceImportarExecutanteSAP.DataSet.FieldByName('CodigoSAP').asString,
-  FrmDataModule.DataSourceImportarExecutanteSAP.DataSet.FieldByName('Documento').asString);
-  FrmDataModule.ADOQueryImportarExecutanteSAP.Edit;
-  FrmDataModule.DataSourceImportarExecutanteSAP.DataSet.
-  FieldByName('txtTipoetapaServico').asString:= ExecutanteSAP.TipoEtapaServico;
-  FrmDataModule.DataSourceImportarExecutanteSAP.DataSet.
-  FieldByName('txtNomeExecutante').asString:= ExecutanteSAP.NomeExecutante;
-  FrmDataModule.DataSourceImportarExecutanteSAP.DataSet.
-  FieldByName('txtFuncao').asString:= ExecutanteSAP.Funcao;
-  FrmDataModule.DataSourceImportarExecutanteSAP.DataSet.
-  FieldByName('txtEmpresa').asString:= ExecutanteSAP.Empresa;
-  //=========================================================
-  FrmDataModule.ADOQueryImportarExecutanteSAP.First;
-  FrmDataModule.DataSourceImportarExecutanteSAP.Enabled:= true;
-  FrmPrincipal.ProgressBarAtualizar;
-  actInterromper.Enabled:= false;
-end;
-
 procedure TFrmImportacao.actImportarExecutanteAPLATExecute(Sender: TObject);
 begin
   if fileexists(edtEnderecoExecutanteAPLAT.Text) then
@@ -798,34 +453,10 @@ begin
     '.::ATENÇÃO::.',36) = 6 then
     begin
       FrmPrincipal.registroEscrever('POB_APLAT',edtEnderecoExecutanteAPLAT.Text);
-      actLimparFiltros.Execute;
+      btnClearFiltroAPLAT.Click;
       actExecutanteAPLAT.Execute;
       actAnalisaExecutanteAPLAT.Execute;
       edtEnderecoExecutanteAPLAT.Text:= FrmPrincipal.registroEndereco('POB_APLAT');
-      actLimparFiltros.Execute;
-    end;
-  end
-  else
-  begin
-    MessageBox(0,'O endereço da planilha Excel não existe e operação foi cancelada!',
-    'Colibri', MB_ICONWARNING);
-  end;
-end;
-
-procedure TFrmImportacao.actImportarExecutanteSAPExecute(Sender: TObject);
-begin
-  if fileexists(edtEnderecoExecutanteSAP.Text) then
-  begin
-    FrmPrincipal.registroEscrever('RT_SAP', edtEnderecoExecutanteSAP.Text);
-    if Application.MessageBox(PChar(
-    'Deseja realmente importar a planilha de RT''s marítimas SAP-T31 de embarque?'),
-    '.::ATENÇÃO::.',36) = 6 then
-    begin
-      FrmPrincipal.registroEscrever('RT_SAP',edtEnderecoExecutanteSAP.Text);
-      actLimparFiltros.Execute;
-      actExecutanteSAP.Execute;
-      actAnalisaExecutanteSAP.Execute;
-      edtEnderecoExecutanteAPLAT.Text:= FrmPrincipal.registroEndereco('RT_SAP');
     end;
   end
   else
@@ -953,137 +584,6 @@ begin
   end;
 end;
 
-procedure TFrmImportacao.actExecutanteSAPExecute(Sender: TObject);
-var
-  Excel, Sheet: Variant;
-  matrizLinha,ARow,i: Integer;
-  Origem,Documento: String;
-begin
-  FrmDataModule.ADOQueryImportarExecutanteSAP.Close;
-  FrmDataModule.ADOQueryImportarExecutanteSAP.SQL.Clear;
-  FrmDataModule.ADOQueryImportarExecutanteSAP.SQL.Add(
-  'SELECT tblExecutanteSAP.* FROM tblExecutanteSAP '+
-  'ORDER BY NomeExecutante;');
-  FrmDataModule.ADOQueryImportarExecutanteSAP.Open;
-  FrmDataModule.ADOQueryImportarExecutanteSAP.Active:= true;
-  try
-    try
-      ARow:= 2;
-      try
-        Excel := CreateOleObject('Excel.Application');
-      except
-        MessageBox(0,'Verifique se o Microsoft Office Excel esta instalado na sua máquina.',
-        'Excel', MB_ICONERROR);
-      end;
-      // Abrir o arquivo
-      try
-        Excel.Workbooks.Open(edtEnderecoExecutanteSAP.Text);
-      except
-        MessageBox(0,'Arquivo não encontrado, verifique o endereço do arquivo!',
-        'Excel', MB_ICONERROR);
-      end;
-      // Abrir a primeira planilha do arquivo
-      Sheet := Excel.WorkSheets[1];
-      // ============================================
-      //Excluir todos os registros atuais
-      // ============================================
-      FrmPrincipal.deleteQueryRapido(FrmDataModule.ADOQueryImportarExecutanteSAP,'tblExecutanteSAP');
-      // ============================================
-      //Verificar a ultima Linha
-      // ============================================
-      matrizLinha:= (Sheet.Cells.SpecialCells(11).Row);
-      // Inicializar ProgressBar
-      FrmPrincipal.ProgressBarIncializa(matrizLinha,
-      'Importando Arquivo Excel...');
-      // ============================================
-      // Preencher as planilhas
-      // ============================================
-      FrmDataModule.DataSourceImportarExecutanteSAP.Enabled := false;
-      actInterromper.Enabled:= true;
-      for i := ARow to matrizLinha do
-      begin
-        Application.ProcessMessages;
-        if Interromper and (Application.MessageBox(PChar('Deseja realmente cancelar o processo?'),
-        '.::ATENÇÃO::.',36) = 6) then
-        begin
-          Interromper := False;
-          break;
-        end
-        else
-          Interromper := False;
-        Origem:= Excel.Workbooks[1].Sheets[1].Cells[i,11];
-        if Origem = 'TMIB' then
-        begin
-          //Verifica se é CPF e Corrige se não mantem numero para OutroDocumento
-          Documento:= Excel.Workbooks[1].Sheets[1].Cells[i,5];
-          if Documento <> '' then
-          begin
-            Documento:= FrmPrincipal.VerificaCPF(Documento);
-            if Documento = '' then
-            Documento:= Excel.Workbooks[1].Sheets[1].Cells[i,5];
-          end;
-          try
-            // Inserir novo registro na tabela de dados
-            FrmDataModule.ADOQueryImportarExecutanteSAP.Insert;
-            // Preencher as colunas do registro na tabela de dados
-            FrmDataModule.DataSourceImportarExecutanteSAP.DataSet.
-            FieldByName('TipoNota').AsString := Excel.Workbooks[1].Sheets[1].Cells[i,1];
-            FrmDataModule.DataSourceImportarExecutanteSAP.DataSet.
-            FieldByName('Nota').AsString := Excel.Workbooks[1].Sheets[1].Cells[i,2];
-            FrmDataModule.DataSourceImportarExecutanteSAP.DataSet.
-            FieldByName('DescricaoNota').AsString := Excel.Workbooks[1].Sheets[1].Cells[i,3];
-            FrmDataModule.DataSourceImportarExecutanteSAP.DataSet.
-            FieldByName('CodigoSAP').AsString := Excel.Workbooks[1].Sheets[1].Cells[i,4];
-            FrmDataModule.DataSourceImportarExecutanteSAP.DataSet.
-            FieldByName('Documento').AsString := Documento;
-            FrmDataModule.DataSourceImportarExecutanteSAP.DataSet.
-            FieldByName('NomeExecutante').AsString := Excel.Workbooks[1].Sheets[1].Cells[i,6];
-            FrmDataModule.DataSourceImportarExecutanteSAP.DataSet.
-            FieldByName('DataEmbarque').AsDateTime :=
-            StrToDate(Excel.Workbooks[1].Sheets[1].Cells[i,7]);
-            FrmDataModule.DataSourceImportarExecutanteSAP.DataSet.
-            FieldByName('Destino').AsString := Excel.Workbooks[1].Sheets[1].Cells[i,8];
-            FrmDataModule.DataSourceImportarExecutanteSAP.DataSet.
-            FieldByName('ModalDefinido').AsString := Excel.Workbooks[1].Sheets[1].Cells[i,9];
-            FrmDataModule.DataSourceImportarExecutanteSAP.DataSet.
-            FieldByName('Origem').AsString := Excel.Workbooks[1].Sheets[1].Cells[i,11];
-            FrmDataModule.DataSourceImportarExecutanteSAP.DataSet.
-            FieldByName('CriadoPor').AsString := Excel.Workbooks[1].Sheets[1].Cells[i,19];
-            FrmDataModule.ADOQueryImportarExecutanteSAP.Post;
-          except
-            FrmDataModule.ADOQueryImportarExecutanteSAP.Cancel;
-          end;
-        end;
-        // Incremento ProgressBar
-        FrmPrincipal.ProgressBarIncremento(1);
-      end;
-      FrmDataModule.ADOQueryImportarExecutanteSAP.First;
-      FrmDataModule.DataSourceImportarExecutanteSAP.Enabled := true;
-      actInterromper.Enabled:= false;
-      // Atualizar ProgressBar
-      FrmPrincipal.ProgressBarAtualizar;
-    finally
-      //Fechar Excel
-      Excel.Application.DisplayAlerts := False; // Alle Rückfragen ausstellen
-      Excel.Quit;
-      Excel := Unassigned;
-      Excel := 0;
-    end;
-  except
-    MessageBox(0,'Ocorreu um erro durante a importação e a operação foi cancelada!',
-    'Excel', MB_ICONERROR);
-    FrmDataModule.ADOQueryImportarExecutanteSAP.First;
-    FrmDataModule.DataSourceImportarExecutanteSAP.Enabled := true;
-    // Atualizar ProgressBar
-    FrmPrincipal.ProgressBarAtualizar;
-    //Fechar Excel
-    Excel.Application.DisplayAlerts := False; // Alle Rückfragen ausstellen
-    Excel.Quit;
-    Excel := Unassigned;
-    Excel := 0;
-  end;
-end;
-
 procedure TFrmImportacao.DBGridExecutanteAPLATDrawColumnCell(Sender: TObject;
   const Rect: TRect; DataCol: Integer; Column: TColumn; State: TGridDrawState);
 begin
@@ -1123,62 +623,6 @@ begin
   end;
 end;
 
-procedure TFrmImportacao.DBGridExecutanteAPLATTitleClick(Column: TColumn);
-begin
-  FrmPrincipal.configurarFiltro(0,Column.FieldName,IntToStr(Column.Index),
-  Column.ReadOnly,actFiltroInserir,actGridASC,actGridDESC,actGridDESC);
-  //======================================================
-  FrmPrincipal.titleGrid(ColunasAPLAT,'Memoria',FrmDataModule.ADOQueryImportarExecutanteAPLAT.SQL.Text);
-end;
-
-procedure TFrmImportacao.DBGridExecutanteSAPDrawColumnCell(Sender: TObject;
-  const Rect: TRect; DataCol: Integer; Column: TColumn; State: TGridDrawState);
-begin
-  FrmPrincipal.GridZebrado(DBGridExecutanteSAP,ColunasT31,State,Rect,DataCol,Column);
-  if (Column.Field.FieldName = 'txtTipoEtapaServico') then
-  begin
-    if (FrmDataModule.DataSourceImportarExecutanteSAP.DataSet.
-    FieldByName('txtTipoEtapaServico').AsString = 'NÃO DEFINIDO')  then
-    begin
-      DBGridExecutanteSAP.Canvas.Brush.Color:= clRed;
-      DBGridExecutanteSAP.Font.Color:= clBlack;
-      DBGridExecutanteSAP.Canvas.FillRect(Rect);
-      DBGridExecutanteSAP.DefaultDrawColumnCell(Rect, DataCol,Column, State);
-    end;
-  end;
-  if (Column.Field.FieldName = 'txtFuncao') then
-  begin
-    if (FrmDataModule.DataSourceImportarExecutanteSAP.DataSet.
-    FieldByName('txtFuncao').AsString = 'NÃO DEFINIDO')  then
-    begin
-      DBGridExecutanteSAP.Canvas.Brush.Color:= clRed;
-      DBGridExecutanteSAP.Font.Color:= clBlack;
-      DBGridExecutanteSAP.Canvas.FillRect(Rect);
-      DBGridExecutanteSAP.DefaultDrawColumnCell(Rect, DataCol,Column, State);
-    end;
-  end;
-  if (Column.Field.FieldName = 'txtEmpresa') then
-  begin
-    if (FrmDataModule.DataSourceImportarExecutanteSAP.DataSet.
-    FieldByName('txtEmpresa').AsString = 'NÃO DEFINIDO')  then
-    begin
-      DBGridExecutanteSAP.Canvas.Brush.Color:= clRed;
-      DBGridExecutanteSAP.Font.Color:= clBlack;
-      DBGridExecutanteSAP.Canvas.FillRect(Rect);
-      DBGridExecutanteSAP.DefaultDrawColumnCell(Rect, DataCol,Column, State);
-    end;
-  end;
-
-end;
-
-procedure TFrmImportacao.DBGridExecutanteSAPTitleClick(Column: TColumn);
-begin
-  FrmPrincipal.configurarFiltro(0,Column.FieldName,IntToStr(Column.Index),
-  Column.ReadOnly,actFiltroInserir,actGridASC,actGridDESC,actGridDESC);
-  //======================================================
-  FrmPrincipal.titleGrid(ColunasT31,'Memoria',FrmDataModule.ADOQueryImportarExecutanteSAP.SQL.Text);
-end;
-
 procedure TFrmImportacao.editEndereco(edt: TEdit);
 begin
   OpenDialog1.Filter := 'Microsoft Excel |*.xlsx|Microsoft Excel 97-2003|*.xls|Dados XML|*.xml|Página da Web|*.htm;*.html';
@@ -1206,15 +650,12 @@ begin
   FrmDataModule.ADOQueryTipoEtapaServico.Active:= true;
   //=====================================
   PageControlImportacao.Pages[0].TabVisible:= true;
-  PageControlImportacao.Pages[1].TabVisible:= true;
   //Incicialização
-  FrmPrincipal.SetUpColunasLayout(DBGridExecutanteAPLAT, ColunasAPLAT);
-  FrmPrincipal.SetUpColunasLayout(DBGridExecutanteSAP, ColunasT31);
+  FrmDataModule.setFilterDBGrid(DBGridExecutanteAPLAT);
   //Carregar endereços
   edtEnderecoExecutanteAPLAT.Text:= FrmPrincipal.registroEndereco('POB_APLAT');
-  if FrmPrincipal.logPerfil = 'Administrador' then
+  if ((FrmPrincipal.logPerfil = FrmPrincipal.PERFILADM)) then
   begin
-    DBGridExecutanteSAP.ReadOnly:= false;
     DBGridExecutanteAPLAT.ReadOnly:= false;
     //Executantes APLAT
     actImportarExecutanteAPLAT.Enabled:= true;
@@ -1222,16 +663,9 @@ begin
     actND_APLAT.Enabled:= true;
     actExcluirAPLAT_Executantes.Enabled:= true;
     actEnderecoExecutanteAPLAT.Enabled:= true;
-    //Executantes SAP
-    actImportarExecutanteSAP.Enabled:= true;
-    actAnalisaExecutanteSAP.Enabled:= true;
-    actND_SAP.Enabled:= true;
-    actExcluirSAP_Executantes.Enabled:= true;
-    actEnderecoExecutanteSAP.Enabled:= true;
   end
-  else if FrmPrincipal.logPerfil = 'Supervisor' then
+  else if (FrmPrincipal.logPerfil = FrmPrincipal.PERFILSUPERVISAO) then
   begin
-    DBGridExecutanteSAP.ReadOnly:= false;
     DBGridExecutanteAPLAT.ReadOnly:= false;
     //Executantes APLAT
     actImportarExecutanteAPLAT.Enabled:= true;
@@ -1239,16 +673,9 @@ begin
     actND_APLAT.Enabled:= true;
     actExcluirAPLAT_Executantes.Enabled:= true;
     actEnderecoExecutanteAPLAT.Enabled:= true;
-    //Executantes SAP
-    actImportarExecutanteSAP.Enabled:= true;
-    actAnalisaExecutanteSAP.Enabled:= true;
-    actND_SAP.Enabled:= true;
-    actExcluirSAP_Executantes.Enabled:= true;
-    actEnderecoExecutanteSAP.Enabled:= true;
   end
-  else if ((FrmPrincipal.logPerfil = 'Programação')) then
+  else if (FrmPrincipal.logPerfil = FrmPrincipal.PERFILPROGRAMACAO) then
   begin
-    DBGridExecutanteSAP.ReadOnly:= true;
     DBGridExecutanteAPLAT.ReadOnly:= true;
     //Executantes APLAT
     actImportarExecutanteAPLAT.Enabled:= true;
@@ -1256,16 +683,9 @@ begin
     actND_APLAT.Enabled:= true;
     actExcluirAPLAT_Executantes.Enabled:= true;
     actEnderecoExecutanteAPLAT.Enabled:= true;
-    //Executantes SAP
-    actImportarExecutanteSAP.Enabled:= true;
-    actAnalisaExecutanteSAP.Enabled:= true;
-    actND_SAP.Enabled:= true;
-    actExcluirSAP_Executantes.Enabled:= true;
-    actEnderecoExecutanteSAP.Enabled:= true;
   end
-  else if FrmPrincipal.logPerfil = 'Hotelaria' then
+  else if (FrmPrincipal.logPerfil = FrmPrincipal.PERFILRT) then
   begin
-    DBGridExecutanteSAP.ReadOnly:= true;
     DBGridExecutanteAPLAT.ReadOnly:= true;
     //Executantes APLAT
     actImportarExecutanteAPLAT.Enabled:= true;
@@ -1273,16 +693,19 @@ begin
     actND_APLAT.Enabled:= true;
     actExcluirAPLAT_Executantes.Enabled:= true;
     actEnderecoExecutanteAPLAT.Enabled:= true;
-    //Executantes SAP
-    actImportarExecutanteSAP.Enabled:= true;
-    actAnalisaExecutanteSAP.Enabled:= true;
-    actND_SAP.Enabled:= true;
-    actExcluirSAP_Executantes.Enabled:= true;
-    actEnderecoExecutanteSAP.Enabled:= true;
+  end
+  else if (FrmPrincipal.logPerfil = FrmPrincipal.PERFILHOTELARIA) then
+  begin
+    DBGridExecutanteAPLAT.ReadOnly:= true;
+    //Executantes APLAT
+    actImportarExecutanteAPLAT.Enabled:= true;
+    actAnalisaExecutanteAPLAT.Enabled:= true;
+    actND_APLAT.Enabled:= true;
+    actExcluirAPLAT_Executantes.Enabled:= true;
+    actEnderecoExecutanteAPLAT.Enabled:= true;
   end
   else
   begin
-    DBGridExecutanteSAP.ReadOnly:= true;
     DBGridExecutanteAPLAT.ReadOnly:= true;
     //Executantes APLAT
     actImportarExecutanteAPLAT.Enabled:= false;
@@ -1290,12 +713,6 @@ begin
     actND_APLAT.Enabled:= false;
     actExcluirAPLAT_Executantes.Enabled:= false;
     actEnderecoExecutanteAPLAT.Enabled:= false;
-    //Executantes SAP
-    actImportarExecutanteSAP.Enabled:= false;
-    actAnalisaExecutanteSAP.Enabled:= false;
-    actND_SAP.Enabled:= false;
-    actExcluirSAP_Executantes.Enabled:= false;
-    actEnderecoExecutanteSAP.Enabled:= false;
   end;
   actProcurar.Execute;
 end;
@@ -1323,7 +740,7 @@ procedure TFrmImportacao.StringGridNDFixedCellClick(Sender: TObject; ACol,
   ARow: Integer);
 begin
   FrmPrincipal.clasifica(StringGridND,ACol,true);
-  FrmPrincipal.AutoFitGrade(StringGridND);
+  AutoFitGrade(StringGridND);
 end;
 
 procedure TFrmImportacao.StringGridNDSelectCell(Sender: TObject; ACol,
@@ -1460,57 +877,6 @@ begin
     Result.Funcao:= 'NÃO DEFINIDO';
     Result.Empresa:= 'NÃO DEFINIDO';
     Result.Documento:= 'NÃO DEFINIDO';
-  end;
-end;
-
-function TFrmImportacao.AnalisaExecutanteSAP(CodigoSAP,
-  Documento: String): TExecCadastro;
-  var
-    txtTipoEtapaServico,txtEmpresa,txtFuncao,NomeExecutante: String;
-begin
-  if ((CodigoSAP = '')or(CodigoSAP = '0')) then
-    CodigoSAP:= '999999999';
-  if (Documento = '') then
-    Documento:= '999999999';
-
-  try
-    FrmDataModule.ADOQueryTemporarioDBConsulta1.Close;
-    FrmDataModule.ADOQueryTemporarioDBConsulta1.SQL.Clear;
-    FrmDataModule.ADOQueryTemporarioDBConsulta1.SQL.Add(
-    'SELECT tblExecutante.* '+
-    'FROM tblExecutante '+
-    'WHERE ((CodigoSAP like '+QuotedStr(CodigoSAP)+
-    ')OR(CPF like '+QuotedStr(Documento)+
-    ')OR(OutroDocumento like '+QuotedStr(Documento)+'));');
-    FrmDataModule.ADOQueryTemporarioDBConsulta1.Open;
-    FrmDataModule.ADOQueryTemporarioDBConsulta1.Active:= true;
-    txtTipoEtapaServico:= FrmDataModule.DataSourceTemporarioDBConsulta1.
-    DataSet.FieldByName('txtTipoEtapaServico').AsString;
-    txtEmpresa:= FrmDataModule.DataSourceTemporarioDBConsulta1.
-    DataSet.FieldByName('txtEmpresa').AsString;
-    txtFuncao:= FrmDataModule.DataSourceTemporarioDBConsulta1.
-    DataSet.FieldByName('txtFuncao').AsString;
-    NomeExecutante:= FrmPrincipal.TextoMaiusculo(FrmDataModule.DataSourceTemporarioDBConsulta1.
-    DataSet.FieldByName('NomeExecutante').AsString);
-    if txtTipoEtapaServico <> '' then
-    begin
-      Result.NomeExecutante:= NomeExecutante;
-      Result.TipoEtapaServico:= txtTipoEtapaServico;
-      Result.Funcao:= txtFuncao;
-      Result.Empresa:= txtEmpresa;
-    end
-    else
-    begin
-      Result.NomeExecutante:= 'NÃO DEFINIDO';
-      Result.TipoEtapaServico:= 'NÃO DEFINIDO';
-      Result.Funcao:= 'NÃO DEFINIDO';
-      Result.Empresa:= 'NÃO DEFINIDO';
-    end;
-  except
-    Result.NomeExecutante:= 'NÃO DEFINIDO';
-    Result.TipoEtapaServico:= 'NÃO DEFINIDO';
-    Result.Funcao:= 'NÃO DEFINIDO';
-    Result.Empresa:= 'NÃO DEFINIDO';
   end;
 end;
 

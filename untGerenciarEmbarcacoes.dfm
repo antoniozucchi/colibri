@@ -2,8 +2,8 @@ object FrmGerenciarEmbarcacoes: TFrmGerenciarEmbarcacoes
   Left = 0
   Top = 0
   Caption = 'Gerenciar Transporte Mar'#237'timo'
-  ClientHeight = 557
-  ClientWidth = 1282
+  ClientHeight = 549
+  ClientWidth = 1280
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -20,7 +20,7 @@ object FrmGerenciarEmbarcacoes: TFrmGerenciarEmbarcacoes
   object PanelTitulo: TPanel
     Left = 0
     Top = 0
-    Width = 1282
+    Width = 1280
     Height = 25
     Align = alTop
     Caption = 'Gerenciar Transporte Mar'#237'timo'
@@ -33,26 +33,26 @@ object FrmGerenciarEmbarcacoes: TFrmGerenciarEmbarcacoes
     ParentBackground = False
     ParentFont = False
     TabOrder = 0
-    ExplicitWidth = 1280
+    ExplicitWidth = 1278
   end
   object PageControlPrincipal: TPageControl
     Left = 0
     Top = 50
-    Width = 1282
-    Height = 507
+    Width = 1280
+    Height = 499
     ActivePage = TabSheet3
     Align = alClient
     TabOrder = 1
     OnChange = PageControlPrincipalChange
-    ExplicitWidth = 1280
-    ExplicitHeight = 499
+    ExplicitWidth = 1278
+    ExplicitHeight = 491
     object TabSheet3: TTabSheet
       Caption = 'Distribui'#231#227'o'
       ImageIndex = 2
       object Splitter2: TSplitter
         Left = 460
         Top = 0
-        Height = 479
+        Height = 471
         ExplicitLeft = 456
         ExplicitTop = 264
         ExplicitHeight = 100
@@ -61,10 +61,10 @@ object FrmGerenciarEmbarcacoes: TFrmGerenciarEmbarcacoes
         Left = 0
         Top = 0
         Width = 460
-        Height = 479
+        Height = 471
         Align = alLeft
         TabOrder = 0
-        ExplicitHeight = 471
+        ExplicitHeight = 463
         object Splitter1: TSplitter
           Left = 1
           Top = 286
@@ -98,11 +98,11 @@ object FrmGerenciarEmbarcacoes: TFrmGerenciarEmbarcacoes
             TitleFont.Style = []
             OnDrawColumnCell = DBGridRoteamentoDrawColumnCell
             OnKeyDown = DBGridRoteamentoKeyDown
-            OnTitleClick = DBGridRoteamentoTitleClick
             ClearFilterButton = btnFiltroClearRoteamento
             SearchAction = actProcuraRoteamento
             LayoutGrid = ColunasLayoutRoteamento
             EnableZebra = False
+            ExcelButton = btnExcelRoteamento
             Columns = <
               item
                 Expanded = False
@@ -218,21 +218,41 @@ object FrmGerenciarEmbarcacoes: TFrmGerenciarEmbarcacoes
               ParentShowHint = False
               ShowHint = True
             end
-            object btnInserir: TBitBtn
+            object btnExcelRoteamento: TToolButton
               Left = 23
               Top = 0
-              Width = 70
+              Hint = 'Exportar dados para o Excel'
+              Caption = 'btnExcelRoteamento'
+              ImageIndex = 54
+              ParentShowHint = False
+              ShowHint = True
+            end
+            object BitBtn4: TBitBtn
+              Left = 46
+              Top = 0
+              Width = 57
               Height = 22
               Action = actInserirRoteamento
               Caption = 'Inserir'
               ParentShowHint = False
               ShowHint = True
+              TabOrder = 4
+            end
+            object btnInserir: TBitBtn
+              Left = 103
+              Top = 0
+              Width = 89
+              Height = 22
+              Action = actCriarRotasAutomaticamente
+              Caption = 'Gerar Rotas'
+              ParentShowHint = False
+              ShowHint = True
               TabOrder = 0
             end
             object btnSalvar: TBitBtn
-              Left = 93
+              Left = 192
               Top = 0
-              Width = 70
+              Width = 57
               Height = 22
               Action = actEditarRoteamento
               Caption = 'Salvar'
@@ -240,8 +260,8 @@ object FrmGerenciarEmbarcacoes: TFrmGerenciarEmbarcacoes
               ShowHint = True
               TabOrder = 2
             end
-            object btnExcluirRota: TBitBtn
-              Left = 163
+            object BitBtn6: TBitBtn
+              Left = 249
               Top = 0
               Width = 90
               Height = 22
@@ -249,10 +269,21 @@ object FrmGerenciarEmbarcacoes: TFrmGerenciarEmbarcacoes
               Caption = 'Excluir Rota'
               ParentShowHint = False
               ShowHint = True
+              TabOrder = 5
+            end
+            object btnExcluirRota: TBitBtn
+              Left = 339
+              Top = 0
+              Width = 86
+              Height = 22
+              Action = actExcluirRoteamentoTODOS
+              Caption = 'Excluir todas'
+              ParentShowHint = False
+              ShowHint = True
               TabOrder = 1
             end
             object DBEditCodigoRoteamento: TDBEdit
-              Left = 253
+              Left = 425
               Top = 0
               Width = 48
               Height = 22
@@ -344,14 +375,14 @@ object FrmGerenciarEmbarcacoes: TFrmGerenciarEmbarcacoes
           Left = 1
           Top = 289
           Width = 458
-          Height = 189
+          Height = 181
           Align = alClient
           TabOrder = 1
-          ExplicitHeight = 181
+          ExplicitHeight = 173
           object Splitter4: TSplitter
             Left = 209
             Top = 26
-            Height = 162
+            Height = 154
             ExplicitLeft = 194
             ExplicitTop = 32
             ExplicitHeight = 353
@@ -377,11 +408,11 @@ object FrmGerenciarEmbarcacoes: TFrmGerenciarEmbarcacoes
             Left = 1
             Top = 26
             Width = 208
-            Height = 162
+            Height = 154
             Align = alLeft
             Caption = 'PanelSelecaoPlataforma'
             TabOrder = 1
-            ExplicitHeight = 154
+            ExplicitHeight = 146
             object ToolBar4: TToolBar
               Left = 1
               Top = 1
@@ -447,23 +478,23 @@ object FrmGerenciarEmbarcacoes: TFrmGerenciarEmbarcacoes
               Left = 1
               Top = 30
               Width = 206
-              Height = 131
+              Height = 123
               Align = alClient
               FixedCols = 0
               TabOrder = 1
               OnDblClick = StrGridResumoDblClick
-              ExplicitHeight = 123
+              ExplicitHeight = 115
             end
           end
           object Panel5: TPanel
             Left = 212
             Top = 26
             Width = 245
-            Height = 162
+            Height = 154
             Align = alClient
             Caption = 'Panel5'
             TabOrder = 2
-            ExplicitHeight = 154
+            ExplicitHeight = 146
             object ToolBar1: TToolBar
               Left = 1
               Top = 1
@@ -490,7 +521,7 @@ object FrmGerenciarEmbarcacoes: TFrmGerenciarEmbarcacoes
               Left = 1
               Top = 30
               Width = 243
-              Height = 131
+              Height = 123
               Align = alClient
               ColCount = 6
               DefaultColWidth = 20
@@ -499,9 +530,10 @@ object FrmGerenciarEmbarcacoes: TFrmGerenciarEmbarcacoes
               Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goDrawFocusSelected, goColSizing, goRowMoving]
               PopupMenu = PopupMenuRota
               TabOrder = 1
+              OnDblClick = actExcluirLinhaExecute
               OnRowMoved = StrGridRotaRowMoved
               OnSelectCell = StrGridRotaSelectCell
-              ExplicitHeight = 123
+              ExplicitHeight = 115
               ColWidths = (
                 20
                 59
@@ -557,16 +589,16 @@ object FrmGerenciarEmbarcacoes: TFrmGerenciarEmbarcacoes
       object PanelVinculados: TPanel
         Left = 463
         Top = 0
-        Width = 811
-        Height = 479
+        Width = 809
+        Height = 471
         Align = alClient
         TabOrder = 1
-        ExplicitWidth = 809
-        ExplicitHeight = 471
+        ExplicitWidth = 807
+        ExplicitHeight = 463
         object SplitterAnalise: TSplitter
           Left = 1
           Top = 329
-          Width = 809
+          Width = 807
           Height = 3
           Cursor = crVSplit
           Align = alTop
@@ -576,16 +608,16 @@ object FrmGerenciarEmbarcacoes: TFrmGerenciarEmbarcacoes
         object PanelExecutantesVinculados: TPanel
           Left = 1
           Top = 332
-          Width = 809
-          Height = 146
+          Width = 807
+          Height = 138
           Align = alClient
           TabOrder = 0
-          ExplicitWidth = 807
-          ExplicitHeight = 138
+          ExplicitWidth = 805
+          ExplicitHeight = 130
           object ToolBar10: TToolBar
             Left = 1
             Top = 26
-            Width = 807
+            Width = 805
             Height = 29
             ButtonHeight = 23
             Caption = 'ToolBar10'
@@ -593,7 +625,7 @@ object FrmGerenciarEmbarcacoes: TFrmGerenciarEmbarcacoes
             EdgeBorders = [ebLeft, ebTop, ebRight, ebBottom]
             Images = FrmPrincipal.ImageList1
             TabOrder = 0
-            ExplicitWidth = 805
+            ExplicitWidth = 803
             object ToolButton7: TToolButton
               Left = 0
               Top = 0
@@ -626,23 +658,21 @@ object FrmGerenciarEmbarcacoes: TFrmGerenciarEmbarcacoes
               ParentShowHint = False
               ShowHint = True
             end
-            object BitBtn10: TBitBtn
+            object btnExcelRotaExecutante: TToolButton
               Left = 111
               Top = 0
-              Width = 70
-              Height = 23
-              Action = actExcel
+              Hint = 'Exportar dados para o Excel'
               Caption = 'Exportar'
+              ImageIndex = 54
               ParentShowHint = False
               ShowHint = True
-              TabOrder = 0
             end
           end
           object DBGridRotaExecutantes: TFilterDBGrid
             Left = 1
             Top = 55
-            Width = 807
-            Height = 71
+            Width = 805
+            Height = 63
             Align = alClient
             DataSource = FrmDataModule.DataSourceTM_RotaExecutantes
             ReadOnly = True
@@ -659,6 +689,7 @@ object FrmGerenciarEmbarcacoes: TFrmGerenciarEmbarcacoes
             SearchAction = actProcuraRotaExecutantes
             LayoutGrid = ColunasLayoutRotaExecutantes
             EnableZebra = False
+            ExcelButton = btnExcelRotaExecutante
             Columns = <
               item
                 Alignment = taCenter
@@ -727,8 +758,8 @@ object FrmGerenciarEmbarcacoes: TFrmGerenciarEmbarcacoes
           end
           object StatusBarRotaExecutantes: TStatusBar
             Left = 1
-            Top = 126
-            Width = 807
+            Top = 118
+            Width = 805
             Height = 19
             Panels = <
               item
@@ -746,8 +777,8 @@ object FrmGerenciarEmbarcacoes: TFrmGerenciarEmbarcacoes
               item
                 Width = 50
               end>
-            ExplicitTop = 118
-            ExplicitWidth = 805
+            ExplicitTop = 110
+            ExplicitWidth = 803
           end
           object ColunasLayoutRotaExecutantes: TStringGrid
             Left = 72
@@ -772,7 +803,7 @@ object FrmGerenciarEmbarcacoes: TFrmGerenciarEmbarcacoes
           object PanelTituloRotaExecutantes: TPanel
             Left = 1
             Top = 1
-            Width = 807
+            Width = 805
             Height = 25
             Align = alTop
             Color = clGradientActiveCaption
@@ -784,21 +815,21 @@ object FrmGerenciarEmbarcacoes: TFrmGerenciarEmbarcacoes
             ParentBackground = False
             ParentFont = False
             TabOrder = 4
-            ExplicitWidth = 805
+            ExplicitWidth = 803
           end
         end
         object PanelAnalise: TPanel
           Left = 1
           Top = 26
-          Width = 809
+          Width = 807
           Height = 303
           Align = alTop
           TabOrder = 1
-          ExplicitWidth = 807
+          ExplicitWidth = 805
           object StatusBarExecutantes: TStatusBar
             Left = 1
             Top = 283
-            Width = 807
+            Width = 805
             Height = 19
             Panels = <
               item
@@ -816,12 +847,12 @@ object FrmGerenciarEmbarcacoes: TFrmGerenciarEmbarcacoes
               item
                 Width = 50
               end>
-            ExplicitWidth = 805
+            ExplicitWidth = 803
           end
           object ToolBar9: TToolBar
             Left = 1
             Top = 1
-            Width = 807
+            Width = 805
             Height = 29
             ButtonHeight = 23
             Caption = 'ToolBar8'
@@ -830,7 +861,7 @@ object FrmGerenciarEmbarcacoes: TFrmGerenciarEmbarcacoes
             HotTrackColor = clRed
             Images = FrmPrincipal.ImageList1
             TabOrder = 1
-            ExplicitWidth = 805
+            ExplicitWidth = 803
             object ToolButton21: TToolButton
               Left = 0
               Top = 0
@@ -892,19 +923,16 @@ object FrmGerenciarEmbarcacoes: TFrmGerenciarEmbarcacoes
               ShowHint = True
               Visible = False
             end
-            object BitBtn13: TBitBtn
+            object btnExcelGeral: TToolButton
               Left = 161
               Top = 0
-              Width = 70
-              Height = 23
+              Hint = 'Exportar dados para o Excel'
               Action = actExcelProcuraExecutantes
-              Caption = 'Exportar'
               ParentShowHint = False
               ShowHint = True
-              TabOrder = 0
             end
             object BitBtn20: TBitBtn
-              Left = 231
+              Left = 184
               Top = 0
               Width = 93
               Height = 23
@@ -912,10 +940,10 @@ object FrmGerenciarEmbarcacoes: TFrmGerenciarEmbarcacoes
               Caption = 'Vincular Exec.'
               ParentShowHint = False
               ShowHint = True
-              TabOrder = 2
+              TabOrder = 1
             end
             object BitBtn21: TBitBtn
-              Left = 324
+              Left = 277
               Top = 0
               Width = 93
               Height = 23
@@ -923,10 +951,10 @@ object FrmGerenciarEmbarcacoes: TFrmGerenciarEmbarcacoes
               Caption = 'Transbordos'
               ParentShowHint = False
               ShowHint = True
-              TabOrder = 3
+              TabOrder = 2
             end
             object CheckBoxOrigemDestino: TCheckBox
-              Left = 417
+              Left = 370
               Top = 0
               Width = 202
               Height = 23
@@ -934,13 +962,13 @@ object FrmGerenciarEmbarcacoes: TFrmGerenciarEmbarcacoes
               Caption = 'DESTINO diferente da ORIGEM'
               Checked = True
               State = cbChecked
-              TabOrder = 1
+              TabOrder = 0
             end
           end
           object DBGridProcuraGeral: TFilterDBGrid
             Left = 1
             Top = 30
-            Width = 807
+            Width = 805
             Height = 115
             Align = alTop
             DataSource = FrmDataModule.DataSourceConsultaExecutantes_DataProgramacao
@@ -958,6 +986,7 @@ object FrmGerenciarEmbarcacoes: TFrmGerenciarEmbarcacoes
             SearchAction = actProcuraGeral
             LayoutGrid = ColunasLayoutProcuraGeral
             EnableZebra = False
+            ExcelButton = btnExcelGeral
             Columns = <
               item
                 Alignment = taCenter
@@ -1067,15 +1096,6 @@ object FrmGerenciarEmbarcacoes: TFrmGerenciarEmbarcacoes
                 Visible = True
               end
               item
-                Alignment = taCenter
-                Expanded = False
-                FieldName = 'TipoEmbarque'
-                Title.Alignment = taCenter
-                Title.Caption = 'Tipo de Embarque'
-                Width = 108
-                Visible = True
-              end
-              item
                 Expanded = False
                 FieldName = 'RequisitantePT'
                 Title.Alignment = taCenter
@@ -1152,7 +1172,7 @@ object FrmGerenciarEmbarcacoes: TFrmGerenciarEmbarcacoes
           object DBGridProcuraProgramados: TFilterDBGrid
             Left = 1
             Top = 145
-            Width = 807
+            Width = 805
             Height = 138
             Align = alClient
             DataSource = FrmDataModule.DataSourceProgramados
@@ -1262,14 +1282,6 @@ object FrmGerenciarEmbarcacoes: TFrmGerenciarEmbarcacoes
               item
                 Alignment = taCenter
                 Expanded = False
-                FieldName = 'HorarioChegada'
-                Title.Alignment = taCenter
-                Title.Caption = 'Hora Chegada'
-                Visible = True
-              end
-              item
-                Alignment = taCenter
-                Expanded = False
                 FieldName = 'CodigoSAP'
                 Title.Alignment = taCenter
                 Title.Caption = 'C'#243'digo SAP'
@@ -1279,18 +1291,17 @@ object FrmGerenciarEmbarcacoes: TFrmGerenciarEmbarcacoes
               item
                 Alignment = taCenter
                 Expanded = False
-                FieldName = 'RT'
+                FieldName = 'HorarioChegada'
                 Title.Alignment = taCenter
-                Width = 105
+                Title.Caption = 'Hora Chegada'
                 Visible = True
               end
               item
                 Alignment = taCenter
                 Expanded = False
-                FieldName = 'TipoEmbarque'
+                FieldName = 'RT'
                 Title.Alignment = taCenter
-                Title.Caption = 'Tipo de Embarque'
-                Width = 108
+                Width = 105
                 Visible = True
               end
               item
@@ -1309,11 +1320,10 @@ object FrmGerenciarEmbarcacoes: TFrmGerenciarEmbarcacoes
             Height = 65
             ColCount = 7
             DefaultRowHeight = 21
-            RowCount = 23
+            RowCount = 22
             TabOrder = 4
             Visible = False
             RowHeights = (
-              21
               21
               21
               21
@@ -1344,11 +1354,10 @@ object FrmGerenciarEmbarcacoes: TFrmGerenciarEmbarcacoes
             Height = 65
             ColCount = 7
             DefaultRowHeight = 21
-            RowCount = 16
+            RowCount = 15
             TabOrder = 5
             Visible = False
             RowHeights = (
-              21
               21
               21
               21
@@ -1369,7 +1378,7 @@ object FrmGerenciarEmbarcacoes: TFrmGerenciarEmbarcacoes
         object PanelTituloExecutantes: TPanel
           Left = 1
           Top = 1
-          Width = 809
+          Width = 807
           Height = 25
           Align = alTop
           Caption = 'Sele'#231#227'o de Executantes para vinculo ao roteamento'
@@ -1382,7 +1391,7 @@ object FrmGerenciarEmbarcacoes: TFrmGerenciarEmbarcacoes
           ParentBackground = False
           ParentFont = False
           TabOrder = 2
-          ExplicitWidth = 807
+          ExplicitWidth = 805
         end
       end
     end
@@ -1391,8 +1400,8 @@ object FrmGerenciarEmbarcacoes: TFrmGerenciarEmbarcacoes
       ImageIndex = 3
       object StatusBarImpressao: TStatusBar
         Left = 0
-        Top = 460
-        Width = 1274
+        Top = 452
+        Width = 1272
         Height = 19
         Panels = <
           item
@@ -1513,8 +1522,8 @@ object FrmGerenciarEmbarcacoes: TFrmGerenciarEmbarcacoes
       end
       object Memo1: TMemo
         Left = 0
-        Top = 371
-        Width = 1274
+        Top = 363
+        Width = 1272
         Height = 89
         Align = alBottom
         ScrollBars = ssBoth
@@ -1522,8 +1531,8 @@ object FrmGerenciarEmbarcacoes: TFrmGerenciarEmbarcacoes
       end
       object Panel11: TPanel
         Left = 0
-        Top = 351
-        Width = 1274
+        Top = 343
+        Width = 1272
         Height = 20
         Align = alBottom
         Alignment = taLeftJustify
@@ -1541,7 +1550,7 @@ object FrmGerenciarEmbarcacoes: TFrmGerenciarEmbarcacoes
       object ToolBar7: TToolBar
         Left = 0
         Top = 0
-        Width = 1274
+        Width = 1272
         Height = 29
         Caption = 'ToolBar7'
         DrawingStyle = dsGradient
@@ -1684,8 +1693,8 @@ object FrmGerenciarEmbarcacoes: TFrmGerenciarEmbarcacoes
       object RLImpressao: TStringGrid
         Left = 0
         Top = 81
-        Width = 1274
-        Height = 270
+        Width = 1272
+        Height = 262
         Align = alClient
         RowCount = 2
         Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goDrawFocusSelected, goColSizing, goRowMoving, goColMoving, goEditing, goFixedRowClick]
@@ -1701,7 +1710,7 @@ object FrmGerenciarEmbarcacoes: TFrmGerenciarEmbarcacoes
       end
       object RadioGroupImpressao: TRadioGroup
         Left = 168
-        Top = 152
+        Top = 153
         Width = 185
         Height = 105
         Caption = 'RadioGroupImpressao'
@@ -1716,14 +1725,14 @@ object FrmGerenciarEmbarcacoes: TFrmGerenciarEmbarcacoes
       object PanelTitulo1: TPanel
         Left = 0
         Top = 55
-        Width = 1274
+        Width = 1272
         Height = 26
         Align = alTop
         TabOrder = 7
         object edtTitulo2: TEdit
           Left = 1
           Top = 1
-          Width = 1272
+          Width = 1270
           Height = 24
           Align = alClient
           Alignment = taCenter
@@ -1735,14 +1744,14 @@ object FrmGerenciarEmbarcacoes: TFrmGerenciarEmbarcacoes
       object PanelTitulo2: TPanel
         Left = 0
         Top = 29
-        Width = 1274
+        Width = 1272
         Height = 26
         Align = alTop
         TabOrder = 8
         object edtTitulo1: TEdit
           Left = 1
           Top = 1
-          Width = 1272
+          Width = 1270
           Height = 24
           Align = alClient
           Alignment = taCenter
@@ -1752,15 +1761,808 @@ object FrmGerenciarEmbarcacoes: TFrmGerenciarEmbarcacoes
         end
       end
     end
+    object TabSheet1: TTabSheet
+      Caption = 'Mapa'
+      ImageIndex = 2
+      object ToolBar2: TToolBar
+        Left = 0
+        Top = 0
+        Width = 1272
+        Height = 29
+        Caption = 'ToolBar2'
+        DrawingStyle = dsGradient
+        EdgeBorders = [ebLeft, ebTop, ebRight, ebBottom]
+        HotTrackColor = clRed
+        Images = FrmPrincipal.ImageList1
+        TabOrder = 0
+        object ToolButton23: TToolButton
+          Left = 0
+          Top = 0
+          Action = actAbrirDesenho
+        end
+        object ToolButton5: TToolButton
+          Left = 23
+          Top = 0
+          Action = actSalvarDesenho
+        end
+        object ToolButton8: TToolButton
+          Left = 46
+          Top = 0
+          Action = actImprimirMapa
+          ParentShowHint = False
+          ShowHint = True
+        end
+        object ToolButton10: TToolButton
+          Left = 69
+          Top = 0
+          Action = actSalvarImagem
+          ParentShowHint = False
+          ShowHint = True
+        end
+        object ToolButton3: TToolButton
+          Left = 92
+          Top = 0
+          Hint = 'Desenho dos mapas'
+          Action = actBrasil
+          DropdownMenu = PopupMenuMapa
+          ImageIndex = 461
+          ParentShowHint = False
+          ShowHint = True
+          Style = tbsDropDown
+        end
+        object ToolButton11: TToolButton
+          Left = 134
+          Top = 0
+          Action = actMarcar
+          ParentShowHint = False
+          ShowHint = True
+        end
+        object ToolButton12: TToolButton
+          Left = 157
+          Top = 0
+          Action = actLimparGrafico
+          ParentShowHint = False
+          ShowHint = True
+        end
+        object ToolButton4: TToolButton
+          Left = 180
+          Top = 0
+          Hint = 'Gerar linha da rota selecionada no ComboBox Embarca'#231#227'o'
+          Caption = 'actGerarLinhas'
+          ImageIndex = 11
+          ParentShowHint = False
+          ShowHint = True
+          OnClick = ToolButton4Click
+        end
+        object ToolButton22: TToolButton
+          Left = 203
+          Top = 0
+          Action = actGerarLinhasTodas
+          ParentShowHint = False
+          ShowHint = True
+        end
+        object btnCotas: TToolButton
+          Left = 226
+          Top = 0
+          Hint = 
+            'Gerar uma cota com a dist'#226'nica entre duas Plataformas selecionad' +
+            'as com o clique do mouse'
+          Caption = 'btnCotas'
+          ImageIndex = 460
+          Style = tbsCheck
+        end
+        object ToolButton14: TToolButton
+          Left = 249
+          Top = 0
+          Action = actMapaZoomDinamico
+          ParentShowHint = False
+          ShowHint = True
+        end
+        object ToolButton9: TToolButton
+          Left = 272
+          Top = 0
+          Action = actMapaZoomFit
+          ParentShowHint = False
+          ShowHint = True
+        end
+        object ToolButton15: TToolButton
+          Left = 295
+          Top = 0
+          Action = actMapaPan
+          ParentShowHint = False
+          ShowHint = True
+        end
+        object ToolButton16: TToolButton
+          Left = 318
+          Top = 0
+          Action = actMapaZoomWind
+          ParentShowHint = False
+          ShowHint = True
+        end
+      end
+      object StatusBarMapa: TStatusBar
+        Left = 0
+        Top = 29
+        Width = 1272
+        Height = 19
+        Align = alTop
+        Panels = <
+          item
+            Width = 50
+          end
+          item
+            Width = 50
+          end
+          item
+            Width = 50
+          end
+          item
+            Width = 50
+          end>
+      end
+      object MemoMapaMundi: TMemo
+        Left = 0
+        Top = 48
+        Width = 1272
+        Height = 49
+        Align = alTop
+        TabOrder = 2
+        Visible = False
+      end
+      object ToolBar19: TToolBar
+        Left = 0
+        Top = 442
+        Width = 1272
+        Height = 29
+        Align = alBottom
+        Caption = 'ToolBar7'
+        Color = clWhite
+        EdgeBorders = [ebLeft, ebTop, ebRight, ebBottom]
+        Images = FrmPrincipal.ImageList1
+        ParentColor = False
+        TabOrder = 3
+        object CheckBox1: TCheckBox
+          Left = 0
+          Top = 0
+          Width = 19
+          Height = 22
+          Hint = 'Mostrar grade no desenho'
+          Alignment = taLeftJustify
+          ParentShowHint = False
+          ShowHint = True
+          TabOrder = 0
+          OnClick = CheckBox1Click
+        end
+        object ToolButton18: TToolButton
+          Left = 19
+          Top = 0
+          Width = 8
+          Caption = 'ToolButton9'
+          ImageIndex = 0
+          Style = tbsSeparator
+        end
+        object edtGridXFEA: TNumIO2
+          Left = 27
+          Top = 0
+          Width = 127
+          Height = 22
+          Hint = 'Grade X'
+          Alignment = taCenter
+          AutoSize = False
+          Beep = False
+          ButVisible = False
+          But3D = True
+          ButHeight = 22
+          ButWidth = 18
+          ButIncrem = 1.000000000000000000
+          ButSpace = 3
+          ButColor = clSilver
+          ColorBoxBG = clWhite
+          ColorBoxText = clBlack
+          ColorOutBG = clWhite
+          ColorOutText = clBlack
+          ColorScheme = csBWG
+          ColorWarnBG = 1619591152
+          ColorWarnText = clRed
+          DecPlaceSep = dsBoth
+          Enabled = True
+          FixPointDecPlaces = 3
+          FrameStyle = fsLowered
+          FreezeBoxChecked = False
+          FreezeBoxLeft = 30
+          FreezeBoxSize = 16
+          FreezeBoxTop = 4
+          FreezeBoxVisible = False
+          GaugeColor = clNavy
+          GaugeColorBg = clSilver
+          GaugeColorFrame = clGray
+          GaugeHeight = 8
+          GaugeFrameStyle = fsLowered
+          GaugeLeftMargin = 35
+          GaugeTopMargin = 3
+          GaugeVisible = False
+          GaugeWidth = 82
+          HideInputEditor = False
+          HideInputOnFreeze = False
+          HideSelection = True
+          InputFormat = itFloat
+          LeftSpace = 50
+          LeftText = 'Grade X:'
+          LeftTextAlignment = taRightJustify
+          ParentShowHint = False
+          RangeHigh = 100000000000.000000000000000000
+          RangeLow = 0.000000000000000000
+          ReadOnly = False
+          RightTextAlignment = taLeftJustify
+          ShowHint = True
+          SignificantDigits = 6
+          TabOrder = 1
+          Text = '1666.800'
+          TextBoxWidth = 65
+          Value = 1666.800000000000000000
+        end
+        object edtGridYFEA: TNumIO2
+          Left = 154
+          Top = 0
+          Width = 115
+          Height = 22
+          Hint = 'Grade Y'
+          Alignment = taCenter
+          AutoSize = False
+          Beep = False
+          ButVisible = False
+          But3D = True
+          ButHeight = 22
+          ButWidth = 18
+          ButIncrem = 1.000000000000000000
+          ButSpace = 3
+          ButColor = clSilver
+          ColorBoxBG = clWhite
+          ColorBoxText = clBlack
+          ColorOutBG = clWhite
+          ColorOutText = clBlack
+          ColorScheme = csBWG
+          ColorWarnBG = 1619591152
+          ColorWarnText = clRed
+          DecPlaceSep = dsBoth
+          Enabled = True
+          FixPointDecPlaces = 3
+          FrameStyle = fsLowered
+          FreezeBoxChecked = False
+          FreezeBoxLeft = 30
+          FreezeBoxSize = 16
+          FreezeBoxTop = 4
+          FreezeBoxVisible = False
+          GaugeColor = clNavy
+          GaugeColorBg = clSilver
+          GaugeColorFrame = clGray
+          GaugeHeight = 8
+          GaugeFrameStyle = fsLowered
+          GaugeLeftMargin = 35
+          GaugeTopMargin = 3
+          GaugeVisible = False
+          GaugeWidth = 82
+          HideInputEditor = False
+          HideInputOnFreeze = False
+          HideSelection = True
+          InputFormat = itFloat
+          LeftSpace = 50
+          LeftText = 'Grade Y:'
+          LeftTextAlignment = taRightJustify
+          ParentShowHint = False
+          RangeHigh = 10000000000.000000000000000000
+          RangeLow = 0.000000000000000000
+          ReadOnly = False
+          RightTextAlignment = taLeftJustify
+          ShowHint = True
+          SignificantDigits = 6
+          TabOrder = 2
+          Text = '3000.000'
+          TextBoxWidth = 65
+          Value = 3000.000000000000000000
+        end
+        object ToolButton57: TToolButton
+          Left = 269
+          Top = 0
+          Width = 8
+          Caption = 'ToolButton10'
+          ImageIndex = 1
+          Style = tbsSeparator
+        end
+        object edtXFEA: TNumIO2
+          Left = 277
+          Top = 0
+          Width = 115
+          Height = 22
+          Hint = 'Posi'#231#227'o X do mouse'
+          Alignment = taCenter
+          AutoSize = False
+          Beep = False
+          ButVisible = False
+          But3D = True
+          ButHeight = 22
+          ButWidth = 18
+          ButIncrem = 1.000000000000000000
+          ButSpace = 3
+          ButColor = clSilver
+          ColorBoxBG = clInfoBk
+          ColorBoxText = clBlack
+          ColorOutBG = clWhite
+          ColorOutText = clBlack
+          ColorScheme = csBWG
+          ColorWarnBG = 1619591152
+          ColorWarnText = clRed
+          DecPlaceSep = dsBoth
+          Enabled = True
+          FixPointDecPlaces = 2
+          FrameStyle = fsLowered
+          FreezeBoxChecked = False
+          FreezeBoxLeft = 30
+          FreezeBoxSize = 16
+          FreezeBoxTop = 4
+          FreezeBoxVisible = False
+          GaugeColor = clNavy
+          GaugeColorBg = clSilver
+          GaugeColorFrame = clGray
+          GaugeHeight = 8
+          GaugeFrameStyle = fsLowered
+          GaugeLeftMargin = 35
+          GaugeTopMargin = 3
+          GaugeVisible = False
+          GaugeWidth = 82
+          HideInputEditor = False
+          HideInputOnFreeze = False
+          HideSelection = True
+          InputFormat = itFloat
+          LeftSpace = 25
+          LeftText = 'X:'
+          LeftTextAlignment = taRightJustify
+          ParentShowHint = False
+          RangeHigh = 1E20
+          RangeLow = -1E20
+          ReadOnly = True
+          RightText = 'km'
+          RightTextAlignment = taLeftJustify
+          ShowHint = True
+          SignificantDigits = 6
+          TabOrder = 3
+          Text = '0.00'
+          TextBoxWidth = 65
+        end
+        object ToolButton60: TToolButton
+          Left = 392
+          Top = 0
+          Width = 8
+          Caption = 'ToolButton14'
+          ImageIndex = 2
+          Style = tbsSeparator
+        end
+        object edtYFEA: TNumIO2
+          Left = 400
+          Top = 0
+          Width = 115
+          Height = 22
+          Hint = 'Posi'#231#227'o Y do mouse'
+          Alignment = taCenter
+          AutoSize = False
+          Beep = False
+          ButVisible = False
+          But3D = True
+          ButHeight = 22
+          ButWidth = 18
+          ButIncrem = 1.000000000000000000
+          ButSpace = 3
+          ButColor = clSilver
+          ColorBoxBG = clInfoBk
+          ColorBoxText = clBlack
+          ColorOutBG = clWhite
+          ColorOutText = clBlack
+          ColorScheme = csBWG
+          ColorWarnBG = 1619591152
+          ColorWarnText = clRed
+          DecPlaceSep = dsBoth
+          Enabled = True
+          FixPointDecPlaces = 2
+          FrameStyle = fsLowered
+          FreezeBoxChecked = False
+          FreezeBoxLeft = 30
+          FreezeBoxSize = 16
+          FreezeBoxTop = 4
+          FreezeBoxVisible = False
+          GaugeColor = clNavy
+          GaugeColorBg = clSilver
+          GaugeColorFrame = clGray
+          GaugeHeight = 8
+          GaugeFrameStyle = fsLowered
+          GaugeLeftMargin = 35
+          GaugeTopMargin = 3
+          GaugeVisible = False
+          GaugeWidth = 82
+          HideInputEditor = False
+          HideInputOnFreeze = False
+          HideSelection = True
+          InputFormat = itFloat
+          LeftSpace = 25
+          LeftText = 'Y:'
+          LeftTextAlignment = taRightJustify
+          ParentShowHint = False
+          RangeHigh = 1E20
+          RangeLow = -1E20
+          ReadOnly = False
+          RightText = 'km'
+          RightTextAlignment = taLeftJustify
+          ShowHint = True
+          SignificantDigits = 6
+          TabOrder = 4
+          Text = '0.00'
+          TextBoxWidth = 65
+        end
+      end
+      object RChartMapa: TRChart
+        Left = 0
+        Top = 97
+        Width = 1272
+        Height = 345
+        Cursor = crHandPoint
+        ParentCustomHint = False
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -16
+        Font.Name = 'Arial'
+        Font.Style = []
+        Align = alClient
+        AvoidDuplicateMarks = False
+        AllocSize = 1000
+        AutoRedraw = True
+        MarginLeft = 40
+        MarginRight = 2
+        MarginTop = 1
+        MarginBottom = 25
+        MinDupMarkDist = 1
+        LRim = 40
+        RRim = 2
+        TRim = 1
+        BRim = 25
+        BackGroundImg.IncludePath = True
+        BackGroundImg.FillMode = bfStretch
+        BackGroundImg.AreaMode = bamNone
+        BackGroundImg.AreaColor = 14540253
+        BackGroundImg.AreaLeft = -1.000000000000000000
+        BackGroundImg.AreaRight = 1.000000000000000000
+        BackGroundImg.AreaTop = 1.000000000000000000
+        BackGroundImg.AreaBottom = -1.000000000000000000
+        ClassDefault = 0
+        GridStyle = gsNone
+        GridDx = 5.000000000000000000
+        GridDy = 5.000000000000000000
+        Isometric = True
+        FillColor = clWhite
+        ChartColor = clInactiveBorder
+        WindColor = clWhite
+        GridColor = clSilver
+        JointLayers.L01xControlledBy = 1
+        JointLayers.L01yControlledBy = 1
+        JointLayers.L02xControlledBy = 2
+        JointLayers.L02yControlledBy = 2
+        JointLayers.L03xControlledBy = 3
+        JointLayers.L03yControlledBy = 3
+        JointLayers.L04xControlledBy = 4
+        JointLayers.L04yControlledBy = 4
+        JointLayers.L05xControlledBy = 5
+        JointLayers.L05yControlledBy = 5
+        JointLayers.L06xControlledBy = 6
+        JointLayers.L06yControlledBy = 6
+        JointLayers.L07xControlledBy = 7
+        JointLayers.L07yControlledBy = 7
+        JointLayers.L08xControlledBy = 8
+        JointLayers.L08yControlledBy = 8
+        JointLayers.L09xControlledBy = 9
+        JointLayers.L09yControlledBy = 9
+        JointLayers.L10xControlledBy = 10
+        JointLayers.L10yControlledBy = 10
+        JointLayers.L11xControlledBy = 11
+        JointLayers.L11yControlledBy = 11
+        JointLayers.L12xControlledBy = 12
+        JointLayers.L12yControlledBy = 12
+        JointLayers.L13xControlledBy = 13
+        JointLayers.L13yControlledBy = 13
+        JointLayers.L14xControlledBy = 14
+        JointLayers.L14yControlledBy = 14
+        JointLayers.L15xControlledBy = 15
+        JointLayers.L15yControlledBy = 15
+        JointLayers.L16xControlledBy = 16
+        JointLayers.L16yControlledBy = 16
+        Caption = ''
+        CaptionPosX = 0
+        CaptionPosY = -30
+        CaptionAlignment = taCenter
+        CaptionAnchorHoriz = cahChartCenter
+        CaptionAnchorVert = cavChartTop
+        CaptionTrim = 100
+        MouseTraceColor = clWhite
+        MouseTraceInvert = True
+        CrossHair1.Color = clBlack
+        CrossHair1.Layer = 1
+        CrossHair1.Mode = chBoth
+        CrossHair1.LineType = psClear
+        CrossHair1.LineWid = 1
+        CrossHair2.Color = clMaroon
+        CrossHair2.Layer = 2
+        CrossHair2.Mode = chOff
+        CrossHair2.LineType = psSolid
+        CrossHair2.LineWid = 1
+        CrossHair3.Color = clBlack
+        CrossHair3.Layer = 2
+        CrossHair3.Mode = chOff
+        CrossHair3.LineType = psSolid
+        CrossHair3.LineWid = 1
+        CrossHair4.Color = clBlack
+        CrossHair4.Layer = 2
+        CrossHair4.Mode = chOff
+        CrossHair4.LineType = psSolid
+        CrossHair4.LineWid = 1
+        MouseAction = maPan
+        MouseCursorFixed = False
+        PanGridDx = 1.000000000000000000
+        PanGridDy = 1.000000000000000000
+        Scale1X.CaptionPosX = -45
+        Scale1X.CaptionPosY = 19
+        Scale1X.CaptionAlignment = taCenter
+        Scale1X.CaptionAnchor = uaSclCenter
+        Scale1X.ColorScale = clBlack
+        Scale1X.DateFormat.TimeFormat = tfHHMMSS
+        Scale1X.DateFormat.DateSeparator = '-'
+        Scale1X.DateFormat.TimeSeparator = ':'
+        Scale1X.DateFormat.YearLength = ylYYYY
+        Scale1X.DateFormat.MonthName = True
+        Scale1X.DateFormat.DateOrder = doDDMMYY
+        Scale1X.DateFormat.DateForTime = dtOnePerDay
+        Scale1X.DecPlaces = -2
+        Scale1X.Font.Charset = DEFAULT_CHARSET
+        Scale1X.Font.Color = clWindowText
+        Scale1X.Font.Height = -11
+        Scale1X.Font.Name = 'MS Sans Serif'
+        Scale1X.Font.Style = []
+        Scale1X.Logarithmic = False
+        Scale1X.LabelType = ftNum
+        Scale1X.MinTicks = 5
+        Scale1X.MinRange = 0.000000000100000000
+        Scale1X.MouseAction = maNone
+        Scale1X.RangeLow = -10.000000000000000000
+        Scale1X.RangeHigh = 10.000000000000000000
+        Scale1X.ShortTicks = True
+        Scale1X.ScalePos = 0
+        Scale1X.Visible = True
+        Scale1X.ScaleLocation = slBottom
+        Scale1Y.CaptionPosX = -50
+        Scale1Y.CaptionPosY = 0
+        Scale1Y.CaptionAlignment = taLeftJustify
+        Scale1Y.CaptionAnchor = uaSclTopLft
+        Scale1Y.ColorScale = clBlack
+        Scale1Y.DateFormat.TimeFormat = tfHHMMSS
+        Scale1Y.DateFormat.DateSeparator = '-'
+        Scale1Y.DateFormat.TimeSeparator = ':'
+        Scale1Y.DateFormat.YearLength = ylYYYY
+        Scale1Y.DateFormat.MonthName = True
+        Scale1Y.DateFormat.DateOrder = doDDMMYY
+        Scale1Y.DateFormat.DateForTime = dtOnePerDay
+        Scale1Y.DecPlaces = -2
+        Scale1Y.Font.Charset = DEFAULT_CHARSET
+        Scale1Y.Font.Color = clWindowText
+        Scale1Y.Font.Height = -11
+        Scale1Y.Font.Name = 'MS Sans Serif'
+        Scale1Y.Font.Style = []
+        Scale1Y.Logarithmic = False
+        Scale1Y.LabelType = ftNum
+        Scale1Y.MinTicks = 5
+        Scale1Y.MinRange = 0.000000000100000000
+        Scale1Y.MouseAction = maNone
+        Scale1Y.RangeLow = -2.599512591389114000
+        Scale1Y.RangeHigh = 2.599512591389114000
+        Scale1Y.ShortTicks = True
+        Scale1Y.ScalePos = 0
+        Scale1Y.Visible = True
+        Scale1Y.ScaleLocation = slLeft
+        Scale2X.CaptionPosX = 10
+        Scale2X.CaptionPosY = 100
+        Scale2X.CaptionAlignment = taCenter
+        Scale2X.CaptionAnchor = uaSclCenter
+        Scale2X.ColorScale = clMaroon
+        Scale2X.DateFormat.TimeFormat = tfHHMMSS
+        Scale2X.DateFormat.DateSeparator = '-'
+        Scale2X.DateFormat.TimeSeparator = ':'
+        Scale2X.DateFormat.YearLength = ylYYYY
+        Scale2X.DateFormat.MonthName = True
+        Scale2X.DateFormat.DateOrder = doDDMMYY
+        Scale2X.DateFormat.DateForTime = dtOnePerDay
+        Scale2X.DecPlaces = -2
+        Scale2X.Font.Charset = DEFAULT_CHARSET
+        Scale2X.Font.Color = clWindowText
+        Scale2X.Font.Height = -13
+        Scale2X.Font.Name = 'MS Sans Serif'
+        Scale2X.Font.Style = []
+        Scale2X.Logarithmic = False
+        Scale2X.LabelType = ftNum
+        Scale2X.MinTicks = 3
+        Scale2X.MinRange = 0.000000000100000000
+        Scale2X.MouseAction = maNone
+        Scale2X.RangeHigh = 1.000000000000000000
+        Scale2X.ShortTicks = True
+        Scale2X.ScalePos = 0
+        Scale2X.Visible = False
+        Scale2X.ScaleLocation = slBottom
+        Scale2Y.CaptionPosX = 10
+        Scale2Y.CaptionPosY = 100
+        Scale2Y.CaptionAlignment = taRightJustify
+        Scale2Y.CaptionAnchor = uaSclTopLft
+        Scale2Y.ColorScale = clMaroon
+        Scale2Y.DateFormat.TimeFormat = tfHHMMSS
+        Scale2Y.DateFormat.DateSeparator = '-'
+        Scale2Y.DateFormat.TimeSeparator = ':'
+        Scale2Y.DateFormat.YearLength = ylYYYY
+        Scale2Y.DateFormat.MonthName = True
+        Scale2Y.DateFormat.DateOrder = doDDMMYY
+        Scale2Y.DateFormat.DateForTime = dtOnePerDay
+        Scale2Y.DecPlaces = -2
+        Scale2Y.Font.Charset = DEFAULT_CHARSET
+        Scale2Y.Font.Color = clWindowText
+        Scale2Y.Font.Height = -13
+        Scale2Y.Font.Name = 'MS Sans Serif'
+        Scale2Y.Font.Style = []
+        Scale2Y.Logarithmic = False
+        Scale2Y.LabelType = ftNum
+        Scale2Y.MinTicks = 3
+        Scale2Y.MinRange = 0.000000000100000000
+        Scale2Y.MouseAction = maNone
+        Scale2Y.RangeLow = 0.370024370430543400
+        Scale2Y.RangeHigh = 0.629975629569454900
+        Scale2Y.ShortTicks = True
+        Scale2Y.ScalePos = 0
+        Scale2Y.Visible = False
+        Scale2Y.ScaleLocation = slLeft
+        Scale3X.CaptionPosX = 10
+        Scale3X.CaptionPosY = 100
+        Scale3X.CaptionAlignment = taCenter
+        Scale3X.CaptionAnchor = uaSclCenter
+        Scale3X.ColorScale = clGreen
+        Scale3X.DateFormat.TimeFormat = tfHHMMSS
+        Scale3X.DateFormat.DateSeparator = '-'
+        Scale3X.DateFormat.TimeSeparator = ':'
+        Scale3X.DateFormat.YearLength = ylYYYY
+        Scale3X.DateFormat.MonthName = True
+        Scale3X.DateFormat.DateOrder = doDDMMYY
+        Scale3X.DateFormat.DateForTime = dtOnePerDay
+        Scale3X.DecPlaces = -2
+        Scale3X.Font.Charset = DEFAULT_CHARSET
+        Scale3X.Font.Color = clWindowText
+        Scale3X.Font.Height = -11
+        Scale3X.Font.Name = 'Tahoma'
+        Scale3X.Font.Style = []
+        Scale3X.Logarithmic = False
+        Scale3X.LabelType = ftNum
+        Scale3X.MinTicks = 3
+        Scale3X.MinRange = 0.000000000100000000
+        Scale3X.MouseAction = maNone
+        Scale3X.RangeHigh = 1.000000000000000000
+        Scale3X.ShortTicks = True
+        Scale3X.ScalePos = 0
+        Scale3X.Visible = False
+        Scale3X.ScaleLocation = slBottom
+        Scale3Y.CaptionPosX = 10
+        Scale3Y.CaptionPosY = 100
+        Scale3Y.CaptionAlignment = taRightJustify
+        Scale3Y.CaptionAnchor = uaSclTopLft
+        Scale3Y.ColorScale = clGreen
+        Scale3Y.DateFormat.TimeFormat = tfHHMMSS
+        Scale3Y.DateFormat.DateSeparator = '-'
+        Scale3Y.DateFormat.TimeSeparator = ':'
+        Scale3Y.DateFormat.YearLength = ylYYYY
+        Scale3Y.DateFormat.MonthName = True
+        Scale3Y.DateFormat.DateOrder = doDDMMYY
+        Scale3Y.DateFormat.DateForTime = dtOnePerDay
+        Scale3Y.DecPlaces = -2
+        Scale3Y.Font.Charset = DEFAULT_CHARSET
+        Scale3Y.Font.Color = clWindowText
+        Scale3Y.Font.Height = -11
+        Scale3Y.Font.Name = 'Tahoma'
+        Scale3Y.Font.Style = []
+        Scale3Y.Logarithmic = False
+        Scale3Y.LabelType = ftNum
+        Scale3Y.MinTicks = 3
+        Scale3Y.MinRange = 0.000000000100000000
+        Scale3Y.MouseAction = maNone
+        Scale3Y.RangeLow = 0.370024370430543400
+        Scale3Y.RangeHigh = 0.629975629569454900
+        Scale3Y.ShortTicks = True
+        Scale3Y.ScalePos = 0
+        Scale3Y.Visible = False
+        Scale3Y.ScaleLocation = slLeft
+        Scale4X.CaptionPosX = 10
+        Scale4X.CaptionPosY = 100
+        Scale4X.CaptionAlignment = taCenter
+        Scale4X.CaptionAnchor = uaSclCenter
+        Scale4X.ColorScale = clOlive
+        Scale4X.DateFormat.TimeFormat = tfHHMMSS
+        Scale4X.DateFormat.DateSeparator = '-'
+        Scale4X.DateFormat.TimeSeparator = ':'
+        Scale4X.DateFormat.YearLength = ylYYYY
+        Scale4X.DateFormat.MonthName = True
+        Scale4X.DateFormat.DateOrder = doDDMMYY
+        Scale4X.DateFormat.DateForTime = dtOnePerDay
+        Scale4X.DecPlaces = -2
+        Scale4X.Font.Charset = DEFAULT_CHARSET
+        Scale4X.Font.Color = clWindowText
+        Scale4X.Font.Height = -11
+        Scale4X.Font.Name = 'Tahoma'
+        Scale4X.Font.Style = []
+        Scale4X.Logarithmic = False
+        Scale4X.LabelType = ftNum
+        Scale4X.MinTicks = 3
+        Scale4X.MinRange = 0.000000000100000000
+        Scale4X.MouseAction = maNone
+        Scale4X.RangeHigh = 1.000000000000000000
+        Scale4X.ShortTicks = True
+        Scale4X.ScalePos = 0
+        Scale4X.Visible = False
+        Scale4X.ScaleLocation = slBottom
+        Scale4Y.CaptionPosX = 10
+        Scale4Y.CaptionPosY = 100
+        Scale4Y.CaptionAlignment = taRightJustify
+        Scale4Y.CaptionAnchor = uaSclTopLft
+        Scale4Y.ColorScale = clOlive
+        Scale4Y.DateFormat.TimeFormat = tfHHMMSS
+        Scale4Y.DateFormat.DateSeparator = '-'
+        Scale4Y.DateFormat.TimeSeparator = ':'
+        Scale4Y.DateFormat.YearLength = ylYYYY
+        Scale4Y.DateFormat.MonthName = True
+        Scale4Y.DateFormat.DateOrder = doDDMMYY
+        Scale4Y.DateFormat.DateForTime = dtOnePerDay
+        Scale4Y.DecPlaces = -2
+        Scale4Y.Font.Charset = DEFAULT_CHARSET
+        Scale4Y.Font.Color = clWindowText
+        Scale4Y.Font.Height = -11
+        Scale4Y.Font.Name = 'Tahoma'
+        Scale4Y.Font.Style = []
+        Scale4Y.Logarithmic = False
+        Scale4Y.LabelType = ftNum
+        Scale4Y.MinTicks = 3
+        Scale4Y.MinRange = 0.000000000100000000
+        Scale4Y.MouseAction = maNone
+        Scale4Y.RangeLow = 0.370024370430543400
+        Scale4Y.RangeHigh = 0.629975629569454900
+        Scale4Y.ShortTicks = True
+        Scale4Y.ScalePos = 0
+        Scale4Y.Visible = False
+        Scale4Y.ScaleLocation = slLeft
+        ShadowStyle = ssFlying
+        ShadowColor = clGrayText
+        ShadowBakColor = clBtnFace
+        StyleElements = []
+        TextFont.Charset = DEFAULT_CHARSET
+        TextFont.Color = clWindowText
+        TextFont.Height = -11
+        TextFont.Name = 'Tahoma'
+        TextFont.Style = []
+        TextFontStyle = []
+        TextBkStyle = tbClear
+        TextBkColor = clWhite
+        TextAlignment = taLeftJustify
+        OnDblClick = RChartMapaDblClick
+        OnMouseMove = RChartMapaMouseMove
+        OnKeyDown = RChartMapaKeyDown
+        OnMouseLeave = RChartMapaMouseLeave
+        OnZoomPan = RChartMapaZoomPan
+      end
+    end
   end
   object Panel26: TPanel
     Left = 0
     Top = 25
-    Width = 1282
+    Width = 1280
     Height = 25
     Align = alTop
     TabOrder = 2
-    ExplicitWidth = 1280
+    ExplicitWidth = 1278
     object DBNavigator1: TDBNavigator
       Left = 228
       Top = 1
@@ -1825,8 +2627,8 @@ object FrmGerenciarEmbarcacoes: TFrmGerenciarEmbarcacoes
   end
   object ActionManager1: TActionManager
     Images = FrmPrincipal.ImageList1
-    Left = 520
-    Top = 162
+    Left = 376
+    Top = 210
     StyleName = 'Platform Default'
     object actPanTo: TAction
       Category = 'Mapa'
@@ -1841,30 +2643,35 @@ object FrmGerenciarEmbarcacoes: TFrmGerenciarEmbarcacoes
       Caption = 'actImprimir'
       Hint = 'Imprimir o mapa'
       ImageIndex = 21
+      OnExecute = actImprimirMapaExecute
     end
     object actSalvarImagem: TAction
       Category = 'Mapa'
       Caption = 'actSalvar'
       Hint = 'Salvar mapa como imagem'
       ImageIndex = 264
+      OnExecute = actSalvarImagemExecute
     end
     object actSalvarDesenho: TAction
       Category = 'Mapa'
       Caption = 'actSalvarDesenho'
       Hint = 'Salvar arquivo como desenho 2D (*.zuchi)...'
       ImageIndex = 462
+      OnExecute = actSalvarDesenhoExecute
     end
     object actAbrirDesenho: TAction
       Category = 'Mapa'
       Caption = 'actAbrirDesenho'
       Hint = 'Abrir arquivo de desenho 2D (*.zuchi)...'
       ImageIndex = 20
+      OnExecute = actAbrirDesenhoExecute
     end
     object actMarcar: TAction
       Category = 'Mapa'
       Caption = 'actMarcar'
       Hint = 'Inserir marcador para todas as plataformas'
       ImageIndex = 112
+      OnExecute = actMarcarExecute
     end
     object actLocalizarRoteamentos: TAction
       Category = 'Configura'#231#245'es'
@@ -1897,12 +2704,14 @@ object FrmGerenciarEmbarcacoes: TFrmGerenciarEmbarcacoes
       Caption = 'Limpar o gr'#225'fico'
       Hint = 'Limpar o gr'#225'fico'
       ImageIndex = 324
+      OnExecute = actLimparGraficoExecute
     end
     object actGerarLinhas: TAction
       Category = 'Mapa'
       Caption = 'actGerarLinhas'
       Hint = 'Gerar linha da rota selecionada no ComboBox Embarca'#231#227'o'
       ImageIndex = 11
+      OnExecute = actGerarLinhasExecute
     end
     object actFiltroDestinos: TAction
       Category = 'Sele'#231#227'o destinos'
@@ -1957,25 +2766,18 @@ object FrmGerenciarEmbarcacoes: TFrmGerenciarEmbarcacoes
       Hint = 'Cancelar a programa'#231#227'o selecionada'
       ImageIndex = 190
     end
-    object actPAX: TAction
-      Category = 'Analise'
-      Caption = 'PAX'
-      Hint = 'Mostrar executantes PAX da embarca'#231#227'o (Passageiros) '
-      ImageIndex = 31
-      ShortCut = 117
-    end
     object actSelProgExec1: TAction
       Category = 'Executantes'
       Caption = 'actSelProgExec1'
       Hint = 'Selecionar todos os executantes'
-      ImageIndex = 154
+      ImageIndex = 231
       OnExecute = actSelProgExec1Execute
     end
     object actSelProgExec2: TAction
       Category = 'Executantes'
       Caption = 'actSelProgExec2'
       Hint = 'Limpar sele'#231#227'o de todos os executantes'
-      ImageIndex = 155
+      ImageIndex = 232
       OnExecute = actSelProgExec2Execute
     end
     object actGerarLinhasTodas: TAction
@@ -1983,30 +2785,35 @@ object FrmGerenciarEmbarcacoes: TFrmGerenciarEmbarcacoes
       Caption = 'actGerarLinhasTodas'
       Hint = 'Gerar linhas para todas as rotas'
       ImageIndex = 12
+      OnExecute = actGerarLinhasTodasExecute
     end
     object actMapaZoomFit: TAction
       Category = 'Mapa'
       Caption = 'actZoomFit'
       Hint = 'Zoom fit'
       ImageIndex = 45
+      OnExecute = actMapaZoomFitExecute
     end
     object actMapaZoomDinamico: TAction
       Category = 'Mapa'
       Caption = 'actZoomDinamico'
       Hint = 'Zoom din'#226'mico'
       ImageIndex = 48
+      OnExecute = actMapaZoomDinamicoExecute
     end
     object actMapaPan: TAction
       Category = 'Mapa'
       Caption = 'actMapaPan'
       Hint = 'Pan'
       ImageIndex = 41
+      OnExecute = actMapaPanExecute
     end
     object actMapaZoomWind: TAction
       Category = 'Mapa'
       Caption = 'actMapaZoomWind'
       Hint = 'Zoom janela'
       ImageIndex = 46
+      OnExecute = actMapaZoomWindExecute
     end
     object actImprimirPlanilha: TAction
       Category = 'Imprimir'
@@ -2036,13 +2843,6 @@ object FrmGerenciarEmbarcacoes: TFrmGerenciarEmbarcacoes
       ImageIndex = 452
       OnExecute = actListaRTEmbarqueExecute
     end
-    object actRT_TMIB: TAction
-      Category = 'Imprimir'
-      Caption = 'RT-TMIB'
-      Hint = 'Analise de RT'#39's e manifesto de embarque'
-      ImageIndex = 123
-      OnExecute = actRT_TMIBExecute
-    end
     object actExcelImpressao: TAction
       Category = 'Imprimir'
       Caption = 'Exportar'
@@ -2055,7 +2855,6 @@ object FrmGerenciarEmbarcacoes: TFrmGerenciarEmbarcacoes
       Caption = 'Exportar'
       Hint = 'Exportar para o Excel'
       ImageIndex = 54
-      OnExecute = actExcelProcuraExecutantesExecute
     end
     object actClassificarRegistros: TAction
       Category = 'Imprimir'
@@ -2084,13 +2883,6 @@ object FrmGerenciarEmbarcacoes: TFrmGerenciarEmbarcacoes
       ImageIndex = 324
       OnExecute = actExcluirVinculoExecuntanteTodosExecute
     end
-    object actExcel: TAction
-      Category = 'Rota Executantes'
-      Caption = 'Exportar'
-      Hint = 'Exportar para o Excel'
-      ImageIndex = 54
-      OnExecute = actExcelExecute
-    end
     object actRemoveRow: TAction
       Category = 'Imprimir'
       Caption = 'Excluir linha selecionada'
@@ -2116,16 +2908,19 @@ object FrmGerenciarEmbarcacoes: TFrmGerenciarEmbarcacoes
       Caption = 'Mapa Mundi'
       Hint = 'Desenhar o Mapa Mundi'
       ImageIndex = 462
+      OnExecute = actMapaMundiExecute
     end
     object actLatitudeLongitude: TAction
       Category = 'Mapa'
       Caption = 'Latitudes e Longitudes'
+      OnExecute = actLatitudeLongitudeExecute
     end
     object actBrasil: TAction
       Category = 'Mapa'
       Caption = 'Brasil'
       Hint = '462'
       ImageIndex = 462
+      OnExecute = actBrasilExecute
     end
     object actSalvarRota: TAction
       Category = 'Roteiro Plataformas'
@@ -2242,42 +3037,6 @@ object FrmGerenciarEmbarcacoes: TFrmGerenciarEmbarcacoes
       ShortCut = 46
       OnExecute = actExcluirCelulaExecute
     end
-    object actSubstituirPor: TAction
-      Category = 'Tabela Roteamento'
-      Caption = 'actSubstituirPor'
-      OnExecute = actSubstituirPorExecute
-    end
-    object actFiltroInserirRoteamento: TAction
-      Category = 'Tabela Roteamento'
-      Caption = 'actFiltroInserirRoteamento'
-    end
-    object actGridASCRotemento: TAction
-      Category = 'Tabela Roteamento'
-      Caption = 'actGridASCRotemento'
-    end
-    object actGridDESCRoteamento: TAction
-      Category = 'Tabela Roteamento'
-      Caption = 'actGridDESCRoteamento'
-    end
-    object actLimparFiltrosRoteamento: TAction
-      Category = 'Tabela Roteamento'
-      Caption = 'Limpar'
-      Hint = 'Limpar Filtros'
-      ImageIndex = 469
-      OnExecute = actLimparFiltrosRoteamentoExecute
-    end
-    object actFiltrosTabelaRoteamento: TAction
-      Category = 'Tabela Roteamento'
-      Caption = 'Filtros'
-      Hint = 'Visualizar tabela de filtros'
-      ImageIndex = 470
-      OnExecute = actFiltrosTabelaRoteamentoExecute
-    end
-    object actProcuraFiltrosTabelaRoteamento: TAction
-      Category = 'Tabela Roteamento'
-      Caption = 'actProcuraFiltrosTabelaRoteamento'
-      OnExecute = actProcuraFiltrosTabelaRoteamentoExecute
-    end
     object actProcuraRoteamento: TAction
       Category = 'Procurar'
       Caption = 'Procurar'
@@ -2288,23 +3047,20 @@ object FrmGerenciarEmbarcacoes: TFrmGerenciarEmbarcacoes
     object actMapaRoteiro: TAction
       Category = 'Mapa'
       Caption = 'actMapaRoteiro'
-    end
-    object Action1: TAction
-      Category = 'Rota Executantes'
-      Caption = 'Action1'
+      OnExecute = actMapaRoteiroExecute
     end
     object actSelRotaExecTODOS: TAction
       Category = 'Rota Executantes'
       Caption = 'actSelRotaExecTODOS'
       Hint = 'Selecionar todos os executantes'
-      ImageIndex = 154
+      ImageIndex = 231
       OnExecute = actSelRotaExecTODOSExecute
     end
     object actSelRotaExecLIMPAR: TAction
       Category = 'Rota Executantes'
       Caption = 'actSelRotaExecLIMPAR'
       Hint = 'Limpar a sele'#231#227'o de todos os executantes'
-      ImageIndex = 155
+      ImageIndex = 232
       OnExecute = actSelRotaExecLIMPARExecute
     end
     object actSelecionadosRotaExecutantes: TAction
@@ -2325,6 +3081,30 @@ object FrmGerenciarEmbarcacoes: TFrmGerenciarEmbarcacoes
       Hint = 'Extrato de executantes (Origem Cadastro)'
       ImageIndex = 459
       OnExecute = actExtratoOrigemExecute
+    end
+    object actSugerirRota: TAction
+      Category = 'IA'
+      Caption = 'actSugerirRota'
+      OnExecute = actSugerirRotaExecute
+    end
+    object actAlocacaoAutomatica: TAction
+      Category = 'IA'
+      Caption = 'actAlocacaoAutomatica'
+      OnExecute = actAlocacaoAutomaticaExecute
+    end
+    object actCriarRotasAutomaticamente: TAction
+      Category = 'IA'
+      Caption = 'Gerar Rotas'
+      Hint = 'Gerar rotas autom'#225'ticamente'
+      ImageIndex = 2
+      OnExecute = actCriarRotasAutomaticamenteExecute
+    end
+    object actExcluirRoteamentoTODOS: TAction
+      Category = 'Roteamento'
+      Caption = 'Excluir todas'
+      Hint = 'Excluir todas as Rotas'
+      ImageIndex = 324
+      OnExecute = actExcluirRoteamentoTODOSExecute
     end
   end
   object SavePictureDialog1: TSavePictureDialog
@@ -2408,8 +3188,8 @@ object FrmGerenciarEmbarcacoes: TFrmGerenciarEmbarcacoes
     end
   end
   object PopupMenuRota: TPopupMenu
-    Left = 505
-    Top = 252
+    Left = 377
+    Top = 260
     object Excluirlinhaselecionada2: TMenuItem
       Action = actExcluirLinha
     end

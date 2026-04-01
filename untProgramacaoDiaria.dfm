@@ -2,8 +2,8 @@ object FrmProgramacaoDiaria: TFrmProgramacaoDiaria
   Left = 0
   Top = 0
   Caption = 'Programa'#231#227'o Di'#225'ria de Servi'#231'os'
-  ClientHeight = 650
-  ClientWidth = 1378
+  ClientHeight = 634
+  ClientWidth = 1374
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -20,7 +20,7 @@ object FrmProgramacaoDiaria: TFrmProgramacaoDiaria
   object PanelTitulo: TPanel
     Left = 0
     Top = 0
-    Width = 1378
+    Width = 1374
     Height = 25
     Align = alTop
     Caption = 'Programa'#231#227'o Di'#225'ria de Servi'#231'os'
@@ -33,21 +33,21 @@ object FrmProgramacaoDiaria: TFrmProgramacaoDiaria
     ParentBackground = False
     ParentFont = False
     TabOrder = 0
-    ExplicitWidth = 1376
+    ExplicitWidth = 1372
   end
   object PanelCriacao: TPanel
     Left = 0
     Top = 25
     Width = 900
-    Height = 625
+    Height = 609
     Align = alLeft
     Caption = 'PanelCriacao'
     TabOrder = 1
-    ExplicitHeight = 617
+    ExplicitHeight = 601
     object Splitter3: TSplitter
       Left = 577
       Top = 1
-      Height = 623
+      Height = 607
       ExplicitLeft = 382
       ExplicitHeight = 462
     end
@@ -55,10 +55,10 @@ object FrmProgramacaoDiaria: TFrmProgramacaoDiaria
       Left = 580
       Top = 1
       Width = 319
-      Height = 623
+      Height = 607
       Align = alClient
       TabOrder = 0
-      ExplicitHeight = 615
+      ExplicitHeight = 599
       object Splitter2: TSplitter
         Left = 1
         Top = 281
@@ -100,8 +100,10 @@ object FrmProgramacaoDiaria: TFrmProgramacaoDiaria
             item
               Alignment = taCenter
               Expanded = False
-              FieldName = 'booleanBateVolta'
-              Title.Caption = 'Bate/Volta'
+              FieldName = 'booleanRecolhimento'
+              Title.Alignment = taCenter
+              Title.Caption = 'Recolhimento'
+              Width = 80
               Visible = True
             end
             item
@@ -156,6 +158,14 @@ object FrmProgramacaoDiaria: TFrmProgramacaoDiaria
               FieldName = 'Documento'
               Title.Alignment = taCenter
               Width = 107
+              Visible = True
+            end
+            item
+              Alignment = taCenter
+              Expanded = False
+              FieldName = 'OutroDocumento'
+              Title.Alignment = taCenter
+              Title.Caption = 'Passaporte'
               Visible = True
             end
             item
@@ -223,10 +233,11 @@ object FrmProgramacaoDiaria: TFrmProgramacaoDiaria
           Height = 94
           ColCount = 7
           DefaultRowHeight = 21
-          RowCount = 9
+          RowCount = 10
           TabOrder = 4
           Visible = False
           RowHeights = (
+            21
             21
             21
             21
@@ -242,15 +253,15 @@ object FrmProgramacaoDiaria: TFrmProgramacaoDiaria
         Left = 1
         Top = 284
         Width = 317
-        Height = 338
+        Height = 322
         Align = alClient
         TabOrder = 1
-        ExplicitHeight = 330
+        ExplicitHeight = 314
         object DBGridServico: TFilterDBGrid
           Left = 1
           Top = 55
           Width = 315
-          Height = 263
+          Height = 247
           Align = alClient
           DataSource = FrmDataModule.DataSourceProgramacaoServico_Cadastro
           Options = [dgEditing, dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgAlwaysShowSelection, dgConfirmDelete, dgCancelOnExit, dgTitleClick, dgTitleHotTrack]
@@ -335,7 +346,7 @@ object FrmProgramacaoDiaria: TFrmProgramacaoDiaria
         end
         object StatusBarServicos: TStatusBar
           Left = 1
-          Top = 318
+          Top = 302
           Width = 315
           Height = 19
           Panels = <
@@ -345,7 +356,7 @@ object FrmProgramacaoDiaria: TFrmProgramacaoDiaria
             item
               Width = 50
             end>
-          ExplicitTop = 310
+          ExplicitTop = 294
         end
         object ColunasLayoutServico: TStringGrid
           Left = 73
@@ -413,10 +424,10 @@ object FrmProgramacaoDiaria: TFrmProgramacaoDiaria
       Left = 1
       Top = 1
       Width = 576
-      Height = 623
+      Height = 607
       Align = alLeft
       TabOrder = 1
-      ExplicitHeight = 615
+      ExplicitHeight = 599
       object ToolBar3: TToolBar
         Left = 1
         Top = 26
@@ -531,7 +542,7 @@ object FrmProgramacaoDiaria: TFrmProgramacaoDiaria
         Left = 1
         Top = 55
         Width = 574
-        Height = 548
+        Height = 532
         Align = alClient
         DataSource = FrmDataModule.DataSourceProgramacaoDiaria_Cadastro
         ReadOnly = True
@@ -542,8 +553,8 @@ object FrmProgramacaoDiaria: TFrmProgramacaoDiaria
         TitleFont.Name = 'Tahoma'
         TitleFont.Style = []
         OnDrawColumnCell = DBGridProgramacaoDrawColumnCell
-        OnTitleClick = DBGridProgramacaoTitleClick
         ClearFilterButton = btnFiltroClearProgramacao
+        SearchAction = actProcurarProgramacao
         LayoutGrid = ColunasLayoutProgramacao
         EnableZebra = False
         Columns = <
@@ -670,7 +681,7 @@ object FrmProgramacaoDiaria: TFrmProgramacaoDiaria
       end
       object StatusBarProgramacao: TStatusBar
         Left = 1
-        Top = 603
+        Top = 587
         Width = 574
         Height = 19
         Panels = <
@@ -689,7 +700,7 @@ object FrmProgramacaoDiaria: TFrmProgramacaoDiaria
           item
             Width = 50
           end>
-        ExplicitTop = 595
+        ExplicitTop = 579
       end
       object ColunasLayoutProgramacao: TStringGrid
         Left = 49
@@ -720,17 +731,17 @@ object FrmProgramacaoDiaria: TFrmProgramacaoDiaria
   object PanelProgramacao: TPanel
     Left = 900
     Top = 25
-    Width = 478
-    Height = 625
+    Width = 474
+    Height = 609
     Align = alClient
     TabOrder = 2
     Visible = False
-    ExplicitWidth = 476
-    ExplicitHeight = 617
+    ExplicitWidth = 472
+    ExplicitHeight = 601
     object Splitter1: TSplitter
       Left = 1
-      Top = 401
-      Width = 476
+      Top = 385
+      Width = 472
       Height = 3
       Cursor = crVSplit
       Align = alBottom
@@ -740,7 +751,7 @@ object FrmProgramacaoDiaria: TFrmProgramacaoDiaria
     object ToolBar1: TToolBar
       Left = 1
       Top = 1
-      Width = 476
+      Width = 472
       Height = 29
       ButtonWidth = 24
       Caption = 'ToolBar1'
@@ -749,7 +760,7 @@ object FrmProgramacaoDiaria: TFrmProgramacaoDiaria
       HotTrackColor = clRed
       Images = FrmPrincipal.ImageList1
       TabOrder = 0
-      ExplicitWidth = 474
+      ExplicitWidth = 470
       object BitBtn21: TBitBtn
         Left = 0
         Top = 0
@@ -845,16 +856,16 @@ object FrmProgramacaoDiaria: TFrmProgramacaoDiaria
     object PanelSelecaoExecutante: TPanel
       Left = 1
       Top = 98
-      Width = 476
-      Height = 303
+      Width = 472
+      Height = 287
       Align = alClient
       TabOrder = 1
-      ExplicitWidth = 474
-      ExplicitHeight = 295
+      ExplicitWidth = 470
+      ExplicitHeight = 279
       object PanelTituloExecutantes: TPanel
         Left = 1
         Top = 1
-        Width = 474
+        Width = 470
         Height = 25
         Align = alTop
         Caption = 'Executantes Dispon'#237'veis para Programa'#231#227'o'
@@ -867,12 +878,12 @@ object FrmProgramacaoDiaria: TFrmProgramacaoDiaria
         ParentBackground = False
         ParentFont = False
         TabOrder = 0
-        ExplicitWidth = 472
+        ExplicitWidth = 468
       end
       object StatusBarDisponivelExecutantes: TStatusBar
         Left = 1
-        Top = 283
-        Width = 474
+        Top = 267
+        Width = 470
         Height = 19
         Panels = <
           item
@@ -881,14 +892,14 @@ object FrmProgramacaoDiaria: TFrmProgramacaoDiaria
           item
             Width = 50
           end>
-        ExplicitTop = 275
-        ExplicitWidth = 472
+        ExplicitTop = 259
+        ExplicitWidth = 468
       end
       object RLExecutantes: TStringGrid
         Left = 1
         Top = 55
-        Width = 474
-        Height = 228
+        Width = 470
+        Height = 212
         Align = alClient
         ColCount = 11
         DefaultRowHeight = 22
@@ -900,13 +911,13 @@ object FrmProgramacaoDiaria: TFrmProgramacaoDiaria
         OnKeyPress = RLExecutantesKeyPress
         OnMouseDown = RLExecutantesMouseDown
         OnSelectCell = RLExecutantesSelectCell
-        ExplicitWidth = 472
-        ExplicitHeight = 220
+        ExplicitWidth = 468
+        ExplicitHeight = 204
       end
       object ToolBar2: TToolBar
         Left = 1
         Top = 26
-        Width = 474
+        Width = 470
         Height = 29
         ButtonWidth = 24
         Caption = 'ToolBar2'
@@ -914,7 +925,7 @@ object FrmProgramacaoDiaria: TFrmProgramacaoDiaria
         EdgeBorders = [ebLeft, ebTop, ebRight, ebBottom]
         Images = FrmPrincipal.ImageList1
         TabOrder = 3
-        ExplicitWidth = 472
+        ExplicitWidth = 468
         object ToolButton5: TToolButton
           Left = 0
           Top = 0
@@ -959,20 +970,20 @@ object FrmProgramacaoDiaria: TFrmProgramacaoDiaria
     object TPanel
       Left = 1
       Top = 30
-      Width = 476
+      Width = 472
       Height = 68
       Align = alTop
       AutoSize = True
       TabOrder = 2
-      ExplicitWidth = 474
+      ExplicitWidth = 470
       object PanelTipoEtapaServico: TPanel
         Left = 1
         Top = 45
-        Width = 474
+        Width = 470
         Height = 22
         Align = alTop
         TabOrder = 0
-        ExplicitWidth = 472
+        ExplicitWidth = 468
         object Panel5: TPanel
           Left = 1
           Top = 1
@@ -987,7 +998,7 @@ object FrmProgramacaoDiaria: TFrmProgramacaoDiaria
         object ComboBoxTipoEtapaServico: TComboBox
           Left = 151
           Top = 1
-          Width = 322
+          Width = 318
           Height = 22
           Hint = 'Selecione o Tipo de Etapa de Servi'#231'o'
           Align = alClient
@@ -1001,17 +1012,17 @@ object FrmProgramacaoDiaria: TFrmProgramacaoDiaria
           ShowHint = True
           TabOrder = 1
           OnKeyPress = ComboBoxDestinoKeyPress
-          ExplicitWidth = 320
+          ExplicitWidth = 316
         end
       end
       object PanelDestino: TPanel
         Left = 1
         Top = 23
-        Width = 474
+        Width = 470
         Height = 22
         Align = alTop
         TabOrder = 1
-        ExplicitWidth = 472
+        ExplicitWidth = 468
         object Panel2: TPanel
           Left = 1
           Top = 1
@@ -1026,7 +1037,7 @@ object FrmProgramacaoDiaria: TFrmProgramacaoDiaria
         object ComboBoxDestino: TComboBox
           Left = 151
           Top = 1
-          Width = 322
+          Width = 318
           Height = 22
           Hint = 'Selecione o Destino da Programa'#231#227'o'
           Align = alClient
@@ -1041,17 +1052,17 @@ object FrmProgramacaoDiaria: TFrmProgramacaoDiaria
           ShowHint = True
           TabOrder = 1
           OnKeyPress = ComboBoxDestinoKeyPress
-          ExplicitWidth = 320
+          ExplicitWidth = 316
         end
       end
       object PanelDataProgramacao: TPanel
         Left = 1
         Top = 1
-        Width = 474
+        Width = 470
         Height = 22
         Align = alTop
         TabOrder = 2
-        ExplicitWidth = 472
+        ExplicitWidth = 468
         object Panel3: TPanel
           Left = 1
           Top = 1
@@ -1066,7 +1077,7 @@ object FrmProgramacaoDiaria: TFrmProgramacaoDiaria
         object DateTimePickerProgramacao2: TDateTimePicker
           Left = 151
           Top = 1
-          Width = 322
+          Width = 318
           Height = 20
           Hint = 'Selecione a data da programa'#231#227'o para gravar'
           Align = alClient
@@ -1077,23 +1088,23 @@ object FrmProgramacaoDiaria: TFrmProgramacaoDiaria
           TabOrder = 1
           OnCloseUp = DateTimePickerProgramacao2CloseUp
           OnChange = DateTimePickerProgramacao2Change
-          ExplicitWidth = 320
+          ExplicitWidth = 316
         end
       end
     end
     object PanelSelecaoServico: TPanel
       Left = 1
-      Top = 404
-      Width = 476
+      Top = 388
+      Width = 472
       Height = 220
       Align = alBottom
       TabOrder = 3
-      ExplicitTop = 396
-      ExplicitWidth = 474
+      ExplicitTop = 380
+      ExplicitWidth = 470
       object ToolBar6: TToolBar
         Left = 1
         Top = 26
-        Width = 474
+        Width = 470
         Height = 29
         ButtonWidth = 24
         Caption = 'ToolBar2'
@@ -1101,7 +1112,7 @@ object FrmProgramacaoDiaria: TFrmProgramacaoDiaria
         EdgeBorders = [ebLeft, ebTop, ebRight, ebBottom]
         Images = FrmPrincipal.ImageList1
         TabOrder = 0
-        ExplicitWidth = 472
+        ExplicitWidth = 468
         object ToolButton3: TToolButton
           Left = 0
           Top = 0
@@ -1141,7 +1152,7 @@ object FrmProgramacaoDiaria: TFrmProgramacaoDiaria
       object Panel9: TPanel
         Left = 1
         Top = 1
-        Width = 474
+        Width = 470
         Height = 25
         Align = alTop
         Caption = 'Servi'#231'os Dispon'#237'veis para Programa'#231#227'o'
@@ -1154,12 +1165,12 @@ object FrmProgramacaoDiaria: TFrmProgramacaoDiaria
         ParentBackground = False
         ParentFont = False
         TabOrder = 1
-        ExplicitWidth = 472
+        ExplicitWidth = 468
       end
       object StatusBarDisponivelServicos: TStatusBar
         Left = 1
         Top = 200
-        Width = 474
+        Width = 470
         Height = 19
         Panels = <
           item
@@ -1171,12 +1182,12 @@ object FrmProgramacaoDiaria: TFrmProgramacaoDiaria
           item
             Width = 50
           end>
-        ExplicitWidth = 472
+        ExplicitWidth = 468
       end
       object RLServicos: TStringGrid
         Left = 1
         Top = 55
-        Width = 474
+        Width = 470
         Height = 145
         Align = alClient
         ColCount = 10
@@ -1187,7 +1198,7 @@ object FrmProgramacaoDiaria: TFrmProgramacaoDiaria
         OnDrawCell = RLServicosDrawCell
         OnFixedCellClick = RLServicosFixedCellClick
         OnMouseDown = RLServicosMouseDown
-        ExplicitWidth = 472
+        ExplicitWidth = 468
       end
     end
   end
@@ -1706,8 +1717,8 @@ object FrmProgramacaoDiaria: TFrmProgramacaoDiaria
   end
   object ActionManager1: TActionManager
     Images = FrmPrincipal.ImageList1
-    Left = 40
-    Top = 201
+    Left = 56
+    Top = 161
     StyleName = 'Platform Default'
     object actConfigGRID: TAction
       Category = 'Configura'#231#245'es'
@@ -1717,8 +1728,8 @@ object FrmProgramacaoDiaria: TFrmProgramacaoDiaria
     object actProcurarProgramacao: TAction
       Category = 'Procurar'
       Caption = 'Procurar'
-      Hint = 'Localizar programa'#231#227'o'
-      ImageIndex = 28
+      Hint = 'Buscar registros no banco de dados'
+      ImageIndex = 27
       ShortCut = 116
       OnExecute = actProcurarProgramacaoExecute
     end
@@ -1888,40 +1899,6 @@ object FrmProgramacaoDiaria: TFrmProgramacaoDiaria
       ImageIndex = 119
       OnExecute = actNaoEncontradosExecute
     end
-    object actFiltroInserir: TAction
-      Category = 'Tabela'
-      Caption = 'actFiltroInserir'
-      OnExecute = actFiltroInserirExecute
-    end
-    object actGridASC: TAction
-      Category = 'Tabela'
-      Caption = 'actGridASC'
-      OnExecute = actGridASCExecute
-    end
-    object actGridDESC: TAction
-      Category = 'Tabela'
-      Caption = 'actGridDESC'
-      OnExecute = actGridDESCExecute
-    end
-    object actLimparFiltros: TAction
-      Category = 'Tabela'
-      Caption = 'Limpar'
-      Hint = 'Limpar Filtros'
-      ImageIndex = 469
-      OnExecute = actLimparFiltrosExecute
-    end
-    object actFiltrosTabela: TAction
-      Category = 'Tabela'
-      Caption = 'Filtros'
-      Hint = 'Visualizar tabela de filtros'
-      ImageIndex = 470
-      OnExecute = actFiltrosTabelaExecute
-    end
-    object actProcuraFiltrosTabela: TAction
-      Category = 'Tabela'
-      Caption = 'actProcuraFiltrosTabela'
-      OnExecute = actProcuraFiltrosTabelaExecute
-    end
     object actZoomMais: TAction
       Category = 'Configura'#231#245'es'
       Caption = 'actZoomMais'
@@ -1943,8 +1920,8 @@ object FrmProgramacaoDiaria: TFrmProgramacaoDiaria
     end
     object actCopiarProgramacaoTODAS: TAction
       Category = 'Programados'
-      Caption = 'Copiar todoas as programa'#231#245'es filtradas'
-      Hint = 'Copiar todoas as programa'#231#245'es filtradas'
+      Caption = 'Copiar todas as programa'#231#245'es filtradas'
+      Hint = 'Copiar todas as programa'#231#245'es filtradas'
       ImageIndex = 138
       OnExecute = actCopiarProgramacaoTODASExecute
     end

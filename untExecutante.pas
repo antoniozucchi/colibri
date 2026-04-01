@@ -7,7 +7,7 @@ uses
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ExtCtrls, Data.DB, Vcl.Grids,
   Vcl.DBGrids, Vcl.DBCtrls, Vcl.ToolWin, Vcl.ComCtrls, Vcl.StdCtrls, Vcl.Mask,Data.Win.ADODB,
   Vcl.PlatformDefaultStyleActnCtrls, System.Actions, Vcl.ActnList, Vcl.ActnMan,ComOBJ,
-  Vcl.Buttons,UITypes, Vcl.Menus, untDBGridFilter;
+  Vcl.Buttons,UITypes, Vcl.Menus, untDBGridFilter, uZucchi;
 
 type
   TFrmExecutante = class(TForm)
@@ -19,7 +19,6 @@ type
     DBNavigatorExecutante: TDBNavigator;
     TabSheet2: TTabSheet;
     ActionManager1: TActionManager;
-    actExcelExecutante: TAction;
     ToolBar3: TToolBar;
     DBNavigatorTipoEtapaServico: TDBNavigator;
     actProcurarExecutante: TAction;
@@ -28,7 +27,6 @@ type
     OpenDialog1: TOpenDialog;
     DBLookupComboBox_TipoServico: TDBLookupComboBox;
     actAtualizarTodos: TAction;
-    BitBtn5: TBitBtn;
     StatusBarExecutntes: TStatusBar;
     ToolButton1: TToolButton;
     actAtualizarSelecionado: TAction;
@@ -47,7 +45,6 @@ type
     Excluirtodos1: TMenuItem;
     PopupMenuFiltros: TPopupMenu;
     Procurar1: TMenuItem;
-    ToolButton5: TToolButton;
     PopupMenuExcel: TPopupMenu;
     Exportar1: TMenuItem;
     Importar1: TMenuItem;
@@ -68,18 +65,18 @@ type
     btnFiltroClearTipoEtapaServico: TToolButton;
     btnLayoutExecutante: TToolButton;
     btnLayoutTipoEtapaServico: TToolButton;
+    btnExcelExecutante: TToolButton;
+    btnExcelTIpoServico: TToolButton;
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure DBGridExecutanteDrawColumnCell(Sender: TObject; const Rect: TRect;
       DataCol: Integer; Column: TColumn; State: TGridDrawState);
-    procedure actExcelExecutanteExecute(Sender: TObject);
     procedure DBComboBoxSTATUSKeyPress(Sender: TObject; var Key: Char);
     procedure DBComboBoxTipoEmbarqueKeyPress(Sender: TObject; var Key: Char);
     procedure actProcurarExecutanteExecute(Sender: TObject);
     procedure DBGridTipoServicoDrawColumnCell(Sender: TObject; const Rect: TRect;
       DataCol: Integer; Column: TColumn; State: TGridDrawState);
-    procedure actExcelTipoServicoExecute(Sender: TObject);
     procedure DBGridExecutanteKeyPress(Sender: TObject; var Key: Char);
     procedure actExcelImportarExecute(Sender: TObject);
     procedure DBLookupComboBox_TipoServicoCloseUp(Sender: TObject);
@@ -93,8 +90,6 @@ type
     procedure actDuplicadoNomeExecute(Sender: TObject);
     procedure DBGridTipoServicoCellClick(Column: TColumn);
     procedure actProcurarTipoEtapaServicoExecute(Sender: TObject);
-    procedure DBGridExecutanteColumnMoved(Sender: TObject; FromIndex,
-      ToIndex: Integer);
     procedure actBuscaOrigemCadastroExecute(Sender: TObject);
     procedure actTurmaExecute(Sender: TObject);
     procedure MaskEditCPFChange(Sender: TObject);
@@ -116,35 +111,45 @@ implementation
 procedure TFrmExecutante.actAtualizarSelecionadoExecute(Sender: TObject);
   var
     codigoTipoEtapaServico: Integer;
-    NomeExecutante,txtFuncao,txtEmpresa: String;
+    NomeExecutante,txtFuncao,txtEmpresa,OrigemCadastro,CodigoSAP,
+    CentroCusto,DiagramaRede,OperRede,ElementoPEP,OutroDocumento: String;
+    DSTipo,DSExec: TADOQuery;
 begin
   try
+    DSExec:= FrmDataModule.ADOQueryExecutante;
+    DSTipo:= FrmDataModule.ADOQueryConsultaTipoEtapaServico_ID;
     //FrmDataModule.naoGravar:= true;
-    NomeExecutante:= FrmPrincipal.TextoMaiusculo(FrmDataModule.DataSourceExecutante.
-    DataSet.FieldByName('NomeExecutante').AsString);
-    txtEmpresa:= FrmPrincipal.TextoMaiusculo(FrmDataModule.DataSourceExecutante.
-    DataSet.FieldByName('txtEmpresa').AsString);
-    txtFuncao:= FrmPrincipal.TextoMaiusculo(FrmDataModule.DataSourceExecutante.
-    DataSet.FieldByName('txtFuncao').AsString);
+    NomeExecutante:= FrmPrincipal.TextoMaiusculo(DSExec.FieldByName('NomeExecutante').AsString);
+    txtEmpresa:= FrmPrincipal.TextoMaiusculo(DSExec.FieldByName('txtEmpresa').AsString);
+    txtFuncao:= FrmPrincipal.TextoMaiusculo(DSExec.FieldByName('txtFuncao').AsString);
+    OrigemCadastro:= FrmPrincipal.TextoMaiusculo(DSExec.FieldByName('OrigemCadastro').AsString);
+    CodigoSAP:= RemoverZerosEsquerda(TRIM(DSExec.FieldByName('CodigoSAP').AsString));
+    OutroDocumento:= TRIM(DSExec.FieldByName('OutroDocumento').AsString);
+    CentroCusto:= TRIM(DSExec.FieldByName('CentroCusto').AsString);
+    DiagramaRede:= TRIM(DSExec.FieldByName('DiagramaRede').AsString);
+    OperRede:= TRIM(DSExec.FieldByName('OperRede').AsString);
+    ElementoPEP:= TRIM(DSExec.FieldByName('ElementoPEP').AsString);
     //=========================================================================
-    codigoTipoEtapaServico:= FrmDataModule.DataSourceExecutante.
-    DataSet.FieldByName('codigoTipoEtapaServico').AsInteger;
+    codigoTipoEtapaServico:= DSExec.FieldByName('codigoTipoEtapaServico').AsInteger;
     //SELECIONAR
-    FrmDataModule.ADOQueryConsultaTipoEtapaServico_ID.Active := false;
-    FrmDataModule.ADOQueryConsultaTipoEtapaServico_ID.Parameters.Items[0].Value:= codigoTipoEtapaServico;
-    FrmDataModule.ADOQueryConsultaTipoEtapaServico_ID.Active := true;
+    DSTipo.Active := false;
+    DSTipo.Parameters.Items[0].Value:= codigoTipoEtapaServico;
+    DSTipo.Active := true;
     //CARREGAR O SISTEMA NA TABELA
-    FrmDataModule.ADOQueryExecutante.Edit;
-    FrmDataModule.DataSourceExecutante.DataSet.FieldByName('txtTipoEtapaServico').AsString:=
-    FrmDataModule.DataSourceConsultaTipoEtapaServico_ID.DataSet.
-    FieldByName('TipoEtapaServico').AsString;
-    FrmDataModule.DataSourceExecutante.DataSet.FieldByName('NomeExecutante').AsString:=
-    NomeExecutante;
-    FrmDataModule.DataSourceExecutante.DataSet.FieldByName('txtEmpresa').AsString:=
-    txtEmpresa;
-    FrmDataModule.DataSourceExecutante.DataSet.FieldByName('txtFuncao').AsString:=
-    txtFuncao;
-    FrmDataModule.ADOQueryExecutante.Post;
+
+    DSExec.Edit;
+    DSExec.FieldByName('txtTipoEtapaServico').AsString:= DSTipo.FieldByName('TipoEtapaServico').AsString;
+    DSExec.FieldByName('NomeExecutante').AsString:= NomeExecutante;
+    DSExec.FieldByName('txtEmpresa').AsString:= txtEmpresa;
+    DSExec.FieldByName('txtFuncao').AsString:= txtFuncao;
+    DSExec.FieldByName('OrigemCadastro').AsString:= OrigemCadastro;
+    DSExec.FieldByName('CodigoSAP').AsString:= CodigoSAP;
+    DSExec.FieldByName('CentroCusto').AsString:= CentroCusto;
+    DSExec.FieldByName('DiagramaRede').AsString:= DiagramaRede;
+    DSExec.FieldByName('OperRede').AsString:= OperRede;
+    DSExec.FieldByName('ElementoPEP').AsString:= ElementoPEP;
+    DSExec.FieldByName('OutroDocumento').AsString:= OutroDocumento;
+    DSExec.Post;
   finally
     //FrmDataModule.naoGravar:= false;
   end;
@@ -184,7 +189,7 @@ begin
     CodigoSAP:= FrmDataModule.DataSourceExecutante.DataSet.
     FieldByName('CodigoSAP').AsString;
     FrmPrincipal.buscaFiledGrid1('CodigoSAP',CodigoSAP,'Exato',
-    FrmConsultaExecutantesProgramados.ColunasLayout,4,false);
+    FrmConsultaExecutantesProgramados.ColunasLayoutExecutanteProgramado,4,false);
     FrmConsultaExecutantesProgramados.actProcurarProgramacaoExecutante.Execute;
     FrmDataModule.ADOQueryExecutante.Edit;
     FrmDataModule.DataSourceExecutante.DataSet.FieldByName('OrigemCadastro').AsString:=
@@ -200,16 +205,6 @@ begin
   ProcuraDuplicadosMatricula1.Checked:= false;
   ProcuraDuplicadosNome1.Checked:= true;
   actProcurarExecutante.Execute;
-end;
-
-procedure TFrmExecutante.actExcelExecutanteExecute(Sender: TObject);
-begin
-  FrmPrincipal.GerarExcel(DBGridExecutante,'Executante');
-end;
-
-procedure TFrmExecutante.actExcelTipoServicoExecute(Sender: TObject);
-begin
-  FrmPrincipal.GerarExcel(DBGridTipoServico,'Tipo de serviço');
 end;
 
 procedure TFrmExecutante.actExcluirSelecionadoExecute(Sender: TObject);
@@ -274,7 +269,7 @@ begin
       CodigoSAP:= FrmDataModule.DataSourceExecutante.DataSet.
       FieldByName('CodigoSAP').AsString;
       FrmPrincipal.buscaFiledGrid1('CodigoSAP',CodigoSAP,'Exato',
-      FrmConsultaExecutantesProgramados.ColunasLayout,4,false);
+      FrmConsultaExecutantesProgramados.ColunasLayoutExecutanteProgramado,4,false);
       FrmConsultaExecutantesProgramados.actProcurarProgramacaoExecutante.Execute;
       if not FrmDataModule.ADOQueryConsultaExecutantesProgramados.IsEmpty then
       begin
@@ -303,13 +298,9 @@ begin
     if SQLString<>'' then
       SQLString:= 'AND'+SQLString;
     SQLBase:=
-    'SELECT Ativo, Turma, NomeExecutante, OrigemCadastro, Chave, CodigoSAP, '+
-    'txtFuncao, txtEmpresa, CPF, OutroDocumento, txtTipoEtapaServico, '+
-    'codigoTipoEtapaServico, RequisitantePT, DataValidadePT, booleanCESS, '+
-    'DataValidadeCESS, AvaliadoPor, DataAtualizacao, Computador '+
-    'FROM tblExecutante WHERE (((CodigoSAP) In (SELECT CodigoSAP '+
+    'SELECT * FROM tblExecutante WHERE (((CodigoSAP) In (SELECT CodigoSAP '+
     'FROM tblExecutante As Tmp GROUP BY CodigoSAP HAVING Count(*)>1 ))) '+
-    SQLString+' ORDER BY CodigoSAP;';
+    SQLString+' ORDER BY CodigoSAP, idExecutante;';
   end
   else if ProcuraDuplicadosNome1.Checked then
   begin
@@ -317,13 +308,9 @@ begin
     if SQLString<>'' then
       SQLString:= 'AND'+SQLString;
     SQLBase:=
-    'SELECT Ativo, Turma, NomeExecutante, OrigemCadastro, Chave, CodigoSAP, '+
-    'txtFuncao, txtEmpresa, CPF, OutroDocumento, txtTipoEtapaServico, '+
-    'codigoTipoEtapaServico, RequisitantePT, DataValidadePT, booleanCESS, '+
-    'DataValidadeCESS, AvaliadoPor, DataAtualizacao, Computador '+
-    'FROM tblExecutante WHERE (((NomeExecutante) In (SELECT NomeExecutante FROM '+
+    'SELECT * FROM tblExecutante WHERE (((NomeExecutante) In (SELECT NomeExecutante FROM '+
     'tblExecutante As Tmp GROUP BY NomeExecutante HAVING Count(*)>1 ))) '+
-    SQLString+'ORDER BY NomeExecutante;';
+    SQLString+'ORDER BY NomeExecutante, idExecutante;';
   end;
   FrmPrincipal.ProcuraQuery(SQLBase,FrmDataModule.ADOQueryExecutante,StatusBarExecutntes);
 end;
@@ -455,13 +442,6 @@ begin
     dgCancelOnExit,dgTitleClick,dgTitleHotTrack];
 end;
 
-procedure TFrmExecutante.DBGridExecutanteColumnMoved(Sender: TObject; FromIndex,
-  ToIndex: Integer);
-begin
-  FrmPrincipal.CarregarRLColunasAtivasGRID(DBGridExecutante);
-  FrmPrincipal.GravarRLColunas('CadastroExecutante.txt');
-end;
-
 procedure TFrmExecutante.DBGridExecutanteDrawColumnCell(Sender: TObject;
 const Rect: TRect; DataCol: Integer; Column: TColumn; State: TGridDrawState);
     Const
@@ -556,9 +536,10 @@ end;
 
 procedure TFrmExecutante.FormCreate(Sender: TObject);
 begin
-  if ((FrmPrincipal.logPerfil = 'Administrador')OR
-  (FrmPrincipal.logPerfil = 'Programação')OR
-  (FrmPrincipal.logPerfil = 'Supervisor')) then
+  if ((FrmPrincipal.logPerfil = FrmPrincipal.PERFILADM) OR
+  (FrmPrincipal.logPerfil = FrmPrincipal.PERFILPROGRAMACAO) OR
+  (FrmPrincipal.logPerfil = FrmPrincipal.PERFILSUPERVISAO) or
+  (FrmPrincipal.logPerfil = FrmPrincipal.PERFILRT)) then
   begin
     //Executantes
     DBNavigatorExecutante.Enabled:= true;

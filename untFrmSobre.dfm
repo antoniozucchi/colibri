@@ -2,8 +2,8 @@ object FrmSobre: TFrmSobre
   Left = 0
   Top = 0
   Caption = 'Sobre'
-  ClientHeight = 741
-  ClientWidth = 934
+  ClientHeight = 725
+  ClientWidth = 930
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -11,18 +11,16 @@ object FrmSobre: TFrmSobre
   Font.Name = 'Tahoma'
   Font.Style = []
   FormStyle = fsMDIChild
-  OldCreateOrder = False
   Visible = True
   WindowState = wsMaximized
   OnClose = FormClose
   OnCreate = FormCreate
   OnDestroy = FormDestroy
-  PixelsPerInch = 96
   TextHeight = 13
   object Panel3: TPanel
     Left = 0
     Top = 0
-    Width = 934
+    Width = 930
     Height = 25
     Align = alTop
     Caption = 'Sobre o programa'
@@ -35,6 +33,7 @@ object FrmSobre: TFrmSobre
     ParentBackground = False
     ParentFont = False
     TabOrder = 0
+    ExplicitWidth = 928
     object DBNavigatorVersao: TDBNavigator
       Left = 1
       Top = 1
@@ -49,8 +48,8 @@ object FrmSobre: TFrmSobre
   object MemoInformacoes: TMemo
     Left = 0
     Top = 81
-    Width = 934
-    Height = 660
+    Width = 930
+    Height = 644
     Align = alClient
     Font.Charset = DEFAULT_CHARSET
     Font.Color = clBlack
@@ -61,32 +60,33 @@ object FrmSobre: TFrmSobre
     ReadOnly = True
     ScrollBars = ssVertical
     TabOrder = 1
-    ExplicitTop = 105
+    ExplicitWidth = 928
     ExplicitHeight = 636
   end
   object PanelEntrada: TPanel
     Left = 0
     Top = 25
-    Width = 934
+    Width = 930
     Height = 56
     Align = alTop
     TabOrder = 2
+    ExplicitWidth = 928
     object PanelSuperior: TPanel
       Left = 1
       Top = 1
-      Width = 932
+      Width = 928
       Height = 54
       Align = alClient
       TabOrder = 0
-      ExplicitTop = -4
-      ExplicitHeight = 78
+      ExplicitWidth = 926
       object PanelVersaoDB: TPanel
         Left = 1
         Top = 1
-        Width = 930
+        Width = 926
         Height = 25
         Align = alTop
         TabOrder = 0
+        ExplicitWidth = 924
         object Panel6: TPanel
           Left = 1
           Top = 1
@@ -100,14 +100,15 @@ object FrmSobre: TFrmSobre
         object Panel7: TPanel
           Left = 181
           Top = 1
-          Width = 748
+          Width = 744
           Height = 23
           Align = alClient
           TabOrder = 1
+          ExplicitWidth = 742
           object DBEditVersao: TDBEdit
             Left = 1
             Top = 1
-            Width = 746
+            Width = 742
             Height = 24
             Hint = 'Alterar a vers'#227'o do programa'
             Align = alTop
@@ -122,17 +123,18 @@ object FrmSobre: TFrmSobre
             ParentShowHint = False
             ShowHint = True
             TabOrder = 0
+            ExplicitWidth = 740
           end
         end
       end
       object PanelInstalador: TPanel
         Left = 1
         Top = 26
-        Width = 930
+        Width = 926
         Height = 25
         Align = alTop
         TabOrder = 1
-        ExplicitTop = 51
+        ExplicitWidth = 924
         object Panel2: TPanel
           Left = 1
           Top = 1
@@ -193,14 +195,15 @@ object FrmSobre: TFrmSobre
         object Panel4: TPanel
           Left = 181
           Top = 1
-          Width = 748
+          Width = 744
           Height = 23
           Align = alClient
           TabOrder = 1
+          ExplicitWidth = 742
           object DBEditInstalador: TDBEdit
             Left = 1
             Top = 1
-            Width = 746
+            Width = 742
             Height = 24
             Hint = 
               'Alterar o endere'#231'o do instalador, caso necess'#225'rio atualiza'#231#227'o au' +
@@ -217,6 +220,7 @@ object FrmSobre: TFrmSobre
             ParentShowHint = False
             ShowHint = True
             TabOrder = 0
+            ExplicitWidth = 740
           end
         end
       end

@@ -2,8 +2,8 @@ object FrmGerenciarSolicitacoes: TFrmGerenciarSolicitacoes
   Left = 0
   Top = 0
   Caption = 'Gerenciar Programa'#231#227'o Di'#225'ria de Servi'#231'os'
-  ClientHeight = 578
-  ClientWidth = 1538
+  ClientHeight = 562
+  ClientWidth = 1534
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -20,7 +20,7 @@ object FrmGerenciarSolicitacoes: TFrmGerenciarSolicitacoes
   object Splitter1: TSplitter
     Left = 500
     Top = 25
-    Height = 526
+    Height = 510
     ExplicitLeft = 392
     ExplicitTop = 136
     ExplicitHeight = 100
@@ -28,7 +28,7 @@ object FrmGerenciarSolicitacoes: TFrmGerenciarSolicitacoes
   object PanelTitulo: TPanel
     Left = 0
     Top = 0
-    Width = 1538
+    Width = 1534
     Height = 25
     Align = alTop
     Caption = 'Gerenciar Programa'#231#227'o Di'#225'ria de Servi'#231'os'
@@ -41,30 +41,30 @@ object FrmGerenciarSolicitacoes: TFrmGerenciarSolicitacoes
     ParentBackground = False
     ParentFont = False
     TabOrder = 0
-    ExplicitWidth = 1536
+    ExplicitWidth = 1532
   end
   object PanelResultados: TPanel
     Left = 503
     Top = 25
-    Width = 1035
-    Height = 526
+    Width = 1031
+    Height = 510
     Align = alClient
     TabOrder = 1
-    ExplicitWidth = 1033
-    ExplicitHeight = 518
+    ExplicitWidth = 1029
+    ExplicitHeight = 502
     object PanelServicos: TPanel
       Left = 1
-      Top = 500
-      Width = 1033
+      Top = 484
+      Width = 1029
       Height = 25
       Align = alBottom
       TabOrder = 0
-      ExplicitTop = 492
-      ExplicitWidth = 1031
+      ExplicitTop = 476
+      ExplicitWidth = 1027
       object Panel4: TPanel
         Left = 1
         Top = 1
-        Width = 1031
+        Width = 1027
         Height = 25
         Align = alTop
         Caption = 'Servi'#231'os Programados'
@@ -77,7 +77,7 @@ object FrmGerenciarSolicitacoes: TFrmGerenciarSolicitacoes
         ParentBackground = False
         ParentFont = False
         TabOrder = 0
-        ExplicitWidth = 1029
+        ExplicitWidth = 1025
         object btnMostrarOcultar: TBitBtn
           Left = 1
           Top = 1
@@ -93,15 +93,15 @@ object FrmGerenciarSolicitacoes: TFrmGerenciarSolicitacoes
       object Panel19: TPanel
         Left = 1
         Top = 26
-        Width = 1031
+        Width = 1027
         Height = 173
         Align = alClient
         TabOrder = 1
-        ExplicitWidth = 1029
+        ExplicitWidth = 1025
         object DBGridServicos: TFilterDBGrid
           Left = 1
           Top = 1
-          Width = 1029
+          Width = 1025
           Height = 171
           Align = alClient
           DataSource = FrmDataModule.DataSourceGerenciarServico
@@ -184,16 +184,16 @@ object FrmGerenciarSolicitacoes: TFrmGerenciarSolicitacoes
     object PanelExecutantes: TPanel
       Left = 1
       Top = 1
-      Width = 1033
-      Height = 499
+      Width = 1029
+      Height = 483
       Align = alClient
       TabOrder = 1
-      ExplicitWidth = 1031
-      ExplicitHeight = 491
+      ExplicitWidth = 1027
+      ExplicitHeight = 475
       object Panel6: TPanel
         Left = 1
         Top = 1
-        Width = 1031
+        Width = 1027
         Height = 25
         Align = alTop
         Caption = 'Executantes Programados'
@@ -206,19 +206,19 @@ object FrmGerenciarSolicitacoes: TFrmGerenciarSolicitacoes
         ParentBackground = False
         ParentFont = False
         TabOrder = 0
-        ExplicitWidth = 1029
+        ExplicitWidth = 1025
       end
       object ToolBar2: TToolBar
         Left = 1
         Top = 26
-        Width = 1031
+        Width = 1027
         Height = 29
         Caption = 'ToolBar2'
         DrawingStyle = dsGradient
         EdgeBorders = [ebLeft, ebTop, ebRight, ebBottom]
         Images = FrmPrincipal.ImageList1
         TabOrder = 1
-        ExplicitWidth = 1029
+        ExplicitWidth = 1025
         object ToolButton5: TToolButton
           Left = 0
           Top = 0
@@ -334,19 +334,21 @@ object FrmGerenciarSolicitacoes: TFrmGerenciarSolicitacoes
           ParentShowHint = False
           ShowHint = True
         end
-        object ToolButton10: TToolButton
-          Left = 656
-          Top = 0
-          Action = actExcel
-          ParentShowHint = False
-          ShowHint = True
-        end
         object btnFiltroClearExecutantes: TToolButton
-          Left = 679
+          Left = 656
           Top = 0
           Hint = 'Limpar filtro'
           Caption = 'btnFiltroClearExecutantes'
           ImageIndex = 225
+          ParentShowHint = False
+          ShowHint = True
+        end
+        object btnExcelExecutante: TToolButton
+          Left = 679
+          Top = 0
+          Hint = 'Exportar dados para o Excel'
+          Caption = 'Exportar'
+          ImageIndex = 54
           ParentShowHint = False
           ShowHint = True
         end
@@ -364,8 +366,8 @@ object FrmGerenciarSolicitacoes: TFrmGerenciarSolicitacoes
       end
       object StatusBarExecutantes: TStatusBar
         Left = 1
-        Top = 479
-        Width = 1031
+        Top = 463
+        Width = 1027
         Height = 19
         Panels = <
           item
@@ -383,8 +385,8 @@ object FrmGerenciarSolicitacoes: TFrmGerenciarSolicitacoes
           item
             Width = 50
           end>
-        ExplicitTop = 471
-        ExplicitWidth = 1029
+        ExplicitTop = 455
+        ExplicitWidth = 1025
       end
       object ColunasLayoutExecutantes: TStringGrid
         Left = 49
@@ -425,17 +427,17 @@ object FrmGerenciarSolicitacoes: TFrmGerenciarSolicitacoes
       object Panel18: TPanel
         Left = 1
         Top = 55
-        Width = 1031
-        Height = 424
+        Width = 1027
+        Height = 408
         Align = alClient
         TabOrder = 4
-        ExplicitWidth = 1029
-        ExplicitHeight = 416
+        ExplicitWidth = 1025
+        ExplicitHeight = 400
         object DBGridExecutantes: TFilterDBGrid
           Left = 1
           Top = 1
-          Width = 1029
-          Height = 422
+          Width = 1025
+          Height = 406
           Align = alClient
           DataSource = FrmDataModule.DataSourceGerenciarExecutante
           Options = [dgEditing, dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgAlwaysShowSelection, dgTitleClick, dgTitleHotTrack]
@@ -453,6 +455,7 @@ object FrmGerenciarSolicitacoes: TFrmGerenciarSolicitacoes
           SearchAction = actProcurar
           LayoutGrid = ColunasLayoutExecutantes
           EnableZebra = False
+          ExcelButton = btnExcelExecutante
           Columns = <
             item
               Expanded = False
@@ -669,13 +672,13 @@ object FrmGerenciarSolicitacoes: TFrmGerenciarSolicitacoes
     Left = 0
     Top = 25
     Width = 500
-    Height = 526
+    Height = 510
     Align = alLeft
     TabOrder = 2
-    ExplicitHeight = 518
+    ExplicitHeight = 502
     object Splitter3: TSplitter
       Left = 1
-      Top = 369
+      Top = 353
       Width = 498
       Height = 3
       Cursor = crVSplit
@@ -717,7 +720,7 @@ object FrmGerenciarSolicitacoes: TFrmGerenciarSolicitacoes
         Top = 0
         Hint = 'Analise por Origem'
         Caption = 'btnOrigem'
-        ImageIndex = 181
+        ImageIndex = 179
         ParentShowHint = False
         ShowHint = True
         Style = tbsCheck
@@ -729,7 +732,7 @@ object FrmGerenciarSolicitacoes: TFrmGerenciarSolicitacoes
         Hint = 'Analise por destino'
         Caption = 'btnDestino'
         Down = True
-        ImageIndex = 182
+        ImageIndex = 180
         ParentShowHint = False
         ShowHint = True
         Style = tbsCheck
@@ -760,12 +763,17 @@ object FrmGerenciarSolicitacoes: TFrmGerenciarSolicitacoes
         ParentShowHint = False
         ShowHint = True
       end
+      object ToolButton6: TToolButton
+        Left = 162
+        Top = 0
+        Action = actExcelProgramacao
+      end
     end
     object RLDestinoOrigem: TStringGrid
       Left = 1
       Top = 55
       Width = 498
-      Height = 314
+      Height = 298
       Align = alClient
       ColCount = 8
       DefaultRowHeight = 22
@@ -778,16 +786,16 @@ object FrmGerenciarSolicitacoes: TFrmGerenciarSolicitacoes
       TabOrder = 2
       OnDrawCell = RLDestinoOrigemDrawCell
       OnSelectCell = RLDestinoOrigemSelectCell
-      ExplicitHeight = 306
+      ExplicitHeight = 290
     end
     object PanelNotas: TPanel
       Left = 1
-      Top = 372
+      Top = 356
       Width = 498
       Height = 153
       Align = alBottom
       TabOrder = 3
-      ExplicitTop = 364
+      ExplicitTop = 348
       object Panel1: TPanel
         Left = 1
         Top = 1
@@ -890,7 +898,7 @@ object FrmGerenciarSolicitacoes: TFrmGerenciarSolicitacoes
     Left = 50
     Top = 132
     Width = 500
-    Height = 300
+    Height = 398
     Color = clMenu
     ParentBackground = False
     TabOrder = 3
@@ -968,7 +976,7 @@ object FrmGerenciarSolicitacoes: TFrmGerenciarSolicitacoes
       Left = 1
       Top = 297
       Width = 498
-      Height = 174
+      Height = 167
       Align = alTop
       TabOrder = 1
       object ToolBar1: TToolBar
@@ -1008,7 +1016,7 @@ object FrmGerenciarSolicitacoes: TFrmGerenciarSolicitacoes
         Left = 1
         Top = 30
         Width = 496
-        Height = 124
+        Height = 117
         Align = alClient
         FixedCols = 0
         Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goDrawFocusSelected, goColSizing, goFixedRowClick]
@@ -1017,7 +1025,7 @@ object FrmGerenciarSolicitacoes: TFrmGerenciarSolicitacoes
       end
       object StatusBarAlterarDestinos: TStatusBar
         Left = 1
-        Top = 154
+        Top = 147
         Width = 496
         Height = 19
         Panels = <
@@ -1062,6 +1070,7 @@ object FrmGerenciarSolicitacoes: TFrmGerenciarSolicitacoes
         Caption = 'ToolBar6'
         DrawingStyle = dsGradient
         EdgeBorders = [ebLeft, ebTop, ebRight, ebBottom]
+        Images = FrmPrincipal.ImageList1
         TabOrder = 0
         object DBNavigatorComissao: TDBNavigator
           Left = 0
@@ -1086,6 +1095,24 @@ object FrmGerenciarSolicitacoes: TFrmGerenciarSolicitacoes
           ParentShowHint = False
           ShowHint = True
           TabOrder = 0
+        end
+        object btnClearFiltroContador: TToolButton
+          Left = 138
+          Top = 0
+          Hint = 'Limpar filtro'
+          Caption = 'btnClearFiltroContador'
+          ImageIndex = 225
+          ParentShowHint = False
+          ShowHint = True
+        end
+        object btnExcelContador: TToolButton
+          Left = 161
+          Top = 0
+          Hint = 'Exportar dados para o Excel'
+          Caption = 'btnExcelContador'
+          ImageIndex = 54
+          ParentShowHint = False
+          ShowHint = True
         end
       end
       object Panel2: TPanel
@@ -1310,7 +1337,10 @@ object FrmGerenciarSolicitacoes: TFrmGerenciarSolicitacoes
         TitleFont.Style = []
         OnCellClick = DBGridContadorCellClick
         OnDrawColumnCell = DBGridContadorDrawColumnCell
+        ClearFilterButton = btnClearFiltroContador
+        LayoutGrid = ColunasLayoutContador
         EnableZebra = False
+        ExcelButton = btnExcelContador
         Columns = <
           item
             Alignment = taCenter
@@ -1360,10 +1390,12 @@ object FrmGerenciarSolicitacoes: TFrmGerenciarSolicitacoes
           end>
       end
       object ColunasLayoutContador: TStringGrid
-        Left = 352
-        Top = 36
+        Left = 304
+        Top = 53
         Width = 88
         Height = 62
+        ColCount = 7
+        RowCount = 6
         TabOrder = 3
         Visible = False
       end
@@ -1371,17 +1403,17 @@ object FrmGerenciarSolicitacoes: TFrmGerenciarSolicitacoes
   end
   object PanelContadorSolicitacao: TPanel
     Left = 0
-    Top = 551
-    Width = 1538
+    Top = 535
+    Width = 1534
     Height = 27
     Align = alBottom
     TabOrder = 4
-    ExplicitTop = 543
-    ExplicitWidth = 1536
+    ExplicitTop = 527
+    ExplicitWidth = 1532
     object RLContadorSolicitacao: TStringGrid
       Left = 1
       Top = 1
-      Width = 1536
+      Width = 1532
       Height = 25
       Align = alClient
       ColCount = 1
@@ -1391,7 +1423,7 @@ object FrmGerenciarSolicitacoes: TFrmGerenciarSolicitacoes
       FixedRows = 0
       Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goDrawFocusSelected, goColSizing, goColMoving, goFixedRowClick]
       TabOrder = 0
-      ExplicitWidth = 1534
+      ExplicitWidth = 1530
     end
   end
   object ActionManager1: TActionManager
@@ -1499,19 +1531,6 @@ object FrmGerenciarSolicitacoes: TFrmGerenciarSolicitacoes
       ImageIndex = 47
       OnExecute = actZoomMenosExecute
     end
-    object actExcel: TAction
-      Category = 'Bot'#245'es'
-      Caption = 'Exportar'
-      Hint = 'Exportar para o Excel'
-      ImageIndex = 54
-      OnExecute = actExcelExecute
-    end
-    object actExcelDuplicados: TAction
-      Category = 'Bot'#245'es'
-      Caption = 'Exportar'
-      Hint = 'Exportar para o Excel'
-      ImageIndex = 54
-    end
     object actAutoFit: TAction
       Category = 'Bot'#245'es'
       Caption = 'actAutoFit'
@@ -1564,21 +1583,21 @@ object FrmGerenciarSolicitacoes: TFrmGerenciarSolicitacoes
       Category = 'Bot'#245'es'
       Caption = 'Destinos'
       Hint = 'Carregar altera'#231#227'o do destino de executantes'
-      ImageIndex = 211
+      ImageIndex = 209
       OnExecute = actCarregarDestinoJanelaExecute
     end
     object actCarregarDestino: TAction
       Category = 'Bot'#245'es'
       Caption = 'Individualmente'
       Hint = 'Alterar destinos individualmente'
-      ImageIndex = 211
+      ImageIndex = 209
       OnExecute = actCarregarDestinoExecute
     end
     object actCarregarDestinoProgramacao: TAction
       Category = 'Bot'#245'es'
       Caption = 'Todos'
       Hint = 'Alterar destino da programa'#231#227'o completa'
-      ImageIndex = 211
+      ImageIndex = 209
       OnExecute = actCarregarDestinoProgramacaoExecute
     end
     object actExcluirProgramacao: TAction
@@ -1602,10 +1621,20 @@ object FrmGerenciarSolicitacoes: TFrmGerenciarSolicitacoes
       ImageIndex = 95
       OnExecute = actDuplicadosExecute
     end
+    object Action1: TAction
+      Caption = 'Action1'
+    end
+    object actExcelProgramacao: TAction
+      Category = 'Bot'#245'es'
+      Caption = 'actExcelProgramacao'
+      Hint = 'Exportar para o Excel'
+      ImageIndex = 54
+      OnExecute = actExcelProgramacaoExecute
+    end
   end
   object PopupMenuDestinoOrigem: TPopupMenu
-    Left = 40
-    Top = 185
+    Left = 680
+    Top = 169
     object StatusdaprogramaoTODOS1: TMenuItem
       Action = actStatusTodos
     end

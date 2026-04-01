@@ -8,7 +8,8 @@ uses
   Vcl.Samples.Spin, Vcl.OleCtrls, SHDocVw, Vcl.DBCtrls,
   Vcl.ToolWin, Vcl.Grids, Vcl.DBGrids,ComOBJ, System.Actions, Vcl.ActnList,
   Vcl.PlatformDefaultStyleActnCtrls, Vcl.ActnMan, Vcl.Mask, Menus, Data.DB,
-  SDL_rchart, Vcl.ExtDlgs,Math,SDL_sdlbase, SDL_NumIO, Data.Win.ADODB,System.Types,DateUtils;
+  SDL_rchart, Vcl.ExtDlgs,Math,SDL_sdlbase, SDL_NumIO, Data.Win.ADODB,System.Types,DateUtils,
+  untDBGridFilter;
 
 
 type
@@ -41,36 +42,19 @@ type
     actAbrirDesenho: TAction;
     actSalvarDesenhoData: TAction;
     SaveDialog1: TSaveDialog;
-    actFiltroInserir: TAction;
-    actGridASC: TAction;
-    actGridDESC: TAction;
-    actSubstituirPor: TAction;
-    actLimparFiltros: TAction;
-    actFiltrosTabela: TAction;
-    actProcuraFiltrosTabela: TAction;
-    actExcel: TAction;
     actTabuaMare: TAction;
     actProcurarTabuaMare: TAction;
-    actExcelTabuaMAre: TAction;
-    actExcelImportarTabuaMare: TAction;
-    actCimaTudo: TAction;
-    actBaixoTudo: TAction;
-    actBaixo: TAction;
-    actCima: TAction;
-    actSalvarLayout: TAction;
-    actLayoutJanela: TAction;
-    ColunasLayout: TStringGrid;
     StatusBar1: TStatusBar;
-    DBGridPlataformas: TDBGrid;
+    DBGridPlataformas: TFilterDBGrid;
     ToolBar1: TToolBar;
     DBNavigatorCadastro: TDBNavigator;
     ToolButton2: TToolButton;
-    BitBtn3: TBitBtn;
-    BitBtn4: TBitBtn;
-    BitBtn1: TBitBtn;
-    BitBtn2: TBitBtn;
     BitBtn5: TBitBtn;
     DBEdit1: TDBEdit;
+    btnClearFiltro: TToolButton;
+    btnExcel: TToolButton;
+    btnLayout: TToolButton;
+    ColunasLayout: TStringGrid;
     procedure StatusBar1DrawPanel(StatusBar: TStatusBar; Panel: TStatusPanel;
       const Rect: TRect);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
@@ -88,29 +72,12 @@ type
 
    
     procedure DBGridPlataformasCellClick(Column: TColumn);
-    procedure actFiltrosTabelaExecute(Sender: TObject);
-    procedure actFiltroInserirExecute(Sender: TObject);
-    procedure actGridASCExecute(Sender: TObject);
-    procedure actGridDESCExecute(Sender: TObject);
-    procedure actSubstituirPorExecute(Sender: TObject);
-    procedure actLimparFiltrosExecute(Sender: TObject);
-    procedure actProcuraFiltrosTabelaExecute(Sender: TObject);
-    procedure DBGridPlataformasTitleClick(Column: TColumn);
-    procedure actExcelExecute(Sender: TObject);
-    procedure actCimaTudoExecute(Sender: TObject);
-    procedure actBaixoTudoExecute(Sender: TObject);
-    procedure actBaixoExecute(Sender: TObject);
-    procedure actCimaExecute(Sender: TObject);
-    procedure actSalvarLayoutExecute(Sender: TObject);
-    procedure actLayoutJanelaExecute(Sender: TObject);
 
   private
     //procedure DoMap;
     Capturing: Boolean;
     MouseDownSpot: TPoint;
-    TabResultado: Integer;
     AlturaAgora: Double;
-    txtLayout: String;
     procedure WMMDIACTIVATE(var msg: TWMMDIACTIVATE);message WM_MDIACTIVATE;
 
   public
@@ -150,8 +117,9 @@ end;
 
 procedure TFrmPlataforma.DBGridPlataformasCellClick(Column: TColumn);
 begin
-  if ((FrmPrincipal.logPerfil = 'Administrador') OR
-  (FrmPrincipal.logPerfil = 'Supervisor')) then
+  if ((FrmPrincipal.logPerfil = FrmPrincipal.PERFILADM) OR
+  (FrmPrincipal.logPerfil = FrmPrincipal.PERFILSUPERVISAO) OR
+  (FrmPrincipal.logPerfil = FrmPrincipal.PERFILRT)) then
   begin
     try
       if (Self.DBGridPlataformas.SelectedField.DataType = ftBoolean)AND
@@ -205,15 +173,6 @@ begin
   end;
 end;
 
-procedure TFrmPlataforma.DBGridPlataformasTitleClick(Column: TColumn);
-begin
-  TabResultado:= 0;
-  FrmPrincipal.configurarFiltro(1,Column.FieldName,IntToStr(Column.Index),
-  Column.ReadOnly,actFiltroInserir,actGridASC,actGridDESC,actSubstituirPor);
-  //======================================================
-  FrmPrincipal.titleGrid(ColunasLayout,'Consulta',FrmDataModule.ADOQueryPlataforma.SQL.Text);
-end;
-
 procedure TFrmPlataforma.actAtualizarTituoExecute(Sender: TObject);
   var
     plataforma: String;
@@ -229,20 +188,6 @@ begin
 
   PanelTitulo.Caption:=
   'Cadastro de Instalações - '+plataforma;
-end;
-
-procedure TFrmPlataforma.actBaixoExecute(Sender: TObject);
-begin
-  FrmPrincipal.moveBaixo(DBGridPlataformas, ColunasLayout);
-  actLimparFiltros.Execute;
-end;
-
-procedure TFrmPlataforma.actBaixoTudoExecute(Sender: TObject);
-begin
-  FrmPrincipal.botaoMoveTudo(FrmDataModule.ADOConnectionConsulta,
-  txtLayout,'tblPlataforma','TAB2;',
-  DBGridPlataformas,ColunasLayout);
-  actLimparFiltros.Execute;
 end;
 
 procedure TFrmPlataforma.actCalcularXYExecute(Sender: TObject);
@@ -281,93 +226,6 @@ begin
   FrmPrincipal.ProgressBarAtualizar;
 end;
 
-procedure TFrmPlataforma.actCimaExecute(Sender: TObject);
-begin
-  FrmPrincipal.moveCima(DBGridPlataformas, ColunasLayout);
-  actLimparFiltros.Execute;
-end;
-
-procedure TFrmPlataforma.actCimaTudoExecute(Sender: TObject);
-begin
-  FrmPrincipal.botaoMoveTudo(FrmDataModule.ADOConnectionConsulta,
-  txtLayout,'tblPlataforma','TAB1;',
-  DBGridPlataformas,ColunasLayout);
-  actLimparFiltros.Execute;
-end;
-
-procedure TFrmPlataforma.actExcelExecute(Sender: TObject);
-begin
-  FrmPrincipal.GerarExcel(DBGridPlataformas,'Plataformas');
-end;
-
-procedure TFrmPlataforma.actFiltroInserirExecute(Sender: TObject);
-begin
-  case TabResultado of
-    0:
-    begin
-      FrmPrincipal.inserirProcura(DBGridPlataformas,ColunasLayout);
-      actProcurar.Execute;
-    end;
-
-  end;
-  if (FrmPrincipal.PanelFiltrosTabela.Visible)AND(FrmPrincipal.PanelAjuda1.Visible) then
-    actFiltrosTabela.Execute;
-end;
-
-procedure TFrmPlataforma.actFiltrosTabelaExecute(Sender: TObject);
-begin
-  FrmPrincipal.btnProcurarFiltrosTabela.Action:= actProcuraFiltrosTabela;
-  case TabResultado of
-    0: FrmPrincipal.FiltrosTabela(DBGridPlataformas,ColunasLayout);
-  end;
-end;
-
-procedure TFrmPlataforma.actGridASCExecute(Sender: TObject);
-begin
-  case TabResultado of
-    0:FrmPrincipal.ClassificaDBGrid(DBGridPlataformas,FrmDataModule.ADOQueryPlataforma,0);
-  end;
-end;
-
-procedure TFrmPlataforma.actGridDESCExecute(Sender: TObject);
-begin
-  case TabResultado of
-    0:FrmPrincipal.ClassificaDBGrid(DBGridPlataformas,FrmDataModule.ADOQueryPlataforma,1);
-  end;
-end;
-
-procedure TFrmPlataforma.actLayoutJanelaExecute(Sender: TObject);
-begin
-  FrmPrincipal.btnCima.Action:= actCima;
-  FrmPrincipal.btnBaixo.Action:= actBaixo;
-  FrmPrincipal.btnBaixoTudo.Action:= actBaixoTudo;
-  FrmPrincipal.btnCimaTudo.Action:= actCimaTudo;
-  FrmPrincipal.btnSalvarLayout.Action:= actSalvarLayout;
-  FrmPrincipal.btnSalvarLayout.Visible:= false;
-  FrmPrincipal.CarregarRLColunas(txtLayout,ColunasLayout);
-  FrmPrincipal.actConfigPanelLayout.Execute;
-end;
-
-procedure TFrmPlataforma.actLimparFiltrosExecute(Sender: TObject);
-begin
-  case TabResultado of
-    0:
-    begin
-      FrmPrincipal.LimparColunasFiltro(DBGridPlataformas,ColunasLayout);
-      actProcurar.Execute;
-    end;
-  end;
-
-  if (FrmPrincipal.PanelFiltrosTabela.Visible)AND(FrmPrincipal.PanelAjuda1.Visible) then
-    actFiltrosTabela.Execute;
-end;
-
-procedure TFrmPlataforma.actProcuraFiltrosTabelaExecute(Sender: TObject);
-begin
-  frmPrincipal.CarregaFiltrosProcura(ColunasLayout);
-  actProcurar.Execute;
-end;
-
 procedure TFrmPlataforma.actProcurarExecute(Sender: TObject);
   var
     SQLString,SQLBase: String;
@@ -376,22 +234,6 @@ begin
   SQLBase:= 'SELECT tblPlataforma.* FROM tblPlataforma '+
   SQLString+' ORDER BY Plataforma;';
   FrmPrincipal.ProcuraQuery(SQLBase,FrmDataModule.ADOQueryPlataforma,StatusBar1);
-end;
-
-procedure TFrmPlataforma.actSalvarLayoutExecute(Sender: TObject);
-begin
-  FrmPrincipal.SalvarRLColunasCarregaGRID(FrmDataModule.ADOConnectionConsulta,
-  txtLayout,'tblPlataforma',
-  DBGridPlataformas,ColunasLayout);
-  actLimparFiltros.Execute;
-end;
-
-procedure TFrmPlataforma.actSubstituirPorExecute(Sender: TObject);
-begin
-    case TabResultado of
-    0:FrmPrincipal.SubstituirPor(DBGridPlataformas,FrmDataModule.ADOQueryPlataforma,
-      FrmDataModule.DataSourcePlataforma);
-  end;
 end;
 
 procedure TFrmPlataforma.PanelTituloAjudaMouseDown(Sender: TObject;
@@ -413,18 +255,16 @@ begin
   //===============================================================
   AlturaAgora:=0;
   //=====================================
-  txtLayout:= 'Plataforma.txt';
   //Incicialização
-  FrmPrincipal.SetUpColunasLayout(DBGridPlataformas, ColunasLayout);
-  FrmPrincipal.CarregarRLColunas(txtLayout, ColunasLayout);
-  FrmPrincipal.CarregarColunasGRID(FrmDataModule.ADOConnectionConsulta,
-  'tblPlataforma',DBGridPlataformas,ColunasLayout);
+  FrmDataModule.setFilterDBGrid(DBGridPlataformas);
 
   //======ADICIONAR TABSET DO FOMRMDI=======
   FrmPrincipal.MDIChildCreated(self.Handle);
   //Configuração de Perfil
-  if ((FrmPrincipal.logPerfil = 'Administrador') OR
-  (FrmPrincipal.logPerfil = 'Supervisor')) then
+  if ((FrmPrincipal.logPerfil = FrmPrincipal.PERFILADM) OR
+  (FrmPrincipal.logPerfil = FrmPrincipal.PERFILSUPERVISAO) OR
+  (FrmPrincipal.logPerfil = FrmPrincipal.PERFILRT)OR
+  (FrmPrincipal.logPerfil = FrmPrincipal.PERFILPROGRAMACAO)) then
   begin
     DBNavigatorCadastro.Enabled:= true;
     DBGridPlataformas.ReadOnly:= false;
@@ -438,7 +278,6 @@ begin
   end;
 
   actProcurar.Execute;
-
 end;
 
 procedure TFrmPlataforma.FormDestroy(Sender: TObject);

@@ -888,7 +888,7 @@ begin
   with PrintPreview do
   begin
     //Impressao
-    tabelaStringGrid(FrmConsultaExecutantesProgramados.StringGridImpressao,
+    tabelaStringGrid(FrmConsultaExecutantesProgramados.RLTemporario,
     Pagina.Left-YFrom(mmLoMetric,20),
     Cabecalho.Bottom+YFrom(mmLoMetric,30),
     8,YFrom(mmLoMetric, 50),1);

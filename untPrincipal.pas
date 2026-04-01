@@ -10,7 +10,8 @@ uses
   Vcl.ComCtrls, Vcl.Tabs, Vcl.DBCtrls, Vcl.ToolWin, Vcl.Mask, Vcl.CheckLst,ClipBrd,
   Vcl.Buttons, Vcl.Imaging.pngimage, SDL_ProgBar, Data.Win.ADODB,
   ShellAPI,ComOBJ,Math,Registry,SDL_rchart,DateUtils,FileCtrl,
-  ActiveX, uAccessDBUtils, untDBGridFilter, Vcl.WinXPickers;
+  ActiveX, uAccessDBUtils, untDBGridFilter, Vcl.WinXPickers,
+  System.Generics.Collections, System.Generics.Defaults, uZucchi;
 
 type
   TFrmPrincipal = class(TForm)
@@ -26,7 +27,6 @@ type
     Programaodiria1: TMenuItem;
     StatusBarPrincipal: TStatusBar;
     ImageList1: TImageList;
-    rocarLogin1: TMenuItem;
     MenuCadastro: TMenuItem;
     Plataforma1: TMenuItem;
     Executantes1: TMenuItem;
@@ -51,336 +51,27 @@ type
     actVerificaVersao: TAction;
     actAbrirDB: TAction;
     CompactarBancoDados1: TMenuItem;
-    PanelAjuda1: TPanel;
-    PanelTituloAjuda1: TPanel;
-    SpeedButton4: TSpeedButton;
     mdiChildrenTabs: TTabSet;
-    PanelCancelamentoMudanca: TPanel;
-    PanelMotivoCancelamento: TPanel;
-    actAjudaLimpar: TAction;
-    RadioGroupFonteCancelamento: TRadioGroup;
-    btnInfoPrioridade: TSpeedButton;
-    PanelPrioridadeScrool: TPanel;
-    ScrollBoxPrioridade: TScrollBox;
-    PanelPrioridade1: TPanel;
-    PanelC04: TPanel;
-    Panel4: TPanel;
-    DBCheckBoxInspecao: TDBCheckBox;
-    edtPontoInspecao: TDBEdit;
-    Panel30: TPanel;
-    DBComboBoxInspecao: TDBComboBox;
-    edtLimiteInspecao: TDBEdit;
-    Panel34: TPanel;
-    edtValorMaxInspecao: TDBEdit;
-    PanelC06: TPanel;
-    Panel6: TPanel;
-    DBCheckBoxFO: TDBCheckBox;
-    edtPontoFO: TDBEdit;
-    Panel32: TPanel;
-    DBComboBoxFO: TDBComboBox;
-    edtLimiteFO: TDBEdit;
-    Panel36: TPanel;
-    edtValorMaxFO: TDBEdit;
-    PanelC03: TPanel;
-    Panel8: TPanel;
-    DBCheckBoxCorretiva: TDBCheckBox;
-    edtPontoCorretiva: TDBEdit;
-    Panel28: TPanel;
-    DBComboBoxCorretiva: TDBComboBox;
-    edtLimiteCorretiva: TDBEdit;
-    Panel29: TPanel;
-    edtValorMaxCorretiva: TDBEdit;
-    PanelC01: TPanel;
-    Panel10: TPanel;
-    DBCheckBoxPreventiva: TDBCheckBox;
-    edtPontoPreventiva: TDBEdit;
-    edtLimitePreventiva: TDBEdit;
-    Panel50: TPanel;
-    edtValorMaxPreventiva: TDBEdit;
-    Panel2: TPanel;
-    DBComboBoxPreventiva: TDBComboBox;
-    PanelC12: TPanel;
-    Panel12: TPanel;
-    DBCheckBoxMarinha: TDBCheckBox;
-    edtPontoMarinha: TDBEdit;
-    Panel48: TPanel;
-    DBComboBoxMarinha: TDBComboBox;
-    edtLimiteMarinha: TDBEdit;
-    Panel49: TPanel;
-    edtValorMaxMarinha: TDBEdit;
-    PanelC08D: TPanel;
-    Panel14: TPanel;
-    DBCheckBoxRTID: TDBCheckBox;
-    edtPontoRTID: TDBEdit;
-    Panel38: TPanel;
-    DBComboBoxRTID: TDBComboBox;
-    edtLimiteRTID: TDBEdit;
-    Panel39: TPanel;
-    edtValorMaxRTID: TDBEdit;
-    PanelC07: TPanel;
-    Panel16: TPanel;
-    DBCheckBoxRO: TDBCheckBox;
-    edtPontoRO: TDBEdit;
-    Panel33: TPanel;
-    DBComboBoxRO: TDBComboBox;
-    edtLimiteRO: TDBEdit;
-    Panel37: TPanel;
-    edtValorMaxRO: TDBEdit;
-    PanelC02: TPanel;
-    Panel18: TPanel;
-    DBCheckBoxICPMA: TDBCheckBox;
-    edtPontoICPMA: TDBEdit;
-    Panel44: TPanel;
-    DBComboBoxICPMA: TDBComboBox;
-    edtLimiteICPMA: TDBEdit;
-    Panel45: TPanel;
-    edtValorMaxICPMA: TDBEdit;
-    PanelC13: TPanel;
-    Panel20: TPanel;
-    DBCheckBoxIBAMA: TDBCheckBox;
-    edtPontoIBAMA: TDBEdit;
-    Panel42: TPanel;
-    DBComboBoxIBAMA: TDBComboBox;
-    edtLimiteIBAMA: TDBEdit;
-    Panel43: TPanel;
-    edtValorMaxIBAMA: TDBEdit;
-    PanelC11: TPanel;
-    Panel22: TPanel;
-    DBCheckBoxATM: TDBCheckBox;
-    edtPontoATM: TDBEdit;
-    Panel40: TPanel;
-    DBComboBoxATM: TDBComboBox;
-    edtLimiteATM: TDBEdit;
-    Panel41: TPanel;
-    edtValorMaxATM: TDBEdit;
-    PanelC05: TPanel;
-    Panel24: TPanel;
-    DBCheckBoxMergulho: TDBCheckBox;
-    edtPontoMergulho: TDBEdit;
-    Panel31: TPanel;
-    DBComboBoxMergulho: TDBComboBox;
-    edtLimiteMergulho: TDBEdit;
-    Panel35: TPanel;
-    edtValorMaxMergulho: TDBEdit;
-    PanelC16: TPanel;
-    Panel26: TPanel;
-    DBCheckBoxEC: TDBCheckBox;
-    edtPontoEC: TDBEdit;
-    Panel46: TPanel;
-    DBComboBoxEC: TDBComboBox;
-    edtLimiteEC: TDBEdit;
-    Panel47: TPanel;
-    edtValorMaxEC: TDBEdit;
-    PanelC14: TPanel;
-    Panel52: TPanel;
-    DBCheckBoxANP: TDBCheckBox;
-    edtPontoANP: TDBEdit;
-    Panel53: TPanel;
-    DBComboBoxANP: TDBComboBox;
-    edtLimiteANP: TDBEdit;
-    Panel54: TPanel;
-    edtValorMaxANP: TDBEdit;
-    PanelC00: TPanel;
-    Panel5: TPanel;
-    DBCheckBoxCusto: TDBCheckBox;
-    edtPontoMinimo: TDBEdit;
-    edtPontoMaximo: TDBEdit;
-    edtCustoMaximo: TDBEdit;
-    edtCustoMinimo: TDBEdit;
-    PanelC10: TPanel;
-    Panel7: TPanel;
-    DBCheckBoxNR10: TDBCheckBox;
-    edtPontoNR10: TDBEdit;
-    Panel9: TPanel;
-    DBComboBoxNR10: TDBComboBox;
-    edtLimiteNR10: TDBEdit;
-    Panel11: TPanel;
-    edtValorMaxNR10: TDBEdit;
-    PanelC09: TPanel;
-    Panel21: TPanel;
-    DBCheckBoxINSPLAN: TDBCheckBox;
-    edtPontoINSPLAN: TDBEdit;
-    Panel23: TPanel;
-    DBComboBoxINSPLAN: TDBComboBox;
-    edtLimiteINSPLAN: TDBEdit;
-    Panel25: TPanel;
-    edtValorMaxINSPLAN: TDBEdit;
-    PanelC15: TPanel;
-    Panel13: TPanel;
-    DBCheckBoxANVISA: TDBCheckBox;
-    edtPontoANVISA: TDBEdit;
-    Panel15: TPanel;
-    DBComboBoxANVISA: TDBComboBox;
-    edtLimiteANVISA: TDBEdit;
-    Panel17: TPanel;
-    edtValorMaxANVISA: TDBEdit;
-    Panel19: TPanel;
-    Panel3: TPanel;
-    Panel27: TPanel;
-    Panel51: TPanel;
-    Panel55: TPanel;
-    PanelC08C: TPanel;
-    Panel57: TPanel;
-    DBCheckBoxRTIC: TDBCheckBox;
-    edtPontoRTIC: TDBEdit;
-    Panel58: TPanel;
-    DBComboBoxRTIC: TDBComboBox;
-    edtLimiteRTIC: TDBEdit;
-    Panel59: TPanel;
-    edtValorMaxRTIC: TDBEdit;
-    PanelC08B: TPanel;
-    Panel61: TPanel;
-    DBCheckBoxRTIB: TDBCheckBox;
-    edtPontoRTIB: TDBEdit;
-    Panel62: TPanel;
-    DBComboBoxRTIB: TDBComboBox;
-    edtLimiteRTIB: TDBEdit;
-    Panel63: TPanel;
-    edtValorMaxRTIB: TDBEdit;
-    PanelC08A: TPanel;
-    Panel65: TPanel;
-    DBCheckBoxRTIA: TDBCheckBox;
-    edtPontoRTIA: TDBEdit;
-    Panel66: TPanel;
-    DBComboBoxRTIA: TDBComboBox;
-    edtLimiteRTIA: TDBEdit;
-    Panel67: TPanel;
-    edtValorMaxRTIA: TDBEdit;
-    ToolBar1: TToolBar;
-    DBNavigatorPrioridade: TDBNavigator;
-    btnConfigPadrao: TBitBtn;
-    PanelMagicFiltro1: TPanel;
-    PanelFiltroGRID: TPanel;
-    PageControl4: TPageControl;
-    TabSheet8: TTabSheet;
-    TabSheet9: TTabSheet;
-    ToolBar3: TToolBar;
-    btnSubstituirPor: TToolButton;
-    PanelLocalizar: TPanel;
-    Panel56: TPanel;
-    Panel60: TPanel;
-    edtSubstituirPor: TEdit;
-    Panel64: TPanel;
-    Panel68: TPanel;
-    Panel69: TPanel;
-    edtLocalizar: TEdit;
-    actFiltroCancelar: TAction;
-    actGridSelTudo: TAction;
-    actGridSelLimpa: TAction;
-    PanelTituloMagic: TPanel;
-    SpeedButton1: TSpeedButton;
-    PanelLayout: TPanel;
-    Splitter8: TSplitter;
-    RLColunasAtivas: TStringGrid;
-    ToolBar8: TToolBar;
-    btnCima: TToolButton;
-    btnBaixo: TToolButton;
-    btnCimaTudo: TToolButton;
-    btnBaixoTudo: TToolButton;
-    btnClassifica: TToolButton;
-    RLColunasOpcoes: TStringGrid;
     MemoPrincipal: TMemo;
-    actLayoutSORT: TAction;
-    Carregar: TAction;
-    btnSalvarLayout: TToolButton;
-    PanelFiltrosTabela: TPanel;
-    actConfigMagicPanel: TAction;
-    actConfigPanelLayout: TAction;
-    actConfigFiltrosTabela: TAction;
-    Panel70: TPanel;
-    BitBtn3: TBitBtn;
-    BitBtn4: TBitBtn;
     actExcel: TAction;
     MaskEditData: TMaskEdit;
-    actCancelarProgramacao: TAction;
     StatusBar1: TStatusBar;
-    PanelCONECTION: TPanel;
-    ToolBar7: TToolBar;
-    BitBtn7: TBitBtn;
-    actLOCAL: TAction;
-    actREDE: TAction;
-    BitBtn8: TBitBtn;
-    actUpload: TAction;
-    actDownload: TAction;
-    BitBtn9: TBitBtn;
-    BitBtn10: TBitBtn;
     ConexoLOCAL1: TMenuItem;
     actSalvatagemPlataforma: TAction;
     actConverterDB: TAction;
     Converterverso1: TMenuItem;
-    actConexao: TAction;
     MovimentacaoCarga1: TMenuItem;
-    actSalvarLista: TAction;
-    actInterromper: TAction;
-    ProgBarMagicFiltro: TProgBar;
-    Timer2: TTimer;
-    actListar: TAction;
-    StatusBarMagicFiltro: TStatusBar;
     CondicaoMarEmbarcacao1: TMenuItem;
-    PanelDuplicados: TPanel;
-    ToolBar6: TToolBar;
-    BitBtn13: TBitBtn;
-    RLDuplicados: TStringGrid;
-    actExcelDuplicados: TAction;
-    GroupBox1: TGroupBox;
-    CheckBoxColibri: TCheckBox;
-    CheckBoxConsulta: TCheckBox;
-    CheckBoxMemoria: TCheckBox;
-    Panel80: TPanel;
-    ToolBar2: TToolBar;
-    btnASC: TToolButton;
-    btnDESC: TToolButton;
-    btnSelTudo: TToolButton;
-    btnSelLimpa: TToolButton;
-    ToolButton1: TToolButton;
-    RadioGroupOperador: TRadioGroup;
-    Panel81: TPanel;
-    edtProcura: TEdit;
-    CheckListBoxFiltroGRID: TCheckListBox;
-    btnInserir: TBitBtn;
-    btnCancelar: TBitBtn;
-    BitBtn12: TBitBtn;
-    BitBtn11: TBitBtn;
-    CheckBoxListarAutomatico: TCheckBox;
     N3: TMenuItem;
     actDownlodaDBMemoria: TAction;
     actUploadDBMemoria: TAction;
-    RadioGroupSubstituir: TRadioGroup;
-    DBGridPalavraChave: TDBGrid;
-    ColunasLayoutPalavraChave: TStringGrid;
-    actFiltroInserir: TAction;
-    actGridASC: TAction;
-    actGridDESC: TAction;
-    actSubstituirPor: TAction;
-    actLimparFiltros: TAction;
-    actFiltrosTabela: TAction;
-    actProcuraFiltrosTabela: TAction;
-    actProcurarPalavraChave: TAction;
-    ToolBar9: TToolBar;
-    BitBtn5: TBitBtn;
-    BitBtn6: TBitBtn;
-    DBNavigatorPalavraChave: TDBNavigator;
-    StatusBarPalavraChave: TStatusBar;
-    BitBtn14: TBitBtn;
-    BitBtn15: TBitBtn;
-    actInserirRegistro: TAction;
-    actCancelarRegistro: TAction;
     Ajuda1: TMenuItem;
     actMatrizExecutanteAPLAT: TAction;
-    actMatrizExecutanteT31: TAction;
     actMatrizExecutanteCadastro: TAction;
     ResumoProgramao1: TMenuItem;
     SituaodosEquipamentoseAcessodasPlataformas1: TMenuItem;
+    Reconexoforada1: TMenuItem;
     actMatrizForaOperacao: TAction;
-    Splitter1: TSplitter;
-    RLFiltrosTabela: TStringGrid;
-    ComboBoxOperador: TComboBox;
-    ToolBar4: TToolBar;
-    btnProcurarFiltrosTabela: TBitBtn;
-    Panel72: TPanel;
-    ToolBar10: TToolBar;
-    btnSQLFiltroTabela: TToolButton;
-    MemoSQL: TMemo;
     procedure SalvarBancoDadosComo1Click(Sender: TObject);
     procedure Timer1Timer(Sender: TObject);
     procedure FormCreate(Sender: TObject);
@@ -408,136 +99,55 @@ type
     procedure CompactarBancoDados1Click(Sender: TObject);
     procedure PanelTituloAjuda1MouseDown(Sender: TObject; Button: TMouseButton;
       Shift: TShiftState; X, Y: Integer);
-    procedure PanelTituloAjuda1MouseMove(Sender: TObject; Shift: TShiftState; X,
-      Y: Integer);
-    procedure PanelTituloAjuda1MouseUp(Sender: TObject; Button: TMouseButton;
-      Shift: TShiftState; X, Y: Integer);
-    procedure SpeedButton4Click(Sender: TObject);
-    procedure actAjudaLimparExecute(Sender: TObject);
     procedure DBComboBoxPreventivaKeyPress(Sender: TObject; var Key: Char);
-    procedure DBCheckBoxPreventivaClick(Sender: TObject);
-    procedure DBCheckBoxICPMAClick(Sender: TObject);
-    procedure DBCheckBoxCorretivaClick(Sender: TObject);
-    procedure DBCheckBoxInspecaoClick(Sender: TObject);
-    procedure DBCheckBoxMergulhoClick(Sender: TObject);
-    procedure DBCheckBoxFOClick(Sender: TObject);
-    procedure DBCheckBoxROClick(Sender: TObject);
-    procedure DBCheckBoxRTIDClick(Sender: TObject);
-    procedure DBCheckBoxMarinhaClick(Sender: TObject);
-    procedure DBCheckBoxATMClick(Sender: TObject);
-    procedure DBCheckBoxIBAMAClick(Sender: TObject);
-    procedure DBCheckBoxANPClick(Sender: TObject);
-    procedure DBCheckBoxECClick(Sender: TObject);
-    procedure DBCheckBoxCustoClick(Sender: TObject);
-    procedure edtCustoMinimoExit(Sender: TObject);
-    procedure edtCustoMaximoExit(Sender: TObject);
-    procedure DBComboBoxPreventivaChange(Sender: TObject);
-    procedure DBComboBoxICPMAChange(Sender: TObject);
-    procedure DBComboBoxCorretivaChange(Sender: TObject);
-    procedure DBComboBoxInspecaoChange(Sender: TObject);
-    procedure DBComboBoxMergulhoChange(Sender: TObject);
-    procedure DBComboBoxFOChange(Sender: TObject);
-    procedure DBComboBoxROChange(Sender: TObject);
-    procedure DBComboBoxRTIDChange(Sender: TObject);
-    procedure DBComboBoxMarinhaChange(Sender: TObject);
-    procedure DBComboBoxATMChange(Sender: TObject);
-    procedure DBComboBoxIBAMAChange(Sender: TObject);
-    procedure DBComboBoxANPChange(Sender: TObject);
-    procedure DBComboBoxECChange(Sender: TObject);
-    procedure DBComboBoxNR10Change(Sender: TObject);
-    procedure DBCheckBoxNR10Click(Sender: TObject);
-    procedure DBCheckBoxINSPLANClick(Sender: TObject);
-    procedure DBCheckBoxANVISAClick(Sender: TObject);
-    procedure DBComboBoxANVISAChange(Sender: TObject);
-    procedure DBComboBoxINSPLANChange(Sender: TObject);
-    procedure DBCheckBoxRTIAClick(Sender: TObject);
-    procedure DBCheckBoxRTIBClick(Sender: TObject);
-    procedure DBCheckBoxRTICClick(Sender: TObject);
-    procedure DBComboBoxRTIAChange(Sender: TObject);
-    procedure DBComboBoxRTIBChange(Sender: TObject);
-    procedure DBComboBoxRTICChange(Sender: TObject);
-    procedure actFiltroCancelarExecute(Sender: TObject);
-    procedure actGridSelTudoExecute(Sender: TObject);
-    procedure actGridSelLimpaExecute(Sender: TObject);
-    procedure SpeedButton1Click(Sender: TObject);
-    procedure PanelTituloMagicMouseMove(Sender: TObject; Shift: TShiftState; X,
-      Y: Integer);
-    procedure PanelTituloMagicMouseUp(Sender: TObject; Button: TMouseButton;
-      Shift: TShiftState; X, Y: Integer);
-    procedure actLayoutSORTExecute(Sender: TObject);
-    procedure RLColunasAtivasDrawCell(Sender: TObject; ACol, ARow: Integer;
-      Rect: TRect; State: TGridDrawState);
-    procedure RLColunasOpcoesDrawCell(Sender: TObject; ACol, ARow: Integer;
-      Rect: TRect; State: TGridDrawState);
-    procedure RLColunasAtivasDblClick(Sender: TObject);
-    procedure RLColunasOpcoesDblClick(Sender: TObject);
-    procedure actConfigMagicPanelExecute(Sender: TObject);
-    procedure actConfigPanelLayoutExecute(Sender: TObject);
-    procedure actConfigFiltrosTabelaExecute(Sender: TObject);
-    procedure RLFiltrosTabelaSelectCell(Sender: TObject; ACol, ARow: Integer;
-      var CanSelect: Boolean);
-    procedure ComboBoxOperadorCloseUp(Sender: TObject);
-    procedure ComboBoxOperadorMouseLeave(Sender: TObject);
     procedure ComboBoxOperadorKeyPress(Sender: TObject; var Key: Char);
-    procedure edtProcuraKeyPress(Sender: TObject; var Key: Char);
-    procedure BitBtn4Click(Sender: TObject);
-    procedure CarregarExecute(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
-    procedure actCancelarProgramacaoExecute(Sender: TObject);
     procedure ConexoLOCAL1Click(Sender: TObject);
-    procedure actLOCALExecute(Sender: TObject);
-    procedure actREDEExecute(Sender: TObject);
-    procedure actUploadExecute(Sender: TObject);
-    procedure actDownloadExecute(Sender: TObject);
     procedure actSalvatagemPlataformaExecute(Sender: TObject);
     procedure actConverterDBExecute(Sender: TObject);
     procedure MovimentacaoCarga1Click(Sender: TObject);
-    procedure actInterromperExecute(Sender: TObject);
-    procedure Timer2Timer(Sender: TObject);
-    procedure actListarExecute(Sender: TObject);
     procedure CondicaoMarEmbarcacao1Click(Sender: TObject);
-    procedure actSalvarListaExecute(Sender: TObject);
-    procedure actExcelDuplicadosExecute(Sender: TObject);
-    procedure RLDuplicadosFixedCellClick(Sender: TObject; ACol, ARow: Integer);
     procedure actDownlodaDBMemoriaExecute(Sender: TObject);
     procedure actUploadDBMemoriaExecute(Sender: TObject);
-    procedure DBGridPalavraChaveDrawColumnCell(Sender: TObject;
-      const Rect: TRect; DataCol: Integer; Column: TColumn;
-      State: TGridDrawState);
-    procedure DBGridPalavraChaveTitleClick(Column: TColumn);
-    procedure actFiltroInserirExecute(Sender: TObject);
-    procedure actGridASCExecute(Sender: TObject);
-    procedure actGridDESCExecute(Sender: TObject);
-    procedure actSubstituirPorExecute(Sender: TObject);
-    procedure actLimparFiltrosExecute(Sender: TObject);
-    procedure actFiltrosTabelaExecute(Sender: TObject);
-    procedure actProcuraFiltrosTabelaExecute(Sender: TObject);
-    procedure actProcurarPalavraChaveExecute(Sender: TObject);
-    procedure DBGridPalavraChaveCellClick(Column: TColumn);
-    procedure actInserirRegistroExecute(Sender: TObject);
-    procedure actCancelarRegistroExecute(Sender: TObject);
     procedure Ajuda1Click(Sender: TObject);
     procedure actMatrizExecutanteAPLATExecute(Sender: TObject);
-    procedure actMatrizExecutanteT31Execute(Sender: TObject);
     procedure actMatrizExecutanteCadastroExecute(Sender: TObject);
     procedure ResumoProgramao1Click(Sender: TObject);
     procedure SituaodosEquipamentoseAcessodasPlataformas1Click(Sender: TObject);
+    procedure Reconexoforada1Click(Sender: TObject);
     procedure actMatrizForaOperacaoExecute(Sender: TObject);
     type
       TExecutanteProgramado = record
         ListaDestinos: TStrings;
         booleanProgramado: Boolean;
     end;
+    type
+      TTransbordoLeg = record
+        IDProgramacaoExecutante: Integer;
+        Origem, Destino: string;
+        NomeExecutante: string;
+        TipoEtapaServico: string;
+        Funcao: string;
+        Empresa: string;
+        DistKm: Double;
+        HasDist: Boolean;
+        HoraInicioFicticia: TDateTime;
+      end;
+
 
   private
     { Private declarations }
     function versaoAtualizada(versaoPRG,versaoDB: String): Integer;
     function versaoExe: String;
-    function HintRelacaoTempo(Combo: TDBComboBox): String;
-
+    procedure CopiarRegistrosRelacionados(AGravarQuery: TADOQuery;
+      const AIdOrigem, AIdDestino: Integer; const ACampoLigacao,
+      ASQLConsulta: string; const AExecutante: Boolean);
+    procedure LimparCamposRTDaProgramacao(
+      const ACodigoProgramacaoDiaria: Integer);
     //procedure Descomprime(ArquivoZip: TFileName; DiretorioDestino: string);
 
   public
+    
     var
     SelPlataforma: Boolean;
     ultimaSelecao: TPointFloat;
@@ -548,13 +158,22 @@ type
     HintPadrao,txtBarraProgresso,enderecoColibriRegistro: String;
 
     MatrizSalvatagem,MatrizExecutanteAPLAT,MatrizForaOperacao,
-    MatrizExecutanteT31,MatrizExecutanteCadastro: array of array of String;
+    MatrizExecutanteCadastro: array of array of String;
     const
     CoresAuto: array[0..14] of TColor =
     (clMaroon,clGreen,clOlive,clNavy,clPurple,clTeal,clRed,clLime,clYellow,clBlue,
     clFuchsia,clAqua,clBlack,clGray,clSilver);
+
+    PERFILRT = 'Requisição de Transporte';
+    PERFILADM = 'Administrador';
+    PERFILPROGRAMACAO = 'Programação';
+    PERFILHOTELARIA = 'Hotelaria';
+    PERFILSUPERVISAO = 'Supervisão';
     { Public declarations }
+    procedure Force_Reconnect;
+    procedure ADOConnection_Reconnect(Conn: TADOConnection);
     //Registros Windows
+    function FormatarCPF(CPF: String): String;
     procedure registroEscrever(keyString,Endereco: String);
     function registroEndereco(keyString: String): String;
     //Conexão DB
@@ -567,8 +186,8 @@ type
     function CharAscDesc(const Ch: Char; const S: string): Boolean;
     procedure GridZebrado(Grid: TDBGrid; ColunasLayout: TStringGrid; State: TGridDrawState;
     const Rect: TRect; DataCol: Integer; Column: TColumn);
-    procedure SetupGridPickListSQL(Conection: TADOConnection; const FieldName: string; const sql: String;
-    var Tabela: TDBGrid; DeletarRepetidos: Boolean);
+    procedure SetupGridPickListSQL(Conection: TADOConnection; const FieldName, sql: String;
+      var Tabela: TDBGrid; DeletarRepetidos: Boolean);
     procedure SetupGridFilterPickListSQL(Conection: TADOConnection;
       const FieldName, sql: String; var Tabela: TFilterDBGrid;
       DeletarRepetidos: Boolean);
@@ -582,35 +201,27 @@ type
     function InsertRow1(StrGrid: TStringGrid; Linha:integer):integer;
     procedure DeleteCol(Grid: TStringGrid; ACol: Integer);
     function Clasifica(Grid: TStringGrid; ACol: Integer;indicar: Boolean): String;
-    procedure selecaoDBGrid(Grid: TDBGrid; selecao: boolean);
+    procedure selecaoDBGrid(Grid: TDBGrid; selecao: boolean; Field: String);
     function palavraBusca(SQLString,FieldBusca,Operador,StringBusca,CondicionalVariaveis: String): String;
     function palavraBuscaAND(FieldBusca,PalavraBusca: String): String;
     function incialListaBusca(CampoString: String): TStringList;
     procedure LayoutPadrao(NomeArquivoMemo:string; GridPadrao: TStringGrid;Tabela: String);
-    procedure AutoFitGrade(aGrade: TStringGrid);
-    procedure AutoFitStatusBar(aStatus: TStatusBar);
     procedure addColuna(Grid: TDBGrid; Field,Caption,alinha: String;
     numColuna,Largura: Integer; booleanReadOnly: Boolean);
-    procedure titleGrid(ColunasLayout: TStringGrid; FonteDB,SQLQuery: String);
-    procedure inserirProcura(Grid: TDBGrid; ColunasLayout: TStringGrid);
-    procedure SubstituirPor(Grid: TDBGrid; ADOQuery: TADOQuery; DataSource: TDataSource);
+
     procedure limparTitleGrid(Grid: TDBGrid);
     procedure buscaFiledGrid1(FieldName,palavraBusca,Operador:String;ColunasLayout:
     TStringGrid; ACol: Integer;BooleanConcatenar: Boolean);
     procedure AlterarTituloColuna(ColunasLayout:TStringGrid;FieldName,strTitulo: String);
-    function GroupFieldDBGrid(SQLQuery,FieldName,FonteDB: String; StatusBar: TStatusBar): TStringList;
     function indexLayoutFieldName(FieldName: String; ColunasLayout: TStringGrid): Integer;
     function indexLayoutCaption(Caption: String; ColunasLayout: TStringGrid): Integer;
     //Tratamento de Strings
     function DeleteChar(const Ch: Char; const S: string): string;
     //Excel
-    procedure GerarExcel(Tabela: TDBGrid; const nomeTabela: String);
-    procedure ExportarExcel(TableName: String; BancoDados: Integer);
     procedure GeraTexto(DataSource: TDataSource; Separador: Char; nomeTabela: String);
     function RefToCell(const iCol: Integer; const iRow: Integer): String;
     procedure importarExcel(nomeTabela: String;
     ACol,ARow,TabSheet: Integer; Tabela: TDBGrid; ADOQuery: TADOQuery);
-    procedure ExcelStringGrid (Grid: TStringGrid; NomePlanilha,Titulo1,Titulo2: String;LinhaInicial: Integer);
     //Tratamento de Query
     procedure deleteQuery(ADOQuery: TADOQuery; nomeTabela: String);
     procedure deleteQueryRapido(ADOQuery: TADOQuery; nomeTabela: String);
@@ -629,6 +240,7 @@ type
     procedure deleteRepetidosCheckListBox(CheckListBox: TCheckListBox);
     procedure deleteRepetidosList(Lista: TStringList);
     procedure carregarLoginUsuario(Chave: String);
+    function NomeMaquina: String;
     procedure GravarCanceladoAprovado(idProgramacaoDiaria: Integer);
     procedure compactarDB(EnderecoArquivo: String;booleanPerguntar,conexaoColibri: Boolean;
     SourceADOConnection: TADOConnection);
@@ -643,12 +255,10 @@ type
     function SubtrairHoras(Hora1,Hora2: String): String;
     Function DecimalHoras(cValor : Double): String;
     function LatidudeLongitude_Graus(cValor: Double): String;
-    function  GetDistanceBetween(lat1,long1,lat2,long2: Double) : Double;
     function LatLong_XY(Latitude,Longitude: Double): TPointFloat;
     function isNumeric(txt: String): Integer;
     function isData(txt: String): Boolean;
     Function usuarioWindows: string;
-    function NomeMaquina: String;
     function TextoMaiusculo(Texto: String): String;
     function dataFormatar(SourceData: String): TDateTime;
     function dataSAP(SourceData: String): String;
@@ -656,39 +266,20 @@ type
     function dataLimpa(SourceData: String): String;
     function CalcNumCanceladosAprovado(idProgramacaoDiaria,Tipo: Integer): Integer;
     function CalcNumExecutantes(idProgramacaoDiaria: Integer): Integer;
-    procedure configPiroridade(edtPonto,edtLimite,edtValorMax: TDBEdit;
-    relacaoData: TDBComboBox; check: TDBCheckBox);
     procedure AvaliarProgramacaoExecutante(idProgramacaoExecutante,Fonte: Integer;
-    StatusProgramacao,StatusExecucao,Motivo: String);
-    procedure RT_ProgramacaoExecutante(idProgramacaoExecutante: Integer;
-    RT, TipoEmbarque: String);
+    StatusProgramacao,Motivo: String);
     function SQLStringFiltroTabela(ColunasLayout: TStringGrid;BooleanWHERE: Boolean): String;
     procedure ProcuraQuery(SQLBase: String; sourceQuery: TADOQuery;StatusBar: TStatusBar);
 
     function verificaOperacao(StatusSistemaOP: String): String;
     //Layout Grid
-    procedure CarregarColunasGRID(Conection: TADOConnection; tblTabela: String; Grid: TDBGrid; ColunasLayout: TStringGrid);
-    procedure GravarRLColunas(NomeArquivoMemo:string);
-    procedure CarregarRLColunas(NomeArquivoMemo: String; ColunasLayout: TStringGrid);
-    procedure CarregarRLColunasAtivasGRID(Grid: TDBGrid);
-    procedure moveCima(Grid: TDBGrid; ColunasLayout: TStringGrid);
-    procedure moveBaixo(Grid: TDBGrid; ColunasLayout: TStringGrid);
-    procedure botaoMoveTudo(Conection: TADOConnection; NomeArquivoMemo,NomeTabela,NumRLTAB: String;Grid: TDBGrid; ColunasLayout: TStringGrid);
-    procedure SetUpColunasLayout(Grid: TDBGrid; ColunasLayout: TStringGrid);
     procedure LimparColunasFiltro(Grid: TDBGrid; ColunasLayout: TStringGrid);
-    procedure FiltrosTabela(Grid: TDBGrid; ColunasLayout: TStringGrid);
     //PDF
     procedure ImageExcluir(NomeArquivo: String);
     function dadosColuna(txtCaption: String; ColunasLayout: TStringGrid): TStringList;
-    procedure SalvarRLColunasCarregaGRID(Conection: TADOConnection;
-    NomeArquivoMemo,NomeTabela: String; Grid: TDBGrid; ColunasLayout: TStringGrid);
     procedure CarregaFiltrosProcura(ColunasLayout: TStringGrid);
     function DiasFinalUtil(DataInicio: TDateTime; DiasUteis: Integer):TDateTime;
     function DiasFinalCorridos(DataInicio: TDateTime; DiasCorridos: Integer):TDateTime;
-    function verificaTextoLongoCarteira(OrdemManutencao: String): WideString;
-    procedure configurarFiltro(Tipo: Integer;fieldName,ColunaIndex: String;
-    ColunaReadOnly: Boolean; actFiltroInserir,actGridASC,actGridDESC,
-    actSubstituirPor:TAction);
     function corrigirData(strData: TDateTime): String;
     procedure ImportDataAccess(const AccessDb, TableName, ExcelFileName:String);
     procedure ImportExcelAcess(enderecoExcel,enderecoDB,Tabela: String;ListaColunas: TStringList;ADOQuery: TADOQuery);
@@ -700,8 +291,9 @@ type
     function selecionarServico(GRID: TStringGrid; ServicoPT,TextoBreveOP,OrdemManutencao: String): Boolean;
     procedure selecaoPlataforma(RChartMapa: TRChart; noPlataforma: TPointFloat;StatusBarMapa: TStatusBar);
     procedure CotaReta(RChartMapa: TRChart; no1,no2: TPointFloat;StatusBarMapa: TStatusBar);
-    procedure CopiarProgramacao(DataProgramacao: String;DataSource: TDataSource);
-    procedure ProgramarExecutante(Origem: String;idProgramacaoDiaria: Integer;
+    procedure CopiarProgramacao(const ADataProgramacao: TDateTime;
+      ASource: TDataSource);
+    procedure ProgramarExecutantes(Origem: String;idProgramacaoDiaria: Integer;
     QueryExecutante,QueryProgramacao: TADOQuery; DataSourceExecutante,DataSourceProgramacao: TDataSource);
     function RT_Local(Plataforma: String): String;
     function RT_CentroCusto(Plataforma: String): String;
@@ -714,22 +306,13 @@ type
     Destino, txtTipoEtapaServico, CriadoPor,Computador: String;DataCriacao: TDate): Integer;
     procedure selecaoGrid(Grid: TStringGrid; Status: TStatusBar; txt: String);
 
-    {procedure ExcluirTableDB(NomeTabela: String; sourceQuery: TADOQuery);
-    procedure CriarTableDB(NomeTabela,NomeID,SQLVariaveis: String; sourceQuery: TADOQuery);
-    procedure CriarRelacaoTable(TabelaPai,TabelaFilho,IDPai,IDFilho: String; sourceQuery: TADOQuery);
-    procedure AlterarNomeFieldDB(CampoNomeNovo,CampoNomeOriginal,NomeTabela,Tipo: String; sourceQuery: TADOQuery);
-    procedure AlterarNomeTableDB(TabelaNomeNovo,TabelaNomeOriginal: String; sourceQuery: TADOQuery);}
-
     function RetiraEnter(aText : string): string;
-    procedure ProgramacaoDuplicados(RLGrid: TStringGrid; DataProcura: String);
-    procedure PainelDuplicados(DataProcura: String);
     function OrigemPlataformas: String;
     procedure configurarCheckListBox(CheckListBox: TCheckListBox;DBGrid: TDBGrid;Layout: TStringGrid;BooleanLimparColunas: Boolean);
     function buscarString(strBusca,strTexto: String): Boolean;
     procedure DesenharCalendario(Calendario: TStringGrid; PanelNome: TPanel;PrimeiroDiaMes: TDateTime);
     function PrimeiraLetraMaiscula(Str: string): string;
     procedure AbrirBancoDados(enderecoColibri,Chave: String;BooleanSplash: Boolean);
-    procedure PainelCancelamentoMudanca(Fonte: Integer; Titulo: String);
     procedure criarVariavelTempoExecucao(Field,Tabela,TipoField: String; sourceQuery: TADOQuery);
     procedure msgSplash(texto1,texto2: String);
     function ForaOperacao(Plataforma: String; IndexSistema: Integer): String;
@@ -747,7 +330,7 @@ implementation
   untConsultaExecutantesProgramados, untControleGeradores,
   untAgendaIntervencao,untMovimentacaoCarga,untTelaAbertura,
   untSituacaoEquipamentoAcesso,
-  untCondicaoEmbarcacao;
+  untCondicaoEmbarcacao, untFrmTabela, untConexaoLOCAL;
 
 {$R *.dfm}
 
@@ -755,19 +338,20 @@ implementation
 
 procedure TFrmPrincipal.AbrirBancoDados(enderecoColibri,Chave: String;BooleanSplash: Boolean);
   var
-    enderecoConsulta,enderecoMemoria: String;
+    enderecoConsulta,enderecoMemoria, enderecoRT: String;
 begin
   try
     enderecoColibri:= conectarBD(enderecoColibri,FrmDataModule.ADOConnectionColibri);
     enderecoConsulta:= ExtractFilePath(enderecoColibri)+'dbConsulta.mdb';
     enderecoMemoria:= ExtractFilePath(enderecoColibri)+'dbMemoria.mdb';
+    enderecoRT:= ExtractFilePath(enderecoColibri)+'dbRT.mdb';
     carregarLoginUsuario(Chave);
     //========================================================================
     if BooleanSplash then
     begin
       msgSplash('Conectando ao banco de dados dbColibri.colibri',
       ' no endereço: '+enderecoColibri);
-
+      //------------------------------------
       try
         msgSplash('Conectando ao dbConsulta.mdb',
         ' no endereço: '+enderecoConsulta);
@@ -776,12 +360,22 @@ begin
         MessageBox(0,PChar('Banco de dados de Consulta não encontrado ou corrompido: '+enderecoConsulta),
         'Colibri',MB_ICONEXCLAMATION);
       end;
+      //------------------------------------
       try
         msgSplash('Conectando ao dbMemoria.mdb',
         ' no endereço: '+enderecoMemoria);
         FrmPrincipal.conectarBDDireto(enderecoMemoria,FrmDataModule.ADOConnectionMemoria);
       except
         MessageBox(0,PChar('Banco de dados de Memória não encontrado ou corrompido: '+enderecoMemoria),
+        'Colibri',MB_ICONEXCLAMATION);
+      end;
+      //------------------------------------
+      try
+        msgSplash('Conectando ao dbRT.mdb',
+        ' no endereço: '+enderecoRT);
+        FrmPrincipal.conectarBDDireto(enderecoRT,FrmDataModule.ADOConnectionRT);
+      except
+        MessageBox(0,PChar('Banco de dados de RT não encontrado ou corrompido: '+enderecoRT),
         'Colibri',MB_ICONEXCLAMATION);
       end;
     end;
@@ -808,95 +402,13 @@ begin
   begin
     //Abrir banco de dados
     AbrirBancoDados(OpenDialog1.FileName,logChave,false);
+    registroEscrever(OpenDialog1.FileName,'Banco de dados');
   end;
-end;
-
-procedure TFrmPrincipal.actAjudaLimparExecute(Sender: TObject);
-begin
-  PanelCancelamentoMudanca.Visible:= false;
-  PanelPrioridadeScrool.Visible:= false;
-  PanelFiltrosTabela.Visible:= false;
-  PanelLayout.Visible:= false;
-  PanelCONECTION.Visible:= false;
-  PanelDuplicados.Visible:= false;
-  PanelAjuda1.Visible:= false;
-  btnInfoPrioridade.Visible:= false;
-  PanelTituloAjuda1.Color:= clGradientActiveCaption;
-end;
-
-procedure TFrmPrincipal.CarregarExecute(Sender: TObject);
-begin
-  FrmPrincipal.btnSalvarLayout.Click;
-end;
-
-procedure TFrmPrincipal.actCancelarProgramacaoExecute(Sender: TObject);
-begin
-  PanelAjuda1.Visible:= false;
-  PanelTituloAjuda1.Color:= clGradientActiveCaption;
-end;
-
-procedure TFrmPrincipal.actCancelarRegistroExecute(Sender: TObject);
-begin
-  PanelAjuda1.Visible:= false;
-end;
-
-procedure TFrmPrincipal.actConfigFiltrosTabelaExecute(Sender: TObject);
-begin
-  actAjudaLimpar.Execute;
-  PanelFiltrosTabela.Visible:= false;
-  PanelFiltrosTabela.Align:= alClient;
-  PanelFiltrosTabela.Visible:= true;
-  PanelAjuda1.Width:= 600;
-  PanelAjuda1.Height:= 500;
-  PanelTituloAjuda1.Caption:= 'Filtros da tabela';
-  PanelAjuda1.Visible:= true;
-  btnProcurarFiltrosTabela.Caption:= 'Procurar';
-  ImageList1.GetBitmap(28,btnProcurarFiltrosTabela.Glyph);
-  btnProcurarFiltrosTabela.Hint:= 'Procurar';
-  RLFiltrosTabela.Hint:= HintPadrao;
-end;
-
-procedure TFrmPrincipal.actConfigMagicPanelExecute(Sender: TObject);
-begin
-  ImageList1.GetBitmap(27,btnInserir.Glyph);
-  btnInserir.Caption:= 'Filtrar';
-  btnASC.ImageIndex:= 86;
-  btnDESC.ImageIndex:= 85;
-  btnSubstituirPor.ImageIndex:= 59;
-  //===============================
-  btnInserir.Hint:= 'Inserir filtro';
-  btnASC.Hint:= 'Crescente';
-  btnDESC.Hint:= 'Decrescente';
-  btnSubstituirPor.Hint:= 'Substituir Por';
-  edtProcura.Hint:= 'Localizar';
-  PanelMagicFiltro1.Width := 400;
-  PanelMagicFiltro1.Height := 387;
-end;
-
-procedure TFrmPrincipal.actConfigPanelLayoutExecute(Sender: TObject);
-begin
-  btnCima.ImageIndex:= 125;
-  btnBaixo.ImageIndex:= 126;
-  btnCimaTudo.ImageIndex:= 464;
-  btnBaixoTudo.ImageIndex:= 465;
-  //===============================
-  btnCima.Hint:= 'Mover para Colunas Ativas';
-  btnBaixo.Hint:= 'Mover para Colunas Optativas';
-  btnCimaTudo.Hint:= 'Mover todos para Colunas Ativas';
-  btnBaixoTudo.Hint:= 'Mover todos para Colunas Optativas';
-  //===============================
-  FrmPrincipal.actAjudaLimpar.Execute;
-  FrmPrincipal.PanelLayout.Visible:= true;
-  FrmPrincipal.PanelLayout.Align:= alClient;
-  FrmPrincipal.PanelTituloAjuda1.Caption:= 'Layout';
-  FrmPrincipal.PanelAjuda1.Width:= 250;
-  FrmPrincipal.PanelAjuda1.Height:= 450;
-  FrmPrincipal.PanelAjuda1.Visible:= true;
 end;
 
 procedure TFrmPrincipal.actConverterDBExecute(Sender: TObject);
   var
-    versaoDB,versaoPRG: String;
+    versaoDB,versaoPRG, enderecoMemoria: String;
 begin
   try
     FrmDataModule.ADOQueryColibri.Active:= true;
@@ -949,25 +461,25 @@ begin
       FrmDataModule.ADOQueryTemporarioDBColibri);
       CriarFieldDB('TextoBreveOM','tblProgramacaoServico','VARCHAR(255)',
       FrmDataModule.ADOQueryTemporarioDBColibri);
-      AlterarNomeFieldDB('ComputadorImportacao','Computador','tblCarteiraTrabalho','VARCHAR(20)',
+      AlterarNomeFieldDB('ComputadorImportacao','Computador','tblCarteiraTrabalho',
       FrmDataModule.ADOConnectionMemoria);
-      AlterarNomeFieldDB('ComputadorImportacao','Computador','tblExecutanteAPLAT','VARCHAR(20)',
+      AlterarNomeFieldDB('ComputadorImportacao','Computador','tblExecutanteAPLAT',
       FrmDataModule.ADOConnectionMemoria);
-      AlterarNomeFieldDB('ComputadorImportacao','Computador','tblExecutanteSAP','VARCHAR(20)',
+      AlterarNomeFieldDB('ComputadorImportacao','Computador','tblExecutanteSAP',
       FrmDataModule.ADOConnectionMemoria);
-      AlterarNomeFieldDB('ComputadorImportacao','Computador','tblLocalInstalacao','VARCHAR(20)',
+      AlterarNomeFieldDB('ComputadorImportacao','Computador','tblLocalInstalacao',
       FrmDataModule.ADOConnectionMemoria);
-      AlterarNomeFieldDB('ComputadorImportacao','Computador','tblNotaManutencao','VARCHAR(20)',
+      AlterarNomeFieldDB('ComputadorImportacao','Computador','tblNotaManutencao',
       FrmDataModule.ADOConnectionMemoria);
-      AlterarNomeFieldDB('ComputadorImportacao','Computador','tblPreventivas','VARCHAR(20)',
+      AlterarNomeFieldDB('ComputadorImportacao','Computador','tblPreventivas',
       FrmDataModule.ADOConnectionMemoria);
-      AlterarNomeFieldDB('ComputadorImportacao','Computador','tblLocalInstalacao','VARCHAR(20)',
+      AlterarNomeFieldDB('ComputadorImportacao','Computador','tblLocalInstalacao',
       FrmDataModule.ADOConnectionMemoria);
-      AlterarNomeFieldDB('TextoBreveOP','TextoBreveOperacao','tblPreventivas','VARCHAR(20)',
+      AlterarNomeFieldDB('TextoBreveOP','TextoBreveOperacao','tblPreventivas',
       FrmDataModule.ADOConnectionMemoria);
       CriarFieldDB('DataAtendimento','tblMovimentacaoCarga','DATETIME',
       FrmDataModule.ADOQueryTemporarioDBConsulta1);
-      AlterarNomeFieldDB('DataNecessidade','Data','tblMovimentacaoCarga','DATETIME',
+      AlterarNomeFieldDB('DataNecessidade','Data','tblMovimentacaoCarga',
       FrmDataModule.ADOConnectionConsulta);
       versaoDB:= '1.6.6.0';
     end;
@@ -986,9 +498,9 @@ begin
     if versaoDB = '1.6.6.2' then
     begin
       AlterarNomeFieldDB('MotivoProgramacao','MotivoCancelamento',
-      'tblProgramacaoExecutante','VARCHAR(255)',FrmDataModule.ADOConnectionColibri);
+      'tblProgramacaoExecutante',FrmDataModule.ADOConnectionColibri);
       AlterarNomeFieldDB('PalavraChaveProgramacao','PalavraChaveCancelamento',
-      'tblProgramacaoExecutante','VARCHAR(255)',FrmDataModule.ADOConnectionColibri);
+      'tblProgramacaoExecutante',FrmDataModule.ADOConnectionColibri);
       versaoDB:= '1.6.6.3';
     end;
     if versaoDB = '1.6.6.3' then
@@ -999,9 +511,9 @@ begin
     begin
       //Tabela de Notas de Manutenção SAP
       AlterarNomeFieldDB('PrazoGM','PrazoGM',
-      'tblNotaManutencao','VARCHAR(15)',FrmDataModule.ADOConnectionMemoria);
+      'tblNotaManutencao',FrmDataModule.ADOConnectionMemoria);
       AlterarNomeFieldDB('VencimentoAvaria','VencimentoAvaria',
-      'tblNotaManutencao','VARCHAR(15)',FrmDataModule.ADOConnectionMemoria);
+      'tblNotaManutencao',FrmDataModule.ADOConnectionMemoria);
       //Tabela Plataforma
       CriarFieldDB('Painel_Condicao','tblPlataforma','VARCHAR(25)',
       FrmDataModule.ADOQueryTemporarioDBConsulta1);
@@ -1076,7 +588,7 @@ begin
     begin
       //Tabela de Notas de Manutenção SAP
       AlterarNomeFieldDB('DenominacaoLocalInstalacao','DenominacaoLocal',
-      'tblNotaManutencao','VARCHAR(255)',FrmDataModule.ADOConnectionMemoria);
+      'tblNotaManutencao',FrmDataModule.ADOConnectionMemoria);
 
       CriarTableDB('tblFiltroSistemas','idFiltroSitemas',
       '[Item] INTEGER, [Descricao] VARCHAR(255), [TituloColuna] VARCHAR(255), [PalavraBusca] VARCHAR(255),[Condicional] VARCHAR(255)',
@@ -1222,57 +734,53 @@ begin
 
       versaoDB:= '1.6.9.0';
     end;
-    if versaoDB = '1.6.9.0' then
+    if ((versaoDB = '1.6.9.0') OR (versaoDB = '1.7.0.0')OR (versaoDB = '1.7.0.1')) then
     begin
-      //Tabela de dados básicos Colibri
-      CriarFieldDB('RT_Tipo','tblColibri','VARCHAR(3)',
-          FrmDataModule.ADOQueryTemporarioDBColibri);
-      CriarFieldDB('RT_Requisitante','tblColibri','VARCHAR(8)',
-          FrmDataModule.ADOQueryTemporarioDBColibri);
-      CriarFieldDB('RT_PessoaContato','tblColibri','VARCHAR(40)',
-          FrmDataModule.ADOQueryTemporarioDBColibri);
-      CriarFieldDB('RT_TelContato','tblColibri','VARCHAR(16)',
-          FrmDataModule.ADOQueryTemporarioDBColibri);
-      CriarFieldDB('RT_CentroPlan','tblColibri','VARCHAR(4)',
-          FrmDataModule.ADOQueryTemporarioDBColibri);
-      CriarFieldDB('RT_GrpPlan','tblColibri','VARCHAR(3)',
-          FrmDataModule.ADOQueryTemporarioDBColibri);
-      CriarFieldDB('RT_Modal','tblColibri','VARCHAR(3)',
-          FrmDataModule.ADOQueryTemporarioDBColibri);
-      CriarFieldDB('RT_HoraInicio','tblColibri','VARCHAR(5)',
-          FrmDataModule.ADOQueryTemporarioDBColibri);
-      CriarFieldDB('RT_HoraVolta','tblColibri','VARCHAR(5)',
-          FrmDataModule.ADOQueryTemporarioDBColibri);
-      //Excluir
-      ExcluirFieldDB('tblColibri','RT_HoraFim',
-          FrmDataModule.ADOConnectionColibri);
-
-      //ExcluirFieldDB('tblColibri','RT_HoraCobertura',FrmDataModule.ADOConnectionColibri);
-      CriarFieldDB('RT_HoraCobertura','tblColibri','DATETIME',
-          FrmDataModule.ADOQueryTemporarioDBColibri);
-
      //tabela de Programação de Executantes
       CriarFieldDB('RT_Descricao','tblProgramacaoExecutante','VARCHAR(40)',
           FrmDataModule.ADOQueryTemporarioDBColibri);
+      CriarFieldDB('OutroDocumento','tblProgramacaoExecutante','VARCHAR(15)',
+          FrmDataModule.ADOQueryTemporarioDBColibri);
       CriarFieldDB('RT_Modal','tblProgramacaoExecutante','VARCHAR(5)',
+          FrmDataModule.ADOQueryTemporarioDBColibri);
+      CriarFieldDB('RT_Tipo','tblProgramacaoExecutante','VARCHAR(5)',
           FrmDataModule.ADOQueryTemporarioDBColibri);
       CriarFieldDB('RT_Classe','tblProgramacaoExecutante','VARCHAR(5)',
           FrmDataModule.ADOQueryTemporarioDBColibri);
-      CriarFieldDB('RT_HoraInicio','tblProgramacaoExecutante','VARCHAR(5)',
+      CriarFieldDB('RT_HoraIda','tblProgramacaoExecutante','VARCHAR(5)',
           FrmDataModule.ADOQueryTemporarioDBColibri);
-      CriarFieldDB('RT_CentroCusto','tblProgramacaoExecutante','VARCHAR(20)',
+      CriarFieldDB('RT_HoraVolta','tblProgramacaoExecutante','VARCHAR(5)',
           FrmDataModule.ADOQueryTemporarioDBColibri);
-      CriarFieldDB('RT_Cobertura','tblProgramacaoExecutante','YESNO',
-          FrmDataModule.ADOQueryTemporarioDBColibri);
-      CriarFieldDB('RT_Mensagem','tblProgramacaoExecutante','VARCHAR(100)',
+      CriarFieldDB('RT_Mensagem','tblProgramacaoExecutante','VARCHAR(255)',
           FrmDataModule.ADOQueryTemporarioDBColibri);
       CriarFieldDB('RT_Status','tblProgramacaoExecutante','VARCHAR(40)',
           FrmDataModule.ADOQueryTemporarioDBColibri);
       CriarFieldDB('RT_Erro','tblProgramacaoExecutante','VARCHAR(40)',
           FrmDataModule.ADOQueryTemporarioDBColibri);
-
-      CriarFieldDB('booleanBateVolta','tblProgramacaoExecutante','YESNO',
+      CriarFieldDB('DataVolta','tblProgramacaoExecutante','DATETIME',
           FrmDataModule.ADOQueryTemporarioDBColibri);
+      CriarFieldDB('booleanRecolhimento','tblProgramacaoExecutante','YESNO',
+          FrmDataModule.ADOQueryTemporarioDBColibri);
+      CriarFieldDB('RecolherPara','tblProgramacaoExecutante','VARCHAR(20)',
+          FrmDataModule.ADOQueryTemporarioDBColibri);
+
+      ExcluirFieldDB('tblProgramacaoExecutante','RT_HoraInicio',
+          FrmDataModule.ADOConnectionColibri);
+      ExcluirFieldDB('tblProgramacaoExecutante','booleanBateVolta',
+          FrmDataModule.ADOConnectionColibri);
+      ExcluirFieldDB('tblProgramacaoExecutante','booleanBateVolta',
+          FrmDataModule.ADOConnectionColibri);
+      ExcluirFieldDB('tblProgramacaoExecutante','RT_CentroCusto',
+          FrmDataModule.ADOConnectionColibri);
+      ExcluirFieldDB('tblProgramacaoExecutante','RT_DiagramaRede',
+          FrmDataModule.ADOConnectionColibri);
+      ExcluirFieldDB('tblProgramacaoExecutante','RT_OperRede',
+          FrmDataModule.ADOConnectionColibri);
+      ExcluirFieldDB('tblProgramacaoExecutante','RT_Descricao',
+          FrmDataModule.ADOConnectionColibri);
+      ExcluirFieldDB('tblProgramacaoExecutante','RT_Cobertura',
+          FrmDataModule.ADOConnectionColibri);
+
 
       //Tabela Cadastro de Executantes
       CriarFieldDB('CentroCusto','tblExecutante','VARCHAR(40)',
@@ -1284,40 +792,483 @@ begin
       CriarFieldDB('ElementoPEP','tblExecutante','VARCHAR(40)',
           FrmDataModule.ADOQueryTemporarioDBConsulta1);
 
+      //Tabela Plataforma
+      CriarFieldDB('CentroCusto','tblPlataforma','VARCHAR(40)',
+          FrmDataModule.ADOQueryTemporarioDBConsulta1);
+      CriarFieldDB('DiagramaRede','tblPlataforma','VARCHAR(40)',
+          FrmDataModule.ADOQueryTemporarioDBConsulta1);
+      CriarFieldDB('OperRede','tblPlataforma','VARCHAR(40)',
+          FrmDataModule.ADOQueryTemporarioDBConsulta1);
+      CriarFieldDB('ElementoPEP','tblPlataforma','VARCHAR(40)',
+          FrmDataModule.ADOQueryTemporarioDBConsulta1);
+      CriarFieldDB('NomeSAP','tblPlataforma','VARCHAR(15)',
+          FrmDataModule.ADOQueryTemporarioDBConsulta1);
+      CriarFieldDB('booleanNaoCriarRT','tblPlataforma','YESNO',
+          FrmDataModule.ADOQueryTemporarioDBConsulta1);
+      CriarFieldDB('booleanProntidao','tblPlataforma','YESNO',
+          FrmDataModule.ADOQueryTemporarioDBConsulta1);
+      CriarFieldDB('booleanTurno2','tblPlataforma','YESNO',
+          FrmDataModule.ADOQueryTemporarioDBConsulta1);
+      CriarFieldDB('RT_Modal','tblPlataforma','VARCHAR(2)',
+          FrmDataModule.ADOQueryTemporarioDBConsulta1);
+
+
+      CriarFieldDB('RT_Modal','tblPlataforma','VARCHAR(2)',
+          FrmDataModule.ADOQueryTemporarioDBConsulta1);
+
+
+
+      ExcluirFieldDB('tblColibri','booleanCriarRT',
+          FrmDataModule.ADOConnectionColibri);
+
+
       //Tabela Programacao de RT
-      ExcluirTableDB('tblProgramacaoRT',FrmDataModule.ADOQueryTemporarioDBColibri);
+      //ExcluirTableDB('tblProgramacaoRT',FrmDataModule.ADOQueryTemporarioDBColibri);
+      //ExcluirTableDB('tblProgramacaoRT',FrmDataModule.ADOQueryTemporarioRT);
+
       CriarTableDB(
         'tblProgramacaoRT',
         'idProgramacaoRT',
-        '[DataInicio] DATETIME, '+
+        '[idProgramacaoExecutante] INTEGER, '+
+
+        '[DataIda] DATETIME, '+
+        '[DataVolta] DATETIME, '+
+        '[RT_HoraIda] VARCHAR(5), '+
+        '[RT_HoraVolta] VARCHAR(5), '+
+
         '[CodigoSAP] VARCHAR(10), '+
+        '[TipoDoc] VARCHAR(2), '+
+        '[Documento] VARCHAR(30), '+
+        '[Passageiro] VARCHAR(80), '+
+
         '[Origem] VARCHAR(20), '+
         '[txtDestino] VARCHAR(20), '+
+        '[RecolherPara] VARCHAR(20), '+
+
         '[RT_Tipo] VARCHAR(3), '+
         '[RT_Descricao] VARCHAR(80), '+
         '[RT_Requisitante] VARCHAR(10), '+
-        '[RT_TelContato] VARCHAR(16), '+
+        '[RT_TelContato] VARCHAR(20), '+
         '[RT_PessoaContato] VARCHAR(40), '+
         '[RT_CentroPlan] VARCHAR(4), '+
         '[RT_GrpPlan] VARCHAR(3), '+
         '[RT_Modal] VARCHAR(5), '+
         '[RT_Classe] VARCHAR(5), '+
-        '[HoraInicio] VARCHAR(5), '+
-        '[HoraVolta] VARCHAR(5), '+
+
         '[RT_CentroCusto] VARCHAR(20), '+
         '[RT_DiagramaRede] VARCHAR(20), '+
         '[RT_OperRede] VARCHAR(4), '+
         '[RT_ElementoPEP] VARCHAR(20), '+
+
         '[RT_Cobertura] YESNO, '+
         '[RT_Cancelada] YESNO, '+
-        '[booleanBateVolta] YESNO, '+
+        '[booleanRecolhimento] YESNO, '+
+        '[RT_ImportadaSAP] YESNO, '+
+
         '[RT] VARCHAR(15), '+
-        '[RT_Mensagem] VARCHAR(100), '+
+        '[RT_Mensagem] VARCHAR(255), '+
         '[RT_Status] VARCHAR(40), '+
-        '[RT_Erro] VARCHAR(100)',
-        FrmDataModule.ADOConnectionColibri
+        '[RT_Erro] VARCHAR(100), '+
+
+        '[RT_StatusSAP] VARCHAR(2), '+
+        '[RT_StatusSAPDesc] VARCHAR(40), '+
+
+        '[ChavePassageiro] VARCHAR(50), '+
+        '[ChaveIda] VARCHAR(255), '+
+        '[ChaveVolta] VARCHAR(255), '+
+        '[ChaveCompleta] VARCHAR(255)',
+
+        FrmDataModule.ADOConnectionRT
       );
+
+      CriarTableDB(
+        'tblConfigRT',
+        'idConfigRT',
+        '[RT_Tipo] VARCHAR(2), '+
+        '[RT_Requisitante] VARCHAR(8), '+
+        '[RT_PessoaContato] VARCHAR(20), '+
+        '[RT_TelContato] VARCHAR(20), '+
+        '[RT_CentroPlan] VARCHAR(4), '+
+        '[RT_GrpPlan] VARCHAR(3), '+
+        '[HoraInicio_Turno1] VARCHAR(5), '+
+        '[HoraVolta_Turno1] VARCHAR(5), '+
+        '[HoraInicio_Turno2] VARCHAR(5), '+
+        '[HoraVolta_Turno2] VARCHAR(5), '+
+        '[RT_Salvar] YESNO, '+
+        '[RT_HoraCobertura] DATETIME',
+        FrmDataModule.ADOConnectionRT
+      );
+      CriarFieldDB('RT_Salvar','tblConfigRT','YESNO',
+          FrmDataModule.ADOQueryTemporarioRT);
+
+      //Excluir
+      ExcluirFieldDB('tblColibri','RT_Requisitante',
+          FrmDataModule.ADOConnectionColibri);
+      ExcluirFieldDB('tblColibri','RT_PessoaContato',
+          FrmDataModule.ADOConnectionColibri);
+      ExcluirFieldDB('tblColibri','RT_TelContato',
+          FrmDataModule.ADOConnectionColibri);
+      ExcluirFieldDB('tblColibri','RT_CentroPlan',
+          FrmDataModule.ADOConnectionColibri);
+      ExcluirFieldDB('tblColibri','RT_GrpPlan',
+          FrmDataModule.ADOConnectionColibri);
+      ExcluirFieldDB('tblColibri','RT_Modal',
+          FrmDataModule.ADOConnectionColibri);
+      ExcluirFieldDB('tblColibri','RT_HoraInicio',
+          FrmDataModule.ADOConnectionColibri);
+      ExcluirFieldDB('tblColibri','RT_HoraVolta',
+          FrmDataModule.ADOConnectionColibri);
+      ExcluirFieldDB('tblColibri','RT_HoraCobertura',
+          FrmDataModule.ADOConnectionColibri);
+
+
+      // ======================================================
+      // ESPELHO DAS RTS EXISTENTES NO SAP
+      // ======================================================
+      CriarTableDB(
+        'tblRTSapImport',
+        'idRTSapImport',
+        '[DataImportacao] DATETIME, '+
+
+        '[OrigemConsulta] VARCHAR(15), '+      // PONTUAL / PERIODO
+        '[PeriodoInicio] DATETIME, '+
+        '[PeriodoFim] DATETIME, '+
+
+        '[QMNUM] VARCHAR(15), '+               // número da RT
+        '[QMART] VARCHAR(3), '+                // R3 / R7
+        '[IWERK] VARCHAR(4), '+                // centro
+        '[INGRP] VARCHAR(3), '+                // grupo planejador
+
+        '[Origem] VARCHAR(20), '+
+        '[txtDestino] VARCHAR(20), '+
+        '[DataViagem] DATETIME, '+
+        '[HoraViagem] VARCHAR(5), '+
+
+        '[PERNR] VARCHAR(10), '+               // usado no R3
+        '[TipoDoc] VARCHAR(2), '+              // C / P
+        '[Documento] VARCHAR(30), '+
+        '[Passageiro] VARCHAR(80), '+
+        '[QMTXT] VARCHAR(80), '+
+
+        '[RT_Modal] VARCHAR(5), '+
+        '[RT_Classe] VARCHAR(5), '+
+
+        '[StatusItem] VARCHAR(2), '+           // ex.: 09
+        '[StatusDescricao] VARCHAR(40), '+     // ex.: Cancelado
+        '[RT_Cancelada] YESNO, '+
+
+        '[ChavePassageiro] VARCHAR(50), '+
+        '[ChaveIda] VARCHAR(255), '+
+        '[ChaveVolta] VARCHAR(255), '+
+        '[ChaveCompleta] VARCHAR(255), '+
+
+        '[idProgramacaoRT] INTEGER, '+         // quando reconciliado
+        '[idProgramacaoExecutante] INTEGER, '+ // quando reconciliado
+
+        '[ImportadoColibri] YESNO, '+          // True quando vinculado ao processo do Colibri
+        '[Observacao] VARCHAR(255)',
+
+        FrmDataModule.ADOConnectionRT
+      );
+
+      // ======================================================
+      // RESULTADO DA RECONCILIAÇÃO
+      // ======================================================
+      CriarTableDB(
+        'tblReconRT',
+        'idReconRT',
+        '[DataRecon] DATETIME, '+
+
+        '[idProgramacaoExecutante] INTEGER, '+
+        '[idProgramacaoRT] INTEGER, '+
+        '[idRTSapImport] INTEGER, '+
+
+        '[ChavePassageiro] VARCHAR(50), '+
+        '[ChaveIda] VARCHAR(255), '+
+        '[ChaveVolta] VARCHAR(255), '+
+        '[ChaveCompleta] VARCHAR(255), '+
+
+        '[RT] VARCHAR(15), '+
+
+        '[TipoRT] VARCHAR(3), '+
+        '[Origem] VARCHAR(20), '+
+        '[txtDestino] VARCHAR(20), '+
+        '[RecolherPara] VARCHAR(20), '+
+        '[DataIda] DATETIME, '+
+        '[RT_HoraIda] VARCHAR(5), '+
+        '[DataVolta] DATETIME, '+
+        '[RT_HoraVolta] VARCHAR(5), '+
+
+        '[CodigoSAP] VARCHAR(10), '+
+        '[TipoDoc] VARCHAR(2), '+
+        '[Documento] VARCHAR(30), '+
+        '[Passageiro] VARCHAR(80), '+
+
+        '[RT_Modal] VARCHAR(5), '+
+        '[RT_Classe] VARCHAR(5), '+
+        '[RT_CentroPlan] VARCHAR(4), '+
+        '[RT_GrpPlan] VARCHAR(3), '+
+
+        '[TipoAcao] VARCHAR(15), '+            // CRIAR / VINCULAR / CANCELAR / MANTER / ANALISAR
+        '[Motivo] VARCHAR(100), '+
+        '[StatusRecon] VARCHAR(20), '+         // PENDENTE / EXECUTADO / ERRO
+
+        '[RT_StatusSAP] VARCHAR(2), '+
+        '[RT_StatusSAPDesc] VARCHAR(40), '+
+
+        '[BooleanRecolhimento] YESNO, '+
+        '[Divergencia] YESNO, '+
+        '[Observacao] VARCHAR(255)',
+
+        FrmDataModule.ADOConnectionRT
+      );
+
+      // ======================================================
+      // REGRAS DE RECOLHIMENTO DE RT
+      // ======================================================
+      CriarTableDB(
+        'tblRTRegraRecolhimento',
+        'idRegraRecolhimento',
+        '[Ativa] YESNO, '+
+        '[Prioridade] INTEGER, '+
+        '[Descricao] VARCHAR(100), '+
+
+        '[Origem] VARCHAR(20), '+
+        '[txtDestino] VARCHAR(20), '+
+        '[DestinoNaoCriarRT] VARCHAR(3), '+     // '', 'SIM', 'NAO'
+
+        '[RecolherParaTipo] VARCHAR(10), '+     // ORIGEM / DESTINO / FIXO
+        '[RecolherParaValor] VARCHAR(20), '+
+
+        '[Observacao] VARCHAR(255)',
+
+        FrmDataModule.ADOConnectionRT
+      );
+
+
+      ExcluirFieldDB('tblProgramacaoExecutante','RT_StatusSAPDescricao',
+          FrmDataModule.ADOConnectionColibri);
+      ExcluirFieldDB('tblProgramacaoRT','RT_StatusSAPDescricao',
+          FrmDataModule.ADOConnectionRT);
+
+      ExcluirFieldDB('RT_StatusProcessamento','tblProgramacaoExecutante',
+          FrmDataModule.ADOConnectionRT);
+      ExcluirFieldDB('RT_StatusProcessamento','tblProgramacaoRT',
+          FrmDataModule.ADOConnectionRT);
+      //--------------------------------------------
+      CriarFieldDB('RT_StatusAvaliacao', 'tblProgramacaoExecutante', 'VARCHAR(20)',
+        FrmDataModule.ADOQueryTemporarioDBColibri);
+      CriarFieldDB('RT_StatusProcessamento', 'tblProgramacaoExecutante', 'VARCHAR(50)',
+        FrmDataModule.ADOQueryTemporarioDBColibri);
+      CriarFieldDB('RT_StatusSAPCodigo', 'tblProgramacaoExecutante', 'VARCHAR(4)',
+        FrmDataModule.ADOQueryTemporarioDBColibri);
+      CriarFieldDB('RT_StatusSAPDescricao', 'tblProgramacaoExecutante', 'VARCHAR(50)',
+        FrmDataModule.ADOQueryTemporarioDBColibri);
+      //--------------------------------------------
+      CriarFieldDB('RT_StatusAvaliacao', 'tblProgramacaoRT', 'VARCHAR(20)',
+        FrmDataModule.ADOQueryTemporarioRT);
+      CriarFieldDB('RT_StatusProcessamento', 'tblProgramacaoRT', 'VARCHAR(50)',
+        FrmDataModule.ADOQueryTemporarioRT);
+      CriarFieldDB('RT_StatusSAPCodigo', 'tblProgramacaoRT', 'VARCHAR(4)',
+        FrmDataModule.ADOQueryTemporarioRT);
+      CriarFieldDB('RT_StatusSAPDescricao', 'tblProgramacaoRT', 'VARCHAR(50)',
+        FrmDataModule.ADOQueryTemporarioRT);
+      //--------------------------------------------
+      CriarFieldDB('RT_Orfa', 'tblProgramacaoRT', 'BIT',
+        FrmDataModule.ADOQueryTemporarioRT);
+      CriarFieldDB('RT_PendenteCancelamento', 'tblProgramacaoRT', 'BIT',
+        FrmDataModule.ADOQueryTemporarioRT);
+      CriarFieldDB('RT_MotivoConciliacao', 'tblProgramacaoRT', 'VARCHAR(255)',
+        FrmDataModule.ADOQueryTemporarioRT);
+      CriarFieldDB('RT_DataUltimaConciliacao', 'tblProgramacaoRT', 'DATETIME',
+        FrmDataModule.ADOQueryTemporarioRT);
+      //--------------------------------------------
+      CriarFieldDB('RT_Orfa', 'tblRTSapImport', 'BIT',
+        FrmDataModule.ADOQueryTemporarioRT);
+      CriarFieldDB('RT_PendenteCancelamento', 'tblRTSapImport', 'BIT',
+        FrmDataModule.ADOQueryTemporarioRT);
+      CriarFieldDB('RT_MotivoConciliacao', 'tblRTSapImport', 'VARCHAR(255)',
+        FrmDataModule.ADOQueryTemporarioRT);
+      CriarFieldDB('RT_DataUltimaConciliacao', 'tblRTSapImport', 'DATETIME',
+        FrmDataModule.ADOQueryTemporarioRT);
+      CriarFieldDB('Observacao', 'tblRTSapImport', 'VARCHAR(255)',
+        FrmDataModule.ADOQueryTemporarioRT);
+
+      //---------------------------------------------
+      // ======================================================
+      // CONTROLE DE TRANSBORDO - EXECUTANTE
+      // ======================================================
+      CriarFieldDB('RT_Transbordo', 'tblProgramacaoExecutante', 'YESNO',
+        FrmDataModule.ADOQueryTemporarioDBColibri);
+
+      CriarFieldDB('RT_TransbordoAereo', 'tblProgramacaoExecutante', 'YESNO',
+        FrmDataModule.ADOQueryTemporarioDBColibri);
+
+      CriarFieldDB('RT_GrupoTransbordo', 'tblProgramacaoExecutante', 'VARCHAR(80)',
+        FrmDataModule.ADOQueryTemporarioDBColibri);
+
+      CriarFieldDB('RT_BaseRetornoTransbordo', 'tblProgramacaoExecutante', 'VARCHAR(20)',
+        FrmDataModule.ADOQueryTemporarioDBColibri);
+
+      CriarFieldDB('RT_PrimeiraOrigemTransbordo', 'tblProgramacaoExecutante', 'VARCHAR(20)',
+        FrmDataModule.ADOQueryTemporarioDBColibri);
+
+      CriarFieldDB('RT_PrimeiroDestinoTransbordo', 'tblProgramacaoExecutante', 'VARCHAR(20)',
+        FrmDataModule.ADOQueryTemporarioDBColibri);
+
+      CriarFieldDB('RT_SeqTransbordo', 'tblProgramacaoExecutante', 'INTEGER',
+        FrmDataModule.ADOQueryTemporarioDBColibri);
+
+      // ======================================================
+      // CONTROLE DE TRANSBORDO - TABELA RT
+      // ======================================================
+      CriarFieldDB('RT_Transbordo', 'tblProgramacaoRT', 'YESNO',
+        FrmDataModule.ADOQueryTemporarioRT);
+
+      CriarFieldDB('RT_TransbordoAereo', 'tblProgramacaoRT', 'YESNO',
+        FrmDataModule.ADOQueryTemporarioRT);
+
+      CriarFieldDB('RT_GrupoTransbordo', 'tblProgramacaoRT', 'VARCHAR(80)',
+        FrmDataModule.ADOQueryTemporarioRT);
+
+      CriarFieldDB('RT_BaseRetornoTransbordo', 'tblProgramacaoRT', 'VARCHAR(20)',
+        FrmDataModule.ADOQueryTemporarioRT);
+
+      CriarFieldDB('RT_PrimeiraOrigemTransbordo', 'tblProgramacaoRT', 'VARCHAR(20)',
+        FrmDataModule.ADOQueryTemporarioRT);
+
+      CriarFieldDB('RT_PrimeiroDestinoTransbordo', 'tblProgramacaoRT', 'VARCHAR(20)',
+        FrmDataModule.ADOQueryTemporarioRT);
+
+      CriarFieldDB('RT_SeqTransbordo', 'tblProgramacaoRT', 'INTEGER',
+        FrmDataModule.ADOQueryTemporarioRT);
+
+      //=============================================
+      ExcluirFieldDB('tblProgramacaoExecutante','TipoEmbarque',
+          FrmDataModule.ADOConnectionColibri);
+      ExcluirFieldDB('tblProgramacaoExecutante','MotivoNaoExecucao',
+          FrmDataModule.ADOConnectionColibri);
+      ExcluirFieldDB('tblProgramacaoExecutante','PalavraChaveNaoExecucao',
+          FrmDataModule.ADOConnectionColibri);
+      ExcluirFieldDB('tblProgramacaoExecutante','AvaliadoPorExecucao',
+          FrmDataModule.ADOConnectionColibri);
+      ExcluirFieldDB('tblProgramacaoExecutante','DataAvaliacaoExecucao',
+          FrmDataModule.ADOConnectionColibri);
+      ExcluirFieldDB('tblProgramacaoExecutante','ComputadorExecucao',
+          FrmDataModule.ADOConnectionColibri);
+      ExcluirFieldDB('tblProgramacaoExecutante','StatusExecucao',
+          FrmDataModule.ADOConnectionColibri);
+
+
+      ExcluirFieldDB('tblProgramacaoDiaria','booleanIP19',
+          FrmDataModule.ADOConnectionColibri);
+      ExcluirFieldDB('tblProgramacaoDiaria','HorarioSaldo',
+          FrmDataModule.ADOConnectionColibri);
+      ExcluirFieldDB('tblProgramacaoDiaria','HorarioDemora',
+          FrmDataModule.ADOConnectionColibri);
+      ExcluirFieldDB('tblProgramacaoDiaria','HorarioNOTA',
+          FrmDataModule.ADOConnectionColibri);
+      ExcluirFieldDB('tblProgramacaoDiaria','PorcentoExecucao',
+          FrmDataModule.ADOConnectionColibri);
+      ExcluirFieldDB('tblProgramacaoDiaria','HorarioSaida',
+          FrmDataModule.ADOConnectionColibri);
+      ExcluirFieldDB('tblProgramacaoDiaria','HorarioPT',
+          FrmDataModule.ADOConnectionColibri);
+      ExcluirFieldDB('tblProgramacaoDiaria','HorarioEncerramento',
+          FrmDataModule.ADOConnectionColibri);
+
+      versaoDB:= '1.7.0.2';
     end;
+    if (versaoDB = '1.7.0.2') then
+    begin
+      CriarFieldDB('SituacaoSurfer', 'tblPlataforma', 'VARCHAR(3)',
+        FrmDataModule.ADOQueryTemporarioDBConsulta1);
+      CriarFieldDB('SituacaoSOV', 'tblPlataforma', 'VARCHAR(3)',
+        FrmDataModule.ADOQueryTemporarioDBConsulta1);
+      CriarFieldDB('SituacaoAqua', 'tblPlataforma', 'VARCHAR(5)',
+        FrmDataModule.ADOQueryTemporarioDBConsulta1);
+
+      CriarFieldDB('HoraSaidaOrigem', 'tblPlataforma', 'VARCHAR(5)',
+        FrmDataModule.ADOQueryTemporarioDBConsulta1);
+
+      ExcluirFieldDB('tblPlataforma','SituacaoAcesso',
+          FrmDataModule.ADOConnectionConsulta);
+
+      CriarFieldDB('Distribuicao', 'tblEmbarcacao', 'YESNO',
+        FrmDataModule.ADOQueryTemporarioDBConsulta1);
+      CriarFieldDB('UsaBridgeMesmoGrupo', 'tblEmbarcacao', 'YESNO',
+        FrmDataModule.ADOQueryTemporarioDBConsulta1);
+      CriarFieldDB('OrigemBridge', 'tblEmbarcacao', 'VARCHAR(25)',
+        FrmDataModule.ADOQueryTemporarioDBConsulta1);
+
+
+      versaoDB:= '1.7.0.3';
+    end;
+    if (versaoDB = '1.7.0.3') then
+    begin
+      ExcluirFieldDB('tblProgramacaoRT','RT_Erro',
+          FrmDataModule.ADOConnectionRT);
+      ExcluirFieldDB('tblProgramacaoRT','RT_StatusProcessamento',
+          FrmDataModule.ADOConnectionRT);
+      ExcluirFieldDB('tblProgramacaoRT','RT_StatusAvaliacao',
+          FrmDataModule.ADOConnectionRT);
+      ExcluirFieldDB('tblProgramacaoRT','RT_StatusSAPCodigo',
+          FrmDataModule.ADOConnectionRT);
+      ExcluirFieldDB('tblProgramacaoRT','RT_StatusSAPDescricao',
+          FrmDataModule.ADOConnectionRT);
+      ExcluirFieldDB('tblProgramacaoRT','RT_StatusSAP',
+          FrmDataModule.ADOConnectionRT);
+      ExcluirFieldDB('tblProgramacaoRT','RT_StatusSAPDesc',
+          FrmDataModule.ADOConnectionRT);
+      ExcluirFieldDB('tblProgramacaoRT','RT_Mensagem',
+          FrmDataModule.ADOConnectionRT);
+      CriarFieldDB('RT_Mensagem','tblProgramacaoRT','VARCHAR(100)',
+          FrmDataModule.ADOQueryTemporarioRT);
+
+
+
+      CriarFieldDB('RT_Status','tblProgramacaoRT','VARCHAR(40)',
+          FrmDataModule.ADOQueryTemporarioRT);
+      CriarFieldDB('RT_Status','tblProgramacaoExecutante','VARCHAR(40)',
+          FrmDataModule.ADOQueryTemporarioDBColibri);
+
+      ExcluirFieldDB('tblProgramacaoExecutante','RT_Erro',
+          FrmDataModule.ADOConnectionColibri);
+      ExcluirFieldDB('tblProgramacaoExecutante','RT_StatusProcessamento',
+          FrmDataModule.ADOConnectionColibri);
+      ExcluirFieldDB('tblProgramacaoExecutante','RT_StatusAvaliacao',
+          FrmDataModule.ADOConnectionColibri);
+      ExcluirFieldDB('tblProgramacaoExecutante','RT_StatusSAPCodigo',
+          FrmDataModule.ADOConnectionColibri);
+      ExcluirFieldDB('tblProgramacaoExecutante','RT_StatusSAPDescricao',
+          FrmDataModule.ADOConnectionColibri);
+      ExcluirFieldDB('tblProgramacaoExecutante','RT_StatusSAP',
+          FrmDataModule.ADOConnectionColibri);
+      ExcluirFieldDB('tblProgramacaoExecutante','RT_StatusSAPDesc',
+          FrmDataModule.ADOConnectionColibri);
+      ExcluirFieldDB('tblProgramacaoExecutante','RT_Mensagem',
+          FrmDataModule.ADOConnectionColibri);
+      CriarFieldDB('RT_Mensagem','tblProgramacaoExecutante','VARCHAR(100)',
+          FrmDataModule.ADOQueryTemporarioDBColibri);
+
+
+      //========================================================================
+      ExcluirTableDB('tblCarteiraTrabalho',FrmDataModule.ADOQueryTemporarioDBMemoria);
+      ExcluirTableDB('tblICPI',FrmDataModule.ADOQueryTemporarioDBMemoria);
+      ExcluirTableDB('tblICPM',FrmDataModule.ADOQueryTemporarioDBMemoria);
+      ExcluirTableDB('tblItemManutencao',FrmDataModule.ADOQueryTemporarioDBMemoria);
+      ExcluirTableDB('tblLocalInstalacao',FrmDataModule.ADOQueryTemporarioDBMemoria);
+      ExcluirTableDB('tblPrioridadeForcada',FrmDataModule.ADOQueryTemporarioDBMemoria);
+      ExcluirTableDB('tblTextoLongoCarteira',FrmDataModule.ADOQueryTemporarioDBMemoria);
+      ExcluirTableDB('tblTextoLongoOperacao',FrmDataModule.ADOQueryTemporarioDBMemoria);
+      ExcluirTableDB('tblRTI',FrmDataModule.ADOQueryTemporarioDBMemoria);
+      //========================================================================
+      enderecoMemoria := FrmPrincipal.registroEndereco('Banco de dados');
+      enderecoMemoria:= ExtractFilePath(enderecoMemoria)+'\dbMemoria.mdb';
+      compactarDBMemoria(enderecoMemoria,FrmDataModule.ADOConnectionMemoria);
+      versaoDB:= '1.7.0.3';
+    end;
+
     FrmDataModule.ADOQueryColibri.Edit;
     FrmDataModule.DataSourceColibri.DataSet.FieldByName('versao').AsString:= versaoPRG;
     FrmDataModule.ADOQueryColibri.Post;
@@ -1325,6 +1276,11 @@ begin
   except
     MessageBox(0,'Ocorreu algum erro e a operação foi cancelada!','Colibri',MB_ICONERROR);
   end;
+end;
+
+function TFrmPrincipal.FormatarCPF(CPF: String): String;
+begin
+
 end;
 
 procedure TFrmPrincipal.actDownlodaDBMemoriaExecute(Sender: TObject);
@@ -1343,365 +1299,6 @@ begin
   ProgressBarIncremento(2);
   FrmPrincipal.conectarBDDireto(Caminho_Copia,FrmDataModule.ADOConnectionMemoria);
   ProgressBarAtualizar;
-end;
-
-procedure TFrmPrincipal.actDownloadExecute(Sender: TObject);
-  var
-    FileName,FilePath,enderecoREDE,
-    enderecoREDEdbConsulta,enderecoREDEdbMemoria,
-    enderecoLOCALdbColibri,enderecoLOCALdbConsulta,enderecoLOCALdbMemoria: String;
-begin
-  enderecoREDE:= registroEndereco('Banco de dados');
-  FileName:= ExtractFileName(enderecoREDE);
-  FilePath:= ExtractFilePath(enderecoREDE);
-  //LOCAL
-  enderecoLOCALdbColibri:= ExtractFilePath(Application.ExeName)+'LOCAL\'+FileName;
-  enderecoLOCALdbConsulta:= ExtractFilePath(Application.ExeName)+'LOCAL\dbConsulta.mdb';
-  enderecoLOCALdbMemoria:= ExtractFilePath(Application.ExeName)+'LOCAL\dbMemoria.mdb';
-  //REDE
-  enderecoREDEdbConsulta:= FilePath+'dbConsulta.mdb';
-  enderecoREDEdbMemoria:= FilePath+'dbMemoria.mdb';
-  //DOWNPLOAD
-  FrmPrincipal.ProgressBarIncializa(4,'Download banco de dados...');
-  //=============================================================================
-  if CheckBoxColibri.Checked then
-  begin
-    CopyFile(PChar(enderecoREDE), PChar(enderecoLOCALdbColibri), false);
-    conectarBDDireto(enderecoLOCALdbColibri,FrmDataModule.ADOConnectionColibri);
-  end;
-  FrmPrincipal.ProgressBarIncremento(1);
-  if CheckBoxConsulta.Checked then
-  begin
-    CopyFile(PChar(enderecoREDEdbConsulta), PChar(enderecoLOCALdbConsulta), false);
-    conectarBDDireto(enderecoLOCALdbConsulta,FrmDataModule.ADOConnectionConsulta);
-  end;
-  FrmPrincipal.ProgressBarIncremento(1);
-  if CheckBoxMemoria.Checked then
-  begin
-    CopyFile(PChar(enderecoREDEdbMemoria), PChar(enderecoLOCALdbMemoria), false);
-    conectarBDDireto(enderecoLOCALdbMemoria,FrmDataModule.ADOConnectionMemoria);
-  end;
-  //=============================================================================
-  FrmPrincipal.ProgressBarAtualizar;
-end;
-
-procedure TFrmPrincipal.actExcelDuplicadosExecute(Sender: TObject);
-begin
-  FrmPrincipal.ExcelStringGrid(RLDuplicados,'Duplicados','','',1);
-end;
-
-procedure TFrmPrincipal.actFiltroCancelarExecute(Sender: TObject);
-begin
-  PanelMagicFiltro1.Visible:= false;
-end;
-
-procedure TFrmPrincipal.actFiltroInserirExecute(Sender: TObject);
-begin
-  FrmPrincipal.inserirProcura(DBGridPalavraChave,ColunasLayoutPalavraChave);
-  actProcurarPalavraChave.Execute;
-  if (FrmPrincipal.PanelFiltrosTabela.Visible)AND(FrmPrincipal.PanelAjuda1.Visible) then
-    actFiltrosTabela.Execute;
-end;
-
-procedure TFrmPrincipal.actFiltrosTabelaExecute(Sender: TObject);
-begin
-  FrmPrincipal.btnProcurarFiltrosTabela.Action:= actProcuraFiltrosTabela;
-  FrmPrincipal.FiltrosTabela(DBGridPalavraChave,ColunasLayoutPalavraChave);
-end;
-
-procedure TFrmPrincipal.actMatrizForaOperacaoExecute(Sender: TObject);
-  var
-    NumRegistros,i: Integer;
-    SQLBase: String;
-begin
-  SQLBase:= 'SELECT tblPlataforma.* FROM tblPlataforma '+
-  'WHERE (BooleanPlataforma = True) ORDER BY Plataforma;';
-  //=========================================================================
-  FrmDataModule.ADOQueryTemporarioDBConsulta1.Close;
-  FrmDataModule.ADOQueryTemporarioDBConsulta1.SQL.Clear;
-  FrmDataModule.ADOQueryTemporarioDBConsulta1.SQL.Add(SQLBase);
-  FrmDataModule.ADOQueryTemporarioDBConsulta1.Open;
-  NumRegistros:= FrmDataModule.ADOQueryTemporarioDBConsulta1.RecordCount;
-  //=========================================================================
-  MatrizForaOperacao:= nil;
-  SetLength(MatrizForaOperacao, 11);
-  for i := 0 to High(MatrizForaOperacao) do
-    SetLength(MatrizForaOperacao[i], NumRegistros);
-
-  for i := 0 to High(MatrizForaOperacao[0]) do
-  begin
-    MatrizForaOperacao[0,i]:= FrmDataModule.DataSourceTemporarioDBConsulta1.
-    DataSet.FieldByName('Plataforma').AsString;
-    MatrizForaOperacao[1,i]:= FrmDataModule.DataSourceTemporarioDBConsulta1.
-    DataSet.FieldByName('SituacaoGD').AsString;
-    MatrizForaOperacao[2,i]:= FrmDataModule.DataSourceTemporarioDBConsulta1.
-    DataSet.FieldByName('CapPrincipal').AsString;
-    MatrizForaOperacao[3,i]:= FrmDataModule.DataSourceTemporarioDBConsulta1.
-    DataSet.FieldByName('CapAuxiliar').AsString;
-    MatrizForaOperacao[4,i]:= FrmDataModule.DataSourceTemporarioDBConsulta1.
-    DataSet.FieldByName('SituacaoBCI').AsString;
-    MatrizForaOperacao[5,i]:= FrmDataModule.DataSourceTemporarioDBConsulta1.
-    DataSet.FieldByName('SituacaoLinhaBCI').AsString;
-    MatrizForaOperacao[6,i]:= FrmDataModule.DataSourceTemporarioDBConsulta1.
-    DataSet.FieldByName('SituacaoAgua').AsString;
-    MatrizForaOperacao[7,i]:= FrmDataModule.DataSourceTemporarioDBConsulta1.
-    DataSet.FieldByName('SituacaoBalsa').AsString;
-    MatrizForaOperacao[8,i]:= FrmDataModule.DataSourceTemporarioDBConsulta1.
-    DataSet.FieldByName('SituacaoAcesso').AsString;
-    MatrizForaOperacao[9,i]:= FrmDataModule.DataSourceTemporarioDBConsulta1.
-    DataSet.FieldByName('SituacaoDegraus').AsString;
-    MatrizForaOperacao[10,i]:= FrmDataModule.DataSourceTemporarioDBConsulta1.
-    DataSet.FieldByName('DataRealizacaoDegraus').AsString;
-
-    FrmDataModule.ADOQueryTemporarioDBConsulta1.Next;
-  end;
-end;
-
-procedure TFrmPrincipal.actInserirRegistroExecute(Sender: TObject);
-  var
-    PalavraChave: String;
-    idProgramacaoExecutante,idProgramacaoDiaria,NumRegistros: Integer;
-    passou: Boolean;
-begin
-  passou:= true;
-  PalavraChave:= '';
-  while not FrmDataModule.ADOQueryPalavraChave.Eof do
-  begin
-    if FrmDataModule.ADOQueryPalavraChave.FieldByName('booleanSelecao').AsBoolean then
-    begin
-      if PalavraChave <> '' then
-        PalavraChave:= PalavraChave+'; '+FrmDataModule.ADOQueryPalavraChave.FieldByName('PalavraChave').AsString
-      else
-        PalavraChave:= FrmDataModule.ADOQueryPalavraChave.FieldByName('PalavraChave').AsString;
-    end;
-    FrmDataModule.ADOQueryPalavraChave.Next;
-  end;
-  //================================================================
-  if PalavraChave = '' then
-  begin
-    passou:= false;
-    MessageBox(0,'O campo "Palavra Chave" não pode estar em branco!','Avaliação de Programação',MB_ICONERROR);
-  end;
-  if passou then
-  begin
-    case RadioGroupFonteCancelamento.ItemIndex of
-      0://Gerenciar Solicitações (Cancelamento)
-      begin
-        FrmDataModule.DataSourceGerenciarExecutante.Enabled:= false;
-        NumRegistros:= FrmDataModule.ADOQueryGerenciarExecutante.RecordCount;
-        FrmDataModule.ADOQueryGerenciarExecutante.First;
-        FrmPrincipal.ProgressBarIncializa(NumRegistros,
-        'Atribuindo status para programação...');
-        while not FrmDataModule.ADOQueryGerenciarExecutante.Eof do
-        begin
-          if FrmDataModule.DataSourceGerenciarExecutante.DataSet.
-          FieldByName('booleanSelecao').AsBoolean then
-          begin
-            idProgramacaoExecutante:= FrmDataModule.DataSourceGerenciarExecutante.
-            DataSet.FieldByName('idProgramacaoExecutante').AsInteger;
-
-            FrmPrincipal.AvaliarProgramacaoExecutante(idProgramacaoExecutante,0,
-            'Cancelado','Não Executada',PalavraChave);
-          end;
-          FrmDataModule.ADOQueryGerenciarExecutante.Next;
-          FrmPrincipal.ProgressBarIncremento(1);
-        end;
-        FrmPrincipal.ProgressBarAtualizar;
-        //Calcular Cancelados
-        FrmDataModule.ADOQueryGerenciarExecutante.First;
-        FrmPrincipal.ProgressBarIncializa(NumRegistros,
-        'Calculando: Aprovados, Cancelados e N° de Executantes...');
-        while not FrmDataModule.ADOQueryGerenciarExecutante.Eof do
-        begin
-          if FrmDataModule.DataSourceGerenciarExecutante.DataSet.
-          FieldByName('booleanSelecao').AsBoolean then
-          begin
-            idProgramacaoDiaria:= FrmDataModule.DataSourceGerenciarExecutante.
-            DataSet.FieldByName('CodigoProgramacaoDiaria').AsInteger;
-            FrmPrincipal.GravarCanceladoAprovado(idProgramacaoDiaria);
-          end;
-          FrmDataModule.ADOQueryGerenciarExecutante.Next;
-          FrmPrincipal.ProgressBarIncremento(1);
-        end;
-        FrmPrincipal.ProgressBarAtualizar;
-        FrmDataModule.ADOQueryGerenciarExecutante.Active:= false;
-        FrmDataModule.ADOQueryGerenciarExecutante.Active:= true;
-        FrmDataModule.DataSourceGerenciarExecutante.Enabled:= true;
-        FrmGerenciarSolicitacoes.actMatrizOrigemDestino.Execute;
-        FrmGerenciarSolicitacoes.StatusLinhaSelecionada;
-        FrmGerenciarSolicitacoes.actContadorSolicitacao.Execute;
-      end;
-      1: //Marcar os não executados
-      begin
-        FrmDataModule.DataSourceConsultaExecutantesProgramados.Enabled:= false;
-        NumRegistros:= FrmDataModule.ADOQueryConsultaExecutantesProgramados.RecordCount;
-        FrmDataModule.ADOQueryConsultaExecutantesProgramados.First;
-        FrmPrincipal.ProgressBarIncializa(NumRegistros,
-        'Atribuindo Status de Execução...');
-        while not FrmDataModule.ADOQueryConsultaExecutantesProgramados.Eof do
-        begin
-          if FrmDataModule.DataSourceConsultaExecutantesProgramados.DataSet.
-          FieldByName('booleanSelecao').AsBoolean then
-          begin
-            idProgramacaoExecutante:= FrmDataModule.DataSourceConsultaExecutantesProgramados.
-            DataSet.FieldByName('idProgramacaoExecutante').AsInteger;
-            FrmPrincipal.AvaliarProgramacaoExecutante(idProgramacaoExecutante,1,
-            '','Não Executada',PalavraChave);
-          end;
-          FrmDataModule.ADOQueryConsultaExecutantesProgramados.Next;
-          FrmPrincipal.ProgressBarIncremento(1);
-        end;
-        //==========================================================
-        FrmPrincipal.ProgressBarAtualizar;
-        FrmDataModule.ADOQueryConsultaExecutantesProgramados.Active:= false;
-        FrmDataModule.ADOQueryConsultaExecutantesProgramados.Active:= true;
-        FrmDataModule.DataSourceConsultaExecutantesProgramados.Enabled:= true;
-      end;
-      2: //Gerenciamento de Solicitações (Mudança)
-      begin
-        FrmDataModule.DataSourceGerenciarExecutante.Enabled:= false;
-        NumRegistros:= FrmDataModule.ADOQueryGerenciarExecutante.RecordCount;
-        FrmDataModule.ADOQueryGerenciarExecutante.First;
-        FrmPrincipal.ProgressBarIncializa(NumRegistros,
-        'Atribuindo status para programação...');
-        while not FrmDataModule.ADOQueryGerenciarExecutante.Eof do
-        begin
-          if FrmDataModule.DataSourceGerenciarExecutante.DataSet.
-          FieldByName('booleanSelecao').AsBoolean then
-          begin
-            idProgramacaoExecutante:= FrmDataModule.DataSourceGerenciarExecutante.
-            DataSet.FieldByName('idProgramacaoExecutante').AsInteger;
-
-            FrmPrincipal.AvaliarProgramacaoExecutante(idProgramacaoExecutante,0,
-            'Mudança','Não Executada',PalavraChave);
-          end;
-          FrmDataModule.ADOQueryGerenciarExecutante.Next;
-          FrmPrincipal.ProgressBarIncremento(1);
-        end;
-        FrmPrincipal.ProgressBarAtualizar;
-        //Calcular Cancelados
-        FrmDataModule.ADOQueryGerenciarExecutante.First;
-        FrmPrincipal.ProgressBarIncializa(NumRegistros,
-        'Calculando: Aprovados, Cancelados e N° de Executantes...');
-        while not FrmDataModule.ADOQueryGerenciarExecutante.Eof do
-        begin
-          if FrmDataModule.DataSourceGerenciarExecutante.DataSet.
-          FieldByName('booleanSelecao').AsBoolean then
-          begin
-            idProgramacaoDiaria:= FrmDataModule.DataSourceGerenciarExecutante.
-            DataSet.FieldByName('CodigoProgramacaoDiaria').AsInteger;
-            FrmPrincipal.GravarCanceladoAprovado(idProgramacaoDiaria);
-          end;
-          FrmDataModule.ADOQueryGerenciarExecutante.Next;
-          FrmPrincipal.ProgressBarIncremento(1);
-        end;
-        FrmPrincipal.ProgressBarAtualizar;
-        FrmDataModule.ADOQueryGerenciarExecutante.Active:= false;
-        FrmDataModule.ADOQueryGerenciarExecutante.Active:= true;
-        FrmDataModule.DataSourceGerenciarExecutante.Enabled:= true;
-        FrmGerenciarSolicitacoes.actMatrizOrigemDestino.Execute;
-        FrmGerenciarSolicitacoes.StatusLinhaSelecionada;
-        FrmGerenciarSolicitacoes.actContadorSolicitacao.Execute;
-      end;
-    end;
-  end;
-  PanelAjuda1.Visible:= false;
-end;
-
-procedure TFrmPrincipal.actInterromperExecute(Sender: TObject);
-begin
-  Interromper:= true;
-end;
-
-procedure TFrmPrincipal.actLayoutSORTExecute(Sender: TObject);
-  var
-    Ordem: String;
-begin
-  Ordem:= FrmPrincipal.Clasifica(RLColunasOpcoes,1,true);
-  FrmPrincipal.AutoFitGrade(RLColunasOpcoes);
-  RLColunasOpcoes.ColWidths[0]:= 18;
-  if Ordem = 'DESC' then
-  begin
-    actLayoutSORT.ImageIndex:= 86;
-  end
-  else if Ordem = 'ASC' then
-  begin
-    actLayoutSORT.ImageIndex:= 85;
-  end;
-end;
-
-procedure TFrmPrincipal.actLimparFiltrosExecute(Sender: TObject);
-begin
-  FrmPrincipal.LimparColunasFiltro(DBGridPalavraChave,ColunasLayoutPalavraChave);
-  actProcurarPalavraChave.Execute;
-  if (FrmPrincipal.PanelFiltrosTabela.Visible)AND(FrmPrincipal.PanelAjuda1.Visible) then
-    actFiltrosTabela.Execute;
-end;
-
-procedure TFrmPrincipal.actListarExecute(Sender: TObject);
-  var
-    ListaGroup: TStringList;
-begin
-  ListaGroup:= GroupFieldDBGrid(MagicSQLQuery,MagicFieldName,MagicFonteDB,StatusBarMagicFiltro);
-  FrmPrincipal.SetupCheckListSQL1(MagicFieldName,MagicTextoProcura,CheckListBoxFiltroGRID,
-  ListaGroup);
-end;
-
-procedure TFrmPrincipal.actLOCALExecute(Sender: TObject);
-  var
-    enderecoLOCAL,
-    enderecoREDE,FileName,FilePath,dbConsulta,dbMemoria: String;
-begin
-  enderecoREDE:= registroEndereco('Banco de dados');
-  FileName:= ExtractFileName(enderecoREDE);
-  FilePath:= ExtractFilePath(enderecoREDE);
-  enderecoLOCAL:= ExtractFilePath(Application.ExeName);
-  if Application.MessageBox(PChar(
-  'Deseja substituir os bancos de dados LOCAL atual pelos bancos dados da REDE selecionados abaixo?'),
-  '.::ATENÇÃO::.',36) = 6 then
-  begin
-    //Copiar e Substituir Arquivos
-    dbConsulta:= FilePath+'\dbConsulta.mdb';
-    dbMemoria:= FilePath+'\dbMemoria.mdb';
-    FrmPrincipal.ProgressBarIncializa(7,'Conexão LOCAL...');
-    CopyFile(PChar(enderecoREDE), PChar(enderecoLOCAL+'\LOCAL\'+FileName), false);
-    FrmPrincipal.ProgressBarIncremento(1);
-    CopyFile(PChar(dbConsulta), PChar(enderecoLOCAL+'\LOCAL\dbConsulta.mdb'), false);
-    FrmPrincipal.ProgressBarIncremento(1);
-    CopyFile(PChar(dbMemoria), PChar(enderecoLOCAL+'\LOCAL\dbMemoria.mdb'), false);
-    FrmPrincipal.ProgressBarIncremento(1);
-    //Conexão
-    conectarBDDireto(enderecoLOCAL+'\LOCAL\'+FileName,FrmDataModule.ADOConnectionColibri);
-    FrmPrincipal.ProgressBarIncremento(1);
-    conectarBDDireto(enderecoLOCAL+'\LOCAL\dbConsulta.mdb',FrmDataModule.ADOConnectionConsulta);
-    FrmPrincipal.ProgressBarIncremento(1);
-    conectarBDDireto(enderecoLOCAL+'\LOCAL\dbMemoria.mdb',FrmDataModule.ADOConnectionMemoria);
-  end
-  else
-  begin
-    conectarBDDireto(enderecoLOCAL+'\LOCAL\'+FileName,FrmDataModule.ADOConnectionColibri);
-    FrmPrincipal.ProgressBarIncremento(1);
-    conectarBDDireto(enderecoLOCAL+'\LOCAL\dbConsulta.mdb',FrmDataModule.ADOConnectionConsulta);
-    FrmPrincipal.ProgressBarIncremento(1);
-    conectarBDDireto(enderecoLOCAL+'\LOCAL\dbMemoria.mdb',FrmDataModule.ADOConnectionMemoria);
-  end;
-  FrmPrincipal.ProgressBarAtualizar;
-  FrmPrincipal.Caption:= 'Colibri: LOCAL->REDE ';
-  booLOCAL:= true;
-  actLOCAL.Enabled:= false;
-  actREDE.Enabled:= true;
-  PanelTituloAjuda1.Caption:= 'Conectado LOCAL';
-  PanelTituloAjuda1.Color:= clRed;
-  if  (logPerfil = 'Administrador')OR
-      (logPerfil = 'Supervisor')OR
-      (logPerfil = 'Programação') then
-    actUpload.Enabled:= true
-  else
-    actUpload.Enabled:= false;
-
-  actDownload.Enabled:= true;
-  FrmDataModule.ADOQueryColibri.Active:= false;
-  FrmDataModule.ADOQueryColibri.Active:= true;
 end;
 
 procedure TFrmPrincipal.actMatrizExecutanteAPLATExecute(Sender: TObject);
@@ -1759,7 +1356,7 @@ begin
   NumRegistros:= FrmDataModule.ADOQueryTemporarioDBConsulta1.RecordCount;
   //=========================================================================
   MatrizExecutanteCadastro:= nil;
-  SetLength(MatrizExecutanteCadastro, 11);
+  SetLength(MatrizExecutanteCadastro, 15);
   for i := 0 to High(MatrizExecutanteCadastro) do
     SetLength(MatrizExecutanteCadastro[i], NumRegistros);
 
@@ -1787,150 +1384,71 @@ begin
     DataSet.FieldByName('RequisitantePT').AsString);
     MatrizExecutanteCadastro[10,i]:= FrmDataModule.DataSourceTemporarioDBConsulta1.
     DataSet.FieldByName('CentroCusto').AsString;
+    MatrizExecutanteCadastro[11,i]:= FrmDataModule.DataSourceTemporarioDBConsulta1.
+    DataSet.FieldByName('DiagramaRede').AsString;
+    MatrizExecutanteCadastro[12,i]:= FrmDataModule.DataSourceTemporarioDBConsulta1.
+    DataSet.FieldByName('OperRede').AsString;
+    MatrizExecutanteCadastro[13,i]:= FrmDataModule.DataSourceTemporarioDBConsulta1.
+    DataSet.FieldByName('ElementoPEP').AsString;
+    MatrizExecutanteCadastro[14,i]:= FrmDataModule.DataSourceTemporarioDBConsulta1.
+    DataSet.FieldByName('OutroDocumento').AsString;
 
 
     FrmDataModule.ADOQueryTemporarioDBConsulta1.Next;
   end;
 end;
 
-procedure TFrmPrincipal.actMatrizExecutanteT31Execute(Sender: TObject);
+procedure TFrmPrincipal.actMatrizForaOperacaoExecute(Sender: TObject);
   var
     NumRegistros,i: Integer;
     SQLBase: String;
 begin
-  SQLBase:= 'SELECT tblExecutanteSAP.* FROM tblExecutanteSAP;';
+  SQLBase:= 'SELECT tblPlataforma.* FROM tblPlataforma '+
+  'WHERE (BooleanPlataforma = True) ORDER BY Plataforma;';
   //=========================================================================
-  FrmDataModule.ADOQueryTemporarioDBMemoria.Close;
-  FrmDataModule.ADOQueryTemporarioDBMemoria.SQL.Clear;
-  FrmDataModule.ADOQueryTemporarioDBMemoria.SQL.Add(SQLBase);
-  FrmDataModule.ADOQueryTemporarioDBMemoria.Open;
-  NumRegistros:= FrmDataModule.ADOQueryTemporarioDBMemoria.RecordCount;
+  FrmDataModule.ADOQueryTemporarioDBConsulta1.Close;
+  FrmDataModule.ADOQueryTemporarioDBConsulta1.SQL.Clear;
+  FrmDataModule.ADOQueryTemporarioDBConsulta1.SQL.Add(SQLBase);
+  FrmDataModule.ADOQueryTemporarioDBConsulta1.Open;
+  NumRegistros:= FrmDataModule.ADOQueryTemporarioDBConsulta1.RecordCount;
   //=========================================================================
-  MatrizExecutanteT31:= nil;
-  SetLength(MatrizExecutanteT31, 11);
-  for i := 0 to High(MatrizExecutanteT31) do
-    SetLength(MatrizExecutanteT31[i], NumRegistros);
+  MatrizForaOperacao:= nil;
+  SetLength(MatrizForaOperacao, 14);
+  for i := 0 to High(MatrizForaOperacao) do
+    SetLength(MatrizForaOperacao[i], NumRegistros);
 
-  for i := 0 to High(MatrizExecutanteT31[0]) do
+  for i := 0 to High(MatrizForaOperacao[0]) do
   begin
+    MatrizForaOperacao[0,i]:= FrmDataModule.DataSourceTemporarioDBConsulta1.
+    DataSet.FieldByName('Plataforma').AsString;
+    MatrizForaOperacao[1,i]:= FrmDataModule.DataSourceTemporarioDBConsulta1.
+    DataSet.FieldByName('SituacaoGD').AsString;
+    MatrizForaOperacao[2,i]:= FrmDataModule.DataSourceTemporarioDBConsulta1.
+    DataSet.FieldByName('CapPrincipal').AsString;
+    MatrizForaOperacao[3,i]:= FrmDataModule.DataSourceTemporarioDBConsulta1.
+    DataSet.FieldByName('CapAuxiliar').AsString;
+    MatrizForaOperacao[4,i]:= FrmDataModule.DataSourceTemporarioDBConsulta1.
+    DataSet.FieldByName('SituacaoBCI').AsString;
+    MatrizForaOperacao[5,i]:= FrmDataModule.DataSourceTemporarioDBConsulta1.
+    DataSet.FieldByName('SituacaoLinhaBCI').AsString;
+    MatrizForaOperacao[6,i]:= FrmDataModule.DataSourceTemporarioDBConsulta1.
+    DataSet.FieldByName('SituacaoAgua').AsString;
+    MatrizForaOperacao[7,i]:= FrmDataModule.DataSourceTemporarioDBConsulta1.
+    DataSet.FieldByName('SituacaoBalsa').AsString;
 
-    MatrizExecutanteT31[0,i]:= FrmDataModule.DataSourceTemporarioDBMemoria.
-    DataSet.FieldByName('txtTipoEtapaServico').AsString;
-    MatrizExecutanteT31[1,i]:= FrmDataModule.DataSourceTemporarioDBMemoria.
-    DataSet.FieldByName('txtFuncao').AsString;
-    MatrizExecutanteT31[2,i]:= FrmDataModule.DataSourceTemporarioDBMemoria.
-    DataSet.FieldByName('txtEmpresa').AsString;
-    MatrizExecutanteT31[3,i]:= FrmDataModule.DataSourceTemporarioDBMemoria.
-    DataSet.FieldByName('txtNomeExecutante').AsString;
-    MatrizExecutanteT31[4,i]:= FrmDataModule.DataSourceTemporarioDBMemoria.
-    DataSet.FieldByName('codigoSAP').AsString;
-    MatrizExecutanteT31[5,i]:= FrmDataModule.DataSourceTemporarioDBMemoria.
-    DataSet.FieldByName('Documento').AsString;
-    MatrizExecutanteT31[6,i]:= FrmDataModule.DataSourceTemporarioDBMemoria.
-    DataSet.FieldByName('TipoNota').AsString;
-    MatrizExecutanteT31[7,i]:= FrmDataModule.DataSourceTemporarioDBMemoria.
-    DataSet.FieldByName('Nota').AsString;
-    MatrizExecutanteT31[8,i]:= FrmDataModule.DataSourceTemporarioDBMemoria.
-    DataSet.FieldByName('DataEmbarque').AsString;
-    MatrizExecutanteT31[9,i]:= FrmDataModule.DataSourceTemporarioDBMemoria.
-    DataSet.FieldByName('Origem').AsString;
-    MatrizExecutanteT31[10,i]:= FrmDataModule.DataSourceTemporarioDBMemoria.
-    DataSet.FieldByName('Destino').AsString;
 
-    FrmDataModule.ADOQueryTemporarioDBMemoria.Next;
-  end;
-end;
+    MatrizForaOperacao[9,i]:= FrmDataModule.DataSourceTemporarioDBConsulta1.
+    DataSet.FieldByName('SituacaoDegraus').AsString;
+    MatrizForaOperacao[10,i]:= FrmDataModule.DataSourceTemporarioDBConsulta1.
+    DataSet.FieldByName('DataRealizacaoDegraus').AsString;
+    MatrizForaOperacao[11,i]:= FrmDataModule.DataSourceTemporarioDBConsulta1.
+    DataSet.FieldByName('SituacaoSurfer').AsString;
+    MatrizForaOperacao[12,i]:= FrmDataModule.DataSourceTemporarioDBConsulta1.
+    DataSet.FieldByName('SituacaoSOV').AsString;
+    MatrizForaOperacao[13,i]:= FrmDataModule.DataSourceTemporarioDBConsulta1.
+    DataSet.FieldByName('SituacaoAqua').AsString;
 
-procedure TFrmPrincipal.actProcuraFiltrosTabelaExecute(Sender: TObject);
-begin
-  frmPrincipal.CarregaFiltrosProcura(ColunasLayoutPalavraChave);
-  actProcurarPalavraChave.Execute;
-end;
-
-procedure TFrmPrincipal.actProcurarPalavraChaveExecute(Sender: TObject);
-  var
-    SQLString,SQLBase: String;
-begin
-  SQLString:= frmPrincipal.SQLStringFiltroTabela(ColunasLayoutPalavraChave,true);
-  SQLBase:= 'SELECT tblPalavraChave.* FROM tblPalavraChave'+
-  SQLString+' ORDER BY PalavraChave;';
-  FrmPrincipal.ProcuraQuery(SQLBase,FrmDataModule.ADOQueryPalavraChave,StatusBarPalavraChave);
-end;
-
-procedure TFrmPrincipal.actGridASCExecute(Sender: TObject);
-begin
-  FrmPrincipal.ClassificaDBGrid(DBGridPalavraChave,
-  FrmDataModule.ADOQueryPalavraChave,0);
-end;
-
-procedure TFrmPrincipal.actGridDESCExecute(Sender: TObject);
-begin
-  FrmPrincipal.ClassificaDBGrid(DBGridPalavraChave,
-  FrmDataModule.ADOQueryPalavraChave,1);
-end;
-
-procedure TFrmPrincipal.actGridSelLimpaExecute(Sender: TObject);
-var
-  I: Integer;
-begin
-  for I := 0 to FrmPrincipal.CheckListBoxFiltroGRID.Count-1 do
-    FrmPrincipal.CheckListBoxFiltroGRID.Checked[i]:= false;
-end;
-
-procedure TFrmPrincipal.actGridSelTudoExecute(Sender: TObject);
-var
-  I: Integer;
-begin
-  for I := 0 to FrmPrincipal.CheckListBoxFiltroGRID.Count-1 do
-    FrmPrincipal.CheckListBoxFiltroGRID.Checked[i]:= true;
-end;
-
-procedure TFrmPrincipal.actREDEExecute(Sender: TObject);
-  var
-    enderecoREDE,FilePath,dbConsulta,dbMemoria: String;
-begin
-  enderecoREDE:= registroEndereco('Banco de dados');
-  FilePath:= ExtractFilePath(enderecoREDE);
-  dbConsulta:= FilePath+'\dbConsulta.mdb';
-  dbMemoria:= FilePath+'\dbMemoria.mdb';
-  FrmPrincipal.ProgressBarIncializa(2,'Conexão REDE...');
-  FrmPrincipal.ProgressBarIncremento(1);
-  conectarBD(enderecoREDE,FrmDataModule.ADOConnectionColibri);
-  conectarBDDireto(dbConsulta,FrmDataModule.ADOConnectionConsulta);
-  conectarBDDireto(dbMemoria,FrmDataModule.ADOConnectionMemoria);
-  FrmPrincipal.ProgressBarAtualizar;
-  booLOCAL:= false;
-  actLOCAL.Enabled:= true;
-  actREDE.Enabled:= false;
-  PanelTituloAjuda1.Caption:= 'Conectado REDE';
-  PanelTituloAjuda1.Color:= clGreen;
-  actUpload.Enabled:= false;
-  actDownload.Enabled:= false;
-  FrmDataModule.ADOQueryColibri.Active:= false;
-  FrmDataModule.ADOQueryColibri.Active:= true;
-end;
-
-procedure TFrmPrincipal.actSalvarListaExecute(Sender: TObject);
-  var
-    txtPontoVirgula: String;
-    i: Integer;
-begin
-  SaveDialog1.Filter := 'Texto|*.txt';
-  SaveDialog1.DefaultExt := '*.txt';
-  SaveDialog1.FileName:= PanelTituloMagic.Caption;
-  if SaveDialog1.Execute then
-  begin
-    CheckListBoxFiltroGRID.Items.SaveToFile(SaveDialog1.FileName);
-    ShellExecute(0,'open',PChar(SaveDialog1.FileName),'','',SW_SHOWNORMAL);
-    txtPontoVirgula:= '';
-    for I := 0 to CheckListBoxFiltroGRID.Items.Count-1 do
-    begin
-      if txtPontoVirgula = '' then
-        txtPontoVirgula:= CheckListBoxFiltroGRID.Items[i]
-      else
-        txtPontoVirgula:= txtPontoVirgula+';'+CheckListBoxFiltroGRID.Items[i];
-    end;
-    ClipBoard.AsText := txtPontoVirgula;
+    FrmDataModule.ADOQueryTemporarioDBConsulta1.Next;
   end;
 end;
 
@@ -1954,12 +1472,6 @@ begin
   end;
 end;
 
-procedure TFrmPrincipal.actSubstituirPorExecute(Sender: TObject);
-begin
-  FrmPrincipal.SubstituirPor(DBGridPalavraChave,FrmDataModule.ADOQueryPalavraChave,
-  FrmDataModule.DataSourcePalavraChave);
-end;
-
 procedure TFrmPrincipal.actUploadDBMemoriaExecute(Sender: TObject);
   var
     Caminho_Copia,enderecoMemoria: String;
@@ -1974,43 +1486,6 @@ begin
   CopyFile(PChar(Caminho_Copia), PChar(enderecoMemoria), false);
   FrmDataModule.ADOConnectionMemoria.Connected:= true;
   //FrmPrincipal.conectarBDDireto(enderecoMemoria,FrmDataModule.ADOConnectionMemoria);
-end;
-
-procedure TFrmPrincipal.actUploadExecute(Sender: TObject);
-  var
-    FileName,FilePath,enderecoREDE,
-    enderecoREDEdbConsulta,enderecoREDEdbMemoria,
-    enderecoLOCALdbColibri,enderecoLOCALdbConsulta,enderecoLOCALdbMemoria: String;
-begin
-  enderecoREDE:= registroEndereco('Banco de dados');
-  FileName:= ExtractFileName(enderecoREDE);
-  FilePath:= ExtractFilePath(enderecoREDE);
-  //LOCAL
-  enderecoLOCALdbColibri:= ExtractFilePath(Application.ExeName)+'LOCAL\'+FileName;
-  enderecoLOCALdbConsulta:= ExtractFilePath(Application.ExeName)+'LOCAL\dbConsulta.mdb';
-  enderecoLOCALdbMemoria:= ExtractFilePath(Application.ExeName)+'LOCAL\dbMemoria.mdb';
-  //REDE
-  enderecoREDEdbConsulta:= FilePath+'dbConsulta.mdb';
-  enderecoREDEdbMemoria:= FilePath+'dbMemoria.mdb';
-  //DOWNPLOAD
-  FrmPrincipal.ProgressBarIncializa(4,'Upload banco de dados...');
-  //============================================================================
-  if CheckBoxColibri.Checked then
-    if Application.MessageBox(PChar('Deseja realmente substituir o banco de dados dbColibri da REDE?'),'.::ATENÇÃO::.',36) = 6 then
-      CopyFile(PChar(enderecoLOCALdbColibri), PChar(enderecoREDE), false);
-  FrmPrincipal.ProgressBarIncremento(1);
-  //============================================================================
-  if CheckBoxConsulta.Checked then
-    if Application.MessageBox(PChar('Deseja realmente substituir o banco de dados dbConsulta da REDE?'),'.::ATENÇÃO::.',36) = 6 then
-      CopyFile(PChar(enderecoLOCALdbConsulta), PChar(enderecoREDEdbConsulta), false);
-  FrmPrincipal.ProgressBarIncremento(1);
-  //============================================================================
-  if CheckBoxMemoria.Checked then
-    if Application.MessageBox(PChar('Deseja realmente substituir o banco de dados dbMemoria da REDE?'),'.::ATENÇÃO::.',36) = 6 then
-      CopyFile(PChar(enderecoLOCALdbMemoria), PChar(enderecoREDEdbMemoria), false);
-  FrmPrincipal.ProgressBarIncremento(1);
-  //============================================================================
-  FrmPrincipal.ProgressBarAtualizar;
 end;
 
 procedure TFrmPrincipal.actVerificaVersaoExecute(Sender: TObject);
@@ -2107,6 +1582,19 @@ begin
   Grid.columns[numColuna].Width:= Largura;
 end;
 
+procedure TFrmPrincipal.ADOConnection_Reconnect(Conn: TADOConnection);
+var
+  CS: string;
+begin
+  if Conn = nil then Exit;
+  CS := Conn.ConnectionString;
+  Conn.Connected := False;
+  Conn.Close;
+  Conn.ConnectionString := CS;
+  Conn.Open;
+  Conn.Connected := True;
+end;
+
 procedure TFrmPrincipal.Ajuda1Click(Sender: TObject);
 var
   wideChars   : array[0..200] of WideChar;
@@ -2128,52 +1616,6 @@ begin
     begin
       ColunasLayout.Cells[1,i]:= strTitulo;
     end;
-  end;
-end;
-
-procedure TFrmPrincipal.AutoFitGrade(aGrade: TStringGrid);
-var
-  i, j: Integer;
-  x: array of Integer;
-begin
-  // ==============STRINGGRIDCALCULO====================
-  SetLength(x, aGrade.ColCount);
-  for i := 0 to aGrade.ColCount - 1 do
-    x[i] := 0;
-  for i := 0 to aGrade.RowCount - 1 do
-  begin
-    for j := 0 to aGrade.ColCount - 1 do
-    begin
-      if aGrade.Canvas.TextWidth(aGrade.Cells[j, i]) > x[j] then
-        x[j] := aGrade.Canvas.TextWidth(aGrade.Cells[j, i]);
-    end;
-  end;
-  for i := 0 to aGrade.ColCount - 1 do
-  begin
-    if x[i] = 0 then
-      x[i] := 89;
-  end;
-  for i := 0 to aGrade.RowCount - 1 do
-  begin
-    for j := 0 to aGrade.ColCount - 1 do
-      aGrade.ColWidths[j] := x[j] + 14;
-  end;
-end;
-
-procedure TFrmPrincipal.AutoFitStatusBar(aStatus: TStatusBar);
-var
-  i: Integer;
-  str: String;
-begin
-  aStatus.Canvas.Font := aStatus.Font;
-  for i := 0 to aStatus.Panels.Count-1 do
-  begin
-    //Escrever novamente
-    str:= aStatus.Panels[i].Text;
-    aStatus.Panels[i].Text:= '';
-    aStatus.Panels[i].Text:= str;
-    //=======================================================
-    aStatus.Panels[i].Width:= aStatus.Canvas.TextWidth(aStatus.Panels[i].Text)+15;
   end;
 end;
 
@@ -2213,7 +1655,7 @@ begin
 end;
 
 procedure TFrmPrincipal.AvaliarProgramacaoExecutante(
-  idProgramacaoExecutante,Fonte: Integer; StatusProgramacao,StatusExecucao,
+  idProgramacaoExecutante,Fonte: Integer; StatusProgramacao,
   Motivo: String);
 begin
   //Procurar Programação do Executante
@@ -2239,50 +1681,12 @@ begin
         FrmDataModule.DataSourceConsultaProgramacaoExecutante_ID.DataSet.
         FieldByName('DataAvaliacaoProgramacao').AsDateTime:= now;
         //=====================================================
-        //Marcar como Não Executada
-        FrmDataModule.DataSourceConsultaProgramacaoExecutante_ID.DataSet.
-        FieldByName('StatusExecucao').AsString:= StatusExecucao;
-        //=====================================================
-        FrmDataModule.DataSourceConsultaProgramacaoExecutante_ID.DataSet.
-        FieldByName('AvaliadoPorExecucao').AsString:= logChave;
-        FrmDataModule.DataSourceConsultaProgramacaoExecutante_ID.DataSet.
-        FieldByName('ComputadorExecucao').AsString:= logMaquina;
-        FrmDataModule.DataSourceConsultaProgramacaoExecutante_ID.DataSet.
-        FieldByName('DataAvaliacaoExecucao').AsDateTime:= now;
-        //=====================================================
-        FrmDataModule.ADOQueryConsultaProgramacaoExecutante_ID.Post;
-      end;
-      1://Não Executa (Consulta Executantes)
-      begin
-        FrmDataModule.ADOQueryConsultaProgramacaoExecutante_ID.Edit;
-        FrmDataModule.DataSourceConsultaProgramacaoExecutante_ID.DataSet.
-        FieldByName('StatusExecucao').AsString:= StatusExecucao;
-        FrmDataModule.DataSourceConsultaProgramacaoExecutante_ID.DataSet.
-        FieldByName('MotivoNaoExecucao').AsString:= Motivo;
-        FrmDataModule.DataSourceConsultaProgramacaoExecutante_ID.DataSet.
-        FieldByName('AvaliadoPorExecucao').AsString:= logChave;
-        FrmDataModule.DataSourceConsultaProgramacaoExecutante_ID.DataSet.
-        FieldByName('ComputadorExecucao').AsString:= logMaquina;
-        FrmDataModule.DataSourceConsultaProgramacaoExecutante_ID.DataSet.
-        FieldByName('DataAvaliacaoExecucao').AsDateTime:= now;
         FrmDataModule.ADOQueryConsultaProgramacaoExecutante_ID.Post;
       end;
     end;
   except
     ShowMessage('Erro');
   end;
-end;
-
-procedure TFrmPrincipal.BitBtn4Click(Sender: TObject);
-begin
-  PanelAjuda1.Visible:= false;
-end;
-
-procedure TFrmPrincipal.botaoMoveTudo(Conection: TADOConnection; NomeArquivoMemo,NomeTabela,NumRLTAB: String;Grid: TDBGrid; ColunasLayout: TStringGrid);
-begin
-  FrmPrincipal.LayoutPadrao(NomeArquivoMemo,ColunasLayout,NumRLTAB);
-  FrmPrincipal.CarregarRLColunas(NomeArquivoMemo, ColunasLayout);
-  FrmPrincipal.CarregarColunasGRID(Conection,NomeTabela,Grid,ColunasLayout);
 end;
 
 procedure TFrmPrincipal.buscaFiledGrid1(FieldName, palavraBusca,Operador: String;
@@ -2360,16 +1764,16 @@ function TFrmPrincipal.carregaDataMinima(Servico: Boolean): TDateTime;
 begin
   if Servico then
   begin
-    if ((logPerfil = 'Administrador')OR
-    (logPerfil = 'Programacao')OR
-    (logPerfil = 'Supervisão')) then
+    if ((logPerfil = PERFILADM)OR
+    (logPerfil = PERFILPROGRAMACAO)OR
+    (logPerfil = PERFILSUPERVISAO)) then
       DateTimePickerMinima.DateTime:= EncodeDate(2012, 01, 01)
     else
       DateTimePickerMinima.DateTime:= now;//IncDay(now,1);
   end
   else
   begin
-    if (logPerfil = 'Administrador') then
+    if (logPerfil = PERFILADM) then
       DateTimePickerMinima.DateTime:= EncodeDate(2012, 01, 01)
     else
       DateTimePickerMinima.DateTime:= now;//IncDay(now,1);
@@ -2380,67 +1784,9 @@ begin
 end;
 
 procedure TFrmPrincipal.CarregaFiltrosProcura(ColunasLayout: TStringGrid);
-    var
-      i,index: Integer;
-begin
-  for I := 1 to RLFiltrosTabela.RowCount-1 do
-  begin
-    index:= indexLayoutCaption(RLFiltrosTabela.Cells[0,i],ColunasLayout);
-    RLFiltrosTabela.Cells[4,index]:= '';
-    RLFiltrosTabela.Cells[5,index]:= '';
-    ColunasLayout.Cells[4,index]:= RLFiltrosTabela.Cells[1,i];
-    ColunasLayout.Cells[5,index]:= RLFiltrosTabela.Cells[2,i];
-  end;
-end;
 
-procedure TFrmPrincipal.CarregarColunasGRID(Conection: TADOConnection;
-tblTabela: String; Grid: TDBGrid; ColunasLayout: TStringGrid);
-  var
-    i,coluna: Integer;
-    Titulo: String;
-    ListaColuna: TStringList;
-    booleanReadyOnly: Boolean;
 begin
-  Grid.DataSource.Enabled := false;
-  Grid.columns.Clear;
-  if FrmPrincipal.RLColunasAtivas.RowCount>1 then
-  begin
-    coluna:= 0;
-    FrmPrincipal.ProgressBarIncializa(FrmPrincipal.
-    RLColunasAtivas.RowCount,'Carregando colunas...');
-    for I := 0 to FrmPrincipal.RLColunasAtivas.RowCount-1 do
-    begin
-      Titulo:= FrmPrincipal.RLColunasAtivas.Cells[1,i];
-      ListaColuna:= dadosColuna(Titulo,ColunasLayout);
-      if ListaColuna.Count > 1 then
-      begin
-        if ListaColuna[3] = 'TRUE' then
-          booleanReadyOnly:= TRUE
-        else
-        begin
-          booleanReadyOnly:= false;
-        end;
-        FrmPrincipal.addColuna(Grid,
-        ListaColuna[0],ListaColuna[1],ListaColuna[2],Coluna,
-        StrToInt(ListaColuna[4]),booleanReadyOnly);
-        Coluna:= Coluna+1;
-        {if ((booleanReadyOnly = false)AND(tblTabela<>'')) then
-        begin
-          try
-            FrmPrincipal.SetupGridPickListSQL(Conection, ListaColuna[0],
-            'SELECT '+tblTabela+'.'+ListaColuna[0]+' FROM '
-            +tblTabela+' GROUP BY '+tblTabela+'.'+ListaColuna[0]+';',
-            Grid,0);
-          except
-          end;
-        end;}
-      end;
-      FrmPrincipal.ProgressBarIncremento(1);
-    end;
-    Grid.DataSource.Enabled := true;
-  end;
-  FrmPrincipal.LimparColunasFiltro(Grid,ColunasLayout);
-  FrmPrincipal.ProgressBarAtualizar;
+
 end;
 
 procedure TFrmPrincipal.carregarComboBox(Conection: TADOConnection;
@@ -2467,86 +1813,6 @@ begin
   except
     showmessage('Erro ao carregar o combobox do campo: '+txtField);
   end;
-end;
-
-procedure TFrmPrincipal.CarregarRLColunas(NomeArquivoMemo: String; ColunasLayout: TStringGrid);
-  var
-    i: integer;
-    ListaColunas: TStringList;
-    Endereco,strTitulo: String;
-begin
-  ListaColunas:=TStringList.Create;
-  ListaColunas.delimiter:= ';';
-  ListaColunas.StrictDelimiter:=true;
-  Endereco:= ExtractFilePath(Application.ExeName)+'Layout\'+NomeArquivoMemo;
-  if FileExists(Endereco) then
-    MemoPrincipal.Lines.LoadFromFile(Endereco)
-  else
-    FrmPrincipal.LayoutPadrao(ExtractFilePath(Application.ExeName)+
-    'Layout\'+NomeArquivoMemo,ColunasLayout,'TAB1;');
-
-  FrmPrincipal.RLColunasAtivas.RowCount:=1;
-  FrmPrincipal.RLColunasOpcoes.RowCount:=1;
-  FrmPrincipal.RLColunasAtivas.Cells[1,0]:= 'COLUNAS ATIVAS';
-  FrmPrincipal.RLColunasOpcoes.Cells[1,0]:= 'COLUNAS OPTATIVAS';
-  for i := 0 to MemoPrincipal.Lines.Count-1 do
-  begin
-    ListaColunas.Clear;
-    ListaColunas.DelimitedText:= MemoPrincipal.Lines[i];
-    if ListaColunas[0] = 'TAB1' then
-    begin
-      strTitulo:= FrmPrincipal.DeleteChar(char(9650),ListaColunas[1]);
-      strTitulo:= FrmPrincipal.DeleteChar(char(9660),strTitulo);
-      strTitulo:= FrmPrincipal.DeleteChar(char(8722),strTitulo);
-      FrmPrincipal.RLColunasAtivas.RowCount:= FrmPrincipal.RLColunasAtivas.RowCount+1;
-      FrmPrincipal.RLColunasAtivas.Cells[1,FrmPrincipal.RLColunasAtivas.RowCount-1]:=
-      strTitulo;
-    end
-    else if ListaColunas[0] = 'TAB2' then
-    begin
-      strTitulo:= FrmPrincipal.DeleteChar(char(9650),ListaColunas[1]);
-      strTitulo:= FrmPrincipal.DeleteChar(char(9660),strTitulo);
-      strTitulo:= FrmPrincipal.DeleteChar(char(8722),strTitulo);
-      FrmPrincipal.RLColunasOpcoes.RowCount:= FrmPrincipal.RLColunasOpcoes.RowCount+1;
-      FrmPrincipal.RLColunasOpcoes.Cells[1,FrmPrincipal.RLColunasOpcoes.RowCount-1]:=
-      strTitulo;
-    end;
-  end;
-  try
-    FrmPrincipal.RLColunasAtivas.FixedRows:= 1;
-  except
-  end;
-  try
-    FrmPrincipal.RLColunasOpcoes.FixedRows:= 1;
-  except
-  end;
-  FrmPrincipal.AutoFitGrade(FrmPrincipal.RLColunasAtivas);
-  FrmPrincipal.AutoFitGrade(FrmPrincipal.RLColunasOpcoes);
-  FrmPrincipal.RLColunasAtivas.ColWidths[0]:= 18;
-  FrmPrincipal.RLColunasOpcoes.ColWidths[0]:= 18;
-end;
-
-procedure TFrmPrincipal.CarregarRLColunasAtivasGRID(Grid: TDBGrid);
-  var
-    i: integer;
-    strTitulo: String;
-begin
-  FrmPrincipal.RLColunasAtivas.RowCount:=1;
-  FrmPrincipal.RLColunasAtivas.Cells[1,0]:= 'COLUNAS ATIVAS';
-  for i := 0 to Grid.Columns.Count-1 do
-  begin
-    strTitulo:= FrmPrincipal.DeleteChar(char(9650),Grid.Columns.Items[i].Title.Caption);
-    strTitulo:= FrmPrincipal.DeleteChar(char(9660),strTitulo);
-    strTitulo:= FrmPrincipal.DeleteChar(char(8722),strTitulo);
-    FrmPrincipal.RLColunasAtivas.RowCount:= FrmPrincipal.RLColunasAtivas.RowCount+1;
-    FrmPrincipal.RLColunasAtivas.Cells[1,FrmPrincipal.RLColunasAtivas.RowCount-1]:=strTitulo;
-  end;
-  try
-    FrmPrincipal.RLColunasAtivas.FixedRows:= 1;
-  except
-  end;
-  FrmPrincipal.AutoFitGrade(FrmPrincipal.RLColunasAtivas);
-  FrmPrincipal.RLColunasAtivas.ColWidths[0]:= 18;
 end;
 
 procedure TFrmPrincipal.carregarLoginUsuario(Chave: String);
@@ -2587,7 +1853,7 @@ begin
     //=========================================================
     //===========CARREGAR O PERFIL DE USUARIO==================
     //=========================================================
-    if logPerfil = 'Administrador' then //Administrador
+    if logPerfil = PERFILADM then //Administrador
     begin
       CadastroUsuario1.Enabled:= true;
       ProgramacaoDiaria2.Enabled:= true;
@@ -2596,11 +1862,9 @@ begin
       GerenciarTransportes1.Enabled:= true;
       Executantes1.Enabled:= true;
       CompactarBancoDados1.Enabled:= true;
-      actUpload.Enabled:= true;
-      actDownload.Enabled:= true;
       Converterverso1.Enabled:= true;
     end
-    else if logPerfil = 'Supervisor' then
+    else if logPerfil = PERFILSUPERVISAO then
     begin
       CadastroUsuario1.Enabled:= true;
       ProgramacaoDiaria2.Enabled:= true;
@@ -2609,11 +1873,9 @@ begin
       GerenciarTransportes1.Enabled:= true;
       Executantes1.Enabled:= true;
       CompactarBancoDados1.Enabled:= true;
-      actUpload.Enabled:= true;
-      actDownload.Enabled:= true;
-      Converterverso1.Enabled:= false;
+      Converterverso1.Enabled:= true;
     end
-    else if logPerfil = 'Programação' then
+    else if logPerfil = PERFILPROGRAMACAO then
     begin
       CadastroUsuario1.Enabled:= false;
       ProgramacaoDiaria2.Enabled:= true;
@@ -2622,11 +1884,9 @@ begin
       GerenciarTransportes1.Enabled:= true;
       Executantes1.Enabled:= true;
       CompactarBancoDados1.Enabled:= true;
-      actUpload.Enabled:= true;
-      actDownload.Enabled:= true;
-      Converterverso1.Enabled:= false;
+      Converterverso1.Enabled:= true;
     end
-    else if logPerfil = 'Hotelaria' then
+    else if logPerfil = PERFILHOTELARIA then
     begin
       CadastroUsuario1.Enabled:= false;
       ProgramacaoDiaria2.Enabled:= true;
@@ -2634,10 +1894,19 @@ begin
       ImportarPlanilhas1.Enabled:= true;
       GerenciarTransportes1.Enabled:= true;
       Executantes1.Enabled:= true;
-      CompactarBancoDados1.Enabled:= false;
-      actUpload.Enabled:= true;
-      actDownload.Enabled:= true;
-      Converterverso1.Enabled:= false;
+      CompactarBancoDados1.Enabled:= true;
+      Converterverso1.Enabled:= true;
+    end
+    else if logPerfil = PERFILRT then
+    begin
+      CadastroUsuario1.Enabled:= false;
+      ProgramacaoDiaria2.Enabled:= false;
+      SalvarBancoDadosComo1.Enabled:= true;
+      ImportarPlanilhas1.Enabled:= true;
+      GerenciarTransportes1.Enabled:= false;
+      Executantes1.Enabled:= true;
+      CompactarBancoDados1.Enabled:= true;
+      Converterverso1.Enabled:= true;
     end
     else //if logPerfil = 'Consulta' then
     begin
@@ -2647,12 +1916,17 @@ begin
       ImportarPlanilhas1.Enabled:= true;
       GerenciarTransportes1.Enabled:= true;
       Executantes1.Enabled:= false;
-      CompactarBancoDados1.Enabled:= false;
-      actUpload.Enabled:= false;
-      actDownload.Enabled:= false;
-      Converterverso1.Enabled:= false;
+      CompactarBancoDados1.Enabled:= true;
+      Converterverso1.Enabled:= true;
     end;
   end;
+end;
+
+procedure TFrmPrincipal.Force_Reconnect;
+begin
+  ADOConnection_Reconnect(FrmDataModule.ADOConnectionColibri);
+  ADOConnection_Reconnect(FrmDataModule.ADOConnectionMemoria);
+  ADOConnection_Reconnect(FrmDataModule.ADOConnectionConsulta);
 end;
 
 procedure TFrmPrincipal.carregarRadioGroup(ADOQuery: TADOQuery;
@@ -2797,24 +2071,12 @@ begin
   Except
     ShowMessage('Não foi possível organizar');
   End;
-  FrmPrincipal.PanelMagicFiltro1.Visible:= false;
-end;
-
-procedure TFrmPrincipal.ComboBoxOperadorCloseUp(Sender: TObject);
-begin
-  RLFiltrosTabela.Cells[2,RLFiltrosTabela.Row]:= (ComboBoxOperador.Text);
-  ComboBoxOperador.Visible := False;
 end;
 
 procedure TFrmPrincipal.ComboBoxOperadorKeyPress(Sender: TObject;
   var Key: Char);
 begin
   Key:= #0;
-end;
-
-procedure TFrmPrincipal.ComboBoxOperadorMouseLeave(Sender: TObject);
-begin
-  ComboBoxOperador.Visible := False;
 end;
 
 procedure TFrmPrincipal.CompactarBancoDados1Click(Sender: TObject);
@@ -2834,6 +2096,9 @@ begin
     //Memoria
     caminhoReg:= ExtractFilePath(caminhoReg)+'dbMemoria.mdb';
     compactarDB(caminhoReg,false,false,FrmDataModule.ADOConnectionMemoria);
+    //RT
+    caminhoReg:= ExtractFilePath(caminhoReg)+'dbRT.mdb';
+    compactarDB(caminhoReg,false,false,FrmDataModule.ADOConnectionRT);
   end;
 end;
 
@@ -3056,27 +2321,10 @@ end;
 
 procedure TFrmPrincipal.ConexoLOCAL1Click(Sender: TObject);
 begin
-  actAjudaLimpar.Execute;
-  PanelCONECTION.Visible:= true;
-  PanelCONECTION.Align:= alClient;
-  PanelAjuda1.Width:= 330;
-  PanelAjuda1.Height:= 160;
-
-  if booLOCAL then
-  begin
-    PanelTituloAjuda1.Caption:= 'Conectado LOCAL';
-    PanelTituloAjuda1.Color:= clRed;
-    actUpload.Enabled:= true;
-    actDownload.Enabled:= true;
-  end
+  if not Assigned(FrmConexaoLOCAL) then
+    FrmConexaoLOCAL:= TFrmConexaoLOCAL.Create(Application)
   else
-  begin
-    PanelTituloAjuda1.Caption:= 'Conectado REDE';
-    PanelTituloAjuda1.Color:= clGreen;
-    actUpload.Enabled:= false;
-    actDownload.Enabled:= false;
-  end;
-  PanelAjuda1.Visible:= true;
+    FrmConexaoLOCAL.Show;
 end;
 
 procedure TFrmPrincipal.ConfigGridLayout(Grid: TStringGrid; ACol, ARow: Integer;
@@ -3102,35 +2350,6 @@ begin
       Canvas.TextOut(aRect.Left+5, aRect.Top,
       Cells[ACol, ARow]);
     end;
-  end;
-end;
-
-procedure TFrmPrincipal.configPiroridade(edtPonto, edtLimite,
-  edtValorMax: TDBEdit; relacaoData: TDBComboBox; check: TDBCheckBox);
-begin
-  if check.Checked then
-  begin
-    edtPonto.Enabled:= true;
-    edtLimite.Enabled:= true;
-    edtValorMax.Enabled:= true;
-    relacaoData.Enabled:= true;
-    relacaoData.Hint:= HintRelacaoTempo(relacaoData);
-    edtPonto.Color:= clWhite;
-    edtLimite.Color:= clWhite;
-    edtValorMax.Color:= clWhite;
-    relacaoData.Color:= clWhite;
-  end
-  else
-  begin
-    edtPonto.Enabled:= false;
-    edtLimite.Enabled:= false;
-    edtValorMax.Enabled:= false;
-    relacaoData.Enabled:= false;
-    relacaoData.Hint:= HintRelacaoTempo(relacaoData);
-    edtPonto.Color:= clSilver;
-    edtLimite.Color:= clSilver;
-    edtValorMax.Color:= clSilver;
-    relacaoData.Color:= clSilver;
   end;
 end;
 
@@ -3170,64 +2389,6 @@ begin
   end;
 end;
 
-procedure TFrmPrincipal.configurarFiltro(Tipo: Integer; fieldName,ColunaIndex: String;
-ColunaReadOnly: Boolean; actFiltroInserir,actGridASC,actGridDESC,
-actSubstituirPor:TAction);
-begin
-  case Tipo of
-    0:
-    begin
-      FieldName:= FieldName;
-      FrmPrincipal.btnInserir.Action:= actFiltroInserir;
-      FrmPrincipal.btnASC.Action:= actGridASC;
-      FrmPrincipal.btnDESC.Action:= actGridDESC;
-      //======================================================
-      FrmPrincipal.MagicFieldName:= fieldName;
-      FrmPrincipal.MagicIndexColuna:= ColunaIndex;
-      FrmPrincipal.edtProcura.Text:= '';
-      FrmPrincipal.edtLocalizar.Text:= '';
-      FrmPrincipal.edtSubstituirPor.Text:= '';
-      //======================================================
-      FrmPrincipal.btnSubstituirPor.Enabled:= false;
-      FrmPrincipal.btnSubstituirPor.ImageIndex:= 59;
-      FrmPrincipal.edtLocalizar.Enabled:= false;
-      FrmPrincipal.edtSubstituirPor.Enabled:= false;
-      FrmPrincipal.edtLocalizar.Color:= clSilver;
-      FrmPrincipal.edtSubstituirPor.Color:= clSilver;
-    end;
-    1:
-    begin
-      FrmPrincipal.btnInserir.Action:= actFiltroInserir;
-      FrmPrincipal.btnASC.Action:= actGridASC;
-      FrmPrincipal.btnDESC.Action:= actGridDESC;
-      FrmPrincipal.btnSubstituirPor.Action:= actSubstituirPor;
-      //======================================================
-      FrmPrincipal.MagicFieldName:= fieldName;
-      FrmPrincipal.MagicIndexColuna:= ColunaIndex;
-      FrmPrincipal.edtProcura.Text:= '';
-      FrmPrincipal.edtLocalizar.Text:= '';
-      FrmPrincipal.edtSubstituirPor.Text:= '';
-      //======================================================
-      if ColunaReadOnly then
-      begin
-        actSubstituirPor.Enabled:= false;
-        FrmPrincipal.edtLocalizar.Enabled:= false;
-        FrmPrincipal.edtSubstituirPor.Enabled:= false;
-        FrmPrincipal.edtLocalizar.Color:= clSilver;
-        FrmPrincipal.edtSubstituirPor.Color:= clSilver;
-      end
-      else
-      begin
-        actSubstituirPor.Enabled:= true;
-        FrmPrincipal.edtLocalizar.Enabled:= true;
-        FrmPrincipal.edtSubstituirPor.Enabled:= true;
-        FrmPrincipal.edtLocalizar.Color:= clWhite;
-        FrmPrincipal.edtSubstituirPor.Color:= clWhite;
-      end;
-    end;
-  end;
-end;
-
 procedure TFrmPrincipal.ControledeGeradores1Click(Sender: TObject);
 begin
   if not Assigned(FrmControleGeradores) then
@@ -3236,7 +2397,7 @@ begin
     FrmControleGeradores.Show;
 end;
 
-procedure TFrmPrincipal.CopiarProgramacao(DataProgramacao: String;DataSource: TDataSource);
+{procedure TFrmPrincipal.CopiarProgramacao(DataProgramacao: String; DataSource: TDataSource);
   var
     CodigoProgramacaoDiariaREF,CodigoProgramacaoDiariaGravar: Integer;
     LogAcao,txtTipoEtapaServico,txtDestino,NumExecutantes: String;
@@ -3290,6 +2451,191 @@ begin
   'SELECT tblProgramacaoServico.* FROM tblProgramacaoServico '+
   'WHERE (CodigoProgramacaoDiaria=@Servico);',true,false);
   //===============================================================================
+end;}
+
+procedure TFrmPrincipal.CopiarProgramacao(const ADataProgramacao: TDateTime;
+  ASource: TDataSource);
+var
+  CodigoProgramacaoDiariaREF: Integer;
+  CodigoProgramacaoDiariaGravar: Integer;
+  LogAcao: string;
+  Destino: string;
+  TipoEtapaServico: string;
+  NumExecutantes: Integer;
+  DS: TDataSet;
+begin
+  if (ASource = nil) or (ASource.DataSet = nil) or (not ASource.DataSet.Active) then
+    raise Exception.Create('Fonte de dados da programação inválida.');
+
+  DS := ASource.DataSet;
+
+  Destino := DS.FieldByName('txtDestino').AsString;
+  TipoEtapaServico := DS.FieldByName('txtTipoEtapaServico').AsString;
+  NumExecutantes := DS.FieldByName('NumExecutantes').AsInteger;
+  CodigoProgramacaoDiariaREF := DS.FieldByName('idProgramacaoDiaria').AsInteger;
+
+  FrmDataModule.ADOConnectionColibri.BeginTrans;
+  try
+    with FrmDataModule.ADOQueryInserirProgramacao do
+    begin
+      Close;
+      Open;
+      Insert;
+
+      FieldByName('DataProgramacao').AsDateTime := Trunc(ADataProgramacao);
+      FieldByName('txtDestino').AsString := Destino;
+      FieldByName('txtTipoEtapaServico').AsString := TipoEtapaServico;
+      FieldByName('NumExecutantes').AsInteger := NumExecutantes;
+      FieldByName('NumCancelados').AsInteger := 0;
+      FieldByName('NumAprovados').AsInteger := NumExecutantes;
+      FieldByName('CriadoPor').AsString := FrmPrincipal.logChave;
+      FieldByName('ComputadorCriacao').AsString := FrmPrincipal.logMaquina;
+      FieldByName('DataCriacao').AsDateTime := Now;
+
+      LogAcao :=
+        'Programação: ' + FormatDateTime('dd/mm/yyyy', ADataProgramacao) + #9 +
+        Destino + #9 +
+        TipoEtapaServico + #9 +
+        '[' + logChave + '; ' + FormatDateTime('dd/mm/yyyy hh:nn:ss', Now) +
+        '; ' + logMaquina + '; Criação]';
+
+      FieldByName('LogAcao').AsString := LogAcao;
+
+      Post;
+
+      CodigoProgramacaoDiariaGravar := FieldByName('idProgramacaoDiaria').AsInteger;
+    end;
+
+    CopiarRegistrosRelacionados(
+      FrmDataModule.ADOQueryInserirExecutante1,
+      CodigoProgramacaoDiariaREF,
+      CodigoProgramacaoDiariaGravar,
+      'CodigoProgramacaoDiaria',
+      'SELECT * FROM tblProgramacaoExecutante ' +
+      'WHERE CodigoProgramacaoDiaria = :CodigoProgramacaoDiaria ' +
+      'ORDER BY NomeExecutante',
+      True
+    );
+
+    CopiarRegistrosRelacionados(
+      FrmDataModule.ADOQueryInserirServico,
+      CodigoProgramacaoDiariaREF,
+      CodigoProgramacaoDiariaGravar,
+      'CodigoProgramacaoDiaria',
+      'SELECT * FROM tblProgramacaoServico ' +
+      'WHERE CodigoProgramacaoDiaria = :CodigoProgramacaoDiaria',
+      False
+    );
+
+    LimparCamposRTDaProgramacao(CodigoProgramacaoDiariaGravar);
+
+    FrmDataModule.ADOConnectionColibri.CommitTrans;
+  except
+    on E: Exception do
+    begin
+      FrmDataModule.ADOConnectionColibri.RollbackTrans;
+      raise Exception.Create('Erro ao copiar programação: ' + E.Message);
+    end;
+  end;
+end;
+
+procedure TFrmPrincipal.CopiarRegistrosRelacionados(
+  AGravarQuery: TADOQuery;
+  const AIdOrigem, AIdDestino: Integer;
+  const ACampoLigacao: string;
+  const ASQLConsulta: string;
+  const AExecutante: Boolean);
+var
+  QConsulta: TADOQuery;
+  I: Integer;
+  NomeCampo: string;
+begin
+  QConsulta := TADOQuery.Create(nil);
+  try
+    QConsulta.Connection := FrmDataModule.ADOConnectionColibri;
+    QConsulta.Close;
+    QConsulta.SQL.Text := ASQLConsulta;
+    QConsulta.Parameters.ParamByName('CodigoProgramacaoDiaria').Value := AIdOrigem;
+    QConsulta.Open;
+
+    AGravarQuery.Close;
+    AGravarQuery.Open;
+
+    while not QConsulta.Eof do
+    begin
+      AGravarQuery.Insert;
+
+      for I := 0 to QConsulta.FieldCount - 1 do
+      begin
+        NomeCampo := QConsulta.Fields[I].FieldName;
+
+        if SameText(NomeCampo, 'idProgramacaoExecutante') or
+           SameText(NomeCampo, 'idProgramacaoServico') or
+           SameText(NomeCampo, 'id') then
+          Continue;
+
+        if AGravarQuery.FindField(NomeCampo) <> nil then
+          AGravarQuery.FieldByName(NomeCampo).Value :=
+            QConsulta.FieldByName(NomeCampo).Value;
+      end;
+
+      if AGravarQuery.FindField(ACampoLigacao) <> nil then
+        AGravarQuery.FieldByName(ACampoLigacao).AsInteger := AIdDestino;
+
+      if AExecutante then
+      begin
+        if AGravarQuery.FindField('StatusProgramacao') <> nil then
+          AGravarQuery.FieldByName('StatusProgramacao').AsString := 'Aprovado';
+
+        if AGravarQuery.FindField('MotivoProgramacao') <> nil then
+          AGravarQuery.FieldByName('MotivoProgramacao').AsString := '';
+
+        if AGravarQuery.FindField('InseridoProgramacaoTransporte') <> nil then
+          AGravarQuery.FieldByName('InseridoProgramacaoTransporte').AsBoolean := False;
+      end;
+
+      AGravarQuery.Post;
+      QConsulta.Next;
+    end;
+
+  finally
+    QConsulta.Free;
+  end;
+end;
+
+procedure TFrmPrincipal.LimparCamposRTDaProgramacao(
+  const ACodigoProgramacaoDiaria: Integer);
+var
+  Q: TADOQuery;
+begin
+  Q := TADOQuery.Create(nil);
+  try
+    Q.Connection := FrmDataModule.ADOConnectionColibri;
+    Q.ParamCheck := True;
+
+    Q.SQL.Text :=
+      'UPDATE tblProgramacaoExecutante ' +
+      'SET ' +
+      '  RT = NULL, ' +
+      '  RT_Transbordo = 0, ' +
+      '  RT_TransbordoAereo = 0, ' +
+      '  booleanRecolhimento = 0, ' +
+      '  RT_HoraIda = NULL, ' +
+      '  RT_HoraVolta = NULL, ' +
+      '  RT_GrupoTransbordo = NULL, ' +
+      '  RT_PrimeiraOrigemTransbordo = NULL, ' +
+      '  RT_PrimeiroDestinoTransbordo = NULL, ' +
+      '  RT_SeqTransbordo = NULL, ' +
+      '  RT_Status = NULL ' +
+      'WHERE CodigoProgramacaoDiaria = :pCodigoProgramacaoDiaria';
+
+    Q.Parameters.ParamByName('pCodigoProgramacaoDiaria').DataType := ftInteger;
+    Q.Parameters.ParamByName('pCodigoProgramacaoDiaria').Value := ACodigoProgramacaoDiaria;
+
+    Q.ExecSQL;
+  finally
+    Q.Free;
+  end;
 end;
 
 function TFrmPrincipal.corrigirData(strData: TDateTime): String;
@@ -3314,7 +2660,7 @@ begin
     PenStyle:= psSolid;
     DataColor:= clNavy;
     //TEXTO
-    Dimensao:= FormatFloat('0.00km',
+    Dimensao:= FormatFloat('0.00 km',
     FrmPrincipal.DistanciaPontos(No1.X,No1.Y,No2.X,No2.Y));
     ptTexto.X := (No1.X + No2.X)/2;//Coordenada X
     ptTexto.Y := (No1.Y + No2.Y)/2;//Coordenada Y
@@ -3327,7 +2673,7 @@ begin
     Text(ptTexto.X,ptTexto.Y,10,Dimensao);
     Repaint;
     StatusBarMapa.Panels[3].Text:= Dimensao;
-    FrmPrincipal.AutoFitStatusBar(StatusBarMapa);
+    AutoFitStatusBar(StatusBarMapa);
   end;
 end;
 
@@ -3451,319 +2797,9 @@ begin
   Result := EncodeDate(Ano, Mes, Dia);
 end;
 
-procedure TFrmPrincipal.DBCheckBoxANPClick(Sender: TObject);
-begin
-  configPiroridade(edtPontoANP,edtLimiteANP,edtValorMaxANP,
-  DBComboBoxANP,DBCheckBoxANP);
-end;
-
-procedure TFrmPrincipal.DBCheckBoxANVISAClick(Sender: TObject);
-begin
-  configPiroridade(edtPontoANVISA,edtLimiteANVISA,edtValorMaxANVISA,
-  DBComboBoxANVISA,DBCheckBoxANVISA);
-end;
-
-procedure TFrmPrincipal.DBCheckBoxATMClick(Sender: TObject);
-begin
-  configPiroridade(edtPontoATM,edtLimiteATM,edtValorMaxATM,
-  DBComboBoxATM,DBCheckBoxATM);
-end;
-
-procedure TFrmPrincipal.DBCheckBoxCorretivaClick(Sender: TObject);
-begin
-  configPiroridade(edtPontoCorretiva,edtLimiteCorretiva,edtValorMaxCorretiva,
-  DBComboBoxCorretiva,DBCheckBoxCorretiva);
-end;
-
-procedure TFrmPrincipal.DBCheckBoxCustoClick(Sender: TObject);
-begin
-  if DBCheckBoxCusto.Checked then
-  begin
-    edtCustoMaximo.Enabled:= true;
-    edtCustoMinimo.Enabled:= true;
-    edtPontoMinimo.Enabled:= true;
-    edtPontoMaximo.Enabled:= true;
-    edtCustoMaximo.Color:= clWhite;
-    edtCustoMinimo.Color:= clWhite;
-    edtPontoMinimo.Color:= clWhite;
-    edtPontoMaximo.Color:= clWhite;
-  end
-  else
-  begin
-    edtCustoMaximo.Enabled:= false;
-    edtCustoMinimo.Enabled:= false;
-    edtPontoMinimo.Enabled:= false;
-    edtPontoMaximo.Enabled:= false;
-    edtCustoMaximo.Color:= clSilver;
-    edtCustoMinimo.Color:= clSilver;
-    edtPontoMinimo.Color:= clSilver;
-    edtPontoMaximo.Color:= clSilver;
-  end;
-end;
-
-procedure TFrmPrincipal.DBCheckBoxECClick(Sender: TObject);
-begin
-  configPiroridade(edtPontoEC,edtLimiteEC,edtValorMaxEC,
-  DBComboBoxEC,DBCheckBoxEC);
-end;
-
-procedure TFrmPrincipal.DBCheckBoxFOClick(Sender: TObject);
-begin
-  configPiroridade(edtPontoFO,edtLimiteFO,edtValorMaxFO,
-  DBComboBoxFO,DBCheckBoxFO);
-end;
-
-procedure TFrmPrincipal.DBCheckBoxNR10Click(Sender: TObject);
-begin
-  configPiroridade(edtPontoNR10,edtLimiteNR10,edtValorMaxNR10,
-  DBComboBoxNR10,DBCheckBoxNR10);
-end;
-
-procedure TFrmPrincipal.DBCheckBoxIBAMAClick(Sender: TObject);
-begin
-  configPiroridade(edtPontoIBAMA,edtLimiteIBAMA,edtValorMaxIBAMA,
-  DBComboBoxIBAMA,DBCheckBoxIBAMA);
-end;
-
-procedure TFrmPrincipal.DBCheckBoxICPMAClick(Sender: TObject);
-begin
-  configPiroridade(edtPontoICPMA,edtLimiteICPMA,edtValorMaxICPMA,
-  DBComboBoxICPMA,DBCheckBoxICPMA);
-end;
-
-procedure TFrmPrincipal.DBCheckBoxInspecaoClick(Sender: TObject);
-begin
-  configPiroridade(edtPontoInspecao,edtLimiteInspecao,edtValorMaxInspecao,
-  DBComboBoxInspecao,DBCheckBoxInspecao);
-end;
-
-procedure TFrmPrincipal.DBCheckBoxINSPLANClick(Sender: TObject);
-begin
-  configPiroridade(edtPontoINSPLAN,edtLimiteINSPLAN,edtValorMaxINSPLAN,
-  DBComboBoxINSPLAN,DBCheckBoxINSPLAN);
-end;
-
-procedure TFrmPrincipal.DBCheckBoxMarinhaClick(Sender: TObject);
-begin
-  configPiroridade(edtPontoMarinha,edtLimiteMarinha,edtValorMaxMarinha,
-  DBComboBoxMarinha,DBCheckBoxMarinha);
-end;
-
-procedure TFrmPrincipal.DBCheckBoxMergulhoClick(Sender: TObject);
-begin
-  configPiroridade(edtPontoMergulho,edtLimiteMergulho,edtValorMaxMergulho,
-  DBComboBoxMergulho,DBCheckBoxMergulho);
-end;
-
-procedure TFrmPrincipal.DBCheckBoxPreventivaClick(Sender: TObject);
-begin
-  configPiroridade(edtPontoPreventiva,edtLimitePreventiva,edtValorMaxPreventiva,
-  DBComboBoxPreventiva,DBCheckBoxPreventiva);
-end;
-
-procedure TFrmPrincipal.DBCheckBoxROClick(Sender: TObject);
-begin
-  configPiroridade(edtPontoRO,edtLimiteRO,edtValorMaxRO,
-  DBComboBoxRO,DBCheckBoxRO);
-end;
-
-procedure TFrmPrincipal.DBCheckBoxRTIAClick(Sender: TObject);
-begin
-  configPiroridade(edtPontoRTIA,edtLimiteRTIA,edtValorMaxRTIA,
-  DBComboBoxRTIA,DBCheckBoxRTIA);
-end;
-
-procedure TFrmPrincipal.DBCheckBoxRTIBClick(Sender: TObject);
-begin
-  configPiroridade(edtPontoRTIB,edtLimiteRTIB,edtValorMaxRTIB,
-  DBComboBoxRTIB,DBCheckBoxRTIB);
-end;
-
-procedure TFrmPrincipal.DBCheckBoxRTICClick(Sender: TObject);
-begin
-  configPiroridade(edtPontoRTIC,edtLimiteRTIC,edtValorMaxRTIC,
-  DBComboBoxRTIC,DBCheckBoxRTIC);
-end;
-
-procedure TFrmPrincipal.DBCheckBoxRTIDClick(Sender: TObject);
-begin
-  configPiroridade(edtPontoRTID,edtLimiteRTID,edtValorMaxRTID,
-  DBComboBoxRTID,DBCheckBoxRTID);
-end;
-
-procedure TFrmPrincipal.DBComboBoxANPChange(Sender: TObject);
-begin
-DBComboBoxANP.Hint:= HintRelacaoTempo(DBComboBoxANP);
-end;
-
-procedure TFrmPrincipal.DBComboBoxANVISAChange(Sender: TObject);
-begin
-DBComboBoxANVISA.Hint:= HintRelacaoTempo(DBComboBoxANVISA);
-end;
-
-procedure TFrmPrincipal.DBComboBoxATMChange(Sender: TObject);
-begin
-DBComboBoxATM.Hint:= HintRelacaoTempo(DBComboBoxATM);
-end;
-
-procedure TFrmPrincipal.DBComboBoxCorretivaChange(Sender: TObject);
-begin
-DBComboBoxCorretiva.Hint:= HintRelacaoTempo(DBComboBoxCorretiva);
-end;
-
-procedure TFrmPrincipal.DBComboBoxECChange(Sender: TObject);
-begin
-DBComboBoxEC.Hint:= HintRelacaoTempo(DBComboBoxEC);
-end;
-
-procedure TFrmPrincipal.DBComboBoxFOChange(Sender: TObject);
-begin
-DBComboBoxFO.Hint:= HintRelacaoTempo(DBComboBoxFO);
-end;
-
-procedure TFrmPrincipal.DBComboBoxNR10Change(Sender: TObject);
-begin
-DBComboBoxNR10.Hint:= HintRelacaoTempo(DBComboBoxNR10);
-end;
-
-procedure TFrmPrincipal.DBComboBoxIBAMAChange(Sender: TObject);
-begin
-DBComboBoxIBAMA.Hint:= HintRelacaoTempo(DBComboBoxIBAMA);
-end;
-
-procedure TFrmPrincipal.DBComboBoxICPMAChange(Sender: TObject);
-begin
-DBComboBoxICPMA.Hint:= HintRelacaoTempo(DBComboBoxICPMA);
-end;
-
-procedure TFrmPrincipal.DBComboBoxInspecaoChange(Sender: TObject);
-begin
-DBComboBoxInspecao.Hint:= HintRelacaoTempo(DBComboBoxInspecao);
-end;
-
-procedure TFrmPrincipal.DBComboBoxINSPLANChange(Sender: TObject);
-begin
-DBComboBoxINSPLAN.Hint:= HintRelacaoTempo(DBComboBoxINSPLAN);
-end;
-
-procedure TFrmPrincipal.DBComboBoxMarinhaChange(Sender: TObject);
-begin
-DBComboBoxMarinha.Hint:= HintRelacaoTempo(DBComboBoxMarinha);
-end;
-
-procedure TFrmPrincipal.DBComboBoxMergulhoChange(Sender: TObject);
-begin
-DBComboBoxMergulho.Hint:= HintRelacaoTempo(DBComboBoxMergulho);
-end;
-
-procedure TFrmPrincipal.DBComboBoxPreventivaChange(Sender: TObject);
-begin
-DBComboBoxPreventiva.Hint:= HintRelacaoTempo(DBComboBoxPreventiva);
-end;
-
 procedure TFrmPrincipal.DBComboBoxPreventivaKeyPress(Sender: TObject; var Key: Char);
 begin
 key:= #0;
-end;
-
-procedure TFrmPrincipal.DBComboBoxROChange(Sender: TObject);
-begin
-DBComboBoxRO.Hint:= HintRelacaoTempo(DBComboBoxRO);
-end;
-
-procedure TFrmPrincipal.DBComboBoxRTIAChange(Sender: TObject);
-begin
-DBComboBoxRTIA.Hint:= HintRelacaoTempo(DBComboBoxRTIA);
-end;
-
-procedure TFrmPrincipal.DBComboBoxRTIBChange(Sender: TObject);
-begin
-DBComboBoxRTIB.Hint:= HintRelacaoTempo(DBComboBoxRTIB);
-end;
-
-procedure TFrmPrincipal.DBComboBoxRTICChange(Sender: TObject);
-begin
-DBComboBoxRTIC.Hint:= HintRelacaoTempo(DBComboBoxRTIC);
-end;
-
-procedure TFrmPrincipal.DBComboBoxRTIDChange(Sender: TObject);
-begin
-DBComboBoxRTID.Hint:= HintRelacaoTempo(DBComboBoxRTID);
-end;
-
-procedure TFrmPrincipal.DBGridPalavraChaveCellClick(Column: TColumn);
-begin
-  if ((FrmPrincipal.logPerfil = 'Administrador')OR
-  (FrmPrincipal.logPerfil = 'Programação')OR
-  (FrmPrincipal.logPerfil = 'Supervisor')) then
-  begin
-    try
-      if (Self.DBGridPalavraChave.SelectedField.DataType = ftBoolean)AND
-      (Column.Field.FieldName = 'booleanSelecao') then
-      begin
-        DBGridPalavraChave.Options:=
-        [dgTitles,dgIndicator,dgColumnResize,dgColLines,dgRowLines,dgTabs,dgAlwaysShowSelection,dgTitleClick,dgTitleHotTrack];
-        FrmDataModule.ADOQueryPalavraChave.Edit;
-        FrmDataModule.DataSourcePalavraChave.DataSet.
-        FieldByName('booleanSelecao').AsBoolean:= not Self.DBGridPalavraChave.SelectedField.AsBoolean;
-        try
-          FrmDataModule.ADOQueryPalavraChave.Post;
-        except
-          MessageBox(0,'Banco de dados alterado, necessário atualização!','Banco de Dados',MB_ICONINFORMATION);
-          FrmDataModule.ADOQueryPalavraChave.Cancel;
-        end;
-      end
-      else if (Self.DBGridPalavraChave.SelectedField.DataType = ftBoolean)AND
-      (Column.Field.FieldName = 'Kit_PS') then
-      begin
-        DBGridPalavraChave.Options:=
-        [dgTitles,dgIndicator,dgColumnResize,dgColLines,dgRowLines,dgTabs,dgAlwaysShowSelection,dgTitleClick,dgTitleHotTrack];
-        FrmDataModule.ADOQueryPalavraChave.Edit;
-        FrmDataModule.DataSourcePalavraChave.DataSet.
-        FieldByName('Kit_PS').AsBoolean:= not Self.DBGridPalavraChave.SelectedField.AsBoolean;
-        try
-          FrmDataModule.ADOQueryPalavraChave.Post;
-        except
-          MessageBox(0,'Banco de dados alterado, necessário atualização!','Banco de Dados',MB_ICONINFORMATION);
-          FrmDataModule.ADOQueryPalavraChave.Cancel;
-        end;
-      end
-      else
-        DBGridPalavraChave.Options:=
-        [dgEditing,dgTitles,dgIndicator,dgColumnResize,dgColLines,dgRowLines,dgTabs,dgAlwaysShowSelection,dgTitleClick,dgTitleHotTrack];
-    except
-    end;
-  end;
-end;
-
-procedure TFrmPrincipal.DBGridPalavraChaveDrawColumnCell(Sender: TObject;
-  const Rect: TRect; DataCol: Integer; Column: TColumn; State: TGridDrawState);
-  Const
-    CtrlState : array[Boolean] of Integer = (DFCS_BUTTONCHECK,
-    DFCS_BUTTONCHECK or DFCS_CHECKED);
-  var
-    CheckBoxRectangle : TRect;
-begin
-  FrmPrincipal.GridZebrado(DBGridPalavraChave,ColunasLayoutPalavraChave,State,Rect,DataCol,Column);
-  if (Column.Field.FieldName = 'booleanSelecao')then   //  mudança no código
-  begin
-    Self.DBGridPalavraChave.Canvas.FillRect(Rect);
-    CheckBoxRectangle.Left := Rect.Left + 2;
-    CheckBoxRectangle.Right := Rect.Right - 2;
-    CheckBoxRectangle.Top := Rect.Top + 2;
-    CheckBoxRectangle.Bottom := Rect.Bottom - 2;
-    DrawFrameControl(Self.DBGridPalavraChave.Canvas.Handle,
-    CheckBoxRectangle, DFC_BUTTON,
-    CtrlState[Column.Field.AsBoolean]);
-  end
-end;
-
-procedure TFrmPrincipal.DBGridPalavraChaveTitleClick(Column: TColumn);
-begin
-  FrmPrincipal.configurarFiltro(1,Column.FieldName,IntToStr(Column.Index),
-  Column.ReadOnly,actFiltroInserir,actGridASC,actGridDESC,actSubstituirPor);
-  //======================================================
-  FrmPrincipal.titleGrid(ColunasLayoutPalavraChave,'Consulta',FrmDataModule.ADOQueryPalavraChave.SQL.Text);
 end;
 
 function TFrmPrincipal.DecimalHoras(cValor: Double): String;
@@ -4068,12 +3104,8 @@ begin
         if booleanExecutante then
         begin
           GravarDataSource.DataSet.FieldByName('StatusProgramacao').AsString:= 'Aprovado';
-          GravarDataSource.DataSet.FieldByName('StatusExecucao').AsString:= 'Executado';
           GravarDataSource.DataSet.FieldByName('MotivoProgramacao').AsString:= '';
-          GravarDataSource.DataSet.FieldByName('MotivoNaoExecucao').AsString:= '';
           GravarDataSource.DataSet.FieldByName('InseridoProgramacaoTransporte').AsBoolean:= false;
-          GravarDataSource.DataSet.FieldByName('RT').AsString:= 'SEM RT';
-          GravarDataSource.DataSet.FieldByName('TipoEmbarque').AsString:= 'SEM RT';
         end;
 
         GravarQuery.Post;
@@ -4097,119 +3129,12 @@ begin
   end;
 end;
 
-procedure TFrmPrincipal.edtCustoMaximoExit(Sender: TObject);
-begin
-  edtCustoMaximo.Text:= FormatFloat('R$ ###,##0.00',StrToFloat(edtCustoMaximo.Text));
-end;
-
-procedure TFrmPrincipal.edtCustoMinimoExit(Sender: TObject);
-begin
-  edtCustoMinimo.Text:= FormatFloat('R$ ###,##0.00',StrToFloat(edtCustoMinimo.Text));
-end;
-
-procedure TFrmPrincipal.edtProcuraKeyPress(Sender: TObject; var Key: Char);
-begin
-  if Key = #13 then
-    btnInserir.Click;
-end;
-
 procedure TFrmPrincipal.Embarcacao1Click(Sender: TObject);
 begin
   if not Assigned(FrmEmbarcacao) then
     FrmEmbarcacao:= TFrmEmbarcacao.Create(Application)
   else
     FrmEmbarcacao.Show;
-end;
-
-procedure TFrmPrincipal.ExcelStringGrid(Grid: TStringGrid;
-  NomePlanilha,Titulo1,Titulo2: String; LinhaInicial: Integer);
-  var
-    Excel, Sheet: Variant;
-    NumLinhas, NumColunas, Linha, Coluna, i, j, tipoNumero: Integer;
-    celula1: String;
-begin
-  Try
-    Excel := CreateOleObject('Excel.Application');
-    Excel.Workbooks.Add(1);
-    Excel.Caption := NomePlanilha;
-    Excel.Workbooks[1].WorkSheets[1].Name := NomePlanilha;
-    Sheet := Excel.Workbooks[1].WorkSheets[NomePlanilha];
-    // CONFIGURAÇÃO DO PROGRESSBAR
-    FrmPrincipal.ProgressBarIncializa(Grid.ColCount*Grid.RowCount,'Gerando Excel...');
-    Screen.Cursor := crHourGlass;
-    // ==========CARREGAR OS DADOS===============
-    NumLinhas := Grid.RowCount;
-    NumColunas := Grid.ColCount;
-    Linha := LinhaInicial;
-    Coluna := 1;
-    for j := 0 to Grid.ColCount - 1 do
-      for i := 0 to Grid.RowCount - 1 do
-      begin
-        tipoNumero:= isNumeric(Grid.Cells[j, i]);
-        case tipoNumero of
-          0://texto
-          begin
-            Excel.Workbooks[1].Sheets[1].Cells[Linha+i,Coluna+j].NumberFormat:= '@';
-            Excel.Workbooks[1].Sheets[1].Cells[Linha+i,Coluna+j] := Grid.Cells[j, i];
-          end;
-          1://Inteiro
-          begin
-            Excel.Workbooks[1].Sheets[1].Cells[Linha+i,Coluna+j].NumberFormat:= '0';
-            Excel.Workbooks[1].Sheets[1].Cells[Linha+i,Coluna+j] := Grid.Cells[j, i];
-          end;
-          2://Float
-          begin
-            Excel.Workbooks[1].Sheets[1].Cells[Linha+i,Coluna+j].NumberFormat:= '0,00';
-            Excel.Workbooks[1].Sheets[1].Cells[Linha+i,Coluna+j] := Grid.Cells[j, i];
-          end;
-          3://Data
-          begin
-            Excel.Workbooks[1].Sheets[1].Cells[Linha+i,Coluna+j].NumberFormat:= 'dd/mm/aaaa';
-            Excel.Workbooks[1].Sheets[1].Cells[Linha+i,Coluna+j] := StrToDate(Grid.Cells[j, i]);
-          end;
-        end;
-        {// COLORIR LINHAS ALTERNADAMENTE
-        if (Linha + i) MOD 2 = 0 then
-        begin
-          // ANÁLISE 1
-          Sheet.Range['A' + IntToStr(Linha + i),
-            FrmPrincipal.RefToCell(NumColunas, Linha + i)].Interior.Color :=
-            $00FFCF9F;
-        end;}
-        // ProgressBar
-        FrmPrincipal.ProgressBarIncremento(1);
-      end;
-    // =========LETRAS CABEÇALHOS=========
-    if Titulo1 <> '' then
-      Excel.Workbooks[1].Sheets[1].Cells[1,1] := Titulo1;
-    if Titulo2 <> '' then
-      Excel.Workbooks[1].Sheets[1].Cells[2,1] := Titulo2;
-    Sheet.Rows[LinhaInicial].Font.Bold := true;
-    Sheet.Rows[LinhaInicial].Font.Italic := true;
-    Sheet.Rows[Linha + NumLinhas + 2].Font.Bold := true;
-    Sheet.Rows[Linha + NumLinhas + 2].Font.Italic := true;
-    //Sheet.Columns[1].Font.Bold := true;
-    //Sheet.Columns[1].Font.Italic := true;
-    // ====================GRADE=================
-    celula1 := FrmPrincipal.RefToCell(NumColunas, NumLinhas + Linha - 1);
-    Sheet.Range['A'+IntToStr(LinhaInicial), celula1].Borders.LineStyle := 1;
-    Sheet.Range['A'+IntToStr(LinhaInicial), celula1].Borders.Weight := 2;
-    Sheet.Range['A'+IntToStr(LinhaInicial), celula1].Borders.ColorIndex := 1;
-    Sheet.Range['A'+IntToStr(LinhaInicial), celula1].HorizontalAlignment := 3; // 3=Center
-    // cor do cabeçalho
-    Sheet.Range['A'+IntToStr(LinhaInicial), FrmPrincipal.RefToCell(NumColunas, Linha)].Interior.Color
-      := clSilver; // Cor da Célula
-    //===================================================
-    Excel.Visible := true;
-    Excel.Columns.Autofit;
-  Except
-    MessageBox(0, 'Esta operação não pode ser executada.' + #13 + #10 +
-      'Verifique se o Microsoft Office Excel esta instalado na sua máquina.',
-      'Excel', MB_ICONERROR);
-  End;
-  // Atualizar ProgressBar
-  FrmPrincipal.ProgressBarAtualizar;
-  Screen.Cursor := crDefault;
 end;
 
 procedure TExcluirTableDB(NomeTabela: String;
@@ -4243,75 +3168,9 @@ begin
     FrmConsultaExecutantesProgramados.Show;
 end;
 
-procedure TFrmPrincipal.ExportarExcel(TableName: String; BancoDados: Integer);
-  Const
-    acQuitSaveAll             = $00000001;
-    acExport                  = $00000001;
-    acSpreadsheetTypeExcel9   = $00000008;
-    acSpreadsheetTypeExcel12  = $00000009;
-  var
-   LAccess : OleVariant;
-   enderecoDB: String;
-begin
-  case BancoDados of
-    0: //Colibri
-    begin
-      enderecoDB := FrmPrincipal.registroEndereco('Banco de dados');
-    end;
-    1: //Memoria
-    begin
-      enderecoDB := FrmPrincipal.registroEndereco('Banco de dados');
-      enderecoDB:= ExtractFilePath(enderecoDB)+'\dbMemoria.mdb';
-    end;
-    2: //Consulta
-    begin
-      enderecoDB := FrmPrincipal.registroEndereco('Banco de dados');
-      enderecoDB:= ExtractFilePath(enderecoDB)+'\dbConsulta.mdb';
-    end;
-  end;
-  SaveDialog1.DefaultExt:= '*.xls';
-  SaveDialog1.Filter:= 'Excel|*.xls|Excel|*.xlsx';
-  if SaveDialog1.Execute then
-  begin
-    //create the COM Object
-    LAccess := CreateOleObject('Access.Application');
-    //open the access database
-    LAccess.OpenCurrentDatabase(enderecoDB);
-    //export the data
-    LAccess.DoCmd.TransferSpreadsheet( acExport, acSpreadsheetTypeExcel9,
-    TableName, SaveDialog1.FileName, True);
-    LAccess.CloseCurrentDatabase;
-    LAccess.Quit(1);
-  end;
-end;
-
 procedure TFrmPrincipal.Fechar1Click(Sender: TObject);
 begin
   Application.Terminate;
-end;
-
-procedure TFrmPrincipal.FiltrosTabela(Grid: TDBGrid; ColunasLayout: TStringGrid);
-  var
-    i,index: Integer;
-begin
-  RLFiltrosTabela.RowCount:= Grid.Columns.Count+1;
-  RLFiltrosTabela.ColCount:= 3;
-  RLFiltrosTabela.Cells[0,0]:= 'Colunas';
-  RLFiltrosTabela.Cells[1,0]:= 'Filtros';
-  RLFiltrosTabela.Cells[2,0]:= 'Operador';
-  for I := 0 to Grid.Columns.Count-1 do
-  begin
-    index:= indexLayoutFieldName(Grid.Columns[i].FieldName,ColunasLayout);
-    RLFiltrosTabela.Cells[0,i+1]:= '';
-    RLFiltrosTabela.Cells[1,i+1]:= '';
-    RLFiltrosTabela.Cells[2,i+1]:= '';
-    RLFiltrosTabela.Cells[0,i+1]:= ColunasLayout.Cells[1,index];
-    RLFiltrosTabela.Cells[1,i+1]:= ColunasLayout.Cells[4,index];
-    RLFiltrosTabela.Cells[2,i+1]:= ColunasLayout.Cells[5,index];
-  end;
-  AutoFitGrade(RLFiltrosTabela);
-  RLFiltrosTabela.ColWidths[1]:= 300;
-  actConfigFiltrosTabela.Execute;
 end;
 
 function TFrmPrincipal.ForaOperacao(Plataforma: String; IndexSistema: Integer): String;
@@ -4336,9 +3195,12 @@ begin
   MatrizForaOperacao[5,i] SituacaoLinhaBCI;
   MatrizForaOperacao[6,i] SituacaoAgua;
   MatrizForaOperacao[7,i] SituacaoBalsa;
-  MatrizForaOperacao[8,i] SituacaoAcesso;
+
   MatrizForaOperacao[9,i] SituacaoDegraus;
-  MatrizForaOperacao[10,i] DataRealizacaoDegraus;}
+  MatrizForaOperacao[10,i] DataRealizacaoDegraus;
+  MatrizForaOperacao[11,i] SituacaoSurfer;
+  MatrizForaOperacao[12,i] SituacaoSOV;
+  MatrizForaOperacao[13,i] SituacaoAqua;}
 end;
 
 function TFrmPrincipal.FormataCPF(Texto: String): String;
@@ -4363,8 +3225,6 @@ procedure TFrmPrincipal.FormCreate(Sender: TObject);
 begin
   FrmTelaAbertura.ProgressBarTelaAbertura.Value:= 0;
   booLOCAL:= false;
-  actLOCAL.Enabled:= true;
-  actREDE.Enabled:= false;
   filtroFO:= 'WHERE (((TextoBreveNOTA LIKE "FO:%"))AND((FimAvaria IS NULL)))';
   if ParamCount > 0 then
     enderecoColibriRegistro:= ParamStr(1)
@@ -4383,110 +3243,6 @@ end;
 procedure TFrmPrincipal.FormDestroy(Sender: TObject);
 begin
   FrmPrincipal:=nil;
-end;
-
-procedure TFrmPrincipal.GerarExcel(Tabela: TDBGrid; const nomeTabela: String);
-var
-  Excel, Sheet: Variant;
-  i,j,matrizLinha,matrizColuna,selRegistro,tipoNumero,TipoArquivo: Integer;
-  Celula, Titulo,campoProcura: String;
-begin
-  if Application.MessageBox(PChar(
-  'Clique em SIM para exportar para arquivo Excel.'+#13+
-  'Clique em NÃO para exportar para arquivo txt, delimitado por "@"'),'.::ATENÇÃO::.',36) = 6 then
-    TipoArquivo:= 0
-  else
-    TipoArquivo:= 1;
-
-  case TipoArquivo of
-    0: //Excel
-    begin
-      selRegistro:= 0;
-      try
-        Excel := CreateOleObject('Excel.Application');
-        Excel.Workbooks.Add;
-        Excel.Workbooks[1].WorkSheets[1].Name := nomeTabela;
-        Sheet := Excel.Workbooks[1].WorkSheets[nomeTabela];
-        Excel.Caption := nomeTabela;
-        //============================================
-        selRegistro:= Tabela.DataSource.DataSet.RecNo;
-        matrizColuna := Tabela.Columns.Count;
-        matrizLinha :=  Tabela.DataSource.DataSet.RecordCount;
-        Tabela.DataSource.Enabled:=false;
-        // CONFIGURAÇÃO DO PROGRESSBAR
-        ProgressBarIncializa(matrizColuna*matrizLinha,'Gerando Excel...');
-        //============================================
-        for j := 0 to matrizColuna - 1 do
-        begin
-          Titulo:= Tabela.Columns.Items[j].Title.Caption;
-          campoProcura:= Tabela.Columns.Items[j].FieldName;
-          // Preencher os titulos
-          Excel.Workbooks[1].Sheets[1].Cells[1, j+1] := Titulo;
-          for i := 1 to matrizLinha do
-          begin
-            // Preencher as linhas
-            Tabela.DataSource.DataSet.RecNo:= i;
-            tipoNumero:= isNumeric(Tabela.DataSource.DataSet.FieldByName(campoProcura).AsString);
-            case tipoNumero of
-              0://texto
-              begin
-                Excel.Workbooks[1].Sheets[1].Cells[i+1, j+1].NumberFormat:= '@';
-                Excel.Workbooks[1].Sheets[1].Cells[i+1, j+1] :=
-                Tabela.DataSource.DataSet.FieldByName(campoProcura).AsString;
-              end;
-              1://Inteiro
-              begin
-                Excel.Workbooks[1].Sheets[1].Cells[i+1, j+1].NumberFormat:= '0';
-                Excel.Workbooks[1].Sheets[1].Cells[i+1, j+1] :=
-                Tabela.DataSource.DataSet.FieldByName(campoProcura).AsInteger;
-              end;
-              2://Float
-              begin
-                Excel.Workbooks[1].Sheets[1].Cells[i+1, j+1].NumberFormat:= '0,00';
-                Excel.Workbooks[1].Sheets[1].Cells[i+1, j+1] :=
-                Tabela.DataSource.DataSet.FieldByName(campoProcura).AsFloat;
-              end;
-              3://Data
-              begin
-                Excel.Workbooks[1].Sheets[1].Cells[i+1, j+1].NumberFormat:= 'dd/mm/aaaa';
-                Excel.Workbooks[1].Sheets[1].Cells[i+1, j+1] :=
-                Tabela.DataSource.DataSet.FieldByName(campoProcura).AsDateTime;
-              end;
-            end;
-            // CONFIGURAÇÃO DAS CÉLULAS DAS LINHAS
-            Sheet.Rows[i+1].VerticalAlignment := 2;
-            // 1=Top - 2=Center - 3=Bottom
-            Sheet.Rows[i+1].HorizontalAlignment := 3; // 3=Center }
-            // Atualizar ProgressBar
-            ProgressBarIncremento(1);
-          end;
-        end;
-        // letras do cabeçalho
-        Sheet.Rows[1].Font.Bold := true;
-        Sheet.Rows[1].Font.Italic := true;
-        Sheet.Rows[1].VerticalAlignment := 2; // 1=Top - 2=Center - 3=Bottom
-        Sheet.Rows[1].HorizontalAlignment := 3; // 3=Center
-        // desenha as grades da tabela
-        Celula := RefToCell(matrizColuna, matrizLinha+1);
-        Sheet.Range['A1', Celula].Borders.LineStyle := 1;
-        Sheet.Range['A1', Celula].Borders.Weight := 2;
-        Sheet.Range['A1', Celula].Borders.ColorIndex := 1;
-        Sheet.Range['A1', RefToCell(matrizColuna, 1)].Interior.Color := clSilver;
-        // Cor da Célula
-        Excel.Visible := true;
-        Excel.columns.Autofit;
-      finally
-        Tabela.DataSource.Enabled:=true;
-        Tabela.DataSource.DataSet.RecNo:= selRegistro;
-        // Atualizar ProgressBar
-        ProgressBarAtualizar;
-      end;
-    end;
-    1: //txt
-    begin
-      GeraTexto(Tabela.DataSource,'@',nomeTabela);
-    end;
-  end;
 end;
 
 procedure TFrmPrincipal.GeraTexto(DataSource: TDataSource; Separador: Char; nomeTabela: String);
@@ -4549,49 +3305,6 @@ begin
     FrmGerenciarEmbarcacoes:= TFrmGerenciarEmbarcacoes.Create(Application)
   else
     FrmGerenciarEmbarcacoes.Show;
-end;
-
-function TFrmPrincipal.GetDistanceBetween(lat1,long1,lat2,long2: Double): Double;
-  var
-    F,G,L : Double;
-    SF, SG, SL,
-    CF, CG, CL : Double;
-    W1, W2 : Double;
-    S, C : Double;
-    O,R,D : Double;
-    H1, H2 : Double;
-    ff : Double;
-begin
-    ff := 1 / 298.257;
-    F := (lat1 + lat2) / 2;
-    G := (lat1 - lat2) / 2;
-    L := (long1 - long2) / 2;
-
-    SF := Sin(F*Pi/180);
-    SG := Sin(G*Pi/180);
-    SL := Sin(L*Pi/180);
-    CF := Cos(F*Pi/180);
-    CG := Cos(G*Pi/180);
-    CL := Cos(L*Pi/180);
-
-    W1 := sqr(SG * CL);
-    W2 := sqr(CF * SL);
-    S := W1 + W2;
-
-    W1 := sqr(CG * CL);
-    W2 := sqr(SF * SL);
-    C := W1 + W2;
-    O := ArcTan(Sqrt(S/C));
-    R := Sqrt(S*C) / O;
-    D := 2 * O * 6378.14;
-
-    H1 := (3*R-1) / (2*C);
-    H2 := (3*R+1) / (2*S);
-
-    W1 := sqr(SF * CG) * H1 * ff + 1;
-    W2 := sqr(CF * SG) * H2 * ff;
-
-    result := D * (W1 - W2);// * 1.609344
 end;
 
 procedure TFrmPrincipal.GravarCanceladoAprovado(idProgramacaoDiaria: Integer);
@@ -4675,131 +3388,6 @@ begin
   Grid.Canvas.Font.Color:= clBlack;
   Grid.Canvas.FillRect(Rect);
   Grid.DefaultDrawColumnCell(Rect, DataCol, Column, State);
-end;
-
-function TFrmPrincipal.GroupFieldDBGrid(SQLQuery,FieldName,FonteDB: String;
-StatusBar: TStatusBar): TStringList;
-  var
-    Anterior,Atual,StrTotal: String;
-    vetorCalc: array of Double;
-    booleanCalculo: Boolean;
-    I,NumRegistros: Integer;
-    Soma: Double;
-    Query: TADOQuery;
-begin
-  booleanCalculo:= true;
-  Soma:= 0;
-  NumRegistros:= 0;
-  StatusBar.Panels[0].Text:= '';
-  StatusBar.Panels[1].Text:= '';
-  StatusBar.Panels[2].Text:= '';
-  StatusBar.Panels[3].Text:= '';
-  StatusBar.Panels[4].Text:= '';
-  Result:= TStringList.Create;
-  Query := TADOQuery.Create(self);
-  try
-    if FonteDB = 'Colibri' then
-    begin
-      Query.Connection := FrmDataModule.ADOConnectionColibri;
-    end
-    else if FonteDB = 'Consulta' then
-    begin
-      Query.Connection := FrmDataModule.ADOConnectionConsulta;
-    end
-    else if FonteDB = 'Memoria' then
-    begin
-      Query.Connection := FrmDataModule.ADOConnectionMemoria;
-    end
-    else if FonteDB = 'Importar' then
-    begin
-      Query.Connection := FrmDataModule.ADOConnectionImportar;
-    end;
-    Query.Close;
-    Query.SQL.Clear;
-    Query.SQL.Add(SQLQuery);
-    Query.Open;
-    Query.Sort:= FieldName+' ASC';
-    NumRegistros:= Query.RecordCount;
-    //======================================
-    SetLength(vetorCalc,NumRegistros);
-    Anterior:= 'zebrabrabadoscaraiodoido';
-    I:= 0;
-    actInterromper.Enabled:= true;
-    StrTotal:= IntToSTr(NumRegistros);
-    ProgBarMagicFiltro.Max:= NumRegistros;
-    ProgBarMagicFiltro.Min:= 0;
-    ProgBarMagicFiltro.Value:= 0;
-    while not Query.Eof do
-    begin
-      //==================================
-      Application.ProcessMessages;
-      if Interromper then
-      begin
-        Interromper := False;
-        Timer2.Enabled:= true;
-        Exit;
-      end;
-      //==================================
-      Atual:= Query.FieldByName(FieldName).AsString;
-      if booleanCalculo then
-      begin
-        try
-          vetorCalc[i]:= Query.FieldByName(FieldName).AsFloat;
-          Soma:= Soma+Query.FieldByName(FieldName).AsFloat;
-        except
-          booleanCalculo:= false;
-          Soma:= 0;
-        end;
-      end;
-      if Anterior <> Atual then
-      begin
-        Result.Add(Atual);
-        Anterior:= Atual;
-      end;
-      Query.Next;
-      i:= i+1;
-      ProgBarMagicFiltro.Value:= i;
-      StatusBar.Panels[0].Text:= IntToStr(i)+' de '+StrTotal;
-      AutoFitStatusBar(StatusBar);
-    end;
-    Timer2.Enabled:= true;
-  except
-  end;
-  if booleanCalculo then
-  begin
-    try
-      StatusBar.Panels[1].Text:= 'Máx.: '+FormatFloat('0',MaxValue(vetorCalc));
-      StatusBar.Panels[2].Text:= 'Mín.: '+FormatFloat('0',MinValue(vetorCalc));
-      StatusBar.Panels[3].Text:= '∑: '+FormatFloat('0',Soma);
-      StatusBar.Panels[4].Text:= 'Média: '+FormatFloat('0.0',Soma/NumRegistros);
-      AutoFitStatusBar(StatusBar);
-    except
-    end;
-  end;
-end;
-
-function TFrmPrincipal.HintRelacaoTempo(Combo: TDBComboBox): String;
-begin
-  if Combo.Text = 'Data Base Início' then
-  begin
-    result:=
-    'if (now >= DataBaseInicio) then'+#13+
-    'begin'+#13+
-    '   TotalDias:= DaysBetween(now,DataBaseInicio);'+#13+
-    '   if (TotalDias >= LimiteDias) then'+#13+
-    '      Result:= ValorMax'+#13+
-    '   else'#13+
-    '      Result:= RoundTo(((TotalDias*ValorMax)/LimiteDias),-3);'+#13+
-    'end;';
-  end
-  else if Combo.Text = 'Data Base Fim' then
-  begin
-    result:=
-    'if (now < incDay(DataBaseFim,-LimiteDias)) then'+#13+
-    '   Result:= 0'+#13+
-    'else'+#13+
-    '   Result:= ValorMax;';
-  end;
 end;
 
 function TFrmPrincipal.HoraParaMin(Hora: String): Integer;
@@ -5115,44 +3703,6 @@ begin
   end;
 end;
 
-procedure TFrmPrincipal.inserirProcura(Grid: TDBGrid; ColunasLayout: TStringGrid);
-  var
-    i: Integer;
-    txtString: String;
-begin
-  //Limpar simbolo de classificação ASC DESC
-  limparTitleGrid(Grid);
-  //Marcar check nas string já filtradas
-  txtString:= '';
-  if edtProcura.Text = '' then
-  begin
-    for i := 0 to CheckListBoxFiltroGRID.Items.Count-1 do
-      if CheckListBoxFiltroGRID.Checked[i] then
-      begin
-        if txtString <> '' then
-          txtString:= txtString+';'+CheckListBoxFiltroGRID.Items[i]
-        else
-          txtString:= CheckListBoxFiltroGRID.Items[i];
-      end;
-  end
-  else
-    txtString:= edtProcura.Text;
-  //Gravar filtro na tabela de filtros
-  for i := 0 to ColunasLayout.RowCount-1 do
-  begin
-    if ColunasLayout.Cells[0,i] = MagicFieldName then
-    begin
-      ColunasLayout.Cells[4,i]:= txtString;
-      case RadioGroupOperador.ItemIndex of
-        0: ColunasLayout.Cells[5,i]:= 'Contem';
-        1: ColunasLayout.Cells[5,i]:= 'Exato';
-        2: ColunasLayout.Cells[5,i]:= 'Diferente';
-      end;
-      Break;
-    end;
-  end;
-end;
-
 function TFrmPrincipal.isData(txt: String): Boolean;
 begin
   Result := true;
@@ -5311,8 +3861,6 @@ procedure TFrmPrincipal.mdiChildrenTabsChange(Sender: TObject; NewTab: Integer;
 var
   k,cHandle,aba: Integer;
 begin
-  actAjudaLimpar.Execute;
-  FrmPrincipal.PanelMagicFiltro1.Visible:= false;
   cHandle := Integer(mdiChildrenTabs.Tabs.Objects[NewTab]);
   if mdiChildrenTabs.Tag = -1 then
     Exit;
@@ -5335,34 +3883,6 @@ begin
   (StatusBarPrincipal.Panels[4].Text)+20;
 end;
 
-procedure TFrmPrincipal.moveBaixo(Grid: TDBGrid; ColunasLayout: TStringGrid);
-  var
-    Titulo: String;
-    Linha: Integer;
-begin
-  if FrmPrincipal.RLColunasAtivas.Row > 0 then
-  begin
-    Titulo:= FrmPrincipal.RLColunasAtivas.Cells[1,FrmPrincipal.RLColunasAtivas.Row];
-    FrmPrincipal.DeleteRow(FrmPrincipal.RLColunasAtivas,FrmPrincipal.RLColunasAtivas.Row);
-    Linha:= FrmPrincipal.InsertRow1(FrmPrincipal.RLColunasOpcoes,FrmPrincipal.RLColunasOpcoes.Row);
-    FrmPrincipal.RLColunasOpcoes.Cells[1,Linha]:= Titulo;
-  end;
-end;
-
-procedure TFrmPrincipal.moveCima(Grid: TDBGrid; ColunasLayout: TStringGrid);
-  var
-    Titulo: String;
-    Linha: Integer;
-begin
-  if FrmPrincipal.RLColunasOpcoes.Row > 0 then
-  begin
-    Titulo:= FrmPrincipal.RLColunasOpcoes.Cells[1,FrmPrincipal.RLColunasOpcoes.Row];
-    FrmPrincipal.DeleteRow(FrmPrincipal.RLColunasOpcoes,FrmPrincipal.RLColunasOpcoes.Row);
-    Linha:= FrmPrincipal.InsertRow1(FrmPrincipal.RLColunasAtivas,FrmPrincipal.RLColunasAtivas.Row);
-    FrmPrincipal.RLColunasAtivas.Cells[1,Linha]:= Titulo;
-  end;
-end;
-
 procedure TFrmPrincipal.MovimentacaoCarga1Click(Sender: TObject);
 begin
   if not Assigned(FrmMovimentacaoCarga) then
@@ -5376,7 +3896,8 @@ begin
   //if not Assigned(FrmTelaAbertura) then
     FrmTelaAbertura.MemoMensagem.Lines.Add(texto1);
     FrmTelaAbertura.MemoMensagem.Lines.Add(texto2);
-    FrmTelaAbertura.MemoMensagem.Lines.Add('--------------------------------------------------------------------------------------------------------');
+    FrmTelaAbertura.MemoMensagem.Lines.Add(
+  '--------------------------------------------------------------------------------------------------------');
     FrmTelaAbertura.ProgressBarTelaAbertura.Value:= FrmTelaAbertura.ProgressBarTelaAbertura.Value+1;
     FrmTelaAbertura.MemoMensagem.Repaint;
     //Sleep(1000);
@@ -5423,52 +3944,6 @@ begin
     FrmDataModule.ADOQueryTemporarioDBConsulta1.Next;
   end;
   Result:= Origem;
-end;
-
-procedure TFrmPrincipal.PainelCancelamentoMudanca(Fonte: Integer; Titulo: String);
-begin
-  FrmPrincipal.SetUpColunasLayout(DBGridPalavraChave, ColunasLayoutPalavraChave);
-  actProcurarPalavraChave.Execute;
-  FrmPrincipal.PanelTituloAjuda1.Caption:= Titulo;
-  FrmPrincipal.actAjudaLimpar.Execute;
-  FrmPrincipal.PanelCancelamentoMudanca.Align:= alClient;
-  FrmPrincipal.PanelCancelamentoMudanca.Visible:= true;
-  FrmPrincipal.PanelAjuda1.Top:= 100;
-  FrmPrincipal.PanelAjuda1.Left:= 200;
-  FrmPrincipal.PanelAjuda1.Height:= 440;
-  FrmPrincipal.PanelAjuda1.Width:= 500;
-  FrmPrincipal.PanelAjuda1.Visible:= true;
-  FrmPrincipal.RadioGroupFonteCancelamento.ItemIndex:= Fonte;
-  if ((FrmPrincipal.logPerfil = 'Administrador')OR
-  (FrmPrincipal.logPerfil = 'Programação')OR
-  (FrmPrincipal.logPerfil = 'Supervisor')) then
-  begin
-    DBNavigatorPalavraChave.Enabled:= true;
-    DBGridPalavraChave.ReadOnly:= false;
-    actInserirRegistro.Enabled:= true;
-    actCancelarRegistro.Enabled:= true;
-  end
-  else
-  begin
-    DBNavigatorPalavraChave.Enabled:= false;
-    DBGridPalavraChave.ReadOnly:= true;
-    actInserirRegistro.Enabled:= false;
-    actCancelarRegistro.Enabled:= false;
-  end;
-end;
-
-procedure TFrmPrincipal.PainelDuplicados(DataProcura: String);
-begin
-  ProgramacaoDuplicados(RLDuplicados,DataProcura);
-  actAjudaLimpar.Execute;
-  PanelTituloAjuda1.Caption:= 'Executantes Duplicados (Transbordos)';
-  PanelDuplicados.Align:= alClient;
-  PanelDuplicados.Visible:= true;
-  PanelAjuda1.Visible:= true;
-  PanelAjuda1.Width:= 770;
-  PanelAjuda1.Height:= 450;
-  PanelAjuda1.Top:= 180;
-  PanelAjuda1.Left:= 400;
 end;
 
 function TFrmPrincipal.CalcNumCanceladosAprovado(idProgramacaoDiaria,Tipo: Integer): Integer;
@@ -5780,7 +4255,7 @@ begin
     FrmConsultaProgramacao.Show;
 end;
 
-procedure TFrmPrincipal.ProgramarExecutante(Origem: String;idProgramacaoDiaria: Integer;
+procedure TFrmPrincipal.ProgramarExecutantes(Origem: String;idProgramacaoDiaria: Integer;
 QueryExecutante,QueryProgramacao: TADOQuery; DataSourceExecutante,DataSourceProgramacao: TDataSource);
 begin
   if idProgramacaoDiaria <> 0 then
@@ -5790,9 +4265,6 @@ begin
       DataSourceExecutante.DataSet.FieldByName('CodigoProgramacaoDiaria').AsInteger:=idProgramacaoDiaria;
       DataSourceExecutante.DataSet.FieldByName('Origem').AsString:= Origem;
       DataSourceExecutante.DataSet.FieldByName('StatusProgramacao').AsString:= 'Aprovado';
-      DataSourceExecutante.DataSet.FieldByName('StatusExecucao').AsString:='Executado';
-      DataSourceExecutante.DataSet.FieldByName('RT').AsString:= 'SEM RT';
-      DataSourceExecutante.DataSet.FieldByName('TipoEmbarque').AsString:= 'SEM RT';
       QueryExecutante.Post;
       //==================================================================
       QueryProgramacao.Edit;
@@ -5815,82 +4287,6 @@ begin
     FrmProgramacaoDiaria:= TFrmProgramacaoDiaria.Create(Application)
   else
     FrmProgramacaoDiaria.Show;
-end;
-
-procedure TFrmPrincipal.ProgramacaoDuplicados(RLGrid: TStringGrid; DataProcura: String);
-  var
-    SQLBase,NomeExecutante1,NomeExecutante2,Origem1,Origem2,Destino1,Destino2,
-    TipoEtapaServico1,TipoEtapaServico2,Funcao1,Funcao2,Empresa1,Empresa2: String;
-    linha: Integer;
-begin
-  RLGrid.RowCount:= 1;
-  RLGrid.ColCount:= 6;
-  RLGrid.Rows[0].Clear;
-  RLGrid.Cells[0,0]:= 'Origem';
-  RLGrid.Cells[1,0]:= 'Destino';
-  RLGrid.Cells[2,0]:= 'Nome do Executante';
-  RLGrid.Cells[3,0]:= 'Tipo de Etapa de Serviço';
-  RLGrid.Cells[4,0]:= 'Função';
-  RLGrid.Cells[5,0]:= 'Empresa';
-  SQLBase:=
-  'SELECT tblProgramacaoDiaria.*, tblProgramacaoExecutante.* '+
-  'FROM tblProgramacaoDiaria INNER JOIN tblProgramacaoExecutante ON '+
-  'tblProgramacaoDiaria.idProgramacaoDiaria = tblProgramacaoExecutante.CodigoProgramacaoDiaria '+
-  'WHERE ((tblProgramacaoDiaria.DataProgramacao LIKE '+QuotedStr(Dataprocura)+
-  ')AND(tblProgramacaoExecutante.StatusProgramacao LIKE "Aprovado")) ORDER BY NomeExecutante,txtTipoEtapaServico,Origem DESC;';
-  FrmDataModule.ADOQueryTemporarioDBColibri.Close;
-  FrmDataModule.ADOQueryTemporarioDBColibri.SQL.Clear;
-  FrmDataModule.ADOQueryTemporarioDBColibri.SQL.Add(SQLBase);
-  FrmDataModule.ADOQueryTemporarioDBColibri.Open;
-  NomeExecutante1:= FrmDataModule.ADOQueryTemporarioDBColibri.FieldByName('NomeExecutante').AsString;
-  Origem1:= FrmDataModule.ADOQueryTemporarioDBColibri.FieldByName('Origem').AsString;
-  Destino1:= FrmDataModule.ADOQueryTemporarioDBColibri.FieldByName('txtDestino').AsString;
-  TipoEtapaServico1:= FrmDataModule.ADOQueryTemporarioDBColibri.FieldByName('txtTipoEtapaServico').AsString;
-  Funcao1:= FrmDataModule.ADOQueryTemporarioDBColibri.FieldByName('Funcao').AsString;
-  Empresa1:= FrmDataModule.ADOQueryTemporarioDBColibri.FieldByName('Empresa').AsString;
-  FrmDataModule.ADOQueryTemporarioDBColibri.Next;
-  while not FrmDataModule.ADOQueryTemporarioDBColibri.Eof do
-  begin
-    NomeExecutante2:= FrmDataModule.ADOQueryTemporarioDBColibri.FieldByName('NomeExecutante').AsString;
-    Origem2:= FrmDataModule.ADOQueryTemporarioDBColibri.FieldByName('Origem').AsString;
-    Destino2:= FrmDataModule.ADOQueryTemporarioDBColibri.FieldByName('txtDestino').AsString;
-    TipoEtapaServico2:= FrmDataModule.ADOQueryTemporarioDBColibri.FieldByName('txtTipoEtapaServico').AsString;
-    Funcao2:= FrmDataModule.ADOQueryTemporarioDBColibri.FieldByName('Funcao').AsString;
-    Empresa2:= FrmDataModule.ADOQueryTemporarioDBColibri.FieldByName('Empresa').AsString;
-    if ((NomeExecutante1 = NomeExecutante2)AND(NomeExecutante1<>'')) then
-    begin
-      linha:= RLGrid.RowCount;
-      RLGrid.RowCount:= RLGrid.RowCount+1;
-      RLGrid.Cells[0,linha]:= Origem1;
-      RLGrid.Cells[1,linha]:= Destino1;
-      RLGrid.Cells[2,linha]:= NomeExecutante1;
-      RLGrid.Cells[3,linha]:= TipoEtapaServico1;
-      RLGrid.Cells[4,linha]:= Funcao1;
-      RLGrid.Cells[5,linha]:= Empresa1;
-      //========================================================
-      linha:= RLGrid.RowCount;
-      RLGrid.RowCount:= RLGrid.RowCount+1;
-      RLGrid.Cells[0,linha]:= Origem2;
-      RLGrid.Cells[1,linha]:= Destino2;
-      RLGrid.Cells[2,linha]:= NomeExecutante2;
-      RLGrid.Cells[3,linha]:= TipoEtapaServico2;
-      RLGrid.Cells[4,linha]:= Funcao2;
-      RLGrid.Cells[5,linha]:= Empresa2;
-      //========================================================
-    end;
-    NomeExecutante1:= NomeExecutante2;
-    Origem1:= Origem2;
-    Destino1:= Destino2;
-    TipoEtapaServico1:= TipoEtapaServico2;
-    Funcao1:= Funcao2;
-    Empresa1:= Empresa2;
-    FrmDataModule.ADOQueryTemporarioDBColibri.Next;
-  end;
-  FrmPrincipal.AutoFitGrade(RLGrid);
-  try
-    RLGrid.FixedRows:= 1;
-  except
-  end;
 end;
 
 procedure TFrmPrincipal.ProgressBarAtualizar;
@@ -5932,6 +4328,11 @@ begin
   StatusBarPrincipal.Panels[4].Text:= txtBarraProgresso;
   StatusBarPrincipal.Panels[4].Width:= StatusBarPrincipal.Canvas.TextWidth(StatusBarPrincipal.Panels[4].Text)+15;
   StatusBarPrincipal.Repaint;
+end;
+
+procedure TFrmPrincipal.Reconexoforada1Click(Sender: TObject);
+begin
+  Force_Reconnect;
 end;
 
 function TFrmPrincipal.RefToCell(const iCol, iRow: Integer): String;
@@ -6001,6 +4402,7 @@ begin
     FrmAgendaIntervencao.Show;
 end;
 
+
 function TFrmPrincipal.RetiraEnter(aText: string): string;
 begin
   { Retirando as quebras de linha em campos blob }
@@ -6008,64 +4410,6 @@ begin
 
   { Retirando as quebras de linha em campos blob }
   Result := StringReplace(Result, #13#10, '', [rfReplaceAll]);
-end;
-
-procedure TFrmPrincipal.RLColunasAtivasDblClick(Sender: TObject);
-begin
-btnBaixo.Click
-end;
-
-procedure TFrmPrincipal.RLColunasAtivasDrawCell(Sender: TObject; ACol,
-  ARow: Integer; Rect: TRect; State: TGridDrawState);
-begin
-  FrmPrincipal.ConfigGridLayout(RLColunasAtivas,ACol,ARow,Rect);
-end;
-
-procedure TFrmPrincipal.RLColunasOpcoesDblClick(Sender: TObject);
-begin
-btnCima.Click
-end;
-
-procedure TFrmPrincipal.RLColunasOpcoesDrawCell(Sender: TObject; ACol,
-  ARow: Integer; Rect: TRect; State: TGridDrawState);
-begin
-  FrmPrincipal.ConfigGridLayout(RLColunasOpcoes,ACol,ARow,Rect);
-end;
-
-procedure TFrmPrincipal.RLDuplicadosFixedCellClick(Sender: TObject; ACol,
-  ARow: Integer);
-begin
-  FrmPrincipal.clasifica(RLDuplicados,ACol,true);
-end;
-
-procedure TFrmPrincipal.RLFiltrosTabelaSelectCell(Sender: TObject; ACol,
-  ARow: Integer; var CanSelect: Boolean);
-  var
-    R: TRect;
-begin
-  if ((ACol = 2) AND(ARow > 0)) then
-  begin
-    if RLFiltrosTabela.Cells[1, ARow] = '' then
-    begin
-      RLFiltrosTabela.Cells[2, ARow] := '';
-    end
-    else
-    begin
-      R := RLFiltrosTabela.CellRect(ACol, ARow);
-      R.Left := R.Left + RLFiltrosTabela.Left;
-      R.Right := R.Right + RLFiltrosTabela.Left;
-      R.Top := R.Top + RLFiltrosTabela.Top;
-      R.Bottom := R.Bottom + RLFiltrosTabela.Top;
-      ComboBoxOperador.Left := R.Left + 1;
-      ComboBoxOperador.Top := R.Top + 1;
-      ComboBoxOperador.Width := (R.Right + 1) - R.Left;
-      ComboBoxOperador.Height := (R.Bottom + 1) - R.Top;
-      ComboBoxOperador.Visible := True;
-      FrmPrincipal.selComboBox(ComboBoxOperador,(RLFiltrosTabela.Cells[2, ARow]));
-      ComboBoxOperador.SetFocus;
-    end;
-  end;
-  CanSelect := True;
 end;
 
 procedure TFrmPrincipal.rocarLogin1Click(Sender: TObject);
@@ -6092,34 +4436,16 @@ begin
   Result:= FrmDataModule.DataSourceConsultaPlataforma_Nome.DataSet.FieldByName('LocalRTSAP').AsString;
 end;
 
-procedure TFrmPrincipal.RT_ProgramacaoExecutante(idProgramacaoExecutante: Integer;
-RT, TipoEmbarque: String);
-begin
-  try
-    //Procurar Programação do Executante
-    FrmDataModule.ADOQueryConsultaProgramacaoExecutante_ID.Active:= false;
-    FrmDataModule.ADOQueryConsultaProgramacaoExecutante_ID.Parameters.Items[0].Value:=
-    idProgramacaoExecutante;
-    FrmDataModule.ADOQueryConsultaProgramacaoExecutante_ID.Active:= true;
-    FrmDataModule.ADOQueryConsultaProgramacaoExecutante_ID.Edit;
-    FrmDataModule.DataSourceConsultaProgramacaoExecutante_ID.DataSet.
-    FieldByName('RT').AsString:= RT;
-    FrmDataModule.DataSourceConsultaProgramacaoExecutante_ID.DataSet.
-    FieldByName('TipoEmbarque').AsString:= TipoEmbarque;
-    FrmDataModule.ADOQueryConsultaProgramacaoExecutante_ID.Post;
-  except
-  end;
-end;
-
 procedure TFrmPrincipal.SalvarBancoDadosComo1Click(Sender: TObject);
 var
   arquivo_original,enderecoConsulta_original,enderecoConsulta,
-  enderecoMemoria_original,enderecoMemoria: string;
+  enderecoMemoria_original,enderecoRT_original,enderecoMemoria,enderecoRT: string;
 begin
   // diretorio e nome do arquivo original
   arquivo_original := registroEndereco('Banco de dados');
   enderecoConsulta_original:= ExtractFilePath(arquivo_original)+'dbConsulta.mdb';
   enderecoMemoria_original:= ExtractFilePath(arquivo_original)+'dbMemoria.mdb';
+  enderecoRT_original:= ExtractFilePath(arquivo_original)+'dbRT.mdb';
   //====================================================
   SaveDialog1.Filter:= 'Arquivo Colibri|*.colibri';
   SaveDialog1.FileName:= arquivo_original;
@@ -6138,11 +4464,18 @@ begin
           //Banco de dados de Consulta
           enderecoConsulta:= ExtractFileDir(SaveDialog1.FileName)+'\dbConsulta.mdb';
           enderecoMemoria:= ExtractFileDir(SaveDialog1.FileName)+'\dbMemoria.mdb';
+          enderecoRT:= ExtractFileDir(SaveDialog1.FileName)+'\dbRT.mdb';
+
           if CopyFile(PChar(enderecoConsulta_original), PChar(enderecoConsulta), false) then
             FrmPrincipal.conectarBDDireto(enderecoConsulta,FrmDataModule.ADOConnectionConsulta);
           FrmPrincipal.ProgressBarIncremento(1);
+
           if CopyFile(PChar(enderecoMemoria_original), PChar(enderecoMemoria), false) then
             FrmPrincipal.conectarBDDireto(enderecoMemoria,FrmDataModule.ADOConnectionMemoria);
+          FrmPrincipal.ProgressBarIncremento(1);
+
+          if CopyFile(PChar(enderecoRT_original), PChar(enderecoRT), false) then
+            FrmPrincipal.conectarBDDireto(enderecoRT,FrmDataModule.ADOConnectionRT);
           FrmPrincipal.ProgressBarIncremento(1);
         end
         else
@@ -6154,27 +4487,6 @@ begin
       end;
   end;
   FrmPrincipal.ProgressBarAtualizar;
-end;
-
-procedure TFrmPrincipal.GravarRLColunas(NomeArquivoMemo:string);
-  var
-    i: Integer;
-begin
-  MemoPrincipal.Lines.Clear;
-  for i := 1 to RLColunasAtivas.RowCount-1 do
-    MemoPrincipal.Lines.Add('TAB1;'+RLColunasAtivas.Cells[1,i]);
-  for i := 1 to RLColunasOpcoes.RowCount-1 do
-    MemoPrincipal.Lines.Add('TAB2;'+RLColunasOpcoes.Cells[1,i]);
-
-  MemoPrincipal.Lines.SaveToFile(
-  ExtractFilePath(Application.ExeName)+'Layout\'+NomeArquivoMemo);
-end;
-
-procedure TFrmPrincipal.SalvarRLColunasCarregaGRID(Conection: TADOConnection;
-NomeArquivoMemo,NomeTabela: String; Grid: TDBGrid; ColunasLayout: TStringGrid);
-begin
-  FrmPrincipal.GravarRLColunas(NomeArquivoMemo);
-  FrmPrincipal.CarregarColunasGRID(Conection,NomeTabela,Grid,ColunasLayout);
 end;
 
 procedure TFrmPrincipal.selComboBox(combo: TComboBox; txt: String);
@@ -6200,7 +4512,7 @@ begin
     combo.Text:= '';
 end;
 
-procedure TFrmPrincipal.selecaoDBGrid(Grid: TDBGrid; selecao: boolean);
+procedure TFrmPrincipal.selecaoDBGrid(Grid: TDBGrid; selecao: boolean; Field: String);
   var
     selRegistro: Integer;
 begin
@@ -6210,7 +4522,7 @@ begin
   while not Grid.DataSource.DataSet.Eof do
   begin
     Grid.DataSource.DataSet.Edit;
-    Grid.DataSource.DataSet.FieldByName('booleanSelecao').AsBoolean:= selecao;
+    Grid.DataSource.DataSet.FieldByName(Field).AsBoolean:= selecao;
     Grid.DataSource.DataSet.Post;
     Grid.DataSource.DataSet.Next;
   end;
@@ -6230,7 +4542,7 @@ begin
   'N° Selecionados: '+(IntToStr(FrmPrincipal.CountChecked(Grid)));
   Status.Panels[1].Text:=
   'N° Registros: '+(IntToStr(Grid.RowCount-1));
-  FrmPrincipal.AutoFitStatusBar(Status);
+  AutoFitStatusBar(Status);
 end;
 
 procedure TFrmPrincipal.selecaoPlataforma(RChartMapa: TRChart; noPlataforma: TPointFloat;
@@ -6276,7 +4588,7 @@ begin
         StatusBarMapa.Panels[1].Text:= Plataforma;
         StatusBarMapa.Panels[2].Text:= '';
         StatusBarMapa.Panels[3].Text:= '';
-        FrmPrincipal.AutoFitStatusBar(StatusBarMapa);
+        AutoFitStatusBar(StatusBarMapa);
       end
       else
       begin
@@ -6356,45 +4668,6 @@ begin
   begin
     ColunasLayout.Cells[4,i]:= '';
     ColunasLayout.Cells[5,i]:= '';
-  end;
-end;
-
-procedure TFrmPrincipal.SetUpColunasLayout(Grid: TDBGrid; ColunasLayout: TStringGrid);
-  var
-    i: Integer;
-    alinha: TAlignment;
-    strTitulo: String;
-begin
-  ColunasLayout.RowCount:= Grid.Columns.Count;
-  ColunasLayout.ColCount:= 7;
-  for i := 0 to ColunasLayout.RowCount-1 do
-  begin
-    //FieldName
-    ColunasLayout.Cells[0,i]:= Grid.Columns[i].FieldName;
-    //Titulo da coluna
-    strTitulo:= FrmPrincipal.DeleteChar(char(9650),Grid.Columns[i].Title.Caption);
-    strTitulo:= FrmPrincipal.DeleteChar(char(9660),strTitulo);
-    strTitulo:= FrmPrincipal.DeleteChar(char(8722),strTitulo);
-    ColunasLayout.Cells[1,i]:= strTitulo;
-    //Filtro
-    ColunasLayout.Cells[4,i]:= '';
-    //Operador
-    ColunasLayout.Cells[5,i]:= '';
-    //Largura da coluna
-    ColunasLayout.Cells[6,i]:= IntToStr(Grid.Columns[i].Width);
-    //Alinhamento
-    alinha:= Grid.Columns[i].Alignment;
-    if alinha = taCenter then
-      ColunasLayout.Cells[2,i]:= 'CENTER'
-    else if alinha = taLeftJustify then
-      ColunasLayout.Cells[2,i]:= 'LEFT'
-    else if alinha = taRightJustify then
-      ColunasLayout.Cells[2,i]:= 'RIGHT';
-    //ReadOnly
-    if Grid.Columns[i].ReadOnly then
-      ColunasLayout.Cells[3,i]:= 'TRUE'
-    else
-      ColunasLayout.Cells[3,i]:= 'FALSE';
   end;
 end;
 
@@ -6548,17 +4821,6 @@ begin
   end;
 end;
 
-procedure TFrmPrincipal.SpeedButton1Click(Sender: TObject);
-begin
-  PanelMagicFiltro1.Visible:= false;
-end;
-
-procedure TFrmPrincipal.SpeedButton4Click(Sender: TObject);
-begin
-  PanelAjuda1.Visible:= false;
-  PanelTituloAjuda1.Color:= clGradientActiveCaption;
-end;
-
 function TFrmPrincipal.SQLStringFiltroTabela(ColunasLayout: TStringGrid;BooleanWHERE: Boolean): String;
   var
     SQLString: String;
@@ -6585,52 +4847,6 @@ begin
   FrmPrincipal.Capturing := true;
   FrmPrincipal.MouseDownSpot.X := X;
   FrmPrincipal.MouseDownSpot.Y := Y;
-end;
-
-procedure TFrmPrincipal.PanelTituloAjuda1MouseMove(Sender: TObject;
-  Shift: TShiftState; X, Y: Integer);
-begin
-  if FrmPrincipal.Capturing then
-  begin
-    PanelAjuda1.Left := PanelAjuda1.Left - (FrmPrincipal.MouseDownSpot.X - X);
-    PanelAjuda1.Top := PanelAjuda1.Top - (FrmPrincipal.MouseDownSpot.Y - Y);
-  end;
-end;
-
-procedure TFrmPrincipal.PanelTituloAjuda1MouseUp(Sender: TObject;
-  Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
-begin
-  if FrmPrincipal.Capturing then
-  begin
-    FrmPrincipal.Capturing := false;
-    PanelAjuda1.Left := PanelAjuda1.Left - (FrmPrincipal.MouseDownSpot.X - X);
-    PanelAjuda1.Top := PanelAjuda1.Top - (FrmPrincipal.MouseDownSpot.Y - Y);
-    if PanelAjuda1.Top < 50 then
-      PanelAjuda1.Top := 50;
-  end;
-end;
-
-procedure TFrmPrincipal.PanelTituloMagicMouseMove(Sender: TObject;
-  Shift: TShiftState; X, Y: Integer);
-begin
-  if FrmPrincipal.Capturing then
-  begin
-    PanelMagicFiltro1.Left := PanelMagicFiltro1.Left - (FrmPrincipal.MouseDownSpot.X - X);
-    PanelMagicFiltro1.Top := PanelMagicFiltro1.Top - (FrmPrincipal.MouseDownSpot.Y - Y);
-  end;
-end;
-
-procedure TFrmPrincipal.PanelTituloMagicMouseUp(Sender: TObject;
-  Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
-begin
-  if FrmPrincipal.Capturing then
-  begin
-    FrmPrincipal.Capturing := false;
-    PanelMagicFiltro1.Left := PanelMagicFiltro1.Left - (FrmPrincipal.MouseDownSpot.X - X);
-    PanelMagicFiltro1.Top := PanelMagicFiltro1.Top - (FrmPrincipal.MouseDownSpot.Y - Y);
-    if PanelMagicFiltro1.Top < 50 then
-      PanelMagicFiltro1.Top := 50;
-  end;
 end;
 
 procedure TFrmPrincipal.Plataforma1Click(Sender: TObject);
@@ -6667,8 +4883,6 @@ end;
 procedure TFrmPrincipal.ProcuraQuery(SQLBase: String; sourceQuery: TADOQuery;StatusBar: TStatusBar);
 begin
   try
-    if btnSQLFiltroTabela.Down then
-      SQLBase:= MemoSQL.Text;
     //=================================
     sourceQuery.Close;
     sourceQuery.SQL.Clear;
@@ -6676,8 +4890,7 @@ begin
     sourceQuery.Open;
     StatusBar.Panels[0].Text:= 'N° Registros: '+
     IntToStr(sourceQuery.RecordCount);
-    FrmPrincipal.AutoFitStatusBar(StatusBar);
-    MemoSQL.Text:= SQLBase;
+    AutoFitStatusBar(StatusBar);
   except
     sourceQuery.Connection.Close;
     sourceQuery.Connection.Open;
@@ -6687,11 +4900,9 @@ begin
     sourceQuery.Open;
     StatusBar.Panels[0].Text:= 'N° Registros: '+
     IntToStr(sourceQuery.RecordCount);
-    FrmPrincipal.AutoFitStatusBar(StatusBar);
+    AutoFitStatusBar(StatusBar);
   end;
 end;
-
-
 
 procedure TFrmPrincipal.procuraQuerySimples(txtField, txtTabela: String;
   edtLocal: TEdit; sourceQuery: TADOQuery);
@@ -6754,73 +4965,6 @@ begin
   end;
 end;
 
-procedure TFrmPrincipal.SubstituirPor(Grid: TDBGrid; ADOQuery: TADOQuery;DataSource: TDataSource);
-  var
-    txtProcura,FieldName,txtCorrigido: String;
-    i: Integer;
-begin
-  try
-    FieldName:= MagicFieldName;
-    DataSource.Enabled:= false;
-    ADOQuery.First;
-    ProgBarMagicFiltro.Max:= ADOQuery.RecordCount;
-    ProgBarMagicFiltro.Min:= 0;
-    ProgBarMagicFiltro.Value:= 0;
-    i:= 0;
-    case RadioGroupSubstituir.ItemIndex of
-      0:
-      begin
-        while not ADOQuery.Eof do
-        begin
-          txtProcura:= DataSource.DataSet.FieldByName(FieldName).AsString;
-          if txtProcura = edtLocalizar.Text then
-          begin
-            try
-              ADOQuery.Edit;
-              DataSource.DataSet.FieldByName(FieldName).AsString:= edtSubstituirPor.Text;
-              ADOQuery.Post;
-            except
-              ADOQuery.Cancel;
-              ADOQuery.Refresh;
-            end;
-          end;
-          ADOQuery.Next;
-          i:= i+1;
-          ProgBarMagicFiltro.Value:= i;
-        end;
-        Timer2.Enabled:= true;
-      end;
-      1:
-      begin
-        while not ADOQuery.Eof do
-        begin
-          txtProcura:= DataSource.DataSet.FieldByName(FieldName).AsString;
-          //txtCorrigido:= SubstituirCaracteres(txtProcura,edtLocalizar.Text,edtSubstituirPor.Text);
-          txtCorrigido:= StringReplace(txtProcura,edtLocalizar.Text,edtSubstituirPor.Text,[rfReplaceAll]);
-          if txtCorrigido<>txtProcura then
-          begin
-            try
-              ADOQuery.Edit;
-              DataSource.DataSet.FieldByName(FieldName).AsString:= txtCorrigido;
-              ADOQuery.Post;
-            except
-              ADOQuery.Cancel;
-              ADOQuery.Refresh;
-            end;
-          end;
-          ADOQuery.Next;
-          i:= i+1;
-          ProgBarMagicFiltro.Value:= i;
-        end;
-        Timer2.Enabled:= true;
-      end;
-    end;
-  finally
-    DataSource.Enabled:= true;
-    ADOQuery.First;
-  end;
-end;
-
 function TFrmPrincipal.SubtrairHoras(Hora1, Hora2: String): String;
   var
     totalHoras,h1,h2: TTime;
@@ -6876,42 +5020,6 @@ begin
   MenssagemStatus('');
   Timer1.Enabled:= false;
   StatusBarPrincipal.Repaint;
-end;
-
-procedure TFrmPrincipal.Timer2Timer(Sender: TObject);
-begin
-  ProgBarMagicFiltro.Value := ProgBarMagicFiltro.Min;
-  actInterromper.Enabled:= false;
-  Interromper:= false;
-  StatusBarMagicFiltro.Panels[0].Text:= '';
-  AutoFitStatusBar(StatusBarMagicFiltro);
-  Timer2.Enabled:= false;
-end;
-
-procedure TFrmPrincipal.titleGrid(ColunasLayout: TStringGrid;
-FonteDB,SQLQuery: String);
-  var
-    txtProcura,titulo: String;
-    i: Integer;
-begin
-  actConfigMagicPanel.Execute;
-  CheckListBoxFiltroGRID.Items.Clear;
-  for i := 0 to ColunasLayout.RowCount-1 do
-  begin
-    if ColunasLayout.Cells[0,i] = MagicFieldName then
-    begin
-      txtProcura:= ColunasLayout.Cells[4,i];
-      titulo:= ColunasLayout.Cells[1,i];
-      Break;
-    end;
-  end;
-  PanelTituloMagic.Caption:= titulo;
-  PanelMagicFiltro1.Visible := True;
-  MagicSQLQuery:= SQLQuery;
-  MagicFonteDB:= FonteDB;
-  MagicTextoProcura:= txtProcura;
-  if CheckBoxListarAutomatico.Checked then
-    actListar.Execute;
 end;
 
 function TFrmPrincipal.usuarioWindows: string;
@@ -6985,27 +5093,6 @@ begin
   end
   else
     Result:= '';
-end;
-
-function TFrmPrincipal.verificaTextoLongoCarteira(
-  OrdemManutencao: String): WideString;
-begin
-  if ((OrdemManutencao = '')or(OrdemManutencao = '0')) then
-    OrdemManutencao:= '999999999';
-
-  try
-    FrmDataModule.ADOQueryTextoLongoOM.Active:= false;
-    FrmDataModule.ADOQueryTextoLongoOM.Parameters.Items[0].Value:= OrdemManutencao;
-    FrmDataModule.ADOQueryTextoLongoOM.Active:= true;
-
-    if not FrmDataModule.ADOQueryTextoLongoOM.IsEmpty then
-      Result:= FrmDataModule.DataSourceTextoLongoOM.
-      DataSet.FieldByName('TextoLongoCarteira').AsWideString
-    else
-      Result:= '';
-  except
-    Result:= 'NÃO DEFINIDO';
-  end;
 end;
 
 function TFrmPrincipal.versaoAtualizada(versaoPRG, versaoDB: String): Integer;

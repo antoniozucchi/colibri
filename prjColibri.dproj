@@ -89,15 +89,15 @@
         <DCC_RemoteDebug>true</DCC_RemoteDebug>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_1_Win32)'!=''">
-        <VerInfo_Release>9</VerInfo_Release>
-        <VerInfo_MinorVer>6</VerInfo_MinorVer>
-        <VerInfo_Keys>CompanyName=Petrobras;FileDescription=Colibri;FileVersion=1.6.9.0;InternalName=Colibri;LegalCopyright=Antonio Augusto Zuchi Leite;LegalTrademarks=Antonio Augusto Zuchi Leite;OriginalFilename=Colibri;ProductName=Colibri;ProductVersion=1.6.9.0;Comments=;ProgramID=com.embarcadero.$(MSBuildProjectName)</VerInfo_Keys>
+        <VerInfo_MinorVer>7</VerInfo_MinorVer>
+        <VerInfo_Keys>CompanyName=Petrobras;FileDescription=Colibri;FileVersion=1.7.0.3;InternalName=Colibri;LegalCopyright=Antonio Augusto Zuchi Leite;LegalTrademarks=Antonio Augusto Zuchi Leite;OriginalFilename=Colibri;ProductName=Colibri;ProductVersion=1.7.0.3;Comments=;ProgramID=com.embarcadero.$(MSBuildProjectName)</VerInfo_Keys>
         <Icon_MainIcon>prjColibri_Icon.ico</Icon_MainIcon>
         <VerInfo_IncludeVerInfo>true</VerInfo_IncludeVerInfo>
         <VerInfo_Locale>1046</VerInfo_Locale>
         <DCC_RemoteDebug>false</DCC_RemoteDebug>
         <BT_BuildType>Debug</BT_BuildType>
         <AppDPIAwarenessMode>none</AppDPIAwarenessMode>
+        <VerInfo_Build>3</VerInfo_Build>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_1_Win64)'!=''">
         <BT_BuildType>Debug</BT_BuildType>
@@ -114,97 +114,91 @@
         </DelphiCompile>
         <DCCReference Include="untConsultaProgramacao.pas">
             <Form>FrmConsultaProgramacao</Form>
-            <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="untPrincipal.pas">
             <Form>FrmPrincipal</Form>
-            <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="untDataModule.pas">
             <Form>FrmDataModule</Form>
-            <FormType>dfm</FormType>
             <DesignClass>TDataModule</DesignClass>
         </DCCReference>
         <DCCReference Include="untFrmLogin.pas">
             <Form>FrmLogin</Form>
-            <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="untPlataforma.pas">
             <Form>FrmPlataforma</Form>
-            <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="untExecutante.pas">
             <Form>FrmExecutante</Form>
-            <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="untEmbarcacao.pas">
             <Form>FrmEmbarcacao</Form>
-            <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="untFrmCadastroUsuario.pas">
             <Form>FrmCadastroUsuario</Form>
-            <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="untFrmPreview.pas">
             <Form>FrmPreview</Form>
-            <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="untProgramacaoDiaria.pas">
             <Form>FrmProgramacaoDiaria</Form>
-            <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="untImportacao.pas">
             <Form>FrmImportacao</Form>
-            <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="untFrmSobre.pas">
             <Form>FrmSobre</Form>
-            <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="untGerenciarSolicitacoes.pas">
             <Form>FrmGerenciarSolicitacoes</Form>
-            <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="untGerenciarEmbarcacoes.pas">
             <Form>FrmGerenciarEmbarcacoes</Form>
-            <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="untConsultaServicosProgramados.pas">
             <Form>FrmConsultaServicosProgramados</Form>
-            <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="untConsultaExecutantesProgramados.pas">
             <Form>FrmConsultaExecutantesProgramados</Form>
-            <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="untControleGeradores.pas">
             <Form>FrmControleGeradores</Form>
-            <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="untMovimentacaoCarga.pas">
             <Form>FrmMovimentacaoCarga</Form>
-            <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="untTelaAbertura.pas">
             <Form>FrmTelaAbertura</Form>
-            <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="untAgendaIntervencao.pas">
             <Form>FrmAgendaIntervencao</Form>
-            <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="untSituacaoEquipamentoAcesso.pas">
             <Form>FrmSituacaoEquipamentoAcesso</Form>
-            <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="uExcelSapRunner.pas"/>
         <DCCReference Include="uAccessDBUtils.pas"/>
         <DCCReference Include="..\..\Library_Delphi\Zucchi\uZucchi.pas"/>
         <DCCReference Include="untFrmConfigRT.pas">
             <Form>FrmConfigRT</Form>
-            <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="..\..\Library_Delphi\Mensagens\uMensagens.pas"/>
+        <DCCReference Include="untCondicaoEmbarcacao.pas">
+            <Form>FrmCondicaoEmbarcacao</Form>
+        </DCCReference>
+        <DCCReference Include="untFrmTabela.pas">
+            <Form>FrmTabela</Form>
+        </DCCReference>
+        <DCCReference Include="uProgramacaoRTUtils.pas"/>
+        <DCCReference Include="untConexaoLOCAL.pas">
+            <Form>FrmConexaoLOCAL</Form>
+        </DCCReference>
+        <DCCReference Include="untMotivoCancelamento.pas">
+            <Form>FrmMotivoCancelamento</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
+        <DCCReference Include="uDistribuicaoLogistica.pas"/>
+        <DCCReference Include="uSimulacaoLogistica.pas"/>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>

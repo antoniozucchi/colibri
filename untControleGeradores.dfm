@@ -2,8 +2,8 @@ object FrmControleGeradores: TFrmControleGeradores
   Left = 0
   Top = 0
   Caption = 'Controle de Geradores'
-  ClientHeight = 522
-  ClientWidth = 926
+  ClientHeight = 506
+  ClientWidth = 922
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -19,8 +19,8 @@ object FrmControleGeradores: TFrmControleGeradores
   TextHeight = 13
   object Splitter1: TSplitter
     Left = 0
-    Top = 392
-    Width = 926
+    Top = 376
+    Width = 922
     Height = 3
     Cursor = crVSplit
     Align = alBottom
@@ -31,13 +31,13 @@ object FrmControleGeradores: TFrmControleGeradores
   object ToolBar1: TToolBar
     Left = 0
     Top = 25
-    Width = 926
+    Width = 922
     Height = 29
     Caption = 'ToolBar1'
     DrawingStyle = dsGradient
     EdgeBorders = [ebLeft, ebTop, ebRight, ebBottom]
+    Images = FrmPrincipal.ImageList1
     TabOrder = 0
-    ExplicitWidth = 819
     object DBNavigatorGerador: TDBNavigator
       Left = 0
       Top = 0
@@ -63,47 +63,38 @@ object FrmControleGeradores: TFrmControleGeradores
       ShowHint = True
       TabOrder = 0
     end
-    object BitBtn4: TBitBtn
+    object btnClearFiltro: TToolButton
       Left = 138
       Top = 0
-      Width = 75
-      Height = 22
-      Action = actExcel
-      Align = alLeft
+      Hint = 'Limpar filtro'
+      Caption = 'btnClearFiltro'
+      ImageIndex = 225
+      ParentShowHint = False
+      ShowHint = True
+    end
+    object btnLayput: TToolButton
+      Left = 161
+      Top = 0
+      Hint = 'Editar layout de colunas'
+      Caption = 'btnLayout'
+      ImageIndex = 196
+      ParentShowHint = False
+      ShowHint = True
+    end
+    object btnExcel: TToolButton
+      Left = 184
+      Top = 0
+      Hint = 'Exportar dados para o Excel'
       Caption = 'Exportar'
+      ImageIndex = 54
       ParentShowHint = False
       ShowHint = True
-      TabOrder = 1
-    end
-    object BitBtn2: TBitBtn
-      Left = 213
-      Top = 0
-      Width = 64
-      Height = 22
-      Action = actLimparFiltros
-      Align = alLeft
-      Caption = 'Limpar'
-      ParentShowHint = False
-      ShowHint = True
-      TabOrder = 3
-    end
-    object BitBtn1: TBitBtn
-      Left = 277
-      Top = 0
-      Width = 64
-      Height = 22
-      Action = actFiltrosTabela
-      Align = alLeft
-      Caption = 'Filtros'
-      ParentShowHint = False
-      ShowHint = True
-      TabOrder = 2
     end
   end
   object PanelTitulo: TPanel
     Left = 0
     Top = 0
-    Width = 926
+    Width = 922
     Height = 25
     Align = alTop
     Caption = 'Controle de Geradores'
@@ -116,13 +107,12 @@ object FrmControleGeradores: TFrmControleGeradores
     ParentBackground = False
     ParentFont = False
     TabOrder = 1
-    ExplicitWidth = 819
   end
-  object DBGridGerador: TDBGrid
+  object DBGridGerador: TFilterDBGrid
     Left = 0
     Top = 54
-    Width = 926
-    Height = 338
+    Width = 922
+    Height = 322
     Align = alClient
     DataSource = FrmDataModule.DataSourceGeradores
     ReadOnly = True
@@ -134,7 +124,12 @@ object FrmControleGeradores: TFrmControleGeradores
     TitleFont.Style = []
     OnDrawColumnCell = DBGridGeradorDrawColumnCell
     OnKeyPress = DBGridGeradorKeyPress
-    OnTitleClick = DBGridGeradorTitleClick
+    ClearFilterButton = btnClearFiltro
+    SearchAction = actProcurar
+    LayoutGrid = ColunasLayout
+    EnableZebra = False
+    LayoutButton = btnLayput
+    ExcelButton = btnExcel
     Columns = <
       item
         Alignment = taCenter
@@ -239,8 +234,8 @@ object FrmControleGeradores: TFrmControleGeradores
   end
   object StatusBar1: TStatusBar
     Left = 0
-    Top = 503
-    Width = 926
+    Top = 487
+    Width = 922
     Height = 19
     Panels = <
       item
@@ -258,19 +253,25 @@ object FrmControleGeradores: TFrmControleGeradores
       item
         Width = 50
       end>
-    ExplicitTop = 327
-    ExplicitWidth = 819
   end
   object ColunasLayout: TStringGrid
     Left = 48
     Top = 102
     Width = 113
     Height = 94
-    ColCount = 2
+    ColCount = 7
     DefaultRowHeight = 21
+    RowCount = 12
     TabOrder = 4
     Visible = False
     RowHeights = (
+      21
+      21
+      21
+      21
+      21
+      21
+      21
       21
       21
       21
@@ -279,18 +280,16 @@ object FrmControleGeradores: TFrmControleGeradores
   end
   object Panel2: TPanel
     Left = 0
-    Top = 395
-    Width = 926
+    Top = 379
+    Width = 922
     Height = 108
     Align = alBottom
     Caption = 'Panel2'
     TabOrder = 5
-    ExplicitTop = 219
-    ExplicitWidth = 819
     object PanelTituloPltaformas: TPanel
       Left = 1
       Top = 1
-      Width = 924
+      Width = 922
       Height = 20
       Align = alTop
       Caption = 'Ocorr'#234'ncias'
@@ -303,12 +302,12 @@ object FrmControleGeradores: TFrmControleGeradores
       ParentBackground = False
       ParentFont = False
       TabOrder = 0
-      ExplicitWidth = 817
+      ExplicitWidth = 920
     end
     object DBMemo1: TDBMemo
       Left = 1
       Top = 21
-      Width = 924
+      Width = 922
       Height = 86
       Align = alClient
       DataField = 'Notas'
@@ -320,7 +319,7 @@ object FrmControleGeradores: TFrmControleGeradores
       Font.Style = []
       ParentFont = False
       TabOrder = 1
-      ExplicitWidth = 817
+      ExplicitWidth = 920
     end
   end
   object ActionManager1: TActionManager
@@ -329,53 +328,10 @@ object FrmControleGeradores: TFrmControleGeradores
     Top = 150
     StyleName = 'Platform Default'
     object actProcurar: TAction
-      Caption = 'actProcurar'
+      Caption = 'Procurar'
+      Hint = 'Buscar registros no banco de dados'
+      ImageIndex = 27
       OnExecute = actProcurarExecute
-    end
-    object actExcel: TAction
-      Caption = 'Exportar'
-      Hint = 'Exportar para o Excel'
-      ImageIndex = 54
-      OnExecute = actExcelExecute
-    end
-    object actFiltroInserir: TAction
-      Category = 'Tabela'
-      Caption = 'actFiltroInserir'
-      OnExecute = actFiltroInserirExecute
-    end
-    object actGridASC: TAction
-      Category = 'Tabela'
-      Caption = 'actGridASC'
-      OnExecute = actGridASCExecute
-    end
-    object actGridDESC: TAction
-      Category = 'Tabela'
-      Caption = 'actGridDESC'
-      OnExecute = actGridDESCExecute
-    end
-    object actSubstituirPor: TAction
-      Category = 'Tabela'
-      Caption = 'actSubstituirPor'
-      OnExecute = actSubstituirPorExecute
-    end
-    object actLimparFiltros: TAction
-      Category = 'Tabela'
-      Caption = 'Limpar'
-      Hint = 'Limpar Filtros'
-      ImageIndex = 469
-      OnExecute = actLimparFiltrosExecute
-    end
-    object actFiltrosTabela: TAction
-      Category = 'Tabela'
-      Caption = 'Filtros'
-      Hint = 'Visualizar tabela de filtros'
-      ImageIndex = 470
-      OnExecute = actFiltrosTabelaExecute
-    end
-    object actProcuraFiltrosTabela: TAction
-      Category = 'Tabela'
-      Caption = 'actProcuraFiltrosTabela'
-      OnExecute = actProcuraFiltrosTabelaExecute
     end
   end
 end

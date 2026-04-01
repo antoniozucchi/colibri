@@ -9,41 +9,24 @@ uses
   Vcl.ImgList, System.Actions, Vcl.ActnList, Vcl.PlatformDefaultStyleActnCtrls,
   Vcl.ActnMan, Data.Win.ADODB, Registry, ComOBJ, Vcl.Mask, Vcl.DBCtrls,DateUtils,
   Vcl.Menus, Vcl.Buttons,UITYPES,Math, Vcl.CheckLst,
-  Vcl.FileCtrl, ComCtrls, Vcl.ExtDlgs, SDL_NumLab;
+  Vcl.FileCtrl, ComCtrls, Vcl.ExtDlgs, SDL_NumLab, untDBGridFilter, uZucchi;
 
 type
   TFrmConsultaProgramacao = class(TForm)
     ActionManager1: TActionManager;
-    actProcurar: TAction;
+    actProcurarProgramacao: TAction;
     ProgressBar1: TProgressBar;
-    actExcelProgramacao: TAction;
-    actExcelExecutante: TAction;
-    actExcelServico: TAction;
     PanelTitulo: TPanel;
     actExcluirTudo: TAction;
-    actStatusTODOS: TAction;
     actExcluirSelecionado: TAction;
     PopupMenuExcluir: TPopupMenu;
-    PopupMenuStatus: TPopupMenu;
     ExcluirSelecionado1: TMenuItem;
     ExcluirTodos1: TMenuItem;
-    CalcularStatusExec1: TMenuItem;
-    actStatusSELECIONADO: TAction;
-    CalcularStatusExecSelecionado1: TMenuItem;
-    actFiltroInserir: TAction;
-    actGridASC: TAction;
-    actGridDESC: TAction;
-    actLimparFiltros: TAction;
-    actFiltrosTabela: TAction;
-    actProcuraFiltrosTabela: TAction;
     actProcurarImportar: TAction;
     actAbrirImportar: TAction;
     actImportar: TAction;
     OpenDialog1: TOpenDialog;
     actImportarFiltrado: TAction;
-    actLimparFiltrosImportar: TAction;
-    actFiltrosTabelaImportar: TAction;
-    actExcelImportar: TAction;
     actExcluirFiltrados: TAction;
     ExcluirtodososregistrosdeProgramaoFILTRADOS1: TMenuItem;
     actGanttImprimir: TAction;
@@ -64,7 +47,6 @@ type
     Importarsemverificao1: TMenuItem;
     actInserirProgramacao: TAction;
     actExcluirRegistroProgramacao: TAction;
-    actSubstituirPor: TAction;
     actLimparExecutantes: TAction;
     actSelecionarServicos: TAction;
     actAjudaLimpar: TAction;
@@ -90,25 +72,17 @@ type
     actGraficoTempo: TAction;
     actGraficoPlataforma: TAction;
     actGraficoTipoEtapaServico: TAction;
-    actLimparHoras: TAction;
     actProgramacaoCancelar: TAction;
     actProgramacaoGravar: TAction;
-    actProgramacaoJanela: TAction;
-    actVerificarAcessoProgramacao: TAction;
     actExecutanteJanela: TAction;
     actVerificarAcessoExecutante: TAction;
     actExecutanteGravar: TAction;
-    actProgramacaoGravarHoras: TAction;
     actCarregarDatas: TAction;
     PopupMenuGantt: TPopupMenu;
     Dias1: TMenuItem;
     Mes1: TMenuItem;
     Ano1: TMenuItem;
     Alterarlarguradacoluna1: TMenuItem;
-    actLimparHorasTodos: TAction;
-    actCalcularHorasTodos: TAction;
-    CalcularHorasFILTRADOS1: TMenuItem;
-    LimparHorasFILTRADOS1: TMenuItem;
     actProcurarServico: TAction;
     actLogAcao: TAction;
     PopupMenuTipoEtapaServico: TPopupMenu;
@@ -121,17 +95,13 @@ type
     ToolBar1: TToolBar;
     BitBtn24: TBitBtn;
     BitBtn23: TBitBtn;
-    BitBtn6: TBitBtn;
-    BitBtn5: TBitBtn;
-    BitBtn7: TBitBtn;
     BitBtn29: TBitBtn;
     BitBtn26: TBitBtn;
     BitBtn1: TBitBtn;
     btnExcluir: TToolButton;
-    btnStatus: TToolButton;
     ToolButton1: TToolButton;
     DBEditProgramacao: TDBEdit;
-    DBGridProgramacao: TDBGrid;
+    DBGridProgramacao: TFilterDBGrid;
     Panel13: TPanel;
     StatusBarProgramacao: TStatusBar;
     PanelFiltrosTodos: TPanel;
@@ -149,24 +119,21 @@ type
     PanelResultados: TPanel;
     Splitter2: TSplitter;
     PanelExecutante: TPanel;
-    DBGridExecutantes: TDBGrid;
+    DBGridExecutantes: TFilterDBGrid;
     ToolBar2: TToolBar;
     BitBtn20: TBitBtn;
     BitBtn27: TBitBtn;
-    BitBtn25: TBitBtn;
-    BitBtn3: TBitBtn;
     DBEdit2: TDBEdit;
     Panel7: TPanel;
     StatusBarExecutantes: TStatusBar;
     ColunasLayoutExecutantes: TStringGrid;
     PanelServico: TPanel;
-    DBGridServicos: TDBGrid;
+    DBGridServicos: TFilterDBGrid;
     ToolBar3: TToolBar;
     DBNavigator1: TDBNavigator;
     BitBtn30: TBitBtn;
     BitBtn15: TBitBtn;
     BitBtn14: TBitBtn;
-    BitBtn4: TBitBtn;
     Panel10: TPanel;
     StatusBarServicos: TStatusBar;
     ColunasLayoutServicos: TStringGrid;
@@ -186,7 +153,7 @@ type
     RadioGroup1: TRadioGroup;
     PanelImportar: TPanel;
     Panel1: TPanel;
-    DBGridImportar: TDBGrid;
+    DBGridImportar: TFilterDBGrid;
     StatusBarImportar: TStatusBar;
     Panel3: TPanel;
     Panel4: TPanel;
@@ -206,7 +173,6 @@ type
     ToolBar4: TToolBar;
     BitBtn11: TBitBtn;
     BitBtn9: TBitBtn;
-    BitBtn10: TBitBtn;
     BitBtn8: TBitBtn;
     PanelCopiar: TPanel;
     MonthCalendar1: TMonthCalendar;
@@ -216,43 +182,6 @@ type
     BitBtn31: TBitBtn;
     ListBoxCopiar: TListBox;
     RadioGroupCopiar: TRadioGroup;
-    PanelEditarProgramacao: TPanel;
-    Panel19: TPanel;
-    Panel20: TPanel;
-    Panel21: TPanel;
-    edtHoraChegada: TMaskEdit;
-    Panel22: TPanel;
-    Panel23: TPanel;
-    Panel24: TPanel;
-    edtHoraSaida: TMaskEdit;
-    Panel25: TPanel;
-    Panel26: TPanel;
-    Panel27: TPanel;
-    edtHoraEncerramento: TMaskEdit;
-    Panel28: TPanel;
-    Panel29: TPanel;
-    Panel30: TPanel;
-    edtHoraPT: TMaskEdit;
-    Panel31: TPanel;
-    Panel32: TPanel;
-    Panel33: TPanel;
-    edtMotivo: TEdit;
-    ToolBar9: TToolBar;
-    btnProgramacao: TBitBtn;
-    BitBtn37: TBitBtn;
-    BitBtn36: TBitBtn;
-    Panel34: TPanel;
-    Panel35: TPanel;
-    Panel36: TPanel;
-    DateTimePickerProgramacao: TDateTimePicker;
-    Panel37: TPanel;
-    Panel38: TPanel;
-    Panel39: TPanel;
-    ComboBoxDestino: TComboBox;
-    Panel43: TPanel;
-    Panel44: TPanel;
-    Panel45: TPanel;
-    ComboBoxTipoEtapaServico: TComboBox;
     PanelEditarExecutante: TPanel;
     ToolBar10: TToolBar;
     BitBtn38: TBitBtn;
@@ -271,7 +200,6 @@ type
     PanelInserirProgramacao: TPanel;
     ToolBar12: TToolBar;
     BitBtn40: TBitBtn;
-    BitBtn41: TBitBtn;
     Panel71: TPanel;
     Panel72: TPanel;
     Panel73: TPanel;
@@ -284,8 +212,15 @@ type
     Panel78: TPanel;
     Panel79: TPanel;
     ComboBoxJanelaTipoEtapaServico: TComboBox;
-    procedure actProcurarExecute(Sender: TObject);
-    procedure actExcelProgramacaoExecute(Sender: TObject);
+    btnClearFiltroProgramacao: TToolButton;
+    btnExcelProgramacao: TToolButton;
+    btnClearFiltroExecutante: TToolButton;
+    btnExcelExecutante: TToolButton;
+    btnClearFiltroServico: TToolButton;
+    btnExcelServico: TToolButton;
+    actProcurarExecutante: TAction;
+    actProcurarServicos: TAction;
+    procedure actProcurarProgramacaoExecute(Sender: TObject);
     procedure DBGridProgramacaoDrawColumnCell(Sender: TObject;
       const Rect: TRect; DataCol: Integer; Column: TColumn;
       State: TGridDrawState);
@@ -294,33 +229,18 @@ type
       DataCol: Integer; Column: TColumn; State: TGridDrawState);
     procedure DBGridServicosDrawColumnCell(Sender: TObject; const Rect: TRect;
       DataCol: Integer; Column: TColumn; State: TGridDrawState);
-    procedure actExcelServicoExecute(Sender: TObject);
-    procedure actExcelExecutanteExecute(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure actExcluirTudoExecute(Sender: TObject);
-    procedure actStatusTODOSExecute(Sender: TObject);
     procedure actExcluirSelecionadoExecute(Sender: TObject);
-    procedure actStatusSELECIONADOExecute(Sender: TObject);
-    procedure actFiltroInserirExecute(Sender: TObject);
-    procedure actGridASCExecute(Sender: TObject);
-    procedure actGridDESCExecute(Sender: TObject);
-    procedure actLimparFiltrosExecute(Sender: TObject);
-    procedure actFiltrosTabelaExecute(Sender: TObject);
-    procedure actProcuraFiltrosTabelaExecute(Sender: TObject);
-    procedure DBGridProgramacaoTitleClick(Column: TColumn);
     procedure DBGridImportarDrawColumnCell(Sender: TObject; const Rect: TRect;
       DataCol: Integer; Column: TColumn; State: TGridDrawState);
-    procedure DBGridImportarTitleClick(Column: TColumn);
     procedure actProcurarImportarExecute(Sender: TObject);
     procedure actAbrirImportarExecute(Sender: TObject);
     procedure actImportarExecute(Sender: TObject);
     procedure actImportarFiltradoExecute(Sender: TObject);
     procedure actGridASCImportarExecute(Sender: TObject);
-    procedure actLimparFiltrosImportarExecute(Sender: TObject);
-    procedure actFiltrosTabelaImportarExecute(Sender: TObject);
-    procedure actExcelImportarExecute(Sender: TObject);
     procedure actExcluirFiltradosExecute(Sender: TObject);
     procedure actServicoExcluirExecute(Sender: TObject);
     procedure actServicoInserirExecute(Sender: TObject);
@@ -335,7 +255,6 @@ type
     procedure actCopiarProgramacaoTODASExecute(Sender: TObject);
     procedure actExcluirRegistroProgramacaoExecute(Sender: TObject);
     procedure actInserirProgramacaoExecute(Sender: TObject);
-    procedure actSubstituirPorExecute(Sender: TObject);
     procedure DBGridServicosKeyPress(Sender: TObject; var Key: Char);
     procedure actLimparExecutantesExecute(Sender: TObject);
     procedure actSelecionarServicosExecute(Sender: TObject);
@@ -362,38 +281,17 @@ type
     procedure Excluirselecionado2Click(Sender: TObject);
     procedure actCopiarIncluirDateExecute(Sender: TObject);
     procedure actCopiarLimparDatasExecute(Sender: TObject);
-
-    procedure actLimparHorasExecute(Sender: TObject);
-
-    procedure actProgramacaoJanelaExecute(Sender: TObject);
-    procedure actProgramacaoGravarExecute(Sender: TObject);
     procedure actProgramacaoCancelarExecute(Sender: TObject);
-    procedure actVerificarAcessoProgramacaoExecute(Sender: TObject);
     procedure actExecutanteJanelaExecute(Sender: TObject);
     procedure actVerificarAcessoExecutanteExecute(Sender: TObject);
     procedure actExecutanteGravarExecute(Sender: TObject);
     procedure ComboBoxTipoEtapaServicoKeyPress(Sender: TObject; var Key: Char);
     procedure ComboBoxDestinoKeyPress(Sender: TObject; var Key: Char);
     procedure DBEdit2Change(Sender: TObject);
-    procedure actProgramacaoGravarHorasExecute(Sender: TObject);
-    procedure ssss1Click(Sender: TObject);
-
-    procedure actLimparHorasTodosExecute(Sender: TObject);
-    procedure actCalcularHorasTodosExecute(Sender: TObject);
     procedure DBGridProgramacaoCellClick(Column: TColumn);
     procedure RadioGroup1Click(Sender: TObject);
     procedure actProcurarServicoExecute(Sender: TObject);
     procedure actLogAcaoExecute(Sender: TObject);
-    procedure edtHoraChegadaKeyDown(Sender: TObject; var Key: Word;
-      Shift: TShiftState);
-    procedure edtHoraPTKeyDown(Sender: TObject; var Key: Word;
-      Shift: TShiftState);
-    procedure edtHoraEncerramentoKeyDown(Sender: TObject; var Key: Word;
-      Shift: TShiftState);
-    procedure edtHoraSaidaKeyDown(Sender: TObject; var Key: Word;
-      Shift: TShiftState);
-    procedure edtMotivoKeyDown(Sender: TObject; var Key: Word;
-      Shift: TShiftState);
 
     procedure actGravarProgramacaoExecute(Sender: TObject);
     procedure actCancelarProgramacaoExecute(Sender: TObject);
@@ -412,10 +310,10 @@ type
   private
     { Private declarations }
     listProgramacao: TStringList;
-    TabelaIndex: Integer;
     procedure WMMDIACTIVATE(var msg: TWMMDIACTIVATE);message WM_MDIACTIVATE;
     function carregaStatus(ColunasLayout: TStringGrid): String;
     procedure selecionarServicos(TipoEtapaServico: String);
+    procedure ExcluirFiltradosPorData(const DtIni, DtFim: TDateTime);
   public
     { Public declarations }
   end;
@@ -490,67 +388,6 @@ begin
   end;
 end;
 
-procedure TFrmConsultaProgramacao.actStatusSELECIONADOExecute(Sender: TObject);
-  var
-    idProgramacaoDiaria,NumCancelados,NumAprovados,NumExecutantes: Integer;
-begin
-  idProgramacaoDiaria:= FrmDataModule.DataSourceProgramacaoDiaria_Consulta.DataSet.FieldByName('idProgramacaoDiaria').AsInteger;
-  NumCancelados:= FrmPrincipal.CalcNumCanceladosAprovado(idProgramacaoDiaria,0);
-  NumAprovados:= FrmPrincipal.CalcNumCanceladosAprovado(idProgramacaoDiaria,1);
-  NumExecutantes:= FrmPrincipal.CalcNumExecutantes(idProgramacaoDiaria);
-  FrmDataModule.ADOQueryProgramacaoDiaria_Consulta.Edit;
-  FrmDataModule.DataSourceProgramacaoDiaria_Consulta.DataSet.
-  FieldByName('NumExecutantes').AsInteger:= NumExecutantes;
-  FrmDataModule.DataSourceProgramacaoDiaria_Consulta.DataSet.
-  FieldByName('NumCancelados').AsInteger:= NumCancelados;
-  FrmDataModule.DataSourceProgramacaoDiaria_Consulta.DataSet.
-  FieldByName('NumAprovados').AsInteger:= NumAprovados;
-  FrmDataModule.ADOQueryProgramacaoDiaria_Consulta.Post;
-end;
-
-procedure TFrmConsultaProgramacao.actStatusTODOSExecute(Sender: TObject);
-  var
-    idProgramacaoDiaria,NumCancelados,NumAprovados,NumExecutantes: Integer;
-begin
-  FrmPrincipal.ProgressBarIncializa(FrmDataModule.
-  ADOQueryProgramacaoDiaria_Consulta.RecordCount,
-  'Calculando "N° Exec.", "N° Apro." e "N° Canc."...');
-
-  FrmDataModule.DataSourceProgramacaoDiaria_Consulta.Enabled:= false;
-  FrmDataModule.ADOQueryProgramacaoDiaria_Consulta.First;
-  while not FrmDataModule.ADOQueryProgramacaoDiaria_Consulta.Eof do
-  begin
-    idProgramacaoDiaria:= FrmDataModule.DataSourceProgramacaoDiaria_Consulta.DataSet.FieldByName('idProgramacaoDiaria').AsInteger;
-    NumCancelados:= FrmPrincipal.CalcNumCanceladosAprovado(idProgramacaoDiaria,0);
-    NumAprovados:= FrmPrincipal.CalcNumCanceladosAprovado(idProgramacaoDiaria,1);
-    NumExecutantes:= FrmPrincipal.CalcNumExecutantes(idProgramacaoDiaria);
-    FrmDataModule.ADOQueryProgramacaoDiaria_Consulta.Edit;
-    FrmDataModule.DataSourceProgramacaoDiaria_Consulta.DataSet.
-    FieldByName('NumExecutantes').AsInteger:= NumExecutantes;
-    FrmDataModule.DataSourceProgramacaoDiaria_Consulta.DataSet.
-    FieldByName('NumCancelados').AsInteger:= NumCancelados;
-    FrmDataModule.DataSourceProgramacaoDiaria_Consulta.DataSet.
-    FieldByName('NumAprovados').AsInteger:= NumAprovados;
-    FrmDataModule.ADOQueryProgramacaoDiaria_Consulta.Next;
-    FrmPrincipal.ProgressBarIncremento(1);
-  end;
-  FrmDataModule.ADOQueryProgramacaoDiaria_Consulta.First;
-  FrmDataModule.DataSourceProgramacaoDiaria_Consulta.Enabled:= true;
-  FrmPrincipal.ProgressBarAtualizar;
-end;
-
-procedure TFrmConsultaProgramacao.actSubstituirPorExecute(Sender: TObject);
-begin
-  case TabelaIndex of
-    0: FrmPrincipal.SubstituirPor(DBGridProgramacao,
-        FrmDataModule.ADOQueryProgramacaoDiaria_Consulta,
-        FrmDataModule.DataSourceProgramacaoDiaria_Consulta);
-    1: FrmPrincipal.SubstituirPor(DBGridImportar,
-        FrmDataModule.ADOQueryProgramacaoDiaria_Importar,
-        FrmDataModule.DataSourceProgramacaoDiaria_Importar);
-  end;
-end;
-
 procedure TFrmConsultaProgramacao.actVerificarAcessoExecutanteExecute(
   Sender: TObject);
   var
@@ -581,26 +418,6 @@ begin
   FrmPrincipal.deleteRepetidosCombo(ComboBoxFuncao1);
   FrmPrincipal.selComboBox(ComboBoxOrigem,Origem);
   FrmPrincipal.selComboBox(ComboBoxFuncao1,Funcao);
-end;
-
-procedure TFrmConsultaProgramacao.actVerificarAcessoProgramacaoExecute(Sender: TObject);
-begin
-  DateTimePickerProgramacao.DateTime:= FrmDataModule.DataSourceProgramacaoDiaria_Consulta.DataSet.
-  FieldByName('DataProgramacao').AsDateTime;
-  FrmPrincipal.selComboBox(ComboBoxTipoEtapaServico,FrmDataModule.DataSourceProgramacaoDiaria_Consulta.DataSet.
-  FieldByName('txtTipoEtapaServico').AsString);
-  FrmPrincipal.selComboBox(ComboBoxDestino,FrmDataModule.DataSourceProgramacaoDiaria_Consulta.DataSet.
-  FieldByName('txtDestino').AsString);
-  edtHoraChegada.Text:= FrmDataModule.DataSourceProgramacaoDiaria_Consulta.DataSet.
-  FieldByName('HorarioChegada').AsString;
-  edtHoraPT.Text:= FrmDataModule.DataSourceProgramacaoDiaria_Consulta.DataSet.
-  FieldByName('HorarioPT').AsString;
-  edtHoraEncerramento.Text:= FrmDataModule.DataSourceProgramacaoDiaria_Consulta.DataSet.
-  FieldByName('HorarioEncerramento').AsString;
-  edtHoraSaida.Text:= FrmDataModule.DataSourceProgramacaoDiaria_Consulta.DataSet.
-  FieldByName('HorarioSaida').AsString;
-  edtMotivo.Text:= FrmDataModule.DataSourceProgramacaoDiaria_Consulta.DataSet.
-  FieldByName('HorarioNOTA').AsString;
 end;
 
 function TFrmConsultaProgramacao.carregaStatus(ColunasLayout: TStringGrid): String;
@@ -648,26 +465,6 @@ begin
     FrmPrincipal.conectarBDDireto(OpenDialog1.FileName,FrmDataModule.ADOConnectionImportar);
     actProcurarImportar.Execute;
   end;
-end;
-
-procedure TFrmConsultaProgramacao.actExcelExecutanteExecute(Sender: TObject);
-begin
-  FrmPrincipal.GerarExcel(DBGridExecutantes,'Executantes');
-end;
-
-procedure TFrmConsultaProgramacao.actExcelImportarExecute(Sender: TObject);
-begin
-  FrmPrincipal.GerarExcel(DBGridImportar,'Importar');
-end;
-
-procedure TFrmConsultaProgramacao.actExcelProgramacaoExecute(Sender: TObject);
-begin
-  FrmPrincipal.GerarExcel(DBGridProgramacao,'Programação');
-end;
-
-procedure TFrmConsultaProgramacao.actExcelServicoExecute(Sender: TObject);
-begin
-  FrmPrincipal.GerarExcel(DBGridServicos,'Serviços');
 end;
 
 procedure TFrmConsultaProgramacao.actExcluirSelecionadoExecute(Sender: TObject);
@@ -755,7 +552,7 @@ begin
     begin
       if DataProgramacao >= FrmPrincipal.carregaDataMinima(false) then
       begin
-        FrmPrincipal.ProgramarExecutante('',idProgramacaoDiaria,
+        FrmPrincipal.ProgramarExecutantes('',idProgramacaoDiaria,
         FrmDataModule.ADOQueryProgramacaoExecutante_Consulta,
         FrmDataModule.ADOQueryProgramacaoDiaria_Consulta,
         FrmDataModule.DataSourceProgramacaoExecutante_Consulta,
@@ -782,24 +579,7 @@ begin
   actVerificarAcessoExecutante.Execute;
 end;
 
-procedure TFrmConsultaProgramacao.actProcuraFiltrosTabelaExecute(
-  Sender: TObject);
-begin
-  case TabelaIndex of
-    0:
-    begin
-      FrmPrincipal.CarregaFiltrosProcura(ColunasLayoutProgramacao);
-      actProcurar.Execute;
-    end;
-    1:
-    begin
-      FrmPrincipal.CarregaFiltrosProcura(ColunasLayoutImportar);
-      actProcurarImportar.Execute;
-    end;
-  end;
-end;
-
-procedure TFrmConsultaProgramacao.actProcurarExecute(Sender: TObject);
+procedure TFrmConsultaProgramacao.actProcurarProgramacaoExecute(Sender: TObject);
   var
     DataProcuraIncio,DataProcuraFim,SQLString,SQLBase: String;
 begin
@@ -832,190 +612,14 @@ begin
   selecionarServicos(ComboBoxSelecaoServicoTipoEtapaServico.Text);
 end;
 
-procedure TFrmConsultaProgramacao.actFiltroInserirExecute(Sender: TObject);
-begin
-  if TabelaIndex = 0 then
-  begin
-    FrmPrincipal.inserirProcura(DBGridProgramacao,ColunasLayoutProgramacao);
-    actProcurar.Execute;
-  end
-  else if TabelaIndex = 1 then
-  begin
-    FrmPrincipal.inserirProcura(DBGridImportar,ColunasLayoutImportar);
-    actProcurarImportar.Execute;
-  end;
-  if (FrmPrincipal.PanelFiltrosTabela.Visible)AND(FrmPrincipal.PanelAjuda1.Visible) then
-    actFiltrosTabela.Execute;
-end;
-
-procedure TFrmConsultaProgramacao.actFiltrosTabelaExecute(Sender: TObject);
-begin
-  TabelaIndex:= 0;
-  FrmPrincipal.btnProcurarFiltrosTabela.Action:= actProcuraFiltrosTabela;
-  FrmPrincipal.FiltrosTabela(DBGridProgramacao,ColunasLayoutProgramacao);
-end;
-
-procedure TFrmConsultaProgramacao.actFiltrosTabelaImportarExecute(
-  Sender: TObject);
-begin
-  TabelaIndex:= 1;
-  FrmPrincipal.btnProcurarFiltrosTabela.Action:= actProcuraFiltrosTabela;
-  FrmPrincipal.FiltrosTabela(DBGridImportar,ColunasLayoutImportar);
-end;
-
-procedure TFrmConsultaProgramacao.actGridASCExecute(Sender: TObject);
-begin
-  case TabelaIndex of
-    0: FrmPrincipal.ClassificaDBGrid(DBGridProgramacao,FrmDataModule.
-    ADOQueryProgramacaoDiaria_Consulta,0);
-    1: FrmPrincipal.ClassificaDBGrid(DBGridImportar,FrmDataModule.
-    ADOQueryProgramacaoDiaria_Importar,0);
-  end;
-
-end;
-
 procedure TFrmConsultaProgramacao.actGridASCImportarExecute(Sender: TObject);
 begin
   FrmPrincipal.ClassificaDBGrid(DBGridImportar,FrmDataModule.ADOQueryProgramacaoDiaria_Importar,0);
 end;
 
-procedure TFrmConsultaProgramacao.actGridDESCExecute(Sender: TObject);
-begin
-  case TabelaIndex of
-    0: FrmPrincipal.ClassificaDBGrid(DBGridProgramacao,FrmDataModule.
-    ADOQueryProgramacaoDiaria_Consulta,1);
-    1: FrmPrincipal.ClassificaDBGrid(DBGridImportar,FrmDataModule.
-    ADOQueryProgramacaoDiaria_Importar,1);
-  end;
-end;
-
 procedure TFrmConsultaProgramacao.actProgramacaoCancelarExecute(Sender: TObject);
 begin
   actAjudaLimpar.Execute;
-end;
-
-procedure TFrmConsultaProgramacao.actProgramacaoGravarExecute(Sender: TObject);
-  var
-    HorarioChegada,HorarioPT,HorarioEncerramento,
-    HorarioSaida,HorarioSaldo,HorarioDemora,Disponibilidade,HorarioNota: String;
-begin
-  if (DateTimePickerProgramacao.DateTime >= FrmPrincipal.carregaDataMinima(false)) then
-  begin
-    HorarioChegada:= edtHoraChegada.Text;
-    HorarioPT:= edtHoraPT.Text;
-    HorarioEncerramento:= edtHoraEncerramento.Text;
-    HorarioSaida:= edtHoraSaida.Text;
-    HorarioNota:= edtMotivo.Text;
-    if (HorarioChegada = '  :  ') then
-      HorarioChegada := '00:00';
-    if (HorarioPT = '  :  ') then
-      HorarioPT := '00:00';
-    if (HorarioEncerramento = '  :  ') then
-      HorarioEncerramento := '00:00';
-    if (HorarioSaida = '  :  ') then
-      HorarioSaida := '00:00';
-    //======================================================================
-    if ((HorarioChegada = '00:00')AND(HorarioPT <> '00:00')) then
-      HorarioChegada:= HorarioPT;
-    if ((HorarioPT = '00:00')AND(HorarioChegada <> '00:00')) then
-      HorarioPT:= HorarioChegada;
-    if ((HorarioSaida = '00:00')AND(HorarioEncerramento <> '00:00')) then
-      HorarioSaida:= HorarioEncerramento;
-    if ((HorarioEncerramento = '00:00')AND(HorarioSaida <> '00:00')) then
-      HorarioEncerramento:= HorarioSaida;
-    //======================================================================
-    if StrToTime(HorarioPT) < StrToTime(HorarioChegada) then
-    begin
-      HorarioChegada:= HorarioPT;
-    end;
-    if StrToTime(HorarioEncerramento) < StrToTime(HorarioPT) then
-    begin
-      HorarioEncerramento:= HorarioPT;
-    end;
-    if StrToTime(HorarioSaida) < StrToTime(HorarioEncerramento) then
-    begin
-      HorarioSaida:= HorarioEncerramento;
-    end;
-     //========================================================================
-    edtHoraChegada.Text:= HorarioChegada;
-    edtHoraPT.Text:= HorarioPT;
-    edtHoraEncerramento.Text:= HorarioEncerramento;
-    edtHoraSaida.Text:= HorarioSaida;
-    //========================================================================
-    HorarioSaldo:= FrmPrincipal.SubtrairHoras(HorarioEncerramento,HorarioPT);
-    Disponibilidade:= FrmPrincipal.SubtrairHoras(HorarioSaida,HorarioChegada);
-    HorarioDemora:= FrmPrincipal.SubtrairHoras(Disponibilidade,HorarioSaldo);
-    if ((HorarioSaldo = '00:00:00')AND(HorarioDemora = '00:00:00')) then
-    begin
-      HorarioSaldo:= '';
-      HorarioDemora:= '';
-      HorarioChegada := '';
-      HorarioPT := '';
-      HorarioEncerramento := '';
-      HorarioSaida := '';
-    end;
-    //========================================================================
-    FrmDataModule.ADOQueryProgramacaoDiaria_Consulta.Edit;
-    FrmDataModule.DataSourceProgramacaoDiaria_Consulta.DataSet.
-    FieldByName('DataProgramacao').AsDateTime:= DateTimePickerProgramacao.DateTime;
-    FrmDataModule.DataSourceProgramacaoDiaria_Consulta.DataSet.FieldByName('txtTipoEtapaServico').AsString:=
-    ComboBoxTipoEtapaServico.Text;
-    FrmDataModule.DataSourceProgramacaoDiaria_Consulta.DataSet.FieldByName('txtDestino').AsString:=
-    ComboBoxDestino.Text;
-    FrmDataModule.DataSourceProgramacaoDiaria_Consulta.DataSet.
-    FieldByName('HorarioChegada').AsString:= HorarioChegada;
-    FrmDataModule.DataSourceProgramacaoDiaria_Consulta.DataSet.
-    FieldByName('HorarioPT').AsString:= HorarioPT;
-    FrmDataModule.DataSourceProgramacaoDiaria_Consulta.DataSet.
-    FieldByName('HorarioEncerramento').AsString:= HorarioEncerramento;
-    FrmDataModule.DataSourceProgramacaoDiaria_Consulta.DataSet.
-    FieldByName('HorarioSaida').AsString:= HorarioSaida;
-    FrmDataModule.DataSourceProgramacaoDiaria_Consulta.DataSet.
-    FieldByName('HorarioNOTA').AsString:= HorarioNota;
-    FrmDataModule.DataSourceProgramacaoDiaria_Consulta.DataSet.
-    FieldByName('HorarioSaldo').AsString:= HorarioSaldo;
-    FrmDataModule.DataSourceProgramacaoDiaria_Consulta.DataSet.
-    FieldByName('HorarioDemora').AsString:= HorarioDemora;
-    FrmDataModule.ADOQueryProgramacaoDiaria_Consulta.Post;
-  end
-  else
-    MessageBox(0, 'Não é possivel alterar uma programação do passado!',
-    'Colibri', MB_ICONERROR);
-end;
-
-procedure TFrmConsultaProgramacao.actProgramacaoGravarHorasExecute(
-  Sender: TObject);
-begin
-  FrmDataModule.ADOQueryProgramacaoDiaria_Consulta.Edit;
-  FrmDataModule.DataSourceProgramacaoDiaria_Consulta.DataSet.
-  FieldByName('HorarioChegada').AsString:= edtHoraChegada.Text;
-  FrmDataModule.DataSourceProgramacaoDiaria_Consulta.DataSet.
-  FieldByName('HorarioPT').AsString:= edtHoraPT.Text;
-  FrmDataModule.DataSourceProgramacaoDiaria_Consulta.DataSet.
-  FieldByName('HorarioEncerramento').AsString:= edtHoraEncerramento.Text;
-  FrmDataModule.DataSourceProgramacaoDiaria_Consulta.DataSet.
-  FieldByName('HorarioSaida').AsString:= edtHoraSaida.Text;
-  FrmDataModule.DataSourceProgramacaoDiaria_Consulta.DataSet.
-  FieldByName('HorarioNOTA').AsString:= edtMotivo.Text;
-  FrmDataModule.ADOQueryProgramacaoDiaria_Consulta.Post;
-end;
-
-procedure TFrmConsultaProgramacao.actProgramacaoJanelaExecute(Sender: TObject);
-begin
-  if ((FrmPrincipal.logPerfil = 'Administrador')OR
-  (FrmPrincipal.logPerfil = 'Programação')OR
-  (FrmPrincipal.logPerfil = 'Supervisor')) then
-  begin
-    actAjudaLimpar.Execute;
-    PanelTituloAjuda1.Caption:= 'Editar Programação';
-    PanelEditarProgramacao.Visible:= true;
-    PanelEditarProgramacao.Align:= alClient;
-    PanelEditarProgramacao.Visible:= true;
-    PanelAjuda.Width:= 350;
-    PanelAjuda.Height:= 290;
-    PanelAjuda.Visible:= true;
-    actVerificarAcessoProgramacao.Execute;
-  end;
 end;
 
 procedure TFrmConsultaProgramacao.actImportarExecute(Sender: TObject);
@@ -1146,38 +750,20 @@ begin
       DataSet.FieldByName('MotivoProgramacao').AsString:= FrmDataModule.DataSourceProgramacaoExecutante_Importar.
       DataSet.FieldByName('MotivoProgramacao').AsString;
       FrmDataModule.DataSourceInserirExecutante.
-      DataSet.FieldByName('MotivoNaoExecucao').AsString:= FrmDataModule.DataSourceProgramacaoExecutante_Importar.
-      DataSet.FieldByName('MotivoNaoExecucao').AsString;
-      FrmDataModule.DataSourceInserirExecutante.
       DataSet.FieldByName('PalavraChaveProgramacao').AsString:= FrmDataModule.DataSourceProgramacaoExecutante_Importar.
       DataSet.FieldByName('PalavraChaveProgramacao').AsString;
-      FrmDataModule.DataSourceInserirExecutante.
-      DataSet.FieldByName('PalavraChaveNaoExecucao').AsString:= FrmDataModule.DataSourceProgramacaoExecutante_Importar.
-      DataSet.FieldByName('PalavraChaveNaoExecucao').AsString;
       FrmDataModule.DataSourceInserirExecutante.
       DataSet.FieldByName('AvaliadoPorProgramacao').AsString:= FrmDataModule.DataSourceProgramacaoExecutante_Importar.
       DataSet.FieldByName('AvaliadoPorProgramacao').AsString;
       FrmDataModule.DataSourceInserirExecutante.
-      DataSet.FieldByName('AvaliadoPorExecucao').AsString:= FrmDataModule.DataSourceProgramacaoExecutante_Importar.
-      DataSet.FieldByName('AvaliadoPorExecucao').AsString;
-      FrmDataModule.DataSourceInserirExecutante.
       DataSet.FieldByName('ComputadorProgramacao').AsString:= FrmDataModule.DataSourceProgramacaoExecutante_Importar.
       DataSet.FieldByName('ComputadorProgramacao').AsString;
-      FrmDataModule.DataSourceInserirExecutante.
-      DataSet.FieldByName('ComputadorExecucao').AsString:= FrmDataModule.DataSourceProgramacaoExecutante_Importar.
-      DataSet.FieldByName('ComputadorExecucao').AsString;
       FrmDataModule.DataSourceInserirExecutante.
       DataSet.FieldByName('StatusProgramacao').AsString:= FrmDataModule.DataSourceProgramacaoExecutante_Importar.
       DataSet.FieldByName('StatusProgramacao').AsString;
       FrmDataModule.DataSourceInserirExecutante.
-      DataSet.FieldByName('StatusExecucao').AsString:= FrmDataModule.DataSourceProgramacaoExecutante_Importar.
-      DataSet.FieldByName('StatusExecucao').AsString;
-      FrmDataModule.DataSourceInserirExecutante.
       DataSet.FieldByName('DataAvaliacaoProgramacao').AsString:= FrmDataModule.DataSourceProgramacaoExecutante_Importar.
       DataSet.FieldByName('DataAvaliacaoProgramacao').AsString;
-      FrmDataModule.DataSourceInserirExecutante.
-      DataSet.FieldByName('DataAvaliacaoExecucao').AsString:= FrmDataModule.DataSourceProgramacaoExecutante_Importar.
-      DataSet.FieldByName('DataAvaliacaoExecucao').AsString;
       FrmDataModule.ADOQueryInserirExecutante1.Post;
       FrmDataModule.ADOQueryProgramacaoExecutante_Importar.Next;
     end;
@@ -1211,7 +797,7 @@ begin
   FrmDataModule.ADOQueryProgramacaoDiaria_Importar.First;
   FrmDataModule.DataSourceProgramacaoDiaria_Importar.Enabled:= true;
   FrmPrincipal.ProgressBarAtualizar;
-  actProcurar.Execute;
+  actProcurarProgramacao.Execute;
   FrmDataModule.naoGravar:= false;
 end;
 
@@ -1306,8 +892,6 @@ begin
       FrmDataModule.DataSourceInserirProgramacao.DataSet.
       FieldByName('txtTipoEtapaServico').AsString:= TipoEtapaServico;
       FrmDataModule.DataSourceInserirProgramacao.DataSet.
-      FieldByName('PorcentoExecucao').AsInteger:= 0;
-      FrmDataModule.DataSourceInserirProgramacao.DataSet.
       FieldByName('NumExecutantes').AsInteger:= 0;
       FrmDataModule.DataSourceInserirProgramacao.DataSet.
       FieldByName('NumAprovados').AsInteger:= 0;
@@ -1330,7 +914,7 @@ begin
       FieldByName('LogAcao').AsString:= FrmPrincipal.MemoPrincipal.Text;
       //==========================================
       FrmDataModule.ADOQueryInserirProgramacao.Post;
-      FrmConsultaProgramacao.actProcurar.Execute;
+      FrmConsultaProgramacao.actProcurarProgramacao.Execute;
       PanelAjuda.Visible:= false;
     end
     else
@@ -1340,40 +924,6 @@ begin
     end;
   except
   end;
-end;
-
-procedure TFrmConsultaProgramacao.actLimparHorasExecute(Sender: TObject);
-begin
-  FrmDataModule.ADOQueryProgramacaoDiaria_Consulta.Edit;
-  FrmDataModule.DataSourceProgramacaoDiaria_Consulta.DataSet.FieldByName('HorarioChegada').AsString:= '';
-  FrmDataModule.DataSourceProgramacaoDiaria_Consulta.DataSet.FieldByName('HorarioPT').AsString:= '';
-  FrmDataModule.DataSourceProgramacaoDiaria_Consulta.DataSet.FieldByName('HorarioEncerramento').AsString:= '';
-  FrmDataModule.DataSourceProgramacaoDiaria_Consulta.DataSet.FieldByName('HorarioSaida').AsString:= '';
-  FrmDataModule.DataSourceProgramacaoDiaria_Consulta.DataSet.FieldByName('HorarioSaldo').AsString:= '';
-  FrmDataModule.DataSourceProgramacaoDiaria_Consulta.DataSet.FieldByName('HorarioDemora').AsString:= '';
-  FrmDataModule.DataSourceProgramacaoDiaria_Consulta.DataSet.FieldByName('HorarioNOTA').AsString:= '';
-  FrmDataModule.ADOQueryProgramacaoDiaria_Consulta.Post;
-  edtHoraChegada.Text:= '  :  ';
-  edtHoraPT.Text:= '  :  ';
-  edtHoraEncerramento.Text:= '  :  ';
-  edtHoraSaida.Text:= '  :  ';
-  edtMotivo.Text:= '';
-end;
-
-procedure TFrmConsultaProgramacao.actLimparHorasTodosExecute(Sender: TObject);
-begin
-  FrmDataModule.ADOQueryProgramacaoDiaria_Consulta.First;
-  actProgramacaoJanela.Execute;
-  FrmPrincipal.ProgressBarIncializa(FrmDataModule.ADOQueryProgramacaoDiaria_Consulta.RecordCount,
-  'Limpando horas...');
-  while not FrmDataModule.ADOQueryProgramacaoDiaria_Consulta.Eof do
-  begin
-    actLimparHoras.Execute;
-    FrmDataModule.ADOQueryProgramacaoDiaria_Consulta.Next;
-    FrmPrincipal.ProgressBarIncremento(1);
-  end;
-  FrmPrincipal.ProgressBarAtualizar;
-  FrmDataModule.ADOQueryProgramacaoDiaria_Consulta.First;
 end;
 
 procedure TFrmConsultaProgramacao.actLimparTodosExecute(Sender: TObject);
@@ -1413,27 +963,10 @@ begin
   PanelSelecaoServico.Visible:= false;
   PanelImportar.Visible:= false;
   PanelCopiar.Visible:= false;
-  PanelEditarProgramacao.Visible:= false;
   PanelEditarExecutante.Visible:= false;
   PanelLogAcao.Visible:= false;
   PanelInserirProgramacao.Visible:= false;
   PanelAjuda.Visible:= false;
-end;
-
-procedure TFrmConsultaProgramacao.actCalcularHorasTodosExecute(Sender: TObject);
-begin
-  FrmDataModule.ADOQueryProgramacaoDiaria_Consulta.First;
-  actProgramacaoJanela.Execute;
-  FrmPrincipal.ProgressBarIncializa(FrmDataModule.ADOQueryProgramacaoDiaria_Consulta.RecordCount,
-  'Calculando horas...');
-  while not FrmDataModule.ADOQueryProgramacaoDiaria_Consulta.Eof do
-  begin
-    actProgramacaoGravar.Execute;
-    FrmDataModule.ADOQueryProgramacaoDiaria_Consulta.Next;
-    FrmPrincipal.ProgressBarIncremento(1);
-  end;
-  FrmPrincipal.ProgressBarAtualizar;
-  FrmDataModule.ADOQueryProgramacaoDiaria_Consulta.First;
 end;
 
 procedure TFrmConsultaProgramacao.actCancelarProgramacaoExecute(
@@ -1456,12 +989,12 @@ begin
         begin
           DataProgramacao:= ListBoxCopiar.Items[i];
           if FrmPrincipal.isData(DataProgramacao) then
-            FrmPrincipal.CopiarProgramacao(DataProgramacao,
+            FrmPrincipal.CopiarProgramacao(StrToDate(DataProgramacao),
             FrmDataModule.DataSourceProgramacaoDiaria_Consulta);
         end;
         dataInicio.DateTime:= StrToDate(ListBoxCopiar.Items[0]);
         dataFim.DateTime:= StrToDate(ListBoxCopiar.Items[ListBoxCopiar.Count-1]);
-        actProcurar.Execute;
+        actProcurarProgramacao.Execute;
       end
       else
         MessageBox(0,'Nenhuma data selecionda.','Colibri',MB_ICONEXCLAMATION)
@@ -1482,7 +1015,7 @@ begin
             'Copiando...');
             while not FrmDataModule.ADOQueryProgramacaoDiaria_Consulta.Eof do
             begin
-              FrmPrincipal.CopiarProgramacao(DataProgramacao,
+              FrmPrincipal.CopiarProgramacao(StrToDate(DataProgramacao),
               FrmDataModule.DataSourceProgramacaoDiaria_Consulta);
               FrmDataModule.ADOQueryProgramacaoDiaria_Consulta.Next;
               FrmPrincipal.ProgressBarIncremento(1);
@@ -1492,7 +1025,7 @@ begin
         dataInicio.DateTime:= StrToDate(ListBoxCopiar.Items[0]);
         dataFim.DateTime:= StrToDate(ListBoxCopiar.Items[ListBoxCopiar.Count-1]);
         FrmPrincipal.ProgressBarAtualizar;
-        actProcurar.Execute;
+        actProcurarProgramacao.Execute;
       end
       else
         MessageBox(0,'Nenhuma data selecionda.','Colibri',MB_ICONEXCLAMATION)
@@ -1529,34 +1062,108 @@ begin
   MonthCalendar1.MultiSelect:= true;
 end;
 
+procedure TFrmConsultaProgramacao.ExcluirFiltradosPorData(const DtIni, DtFim: TDateTime);
+var
+  QDel: TADOQuery;
+begin
+  QDel := TADOQuery.Create(nil);
+  try
+    QDel.Connection := FrmDataModule.ADOConnectionColibri; // ajuste
+
+    // transação ajuda no Access
+    QDel.Connection.BeginTrans;
+    try
+      QDel.SQL.Text :=
+        'DELETE FROM tblProgramacaoDiaria '+
+        'WHERE DataProgramacao >= ? AND DataProgramacao < ?';
+
+      QDel.Parameters[0].DataType := ftDateTime;
+      QDel.Parameters[0].Value := Trunc(DtIni);
+
+      QDel.Parameters[1].DataType := ftDateTime;
+      QDel.Parameters[1].Value := Trunc(DtFim) + 1;
+
+      QDel.ExecSQL;
+
+      QDel.Connection.CommitTrans;
+      Application.MessageBox(PChar('Exclusão concluída com sucesso'),
+      'Concluído', MB_OK + MB_ICONINFORMATION);
+    except
+      QDel.Connection.RollbackTrans;
+      Application.MessageBox(PChar('Erro durante processo de exclusão'),
+      'Concluído', MB_OK + MB_ICONINFORMATION);
+      raise;
+    end;
+  finally
+    QDel.Free;
+  end;
+end;
+
 procedure TFrmConsultaProgramacao.actExcluirFiltradosExecute(Sender: TObject);
+{var
+  DtIni, DtFimExclusivo: TDateTime;
+  SQLString, SQLWhere, SQLDel: string;
+  QDel: TADOQuery;
+  Rows: Integer;}
 begin
   if Application.MessageBox(PChar(
-  'Deseja realmente excluir todos os registros de programação "FILTRADOS"?'),
-  '.::ATENÇÃO::.',36) = 6 then
-  begin
-    FrmPrincipal.ProgressBarIncializa(
-    FrmDataModule.ADOQueryProgramacaoDiaria_Consulta.RecordCount,
-    'Excluindo registros: Programação Diária...');
-    FrmDataModule.DataSourceProgramacaoDiaria_Consulta.Enabled:= false;
-    FrmDataModule.ADOQueryProgramacaoDiaria_Consulta.Active := true;
-    FrmDataModule.ADOQueryProgramacaoDiaria_Consulta.First;
-    while not(FrmDataModule.ADOQueryProgramacaoDiaria_Consulta.Eof) do
-    begin
+    'Deseja realmente excluir todos os registros de programação "DATAS FILTRADAS"?'),
+    '.::ATENÇÃO::.', MB_YESNO + MB_ICONWARNING) <> IDYES then
+    Exit;
+
+  ExcluirFiltradosPorData(dataInicio.Date,dataFim.Date);
+
+
+  {if Application.MessageBox(PChar(
+    'Deseja realmente excluir todos os registros de programação "FILTRADOS"?'),
+    '.::ATENÇÃO::.', MB_YESNO + MB_ICONWARNING) <> IDYES then
+    Exit;
+
+  DtIni := Trunc(dataInicio.Date);
+  DtFimExclusivo := Trunc(dataFim.Date) + 1;
+
+  SQLString := carregaStatus(ColunasLayoutProgramacao); // " AND ..."
+  SQLWhere  := ' WHERE DataProgramacao >= ? AND DataProgramacao < ?' + SQLString;
+
+  SQLDel := 'DELETE FROM tblProgramacaoDiaria' + SQLWhere;
+
+  FrmDataModule.DataSourceProgramacaoDiaria_Consulta.Enabled := False;
+  try
+    QDel := TADOQuery.Create(nil);
+    try
+      QDel.Connection := FrmDataModule.ADOConnectionColibri; // ajuste se for outra conexão
+      QDel.SQL.Text := SQLDel;
+
+      QDel.Parameters[0].DataType := ftDateTime;
+      QDel.Parameters[0].Value := DtIni;
+
+      QDel.Parameters[1].DataType := ftDateTime;
+      QDel.Parameters[1].Value := DtFimExclusivo;
+
+      QDel.Connection.BeginTrans;
       try
-        FrmDataModule.ADOQueryProgramacaoDiaria_Consulta.Delete;
+        QDel.ExecSQL;
+        Rows := QDel.RowsAffected; // às vezes pode vir -1 no Access, mas geralmente vem ok
+        QDel.Connection.CommitTrans;
       except
-        FrmDataModule.ADOQueryProgramacaoDiaria_Consulta.Next;
+        QDel.Connection.RollbackTrans;
+        raise;
       end;
-      //Incremento ProgressBar
-      FrmPrincipal.ProgressBarIncremento(1);
+
+    finally
+      QDel.Free;
     end;
-    FrmDataModule.ADOQueryProgramacaoDiaria_Consulta.Active := false;
-    FrmDataModule.ADOQueryProgramacaoDiaria_Consulta.Active := true;
-    FrmDataModule.DataSourceProgramacaoDiaria_Consulta.Enabled:= true;
-    //Atualizar ProgressBar
-    FrmPrincipal.ProgressBarAtualizar;
-  end;
+
+    // Recarrega a grade
+    FrmDataModule.ADOQueryProgramacaoDiaria_Consulta.Close;
+    FrmDataModule.ADOQueryProgramacaoDiaria_Consulta.Open;
+
+    Application.MessageBox(PChar(Format('Exclusão concluída. Registros afetados: %d', [Rows])),
+      'Concluído', MB_OK + MB_ICONINFORMATION);
+
+  finally
+    FrmDataModule.DataSourceProgramacaoDiaria_Consulta.Enabled := True;
+  end; }
 end;
 
 procedure TFrmConsultaProgramacao.actExcluirRegistroProgramacaoExecute(
@@ -1601,38 +1208,15 @@ begin
       FrmDataModule.DataSourceProgramacaoExecutante_Consulta.DataSet.FieldByName('CodigoSAP').AsString:= '';
       FrmDataModule.DataSourceProgramacaoExecutante_Consulta.DataSet.FieldByName('Documento').AsString:= '';
       FrmDataModule.DataSourceProgramacaoExecutante_Consulta.DataSet.FieldByName('StatusProgramacao').AsString:= 'Aprovado';
-      FrmDataModule.DataSourceProgramacaoExecutante_Consulta.DataSet.FieldByName('StatusExecucao').AsString:= 'Executado';
       FrmDataModule.DataSourceProgramacaoExecutante_Consulta.DataSet.FieldByName('MotivoProgramacao').AsString:= '';
-      FrmDataModule.DataSourceProgramacaoExecutante_Consulta.DataSet.FieldByName('MotivoNaoExecucao').AsString:= '';
       FrmDataModule.DataSourceProgramacaoExecutante_Consulta.DataSet.FieldByName('InseridoProgramacaoTransporte').AsBoolean:= false;
       FrmDataModule.DataSourceProgramacaoExecutante_Consulta.DataSet.FieldByName('PalavraChaveProgramacao').AsString:= '';
-      FrmDataModule.DataSourceProgramacaoExecutante_Consulta.DataSet.FieldByName('PalavraChaveNaoExecucao').AsString:= '';
-      FrmDataModule.DataSourceProgramacaoExecutante_Consulta.DataSet.FieldByName('RT').AsString:= 'SEM RT';
-      FrmDataModule.DataSourceProgramacaoExecutante_Consulta.DataSet.FieldByName('TipoEmbarque').AsString:= 'SEM RT';
+      FrmDataModule.DataSourceProgramacaoExecutante_Consulta.DataSet.FieldByName('RT').AsString:= '';
       FrmDataModule.ADOQueryProgramacaoExecutante_Consulta.Post;
       FrmDataModule.ADOQueryProgramacaoExecutante_Consulta.Next;
     end;
     FrmDataModule.ADOQueryProgramacaoExecutante_Consulta.First;
   end;
-end;
-
-procedure TFrmConsultaProgramacao.actLimparFiltrosExecute(Sender: TObject);
-begin
-  TabelaIndex:= 0;
-  FrmPrincipal.LimparColunasFiltro(DBGridProgramacao,ColunasLayoutProgramacao);
-  actProcurar.Execute;
-  if (FrmPrincipal.PanelFiltrosTabela.Visible)AND(FrmPrincipal.PanelAjuda1.Visible) then
-    actFiltrosTabela.Execute;
-end;
-
-procedure TFrmConsultaProgramacao.actLimparFiltrosImportarExecute(
-  Sender: TObject);
-begin
-  TabelaIndex:= 1;
-  FrmPrincipal.LimparColunasFiltro(DBGridImportar,ColunasLayoutImportar);
-  actProcurarImportar.Execute;
-  if (FrmPrincipal.PanelFiltrosTabela.Visible)AND(FrmPrincipal.PanelAjuda1.Visible) then
-    actFiltrosTabelaImportar.Execute;
 end;
 
 procedure TFrmConsultaProgramacao.DBEdit2Change(Sender: TObject);
@@ -1660,10 +1244,10 @@ begin
     try
       NumExecutantes:= FrmDataModule.ADOQueryProgramacaoExecutante_Consulta.RecordCount;
       StatusBarExecutantes.Panels[0].Text:= 'N° Registros: '+IntToStr(NumExecutantes);
-      FrmPrincipal.AutoFitStatusBar(StatusBarExecutantes);
+      AutoFitStatusBar(StatusBarExecutantes);
       StatusBarServicos.Panels[0].Text:= 'N° Registros: '+
       IntToStr(FrmDataModule.ADOQueryProgramacaoServico_Consulta.RecordCount);
-      FrmPrincipal.AutoFitStatusBar(StatusBarServicos);
+      AutoFitStatusBar(StatusBarServicos);
     except
       FrmDataModule.ADOQueryProgramacaoDiaria_Consulta.Cancel;
       FrmDataModule.ADOQueryProgramacaoDiaria_Consulta.Refresh;
@@ -1673,33 +1257,6 @@ begin
   begin
     FrmDataModule.ADOQueryProgramacaoServico_Consulta.Active := false;
     FrmDataModule.ADOQueryProgramacaoExecutante_Consulta.Active := false;
-  end;
-  if (PanelEditarProgramacao.Visible)AND(PanelAjuda.Visible) then
-  begin
-    actVerificarAcessoProgramacao.Execute;
-  end;
-  //Verificar data minima
-  if ((FrmDataModule.DataSourceProgramacaoDiaria_Consulta.DataSet.
-  FieldByName('DataProgramacao').AsDateTime >= FrmPrincipal.carregaDataMinima(false)))AND
-  ((FrmPrincipal.logPerfil = 'Administrador')OR
-  (FrmPrincipal.logPerfil = 'Supervisor')OR
-  (FrmPrincipal.logPerfil = 'Programação')) then
-  begin
-    btnProgramacao.Action:= actProgramacaoGravar;
-    DateTimePickerProgramacao.Enabled:= true;
-    ComboBoxDestino.Enabled:= true;
-    ComboBoxTipoEtapaServico.Enabled:= true;
-    actExecutanteGravar.Enabled:= true;
-    DBGridServicos.ReadOnly:= false;
-  end
-  else
-  begin
-    btnProgramacao.Action:= actProgramacaoGravarHoras;
-    DateTimePickerProgramacao.Enabled:= false;
-    ComboBoxDestino.Enabled:= false;
-    ComboBoxTipoEtapaServico.Enabled:= false;
-    actExecutanteGravar.Enabled:= false;
-    DBGridServicos.ReadOnly:= true;
   end;
 end;
 
@@ -1730,25 +1287,6 @@ begin
     FieldByName('StatusProgramacao').AsString = 'Mudança' then
     begin
       DBGridExecutantes.Canvas.Brush.Color:= clYellow;
-      DBGridExecutantes.Font.Color:= clBlack;
-      DBGridExecutantes.Canvas.FillRect(Rect);
-      DBGridExecutantes.DefaultDrawColumnCell(Rect, DataCol,Column, State);
-    end;
-  end
-  else if (Column.Field.FieldName = 'StatusExecucao') then
-  begin
-    if FrmDataModule.DataSourceProgramacaoExecutante_Consulta.DataSet.
-    FieldByName('StatusExecucao').AsString = 'Executado' then
-    begin
-      DBGridExecutantes.Canvas.Brush.Color:= clLime;
-      DBGridExecutantes.Font.Color:= clBlack;
-      DBGridExecutantes.Canvas.FillRect(Rect);
-      DBGridExecutantes.DefaultDrawColumnCell(Rect, DataCol,Column, State);
-    end
-    else if FrmDataModule.DataSourceProgramacaoExecutante_Consulta.DataSet.
-    FieldByName('StatusExecucao').AsString = 'Não Executada' then
-    begin
-      DBGridExecutantes.Canvas.Brush.Color:= clRed;
       DBGridExecutantes.Font.Color:= clBlack;
       DBGridExecutantes.Canvas.FillRect(Rect);
       DBGridExecutantes.DefaultDrawColumnCell(Rect, DataCol,Column, State);
@@ -1798,21 +1336,11 @@ begin
   end;
 end;
 
-procedure TFrmConsultaProgramacao.DBGridImportarTitleClick(Column: TColumn);
-begin
-  TabelaIndex:= 1;
-  FrmPrincipal.configurarFiltro(0,Column.FieldName,IntToStr(Column.Index),
-  Column.ReadOnly,actFiltroInserir,actGridASC,actGridDESC,actGridDESC);
-  //======================================================
-  FrmPrincipal.titleGrid(ColunasLayoutImportar,'Importar',FrmDataModule.
-  ADOQueryProgramacaoDiaria_Importar.SQL.Text);
-end;
-
 procedure TFrmConsultaProgramacao.DBGridProgramacaoCellClick(Column: TColumn);
 begin
-  if ((FrmPrincipal.logPerfil = 'Administrador')OR
-  (FrmPrincipal.logPerfil = 'Supervisor')OR
-  (FrmPrincipal.logPerfil = 'Programação')) then
+  if ((FrmPrincipal.logPerfil = FrmPrincipal.PERFILADM)OR
+  (FrmPrincipal.logPerfil = FrmPrincipal.PERFILSUPERVISAO)OR
+  (FrmPrincipal.logPerfil = FrmPrincipal.PERFILPROGRAMACAO)) then
   begin
     try
       if (Self.DBGridProgramacao.SelectedField.DataType = ftBoolean)AND
@@ -1893,16 +1421,6 @@ begin
   end;
 end;
 
-procedure TFrmConsultaProgramacao.DBGridProgramacaoTitleClick(Column: TColumn);
-begin
-  TabelaIndex:= 1;
-  FrmPrincipal.configurarFiltro(1,Column.FieldName,IntToStr(Column.Index),
-  Column.ReadOnly,actFiltroInserir,actGridASC,actGridDESC,actSubstituirPor);
-  //======================================================
-  FrmPrincipal.titleGrid(ColunasLayoutProgramacao,'Colibri',FrmDataModule.
-  ADOQueryProgramacaoDiaria_Consulta.SQL.Text);
-end;
-
 procedure TFrmConsultaProgramacao.DBGridServicosDrawColumnCell(Sender: TObject;
   const Rect: TRect; DataCol: Integer; Column: TColumn; State: TGridDrawState);
 begin
@@ -1928,51 +1446,6 @@ begin
     key:= #0;
 end;
 
-procedure TFrmConsultaProgramacao.edtHoraChegadaKeyDown(Sender: TObject;
-  var Key: Word; Shift: TShiftState);
-begin
-  if Key = vk_Down then
-    edtHoraPT.SetFocus
-  else if Key = vk_up then
-    edtMotivo.SetFocus;
-end;
-
-procedure TFrmConsultaProgramacao.edtHoraEncerramentoKeyDown(Sender: TObject;
-  var Key: Word; Shift: TShiftState);
-begin
-  if Key = vk_Down then
-    edtHoraSaida.SetFocus
-  else if Key = vk_up then
-    edtHoraPT.SetFocus;
-end;
-
-procedure TFrmConsultaProgramacao.edtHoraPTKeyDown(Sender: TObject;
-  var Key: Word; Shift: TShiftState);
-begin
-  if Key = vk_Down then
-    edtHoraEncerramento.SetFocus
-  else if Key = vk_up then
-    edtHoraChegada.SetFocus;
-end;
-
-procedure TFrmConsultaProgramacao.edtHoraSaidaKeyDown(Sender: TObject;
-  var Key: Word; Shift: TShiftState);
-begin
-  if Key = vk_Down then
-    edtMotivo.SetFocus
-  else if Key = vk_up then
-    edtHoraEncerramento.SetFocus;
-end;
-
-procedure TFrmConsultaProgramacao.edtMotivoKeyDown(Sender: TObject;
-  var Key: Word; Shift: TShiftState);
-begin
-  if Key = vk_Down then
-    edtHoraChegada.SetFocus
-  else if Key = vk_up then
-    edtHoraSaida.SetFocus;
-end;
-
 procedure TFrmConsultaProgramacao.Excluirselecionado2Click(Sender: TObject);
 begin
   ListBoxCopiar.Items.Delete(ListBoxCopiar.ItemIndex);
@@ -1991,15 +1464,13 @@ begin
   listProgramacao:= TStringList.Create;
   FrmPrincipal.MDIChildCreated(self.Handle);
   FrmPrincipal.ProgressBarIncializa(5,'Inicializando....');
-  if ((FrmPrincipal.logPerfil = 'Administrador')) then
+  if (FrmPrincipal.logPerfil = FrmPrincipal.PERFILADM) then
   begin
     actExcluirTudo.Enabled:= true;
     actExcluirSelecionado.Enabled:= true;
     actExcluirFiltrados.Enabled:= true;
     actCopiarProgramacaoSELECAO.Enabled:= true;
     actCopiarProgramacaoTODAS.Enabled:= true;
-    actStatusTODOS.Enabled:= true;
-    actStatusSELECIONADO.Enabled:= true;
     actImportar.Enabled:= true;
     actInserirProgramacao.Enabled:= true;
     actExcluirRegistroProgramacao.Enabled:= true;
@@ -2008,21 +1479,17 @@ begin
     actServicoInserir.Enabled:= true;
     actServicoExcluir.Enabled:= true;
     actGravarPIOP.Enabled:= true;
-    actCalcularHorasTodos.Enabled:= true;
-    actLimparHorasTodos.Enabled:= true;
     actLimparExecutantes.Enabled:= true;
     actCarregarDatas.Enabled:= true;
   end
-  else if ((FrmPrincipal.logPerfil = 'Programação')OR
-  (FrmPrincipal.logPerfil = 'Supervisor')) then
+  else if ((FrmPrincipal.logPerfil = FrmPrincipal.PERFILPROGRAMACAO)OR
+  (FrmPrincipal.logPerfil = FrmPrincipal.PERFILSUPERVISAO)) then
   begin
     actExcluirTudo.Enabled:= false;
     actExcluirSelecionado.Enabled:= true;
     actExcluirFiltrados.Enabled:= true;
     actCopiarProgramacaoSELECAO.Enabled:= true;
     actCopiarProgramacaoTODAS.Enabled:= true;
-    actStatusTODOS.Enabled:= true;
-    actStatusSELECIONADO.Enabled:= true;
     actImportar.Enabled:= true;
     actInserirProgramacao.Enabled:= true;
     actExcluirRegistroProgramacao.Enabled:= true;
@@ -2031,8 +1498,6 @@ begin
     actServicoInserir.Enabled:= true;
     actServicoExcluir.Enabled:= true;
     actGravarPIOP.Enabled:= false;
-    actCalcularHorasTodos.Enabled:= false;
-    actLimparHorasTodos.Enabled:= false;
     actLimparExecutantes.Enabled:= true;
     actCarregarDatas.Enabled:= true;
   end
@@ -2043,8 +1508,6 @@ begin
     actExcluirFiltrados.Enabled:= false;
     actCopiarProgramacaoSELECAO.Enabled:= false;
     actCopiarProgramacaoTODAS.Enabled:= false;
-    actStatusTODOS.Enabled:= false;
-    actStatusSELECIONADO.Enabled:= false;
     actImportar.Enabled:= false;
     actInserirProgramacao.Enabled:= false;
     actExcluirRegistroProgramacao.Enabled:= false;
@@ -2053,8 +1516,6 @@ begin
     actServicoInserir.Enabled:= false;
     actServicoExcluir.Enabled:= false;
     actGravarPIOP.Enabled:= false;
-    actCalcularHorasTodos.Enabled:= false;
-    actLimparHorasTodos.Enabled:= false;
     actLimparExecutantes.Enabled:= false;
     actCarregarDatas.Enabled:= false;
   end;
@@ -2063,26 +1524,22 @@ begin
   dataInicio.Date:= IncDay(now,1);
   dataFim.Date:= IncDay(now,1);
   FrmPrincipal.carregarComboBox(FrmDataModule.ADOConnectionConsulta,'Plataforma',
-  'SELECT Plataforma FROM tblPlataforma ORDER BY Plataforma;',ComboBoxDestino);
-  FrmPrincipal.carregarComboBox(FrmDataModule.ADOConnectionConsulta,'Plataforma',
   'SELECT Plataforma FROM tblPlataforma ORDER BY Plataforma;',ComboBoxOrigem);
-  FrmPrincipal.carregarComboBox(FrmDataModule.ADOConnectionConsulta,'TipoEtapaServico',
-  'SELECT TipoEtapaServico FROM tblTipoEtapaServico ORDER BY TipoEtapaServico;',ComboBoxTipoEtapaServico);
   FrmPrincipal.carregarComboBox(FrmDataModule.ADOConnectionConsulta,'TipoEtapaServico',
   'SELECT TipoEtapaServico FROM tblTipoEtapaServico ORDER BY TipoEtapaServico;',ComboBoxSelecaoServicoTipoEtapaServico);
   //Incicialização
   FrmPrincipal.ProgressBarIncremento(1);
-  FrmPrincipal.SetUpColunasLayout(DBGridProgramacao, ColunasLayoutProgramacao);
-  FrmPrincipal.SetUpColunasLayout(DBGridExecutantes, ColunasLayoutExecutantes);
-  FrmPrincipal.SetUpColunasLayout(DBGridServicos, ColunasLayoutServicos);
-  FrmPrincipal.SetUpColunasLayout(DBGridImportar, ColunasLayoutImportar);
+  FrmDataModule.setFilterDBGrid(DBGridProgramacao);
+  FrmDataModule.setFilterDBGrid(DBGridExecutantes);
+  FrmDataModule.setFilterDBGrid(DBGridServicos);
+  FrmDataModule.setFilterDBGrid(DBGridImportar);
   FrmPrincipal.ProgressBarIncremento(1);
   //=========================================
-  FrmPrincipal.SetupGridPickListSQL(FrmDataModule.ADOConnectionConsulta,'Origem',
+  FrmPrincipal.SetupGridFilterPickListSQL(FrmDataModule.ADOConnectionConsulta,'Origem',
   'SELECT Plataforma FROM tblPlataforma WHERE (BooleanOrigem = True);',
   DBGridExecutantes,false);
   FrmPrincipal.ProgressBarIncremento(1);
-  actProcurar.Execute;
+  actProcurarProgramacao.Execute;
   FrmPrincipal.ProgressBarAtualizar;
 end;
 
@@ -2160,7 +1617,7 @@ procedure TFrmConsultaProgramacao.RLSelecionarServicosFixedCellClick(
   Sender: TObject; ACol, ARow: Integer);
 begin
   FrmPrincipal.clasifica(RLSelecionarServicos,ACol,true);
-  FrmPrincipal.AutoFitGrade(RLSelecionarServicos);
+  AutoFitGrade(RLSelecionarServicos);
 end;
 
 procedure TFrmConsultaProgramacao.RLSelecionarServicosKeyPress(Sender: TObject;
@@ -2177,7 +1634,7 @@ begin
     'N° Selecionados: '+(IntToStr(FrmPrincipal.CountChecked(RLSelecionarServicos)));
     StatusBarSelecaoServico.Panels[1].Text:=
     'N° Registros: '+(IntToStr(RLSelecionarServicos.RowCount-1));
-    FrmPrincipal.AutoFitStatusBar(StatusBarSelecaoServico);
+    AutoFitStatusBar(StatusBarSelecaoServico);
   end
 end;
 
@@ -2201,7 +1658,7 @@ begin
   'N° Selecionados: '+(IntToStr(FrmPrincipal.CountChecked(RLSelecionarServicos)));
   StatusBarSelecaoServico.Panels[1].Text:=
   'N° Registros: '+(IntToStr(RLSelecionarServicos.RowCount-1));
-  FrmPrincipal.AutoFitStatusBar(StatusBarSelecaoServico);
+  AutoFitStatusBar(StatusBarSelecaoServico);
 end;
 
 procedure TFrmConsultaProgramacao.selecionarServicos(TipoEtapaServico: String);
@@ -2297,7 +1754,7 @@ begin
   end;
   FrmDataModule.ADOQueryProgramacaoServico_Consulta.First;
   //=================================================================
-  FrmPrincipal.AutoFitGrade(RLSelecionarServicos);
+  AutoFitGrade(RLSelecionarServicos);
   try
     RLSelecionarServicos.FixedRows:= 1;
   except
@@ -2308,7 +1765,7 @@ begin
   'N° Selecionados: '+(IntToStr(FrmPrincipal.CountChecked(RLSelecionarServicos)));
   StatusBarSelecaoServico.Panels[1].Text:=
   'N° Registros: '+(IntToStr(RLSelecionarServicos.RowCount-1));
-  FrmPrincipal.AutoFitStatusBar(StatusBarSelecaoServico);
+  AutoFitStatusBar(StatusBarSelecaoServico);
   //================================================
   PanelTituloAjuda1.Caption:= 'Seleção de serviços disponivéis';
   PanelSelecaoServico.Visible:= true;
@@ -2317,15 +1774,6 @@ begin
   PanelAjuda.Height:= 350;
   PanelAjuda.Visible:= true;
 
-end;
-
-procedure TFrmConsultaProgramacao.ssss1Click(Sender: TObject);
-begin
-  while not FrmDataModule.ADOQueryProgramacaoDiaria_Consulta.Eof do
-  begin
-    actLimparHoras.Execute;
-    FrmDataModule.ADOQueryProgramacaoDiaria_Consulta.Next;
-  end;
 end;
 
 procedure TFrmConsultaProgramacao.WMMDIACTIVATE(var msg: TWMMDIACTIVATE);

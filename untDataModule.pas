@@ -23,16 +23,10 @@ type
     DataSourceUsuario: TDataSource;
     ADOQueryCarregaExecutanteAPLAT: TADOQuery;
     DataSourceCarregaExecutanteAPLAT: TDataSource;
-    ADOQueryCarregaExecutanteSAP: TADOQuery;
-    DataSourceCarregaExecutanteSAP: TDataSource;
     DataSourceProgramacaoDiaria_Cadastro: TDataSource;
     ADOQueryProgramacaoDiaria_Cadastro: TADOQuery;
     ADOQueryImportarExecutanteAPLAT: TADOQuery;
     DataSourceImportarExecutanteAPLAT: TDataSource;
-    ADOQueryImportarExecutanteSAP: TADOQuery;
-    DataSourceImportarExecutanteSAP: TDataSource;
-    ADOQueryImportarCarteiraTrabalho: TADOQuery;
-    DataSourceImportarCarteiraTrabalho: TDataSource;
     ADOQueryConsultaExecutante_DataCodigoSAP: TADOQuery;
     DataSourceConsultaExecutante_DataCodigoSAP: TDataSource;
     DataSourceInserirExecutante: TDataSource;
@@ -55,8 +49,6 @@ type
     DataSourceTipoEtapaServico: TDataSource;
     ADOQueryConsultaTipoEtapaServico_ID: TADOQuery;
     DataSourceConsultaTipoEtapaServico_ID: TDataSource;
-    ADOQueryCarteiraOM: TADOQuery;
-    DataSourceCarteiraOM: TDataSource;
     ADOQueryGerenciarSolicitacoes: TADOQuery;
     DataSourceGerenciarSolicitacoes: TDataSource;
     ADOQueryConsultaPlataforma_Nome: TADOQuery;
@@ -93,22 +85,16 @@ type
     DataSourceTemporarioDBColibri: TDataSource;
     ADOQueryConsultaServicosProgramados: TADOQuery;
     DataSourceConsultaServicosProgramados: TDataSource;
-    DataSourceExecutantesSAP: TDataSource;
-    ADOQueryExecutantesSAP: TADOQuery;
     ADOQueryConsultaEmbarcacao: TADOQuery;
     DataSourceConsultaEmbarcacao: TDataSource;
     ADOQueryConsultaExecutantesProgramados: TADOQuery;
     DataSourceConsultaExecutantesProgramados: TDataSource;
-    DataSourceForaOperacao: TDataSource;
     DataSourceColibri: TDataSource;
     DataSourceGeradores: TDataSource;
-    ADOQueryForaOperacao: TADOQuery;
     ADOQueryColibri: TADOQuery;
     ADOQueryGeradores: TADOQuery;
     ADOQueryConsultaExecutante_CodigoSAP: TADOQuery;
     DataSourceConsultaExecutante_CodigoSAP: TDataSource;
-    DataSourceImportarNotaManutencao: TDataSource;
-    ADOQueryImportarNotaManutencao: TADOQuery;
     DataSourceConsultaProgramacaoServico_ID: TDataSource;
     ADOQueryConsultaProgramacaoServico_ID: TADOQuery;
     DataSourceContarExecCancelados_ID: TDataSource;
@@ -117,35 +103,21 @@ type
     DataSourceContarExecTotal_ID: TDataSource;
     ADOQueryProgramacaoExecutante_Consulta: TADOQuery;
     DataSourceProgramacaoExecutante_Consulta: TDataSource;
-    DataSourceServicosSAP_TipoEtapaServico_Destino: TDataSource;
-    ADOQueryServicosSAP_TipoEtapaServico_Destino: TADOQuery;
     DataSourceProgramacaoServico_Consulta: TDataSource;
     ADOQueryProgramacaoServico_Consulta: TADOQuery;
     ADOQueryNumExecutantes: TADOQuery;
     DataSourceNumExecutantes: TDataSource;
-    ADOQueryImportarTextoLongoCarteira: TADOQuery;
-    DataSourceImportarTextoLongoCarteira: TDataSource;
     ADOQueryProgramados: TADOQuery;
     DataSourceProgramados: TDataSource;
-    ADOQueryCarteiraOP: TADOQuery;
-    DataSourceCarteiraOP: TDataSource;
     DataSourceCentroTrabalho_Descricao: TDataSource;
     ADOQueryCentroTrabalho_Descricao: TADOQuery;
     DataSourceTipoEtapaServico_Carteira: TDataSource;
     ADOQueryTipoEtapaServico_Carteira: TADOQuery;
-    ADOQueryPrioridadeForcada: TADOQuery;
-    DataSourcePrioridadeForcada: TDataSource;
-    ADOQueryLocalInstalacaoSAP: TADOQuery;
-    DataSourceLocalInstalacaoSAP: TDataSource;
     ADOConnectionMemoria: TADOConnection;
-    DataSourceIW37N: TDataSource;
-    ADOQueryIW37N: TADOQuery;
     DataSourceCadastroUsuario: TDataSource;
     ADOQueryCadastroUsuario: TADOQuery;
     DataSourceTemporarioDBConsulta1: TDataSource;
     ADOQueryTemporarioDBConsulta1: TADOQuery;
-    ADOQueryRestricaoOperacional: TADOQuery;
-    DataSourceRestricaoOperacional: TDataSource;
     ADOQueryTotalCampo: TADOQuery;
     DataSourceTotalCampo: TDataSource;
     ADOQueryTotalOrigem: TADOQuery;
@@ -154,22 +126,8 @@ type
     DataSourcePassageirosTM_SIM: TDataSource;
     ADOQueryPassageirosTM_NAO: TADOQuery;
     DataSourcePassageirosTM_NAO: TDataSource;
-    DataSourceImportarLocalInstalacao: TDataSource;
-    ADOQueryImportarLocalInstalacao: TADOQuery;
-    DataSourceRECLocalSAP: TDataSource;
-    ADOQueryRECLocalSAP: TADOQuery;
-    DataSourceForaFSMC: TDataSource;
-    ADOQueryForaFSMC: TADOQuery;
-    DataSourceForaFSCI: TDataSource;
-    ADOQueryForaFSCI: TADOQuery;
-    DataSourcePendenciaSAP: TDataSource;
-    ADOQueryPendenciaSAP: TADOQuery;
-    ADOQueryTextoLongoOM: TADOQuery;
-    DataSourceTextoLongoOM: TDataSource;
     DataSourceAnalisarTipoEtapaServico: TDataSource;
     ADOQueryAnalisarTipoEtapaServico: TADOQuery;
-    DataSourcePreventivaAtrasada: TDataSource;
-    ADOQueryPreventivaAtrasada: TADOQuery;
     DataSourceConsultaExecutante_Documento_Data: TDataSource;
     ADOQueryConsultaExecutante_Documento_Data: TADOQuery;
     ADOConnectionImportar: TADOConnection;
@@ -187,16 +145,8 @@ type
     ADOConnectionGantt: TADOConnection;
     ADOQueryGantt: TADOQuery;
     DataSourceGantt: TDataSource;
-    DataSourceNotaManutencao: TDataSource;
-    ADOQueryNotaManutencao: TADOQuery;
     DataSourceExecutante_TipoEtapaServico: TDataSource;
     ADOQueryExecutante_TipoEtapaServico: TADOQuery;
-    DataSourceImportarTextoLongoOperacao: TDataSource;
-    ADOQueryImportarTextoLongoOperacao: TADOQuery;
-    DataSourceAnaliseGM: TDataSource;
-    ADOQueryAnaliseGM: TADOQuery;
-    DataSourceRestricaoFSMC: TDataSource;
-    ADOQueryRestricaoFSMC: TADOQuery;
     DataSourceMovimentacaoCarga: TDataSource;
     ADOQueryMovimentacaoCarga: TADOQuery;
     DataSourceCondicaoMar: TDataSource;
@@ -205,8 +155,6 @@ type
     ADOQueryCondicaoEmbarcacao: TADOQuery;
     DataSourceProgramacaoNotas: TDataSource;
     ADOQueryProgramacaoNotas: TADOQuery;
-    DataSourceImportarItemManutencao: TDataSource;
-    ADOQueryImportarItemManutencao: TADOQuery;
     ADOQueryContadorSolicitacao: TADOQuery;
     DataSourceContadorSolicitacao: TDataSource;
     DataSourceProgramacaoCalendario: TDataSource;
@@ -215,8 +163,6 @@ type
     DataSourcePlataformaControle: TDataSource;
     DataSourceImportarMemoria: TDataSource;
     ADOQueryImportarMemoria: TADOQuery;
-    DataSourceImportarICPM: TDataSource;
-    ADOQueryImportarICPM: TADOQuery;
     ADOQueryPalavraChave: TADOQuery;
     DataSourcePalavraChave: TDataSource;
     ADOQueryAuxTabelaRT: TADOQuery;
@@ -225,23 +171,32 @@ type
     DataSourceCancelarRT: TDataSource;
     ADOQueryGestaoRT: TADOQuery;
     DataSourceGestaoRT: TDataSource;
+    ADOConnectionRT: TADOConnection;
+    DataSourceTemporarioRT: TDataSource;
+    ADOQueryTemporarioRT: TADOQuery;
+    ADOQueryConfigRT: TADOQuery;
+    DataSourceConfigRT: TDataSource;
+    DataSourceSAPImport: TDataSource;
+    ADOQuerySAPImport: TADOQuery;
+    ADOQueryRegrasRecolhimento: TADOQuery;
+    DataSourceRegrasRecolhimento: TDataSource;
+    ADOQueryFrequenciaResumo: TADOQuery;
+    DataSourceFrequenciaResumo: TDataSource;
+    ADOQueryFrequenciaDetalhe: TADOQuery;
+    DataSourceFrequenciaDetalhe: TDataSource;
     procedure ADOQueryEmbarcacoesBeforePost(DataSet: TDataSet);
     procedure ADOQueryRoteamentoBeforePost(DataSet: TDataSet);
     procedure ADOQueryGeradoresBeforePost(DataSet: TDataSet);
     procedure ADOQueryExecutanteBeforePost(DataSet: TDataSet);
     procedure ADOQueryTipoEtapaServicoBeforePost(DataSet: TDataSet);
-    procedure ADOQueryPrioridadeForcadaBeforePost(DataSet: TDataSet);
     procedure ADOQueryCadastroUsuarioBeforePost(DataSet: TDataSet);
     procedure ADOQueryImportarExecutanteAPLATBeforePost(DataSet: TDataSet);
-    procedure ADOQueryImportarExecutanteSAPBeforePost(DataSet: TDataSet);
     procedure ADOQueryPlataformaBeforePost(DataSet: TDataSet);
     procedure ADOQueryPlataformaAfterRefresh(DataSet: TDataSet);
     procedure ADOQueryMovimentacaoCargaBeforePost(DataSet: TDataSet);
     procedure ADOQueryCondicaoMarBeforePost(DataSet: TDataSet);
     procedure ADOQueryCondicaoEmbarcacaoBeforePost(DataSet: TDataSet);
     procedure ADOQueryProgramacaoNotasBeforePost(DataSet: TDataSet);
-    procedure ADOQueryImportarLocalInstalacaoBeforePost(DataSet: TDataSet);
-    procedure ADOQueryForaOperacaoBeforePost(DataSet: TDataSet);
     procedure ADOQueryPlataformaControleBeforePost(DataSet: TDataSet);
   private
 
@@ -424,53 +379,6 @@ begin
   end;
 end;
 
-procedure TFrmDataModule.ADOQueryForaOperacaoBeforePost(DataSet: TDataSet);
-  var
-    SQLBase,NotaManutencao: String;
-begin
-  try
-    FrmDataModule.DataSourceForaOperacao.DataSet.
-    FieldByName('ComentarioPor').AsString:= FrmPrincipal.logChave;
-    FrmDataModule.DataSourceForaOperacao.DataSet.
-    FieldByName('DataComentario').AsDateTime:= now;
-    FrmDataModule.DataSourceForaOperacao.DataSet.
-    FieldByName('ComputadorComentario').AsString:= FrmPrincipal.logMaquina;
-    //=======================================================================
-    NotaManutencao:= FrmDataModule.DataSourceForaOperacao.DataSet.FieldByName('NotaManutencao').AsString;
-    SQLBase:= 'SELECT tblComentarioForaOperacao.* FROM tblComentarioForaOperacao '+
-    'WHERE ((NotaManutencao LIKE '+QuotedStr(NotaManutencao)+'));';
-    ADOQueryTemporarioDBConsulta1.Close;
-    ADOQueryTemporarioDBConsulta1.SQL.Clear;
-    ADOQueryTemporarioDBConsulta1.SQL.Add(SQLBase);
-    ADOQueryTemporarioDBConsulta1.Open;
-    if ADOQueryTemporarioDBConsulta1.IsEmpty then
-    begin
-      ADOQueryTemporarioDBConsulta1.Insert;
-      ADOQueryTemporarioDBConsulta1.FieldByName('NotaManutencao').AsString:= NotaManutencao;
-      ADOQueryTemporarioDBConsulta1.FieldByName('Comentario').AsString:= FrmDataModule.DataSourceForaOperacao.DataSet.
-      FieldByName('Comentario').AsString;
-      ADOQueryTemporarioDBConsulta1.FieldByName('Comentario').AsString:= FrmDataModule.DataSourceForaOperacao.DataSet.
-      FieldByName('Comentario').AsString;
-      ADOQueryTemporarioDBConsulta1.FieldByName('DataComentario').AsDateTime:= now;
-      ADOQueryTemporarioDBConsulta1.FieldByName('ComentarioPor').AsString:= FrmPrincipal.logChave;
-      ADOQueryTemporarioDBConsulta1.FieldByName('ComputadorComentario').AsString:= FrmPrincipal.logMaquina;
-      ADOQueryTemporarioDBConsulta1.Post;
-    end
-    else
-    begin
-      ADOQueryTemporarioDBConsulta1.Edit;
-      ADOQueryTemporarioDBConsulta1.FieldByName('NotaManutencao').AsString:= NotaManutencao;
-      ADOQueryTemporarioDBConsulta1.FieldByName('Comentario').AsString:= FrmDataModule.DataSourceForaOperacao.DataSet.
-      FieldByName('Comentario').AsString;
-      ADOQueryTemporarioDBConsulta1.FieldByName('DataComentario').AsDateTime:= now;
-      ADOQueryTemporarioDBConsulta1.FieldByName('ComentarioPor').AsString:= FrmPrincipal.logChave;
-      ADOQueryTemporarioDBConsulta1.FieldByName('ComputadorComentario').AsString:= FrmPrincipal.logMaquina;
-      ADOQueryTemporarioDBConsulta1.Post;
-    end;
-  except
-  end;
-end;
-
 procedure TFrmDataModule.ADOQueryGeradoresBeforePost(DataSet: TDataSet);
 begin
   FrmDataModule.DataSourceGeradores.DataSet.
@@ -490,30 +398,6 @@ begin
   FrmDataModule.DataSourceImportarExecutanteAPLAT.DataSet.
   FieldByName('DataImportacao').AsDateTime:= now;
   FrmDataModule.DataSourceImportarExecutanteAPLAT.DataSet.
-  FieldByName('ComputadorImportacao').AsString:= FrmPrincipal.logMaquina;
-end;
-
-procedure TFrmDataModule.ADOQueryImportarExecutanteSAPBeforePost(
-  DataSet: TDataSet);
-begin
-  //Usuário
-  FrmDataModule.DataSourceImportarExecutanteSAP.DataSet.
-  FieldByName('ImportadoPor').asString:= FrmPrincipal.logChave;
-  FrmDataModule.DataSourceImportarExecutanteSAP.DataSet.
-  FieldByName('DataImportacao').AsDateTime:= now;
-  FrmDataModule.DataSourceImportarExecutanteSAP.DataSet.
-  FieldByName('ComputadorImportacao').AsString:= FrmPrincipal.logMaquina;
-end;
-
-procedure TFrmDataModule.ADOQueryImportarLocalInstalacaoBeforePost(
-  DataSet: TDataSet);
-begin
-  //Usuário
-  FrmDataModule.DataSourceImportarLocalInstalacao.DataSet.
-  FieldByName('ImportadoPor').asString:= FrmPrincipal.logChave;
-  FrmDataModule.DataSourceImportarLocalInstalacao.DataSet.
-  FieldByName('DataImportacao').AsDateTime:= now;
-  FrmDataModule.DataSourceImportarLocalInstalacao.DataSet.
   FieldByName('ComputadorImportacao').AsString:= FrmPrincipal.logMaquina;
 end;
 
@@ -551,16 +435,6 @@ begin
   FrmDataModule.DataSourcePlataformaControle.DataSet.
   FieldByName('DataAtualizacao').AsDateTime:= now;
   FrmDataModule.DataSourcePlataformaControle.DataSet.
-  FieldByName('Computador').AsString:= FrmPrincipal.logMaquina;
-end;
-
-procedure TFrmDataModule.ADOQueryPrioridadeForcadaBeforePost(DataSet: TDataSet);
-begin
-  FrmDataModule.DataSourcePrioridadeForcada.DataSet.
-  FieldByName('AvaliadoPor').AsString:= FrmPrincipal.logChave;
-  FrmDataModule.DataSourcePrioridadeForcada.DataSet.
-  FieldByName('DataAtualizacao').AsDateTime:= now;
-  FrmDataModule.DataSourcePrioridadeForcada.DataSet.
   FieldByName('Computador').AsString:= FrmPrincipal.logMaquina;
 end;
 

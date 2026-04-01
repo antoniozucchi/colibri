@@ -2,8 +2,8 @@ object FrmAgendaIntervencao: TFrmAgendaIntervencao
   Left = 0
   Top = 0
   Caption = 'Resumo de Programa'#231#227'o'
-  ClientHeight = 478
-  ClientWidth = 871
+  ClientHeight = 454
+  ClientWidth = 865
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -20,7 +20,7 @@ object FrmAgendaIntervencao: TFrmAgendaIntervencao
   object Panel7: TPanel
     Left = 0
     Top = 0
-    Width = 871
+    Width = 865
     Height = 25
     Align = alTop
     Caption = 'Resumo de Programa'#231#227'o'
@@ -33,13 +33,13 @@ object FrmAgendaIntervencao: TFrmAgendaIntervencao
     ParentBackground = False
     ParentFont = False
     TabOrder = 0
-    ExplicitWidth = 869
+    ExplicitWidth = 863
   end
   object StringGrid: TStringGrid
     Left = 0
     Top = 54
-    Width = 871
-    Height = 424
+    Width = 865
+    Height = 400
     Align = alClient
     ColCount = 1
     FixedCols = 0
@@ -49,21 +49,21 @@ object FrmAgendaIntervencao: TFrmAgendaIntervencao
     TabOrder = 1
     OnDrawCell = StringGridDrawCell
     OnFixedCellClick = StringGridFixedCellClick
-    ExplicitWidth = 869
-    ExplicitHeight = 416
+    ExplicitWidth = 863
+    ExplicitHeight = 392
   end
   object ToolBar1: TToolBar
     Left = 0
     Top = 25
-    Width = 871
+    Width = 865
     Height = 29
     ButtonHeight = 30
-    ButtonWidth = 59
+    ButtonWidth = 101
     Caption = 'ToolBar1'
     EdgeBorders = [ebLeft, ebTop, ebRight, ebBottom]
     Images = FrmPrincipal.ImageList1
     TabOrder = 2
-    ExplicitWidth = 869
+    ExplicitWidth = 863
     object ToolButton2: TToolButton
       Left = 0
       Top = 0
@@ -74,7 +74,7 @@ object FrmAgendaIntervencao: TFrmAgendaIntervencao
       Style = tbsDropDown
     end
     object Panel8: TPanel
-      Left = 78
+      Left = 120
       Top = 0
       Width = 70
       Height = 30
@@ -84,7 +84,7 @@ object FrmAgendaIntervencao: TFrmAgendaIntervencao
       TabOrder = 2
     end
     object dataInicio: TDateTimePicker
-      Left = 148
+      Left = 190
       Top = 0
       Width = 95
       Height = 30
@@ -97,7 +97,7 @@ object FrmAgendaIntervencao: TFrmAgendaIntervencao
       TabOrder = 3
     end
     object Panel4: TPanel
-      Left = 243
+      Left = 285
       Top = 0
       Width = 70
       Height = 30
@@ -107,7 +107,7 @@ object FrmAgendaIntervencao: TFrmAgendaIntervencao
       TabOrder = 4
     end
     object dataFim: TDateTimePicker
-      Left = 313
+      Left = 355
       Top = 0
       Width = 95
       Height = 30
@@ -120,14 +120,14 @@ object FrmAgendaIntervencao: TFrmAgendaIntervencao
       TabOrder = 5
     end
     object ToolButton1: TToolButton
-      Left = 408
+      Left = 450
       Top = 0
       Width = 8
       Caption = 'ToolButton1'
       Style = tbsSeparator
     end
     object BitBtn13: TBitBtn
-      Left = 416
+      Left = 458
       Top = 0
       Width = 70
       Height = 30
@@ -138,7 +138,7 @@ object FrmAgendaIntervencao: TFrmAgendaIntervencao
       TabOrder = 0
     end
     object edtComparar: TEdit
-      Left = 486
+      Left = 528
       Top = 0
       Width = 90
       Height = 30

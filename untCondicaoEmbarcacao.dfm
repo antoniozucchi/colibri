@@ -2,8 +2,8 @@ object FrmCondicaoEmbarcacao: TFrmCondicaoEmbarcacao
   Left = 0
   Top = 0
   Caption = 'Condi'#231#227'o de Mar e Disponibilidade de Embarca'#231#245'es'
-  ClientHeight = 640
-  ClientWidth = 894
+  ClientHeight = 632
+  ClientWidth = 892
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -11,29 +11,29 @@ object FrmCondicaoEmbarcacao: TFrmCondicaoEmbarcacao
   Font.Name = 'Tahoma'
   Font.Style = []
   FormStyle = fsMDIChild
-  OldCreateOrder = False
   Visible = True
   WindowState = wsMaximized
   OnClose = FormClose
   OnCreate = FormCreate
   OnDestroy = FormDestroy
-  PixelsPerInch = 96
   TextHeight = 13
   object PageControl1: TPageControl
     Left = 0
     Top = 25
-    Width = 894
-    Height = 615
+    Width = 892
+    Height = 607
     ActivePage = TabSheet1
     Align = alClient
     TabOrder = 0
     OnChange = PageControl1Change
+    ExplicitWidth = 890
+    ExplicitHeight = 599
     object TabSheet1: TTabSheet
       Caption = 'Condi'#231#227'o de Mar'
       object Splitter1: TSplitter
         Left = 0
         Top = 353
-        Width = 886
+        Width = 884
         Height = 3
         Cursor = crVSplit
         Align = alTop
@@ -42,10 +42,11 @@ object FrmCondicaoEmbarcacao: TFrmCondicaoEmbarcacao
       object PanelMes: TPanel
         Left = 0
         Top = 0
-        Width = 886
+        Width = 884
         Height = 353
         Align = alTop
         TabOrder = 0
+        ExplicitWidth = 882
         object PanelCalendario: TPanel
           Left = 1
           Top = 1
@@ -318,60 +319,54 @@ object FrmCondicaoEmbarcacao: TFrmCondicaoEmbarcacao
         object PanelTabelaCondicaoMar: TPanel
           Left = 449
           Top = 1
-          Width = 436
+          Width = 434
           Height = 351
           Align = alClient
           TabOrder = 1
+          ExplicitWidth = 432
           object ToolBar1: TToolBar
             Left = 1
             Top = 1
-            Width = 434
+            Width = 432
             Height = 29
             Caption = 'ToolBar1'
             DrawingStyle = dsGradient
             EdgeBorders = [ebLeft, ebTop, ebRight, ebBottom]
+            Images = FrmPrincipal.ImageList1
             TabOrder = 0
-            object BitBtn4: TBitBtn
+            ExplicitWidth = 430
+            object btnClearFiltro: TToolButton
               Left = 0
               Top = 0
-              Width = 75
-              Height = 22
-              Action = actExcelCondicaoMar
-              Align = alLeft
+              Hint = 'Limpar filtro'
+              Caption = 'btnClearFiltro'
+              ImageIndex = 225
+              ParentShowHint = False
+              ShowHint = True
+            end
+            object btnLayout: TToolButton
+              Left = 23
+              Top = 0
+              Hint = 'Editar layout de colunas'
+              Caption = 'btnLayoutMar'
+              ImageIndex = 196
+              ParentShowHint = False
+              ShowHint = True
+            end
+            object btnExcelMar: TToolButton
+              Left = 46
+              Top = 0
+              Hint = 'Exportar dados para o Excel'
               Caption = 'Exportar'
+              ImageIndex = 54
               ParentShowHint = False
               ShowHint = True
-              TabOrder = 0
-            end
-            object BitBtn10: TBitBtn
-              Left = 75
-              Top = 0
-              Width = 64
-              Height = 22
-              Action = actLimparFiltros
-              Align = alLeft
-              Caption = 'Limpar'
-              ParentShowHint = False
-              ShowHint = True
-              TabOrder = 1
-            end
-            object BitBtn11: TBitBtn
-              Left = 139
-              Top = 0
-              Width = 64
-              Height = 22
-              Action = actFiltrosTabela
-              Align = alLeft
-              Caption = 'Filtros'
-              ParentShowHint = False
-              ShowHint = True
-              TabOrder = 2
             end
           end
-          object DBGridCondicaoMar: TDBGrid
+          object DBGridCondicaoMar: TFilterDBGrid
             Left = 1
             Top = 30
-            Width = 249
+            Width = 247
             Height = 301
             Align = alClient
             DataSource = FrmDataModule.DataSourceCondicaoMar
@@ -383,7 +378,12 @@ object FrmCondicaoEmbarcacao: TFrmCondicaoEmbarcacao
             TitleFont.Name = 'Tahoma'
             TitleFont.Style = []
             OnDrawColumnCell = DBGridCondicaoMarDrawColumnCell
-            OnTitleClick = DBGridCondicaoMarTitleClick
+            ClearFilterButton = btnClearFiltro
+            SearchAction = actProcurarMar
+            LayoutGrid = ColunasLayoutMar
+            EnableZebra = False
+            LayoutButton = btnLayout
+            ExcelButton = btnExcelMar
             Columns = <
               item
                 Alignment = taCenter
@@ -422,7 +422,9 @@ object FrmCondicaoEmbarcacao: TFrmCondicaoEmbarcacao
             Top = 80
             Width = 113
             Height = 97
+            ColCount = 7
             FixedCols = 0
+            RowCount = 4
             Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goDrawFocusSelected, goRowSizing, goColSizing, goEditing]
             TabOrder = 2
             Visible = False
@@ -430,13 +432,12 @@ object FrmCondicaoEmbarcacao: TFrmCondicaoEmbarcacao
               24
               24
               21
-              24
               24)
           end
           object StatusBarCondicaoMar: TStatusBar
             Left = 1
             Top = 331
-            Width = 434
+            Width = 432
             Height = 19
             Panels = <
               item
@@ -454,15 +455,17 @@ object FrmCondicaoEmbarcacao: TFrmCondicaoEmbarcacao
               item
                 Width = 50
               end>
+            ExplicitWidth = 430
           end
           object Panel15: TPanel
-            Left = 250
+            Left = 248
             Top = 30
             Width = 185
             Height = 301
             Align = alRight
             Caption = 'Panel15'
             TabOrder = 4
+            ExplicitLeft = 246
             object ToolBar6: TToolBar
               Left = 1
               Top = 1
@@ -502,7 +505,7 @@ object FrmCondicaoEmbarcacao: TFrmCondicaoEmbarcacao
               Height = 270
               Hint = 'Selecione datas para filtrar'
               Align = alClient
-              ItemHeight = 13
+              ItemHeight = 17
               ParentShowHint = False
               ShowHint = True
               TabOrder = 1
@@ -514,19 +517,22 @@ object FrmCondicaoEmbarcacao: TFrmCondicaoEmbarcacao
       object PanelAno: TPanel
         Left = 0
         Top = 356
-        Width = 886
-        Height = 231
+        Width = 884
+        Height = 223
         Align = alClient
         TabOrder = 1
+        ExplicitWidth = 882
+        ExplicitHeight = 215
         object ToolBar2: TToolBar
           Left = 1
           Top = 1
-          Width = 884
+          Width = 882
           Height = 29
           Caption = 'ToolBar2'
           DrawingStyle = dsGradient
           EdgeBorders = [ebLeft, ebTop, ebRight, ebBottom]
           TabOrder = 0
+          ExplicitWidth = 880
           object BitBtn1: TBitBtn
             Left = 0
             Top = 0
@@ -543,8 +549,8 @@ object FrmCondicaoEmbarcacao: TFrmCondicaoEmbarcacao
         object RLMar: TStringGrid
           Left = 1
           Top = 30
-          Width = 884
-          Height = 200
+          Width = 882
+          Height = 192
           Align = alClient
           ColCount = 35
           DefaultColWidth = 25
@@ -553,6 +559,8 @@ object FrmCondicaoEmbarcacao: TFrmCondicaoEmbarcacao
           FixedRows = 0
           TabOrder = 1
           OnDrawCell = RLMarDrawCell
+          ExplicitWidth = 880
+          ExplicitHeight = 184
         end
       end
     end
@@ -562,19 +570,21 @@ object FrmCondicaoEmbarcacao: TFrmCondicaoEmbarcacao
       object Splitter2: TSplitter
         Left = 0
         Top = 297
-        Width = 886
+        Width = 884
         Height = 3
         Cursor = crVSplit
         Align = alTop
         ExplicitTop = 353
+        ExplicitWidth = 886
       end
       object Panel1: TPanel
         Left = 0
         Top = 0
-        Width = 886
+        Width = 884
         Height = 297
         Align = alTop
         TabOrder = 0
+        ExplicitWidth = 882
         object Panel2: TPanel
           Left = 1
           Top = 1
@@ -847,57 +857,41 @@ object FrmCondicaoEmbarcacao: TFrmCondicaoEmbarcacao
         object Panel4: TPanel
           Left = 449
           Top = 1
-          Width = 436
+          Width = 434
           Height = 295
           Align = alClient
           TabOrder = 1
+          ExplicitWidth = 432
           object ToolBar3: TToolBar
             Left = 1
             Top = 1
-            Width = 434
+            Width = 432
             Height = 29
             Caption = 'ToolBar1'
             DrawingStyle = dsGradient
             EdgeBorders = [ebLeft, ebTop, ebRight, ebBottom]
+            Images = FrmPrincipal.ImageList1
             TabOrder = 0
-            object BitBtn2: TBitBtn
+            object btnClearFiltroEmbarcacao: TToolButton
               Left = 0
               Top = 0
-              Width = 75
-              Height = 22
-              Action = actExcelIndisponibilidadeEmbarcacaco
-              Align = alLeft
+              Hint = 'Limpar filtro'
+              Caption = 'btnClearFiltroEmbarcacao'
+              ImageIndex = 225
+              ParentShowHint = False
+              ShowHint = True
+            end
+            object btnExcelEmbarcacao: TToolButton
+              Left = 23
+              Top = 0
+              Hint = 'Exportar dados para o Excel'
               Caption = 'Exportar'
+              ImageIndex = 54
               ParentShowHint = False
               ShowHint = True
-              TabOrder = 0
-            end
-            object BitBtn5: TBitBtn
-              Left = 75
-              Top = 0
-              Width = 64
-              Height = 22
-              Action = actLimparFiltros
-              Align = alLeft
-              Caption = 'Limpar'
-              ParentShowHint = False
-              ShowHint = True
-              TabOrder = 1
-            end
-            object BitBtn6: TBitBtn
-              Left = 139
-              Top = 0
-              Width = 64
-              Height = 22
-              Action = actFiltrosTabela
-              Align = alLeft
-              Caption = 'Filtros'
-              ParentShowHint = False
-              ShowHint = True
-              TabOrder = 2
             end
             object BitBtn9: TBitBtn
-              Left = 203
+              Left = 46
               Top = 0
               Width = 78
               Height = 22
@@ -906,13 +900,13 @@ object FrmCondicaoEmbarcacao: TFrmCondicaoEmbarcacao
               Caption = 'Atualizar'
               ParentShowHint = False
               ShowHint = True
-              TabOrder = 3
+              TabOrder = 0
             end
           end
-          object DBGridCondicaoEmbarcacao: TDBGrid
+          object DBGridCondicaoEmbarcacao: TFilterDBGrid
             Left = 1
             Top = 30
-            Width = 249
+            Width = 247
             Height = 245
             Align = alClient
             DataSource = FrmDataModule.DataSourceCondicaoEmbarcacao
@@ -923,7 +917,11 @@ object FrmCondicaoEmbarcacao: TFrmCondicaoEmbarcacao
             TitleFont.Name = 'Tahoma'
             TitleFont.Style = []
             OnDrawColumnCell = DBGridCondicaoEmbarcacaoDrawColumnCell
-            OnTitleClick = DBGridCondicaoEmbarcacaoTitleClick
+            ClearFilterButton = btnClearFiltroEmbarcacao
+            SearchAction = actProcurarEmbarcacao
+            LayoutGrid = ColunasLayoutEmbarcacao
+            EnableZebra = False
+            ExcelButton = btnExcelEmbarcacao
             Columns = <
               item
                 Alignment = taCenter
@@ -990,7 +988,9 @@ object FrmCondicaoEmbarcacao: TFrmCondicaoEmbarcacao
             Top = 80
             Width = 113
             Height = 97
+            ColCount = 7
             FixedCols = 0
+            RowCount = 7
             Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goDrawFocusSelected, goRowSizing, goColSizing, goEditing]
             TabOrder = 2
             Visible = False
@@ -999,12 +999,14 @@ object FrmCondicaoEmbarcacao: TFrmCondicaoEmbarcacao
               24
               21
               24
+              24
+              24
               24)
           end
           object StatusBarCondicaoEmbarcacao: TStatusBar
             Left = 1
             Top = 275
-            Width = 434
+            Width = 432
             Height = 19
             Panels = <
               item
@@ -1024,13 +1026,14 @@ object FrmCondicaoEmbarcacao: TFrmCondicaoEmbarcacao
               end>
           end
           object Panel16: TPanel
-            Left = 250
+            Left = 248
             Top = 30
             Width = 185
             Height = 245
             Align = alRight
             Caption = 'Panel15'
             TabOrder = 4
+            ExplicitLeft = 246
             object ToolBar7: TToolBar
               Left = 1
               Top = 1
@@ -1070,7 +1073,7 @@ object FrmCondicaoEmbarcacao: TFrmCondicaoEmbarcacao
               Height = 214
               Hint = 'Selecione datas para filtrar'
               Align = alClient
-              ItemHeight = 13
+              ItemHeight = 17
               ParentShowHint = False
               ShowHint = True
               TabOrder = 1
@@ -1082,14 +1085,14 @@ object FrmCondicaoEmbarcacao: TFrmCondicaoEmbarcacao
       object Panel5: TPanel
         Left = 0
         Top = 300
-        Width = 886
-        Height = 287
+        Width = 884
+        Height = 279
         Align = alClient
         TabOrder = 1
         object ToolBar4: TToolBar
           Left = 1
           Top = 1
-          Width = 884
+          Width = 882
           Height = 29
           Caption = 'ToolBar2'
           DrawingStyle = dsGradient
@@ -1122,8 +1125,8 @@ object FrmCondicaoEmbarcacao: TFrmCondicaoEmbarcacao
         object RLEmbarcacao: TStringGrid
           Left = 1
           Top = 30
-          Width = 884
-          Height = 120
+          Width = 882
+          Height = 112
           Align = alClient
           ColCount = 35
           DefaultColWidth = 25
@@ -1135,8 +1138,8 @@ object FrmCondicaoEmbarcacao: TFrmCondicaoEmbarcacao
         end
         object RLGeral: TStringGrid
           Left = 1
-          Top = 208
-          Width = 884
+          Top = 200
+          Width = 882
           Height = 78
           Align = alBottom
           ColCount = 35
@@ -1149,8 +1152,8 @@ object FrmCondicaoEmbarcacao: TFrmCondicaoEmbarcacao
         end
         object RLPrevisto: TStringGrid
           Left = 1
-          Top = 150
-          Width = 884
+          Top = 142
+          Width = 882
           Height = 58
           Align = alBottom
           ColCount = 35
@@ -1167,7 +1170,7 @@ object FrmCondicaoEmbarcacao: TFrmCondicaoEmbarcacao
   object Panel7: TPanel
     Left = 0
     Top = 0
-    Width = 894
+    Width = 892
     Height = 25
     Align = alTop
     Caption = 'Condi'#231#227'o de Mar e Disponibilidade de Embarca'#231#245'es'
@@ -1180,6 +1183,7 @@ object FrmCondicaoEmbarcacao: TFrmCondicaoEmbarcacao
     ParentBackground = False
     ParentFont = False
     TabOrder = 1
+    ExplicitWidth = 890
   end
   object PanelAjuda: TPanel
     Left = 108
@@ -1450,48 +1454,11 @@ object FrmCondicaoEmbarcacao: TFrmCondicaoEmbarcacao
     Left = 55
     Top = 177
     StyleName = 'Platform Default'
-    object actFiltroInserir: TAction
-      Category = 'Tabela'
-      Caption = 'actFiltroInserir'
-      OnExecute = actFiltroInserirExecute
-    end
-    object actGridASC: TAction
-      Category = 'Tabela'
-      Caption = 'actGridASC'
-      OnExecute = actGridASCExecute
-    end
-    object actGridDESC: TAction
-      Category = 'Tabela'
-      Caption = 'actGridDESC'
-      OnExecute = actGridDESCExecute
-    end
-    object actSubstituirPor: TAction
-      Category = 'Tabela'
-      Caption = 'actSubstituirPor'
-      OnExecute = actSubstituirPorExecute
-    end
-    object actLimparFiltros: TAction
-      Category = 'Tabela'
-      Caption = 'Limpar'
-      Hint = 'Limpar Filtros'
-      ImageIndex = 469
-      OnExecute = actLimparFiltrosExecute
-    end
-    object actFiltrosTabela: TAction
-      Category = 'Tabela'
-      Caption = 'Filtros'
-      Hint = 'Visualizar tabela de filtros'
-      ImageIndex = 470
-      OnExecute = actFiltrosTabelaExecute
-    end
-    object actProcuraFiltrosTabela: TAction
-      Category = 'Tabela'
-      Caption = 'actProcuraFiltrosTabela'
-      OnExecute = actProcuraFiltrosTabelaExecute
-    end
     object actProcurarMar: TAction
       Category = 'Mar'
-      Caption = 'actProcurarMar'
+      Caption = 'Procurar'
+      Hint = 'Buscar registros no banco de dados'
+      ImageIndex = 27
       OnExecute = actProcurarMarExecute
     end
     object actDadosMar: TAction
@@ -1501,20 +1468,15 @@ object FrmCondicaoEmbarcacao: TFrmCondicaoEmbarcacao
     end
     object actProcurarEmbarcacao: TAction
       Category = 'Embarca'#231#227'o'
-      Caption = 'actProcurarEmbarcacao'
+      Caption = 'Procurar'
+      Hint = 'Buscar registros no banco de dados'
+      ImageIndex = 27
       OnExecute = actProcurarEmbarcacaoExecute
     end
     object actDadosEmbarcacao: TAction
       Category = 'Embarca'#231#227'o'
       Caption = 'actDadosEmbarcacao'
       OnExecute = actDadosEmbarcacaoExecute
-    end
-    object actExcelCondicaoMar: TAction
-      Category = 'Mar'
-      Caption = 'Exportar'
-      Hint = 'Exportar para o Excel'
-      ImageIndex = 54
-      OnExecute = actExcelCondicaoMarExecute
     end
     object actExcelCalendarioMar: TAction
       Category = 'Mar'
@@ -1535,13 +1497,6 @@ object FrmCondicaoEmbarcacao: TFrmCondicaoEmbarcacao
       Caption = 'actLimparAjuda'
       OnExecute = actLimparAjudaExecute
     end
-    object actExcelIndisponibilidadeEmbarcacaco: TAction
-      Category = 'Embarca'#231#227'o'
-      Caption = 'Exportar'
-      Hint = 'Exportar para o Excel'
-      ImageIndex = 54
-      OnExecute = actExcelIndisponibilidadeEmbarcacacoExecute
-    end
     object actGravar: TAction
       Category = 'Embarca'#231#227'o'
       Caption = 'Gravar'
@@ -1559,14 +1514,14 @@ object FrmCondicaoEmbarcacao: TFrmCondicaoEmbarcacao
     object actSelLimparMar: TAction
       Category = 'Tabela'
       Hint = 'Limpar sele'#231#227'o'
-      ImageIndex = 155
+      ImageIndex = 231
       OnExecute = actSelLimparMarExecute
     end
     object actSelTudoMar: TAction
       Category = 'Tabela'
       Caption = 'actSelTudo'
       Hint = 'Selecionar todos'
-      ImageIndex = 154
+      ImageIndex = 232
       OnExecute = actSelTudoMarExecute
     end
     object actSalvarListaMar: TAction
@@ -1580,14 +1535,14 @@ object FrmCondicaoEmbarcacao: TFrmCondicaoEmbarcacao
       Category = 'Tabela'
       Caption = 'actSelLimparEmbarcacao'
       Hint = 'Limpar sele'#231#227'o'
-      ImageIndex = 155
+      ImageIndex = 231
       OnExecute = actSelLimparEmbarcacaoExecute
     end
     object actSelTudoEmbarcacao: TAction
       Category = 'Tabela'
       Caption = 'actSelTudoEmbarcacao'
       Hint = 'Selecionar todos'
-      ImageIndex = 154
+      ImageIndex = 232
       OnExecute = actSelTudoEmbarcacaoExecute
     end
     object actSalvarListaEmbarcacao: TAction

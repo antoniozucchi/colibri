@@ -7,28 +7,18 @@ uses
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Data.DB, Vcl.ComCtrls, System.Actions,
   Vcl.ActnList, Vcl.PlatformDefaultStyleActnCtrls, Vcl.ActnMan, Vcl.Grids,DateUtils,
   Vcl.DBGrids, Vcl.StdCtrls, Vcl.Buttons, Vcl.DBCtrls, Vcl.ToolWin, Vcl.ExtCtrls,
-  DBDateTimePicker;
+  DBDateTimePicker, untDBGridFilter;
 
 type
   TFrmMovimentacaoCarga = class(TForm)
     PanelTitulo: TPanel;
     ToolBar1: TToolBar;
     DBNavigator1: TDBNavigator;
-    BitBtn4: TBitBtn;
-    BitBtn2: TBitBtn;
-    BitBtn1: TBitBtn;
-    DBGridMovimentacaoCarga: TDBGrid;
+    DBGridMovimentacaoCarga: TFilterDBGrid;
     ColunasLayout: TStringGrid;
     ActionManager1: TActionManager;
     actProcurar: TAction;
     actExcel: TAction;
-    actFiltroInserir: TAction;
-    actGridASC: TAction;
-    actGridDESC: TAction;
-    actSubstituirPor: TAction;
-    actLimparFiltros: TAction;
-    actFiltrosTabela: TAction;
-    actProcuraFiltrosTabela: TAction;
     StatusBar1: TStatusBar;
     Panel3: TPanel;
     dataInicio: TDateTimePicker;
@@ -37,19 +27,13 @@ type
     Panel8: TPanel;
     DBDataNecessidade: TDBDateTimePicker;
     DBDataAtendimento: TDBDateTimePicker;
+    btnClearFiltro: TToolButton;
+    brnLayout: TToolButton;
+    btnExcel: TToolButton;
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure FormDestroy(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure actProcurarExecute(Sender: TObject);
-    procedure actExcelExecute(Sender: TObject);
-    procedure actFiltroInserirExecute(Sender: TObject);
-    procedure actGridASCExecute(Sender: TObject);
-    procedure actGridDESCExecute(Sender: TObject);
-    procedure actSubstituirPorExecute(Sender: TObject);
-    procedure actLimparFiltrosExecute(Sender: TObject);
-    procedure actFiltrosTabelaExecute(Sender: TObject);
-    procedure actProcuraFiltrosTabelaExecute(Sender: TObject);
-    procedure DBGridMovimentacaoCargaTitleClick(Column: TColumn);
     procedure DBGridMovimentacaoCargaDrawColumnCell(Sender: TObject;
       const Rect: TRect; DataCol: Integer; Column: TColumn;
       State: TGridDrawState);
@@ -68,49 +52,6 @@ implementation
   uses untPrincipal,untDataModule;
 {$R *.dfm}
 
-procedure TFrmMovimentacaoCarga.actExcelExecute(Sender: TObject);
-begin
-  FrmPrincipal.GerarExcel(DBGridMovimentacaoCarga,'Mov.Carga');
-end;
-
-procedure TFrmMovimentacaoCarga.actFiltroInserirExecute(Sender: TObject);
-begin
-  FrmPrincipal.inserirProcura(DBGridMovimentacaoCarga,ColunasLayout);
-  actProcurar.Execute;
-  if (FrmPrincipal.PanelFiltrosTabela.Visible)AND(FrmPrincipal.PanelAjuda1.Visible) then
-    actFiltrosTabela.Execute;
-end;
-
-procedure TFrmMovimentacaoCarga.actFiltrosTabelaExecute(Sender: TObject);
-begin
-  FrmPrincipal.btnProcurarFiltrosTabela.Action:= actProcuraFiltrosTabela;
-  FrmPrincipal.FiltrosTabela(DBGridMovimentacaoCarga,ColunasLayout);
-end;
-
-procedure TFrmMovimentacaoCarga.actGridASCExecute(Sender: TObject);
-begin
-  FrmPrincipal.ClassificaDBGrid(DBGridMovimentacaoCarga,FrmDataModule.ADOQueryMovimentacaoCarga,0);
-end;
-
-procedure TFrmMovimentacaoCarga.actGridDESCExecute(Sender: TObject);
-begin
-  FrmPrincipal.ClassificaDBGrid(DBGridMovimentacaoCarga,FrmDataModule.ADOQueryMovimentacaoCarga,1);
-end;
-
-procedure TFrmMovimentacaoCarga.actLimparFiltrosExecute(Sender: TObject);
-begin
-  FrmPrincipal.LimparColunasFiltro(DBGridMovimentacaoCarga,ColunasLayout);
-  actProcurar.Execute;
-  if (FrmPrincipal.PanelFiltrosTabela.Visible)AND(FrmPrincipal.PanelAjuda1.Visible) then
-    actFiltrosTabela.Execute;
-end;
-
-procedure TFrmMovimentacaoCarga.actProcuraFiltrosTabelaExecute(Sender: TObject);
-begin
-  FrmPrincipal.CarregaFiltrosProcura(ColunasLayout);
-  actProcurar.Execute;
-end;
-
 procedure TFrmMovimentacaoCarga.actProcurarExecute(Sender: TObject);
   var
     SQLString,SQLBase,DataProcuraIncio,DataProcuraFim: String;
@@ -124,12 +65,6 @@ begin
   'WHERE (DataNecessidade BETWEEN #'+DataProcuraIncio+'# and #'+DataProcuraFim+'#)'+
   SQLString+' ORDER BY DataNecessidade;';
   FrmPrincipal.ProcuraQuery(SQLBase,FrmDataModule.ADOQueryMovimentacaoCarga,StatusBar1);
-end;
-
-procedure TFrmMovimentacaoCarga.actSubstituirPorExecute(Sender: TObject);
-begin
-  FrmPrincipal.SubstituirPor(DBGridMovimentacaoCarga,FrmDataModule.ADOQueryMovimentacaoCarga,
-  FrmDataModule.DataSourceMovimentacaoCarga);
 end;
 
 procedure TFrmMovimentacaoCarga.DBGridMovimentacaoCargaDrawColumnCell(
@@ -206,15 +141,6 @@ begin
     Key:= #0;
 end;
 
-procedure TFrmMovimentacaoCarga.DBGridMovimentacaoCargaTitleClick(
-  Column: TColumn);
-begin
-  FrmPrincipal.configurarFiltro(1,Column.FieldName,IntToStr(Column.Index),
-  Column.ReadOnly,actFiltroInserir,actGridASC,actGridDESC,actSubstituirPor);
-  //======================================================
-  FrmPrincipal.titleGrid(ColunasLayout,'Consulta',FrmDataModule.ADOQueryMovimentacaoCarga.SQL.Text);
-end;
-
 procedure TFrmMovimentacaoCarga.FormClose(Sender: TObject;
   var Action: TCloseAction);
 begin
@@ -228,7 +154,7 @@ begin
   dataInicio.Date:= IncDay(now,-2);
   dataFim.Date:= IncDay(now,2);
   //Incicialização
-  FrmPrincipal.SetUpColunasLayout(DBGridMovimentacaoCarga, ColunasLayout);
+  FrmDataModule.setFilterDBGrid(DBGridMovimentacaoCarga);
   actProcurar.Execute;
 end;
 

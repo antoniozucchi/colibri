@@ -2,8 +2,8 @@ object FrmExecutante: TFrmExecutante
   Left = 0
   Top = 0
   Caption = 'Executantes'
-  ClientHeight = 512
-  ClientWidth = 1165
+  ClientHeight = 488
+  ClientWidth = 1159
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -20,7 +20,7 @@ object FrmExecutante: TFrmExecutante
   object Panel7: TPanel
     Left = 0
     Top = 0
-    Width = 1165
+    Width = 1159
     Height = 25
     Align = alTop
     Caption = 'Cadastro de Executantes'
@@ -33,24 +33,25 @@ object FrmExecutante: TFrmExecutante
     ParentBackground = False
     ParentFont = False
     TabOrder = 0
-    ExplicitWidth = 1163
+    ExplicitWidth = 1157
   end
   object PageControl1: TPageControl
     Left = 0
     Top = 25
-    Width = 1165
-    Height = 487
+    Width = 1159
+    Height = 463
     ActivePage = TabSheet1
     Align = alClient
     TabOrder = 1
-    ExplicitTop = 31
+    ExplicitWidth = 1157
+    ExplicitHeight = 455
     object TabSheet1: TTabSheet
       Caption = 'Executante'
       object DBGridExecutante: TFilterDBGrid
         Left = 0
         Top = 29
-        Width = 1157
-        Height = 411
+        Width = 1151
+        Height = 387
         Align = alClient
         Color = clWhite
         DataSource = FrmDataModule.DataSourceExecutante
@@ -62,7 +63,6 @@ object FrmExecutante: TFrmExecutante
         TitleFont.Name = 'Tahoma'
         TitleFont.Style = []
         OnCellClick = DBGridExecutanteCellClick
-        OnColumnMoved = DBGridExecutanteColumnMoved
         OnDrawColumnCell = DBGridExecutanteDrawColumnCell
         OnKeyPress = DBGridExecutanteKeyPress
         ClearFilterButton = btnFiltroClearExecutante
@@ -70,6 +70,7 @@ object FrmExecutante: TFrmExecutante
         LayoutGrid = ColunasLayoutExecutante
         EnableZebra = False
         LayoutButton = btnLayoutExecutante
+        ExcelButton = btnExcelExecutante
         Columns = <
           item
             Alignment = taCenter
@@ -146,7 +147,7 @@ object FrmExecutante: TFrmExecutante
             Expanded = False
             FieldName = 'OutroDocumento'
             Title.Alignment = taCenter
-            Title.Caption = 'Outro Documento'
+            Title.Caption = 'Passaporte'
             Width = 91
             Visible = True
           end
@@ -255,19 +256,27 @@ object FrmExecutante: TFrmExecutante
             Title.Alignment = taCenter
             Width = 69
             Visible = True
+          end
+          item
+            Alignment = taCenter
+            Expanded = False
+            FieldName = 'idExecutante'
+            ReadOnly = True
+            Title.Caption = 'ID'
+            Visible = True
           end>
       end
       object ToolBar1: TToolBar
         Left = 0
         Top = 0
-        Width = 1157
+        Width = 1151
         Height = 29
         Caption = 'ToolBar1'
         DrawingStyle = dsGradient
         EdgeBorders = [ebLeft, ebTop, ebRight, ebBottom]
         Images = FrmPrincipal.ImageList1
         TabOrder = 1
-        ExplicitWidth = 1155
+        ExplicitWidth = 1149
         object DBNavigatorExecutante: TDBNavigator
           Left = 0
           Top = 0
@@ -336,19 +345,8 @@ object FrmExecutante: TFrmExecutante
           ShowHint = True
           Style = tbsDropDown
         end
-        object ToolButton5: TToolButton
-          Left = 290
-          Top = 0
-          Hint = 'Exportar ou Importar do Excel'
-          Caption = 'ToolButton5'
-          DropdownMenu = PopupMenuExcel
-          ImageIndex = 54
-          ParentShowHint = False
-          ShowHint = True
-          Style = tbsDropDown
-        end
         object btnFiltroClearExecutante: TToolButton
-          Left = 332
+          Left = 290
           Top = 0
           Hint = 'Limpar filtro'
           Caption = 'btnFiltroClearExecutante'
@@ -357,11 +355,20 @@ object FrmExecutante: TFrmExecutante
           ShowHint = True
         end
         object btnLayoutExecutante: TToolButton
-          Left = 355
+          Left = 313
           Top = 0
           Hint = 'Editar layout de colunas'
           Caption = 'btnLayoutExecutante'
           ImageIndex = 196
+          ParentShowHint = False
+          ShowHint = True
+        end
+        object btnExcelExecutante: TToolButton
+          Left = 336
+          Top = 0
+          Hint = 'Exportar dados para o Excel'
+          Caption = 'btnExcelExecutante'
+          ImageIndex = 54
           ParentShowHint = False
           ShowHint = True
         end
@@ -384,8 +391,8 @@ object FrmExecutante: TFrmExecutante
       end
       object StatusBarExecutntes: TStatusBar
         Left = 0
-        Top = 440
-        Width = 1157
+        Top = 416
+        Width = 1151
         Height = 19
         Panels = <
           item
@@ -406,8 +413,8 @@ object FrmExecutante: TFrmExecutante
           item
             Width = 50
           end>
-        ExplicitTop = 432
-        ExplicitWidth = 1155
+        ExplicitTop = 408
+        ExplicitWidth = 1149
       end
       object ColunasLayoutExecutante: TStringGrid
         Left = 21
@@ -416,10 +423,11 @@ object FrmExecutante: TFrmExecutante
         Height = 94
         ColCount = 7
         DefaultRowHeight = 21
-        RowCount = 23
+        RowCount = 24
         TabOrder = 4
         Visible = False
         RowHeights = (
+          21
           21
           21
           21
@@ -465,14 +473,14 @@ object FrmExecutante: TFrmExecutante
       object PanelEspecialidade1: TPanel
         Left = 0
         Top = 0
-        Width = 1157
-        Height = 459
+        Width = 1151
+        Height = 435
         Align = alClient
         TabOrder = 0
         object ToolBar3: TToolBar
           Left = 1
           Top = 1
-          Width = 1155
+          Width = 1149
           Height = 29
           Caption = 'ToolBar2'
           DrawingStyle = dsGradient
@@ -521,23 +529,21 @@ object FrmExecutante: TFrmExecutante
             ParentShowHint = False
             ShowHint = True
           end
-          object BitBtn5: TBitBtn
+          object btnExcelTIpoServico: TToolButton
             Left = 184
             Top = 0
-            Width = 80
-            Height = 22
-            Action = actExcelTipoServico
-            Caption = 'Exportar'
+            Hint = 'Exportar dados para o Excel'
+            Caption = 'btnExcelTIpoServico'
+            ImageIndex = 54
             ParentShowHint = False
             ShowHint = True
-            TabOrder = 1
           end
         end
         object DBGridTipoServico: TFilterDBGrid
           Left = 1
           Top = 30
-          Width = 1155
-          Height = 409
+          Width = 1149
+          Height = 385
           Align = alClient
           DataSource = FrmDataModule.DataSourceTipoEtapaServico
           Options = [dgEditing, dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgAlwaysShowSelection, dgConfirmDelete, dgCancelOnExit, dgTitleClick, dgTitleHotTrack]
@@ -554,6 +560,7 @@ object FrmExecutante: TFrmExecutante
           LayoutGrid = ColunasLayoutTipoEtapaServico
           EnableZebra = False
           LayoutButton = btnLayoutTipoEtapaServico
+          ExcelButton = btnExcelTIpoServico
           Columns = <
             item
               Alignment = taCenter
@@ -614,8 +621,8 @@ object FrmExecutante: TFrmExecutante
         end
         object StatusBarTipoEtapaServico: TStatusBar
           Left = 1
-          Top = 439
-          Width = 1155
+          Top = 415
+          Width = 1149
           Height = 19
           Panels = <
             item
@@ -661,26 +668,12 @@ object FrmExecutante: TFrmExecutante
     Left = 460
     Top = 153
     StyleName = 'Platform Default'
-    object actExcelExecutante: TAction
-      Category = 'Excel'
-      Caption = 'Exportar para o Excel'
-      Hint = 'Exportar para o Excel'
-      ImageIndex = 54
-      OnExecute = actExcelExecutanteExecute
-    end
     object actExcelImportar: TAction
       Category = 'Excel'
       Caption = 'Importar do Excel'
       Hint = 'Importar tabela do Excel'
       ImageIndex = 251
       OnExecute = actExcelImportarExecute
-    end
-    object actExcelTipoServico: TAction
-      Category = 'Excel'
-      Caption = 'Exportar'
-      Hint = 'Exportar para o Excel'
-      ImageIndex = 54
-      OnExecute = actExcelTipoServicoExecute
     end
     object actProcurarExecutante: TAction
       Category = 'Localizar'
@@ -828,7 +821,9 @@ object FrmExecutante: TFrmExecutante
     Left = 420
     Top = 289
     object Exportar1: TMenuItem
-      Action = actExcelExecutante
+      Caption = 'Exportar para o Excel'
+      Hint = 'Exportar para o Excel'
+      ImageIndex = 54
     end
     object Importar1: TMenuItem
       Action = actExcelImportar

@@ -6,45 +6,30 @@ uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ExtCtrls, Vcl.ToolWin, Vcl.ComCtrls,
   Data.DB, Vcl.Grids, Vcl.DBGrids, Vcl.DBCtrls, System.Actions, Vcl.ActnList,
-  Vcl.PlatformDefaultStyleActnCtrls, Vcl.ActnMan, Vcl.StdCtrls, Vcl.Buttons;
+  Vcl.PlatformDefaultStyleActnCtrls, Vcl.ActnMan, Vcl.StdCtrls, Vcl.Buttons,
+  untDBGridFilter;
 
 type
   TFrmEmbarcacao = class(TForm)
     ToolBar1: TToolBar;
     PanelTitulo: TPanel;
-    DBGridEmbarcacao: TDBGrid;
+    DBGridEmbarcacao: TFilterDBGrid;
     DBNavigator1: TDBNavigator;
-    BitBtn1: TBitBtn;
     ActionManager1: TActionManager;
     actExcel: TAction;
     actProcurar: TAction;
     StatusBar1: TStatusBar;
     ColunasLayout: TStringGrid;
-    actFiltroInserir: TAction;
-    actGridASC: TAction;
-    actGridDESC: TAction;
-    actSubstituirPor: TAction;
-    actLimparFiltros: TAction;
-    actFiltrosTabela: TAction;
-    actProcuraFiltrosTabela: TAction;
-    BitBtn2: TBitBtn;
-    BitBtn4: TBitBtn;
+    btnClearFiltro: TToolButton;
+    btnExcel: TToolButton;
+    btnLayout: TToolButton;
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure DBGridEmbarcacaoDrawColumnCell(Sender: TObject; const Rect: TRect;
       DataCol: Integer; Column: TColumn; State: TGridDrawState);
     procedure DBGridEmbarcacaoKeyPress(Sender: TObject; var Key: Char);
-    procedure actExcelExecute(Sender: TObject);
     procedure actProcurarExecute(Sender: TObject);
-    procedure actFiltroInserirExecute(Sender: TObject);
-    procedure actGridASCExecute(Sender: TObject);
-    procedure actGridDESCExecute(Sender: TObject);
-    procedure actSubstituirPorExecute(Sender: TObject);
-    procedure actLimparFiltrosExecute(Sender: TObject);
-    procedure actFiltrosTabelaExecute(Sender: TObject);
-    procedure actProcuraFiltrosTabelaExecute(Sender: TObject);
-    procedure DBGridEmbarcacaoTitleClick(Column: TColumn);
   private
     { Private declarations }
     procedure WMMDIACTIVATE(var msg: TWMMDIACTIVATE);message WM_MDIACTIVATE;
@@ -59,49 +44,6 @@ implementation
   uses untPrincipal,untDataModule;
 {$R *.dfm}
 
-procedure TFrmEmbarcacao.actExcelExecute(Sender: TObject);
-begin
-  FrmPrincipal.GerarExcel(DBGridEmbarcacao,'Embarcações');
-end;
-
-procedure TFrmEmbarcacao.actFiltroInserirExecute(Sender: TObject);
-begin
-  FrmPrincipal.inserirProcura(DBGridEmbarcacao,ColunasLayout);
-  actProcurar.Execute;
-  if (FrmPrincipal.PanelFiltrosTabela.Visible)AND(FrmPrincipal.PanelAjuda1.Visible) then
-    actFiltrosTabela.Execute;
-end;
-
-procedure TFrmEmbarcacao.actFiltrosTabelaExecute(Sender: TObject);
-begin
-  FrmPrincipal.btnProcurarFiltrosTabela.Action:= actProcuraFiltrosTabela;
-  FrmPrincipal.FiltrosTabela(DBGridEmbarcacao,ColunasLayout);
-end;
-
-procedure TFrmEmbarcacao.actGridASCExecute(Sender: TObject);
-begin
-  FrmPrincipal.ClassificaDBGrid(DBGridEmbarcacao,FrmDataModule.ADOQueryEmbarcacoes,0);
-end;
-
-procedure TFrmEmbarcacao.actGridDESCExecute(Sender: TObject);
-begin
-  FrmPrincipal.ClassificaDBGrid(DBGridEmbarcacao,FrmDataModule.ADOQueryEmbarcacoes,1);
-end;
-
-procedure TFrmEmbarcacao.actLimparFiltrosExecute(Sender: TObject);
-begin
-  FrmPrincipal.LimparColunasFiltro(DBGridEmbarcacao,ColunasLayout);
-  actProcurar.Execute;
-  if (FrmPrincipal.PanelFiltrosTabela.Visible)AND(FrmPrincipal.PanelAjuda1.Visible) then
-    actFiltrosTabela.Execute;
-end;
-
-procedure TFrmEmbarcacao.actProcuraFiltrosTabelaExecute(Sender: TObject);
-begin
-  frmPrincipal.CarregaFiltrosProcura(ColunasLayout);
-  actProcurar.Execute;
-end;
-
 procedure TFrmEmbarcacao.actProcurarExecute(Sender: TObject);
   var
     SQLString,SQLBase: String;
@@ -110,12 +52,6 @@ begin
   SQLBase:= 'SELECT tblEmbarcacao.* FROM tblEmbarcacao '+
   SQLString+' ORDER BY TipoEmbarcacao;';
   FrmPrincipal.ProcuraQuery(SQLBase,FrmDataModule.ADOQueryEmbarcacoes,StatusBar1);
-end;
-
-procedure TFrmEmbarcacao.actSubstituirPorExecute(Sender: TObject);
-begin
-  FrmPrincipal.SubstituirPor(DBGridEmbarcacao,FrmDataModule.ADOQueryEmbarcacoes,
-  FrmDataModule.DataSourceEmbarcacoes);
 end;
 
 procedure TFrmEmbarcacao.DBGridEmbarcacaoDrawColumnCell(Sender: TObject;
@@ -132,14 +68,6 @@ begin
     Key:= #0;
 end;
 
-procedure TFrmEmbarcacao.DBGridEmbarcacaoTitleClick(Column: TColumn);
-begin
-  FrmPrincipal.configurarFiltro(1,Column.FieldName,IntToStr(Column.Index),
-  Column.ReadOnly,actFiltroInserir,actGridASC,actGridDESC,actSubstituirPor);
-  //======================================================
-  FrmPrincipal.titleGrid(ColunasLayout,'Consulta',FrmDataModule.ADOQueryEmbarcacoes.SQL.Text);
-end;
-
 procedure TFrmEmbarcacao.FormClose(Sender: TObject; var Action: TCloseAction);
 begin
   Action:= caFree;
@@ -149,9 +77,9 @@ end;
 procedure TFrmEmbarcacao.FormCreate(Sender: TObject);
 begin
   FrmPrincipal.MDIChildCreated(self.Handle);
-  if ((FrmPrincipal.logPerfil = 'Administrador') OR
-  (FrmPrincipal.logPerfil = 'Supervisor') OR
-  (FrmPrincipal.logPerfil = 'Programação')) then
+  if ((FrmPrincipal.logPerfil = FrmPrincipal.PERFILADM) OR
+  (FrmPrincipal.logPerfil = FrmPrincipal.PERFILPROGRAMACAO) OR
+  (FrmPrincipal.logPerfil = FrmPrincipal.PERFILSUPERVISAO)) then
   begin
     DBNavigator1.Enabled:= true;
     DBGridEmbarcacao.ReadOnly:= false;
@@ -162,7 +90,7 @@ begin
     DBGridEmbarcacao.ReadOnly:= true;
   end;
   //Incicialização
-  FrmPrincipal.SetUpColunasLayout(DBGridEmbarcacao, ColunasLayout);
+  FrmDataModule.setFilterDBGrid(DBGridEmbarcacao);
   actProcurar.Execute;
 end;
 

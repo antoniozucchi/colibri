@@ -32,7 +32,14 @@ uses
   uAccessDBUtils in 'uAccessDBUtils.pas',
   uZucchi in '..\..\Library_Delphi\Zucchi\uZucchi.pas',
   untFrmConfigRT in 'untFrmConfigRT.pas' {FrmConfigRT},
-  uMensagens in '..\..\Library_Delphi\Mensagens\uMensagens.pas';
+  uMensagens in '..\..\Library_Delphi\Mensagens\uMensagens.pas',
+  untCondicaoEmbarcacao in 'untCondicaoEmbarcacao.pas' {FrmCondicaoEmbarcacao},
+  untFrmTabela in 'untFrmTabela.pas' {FrmTabela},
+  uProgramacaoRTUtils in 'uProgramacaoRTUtils.pas',
+  untConexaoLOCAL in 'untConexaoLOCAL.pas' {FrmConexaoLOCAL},
+  untMotivoCancelamento in 'untMotivoCancelamento.pas' {FrmMotivoCancelamento},
+  uDistribuicaoLogistica in 'uDistribuicaoLogistica.pas',
+  uSimulacaoLogistica in 'uSimulacaoLogistica.pas';
 
 {$R *.res}
 
@@ -45,6 +52,9 @@ begin
   Application.MainFormOnTaskbar := True;
   Application.CreateForm(TFrmDataModule, FrmDataModule);
   Application.CreateForm(TFrmPrincipal, FrmPrincipal);
+  Application.CreateForm(TFrmTabela, FrmTabela);
+  Application.CreateForm(TFrmConexaoLOCAL, FrmConexaoLOCAL);
+  Application.CreateForm(TFrmMotivoCancelamento, FrmMotivoCancelamento);
   //=====================================================
   FrmTelaAbertura.Hide; {Esconde o FormAbertura}
   FrmTelaAbertura.Free; {Libera Memória}

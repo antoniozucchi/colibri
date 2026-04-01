@@ -28,8 +28,12 @@ procedure ExcluirFieldDB(const NomeTabela, NomeCampoExcluir: String;
 procedure ExcluirTabelaDB(NomeTabela: String; Query: TADOQuery);
 
 procedure AlterarNomeFieldDB(
-  const CampoNomeNovo, CampoNomeOriginal, NomeTabela, Tipo: String;
-  const FDConnection: TADOConnection);
+  const CampoNomeNovo, CampoNomeOriginal, NomeTabela: String;
+  const ADOConn: TADOConnection);
+
+procedure AlterarNomeFieldDB_ADOX(
+  const CampoNomeNovo, CampoNomeOriginal, NomeTabela: String;
+  const ADOConn: TADOConnection);
 
 procedure AlterarTipoFieldDB(const CampoNome, NomeTabela, NovoTipo: String;
   const ZConnection: TADOConnection);
@@ -567,13 +571,12 @@ Query: TADOQuery);
 begin
   try
     SQLBase:= 'ALTER TABLE '+NomeTabela+' ADD COLUMN '+NovoCampo+' '+Tipo+';';
-    //SQLBase:= Format('ALTER TABLE %s  ADD COLUMN %s %s;', [NomeTabela,NovoCampo,NovoCampo]);
     Query.Close;
     Query.SQL.Clear;
     Query.SQL.Add(SQLBase);
     Query.ExecSQL;
   except
-    //Query.Free;
+
   end;
 end;
 
@@ -659,7 +662,8 @@ begin
       Q.Free;
     end;
   except
-
+    //on E: Exception do
+     // ShowMessage('Erro: ' + E.Message);
   end;
 end;
 
@@ -743,88 +747,70 @@ begin
   end;
 end;
 
+procedure AlterarNomeFieldDB_ADOX(
+  const CampoNomeNovo, CampoNomeOriginal, NomeTabela: String;
+  const ADOConn: TADOConnection);
+var
+  Cat, Tbl, Col: OleVariant;
+begin
+  if (ADOConn = nil) or (not ADOConn.Connected) then
+    raise Exception.Create('Conexão ADO não está conectada.');
+
+  Cat := CreateOleObject('ADOX.Catalog');
+
+  // Em alguns ambientes funciona melhor com ConnectionString do que ConnectionObject:
+  // Cat.ActiveConnection := ADOConn.ConnectionString;
+  Cat.ActiveConnection := ADOConn.ConnectionObject;
+  try
+  Tbl := Cat.Tables.Item(NomeTabela);
+  Col := Tbl.Columns.Item(CampoNomeOriginal);
+
+  Col.Name := CampoNomeNovo; // <- aqui renomeia
+
+  except
+    on E: Exception do
+      ShowMessage('Erro: ' + E.Message);
+  end;
+end;
 
 procedure AlterarNomeFieldDB(
-  const CampoNomeNovo, CampoNomeOriginal, NomeTabela, Tipo: String;
-  const FDConnection: TADOConnection);
+  const CampoNomeNovo, CampoNomeOriginal, NomeTabela: String;
+  const ADOConn: TADOConnection);
 var
-  CamposOriginais, CamposNovos: TStringList;
-  Q: TADOQuery;
-  NomeTabelaTemp, Campo, SQL: String;
-  i: Integer;
+  Cat: OleVariant;
 begin
-  CamposOriginais := TStringList.Create;
-  CamposNovos := TStringList.Create;
-  Q := TADOQuery.Create(nil);
+  if Trim(CampoNomeNovo) = '' then
+    raise Exception.Create('CampoNomeNovo vazio.');
+
+  if Trim(CampoNomeOriginal) = '' then
+    raise Exception.Create('CampoNomeOriginal vazio.');
+
+  if Trim(NomeTabela) = '' then
+    raise Exception.Create('NomeTabela vazio.');
+
+  if SameText(CampoNomeNovo, CampoNomeOriginal) then
+    Exit;
+
+  if (ADOConn = nil) or (not ADOConn.Connected) then
+    raise Exception.Create('Conexão ADO não está conectada.');
+
+  Cat := CreateOleObject('ADOX.Catalog');
+  Cat.ActiveConnection := ADOConn.ConnectionObject;
+
+  // Renomeia a coluna
   try
-    Q.Connection := FDConnection;
-
-    // 1. Lê estrutura da tabela
-    Q.SQL.Text := Format('SELECT * FROM [%s] WHERE 1=0;', [NomeTabela]);
-    Q.Open;
-
-    for i := 0 to Q.Fields.Count - 1 do
-    begin
-      Campo := Q.Fields[i].FieldName;
-      if SameText(Campo, CampoNomeOriginal) then
-      begin
-        CamposOriginais.Add(Campo);
-        CamposNovos.Add(CampoNomeNovo);
-      end
-      else
-      begin
-        CamposOriginais.Add(Campo);
-        CamposNovos.Add(Campo);
-      end;
-    end;
-    Q.Close;
-
-    if CamposOriginais.IndexOf(CampoNomeOriginal) = -1 then
-    begin
-      ShowMessage('Campo "' + CampoNomeOriginal + '" não encontrado.');
-      Exit;
-    end;
-
-    NomeTabelaTemp := NomeTabela + '_temp_' + FormatDateTime('hhnnsszzz', Now);
-
-    // 2. Cria a nova tabela com o novo nome de campo
-    SQL := Format('CREATE TABLE [%s] (', [NomeTabelaTemp]);
-    for i := 0 to CamposNovos.Count - 1 do
-    begin
-      if i > 0 then SQL := SQL + ', ';
-      SQL := SQL + Format('[%s] %s', [CamposNovos[i], Tipo]); // usa mesmo tipo
-    end;
-    SQL := SQL + ');';
-    FDConnection.Execute(SQL);
-
-    // 3. Copia os dados
-    SQL := Format('INSERT INTO [%s] (', [NomeTabelaTemp]);
-    for i := 0 to CamposNovos.Count - 1 do
-    begin
-      if i > 0 then SQL := SQL + ', ';
-      SQL := SQL + Format('[%s]', [CamposNovos[i]]);
-    end;
-    SQL := SQL + ') SELECT ';
-    for i := 0 to CamposOriginais.Count - 1 do
-    begin
-      if i > 0 then SQL := SQL + ', ';
-      SQL := SQL + Format('[%s]', [CamposOriginais[i]]);
-    end;
-    SQL := SQL + Format(' FROM [%s];', [NomeTabela]);
-    FDConnection.Execute(SQL);
-
-    // 4. Substitui tabelas
-    FDConnection.Execute(Format('DROP TABLE [%s];', [NomeTabela]));
-    FDConnection.Execute(Format('SELECT * INTO [%s] FROM [%s];', [NomeTabela, NomeTabelaTemp]));
-    FDConnection.Execute(Format('DROP TABLE [%s];', [NomeTabelaTemp]));
-
-    ShowMessage(Format('Campo "%s" renomeado para "%s" na tabela "%s".',
-      [CampoNomeOriginal, CampoNomeNovo, NomeTabela]));
-  finally
-    CamposOriginais.Free;
-    CamposNovos.Free;
-    Q.Free;
+    Cat.Tables(NomeTabela).Columns(CampoNomeOriginal).Name := CampoNomeNovo;
+  except
+    on E: Exception do
+      ShowMessage('Erro: ' + E.Message);
   end;
+
+  // (Opcional) refresh
+  Cat.Tables.Refresh;
+
+  // Se quiser mensagem:
+  // ShowMessage(Format('Campo "%s" renomeado para "%s" na tabela "%s".',
+  //   [CampoNomeOriginal, CampoNomeNovo, NomeTabela]));
 end;
 
 procedure ExcluirTabelaDB(NomeTabela: String; Query: TADOQuery);

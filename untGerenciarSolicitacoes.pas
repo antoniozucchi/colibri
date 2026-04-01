@@ -8,7 +8,7 @@ uses
   Data.DB, Vcl.Grids, Vcl.DBGrids, System.Actions, Vcl.ActnList,
   Vcl.PlatformDefaultStyleActnCtrls, Vcl.ActnMan, Vcl.StdCtrls, Vcl.Buttons,
   Vcl.Mask, Vcl.DBCtrls,DateUtils, Vcl.Menus, Vcl.CheckLst, ADODB, SDL_NumIO,
-  untDBGridFilter;
+  untDBGridFilter, uZucchi, uProgramacaoRTUtils;
 
 type
   TFrmGerenciarSolicitacoes = class(TForm)
@@ -50,7 +50,6 @@ type
     actZoomMenos: TAction;
     ToolButton2: TToolButton;
     ToolButton3: TToolButton;
-    actExcel: TAction;
     actAutoFit: TAction;
     actStatusTodos: TAction;
     RLDestinoOrigem: TStringGrid;
@@ -91,7 +90,6 @@ type
     actMudanca: TAction;
     btnMudanca: TBitBtn;
     actDuplicados: TAction;
-    actExcelDuplicados: TAction;
     PanelNotas: TPanel;
     Panel1: TPanel;
     ToolBar3: TToolBar;
@@ -100,7 +98,7 @@ type
     DBEdit2: TDBEdit;
     DBEdit3: TDBEdit;
     Splitter3: TSplitter;
-    ToolButton10: TToolButton;
+    btnExcelExecutante: TToolButton;
     Panel18: TPanel;
     DBGridExecutantes: TFilterDBGrid;
     PanelContadorSolicitacao: TPanel;
@@ -139,6 +137,11 @@ type
     DBGridServicos: TFilterDBGrid;
     ColunasLayoutServico: TStringGrid;
     btnFiltroClearExecutantes: TToolButton;
+    btnClearFiltroContador: TToolButton;
+    btnExcelContador: TToolButton;
+    Action1: TAction;
+    ToolButton6: TToolButton;
+    actExcelProgramacao: TAction;
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
@@ -167,7 +170,6 @@ type
     procedure actAbrirServicoExecute(Sender: TObject);
     procedure actZoomMaisExecute(Sender: TObject);
     procedure actZoomMenosExecute(Sender: TObject);
-    procedure actExcelExecute(Sender: TObject);
     procedure actAutoFitExecute(Sender: TObject);
     procedure RLDestinoOrigemSelectCell(Sender: TObject; ACol, ARow: Integer;
       var CanSelect: Boolean);
@@ -213,9 +215,10 @@ type
       DataCol: Integer; Column: TColumn; State: TGridDrawState);
     procedure actConfigurarContadorExecute(Sender: TObject);
     procedure DBGridContadorCellClick(Column: TColumn);
+    procedure actExcelProgramacaoExecute(Sender: TObject);
     type
       TPlataforma = record
-        Salvatagem,GD,BCI,Acesso: String;
+        Salvatagem,GD,BCI,Surfer,SOV,Aqua: String;
       end;
     type
       TMemoriaExecutante = record
@@ -229,7 +232,7 @@ type
     MatrizPlataforma,MatrizConsulta: array of array of String;
     DestinoMudanca: String;
     procedure WMMDIACTIVATE(var msg: TWMMDIACTIVATE);message WM_MDIACTIVATE;
-    procedure GravarStatus(StatusProgramacao,StatusExecucao: String);
+    procedure GravarStatus(StatusProgramacao: String);
     function TotalDestino(Destino,StatusProgramacao: String): Integer;
     function TotalOrigem(Origem,StatusProgramacao: String): Integer;
     function TotalPOB(Destino,StatusProgramacao: String): Integer;
@@ -247,7 +250,8 @@ var
   FrmGerenciarSolicitacoes: TFrmGerenciarSolicitacoes;
 
 implementation
-  uses untPrincipal,untDataModule;
+  uses untPrincipal,untDataModule, untFrmTabela, untConsultaExecutantesProgramados,
+  untMotivoCancelamento;
 {$R *.dfm}
 
 procedure TFrmGerenciarSolicitacoes.actAbrirServicoExecute(Sender: TObject);
@@ -275,7 +279,7 @@ end;
 procedure TFrmGerenciarSolicitacoes.actAprovarSelecionadoExecute(
   Sender: TObject);
 begin
-  GravarStatus('Aprovado','Executado');
+  GravarStatus('Aprovado');
   actContadorSolicitacao.Execute;
 end;
 
@@ -283,8 +287,8 @@ procedure TFrmGerenciarSolicitacoes.actAutoFitExecute(Sender: TObject);
 begin
   FrmPrincipal.AutoSizeDBGrid(DBGridExecutantes);
   FrmPrincipal.AutoSizeDBGrid(DBGridServicos);
-  FrmPrincipal.AutoFitGrade(RLDestinoOrigem);
-  FrmPrincipal.AutoFitStatusBar(StatusBarExecutantes);
+  AutoFitGrade(RLDestinoOrigem);
+  AutoFitStatusBar(StatusBarExecutantes);
 end;
 
 procedure TFrmGerenciarSolicitacoes.actOcultarExecute(Sender: TObject);
@@ -298,10 +302,12 @@ end;
 procedure TFrmGerenciarSolicitacoes.actCancelarSelecionadoExecute(
   Sender: TObject);
 begin
-  if not FrmDataModule.ADOQueryGerenciarExecutante.IsEmpty then
-  begin
-    FrmPrincipal.PainelCancelamentoMudanca(0,'Motivo de Cancelamento e Palavras Chave');
-  end;
+  if not Assigned(FrmMotivoCancelamento) then
+    FrmMotivoCancelamento:= TFrmMotivoCancelamento.Create(Application)
+  else
+    FrmMotivoCancelamento.Show;
+
+  FrmMotivoCancelamento.Iniciar(0);
 end;
 
 procedure TFrmGerenciarSolicitacoes.actCarregarDestinoExecute(Sender: TObject);
@@ -354,13 +360,7 @@ begin
       FieldByName('RequisitantePT').AsBoolean:= FrmDataModule.DataSourceConsultaProgramacaoExecutante_ID.DataSet.
       FieldByName('RequisitantePT').AsBoolean;
       FrmDataModule.DataSourceInserirExecutante.DataSet.
-      FieldByName('RT').AsString:= 'SEM RT';
-      FrmDataModule.DataSourceInserirExecutante.DataSet.
-      FieldByName('TipoEmbarque').AsString:= 'SEM RT';
-      FrmDataModule.DataSourceInserirExecutante.DataSet.
       FieldByName('StatusProgramacao').AsString:= 'Aprovado';
-      FrmDataModule.DataSourceInserirExecutante.DataSet.
-      FieldByName('StatusExecucao').AsString:= 'Executado';
       FrmDataModule.DataSourceInserirExecutante.DataSet.
       FieldByName('AvaliadoPorProgramacao').AsString:= FrmPrincipal.logChave;
       FrmDataModule.DataSourceInserirExecutante.DataSet.
@@ -464,10 +464,10 @@ begin
 
   StatusBarAlterarDestinos.Panels[0].Text:= 'N° registros: '+
   intToStr(RLAlterarDestinos.RowCount-1);
-  FrmPrincipal.AutoFitGrade(RLAlterarDestinos);
+  AutoFitGrade(RLAlterarDestinos);
   FrmPrincipal.ProgressBarAtualizar;
   RLAlterarDestinos.ColWidths[1] := 90;
-  FrmPrincipal.AutoFitStatusBar(StatusBarAlterarDestinos);
+  AutoFitStatusBar(StatusBarAlterarDestinos);
   try
     RLAlterarDestinos.FixedRows:= 1;
   except
@@ -634,7 +634,7 @@ begin
     RLContadorSolicitacao.ColCount:= RLContadorSolicitacao.ColCount+1;
     FrmDataModule.ADOQueryContadorSolicitacao.Next;
   end;
-  FrmPrincipal.AutoFitGrade(RLContadorSolicitacao);
+  AutoFitGrade(RLContadorSolicitacao);
   FrmDataModule.ADOQueryContadorSolicitacao.First;
   FrmDataModule.DataSourceContadorSolicitacao.Enabled:= true;
 end;
@@ -682,13 +682,18 @@ end;
 
 procedure TFrmGerenciarSolicitacoes.actTransbordosExecute(Sender: TObject);
 begin
-  FrmPrincipal.PainelDuplicados(DateToStr(DateProgramacao.Date));
+  if not Assigned(FrmTabela) then
+    Application.CreateForm(TFrmTabela, FrmTabela);
+  FrmTabela.Show;   // ou ShowModal conforme o caso
+
+  TProgramacaoRTUtils.PainelTransbordos(DateToStr(DateProgramacao.Date));
 end;
 
 procedure TFrmGerenciarSolicitacoes.actDestinoOrigemExecute(Sender: TObject);
   var
     DataProcura,SQLBase: String;
 begin
+  FrmPrincipal.actMatrizForaOperacao.Execute;
   if btnDestino.Down then
   begin
     PanelTituloDestinoOrigem.Caption:= 'Destinos Programados';
@@ -721,17 +726,18 @@ begin
 
   FrmDataModule.ADOQueryInserirExecutante1.Active:= false;
   FrmDataModule.ADOQueryInserirExecutante1.Active:= true;
-
 end;
 
 procedure TFrmGerenciarSolicitacoes.actDuplicadosExecute(Sender: TObject);
 begin
-  FrmPrincipal.PainelDuplicados(DateToStr(DateProgramacao.Date));
+  TProgramacaoRTUtils.PainelTransbordos(DateToStr(DateProgramacao.Date));
 end;
 
-procedure TFrmGerenciarSolicitacoes.actExcelExecute(Sender: TObject);
+procedure TFrmGerenciarSolicitacoes.actExcelProgramacaoExecute(Sender: TObject);
 begin
-  FrmPrincipal.GerarExcel(DBGridExecutantes,'Executantes Programados');
+  ExcelStringGrid(RLDestinoOrigem,'Programação',
+  'Data: '+DateToStr(DateProgramacao.DateTime),'','',true,
+  FrmPrincipal.ProgressBarPrincipal,FrmPrincipal.MemoPrincipal);
 end;
 
 procedure TFrmGerenciarSolicitacoes.actexcluirExecutanteExecute(
@@ -795,7 +801,7 @@ begin
   'HAVING (tblProgramacaoDiaria.DataProgramacao LIKE '+QuotedStr(DataProcura)+');');
   FrmDataModule.ADOQueryGerenciarSolicitacoes.Open;
   //=============================================================
-  RLDestinoOrigem.ColCount:= 12;
+  RLDestinoOrigem.ColCount:= 11;
   RLDestinoOrigem.FixedRows:= 0;
   RLDestinoOrigem.RowCount:= 1;
   RLDestinoOrigem.Cells[0,0]:= 'Destino';
@@ -806,14 +812,16 @@ begin
   RLDestinoOrigem.Cells[5,0]:= 'OP';
   RLDestinoOrigem.Cells[6,0]:= 'GD ';
   RLDestinoOrigem.Cells[7,0]:= 'BCI';
-  RLDestinoOrigem.Cells[8,0]:= 'Ac.';
-  RLDestinoOrigem.Cells[9,0]:= 'Saldo';
-  RLDestinoOrigem.Cells[10,0]:= 'Salv.';
-  RLDestinoOrigem.Cells[11,0]:= 'KIT';
+  {RLDestinoOrigem.Cells[8,0]:= 'Surfer';
+  RLDestinoOrigem.Cells[9,0]:= 'SOV';
+  RLDestinoOrigem.Cells[10,0]:= 'Áqua';}
+  RLDestinoOrigem.Cells[8,0]:= 'Saldo';
+  RLDestinoOrigem.Cells[9,0]:= 'Salv.';
+  RLDestinoOrigem.Cells[10,0]:= 'KIT';
   //Configurar matriz de dados das plataformas
   NumRegistros:= FrmDataModule.ADOQueryGerenciarSolicitacoes.RecordCount;
   MatrizPlataforma:= nil;
-  SetLength(MatrizPlataforma, 5);
+  SetLength(MatrizPlataforma, 7);
   for i := 0 to High(MatrizPlataforma) do
     SetLength(MatrizPlataforma[i], NumRegistros);
   //==============================================
@@ -833,16 +841,20 @@ begin
     RLDestinoOrigem.Cells[5,NumLinhas]:='';
     RLDestinoOrigem.Cells[6,NumLinhas]:='';
     RLDestinoOrigem.Cells[7,NumLinhas]:='';
+    {RLDestinoOrigem.Cells[8,NumLinhas]:='';
+    RLDestinoOrigem.Cells[9,NumLinhas]:='';
+    RLDestinoOrigem.Cells[10,NumLinhas]:='';}
     RLDestinoOrigem.Cells[8,NumLinhas]:='';
     RLDestinoOrigem.Cells[9,NumLinhas]:='';
     RLDestinoOrigem.Cells[10,NumLinhas]:='';
-    RLDestinoOrigem.Cells[11,NumLinhas]:='';
     //============================================
     MatrizPlataforma[0,NumLinhas-1]:= Destino;
     MatrizPlataforma[1,NumLinhas-1]:= SalvatagemPlataforma(Destino);
     MatrizPlataforma[2,NumLinhas-1]:= FrmPrincipal.ForaOperacao(Destino,1);//GD
     MatrizPlataforma[3,NumLinhas-1]:= FrmPrincipal.ForaOperacao(Destino,4);//BCI
-    MatrizPlataforma[4,NumLinhas-1]:= FrmPrincipal.ForaOperacao(Destino,8);//Acesso
+    MatrizPlataforma[4,NumLinhas-1]:= FrmPrincipal.ForaOperacao(Destino,11);//Surfer
+    MatrizPlataforma[5,NumLinhas-1]:= FrmPrincipal.ForaOperacao(Destino,12);//SOV
+    MatrizPlataforma[6,NumLinhas-1]:= FrmPrincipal.ForaOperacao(Destino,13);//Áqua
     //============================================
     FrmDataModule.ADOQueryGerenciarSolicitacoes.Next;
   end;
@@ -853,7 +865,7 @@ begin
     RLDestinoOrigem.FixedRows:= 1;
     RLDestinoOrigem.Rows[1].Clear;
   end;
-  FrmPrincipal.AutoFitGrade(RLDestinoOrigem);
+  AutoFitGrade(RLDestinoOrigem);
   RLDestinoOrigem.Row:= 1;
   Destino:= (RLDestinoOrigem.Cells[0,1]);
   FrmPrincipal.buscaFiledGrid1('txtDestino',Destino,'Contem',ColunasLayoutExecutantes,4,false);
@@ -869,10 +881,12 @@ end;
 
 procedure TFrmGerenciarSolicitacoes.actMudancaExecute(Sender: TObject);
 begin
-  if not FrmDataModule.ADOQueryGerenciarExecutante.IsEmpty then
-  begin
-    FrmPrincipal.PainelCancelamentoMudanca(2,'Motivo da Mudança e Palavras Chave');
-  end;
+  if not Assigned(FrmMotivoCancelamento) then
+    FrmMotivoCancelamento:= TFrmMotivoCancelamento.Create(Application)
+  else
+    FrmMotivoCancelamento.Show;
+
+  FrmMotivoCancelamento.Iniciar(2);
 end;
 
 procedure TFrmGerenciarSolicitacoes.actOrigemExecute(Sender: TObject);
@@ -926,7 +940,10 @@ begin
     //===================================
     RLDestinoOrigem.Cells[6,NumLinhas]:='';
     RLDestinoOrigem.Cells[7,NumLinhas]:='';
-    RLDestinoOrigem.Cells[8,NumLinhas]:='';
+    //===================================
+    {RLDestinoOrigem.Cells[8,NumLinhas]:='';
+    RLDestinoOrigem.Cells[9,NumLinhas]:='';
+    RLDestinoOrigem.Cells[10,NumLinhas]:='';}
     //===================================
     MatrizPlataforma[0,i]:= Origem;
     MatrizPlataforma[1,i]:= SalvatagemPlataforma(Origem);
@@ -941,7 +958,7 @@ begin
     RLDestinoOrigem.FixedRows:= 1;
     RLDestinoOrigem.Rows[1].Clear;
   end;
-  FrmPrincipal.AutoFitGrade(RLDestinoOrigem);
+  AutoFitGrade(RLDestinoOrigem);
   RLDestinoOrigem.Row:= 1;
   Origem:= (RLDestinoOrigem.Cells[0,1]);
   FrmPrincipal.buscaFiledGrid1('Origem',Origem,'Contem',ColunasLayoutExecutantes,4,false);
@@ -1060,11 +1077,11 @@ begin
   //RLDestinoOrigem
   RLDestinoOrigem.Font.Size:= RLDestinoOrigem.Font.Size+1;
   RLDestinoOrigem.DefaultRowHeight:= RLDestinoOrigem.DefaultRowHeight+1;
-  FrmPrincipal.AutoFitGrade(RLDestinoOrigem);
+  AutoFitGrade(RLDestinoOrigem);
   //Contador Solicitações
   RLContadorSolicitacao.Font.Size:= RLContadorSolicitacao.Font.Size+1;
   RLContadorSolicitacao.DefaultRowHeight:= RLContadorSolicitacao.DefaultRowHeight+1;
-  FrmPrincipal.AutoFitGrade(RLContadorSolicitacao);
+  AutoFitGrade(RLContadorSolicitacao);
   //StatusBarExecutantes
   StatusBarExecutantes.Height:= StatusBarExecutantes.Height+2;
   StatusBarExecutantes.Font.Size:= StatusBarExecutantes.Font.Size+1;
@@ -1086,11 +1103,11 @@ begin
     //RLDestinoOrigem
     RLDestinoOrigem.Font.Size:= RLDestinoOrigem.Font.Size-1;
     RLDestinoOrigem.DefaultRowHeight:= RLDestinoOrigem.DefaultRowHeight-1;
-    FrmPrincipal.AutoFitGrade(RLDestinoOrigem);
+    AutoFitGrade(RLDestinoOrigem);
     //Contador Solicitações
     RLContadorSolicitacao.Font.Size:= RLContadorSolicitacao.Font.Size-1;
     RLContadorSolicitacao.DefaultRowHeight:= RLContadorSolicitacao.DefaultRowHeight-1;
-    FrmPrincipal.AutoFitGrade(RLContadorSolicitacao);
+    AutoFitGrade(RLContadorSolicitacao);
     //StatusBarExecutantes
     StatusBarExecutantes.Font.Size:= StatusBarExecutantes.Font.Size-1;
     StatusBarExecutantes.Height:= StatusBarExecutantes.Height-2;
@@ -1251,9 +1268,9 @@ end;
 
 procedure TFrmGerenciarSolicitacoes.DBGridExecutantesCellClick(Column: TColumn);
 begin
-  if ((FrmPrincipal.logPerfil = 'Administrador')OR
-  (FrmPrincipal.logPerfil = 'Programação')OR
-  (FrmPrincipal.logPerfil = 'Supervisor')) then
+  if ((FrmPrincipal.logPerfil = FrmPrincipal.PERFILADM) OR
+  (FrmPrincipal.logPerfil = FrmPrincipal.PERFILPROGRAMACAO) OR
+  (FrmPrincipal.logPerfil = FrmPrincipal.PERFILSUPERVISAO)) then
   begin
     try
       if (Self.DBGridExecutantes.SelectedField.DataType = ftBoolean)AND
@@ -1433,9 +1450,9 @@ begin
   FrmPrincipal.actMatrizForaOperacao.Execute;
   //=============================================
   FrmPrincipal.ProgressBarIncializa(7,'Inicializando....');
-  if ((FrmPrincipal.logPerfil = 'Administrador')OR
-  (FrmPrincipal.logPerfil = 'Programação')OR
-  (FrmPrincipal.logPerfil = 'Supervisor')) then
+  if ((FrmPrincipal.logPerfil = FrmPrincipal.PERFILADM) OR
+  (FrmPrincipal.logPerfil = FrmPrincipal.PERFILPROGRAMACAO) OR
+  (FrmPrincipal.logPerfil = FrmPrincipal.PERFILSUPERVISAO)) then
   begin
     btnAprovar.Enabled:= true;
     btnCancelar.Enabled:= true;
@@ -1484,7 +1501,7 @@ begin
   FrmPrincipal.MDIChildDestroyed(self.Handle);
 end;
 
-procedure TFrmGerenciarSolicitacoes.GravarStatus(StatusProgramacao,StatusExecucao: String);
+procedure TFrmGerenciarSolicitacoes.GravarStatus(StatusProgramacao: String);
   var
     idProgramacaoExecutante,CodigoProgramacaoDiaria,NumRegistros: Integer;
 begin
@@ -1503,7 +1520,7 @@ begin
         idProgramacaoExecutante:= FrmDataModule.DataSourceGerenciarExecutante.
         DataSet.FieldByName('idProgramacaoExecutante').AsInteger;
         FrmPrincipal.AvaliarProgramacaoExecutante(idProgramacaoExecutante,0,
-        StatusProgramacao,StatusExecucao,'');
+        StatusProgramacao,'');
       end;
       FrmDataModule.ADOQueryGerenciarExecutante.Next;
       FrmPrincipal.ProgressBarIncremento(1);
@@ -1610,7 +1627,7 @@ var
   KIT_PS: Integer;
 begin
   //GD, BCI ou Balsa
-  if ((ACol=6)OR(ACol=7)OR(ACol=8)) then
+  if ((ACol=6)OR(ACol=7)OR(ACol=8)OR(ACol=9)OR(ACol=10)) then
   begin
     R := Rect;
     R.Left := R.Left - 4;
@@ -1706,7 +1723,7 @@ begin
         -1, R, DT_Center);
       end
       //KIT_PS
-      else if (ACol=11) then
+      else if (ACol=13) then
       begin
         try
           KIT_PS:= StrToInt(RLDestinoOrigem.Cells[ACol,ARow]);
@@ -1774,8 +1791,6 @@ begin
         FrmPrincipal.buscaFiledGrid1('CodigoSAP','','',ColunasLayoutExecutantes,4,false);
         actProcurar.Execute;
       end;
-      if (FrmPrincipal.PanelAjuda1.Visible) then
-        btnFiltroClearExecutantes.Click;;
     except
 
     end;
@@ -1818,12 +1833,14 @@ begin
     DadosPlataforma:= InfoPlataforma(DestinoOrigem);
     RLDestinoOrigem.Cells[6,RLDestinoOrigem.Row]:= DadosPlataforma.GD;
     RLDestinoOrigem.Cells[7,RLDestinoOrigem.Row]:= DadosPlataforma.BCI;
-    RLDestinoOrigem.Cells[8,RLDestinoOrigem.Row]:= DadosPlataforma.Acesso;
-    RLDestinoOrigem.Cells[9,RLDestinoOrigem.Row]:= IntToStr(Saldo);
-    RLDestinoOrigem.Cells[10,RLDestinoOrigem.Row]:= DadosPlataforma.Salvatagem;
+    {RLDestinoOrigem.Cells[8,RLDestinoOrigem.Row]:= DadosPlataforma.Surfer;
+    RLDestinoOrigem.Cells[9,RLDestinoOrigem.Row]:= DadosPlataforma.SOV;
+    RLDestinoOrigem.Cells[10,RLDestinoOrigem.Row]:= DadosPlataforma.Aqua;}
+    RLDestinoOrigem.Cells[8,RLDestinoOrigem.Row]:= IntToStr(Saldo);
+    RLDestinoOrigem.Cells[9,RLDestinoOrigem.Row]:= DadosPlataforma.Salvatagem;
     //KIT_PS
     NumContar:= Contar_KIT_PS(DestinoOrigem);
-    RLDestinoOrigem.Cells[11,RLDestinoOrigem.Row]:= IntToStr(NumContar);
+    RLDestinoOrigem.Cells[10,RLDestinoOrigem.Row]:= IntToStr(NumContar);
   end
   else if btnOrigem.Down then
   begin
@@ -1913,7 +1930,9 @@ begin
       Result.Salvatagem:= (MatrizPlataforma[1,i]);
       Result.GD:= (MatrizPlataforma[2,i]);
       Result.BCI:= (MatrizPlataforma[3,i]);
-      Result.Acesso:= (MatrizPlataforma[4,i]);
+      Result.Surfer:= (MatrizPlataforma[4,i]);
+      Result.SOV:= (MatrizPlataforma[5,i]);
+      Result.Aqua:= (MatrizPlataforma[6,i]);
       break
     end;
 end;

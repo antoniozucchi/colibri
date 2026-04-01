@@ -14,10 +14,17 @@
 *.~*
 
 __history/
+__recovery/
 Win32/
 Win64/
 Debug/
 Release/
 
-# Office temporários
+# IDE / tooling local
+*.tvsconfig
+
+# Dados locais
+Banco de dados/
+
+# Office temporarios
 ~$*.*

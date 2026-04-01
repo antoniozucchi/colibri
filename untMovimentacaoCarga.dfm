@@ -2,8 +2,8 @@ object FrmMovimentacaoCarga: TFrmMovimentacaoCarga
   Left = 0
   Top = 0
   Caption = 'Movimenta'#231#227'o de Carga'
-  ClientHeight = 437
-  ClientWidth = 810
+  ClientHeight = 421
+  ClientWidth = 806
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -20,7 +20,7 @@ object FrmMovimentacaoCarga: TFrmMovimentacaoCarga
   object PanelTitulo: TPanel
     Left = 0
     Top = 0
-    Width = 810
+    Width = 806
     Height = 25
     Align = alTop
     Caption = 'Movimenta'#231#227'o de Carga'
@@ -33,16 +33,19 @@ object FrmMovimentacaoCarga: TFrmMovimentacaoCarga
     ParentBackground = False
     ParentFont = False
     TabOrder = 0
+    ExplicitWidth = 804
   end
   object ToolBar1: TToolBar
     Left = 0
     Top = 50
-    Width = 810
+    Width = 806
     Height = 29
     Caption = 'ToolBar1'
     DrawingStyle = dsGradient
     EdgeBorders = [ebLeft, ebTop, ebRight, ebBottom]
+    Images = FrmPrincipal.ImageList1
     TabOrder = 1
+    ExplicitWidth = 804
     object DBNavigator1: TDBNavigator
       Left = 0
       Top = 0
@@ -67,48 +70,38 @@ object FrmMovimentacaoCarga: TFrmMovimentacaoCarga
       ShowHint = True
       TabOrder = 0
     end
-    object BitBtn4: TBitBtn
+    object btnClearFiltro: TToolButton
       Left = 138
       Top = 0
-      Width = 75
-      Height = 22
+      Hint = 'Limpar filtro'
+      Caption = 'btnClearFiltro'
+      ImageIndex = 225
+      ParentShowHint = False
+      ShowHint = True
+    end
+    object brnLayout: TToolButton
+      Left = 161
+      Top = 0
+      Hint = 'Editar layout de colunas'
+      Caption = 'brnLayout'
+      ImageIndex = 196
+      ParentShowHint = False
+      ShowHint = True
+    end
+    object btnExcel: TToolButton
+      Left = 184
+      Top = 0
+      Hint = 'Exportar dados para o Excel'
       Action = actExcel
-      Align = alLeft
-      Caption = 'Exportar'
       ParentShowHint = False
       ShowHint = True
-      TabOrder = 1
-    end
-    object BitBtn2: TBitBtn
-      Left = 213
-      Top = 0
-      Width = 64
-      Height = 22
-      Action = actLimparFiltros
-      Align = alLeft
-      Caption = 'Limpar'
-      ParentShowHint = False
-      ShowHint = True
-      TabOrder = 3
-    end
-    object BitBtn1: TBitBtn
-      Left = 277
-      Top = 0
-      Width = 64
-      Height = 22
-      Action = actFiltrosTabela
-      Align = alLeft
-      Caption = 'Filtros'
-      ParentShowHint = False
-      ShowHint = True
-      TabOrder = 2
     end
   end
-  object DBGridMovimentacaoCarga: TDBGrid
+  object DBGridMovimentacaoCarga: TFilterDBGrid
     Left = 0
     Top = 79
-    Width = 810
-    Height = 339
+    Width = 806
+    Height = 323
     Align = alClient
     DataSource = FrmDataModule.DataSourceMovimentacaoCarga
     TabOrder = 2
@@ -119,7 +112,12 @@ object FrmMovimentacaoCarga: TFrmMovimentacaoCarga
     TitleFont.Style = []
     OnDrawColumnCell = DBGridMovimentacaoCargaDrawColumnCell
     OnKeyPress = DBGridMovimentacaoCargaKeyPress
-    OnTitleClick = DBGridMovimentacaoCargaTitleClick
+    ClearFilterButton = btnClearFiltro
+    SearchAction = actProcurar
+    LayoutGrid = ColunasLayout
+    EnableZebra = False
+    LayoutButton = brnLayout
+    ExcelButton = btnExcel
     Columns = <
       item
         Expanded = False
@@ -226,11 +224,19 @@ object FrmMovimentacaoCarga: TFrmMovimentacaoCarga
     Top = 160
     Width = 113
     Height = 94
-    ColCount = 2
+    ColCount = 7
     DefaultRowHeight = 21
+    RowCount = 12
     TabOrder = 3
     Visible = False
     RowHeights = (
+      21
+      21
+      21
+      21
+      21
+      21
+      21
       21
       21
       21
@@ -239,8 +245,8 @@ object FrmMovimentacaoCarga: TFrmMovimentacaoCarga
   end
   object StatusBar1: TStatusBar
     Left = 0
-    Top = 418
-    Width = 810
+    Top = 402
+    Width = 806
     Height = 19
     Panels = <
       item
@@ -258,14 +264,17 @@ object FrmMovimentacaoCarga: TFrmMovimentacaoCarga
       item
         Width = 50
       end>
+    ExplicitTop = 394
+    ExplicitWidth = 804
   end
   object Panel3: TPanel
     Left = 0
     Top = 25
-    Width = 810
+    Width = 806
     Height = 25
     Align = alTop
     TabOrder = 5
+    ExplicitWidth = 804
     object dataInicio: TDateTimePicker
       Left = 71
       Top = 1
@@ -347,53 +356,15 @@ object FrmMovimentacaoCarga: TFrmMovimentacaoCarga
     Top = 152
     StyleName = 'Platform Default'
     object actProcurar: TAction
-      Caption = 'actProcurar'
+      Caption = 'Procurar'
+      Hint = 'Buscar registros no banco de dados'
+      ImageIndex = 27
       OnExecute = actProcurarExecute
     end
     object actExcel: TAction
       Caption = 'Exportar'
       Hint = 'Exportar para o Excel'
       ImageIndex = 54
-      OnExecute = actExcelExecute
-    end
-    object actFiltroInserir: TAction
-      Category = 'Tabela'
-      Caption = 'actFiltroInserir'
-      OnExecute = actFiltroInserirExecute
-    end
-    object actGridASC: TAction
-      Category = 'Tabela'
-      Caption = 'actGridASC'
-      OnExecute = actGridASCExecute
-    end
-    object actGridDESC: TAction
-      Category = 'Tabela'
-      Caption = 'actGridDESC'
-      OnExecute = actGridDESCExecute
-    end
-    object actSubstituirPor: TAction
-      Category = 'Tabela'
-      Caption = 'actSubstituirPor'
-      OnExecute = actSubstituirPorExecute
-    end
-    object actLimparFiltros: TAction
-      Category = 'Tabela'
-      Caption = 'Limpar'
-      Hint = 'Limpar Filtros'
-      ImageIndex = 469
-      OnExecute = actLimparFiltrosExecute
-    end
-    object actFiltrosTabela: TAction
-      Category = 'Tabela'
-      Caption = 'Filtros'
-      Hint = 'Visualizar tabela de filtros'
-      ImageIndex = 470
-      OnExecute = actFiltrosTabelaExecute
-    end
-    object actProcuraFiltrosTabela: TAction
-      Category = 'Tabela'
-      Caption = 'actProcuraFiltrosTabela'
-      OnExecute = actProcuraFiltrosTabelaExecute
     end
   end
 end

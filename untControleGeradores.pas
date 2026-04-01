@@ -7,33 +7,25 @@ uses
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Data.DB, Vcl.Grids, Vcl.DBGrids,
   Vcl.ExtCtrls, Vcl.DBCtrls, Vcl.ToolWin, Vcl.ComCtrls, Vcl.StdCtrls, Vcl.Mask,
   System.Actions, Vcl.ActnList, Vcl.PlatformDefaultStyleActnCtrls, Vcl.ActnMan,
-  Vcl.Buttons;
+  Vcl.Buttons, untDBGridFilter;
 
 type
   TFrmControleGeradores = class(TForm)
     ToolBar1: TToolBar;
     DBNavigatorGerador: TDBNavigator;
     PanelTitulo: TPanel;
-    DBGridGerador: TDBGrid;
+    DBGridGerador: TFilterDBGrid;
     ActionManager1: TActionManager;
     actProcurar: TAction;
     StatusBar1: TStatusBar;
-    BitBtn4: TBitBtn;
-    actExcel: TAction;
     ColunasLayout: TStringGrid;
-    actFiltroInserir: TAction;
-    actGridASC: TAction;
-    actGridDESC: TAction;
-    actSubstituirPor: TAction;
-    actLimparFiltros: TAction;
-    actFiltrosTabela: TAction;
-    actProcuraFiltrosTabela: TAction;
-    BitBtn1: TBitBtn;
-    BitBtn2: TBitBtn;
     Splitter1: TSplitter;
     Panel2: TPanel;
     PanelTituloPltaformas: TPanel;
     DBMemo1: TDBMemo;
+    btnClearFiltro: TToolButton;
+    btnLayput: TToolButton;
+    btnExcel: TToolButton;
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
@@ -41,15 +33,6 @@ type
       DataCol: Integer; Column: TColumn; State: TGridDrawState);
     procedure DBGridGeradorKeyPress(Sender: TObject; var Key: Char);
     procedure actProcurarExecute(Sender: TObject);
-    procedure actExcelExecute(Sender: TObject);
-    procedure actFiltroInserirExecute(Sender: TObject);
-    procedure actGridASCExecute(Sender: TObject);
-    procedure actGridDESCExecute(Sender: TObject);
-    procedure actSubstituirPorExecute(Sender: TObject);
-    procedure actLimparFiltrosExecute(Sender: TObject);
-    procedure actFiltrosTabelaExecute(Sender: TObject);
-    procedure actProcuraFiltrosTabelaExecute(Sender: TObject);
-    procedure DBGridGeradorTitleClick(Column: TColumn);
   private
     { Private declarations }
     procedure WMMDIACTIVATE(var msg: TWMMDIACTIVATE);message WM_MDIACTIVATE;
@@ -64,49 +47,6 @@ implementation
   uses untDataModule,untPrincipal;
 {$R *.dfm}
 
-procedure TFrmControleGeradores.actExcelExecute(Sender: TObject);
-begin
-  FrmPrincipal.GerarExcel(DBGridGerador,'Geradores');
-end;
-
-procedure TFrmControleGeradores.actFiltroInserirExecute(Sender: TObject);
-begin
-  FrmPrincipal.inserirProcura(DBGridGerador,ColunasLayout);
-  actProcurar.Execute;
-  if (FrmPrincipal.PanelFiltrosTabela.Visible)AND(FrmPrincipal.PanelAjuda1.Visible) then
-    actFiltrosTabela.Execute;
-end;
-
-procedure TFrmControleGeradores.actFiltrosTabelaExecute(Sender: TObject);
-begin
-  FrmPrincipal.btnProcurarFiltrosTabela.Action:= actProcuraFiltrosTabela;
-  FrmPrincipal.FiltrosTabela(DBGridGerador,ColunasLayout);
-end;
-
-procedure TFrmControleGeradores.actGridASCExecute(Sender: TObject);
-begin
-  FrmPrincipal.ClassificaDBGrid(DBGridGerador,FrmDataModule.ADOQueryGeradores,0);
-end;
-
-procedure TFrmControleGeradores.actGridDESCExecute(Sender: TObject);
-begin
-  FrmPrincipal.ClassificaDBGrid(DBGridGerador,FrmDataModule.ADOQueryGeradores,1);
-end;
-
-procedure TFrmControleGeradores.actLimparFiltrosExecute(Sender: TObject);
-begin
-  FrmPrincipal.LimparColunasFiltro(DBGridGerador,ColunasLayout);
-  actProcurar.Execute;
-  if (FrmPrincipal.PanelFiltrosTabela.Visible)AND(FrmPrincipal.PanelAjuda1.Visible) then
-    actFiltrosTabela.Execute;
-end;
-
-procedure TFrmControleGeradores.actProcuraFiltrosTabelaExecute(Sender: TObject);
-begin
-  frmPrincipal.CarregaFiltrosProcura(ColunasLayout);
-  actProcurar.Execute;
-end;
-
 procedure TFrmControleGeradores.actProcurarExecute(Sender: TObject);
   var
     SQLString,SQLBase: String;
@@ -115,12 +55,6 @@ begin
   SQLBase:= 'SELECT tblGerador.* FROM tblGerador '+
   SQLString+' ORDER BY Plataforma;';
   FrmPrincipal.ProcuraQuery(SQLBase,FrmDataModule.ADOQueryGeradores,StatusBar1);
-end;
-
-procedure TFrmControleGeradores.actSubstituirPorExecute(Sender: TObject);
-begin
-  FrmPrincipal.SubstituirPor(DBGridGerador,FrmDataModule.ADOQueryGeradores,
-  FrmDataModule.DataSourceGeradores);
 end;
 
 procedure TFrmControleGeradores.DBGridGeradorDrawColumnCell(Sender: TObject;
@@ -158,15 +92,6 @@ begin
   end;
 end;
 
-procedure TFrmControleGeradores.DBGridGeradorTitleClick(Column: TColumn);
-begin
-  FrmPrincipal.configurarFiltro(1,Column.FieldName,IntToStr(Column.Index),
-  Column.ReadOnly,actFiltroInserir,actGridASC,actGridDESC,actSubstituirPor);
-  //======================================================
-  FrmPrincipal.titleGrid(ColunasLayout,'Consulta',
-  FrmDataModule.ADOQueryGeradores.SQL.Text);
-end;
-
 procedure TFrmControleGeradores.FormClose(Sender: TObject;
   var Action: TCloseAction);
 begin
@@ -178,9 +103,9 @@ procedure TFrmControleGeradores.FormCreate(Sender: TObject);
 begin
   FrmPrincipal.MDIChildCreated(self.Handle);
 
-  if (FrmPrincipal.logPerfil = 'Administrador')OR
-  (FrmPrincipal.logPerfil = 'Programação')OR
-  (FrmPrincipal.logPerfil = 'Supervisor') then
+  if (FrmPrincipal.logPerfil = FrmPrincipal.PERFILADM)OR
+  (FrmPrincipal.logPerfil = FrmPrincipal.PERFILPROGRAMACAO)OR
+  (FrmPrincipal.logPerfil = FrmPrincipal.PERFILSUPERVISAO) then
   begin
     DBNavigatorGerador.Enabled:= true;
     DBGridGerador.ReadOnly:= false;
@@ -191,8 +116,8 @@ begin
     DBGridGerador.ReadOnly:= true;
   end;
   //Incicialização
-  FrmPrincipal.SetUpColunasLayout(DBGridGerador, ColunasLayout);
-  FrmPrincipal.SetupGridPickListSQL(FrmDataModule.ADOConnectionConsulta,'Plataforma',
+  FrmDataModule.setFilterDBGrid(DBGridGerador);
+  FrmPrincipal.SetupGridFilterPickListSQL(FrmDataModule.ADOConnectionConsulta,'Plataforma',
   'SELECT Plataforma FROM tblPlataforma ORDER BY Plataforma',
   DBGridGerador,false);
   actProcurar.Execute;

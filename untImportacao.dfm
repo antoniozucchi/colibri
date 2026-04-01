@@ -2,8 +2,8 @@ object FrmImportacao: TFrmImportacao
   Left = 0
   Top = 0
   Caption = 'Importa'#231#227'o de Planilhas de Consulta'
-  ClientHeight = 553
-  ClientWidth = 989
+  ClientHeight = 537
+  ClientWidth = 985
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -19,8 +19,8 @@ object FrmImportacao: TFrmImportacao
   TextHeight = 13
   object Splitter1: TSplitter
     Left = 0
-    Top = 351
-    Width = 989
+    Top = 335
+    Width = 985
     Height = 3
     Cursor = crVSplit
     Align = alBottom
@@ -30,8 +30,8 @@ object FrmImportacao: TFrmImportacao
   object PageControlImportacao: TPageControl
     Left = 0
     Top = 25
-    Width = 989
-    Height = 326
+    Width = 985
+    Height = 310
     ActivePage = TabSheet1
     Align = alClient
     TabOrder = 0
@@ -41,16 +41,34 @@ object FrmImportacao: TFrmImportacao
       object ToolBar1: TToolBar
         Left = 0
         Top = 25
-        Width = 983
+        Width = 977
         Height = 29
         Caption = 'ToolBar1'
         DrawingStyle = dsGradient
         EdgeBorders = [ebLeft, ebTop, ebRight, ebBottom]
         Images = FrmPrincipal.ImageList1
         TabOrder = 0
-        ExplicitWidth = 981
-        object btnExecAPLAT: TBitBtn
+        ExplicitWidth = 975
+        object btnClearFiltroAPLAT: TToolButton
           Left = 0
+          Top = 0
+          Hint = 'Limpar filtro'
+          Caption = 'btnClearFiltroAPLAT'
+          ImageIndex = 225
+          ParentShowHint = False
+          ShowHint = True
+        end
+        object btnExcelAPLAT: TToolButton
+          Left = 23
+          Top = 0
+          Hint = 'Exportar dados para o Excel'
+          Caption = 'Exportar'
+          ImageIndex = 54
+          ParentShowHint = False
+          ShowHint = True
+        end
+        object btnExecAPLAT: TBitBtn
+          Left = 46
           Top = 0
           Width = 70
           Height = 22
@@ -58,10 +76,10 @@ object FrmImportacao: TFrmImportacao
           Caption = 'Importar'
           ParentShowHint = False
           ShowHint = True
-          TabOrder = 1
+          TabOrder = 0
         end
         object btnAnaliseExecAPLAT: TBitBtn
-          Left = 70
+          Left = 116
           Top = 0
           Width = 70
           Height = 22
@@ -69,10 +87,10 @@ object FrmImportacao: TFrmImportacao
           Caption = 'Analisar'
           ParentShowHint = False
           ShowHint = True
-          TabOrder = 4
+          TabOrder = 3
         end
         object btnNaoDefinidoAPLAT: TBitBtn
-          Left = 140
+          Left = 186
           Top = 0
           Width = 90
           Height = 22
@@ -80,10 +98,10 @@ object FrmImportacao: TFrmImportacao
           Caption = 'N'#227'o Definido'
           ParentShowHint = False
           ShowHint = True
-          TabOrder = 2
+          TabOrder = 1
         end
         object btnExcluirAPLAT: TBitBtn
-          Left = 230
+          Left = 276
           Top = 0
           Width = 96
           Height = 22
@@ -91,116 +109,13 @@ object FrmImportacao: TFrmImportacao
           Caption = 'Excluir todos'
           ParentShowHint = False
           ShowHint = True
-          TabOrder = 3
-        end
-        object BitBtn14: TBitBtn
-          Left = 326
-          Top = 0
-          Width = 70
-          Height = 22
-          Action = actExcelExecutanteAPLAT
-          Caption = 'Exportar'
-          ParentShowHint = False
-          ShowHint = True
-          TabOrder = 5
-        end
-        object BitBtn3: TBitBtn
-          Left = 396
-          Top = 0
-          Width = 70
-          Height = 22
-          Action = actLimparFiltros
-          Caption = 'Limpar'
-          Glyph.Data = {
-            36040000424D3604000000000000360000002800000010000000100000000100
-            2000000000000004000000000000000000000000000000000000FF00FF00FF00
-            FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FDFDFD029B9B9B643434
-            34CB070707F80D0D0DF2474747B8BDBDBD42FF00FF00FF00FF00FF00FF00FF00
-            FF00FF00FF00FF00FF00FF00FF00FF00FF00FBFBFB04515151AE000000FF0000
-            00FF0C0C0CF3070707F8000000FF010101FE89898976FF00FF00FF00FF00FF00
-            FF00FF00FF00FF00FF00FF00FF00FF00FF008181817E000000FF232323DCC1C1
-            C13EFEFEFE01F9F9F906A1A1A15E0B0B0BF4010101FEBDBDBD42FF00FF00FF00
-            FF00FF00FF00FF00FF00FF00FF00F9F9F906101010EF050505FAD9D9D926FF00
-            FF00FF00FF00FF00FF00FF00FF00A1A1A15E000000FF474747B8FF00FF00FF00
-            FF00FF00FF00FF00FF00FF00FF00CFCFCF30000000FF3F3F3FC0FF00FF00FF00
-            FF00FF00FF00FF00FF00FF00FF00F9F9F906070707F80D0D0DF2FF00FF00FF00
-            FF00FF00FF00FF00FF008B8B8B74181818E7000000FF0A0A0AF5282828D7FF00
-            FF00FF00FF00FF00FF00FF00FF00FF00FF00151515EA000000FFFF00FF00FF00
-            FF00FF00FF00FF00FF007B7B7B84000000FF000000FF000000FF0B0B0BF4FF00
-            FF00FF00FF00FF00FF00FF00FF00FF00FF00151515EA000000FFFF00FF00FDFD
-            FD02C5C5C53AAEAEAE51DBDBDB24F5F5F50AF5F5F50AF5F5F50AF2F2F20DB8B8
-            B847B2B2B24DE6E6E619FF00FF00FF00FF00151515EA000000FFE6E6E6194D4D
-            4DB28F8F8F70A5A5A55A484848B7DCDCDC23FF00FF00FF00FF007474748B9696
-            9669A1A1A15E575757A89191916EFF00FF00151515EA000000FF5F5F5FA0B0B0
-            B04F1E1E1EE1030303FCA5A5A55A484848B7F9F9F906B1B1B14E9292926D3E3E
-            3EC1050505FA787878875F5F5FA0CFCFCF30151515EA000000FF595959A65757
-            57A8000000FF000000FF1E1E1EE1A6A6A659494949B67575758A8A8A8A750000
-            00FF000000FF010101FEA6A6A65988888877151515EA000000FF5B5B5BA45252
-            52AD000000FF000000FF000000FF292929D6878787786262629D020202FD0000
-            00FF000000FF000000FFA6A6A65986868679151515EA000000FF5B5B5BA4ADAD
-            AD52050505FA000000FF000000FF000000FF000000FF000000FF000000FF0000
-            00FF000000FF4E4E4EB179797986C5C5C53A232323DC131313ECD5D5D52A5757
-            57A8B3B3B34C9292926D8F8F8F708F8F8F708F8F8F708F8F8F708F8F8F708F8F
-            8F70A3A3A35C9191916E6B6B6B94FF00FF005C5C5CA35C5C5CA3FF00FF00E4E4
-            E41B777777885D5D5DA25D5D5DA25D5D5DA25D5D5DA25D5D5DA25D5D5DA25D5D
-            5DA25D5D5DA2A6A6A659FEFEFE01FF00FF005C5C5CA35C5C5CA3FF00FF00FF00
-            FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
-            FF00FF00FF00FF00FF00FF00FF00FF00FF002E2E2ED1212121DE}
-          ParentShowHint = False
-          ShowHint = True
-          TabOrder = 0
-        end
-        object BitBtn17: TBitBtn
-          Left = 466
-          Top = 0
-          Width = 70
-          Height = 22
-          Action = actFiltrosTabela
-          Caption = 'Filtros'
-          Glyph.Data = {
-            36040000424D3604000000000000360000002800000010000000100000000100
-            2000000000000004000000000000000000000000000000000000FF00FF00FF00
-            FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
-            FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
-            FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
-            FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
-            FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
-            FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
-            FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
-            FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
-            FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
-            FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FCFC
-            FC03DDDDDD25C6C6C63F9F9F9F6A878686866F6E6EA15B5A5AB794949477E2E2
-            E21FFDFDFD02C4C4C441DEDEDE24FF00FF00FF00FF00FF00FF00E2E2E21F6766
-            66A99D9D9D6D9B9B9B6F87878785373636DF292828EF232222F51C1B1BFF1B1A
-            1AFF383737DE252424F3403F3FD48281818BFF00FF00FF00FF00FEFEFE019594
-            94768585858796959575515050C28181818CE7E7E71AC0C0C0451C1B1BFD1C1B
-            1BFF1C1B1BFF1C1B1BFF1C1B1BFF3F3E3ED6DBDBDB27FF00FF00DDDDDD258D8C
-            8C7FAAA9A95FA6A6A662D0D0D034FF00FF00FF00FF008080808D1C1B1BFF1C1B
-            1BFF1C1B1BFF1C1B1BFF1C1B1BFF282727F05A5959B7E1E0E021FF00FF00FF00
-            FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00E9E9E918A6A6A6626261
-            61AF232222F61C1B1BFF292828EF222121F71C1B1BFFC9C9C93BFF00FF00FF00
-            FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
-            FF00F0F0F010ADACAC5B89898982A8A8A860686868A8EEEEEE12FF00FF00FF00
-            FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
-            FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
-            FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
-            FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
-            FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
-            FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
-            FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
-            FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
-            FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
-            FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00}
-          ParentShowHint = False
-          ShowHint = True
-          TabOrder = 6
+          TabOrder = 2
         end
       end
       object Panel2: TPanel
         Left = 0
         Top = 0
-        Width = 983
+        Width = 977
         Height = 25
         Align = alTop
         Color = clMenuBar
@@ -212,7 +127,7 @@ object FrmImportacao: TFrmImportacao
         ParentBackground = False
         ParentFont = False
         TabOrder = 1
-        ExplicitWidth = 981
+        ExplicitWidth = 975
         object btnAbrirAPLAT: TSpeedButton
           Left = 551
           Top = 1
@@ -246,7 +161,7 @@ object FrmImportacao: TFrmImportacao
         object edtEnderecoExecutanteAPLAT: TEdit
           Left = 574
           Top = 1
-          Width = 408
+          Width = 402
           Height = 23
           Align = alClient
           Color = clInfoBk
@@ -258,24 +173,24 @@ object FrmImportacao: TFrmImportacao
           ParentFont = False
           ReadOnly = True
           TabOrder = 1
-          ExplicitWidth = 406
+          ExplicitWidth = 400
           ExplicitHeight = 24
         end
       end
       object Panel4: TPanel
         Left = 0
         Top = 54
-        Width = 983
-        Height = 252
+        Width = 977
+        Height = 228
         Align = alClient
         Caption = 'Panel4'
         TabOrder = 2
-        ExplicitWidth = 981
-        ExplicitHeight = 244
+        ExplicitWidth = 975
+        ExplicitHeight = 220
         object StatusBarExecAPLAT: TStatusBar
           Left = 1
-          Top = 232
-          Width = 981
+          Top = 208
+          Width = 975
           Height = 19
           Panels = <
             item
@@ -293,14 +208,14 @@ object FrmImportacao: TFrmImportacao
             item
               Width = 50
             end>
-          ExplicitTop = 224
-          ExplicitWidth = 979
+          ExplicitTop = 200
+          ExplicitWidth = 973
         end
-        object DBGridExecutanteAPLAT: TDBGrid
+        object DBGridExecutanteAPLAT: TFilterDBGrid
           Left = 1
           Top = 1
-          Width = 981
-          Height = 231
+          Width = 975
+          Height = 207
           Align = alClient
           DataSource = FrmDataModule.DataSourceImportarExecutanteAPLAT
           TabOrder = 1
@@ -310,7 +225,11 @@ object FrmImportacao: TFrmImportacao
           TitleFont.Name = 'Tahoma'
           TitleFont.Style = []
           OnDrawColumnCell = DBGridExecutanteAPLATDrawColumnCell
-          OnTitleClick = DBGridExecutanteAPLATTitleClick
+          ClearFilterButton = btnClearFiltroAPLAT
+          SearchAction = actLocalizarAPLATExecutante
+          LayoutGrid = ColunasAPLAT
+          EnableZebra = False
+          ExcelButton = btnExcelAPLAT
           Columns = <
             item
               Expanded = False
@@ -445,466 +364,39 @@ object FrmImportacao: TFrmImportacao
             end>
         end
         object ColunasAPLAT: TStringGrid
-          Left = 513
-          Top = 26
+          Left = 468
+          Top = 74
           Width = 113
           Height = 94
-          ColCount = 2
+          ColCount = 7
           DefaultRowHeight = 21
+          RowCount = 15
           TabOrder = 2
           Visible = False
           RowHeights = (
             21
-            8
+            36
             21
             21
-            21)
-        end
-        object ColunasT31: TStringGrid
-          Left = 9
-          Top = 26
-          Width = 113
-          Height = 94
-          ColCount = 2
-          DefaultRowHeight = 21
-          TabOrder = 3
-          Visible = False
-          RowHeights = (
+            21
+            21
+            21
+            21
+            21
+            21
             21
             21
             21
             21
             21)
         end
-      end
-    end
-    object TabSheet2: TTabSheet
-      Caption = 'Executantes: Requisi'#231#227'o de Transporte [SAP]'
-      ImageIndex = 1
-      object DBGridExecutanteSAP: TDBGrid
-        Left = 0
-        Top = 54
-        Width = 983
-        Height = 233
-        Align = alClient
-        DataSource = FrmDataModule.DataSourceImportarExecutanteSAP
-        TabOrder = 0
-        TitleFont.Charset = DEFAULT_CHARSET
-        TitleFont.Color = clWindowText
-        TitleFont.Height = -11
-        TitleFont.Name = 'Tahoma'
-        TitleFont.Style = []
-        OnDrawColumnCell = DBGridExecutanteSAPDrawColumnCell
-        OnTitleClick = DBGridExecutanteSAPTitleClick
-        Columns = <
-          item
-            Expanded = False
-            FieldName = 'txtTipoEtapaServico'
-            ReadOnly = True
-            Title.Alignment = taCenter
-            Title.Caption = 'Tipo de Etapa de Servi'#231'o'
-            Width = 200
-            Visible = True
-          end
-          item
-            Expanded = False
-            FieldName = 'txtFuncao'
-            ReadOnly = True
-            Title.Alignment = taCenter
-            Title.Caption = 'Fun'#231#227'o'
-            Width = 120
-            Visible = True
-          end
-          item
-            Expanded = False
-            FieldName = 'txtEmpresa'
-            ReadOnly = True
-            Title.Alignment = taCenter
-            Title.Caption = 'Empresa'
-            Width = 120
-            Visible = True
-          end
-          item
-            Expanded = False
-            FieldName = 'txtNomeExecutante'
-            ReadOnly = True
-            Title.Alignment = taCenter
-            Title.Caption = 'Nome do Executante'
-            Width = 120
-            Visible = True
-          end
-          item
-            Alignment = taCenter
-            Expanded = False
-            FieldName = 'CodigoSAP'
-            Title.Alignment = taCenter
-            Title.Caption = 'C'#243'digo SAP'
-            Width = 95
-            Visible = True
-          end
-          item
-            Expanded = False
-            FieldName = 'Documento'
-            Title.Alignment = taCenter
-            Width = 95
-            Visible = True
-          end
-          item
-            Alignment = taCenter
-            Expanded = False
-            FieldName = 'TipoNota'
-            Title.Alignment = taCenter
-            Title.Caption = 'Tipo'
-            Width = 62
-            Visible = True
-          end
-          item
-            Expanded = False
-            FieldName = 'Nota'
-            Title.Alignment = taCenter
-            Title.Caption = 'RT'
-            Width = 70
-            Visible = True
-          end
-          item
-            Alignment = taCenter
-            Expanded = False
-            FieldName = 'DataEmbarque'
-            Title.Alignment = taCenter
-            Title.Caption = 'Data Embarque'
-            Width = 100
-            Visible = True
-          end
-          item
-            Expanded = False
-            FieldName = 'DescricaoNota'
-            Title.Alignment = taCenter
-            Title.Caption = 'Descri'#231#227'o Nota'
-            Width = 200
-            Visible = True
-          end
-          item
-            Alignment = taCenter
-            Expanded = False
-            FieldName = 'Origem'
-            Title.Alignment = taCenter
-            Width = 120
-            Visible = True
-          end
-          item
-            Alignment = taCenter
-            Expanded = False
-            FieldName = 'Destino'
-            Title.Alignment = taCenter
-            Width = 120
-            Visible = True
-          end
-          item
-            Alignment = taCenter
-            Expanded = False
-            FieldName = 'ModalDefinido'
-            Title.Alignment = taCenter
-            Title.Caption = 'Modal Definido'
-            Width = 120
-            Visible = True
-          end
-          item
-            Expanded = False
-            FieldName = 'NomeExecutante'
-            Title.Alignment = taCenter
-            Title.Caption = 'Nome Executante (Excel)'
-            Width = 200
-            Visible = True
-          end
-          item
-            Alignment = taCenter
-            Expanded = False
-            FieldName = 'CriadoPor'
-            Title.Alignment = taCenter
-            Title.Caption = 'Criado Por'
-            Width = 120
-            Visible = True
-          end
-          item
-            Alignment = taCenter
-            Expanded = False
-            FieldName = 'ImportadoPor'
-            ReadOnly = True
-            Title.Alignment = taCenter
-            Title.Caption = 'Importado Por'
-            Visible = True
-          end
-          item
-            Alignment = taCenter
-            Expanded = False
-            FieldName = 'DataImportacao'
-            ReadOnly = True
-            Title.Alignment = taCenter
-            Title.Caption = 'Data Importa'#231#227'o'
-            Visible = True
-          end
-          item
-            Alignment = taCenter
-            Expanded = False
-            FieldName = 'ComputadorImportacao'
-            ReadOnly = True
-            Title.Alignment = taCenter
-            Title.Caption = 'Computador'
-            Visible = True
-          end>
-      end
-      object ToolBar2: TToolBar
-        Left = 0
-        Top = 25
-        Width = 983
-        Height = 29
-        Caption = 'ToolBar1'
-        DrawingStyle = dsGradient
-        EdgeBorders = [ebLeft, ebTop, ebRight, ebBottom]
-        Images = FrmPrincipal.ImageList1
-        TabOrder = 1
-        object btnExecSAP: TBitBtn
-          Left = 0
-          Top = 0
-          Width = 70
-          Height = 22
-          Action = actImportarExecutanteSAP
-          Caption = 'Importar'
-          ParentShowHint = False
-          ShowHint = True
-          TabOrder = 0
-        end
-        object btnAnaliseExecSAP: TBitBtn
-          Left = 70
-          Top = 0
-          Width = 70
-          Height = 22
-          Action = actAnalisaExecutanteSAP
-          Caption = 'Analisar'
-          ParentShowHint = False
-          ShowHint = True
-          TabOrder = 1
-        end
-        object btnNaoDefinidoSAP: TBitBtn
-          Left = 140
-          Top = 0
-          Width = 90
-          Height = 22
-          Action = actND_SAP
-          Caption = 'N'#227'o Definido'
-          ParentShowHint = False
-          ShowHint = True
-          TabOrder = 4
-        end
-        object btnExcluirSAP: TBitBtn
-          Left = 230
-          Top = 0
-          Width = 96
-          Height = 22
-          Action = actExcluirSAP_Executantes
-          Caption = 'Excluir todos'
-          ParentShowHint = False
-          ShowHint = True
-          TabOrder = 3
-        end
-        object BitBtn8: TBitBtn
-          Left = 326
-          Top = 0
-          Width = 70
-          Height = 22
-          Action = actExcelExecutanteSAP
-          Caption = 'Exportar'
-          ParentShowHint = False
-          ShowHint = True
-          TabOrder = 2
-        end
-        object BitBtn19: TBitBtn
-          Left = 396
-          Top = 0
-          Width = 70
-          Height = 22
-          Action = actLimparFiltros
-          Caption = 'Limpar'
-          Glyph.Data = {
-            36040000424D3604000000000000360000002800000010000000100000000100
-            2000000000000004000000000000000000000000000000000000FF00FF00FF00
-            FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FDFDFD029B9B9B643434
-            34CB070707F80D0D0DF2474747B8BDBDBD42FF00FF00FF00FF00FF00FF00FF00
-            FF00FF00FF00FF00FF00FF00FF00FF00FF00FBFBFB04515151AE000000FF0000
-            00FF0C0C0CF3070707F8000000FF010101FE89898976FF00FF00FF00FF00FF00
-            FF00FF00FF00FF00FF00FF00FF00FF00FF008181817E000000FF232323DCC1C1
-            C13EFEFEFE01F9F9F906A1A1A15E0B0B0BF4010101FEBDBDBD42FF00FF00FF00
-            FF00FF00FF00FF00FF00FF00FF00F9F9F906101010EF050505FAD9D9D926FF00
-            FF00FF00FF00FF00FF00FF00FF00A1A1A15E000000FF474747B8FF00FF00FF00
-            FF00FF00FF00FF00FF00FF00FF00CFCFCF30000000FF3F3F3FC0FF00FF00FF00
-            FF00FF00FF00FF00FF00FF00FF00F9F9F906070707F80D0D0DF2FF00FF00FF00
-            FF00FF00FF00FF00FF008B8B8B74181818E7000000FF0A0A0AF5282828D7FF00
-            FF00FF00FF00FF00FF00FF00FF00FF00FF00151515EA000000FFFF00FF00FF00
-            FF00FF00FF00FF00FF007B7B7B84000000FF000000FF000000FF0B0B0BF4FF00
-            FF00FF00FF00FF00FF00FF00FF00FF00FF00151515EA000000FFFF00FF00FDFD
-            FD02C5C5C53AAEAEAE51DBDBDB24F5F5F50AF5F5F50AF5F5F50AF2F2F20DB8B8
-            B847B2B2B24DE6E6E619FF00FF00FF00FF00151515EA000000FFE6E6E6194D4D
-            4DB28F8F8F70A5A5A55A484848B7DCDCDC23FF00FF00FF00FF007474748B9696
-            9669A1A1A15E575757A89191916EFF00FF00151515EA000000FF5F5F5FA0B0B0
-            B04F1E1E1EE1030303FCA5A5A55A484848B7F9F9F906B1B1B14E9292926D3E3E
-            3EC1050505FA787878875F5F5FA0CFCFCF30151515EA000000FF595959A65757
-            57A8000000FF000000FF1E1E1EE1A6A6A659494949B67575758A8A8A8A750000
-            00FF000000FF010101FEA6A6A65988888877151515EA000000FF5B5B5BA45252
-            52AD000000FF000000FF000000FF292929D6878787786262629D020202FD0000
-            00FF000000FF000000FFA6A6A65986868679151515EA000000FF5B5B5BA4ADAD
-            AD52050505FA000000FF000000FF000000FF000000FF000000FF000000FF0000
-            00FF000000FF4E4E4EB179797986C5C5C53A232323DC131313ECD5D5D52A5757
-            57A8B3B3B34C9292926D8F8F8F708F8F8F708F8F8F708F8F8F708F8F8F708F8F
-            8F70A3A3A35C9191916E6B6B6B94FF00FF005C5C5CA35C5C5CA3FF00FF00E4E4
-            E41B777777885D5D5DA25D5D5DA25D5D5DA25D5D5DA25D5D5DA25D5D5DA25D5D
-            5DA25D5D5DA2A6A6A659FEFEFE01FF00FF005C5C5CA35C5C5CA3FF00FF00FF00
-            FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
-            FF00FF00FF00FF00FF00FF00FF00FF00FF002E2E2ED1212121DE}
-          ParentShowHint = False
-          ShowHint = True
-          TabOrder = 6
-        end
-        object BitBtn18: TBitBtn
-          Left = 466
-          Top = 0
-          Width = 70
-          Height = 22
-          Action = actFiltrosTabela
-          Caption = 'Filtros'
-          Glyph.Data = {
-            36040000424D3604000000000000360000002800000010000000100000000100
-            2000000000000004000000000000000000000000000000000000FF00FF00FF00
-            FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
-            FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
-            FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
-            FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
-            FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
-            FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
-            FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
-            FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
-            FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
-            FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FCFC
-            FC03DDDDDD25C6C6C63F9F9F9F6A878686866F6E6EA15B5A5AB794949477E2E2
-            E21FFDFDFD02C4C4C441DEDEDE24FF00FF00FF00FF00FF00FF00E2E2E21F6766
-            66A99D9D9D6D9B9B9B6F87878785373636DF292828EF232222F51C1B1BFF1B1A
-            1AFF383737DE252424F3403F3FD48281818BFF00FF00FF00FF00FEFEFE019594
-            94768585858796959575515050C28181818CE7E7E71AC0C0C0451C1B1BFD1C1B
-            1BFF1C1B1BFF1C1B1BFF1C1B1BFF3F3E3ED6DBDBDB27FF00FF00DDDDDD258D8C
-            8C7FAAA9A95FA6A6A662D0D0D034FF00FF00FF00FF008080808D1C1B1BFF1C1B
-            1BFF1C1B1BFF1C1B1BFF1C1B1BFF282727F05A5959B7E1E0E021FF00FF00FF00
-            FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00E9E9E918A6A6A6626261
-            61AF232222F61C1B1BFF292828EF222121F71C1B1BFFC9C9C93BFF00FF00FF00
-            FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
-            FF00F0F0F010ADACAC5B89898982A8A8A860686868A8EEEEEE12FF00FF00FF00
-            FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
-            FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
-            FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
-            FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
-            FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
-            FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
-            FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
-            FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
-            FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
-            FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00}
-          ParentShowHint = False
-          ShowHint = True
-          TabOrder = 5
-        end
-      end
-      object Panel1: TPanel
-        Left = 0
-        Top = 0
-        Width = 983
-        Height = 25
-        Align = alTop
-        Color = clMenuBar
-        Font.Charset = DEFAULT_CHARSET
-        Font.Color = clWindowText
-        Font.Height = -13
-        Font.Name = 'Tahoma'
-        Font.Style = [fsBold]
-        ParentBackground = False
-        ParentFont = False
-        TabOrder = 2
-        object btnAbrirSAP: TSpeedButton
-          Left = 551
-          Top = 1
-          Width = 23
-          Height = 23
-          Action = actEnderecoExecutanteSAP
-          Align = alLeft
-          ParentShowHint = False
-          ShowHint = True
-          ExplicitLeft = 528
-          ExplicitTop = 8
-          ExplicitHeight = 22
-        end
-        object Edit3: TEdit
-          Left = 1
-          Top = 1
-          Width = 550
-          Height = 23
-          Align = alLeft
-          Color = clGradientActiveCaption
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -11
-          Font.Name = 'Tahoma'
-          Font.Style = []
-          ParentFont = False
-          ReadOnly = True
-          TabOrder = 0
-          Text = 
-            'Requisi'#231#245'es de Transporte Maritimo (SAP/R3): [Transa'#231#227'o: YSCSXFR' +
-            'T; Variante: /COLIBRI; preencher o per'#237'odo]'
-          ExplicitHeight = 21
-        end
-        object edtEnderecoExecutanteSAP: TEdit
-          Left = 574
-          Top = 1
-          Width = 408
-          Height = 23
-          Align = alClient
-          Color = clInfoBk
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clRed
-          Font.Height = -13
-          Font.Name = 'Tahoma'
-          Font.Style = []
-          ParentFont = False
-          ReadOnly = True
-          TabOrder = 1
-          ExplicitHeight = 24
-        end
-      end
-      object StatusBarExecSAP: TStatusBar
-        Left = 0
-        Top = 287
-        Width = 983
-        Height = 19
-        Panels = <
-          item
-            Width = 50
-          end
-          item
-            Width = 50
-          end
-          item
-            Width = 50
-          end
-          item
-            Width = 50
-          end
-          item
-            Width = 50
-          end>
       end
     end
   end
   object Panel7: TPanel
     Left = 0
     Top = 0
-    Width = 989
+    Width = 985
     Height = 25
     Align = alTop
     Caption = 'Importa'#231#227'o de Planilhas de Consulta'
@@ -917,8 +409,9 @@ object FrmImportacao: TFrmImportacao
     ParentBackground = False
     ParentFont = False
     TabOrder = 1
+    ExplicitWidth = 983
     object BitBtn13: TBitBtn
-      Left = 860
+      Left = 854
       Top = 1
       Width = 130
       Height = 23
@@ -934,21 +427,23 @@ object FrmImportacao: TFrmImportacao
       ParentShowHint = False
       ShowHint = True
       TabOrder = 0
-      ExplicitLeft = 858
+      ExplicitLeft = 852
     end
   end
   object PanelAjuda: TPanel
     Left = 0
-    Top = 354
-    Width = 989
+    Top = 338
+    Width = 985
     Height = 199
     Align = alBottom
     TabOrder = 2
     Visible = False
+    ExplicitTop = 330
+    ExplicitWidth = 983
     object PanelTituloAjuda: TPanel
       Left = 1
       Top = 1
-      Width = 987
+      Width = 983
       Height = 26
       Align = alTop
       Caption = 'Incluir Executantes "N'#195'O DEFINIDO"'
@@ -962,8 +457,9 @@ object FrmImportacao: TFrmImportacao
       ParentFont = False
       TabOrder = 0
       OnMouseDown = PanelTituloAjudaMouseDown
+      ExplicitWidth = 981
       object SpeedButton4: TSpeedButton
-        Left = 965
+        Left = 959
         Top = 1
         Width = 23
         Height = 24
@@ -1015,13 +511,14 @@ object FrmImportacao: TFrmImportacao
     object ToolBar4: TToolBar
       Left = 1
       Top = 27
-      Width = 987
+      Width = 983
       Height = 29
       Caption = 'ToolBar4'
       DrawingStyle = dsGradient
       EdgeBorders = [ebLeft, ebTop, ebRight, ebBottom]
       Images = FrmPrincipal.ImageList1
       TabOrder = 1
+      ExplicitWidth = 981
       object BitBtn4: TBitBtn
         Left = 0
         Top = 0
@@ -1048,7 +545,7 @@ object FrmImportacao: TFrmImportacao
     object StringGridND: TStringGrid
       Left = 1
       Top = 56
-      Width = 987
+      Width = 983
       Height = 142
       Align = alClient
       FixedCols = 0
@@ -1056,6 +553,7 @@ object FrmImportacao: TFrmImportacao
       TabOrder = 2
       OnFixedCellClick = StringGridNDFixedCellClick
       OnSelectCell = StringGridNDSelectCell
+      ExplicitWidth = 981
     end
     object ComboBoxEmpresa: TComboBox
       Left = 112
@@ -1146,37 +644,6 @@ object FrmImportacao: TFrmImportacao
       ImageIndex = 20
       OnExecute = actEnderecoExecutanteAPLATExecute
     end
-    object actImportarExecutanteSAP: TAction
-      Category = 'SAP - RT Executantes'
-      Caption = 'Importar'
-      Hint = 
-        'Importar Executantes com RT de embarque da planilha EXCEL determ' +
-        'inada (endere'#231'o)'
-      ImageIndex = 206
-      OnExecute = actImportarExecutanteSAPExecute
-    end
-    object actExcelExecutanteAPLAT: TAction
-      Category = 'APLAT - Executantes'
-      Caption = 'Exportar'
-      Hint = 'Exportar para o Excel'
-      ImageIndex = 54
-      OnExecute = actExcelExecutanteAPLATExecute
-    end
-    object actExcelExecutanteSAP: TAction
-      Category = 'SAP - RT Executantes'
-      Caption = 'Exportar'
-      Hint = 'Exportar para o Excel'
-      ImageIndex = 54
-      OnExecute = actExcelExecutanteSAPExecute
-    end
-    object actEnderecoExecutanteSAP: TAction
-      Category = 'SAP - RT Executantes'
-      Hint = 
-        'Carregar endere'#231'o da planilha de Executantes dispon'#237'veis no SAP:' +
-        ' T31'
-      ImageIndex = 20
-      OnExecute = actEnderecoExecutanteSAPExecute
-    end
     object actExecutanteAPLAT: TAction
       Category = 'APLAT - Executantes'
       Caption = 'actExecutanteAPLAT'
@@ -1184,13 +651,16 @@ object FrmImportacao: TFrmImportacao
     end
     object actLocalizarAPLATExecutante: TAction
       Category = 'Localizar'
-      Caption = 'actLocalizarAPLATExecutante'
+      Caption = 'Procurar'
+      Hint = 'Buscar registros no banco de dados'
+      ImageIndex = 27
       OnExecute = actLocalizarAPLATExecutanteExecute
     end
     object actLocalizarSAPExecutante: TAction
       Category = 'Localizar'
-      Caption = 'actLocalizarSAPExecutante'
-      OnExecute = actLocalizarSAPExecutanteExecute
+      Caption = 'Procurar'
+      Hint = 'Buscar registros no banco de dados'
+      ImageIndex = 27
     end
     object actAnalisaExecutanteAPLAT: TAction
       Category = 'APLAT - Executantes'
@@ -1199,13 +669,6 @@ object FrmImportacao: TFrmImportacao
       ImageIndex = 32
       OnExecute = actAnalisaExecutanteAPLATExecute
     end
-    object actAnalisaExecutanteSAP: TAction
-      Category = 'SAP - RT Executantes'
-      Caption = 'Analisar'
-      Hint = 'Verificar cadastro de executantes'
-      ImageIndex = 32
-      OnExecute = actAnalisaExecutanteSAPExecute
-    end
     object actExcluirAPLAT_Executantes: TAction
       Category = 'APLAT - Executantes'
       Caption = 'Excluir todos'
@@ -1213,31 +676,12 @@ object FrmImportacao: TFrmImportacao
       ImageIndex = 324
       OnExecute = actExcluirAPLAT_ExecutantesExecute
     end
-    object actExcluirSAP_Executantes: TAction
-      Category = 'SAP - RT Executantes'
-      Caption = 'Excluir todos'
-      Hint = 'Excluir todos os registros de Executantes do SAP'
-      ImageIndex = 324
-      OnExecute = actExcluirSAP_ExecutantesExecute
-    end
     object actND_APLAT: TAction
       Category = 'APLAT - Executantes'
       Caption = 'Corrigir N'#227'o Definido'
       Hint = 'Corrigir executantes n'#227'o definidos no cadastro'
       ImageIndex = 87
       OnExecute = actND_APLATExecute
-    end
-    object actND_SAP: TAction
-      Category = 'SAP - RT Executantes'
-      Caption = 'N'#227'o Definido'
-      Hint = 'Corrigir executantes n'#227'o definidos no cadastro'
-      ImageIndex = 87
-      OnExecute = actND_SAPExecute
-    end
-    object actExecutanteSAP: TAction
-      Category = 'SAP - RT Executantes'
-      Caption = 'actExecutanteSAP'
-      OnExecute = actExecutanteSAPExecute
     end
     object actExcluirLinha: TAction
       Category = 'N'#227'o Definido'
@@ -1260,40 +704,6 @@ object FrmImportacao: TFrmImportacao
       ImageIndex = 164
       OnExecute = actInterromperExecute
     end
-    object actFiltroInserir: TAction
-      Category = 'Tabela'
-      Caption = 'actFiltroInserir'
-      OnExecute = actFiltroInserirExecute
-    end
-    object actGridASC: TAction
-      Category = 'Tabela'
-      Caption = 'actGridASC'
-      OnExecute = actGridASCExecute
-    end
-    object actGridDESC: TAction
-      Category = 'Tabela'
-      Caption = 'actGridDESC'
-      OnExecute = actGridDESCExecute
-    end
-    object actLimparFiltros: TAction
-      Category = 'Tabela'
-      Caption = 'Limpar'
-      Hint = 'Limpar Filtros'
-      ImageIndex = 469
-      OnExecute = actLimparFiltrosExecute
-    end
-    object actFiltrosTabela: TAction
-      Category = 'Tabela'
-      Caption = 'Filtros'
-      Hint = 'Visualizar tabela de filtros'
-      ImageIndex = 470
-      OnExecute = actFiltrosTabelaExecute
-    end
-    object actProcuraFiltrosTabela: TAction
-      Category = 'Tabela'
-      Caption = 'actProcuraFiltrosTabela'
-      OnExecute = actProcuraFiltrosTabelaExecute
-    end
     object actProcurar: TAction
       Category = 'Localizar'
       Caption = 'actProcurar'
@@ -1311,7 +721,7 @@ object FrmImportacao: TFrmImportacao
     end
   end
   object OpenDialog1: TOpenDialog
-    Left = 284
-    Top = 169
+    Left = 316
+    Top = 161
   end
 end
