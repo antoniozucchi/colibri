@@ -1804,6 +1804,102 @@ object FrmConsultaExecutantesProgramados: TFrmConsultaExecutantesProgramados
           end>
       end
     end
+    object TabSheet5: TTabSheet
+      Caption = 'Simulacao Logistica'
+      ImageIndex = 4
+      object GridSimulacaoParametros: TStringGrid
+        Left = 0
+        Top = 54
+        Width = 445
+        Height = 477
+        Align = alLeft
+        ColCount = 3
+        DefaultRowHeight = 22
+        FixedCols = 0
+        RowCount = 19
+        FixedRows = 1
+        TabOrder = 0
+      end
+      object SplitterSimulacao: TSplitter
+        Left = 445
+        Top = 54
+        Height = 477
+      end
+      object MemoSimulacaoRelatorio: TMemo
+        Left = 448
+        Top = 54
+        Width = 634
+        Height = 477
+        Align = alClient
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Consolas'
+        Font.Style = []
+        ParentFont = False
+        ScrollBars = ssVertical
+        TabOrder = 1
+      end
+      object StatusBarSimulacao: TStatusBar
+        Left = 0
+        Top = 531
+        Width = 1082
+        Height = 19
+        Panels = <>
+        SimplePanel = True
+      end
+      object ToolBarSimulacao: TToolBar
+        Left = 0
+        Top = 25
+        Width = 1082
+        Height = 29
+        ButtonHeight = 23
+        Caption = 'ToolBarSimulacao'
+        DrawingStyle = dsGradient
+        EdgeBorders = [ebLeft, ebTop, ebRight, ebBottom]
+        Images = FrmPrincipal.ImageList1
+        TabOrder = 3
+        object btnSimulacaoPadrao: TBitBtn
+          Left = 0
+          Top = 0
+          Width = 120
+          Height = 23
+          Caption = 'Cenario base'
+          ParentShowHint = False
+          ShowHint = True
+          TabOrder = 0
+          OnClick = btnSimulacaoPadraoClick
+        end
+        object btnSimulacaoRodar: TBitBtn
+          Left = 120
+          Top = 0
+          Width = 128
+          Height = 23
+          Caption = 'Rodar simulacao'
+          ParentShowHint = False
+          ShowHint = True
+          TabOrder = 1
+          OnClick = btnSimulacaoRodarClick
+        end
+      end
+      object PanelSimulacao: TPanel
+        Left = 0
+        Top = 0
+        Width = 1082
+        Height = 25
+        Align = alTop
+        Caption = 'Simulacao logistica comparativa por cenario'
+        Color = clSilver
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -13
+        Font.Name = 'Tahoma'
+        Font.Style = [fsBold]
+        ParentBackground = False
+        ParentFont = False
+        TabOrder = 4
+      end
+    end
   end
   object ActionManager1: TActionManager
     Images = FrmPrincipal.ImageList1

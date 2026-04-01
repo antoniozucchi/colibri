@@ -10,7 +10,7 @@ uses
   Vcl.ExtDlgs, Vcl.Menus, Vcl.AppEvnts,ComOBJ, ADODB,
   untDBGridFilter, System.StrUtils, Vcl.DBCtrls, System.Math,
   System.Generics.Collections, System.Generics.Defaults, uProgramacaoRTUtils, System.UITypes,
-  uAccessDBUtils,uZucchi, Vcl.Mask;
+  uSimulacaoLogistica, uAccessDBUtils,uZucchi, Vcl.Mask;
 
 type
   TFrmConsultaExecutantesProgramados = class(TForm)
@@ -127,6 +127,15 @@ type
     actProcurarBuscaEmbarque: TAction;
     ToolButton1: TToolButton;
     StatusBarFrequenciaResumo: TStatusBar;
+    TabSheet5: TTabSheet;
+    PanelSimulacao: TPanel;
+    ToolBarSimulacao: TToolBar;
+    btnSimulacaoPadrao: TBitBtn;
+    btnSimulacaoRodar: TBitBtn;
+    GridSimulacaoParametros: TStringGrid;
+    SplitterSimulacao: TSplitter;
+    MemoSimulacaoRelatorio: TMemo;
+    StatusBarSimulacao: TStatusBar;
     procedure actProcurarProgramacaoExecutanteExecute(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure FormCreate(Sender: TObject);
@@ -171,6 +180,8 @@ type
     procedure ToolButton1Click(Sender: TObject);
     procedure DBEdit1Change(Sender: TObject);
     procedure actProcurarBuscaEmbarqueExecute(Sender: TObject);
+    procedure btnSimulacaoPadraoClick(Sender: TObject);
+    procedure btnSimulacaoRodarClick(Sender: TObject);
   type
       TDadosRT = record
         idProgramacaoExecutante, idProgramacaoRT, TipoCusto: Integer;
@@ -307,8 +318,42 @@ type
       AStatusDescricao: string): string;
     procedure ReclassificarExecutantesParaR3NoPeriodo(const ADataIni,
       ADataFim: TDateTime; const AForcarTudo: Boolean);
+    procedure InicializarSimulacaoLogistica;
+    procedure AtualizarDiasDisponiveisSimulacao;
+    procedure PreencherCenarioBaseSimulacao;
+    procedure DefinirLinhaSimulacao(const ARow: Integer; const ANome, AValor,
+      AObservacao: string);
+    function ValorSimulacaoTexto(const ARow: Integer): string;
+    function TryParseNumeroSimulacao(const ATexto: string;
+      out AValor: Double): Boolean;
+    function LerInteiroSimulacao(const ARow: Integer;
+      const ANome: string): Integer;
+    function LerFloatSimulacao(const ARow: Integer;
+      const ANome: string): Double;
 
   const
+    SIM_COL_PARAMETRO         = 0;
+    SIM_COL_VALOR             = 1;
+    SIM_COL_OBSERVACAO        = 2;
+    SIM_ROW_QTD_SURFER        = 1;
+    SIM_ROW_QTD_SOV           = 2;
+    SIM_ROW_QTD_BAE           = 3;
+    SIM_ROW_QTD_AQUA          = 4;
+    SIM_ROW_BACKLOG           = 5;
+    SIM_ROW_DIAS_DISPONIVEIS  = 6;
+    SIM_ROW_CUSTO_SURFER      = 7;
+    SIM_ROW_CUSTO_SOV         = 8;
+    SIM_ROW_CUSTO_BAE         = 9;
+    SIM_ROW_CUSTO_AQUA        = 10;
+    SIM_ROW_PROD_SURFER       = 11;
+    SIM_ROW_PROD_SOV          = 12;
+    SIM_ROW_PROD_BAE          = 13;
+    SIM_ROW_PROD_AQUA         = 14;
+    SIM_ROW_HORAS_SURFER      = 15;
+    SIM_ROW_HORAS_SOV         = 16;
+    SIM_ROW_HORAS_BAE         = 17;
+    SIM_ROW_HORAS_AQUA        = 18;
+
     RT_STATUS_NAO_CRIAR        = 'NAO_CRIAR';
     RT_STATUS_PENDENTE         = 'PENDENTE';
     RT_STATUS_PRONTO_EMITIR    = 'PRONTO_EMITIR';
@@ -6103,8 +6148,8 @@ var
   ApenasNumeros: Boolean;
 begin
   /// <summary>
-  /// Normaliza o Código SAP removendo zeros à esquerda se for numérico.
-  /// Regra de negócio crítica para evitar problemas na integração com SAP.
+  /// Normaliza o Cï¿½digo SAP removendo zeros ï¿½ esquerda se for numï¿½rico.
+  /// Regra de negï¿½cio crï¿½tica para evitar problemas na integraï¿½ï¿½o com SAP.
   /// </summary>
   Result := Trim(ACodigo);
   if Result = '' then Exit;
@@ -8134,6 +8179,7 @@ begin
   actProcurarProgramacaoExecutante.Execute;
   actProcurarProgramacaoRT.Execute;
   actProcurarSAPImport.Execute;
+  AtualizarDiasDisponiveisSimulacao;
 end;
 
 procedure TFrmConsultaExecutantesProgramados.dataFimKeyPress(Sender: TObject;
@@ -8148,6 +8194,7 @@ begin
   actProcurarProgramacaoExecutante.Execute;
   actProcurarProgramacaoRT.Execute;
   actProcurarSAPImport.Execute;
+  AtualizarDiasDisponiveisSimulacao;
 end;
 
 procedure TFrmConsultaExecutantesProgramados.dataInicioKeyPress(Sender: TObject;
@@ -9609,6 +9656,159 @@ begin
   FrmConsultaExecutantesProgramados:=nil;
 end;
 
+procedure TFrmConsultaExecutantesProgramados.DefinirLinhaSimulacao(
+  const ARow: Integer; const ANome, AValor, AObservacao: string);
+begin
+  GridSimulacaoParametros.Cells[SIM_COL_PARAMETRO, ARow] := ANome;
+  GridSimulacaoParametros.Cells[SIM_COL_VALOR, ARow] := AValor;
+  GridSimulacaoParametros.Cells[SIM_COL_OBSERVACAO, ARow] := AObservacao;
+end;
+
+function TFrmConsultaExecutantesProgramados.ValorSimulacaoTexto(
+  const ARow: Integer): string;
+begin
+  Result := Trim(GridSimulacaoParametros.Cells[SIM_COL_VALOR, ARow]);
+end;
+
+function TFrmConsultaExecutantesProgramados.TryParseNumeroSimulacao(
+  const ATexto: string; out AValor: Double): Boolean;
+var
+  TextoNormalizado: string;
+  FS: TFormatSettings;
+  UltimoPonto: Integer;
+  UltimaVirgula: Integer;
+begin
+  Result := False;
+  TextoNormalizado := Trim(ATexto);
+  if TextoNormalizado = '' then
+    Exit;
+
+  FS := TFormatSettings.Create;
+  UltimoPonto := LastDelimiter('.', TextoNormalizado);
+  UltimaVirgula := LastDelimiter(',', TextoNormalizado);
+
+  if (UltimoPonto > 0) and (UltimaVirgula > 0) then
+  begin
+    if UltimoPonto > UltimaVirgula then
+    begin
+      TextoNormalizado := StringReplace(TextoNormalizado, ',', '', [rfReplaceAll]);
+      TextoNormalizado := StringReplace(TextoNormalizado, '.', FS.DecimalSeparator, [rfReplaceAll]);
+    end
+    else
+    begin
+      TextoNormalizado := StringReplace(TextoNormalizado, '.', '', [rfReplaceAll]);
+      TextoNormalizado := StringReplace(TextoNormalizado, ',', FS.DecimalSeparator, [rfReplaceAll]);
+    end;
+  end
+  else
+  begin
+    if FS.DecimalSeparator = ',' then
+      TextoNormalizado := StringReplace(TextoNormalizado, '.', FS.DecimalSeparator, [rfReplaceAll])
+    else
+      TextoNormalizado := StringReplace(TextoNormalizado, ',', FS.DecimalSeparator, [rfReplaceAll]);
+  end;
+
+  Result := TryStrToFloat(TextoNormalizado, AValor, FS);
+end;
+
+function TFrmConsultaExecutantesProgramados.LerFloatSimulacao(
+  const ARow: Integer; const ANome: string): Double;
+begin
+  if not TryParseNumeroSimulacao(ValorSimulacaoTexto(ARow), Result) then
+    raise Exception.CreateFmt('Valor invalido para "%s": %s',
+      [ANome, ValorSimulacaoTexto(ARow)]);
+end;
+
+function TFrmConsultaExecutantesProgramados.LerInteiroSimulacao(
+  const ARow: Integer; const ANome: string): Integer;
+begin
+  Result := Round(LerFloatSimulacao(ARow, ANome));
+end;
+
+procedure TFrmConsultaExecutantesProgramados.AtualizarDiasDisponiveisSimulacao;
+var
+  DiasDisponiveis: Integer;
+begin
+  if not Assigned(GridSimulacaoParametros) then
+    Exit;
+
+  if GridSimulacaoParametros.RowCount <= SIM_ROW_DIAS_DISPONIVEIS then
+    Exit;
+
+  DiasDisponiveis := DaysBetween(Trunc(dataFim.Date), Trunc(dataInicio.Date)) + 1;
+  if DiasDisponiveis <= 0 then
+    DiasDisponiveis := 1;
+
+  GridSimulacaoParametros.Cells[SIM_COL_VALOR, SIM_ROW_DIAS_DISPONIVEIS] :=
+    IntToStr(DiasDisponiveis);
+end;
+
+procedure TFrmConsultaExecutantesProgramados.PreencherCenarioBaseSimulacao;
+begin
+  DefinirLinhaSimulacao(SIM_ROW_QTD_SURFER, 'Qtd. Surfer', '5',
+    'Frota base atual');
+  DefinirLinhaSimulacao(SIM_ROW_QTD_SOV, 'Qtd. SOV', '0',
+    'Norwind Gale Bridge');
+  DefinirLinhaSimulacao(SIM_ROW_QTD_BAE, 'Qtd. BAE', '0',
+    'Auto-elevatoria');
+  DefinirLinhaSimulacao(SIM_ROW_QTD_AQUA, 'Qtd. AQUA', '0',
+    'Gangway telescopica');
+  DefinirLinhaSimulacao(SIM_ROW_BACKLOG, 'Backlog (movimentacoes)', '280',
+    'Ajuste conforme a carteira analisada');
+  DefinirLinhaSimulacao(SIM_ROW_DIAS_DISPONIVEIS, 'Dias disponiveis', '1',
+    'Sincronizado com o periodo do filtro');
+  DefinirLinhaSimulacao(SIM_ROW_CUSTO_SURFER, 'Custo diario Surfer', '10000',
+    'R$ por dia');
+  DefinirLinhaSimulacao(SIM_ROW_CUSTO_SOV, 'Custo diario SOV', '516000',
+    'R$ por dia');
+  DefinirLinhaSimulacao(SIM_ROW_CUSTO_BAE, 'Custo diario BAE', '0',
+    'Preencher quando aplicavel');
+  DefinirLinhaSimulacao(SIM_ROW_CUSTO_AQUA, 'Custo diario AQUA', '0',
+    'Preencher quando aplicavel');
+  DefinirLinhaSimulacao(SIM_ROW_PROD_SURFER, 'Produtividade Surfer', '1',
+    'Mov/hora util');
+  DefinirLinhaSimulacao(SIM_ROW_PROD_SOV, 'Produtividade SOV', '1',
+    'Mov/hora util');
+  DefinirLinhaSimulacao(SIM_ROW_PROD_BAE, 'Produtividade BAE', '1',
+    'Mov/hora util');
+  DefinirLinhaSimulacao(SIM_ROW_PROD_AQUA, 'Produtividade AQUA', '1',
+    'Mov/hora util');
+  DefinirLinhaSimulacao(SIM_ROW_HORAS_SURFER, 'Horas uteis Surfer', '6',
+    'Base operacional atual');
+  DefinirLinhaSimulacao(SIM_ROW_HORAS_SOV, 'Horas uteis SOV', '24',
+    'Campanha continua');
+  DefinirLinhaSimulacao(SIM_ROW_HORAS_BAE, 'Horas uteis BAE', '24',
+    'Campanha continua');
+  DefinirLinhaSimulacao(SIM_ROW_HORAS_AQUA, 'Horas uteis AQUA', '24',
+    'Campanha continua');
+
+  AtualizarDiasDisponiveisSimulacao;
+
+  MemoSimulacaoRelatorio.Lines.Text :=
+    'Cenario base carregado.' + sLineBreak +
+    'Ajuste backlog, custos e produtividade para comparar cenarios.' + sLineBreak +
+    'Os custos de BAE e AQUA ficaram zerados por padrao para evitar premissas indevidas.';
+  StatusBarSimulacao.SimpleText :=
+    'Cenario base pronto. Revise custos de BAE/AQUA antes de usa-los.';
+end;
+
+procedure TFrmConsultaExecutantesProgramados.InicializarSimulacaoLogistica;
+begin
+  GridSimulacaoParametros.ColCount := 3;
+  GridSimulacaoParametros.RowCount := SIM_ROW_HORAS_AQUA + 1;
+  GridSimulacaoParametros.FixedRows := 1;
+  GridSimulacaoParametros.Options := GridSimulacaoParametros.Options +
+    [goEditing, goAlwaysShowEditor];
+  GridSimulacaoParametros.Cells[SIM_COL_PARAMETRO, 0] := 'Parametro';
+  GridSimulacaoParametros.Cells[SIM_COL_VALOR, 0] := 'Valor';
+  GridSimulacaoParametros.Cells[SIM_COL_OBSERVACAO, 0] := 'Observacao';
+  GridSimulacaoParametros.ColWidths[SIM_COL_PARAMETRO] := 180;
+  GridSimulacaoParametros.ColWidths[SIM_COL_VALOR] := 95;
+  GridSimulacaoParametros.ColWidths[SIM_COL_OBSERVACAO] := 170;
+
+  PreencherCenarioBaseSimulacao;
+end;
+
 procedure TFrmConsultaExecutantesProgramados.FormCreate(Sender: TObject);
 begin
   //======ADICIONAR TABSET DO FOMRMDI=======
@@ -9675,6 +9875,7 @@ begin
   actProcurarProgramacaoRT.Execute;
   actProcurarSAPImport.Execute;
   GarantirTabelaRTRegraRecolhimento;
+  InicializarSimulacaoLogistica;
 end;
 
 procedure TFrmConsultaExecutantesProgramados.FormDestroy(Sender: TObject);
@@ -9690,6 +9891,76 @@ begin
     1: actProcurarProgramacaoRT.Execute;
     2: actProcurarSAPImport.Execute;
     3: actProcurarBuscaEmbarque.Execute;
+    4: AtualizarDiasDisponiveisSimulacao;
+  end;
+end;
+
+procedure TFrmConsultaExecutantesProgramados.btnSimulacaoPadraoClick(
+  Sender: TObject);
+begin
+  PreencherCenarioBaseSimulacao;
+end;
+
+procedure TFrmConsultaExecutantesProgramados.btnSimulacaoRodarClick(
+  Sender: TObject);
+var
+  Param: TSimulacaoParametros;
+  Resultado: TSimulacaoResultado;
+  PrazoTexto: string;
+begin
+  try
+    Param.QtdSurfer := LerInteiroSimulacao(SIM_ROW_QTD_SURFER, 'Qtd. Surfer');
+    Param.QtdSOV := LerInteiroSimulacao(SIM_ROW_QTD_SOV, 'Qtd. SOV');
+    Param.QtdBAE := LerInteiroSimulacao(SIM_ROW_QTD_BAE, 'Qtd. BAE');
+    Param.QtdAQUA := LerInteiroSimulacao(SIM_ROW_QTD_AQUA, 'Qtd. AQUA');
+    Param.Backlog := LerInteiroSimulacao(SIM_ROW_BACKLOG, 'Backlog');
+    Param.DiasDisponiveis := LerInteiroSimulacao(SIM_ROW_DIAS_DISPONIVEIS,
+      'Dias disponiveis');
+    Param.CustoSurfer := LerFloatSimulacao(SIM_ROW_CUSTO_SURFER,
+      'Custo diario Surfer');
+    Param.CustoSOV := LerFloatSimulacao(SIM_ROW_CUSTO_SOV, 'Custo diario SOV');
+    Param.CustoBAE := LerFloatSimulacao(SIM_ROW_CUSTO_BAE, 'Custo diario BAE');
+    Param.CustoAQUA := LerFloatSimulacao(SIM_ROW_CUSTO_AQUA,
+      'Custo diario AQUA');
+    Param.ProdutividadeSurfer := LerFloatSimulacao(SIM_ROW_PROD_SURFER,
+      'Produtividade Surfer');
+    Param.ProdutividadeSOV := LerFloatSimulacao(SIM_ROW_PROD_SOV,
+      'Produtividade SOV');
+    Param.ProdutividadeBAE := LerFloatSimulacao(SIM_ROW_PROD_BAE,
+      'Produtividade BAE');
+    Param.ProdutividadeAQUA := LerFloatSimulacao(SIM_ROW_PROD_AQUA,
+      'Produtividade AQUA');
+    Param.HorasUteisSurfer := LerFloatSimulacao(SIM_ROW_HORAS_SURFER,
+      'Horas uteis Surfer');
+    Param.HorasUteisSOV := LerFloatSimulacao(SIM_ROW_HORAS_SOV,
+      'Horas uteis SOV');
+    Param.HorasUteisBAE := LerFloatSimulacao(SIM_ROW_HORAS_BAE,
+      'Horas uteis BAE');
+    Param.HorasUteisAQUA := LerFloatSimulacao(SIM_ROW_HORAS_AQUA,
+      'Horas uteis AQUA');
+
+    Resultado := TSimulacaoLogistica.Simular(Param);
+
+    if Resultado.PrazoEstimado < 0 then
+      PrazoTexto := 'Prazo inviavel com a capacidade configurada'
+    else
+      PrazoTexto := IntToStr(Resultado.PrazoEstimado) + ' dia(s)';
+
+    MemoSimulacaoRelatorio.Lines.Text :=
+      'Periodo analisado: ' + FormatDateTime('dd/mm/yyyy', dataInicio.Date) +
+      ' a ' + FormatDateTime('dd/mm/yyyy', dataFim.Date) + sLineBreak +
+      'Frota configurada: ' +
+      Format('Surfer=%d | SOV=%d | BAE=%d | AQUA=%d',
+        [Param.QtdSurfer, Param.QtdSOV, Param.QtdBAE, Param.QtdAQUA]) +
+      sLineBreak + sLineBreak +
+      Resultado.Relatorio;
+
+    StatusBarSimulacao.SimpleText := Format(
+      'Prazo: %s | Backlog atendido: %.1f%% | Custo total: R$ %.2f',
+      [PrazoTexto, Resultado.PercentualBacklogAtendido, Resultado.CustoTotal]);
+  except
+    on E: Exception do
+      ShowMessage(E.Message);
   end;
 end;
 

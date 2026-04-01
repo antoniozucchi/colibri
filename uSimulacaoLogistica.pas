@@ -31,10 +31,13 @@ type
 
   TSimulacaoResultado = record
     PrazoEstimado: Integer;
+    MovimentacoesPorDia: Double;
     CustoTotal: Double;
     HorasUteisGeradas: Double;
     CustoPorHoraUtil: Double;
-    PlataformasConcluidasPct: Double;
+    BacklogAtendido: Integer;
+    BacklogRestante: Integer;
+    PercentualBacklogAtendido: Double;
     Relatorio: string;
   end;
 
@@ -59,9 +62,9 @@ implementation
 class function TSimulacaoLogistica.Simular(const Param: TSimulacaoParametros): TSimulacaoResultado;
 var
   TotalHorasUteis, TotalCusto: Double;
-  Prazo, BacklogRestante: Integer;
+  Prazo, BacklogRestante, BacklogAtendido: Integer;
   MovPorDia: Double;
-  PlataformasConcluidas: Double;
+  PercentualBacklogAtendido: Double;
 begin
   // Cálculo simplificado: soma produtividade ponderada por tipo
   TotalHorasUteis :=
@@ -78,36 +81,52 @@ begin
 
   // Movimentações/dia: assume 1 mov/hora útil
   MovPorDia := TotalHorasUteis;
-  if MovPorDia <= 0 then
+  if Param.Backlog <= 0 then
     Prazo := 0
+  else if MovPorDia <= 0 then
+    Prazo := -1
   else
     Prazo := Ceil(Param.Backlog / MovPorDia);
 
   BacklogRestante := Max(0, Param.Backlog - Trunc(MovPorDia * Param.DiasDisponiveis));
-  PlataformasConcluidas := 1.0;
+  BacklogAtendido := Max(0, Param.Backlog - BacklogRestante);
+  PercentualBacklogAtendido := 100.0;
   if Param.Backlog > 0 then
-    PlataformasConcluidas := (Param.Backlog - BacklogRestante) / Param.Backlog;
+    PercentualBacklogAtendido := (BacklogAtendido / Param.Backlog) * 100;
 
   Result.PrazoEstimado := Prazo;
+  Result.MovimentacoesPorDia := MovPorDia;
   Result.CustoTotal := TotalCusto;
   Result.HorasUteisGeradas := TotalHorasUteis * Param.DiasDisponiveis;
   if Result.HorasUteisGeradas > 0 then
     Result.CustoPorHoraUtil := TotalCusto / Result.HorasUteisGeradas
   else
     Result.CustoPorHoraUtil := 0;
-  Result.PlataformasConcluidasPct := PlataformasConcluidas * 100;
+  Result.BacklogAtendido := BacklogAtendido;
+  Result.BacklogRestante := BacklogRestante;
+  Result.PercentualBacklogAtendido := PercentualBacklogAtendido;
   Result.Relatorio := GerarRelatorio(Result);
 end;
 
 class function TSimulacaoLogistica.GerarRelatorio(const Resultado: TSimulacaoResultado): string;
+var
+  PrazoTexto: string;
 begin
+  if Resultado.PrazoEstimado < 0 then
+    PrazoTexto := 'Prazo estimado para concluir backlog: inviavel com a capacidade atual'
+  else
+    PrazoTexto := Format('Prazo estimado para concluir backlog: %d dias', [Resultado.PrazoEstimado]);
+
   Result :=
     '--- Relatório de Simulação Logística ---' + sLineBreak +
-    Format('Prazo estimado para concluir backlog: %d dias', [Resultado.PrazoEstimado]) + sLineBreak +
+    PrazoTexto + sLineBreak +
+    Format('Movimentações estimadas por dia: %.1f', [Resultado.MovimentacoesPorDia]) + sLineBreak +
     Format('Custo total estimado: R$ %.2f', [Resultado.CustoTotal]) + sLineBreak +
     Format('Horas úteis geradas: %.1f', [Resultado.HorasUteisGeradas]) + sLineBreak +
     Format('Custo por hora útil: R$ %.2f', [Resultado.CustoPorHoraUtil]) + sLineBreak +
-    Format('%% do backlog atendido: %.1f%%', [Resultado.PlataformasConcluidasPct]) + sLineBreak;
+    Format('Backlog atendido no período: %d', [Resultado.BacklogAtendido]) + sLineBreak +
+    Format('Backlog restante: %d', [Resultado.BacklogRestante]) + sLineBreak +
+    Format('%% do backlog atendido: %.1f%%', [Resultado.PercentualBacklogAtendido]) + sLineBreak;
 end;
 
 end.
