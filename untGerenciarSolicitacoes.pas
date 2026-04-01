@@ -8,6 +8,7 @@ uses
   Data.DB, Vcl.Grids, Vcl.DBGrids, System.Actions, Vcl.ActnList,
   Vcl.PlatformDefaultStyleActnCtrls, Vcl.ActnMan, Vcl.StdCtrls, Vcl.Buttons,
   Vcl.Mask, Vcl.DBCtrls,DateUtils, Vcl.Menus, Vcl.CheckLst, ADODB, SDL_NumIO,
+  Clipbrd,
   untDBGridFilter, uZucchi, uProgramacaoRTUtils;
 
 type
@@ -64,6 +65,7 @@ type
     actTransbordos: TAction;
     actMatrizOrigemDestino: TAction;
     BitBtn6: TBitBtn;
+    btnCopiarImagemDestinoOrigem: TBitBtn;
     BitBtn7: TBitBtn;
     actContadorSolicitacao: TAction;
     actCopiarKITPS: TAction;
@@ -139,9 +141,9 @@ type
     btnFiltroClearExecutantes: TToolButton;
     btnClearFiltroContador: TToolButton;
     btnExcelContador: TToolButton;
-    Action1: TAction;
     ToolButton6: TToolButton;
     actExcelProgramacao: TAction;
+    actCopyImage: TAction;
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
@@ -216,6 +218,7 @@ type
     procedure actConfigurarContadorExecute(Sender: TObject);
     procedure DBGridContadorCellClick(Column: TColumn);
     procedure actExcelProgramacaoExecute(Sender: TObject);
+    procedure actCopyImageExecute(Sender: TObject);
     type
       TPlataforma = record
         Salvatagem,GD,BCI,Surfer,SOV,Aqua: String;
@@ -240,6 +243,7 @@ type
     function Contar_KIT_PS(Destino: String): Integer;
     function InfoPlataforma(Plataforma: String): TPlataforma;
     function SalvatagemPlataforma(Plataforma: String): String;
+    procedure CopiarGridComoImagemParaClipboard(AGrid: TStringGrid);
 
   public
     procedure StatusLinhaSelecionada;
@@ -253,6 +257,9 @@ implementation
   uses untPrincipal,untDataModule, untFrmTabela, untConsultaExecutantesProgramados,
   untMotivoCancelamento;
 {$R *.dfm}
+
+type
+  TWinControlAccess = class(TWinControl);
 
 procedure TFrmGerenciarSolicitacoes.actAbrirServicoExecute(Sender: TObject);
   var
@@ -571,6 +578,16 @@ begin
     end;
   end;
 
+end;
+
+procedure TFrmGerenciarSolicitacoes.actCopyImageExecute(Sender: TObject);
+begin
+  CopiarGridComoImagemParaClipboard(RLDestinoOrigem);
+  Application.MessageBox(
+    'Imagem da grade copiada para a área de transferência.',
+    'Colibri',
+    MB_ICONINFORMATION
+  );
 end;
 
 procedure TFrmGerenciarSolicitacoes.actConfigurarContadorExecute(
@@ -1800,6 +1817,30 @@ end;
 procedure TFrmGerenciarSolicitacoes.SpeedButton4Click(Sender: TObject);
 begin
   PanelAjuda.Visible:= false;
+end;
+
+procedure TFrmGerenciarSolicitacoes.CopiarGridComoImagemParaClipboard(
+  AGrid: TStringGrid);
+var
+  Bitmap: TBitmap;
+begin
+  if (AGrid = nil) or (not AGrid.HandleAllocated) then
+    Exit;
+
+  Bitmap := TBitmap.Create;
+  try
+    AGrid.Update;
+
+    Bitmap.PixelFormat := pf24bit;
+    Bitmap.SetSize(AGrid.Width, AGrid.Height);
+    Bitmap.Canvas.Brush.Color := clWhite;
+    Bitmap.Canvas.FillRect(Rect(0, 0, Bitmap.Width, Bitmap.Height));
+    TWinControlAccess(AGrid).PaintTo(Bitmap.Canvas.Handle, 0, 0);
+
+    Clipboard.Assign(Bitmap);
+  finally
+    Bitmap.Free;
+  end;
 end;
 
 procedure TFrmGerenciarSolicitacoes.StatusLinhaSelecionada;

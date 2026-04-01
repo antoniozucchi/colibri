@@ -131,6 +131,7 @@ type
     PanelSimulacao: TPanel;
     ToolBarSimulacao: TToolBar;
     btnSimulacaoPadrao: TBitBtn;
+    btnSimulacaoBaseReal: TBitBtn;
     btnSimulacaoRodar: TBitBtn;
     btnSimulacaoComparar: TBitBtn;
     btnSimulacaoExportar: TBitBtn;
@@ -183,6 +184,7 @@ type
     procedure DBEdit1Change(Sender: TObject);
     procedure actProcurarBuscaEmbarqueExecute(Sender: TObject);
     procedure btnSimulacaoPadraoClick(Sender: TObject);
+    procedure btnSimulacaoBaseRealClick(Sender: TObject);
     procedure btnSimulacaoRodarClick(Sender: TObject);
     procedure btnSimulacaoCompararClick(Sender: TObject);
     procedure btnSimulacaoExportarClick(Sender: TObject);
@@ -649,6 +651,60 @@ implementation
   uses untPrincipal,untDataModule,untFrmPreview, untFrmConfigRT, untFrmTabela,
   untMotivoCancelamento;
 {$R *.dfm}
+
+type
+  TInfoEmbarcacaoSimulacao = record
+    TipoEmbarcacao: string;
+    UsaBridgeMesmoGrupo: Boolean;
+  end;
+
+  TMetricasModalReal = class
+  public
+    TotalMovimentacoes: Integer;
+    TotalHorasRota: Double;
+    TotalCapacidadeOferta: Double;
+    Embarcacoes: TStringList;
+    DiasAtivos: TStringList;
+    EmbarcacaoDiasAtivos: TStringList;
+    RotasProcessadas: TStringList;
+    constructor Create;
+    destructor Destroy; override;
+    function OcupacaoMediaPercentual: Double;
+  end;
+
+constructor TMetricasModalReal.Create;
+begin
+  inherited Create;
+  Embarcacoes := TStringList.Create;
+  Embarcacoes.Sorted := True;
+  Embarcacoes.Duplicates := dupIgnore;
+  DiasAtivos := TStringList.Create;
+  DiasAtivos.Sorted := True;
+  DiasAtivos.Duplicates := dupIgnore;
+  EmbarcacaoDiasAtivos := TStringList.Create;
+  EmbarcacaoDiasAtivos.Sorted := True;
+  EmbarcacaoDiasAtivos.Duplicates := dupIgnore;
+  RotasProcessadas := TStringList.Create;
+  RotasProcessadas.Sorted := True;
+  RotasProcessadas.Duplicates := dupIgnore;
+end;
+
+destructor TMetricasModalReal.Destroy;
+begin
+  RotasProcessadas.Free;
+  EmbarcacaoDiasAtivos.Free;
+  DiasAtivos.Free;
+  Embarcacoes.Free;
+  inherited;
+end;
+
+function TMetricasModalReal.OcupacaoMediaPercentual: Double;
+begin
+  if TotalCapacidadeOferta > 0 then
+    Result := (TotalMovimentacoes / TotalCapacidadeOferta) * 100
+  else
+    Result := 0;
+end;
 
 function TFrmConsultaExecutantesProgramados.StatusRTNormalizado(
   const AStatus: string): string;
@@ -8640,8 +8696,9 @@ end;
 procedure TFrmConsultaExecutantesProgramados.ProcessarRetornoCancelamentoSAP(const LinhaLog: string);
 var
   idProgRT: Integer;
-  Acao, Status, Msg: string;
+  Acao, Status, Msg, MsgNormalizada: string;
   p1, p2, p3: Integer;
+  CancelamentoEfetivado: Boolean;
 begin
   // ignora linhas gerais
   if Pos('|CANCELAR|', LinhaLog) = 0 then
@@ -8664,11 +8721,22 @@ begin
 
   if (idProgRT <= 0) or (Acao <> 'CANCELAR') then Exit;
 
-  // sucesso → marca cancelada
-  if SameText(Status, 'FINALIZADO') then
-    AtualizarProgramacaoRT_Cancelamento(idProgRT, True, Msg, 'CANCELADA')
+  CancelamentoEfetivado :=
+    SameText(Trim(Status), 'FINALIZADO') or
+    SameText(Trim(Status), 'OK');
+
+  if not CancelamentoEfetivado then
+  begin
+    MsgNormalizada := UpperCase(NormalizarMensagemLog(Msg));
+    CancelamentoEfetivado :=
+      (Pos('ENCERRAD', MsgNormalizada) > 0) or
+      (Pos('CANCELAD', MsgNormalizada) > 0);
+  end;
+
+  if CancelamentoEfetivado then
+    AtualizarProgramacaoRT_Cancelamento(idProgRT, True, Msg, RT_STATUS_CANCELADA)
   else
-    AtualizarProgramacaoRT_Cancelamento(idProgRT, False, Msg, 'ERRO');
+    AtualizarProgramacaoRT_Cancelamento(idProgRT, False, Msg, '');
 end;
 
 procedure TFrmConsultaExecutantesProgramados.ImportarRTsSAPPeriodoPorTipo(
@@ -9574,20 +9642,47 @@ procedure TFrmConsultaExecutantesProgramados.AtualizarProgramacaoRT_Cancelamento
   const Mensagem, RT_Status: string);
 var
   Q: TADOQuery;
+  SQL, StatusSafe, MensagemSafe: string;
 begin
   Q := TADOQuery.Create(nil);
   try
     Q.Connection := FrmDataModule.ADOConnectionRT;
-    Q.SQL.Text :=
-      'UPDATE tblProgramacaoRT SET '+
-      '  RT_Cancelada = :RT_Cancelada, '+
-      '  RT_Mensagem = :RT_Mensagem, '+
-      '  RT_Status = :RT_Status, '+
-      'WHERE idProgramacaoRT = :idProgramacaoRT';
+    Q.ParamCheck := True;
+
+    MensagemSafe := AjustarTextoParaCampo(
+      FrmDataModule.ADOConnectionRT,
+      'tblProgramacaoRT',
+      'RT_Mensagem',
+      Trim(Mensagem),
+      255
+    );
+
+    StatusSafe := AjustarTextoParaCampo(
+      FrmDataModule.ADOConnectionRT,
+      'tblProgramacaoRT',
+      'RT_Status',
+      StatusRTNormalizado(RT_Status),
+      40
+    );
+
+    SQL :=
+      'UPDATE tblProgramacaoRT SET ' +
+      '  RT_Cancelada = :RT_Cancelada, ' +
+      '  RT_Mensagem = :RT_Mensagem ';
+
+    if StatusSafe <> '' then
+      SQL := SQL + ', RT_Status = :RT_Status ';
+
+    SQL := SQL + 'WHERE idProgramacaoRT = :idProgramacaoRT';
+
+    Q.SQL.Text := SQL;
 
     Q.Parameters.ParamByName('RT_Cancelada').Value := Cancelada;
-    Q.Parameters.ParamByName('RT_Mensagem').Value := Copy(Trim(Mensagem), 1, 100);
-    Q.Parameters.ParamByName('RT_Status').Value :=  StatusRTNormalizado(RT_Status);
+    Q.Parameters.ParamByName('RT_Mensagem').Value := MensagemSafe;
+
+    if StatusSafe <> '' then
+      Q.Parameters.ParamByName('RT_Status').Value := StatusSafe;
+
     Q.Parameters.ParamByName('idProgramacaoRT').Value := idProgramacaoRT;
 
     Q.ExecSQL;

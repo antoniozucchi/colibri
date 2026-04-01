@@ -41,7 +41,6 @@ object FrmGerenciarSolicitacoes: TFrmGerenciarSolicitacoes
     ParentBackground = False
     ParentFont = False
     TabOrder = 0
-    ExplicitWidth = 1532
   end
   object PanelResultados: TPanel
     Left = 503
@@ -50,8 +49,6 @@ object FrmGerenciarSolicitacoes: TFrmGerenciarSolicitacoes
     Height = 510
     Align = alClient
     TabOrder = 1
-    ExplicitWidth = 1029
-    ExplicitHeight = 502
     object PanelServicos: TPanel
       Left = 1
       Top = 484
@@ -59,8 +56,6 @@ object FrmGerenciarSolicitacoes: TFrmGerenciarSolicitacoes
       Height = 25
       Align = alBottom
       TabOrder = 0
-      ExplicitTop = 476
-      ExplicitWidth = 1027
       object Panel4: TPanel
         Left = 1
         Top = 1
@@ -77,7 +72,6 @@ object FrmGerenciarSolicitacoes: TFrmGerenciarSolicitacoes
         ParentBackground = False
         ParentFont = False
         TabOrder = 0
-        ExplicitWidth = 1025
         object btnMostrarOcultar: TBitBtn
           Left = 1
           Top = 1
@@ -97,7 +91,6 @@ object FrmGerenciarSolicitacoes: TFrmGerenciarSolicitacoes
         Height = 173
         Align = alClient
         TabOrder = 1
-        ExplicitWidth = 1025
         object DBGridServicos: TFilterDBGrid
           Left = 1
           Top = 1
@@ -188,8 +181,6 @@ object FrmGerenciarSolicitacoes: TFrmGerenciarSolicitacoes
       Height = 483
       Align = alClient
       TabOrder = 1
-      ExplicitWidth = 1027
-      ExplicitHeight = 475
       object Panel6: TPanel
         Left = 1
         Top = 1
@@ -206,7 +197,6 @@ object FrmGerenciarSolicitacoes: TFrmGerenciarSolicitacoes
         ParentBackground = False
         ParentFont = False
         TabOrder = 0
-        ExplicitWidth = 1025
       end
       object ToolBar2: TToolBar
         Left = 1
@@ -218,7 +208,6 @@ object FrmGerenciarSolicitacoes: TFrmGerenciarSolicitacoes
         EdgeBorders = [ebLeft, ebTop, ebRight, ebBottom]
         Images = FrmPrincipal.ImageList1
         TabOrder = 1
-        ExplicitWidth = 1025
         object ToolButton5: TToolButton
           Left = 0
           Top = 0
@@ -385,8 +374,6 @@ object FrmGerenciarSolicitacoes: TFrmGerenciarSolicitacoes
           item
             Width = 50
           end>
-        ExplicitTop = 455
-        ExplicitWidth = 1025
       end
       object ColunasLayoutExecutantes: TStringGrid
         Left = 49
@@ -431,8 +418,6 @@ object FrmGerenciarSolicitacoes: TFrmGerenciarSolicitacoes
         Height = 408
         Align = alClient
         TabOrder = 4
-        ExplicitWidth = 1025
-        ExplicitHeight = 400
         object DBGridExecutantes: TFilterDBGrid
           Left = 1
           Top = 1
@@ -675,7 +660,6 @@ object FrmGerenciarSolicitacoes: TFrmGerenciarSolicitacoes
     Height = 510
     Align = alLeft
     TabOrder = 2
-    ExplicitHeight = 502
     object Splitter3: TSplitter
       Left = 1
       Top = 353
@@ -749,22 +733,33 @@ object FrmGerenciarSolicitacoes: TFrmGerenciarSolicitacoes
         ShowHint = True
         TabOrder = 0
       end
-      object ToolButton7: TToolButton
+      object btnCopiarImagemDestinoOrigem: TBitBtn
         Left = 116
+        Top = 0
+        Width = 105
+        Height = 22
+        Action = actCopyImage
+        Caption = 'Copiar Imagem'
+        ParentShowHint = False
+        ShowHint = True
+        TabOrder = 1
+      end
+      object ToolButton7: TToolButton
+        Left = 221
         Top = 0
         Action = actInfo
         ParentShowHint = False
         ShowHint = True
       end
       object ToolButton11: TToolButton
-        Left = 139
+        Left = 244
         Top = 0
         Action = actConfigurarContador
         ParentShowHint = False
         ShowHint = True
       end
       object ToolButton6: TToolButton
-        Left = 162
+        Left = 267
         Top = 0
         Action = actExcelProgramacao
       end
@@ -786,7 +781,8 @@ object FrmGerenciarSolicitacoes: TFrmGerenciarSolicitacoes
       TabOrder = 2
       OnDrawCell = RLDestinoOrigemDrawCell
       OnSelectCell = RLDestinoOrigemSelectCell
-      ExplicitHeight = 290
+      ExplicitLeft = 2
+      ExplicitTop = 56
     end
     object PanelNotas: TPanel
       Left = 1
@@ -795,7 +791,6 @@ object FrmGerenciarSolicitacoes: TFrmGerenciarSolicitacoes
       Height = 153
       Align = alBottom
       TabOrder = 3
-      ExplicitTop = 348
       object Panel1: TPanel
         Left = 1
         Top = 1
@@ -1408,8 +1403,6 @@ object FrmGerenciarSolicitacoes: TFrmGerenciarSolicitacoes
     Height = 27
     Align = alBottom
     TabOrder = 4
-    ExplicitTop = 527
-    ExplicitWidth = 1532
     object RLContadorSolicitacao: TStringGrid
       Left = 1
       Top = 1
@@ -1423,7 +1416,6 @@ object FrmGerenciarSolicitacoes: TFrmGerenciarSolicitacoes
       FixedRows = 0
       Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goDrawFocusSelected, goColSizing, goColMoving, goFixedRowClick]
       TabOrder = 0
-      ExplicitWidth = 1530
     end
   end
   object ActionManager1: TActionManager
@@ -1621,15 +1613,19 @@ object FrmGerenciarSolicitacoes: TFrmGerenciarSolicitacoes
       ImageIndex = 95
       OnExecute = actDuplicadosExecute
     end
-    object Action1: TAction
-      Caption = 'Action1'
-    end
     object actExcelProgramacao: TAction
       Category = 'Bot'#245'es'
       Caption = 'actExcelProgramacao'
       Hint = 'Exportar para o Excel'
       ImageIndex = 54
       OnExecute = actExcelProgramacaoExecute
+    end
+    object actCopyImage: TAction
+      Category = 'Bot'#245'es'
+      Caption = 'Copiar Imagem'
+      Hint = 'Copiar imagem para o clipboard'
+      ImageIndex = 138
+      OnExecute = actCopyImageExecute
     end
   end
   object PopupMenuDestinoOrigem: TPopupMenu
