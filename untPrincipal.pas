@@ -1,4 +1,5 @@
-﻿unit untPrincipal;
+﻿
+unit untPrincipal;
 
 interface
 
@@ -35,8 +36,6 @@ type
     N1: TMenuItem;
     CadastroUsuario1: TMenuItem;
     ProgramacaoDiaria2: TMenuItem;
-    MenuImportacao: TMenuItem;
-    ImportarPlanilhas1: TMenuItem;
     Image2: TImage;
     MenuSistema: TMenuItem;
     Sobre1: TMenuItem;
@@ -63,10 +62,7 @@ type
     MovimentacaoCarga1: TMenuItem;
     CondicaoMarEmbarcacao1: TMenuItem;
     N3: TMenuItem;
-    actDownlodaDBMemoria: TAction;
-    actUploadDBMemoria: TAction;
     Ajuda1: TMenuItem;
-    actMatrizExecutanteAPLAT: TAction;
     actMatrizExecutanteCadastro: TAction;
     ResumoProgramao1: TMenuItem;
     SituaodosEquipamentoseAcessodasPlataformas1: TMenuItem;
@@ -87,7 +83,6 @@ type
       Panel: TStatusPanel; const Rect: TRect);
     procedure CadastroUsuario1Click(Sender: TObject);
     procedure ProgramacaoDiaria2Click(Sender: TObject);
-    procedure ImportarPlanilhas1Click(Sender: TObject);
     procedure Sobre1Click(Sender: TObject);
     procedure GerenciarSolicitaes1Click(Sender: TObject);
     procedure GerenciarTransportes1Click(Sender: TObject);
@@ -107,10 +102,7 @@ type
     procedure actConverterDBExecute(Sender: TObject);
     procedure MovimentacaoCarga1Click(Sender: TObject);
     procedure CondicaoMarEmbarcacao1Click(Sender: TObject);
-    procedure actDownlodaDBMemoriaExecute(Sender: TObject);
-    procedure actUploadDBMemoriaExecute(Sender: TObject);
     procedure Ajuda1Click(Sender: TObject);
-    procedure actMatrizExecutanteAPLATExecute(Sender: TObject);
     procedure actMatrizExecutanteCadastroExecute(Sender: TObject);
     procedure ResumoProgramao1Click(Sender: TObject);
     procedure SituaodosEquipamentoseAcessodasPlataformas1Click(Sender: TObject);
@@ -157,7 +149,7 @@ type
     Capturing,booLOCAL,Interromper: Boolean;
     HintPadrao,txtBarraProgresso,enderecoColibriRegistro: String;
 
-    MatrizSalvatagem,MatrizExecutanteAPLAT,MatrizForaOperacao,
+    MatrizSalvatagem,MatrizForaOperacao,
     MatrizExecutanteCadastro: array of array of String;
     const
     CoresAuto: array[0..14] of TColor =
@@ -244,7 +236,6 @@ type
     procedure GravarCanceladoAprovado(idProgramacaoDiaria: Integer);
     procedure compactarDB(EnderecoArquivo: String;booleanPerguntar,conexaoColibri: Boolean;
     SourceADOConnection: TADOConnection);
-    procedure compactarDBMemoria(EnderecoArquivo: String;SourceADOConnection: TADOConnection);
     function VerificaCPF(Texto: String): String;
     function SomenteNumero(Texto: String): String;
     function FormataCPF(Texto: String): String;
@@ -325,7 +316,7 @@ var
 implementation
   uses untDataModule, untConsultaProgramacao,untFrmlogin,
   untEmbarcacao,untExecutante, untPlataforma, untFrmCadastroUsuario, untProgramacaoDiaria,
-  untImportacao,untFrmSobre, untGerenciarSolicitacoes,
+  untFrmSobre, untGerenciarSolicitacoes,
   untGerenciarEmbarcacoes, untConsultaServicosProgramados,
   untConsultaExecutantesProgramados, untControleGeradores,
   untAgendaIntervencao,untMovimentacaoCarga,untTelaAbertura,
@@ -338,12 +329,11 @@ implementation
 
 procedure TFrmPrincipal.AbrirBancoDados(enderecoColibri,Chave: String;BooleanSplash: Boolean);
   var
-    enderecoConsulta,enderecoMemoria, enderecoRT: String;
+    enderecoConsulta, enderecoRT: String;
 begin
   try
     enderecoColibri:= conectarBD(enderecoColibri,FrmDataModule.ADOConnectionColibri);
     enderecoConsulta:= ExtractFilePath(enderecoColibri)+'dbConsulta.mdb';
-    enderecoMemoria:= ExtractFilePath(enderecoColibri)+'dbMemoria.mdb';
     enderecoRT:= ExtractFilePath(enderecoColibri)+'dbRT.mdb';
     carregarLoginUsuario(Chave);
     //========================================================================
@@ -360,16 +350,6 @@ begin
         MessageBox(0,PChar('Banco de dados de Consulta não encontrado ou corrompido: '+enderecoConsulta),
         'Colibri',MB_ICONEXCLAMATION);
       end;
-      //------------------------------------
-      try
-        msgSplash('Conectando ao dbMemoria.mdb',
-        ' no endereço: '+enderecoMemoria);
-        FrmPrincipal.conectarBDDireto(enderecoMemoria,FrmDataModule.ADOConnectionMemoria);
-      except
-        MessageBox(0,PChar('Banco de dados de Memória não encontrado ou corrompido: '+enderecoMemoria),
-        'Colibri',MB_ICONEXCLAMATION);
-      end;
-      //------------------------------------
       try
         msgSplash('Conectando ao dbRT.mdb',
         ' no endereço: '+enderecoRT);
@@ -408,7 +388,7 @@ end;
 
 procedure TFrmPrincipal.actConverterDBExecute(Sender: TObject);
   var
-    versaoDB,versaoPRG, enderecoMemoria: String;
+    versaoDB,versaoPRG: String;
 begin
   try
     FrmDataModule.ADOQueryColibri.Active:= true;
@@ -439,12 +419,6 @@ begin
     end;
     if versaoDB = '1.6.5.8' then
     begin
-      CriarFieldDB('AtualizadoPor','tblNotaManutencao','VARCHAR(10)',
-      FrmDataModule.ADOQueryTemporarioDBMemoria);
-      CriarFieldDB('DataAtualizacao','tblNotaManutencao','DATETIME',
-      FrmDataModule.ADOQueryTemporarioDBMemoria);
-      CriarFieldDB('ComputadorAtualizacao','tblNotaManutencao','VARCHAR(20)',
-      FrmDataModule.ADOQueryTemporarioDBMemoria);
       CriarFieldDB('Descricao','tblMovimentacaoCarga','VARCHAR(255)',
       FrmDataModule.ADOQueryTemporarioDBConsulta1);
       versaoDB:= '1.6.5.9';
@@ -461,22 +435,6 @@ begin
       FrmDataModule.ADOQueryTemporarioDBColibri);
       CriarFieldDB('TextoBreveOM','tblProgramacaoServico','VARCHAR(255)',
       FrmDataModule.ADOQueryTemporarioDBColibri);
-      AlterarNomeFieldDB('ComputadorImportacao','Computador','tblCarteiraTrabalho',
-      FrmDataModule.ADOConnectionMemoria);
-      AlterarNomeFieldDB('ComputadorImportacao','Computador','tblExecutanteAPLAT',
-      FrmDataModule.ADOConnectionMemoria);
-      AlterarNomeFieldDB('ComputadorImportacao','Computador','tblExecutanteSAP',
-      FrmDataModule.ADOConnectionMemoria);
-      AlterarNomeFieldDB('ComputadorImportacao','Computador','tblLocalInstalacao',
-      FrmDataModule.ADOConnectionMemoria);
-      AlterarNomeFieldDB('ComputadorImportacao','Computador','tblNotaManutencao',
-      FrmDataModule.ADOConnectionMemoria);
-      AlterarNomeFieldDB('ComputadorImportacao','Computador','tblPreventivas',
-      FrmDataModule.ADOConnectionMemoria);
-      AlterarNomeFieldDB('ComputadorImportacao','Computador','tblLocalInstalacao',
-      FrmDataModule.ADOConnectionMemoria);
-      AlterarNomeFieldDB('TextoBreveOP','TextoBreveOperacao','tblPreventivas',
-      FrmDataModule.ADOConnectionMemoria);
       CriarFieldDB('DataAtendimento','tblMovimentacaoCarga','DATETIME',
       FrmDataModule.ADOQueryTemporarioDBConsulta1);
       AlterarNomeFieldDB('DataNecessidade','Data','tblMovimentacaoCarga',
@@ -509,11 +467,6 @@ begin
     end;
     if versaoDB = '1.6.6.4' then
     begin
-      //Tabela de Notas de Manutenção SAP
-      AlterarNomeFieldDB('PrazoGM','PrazoGM',
-      'tblNotaManutencao',FrmDataModule.ADOConnectionMemoria);
-      AlterarNomeFieldDB('VencimentoAvaria','VencimentoAvaria',
-      'tblNotaManutencao',FrmDataModule.ADOConnectionMemoria);
       //Tabela Plataforma
       CriarFieldDB('Painel_Condicao','tblPlataforma','VARCHAR(25)',
       FrmDataModule.ADOQueryTemporarioDBConsulta1);
@@ -586,10 +539,6 @@ begin
     end;
     if versaoDB = '1.6.7.1' then
     begin
-      //Tabela de Notas de Manutenção SAP
-      AlterarNomeFieldDB('DenominacaoLocalInstalacao','DenominacaoLocal',
-      'tblNotaManutencao',FrmDataModule.ADOConnectionMemoria);
-
       CriarTableDB('tblFiltroSistemas','idFiltroSitemas',
       '[Item] INTEGER, [Descricao] VARCHAR(255), [TituloColuna] VARCHAR(255), [PalavraBusca] VARCHAR(255),[Condicional] VARCHAR(255)',
       FrmDataModule.ADOConnectionConsulta);
@@ -608,25 +557,6 @@ begin
     end;
     if versaoDB = '1.6.7.2' then
     begin
-      //LEC Local de Instalação
-      CriarFieldDB('CPO','tblCarteiraTrabalho','VARCHAR(2)',
-      FrmDataModule.ADOQueryTemporarioDBMemoria);
-      CriarFieldDB('Classe','tblLocalInstalacao','VARCHAR(25)',
-      FrmDataModule.ADOQueryTemporarioDBMemoria);
-      CriarFieldDB('BCVT','tblLocalInstalacao','YESNO)',
-      FrmDataModule.ADOQueryTemporarioDBMemoria);
-      //Criar Tabela tblRTI
-      CriarTableDB('tblRTI','idRTI',
-      '[NotaManutencao] INTEGER, [NumItem] VARCHAR(4), [DescricaoFalha] VARCHAR(100), [DataVencimento] DATETIME,'+
-      '[Medida] VARCHAR(4),[DataPH] DATETIME,[DataRECB] DATETIME,[CodigoMedidaABCD] VARCHAR(2), '+
-      '[DataPlanInicio] DATETIME,[DataPlanFim] DATETIME,[StatusUsuarioMedida] VARCHAR(100),[CentroTrabalhoResp] VARCHAR(25), '+
-      '[StatusUsuarioNota] VARCHAR(25), [StatusSistemaMedida] VARCHAR(25), [CodigoMedidas] VARCHAR(4), '+
-      '[GrupoCodeMedidas] VARCHAR(25), [LocalInstalacao] VARCHAR(50), [NEquipamento] VARCHAR(25), '+
-      '[OrdemManutencao] VARCHAR(25), [StatusSistemaNota] VARCHAR(50), [TextoBreveMedida] VARCHAR(50), '+
-      '[CodigoAcao] VARCHAR(25), [AreaOp] VARCHAR(4),[TextoLongoRTI] Memo,[Plataforma] VARCHAR(100), '+
-      '[BooleanCritico] YESNO,[BCVT] YESNO,[Classe] VARCHAR(40), [DenominacaoLocalInstalacao] VARCHAR(40),'+
-      '[ImportadoPor] VARCHAR(10), [DataImportacao] DATETIME,[ComputadorImportacao] VARCHAR(20),[txtTipoEtapaServico] VARCHAR(100)',
-      FrmDataModule.ADOConnectionMemoria);
       //Criar Tabela tblClasseBCVT
       CriarTableDB('tblClasseBCVT','idClasseBCVT',
       '[Classe] VARCHAR(100) ',FrmDataModule.ADOConnectionConsulta);
@@ -634,11 +564,6 @@ begin
     end;
     if versaoDB = '1.6.7.3' then
     begin
-      //Memoria
-      CriarFieldDB('Observacao','tblRTI','VARCHAR(255)',
-      FrmDataModule.ADOQueryTemporarioDBMemoria);
-      CriarFieldDB('StatusProgramacao','tblRTI','VARCHAR(15)',
-      FrmDataModule.ADOQueryTemporarioDBMemoria);
       //Consulta
       CriarTableDB('tblRTIObservacao','idRTIObservacao',
       '[NumItem] VARCHAR(4), [Medida] VARCHAR(4),[Observacao] VARCHAR(255),[StatusProgramacao] VARCHAR(15),[NotaManutencao] VARCHAR(25)',
@@ -650,9 +575,6 @@ begin
     end;
     if versaoDB = '1.6.7.5' then
     begin
-      //Memoria
-      CriarFieldDB('BooleanItem','tblLocalInstalacao','YESNO',
-      FrmDataModule.ADOQueryTemporarioDBMemoria);
       versaoDB:= '1.6.7.6';
     end;
     if versaoDB = '1.6.7.7' then
@@ -719,18 +641,6 @@ begin
       CriarFieldDB('CapPrincipal','tblPlataforma','DOUBLE',FrmDataModule.ADOQueryTemporarioDBConsulta1);
       CriarFieldDB('CapAuxiliar','tblPlataforma','DOUBLE',FrmDataModule.ADOQueryTemporarioDBConsulta1);
       CriarFieldDB('DataRealizacaoDegraus','tblPlataforma','DATETIME',FrmDataModule.ADOQueryTemporarioDBConsulta1);
-
-      //dbMemoria
-      ExcluirTableDB('tblCarteiraTrabalho',FrmDataModule.ADOQueryTemporarioDBMemoria);
-      ExcluirTableDB('tblICPI',FrmDataModule.ADOQueryTemporarioDBMemoria);
-      ExcluirTableDB('tblICPM',FrmDataModule.ADOQueryTemporarioDBMemoria);
-      ExcluirTableDB('tblItemManutencao',FrmDataModule.ADOQueryTemporarioDBMemoria);
-      ExcluirTableDB('tblLocalInstalacao',FrmDataModule.ADOQueryTemporarioDBMemoria);
-      ExcluirTableDB('tblNotaManutencao',FrmDataModule.ADOQueryTemporarioDBMemoria);
-      ExcluirTableDB('tblPrioridadeForcada',FrmDataModule.ADOQueryTemporarioDBMemoria);
-      ExcluirTableDB('tblRTI',FrmDataModule.ADOQueryTemporarioDBMemoria);
-      ExcluirTableDB('tblTextoLongoCarteira',FrmDataModule.ADOQueryTemporarioDBMemoria);
-      ExcluirTableDB('tblTextoLongoOperacao',FrmDataModule.ADOQueryTemporarioDBMemoria);
 
       versaoDB:= '1.6.9.0';
     end;
@@ -1250,23 +1160,123 @@ begin
           FrmDataModule.ADOConnectionColibri);
       CriarFieldDB('RT_Mensagem','tblProgramacaoExecutante','VARCHAR(100)',
           FrmDataModule.ADOQueryTemporarioDBColibri);
+      versaoDB:= '1.7.0.4';
+    end;
+    if (versaoDB = '1.7.0.4') then
+    begin
+      // -----------------------------------------------------------------------
+      // Distribuição logística automática via solver
+      // -----------------------------------------------------------------------
 
+      // tblEmbarcacao (dbConsulta) — suporte ao solver
+      CriarFieldDB('Distribuicao',       'tblEmbarcacao', 'YESNO',       FrmDataModule.ADOQueryTemporarioDBConsulta1);
+      CriarFieldDB('TipoEmbarcacao',     'tblEmbarcacao', 'VARCHAR(20)', FrmDataModule.ADOQueryTemporarioDBConsulta1);
+      CriarFieldDB('VelocidadeNos',      'tblEmbarcacao', 'DOUBLE',      FrmDataModule.ADOQueryTemporarioDBConsulta1);
+      CriarFieldDB('CapacidadeMaxSolver','tblEmbarcacao', 'INTEGER',     FrmDataModule.ADOQueryTemporarioDBConsulta1);
+      CriarFieldDB('HorarioLimiteSolar', 'tblEmbarcacao', 'VARCHAR(5)',  FrmDataModule.ADOQueryTemporarioDBConsulta1);
 
-      //========================================================================
-      ExcluirTableDB('tblCarteiraTrabalho',FrmDataModule.ADOQueryTemporarioDBMemoria);
-      ExcluirTableDB('tblICPI',FrmDataModule.ADOQueryTemporarioDBMemoria);
-      ExcluirTableDB('tblICPM',FrmDataModule.ADOQueryTemporarioDBMemoria);
-      ExcluirTableDB('tblItemManutencao',FrmDataModule.ADOQueryTemporarioDBMemoria);
-      ExcluirTableDB('tblLocalInstalacao',FrmDataModule.ADOQueryTemporarioDBMemoria);
-      ExcluirTableDB('tblPrioridadeForcada',FrmDataModule.ADOQueryTemporarioDBMemoria);
-      ExcluirTableDB('tblTextoLongoCarteira',FrmDataModule.ADOQueryTemporarioDBMemoria);
-      ExcluirTableDB('tblTextoLongoOperacao',FrmDataModule.ADOQueryTemporarioDBMemoria);
-      ExcluirTableDB('tblRTI',FrmDataModule.ADOQueryTemporarioDBMemoria);
-      //========================================================================
-      enderecoMemoria := FrmPrincipal.registroEndereco('Banco de dados');
-      enderecoMemoria:= ExtractFilePath(enderecoMemoria)+'\dbMemoria.mdb';
-      compactarDBMemoria(enderecoMemoria,FrmDataModule.ADOConnectionMemoria);
-      versaoDB:= '1.7.0.3';
+      // tblPlataforma (dbConsulta) — suporte ao solver
+      CriarFieldDB('CodigoNormSolver',       'tblPlataforma', 'VARCHAR(10)', FrmDataModule.ADOQueryTemporarioDBConsulta1);
+      CriarFieldDB('GrupoFisico',            'tblPlataforma', 'VARCHAR(30)', FrmDataModule.ADOQueryTemporarioDBConsulta1);
+      CriarFieldDB('GrupoHorario',           'tblPlataforma', 'VARCHAR(5)',  FrmDataModule.ADOQueryTemporarioDBConsulta1);
+      CriarFieldDB('PrioridadeDistribuicao', 'tblPlataforma', 'INTEGER',     FrmDataModule.ADOQueryTemporarioDBConsulta1);
+      CriarFieldDB('ExcluirDistribuicaoAuto','tblPlataforma', 'YESNO',       FrmDataModule.ADOQueryTemporarioDBConsulta1);
+      // Classifica o papel logístico do nó na rede de distribuição:
+      //   'TERMINAL'   = nó terrestre de apoio (ex: TMIB)
+      //   'HUB'        = plataforma offshore que concentra/distribui PAX (ex: PCM-09)
+      //   '' ou vazio  = plataforma offshore regular
+      CriarFieldDB('TipoNoLogistico',        'tblPlataforma', 'VARCHAR(20)', FrmDataModule.ADOQueryTemporarioDBConsulta1);
+
+      // tblRoteamento (bdColibri) — rastreabilidade da geração automática
+      CriarFieldDB('OrigemDistribuicao',      'tblRoteamento', 'VARCHAR(10)', FrmDataModule.ADOQueryTemporarioDBColibri);
+      CriarFieldDB('GeradaPorSolver',         'tblRoteamento', 'YESNO',       FrmDataModule.ADOQueryTemporarioDBColibri);
+      CriarFieldDB('IdOperacaoDistribuicao',  'tblRoteamento', 'INTEGER',     FrmDataModule.ADOQueryTemporarioDBColibri);
+      CriarFieldDB('GrupoHorarioRota',        'tblRoteamento', 'VARCHAR(5)',  FrmDataModule.ADOQueryTemporarioDBColibri);
+      CriarFieldDB('DistanciaTotalNM',        'tblRoteamento', 'DOUBLE',      FrmDataModule.ADOQueryTemporarioDBColibri);
+
+      // tblOperacaoDistribuicao (bdColibri) — registro de cada execução do solver
+      CriarTableDB('tblOperacaoDistribuicao', 'idOperacaoDistribuicao',
+        '[DataOperacao] DATETIME, ' +
+        '[Perfil] VARCHAR(20), ' +
+        '[Versao] INTEGER, ' +
+        '[DataHoraExecucao] DATETIME, ' +
+        '[UsuarioExecucao] VARCHAR(50), ' +
+        '[StatusExecucao] VARCHAR(20), ' +
+        '[MensagemStatus] MEMO, ' +
+        '[TrocaTurma] YESNO, ' +
+        '[RendidosM9] INTEGER, ' +
+        '[ArquivoInput] VARCHAR(255), ' +
+        '[ArquivoOutput] VARCHAR(255)',
+        FrmDataModule.ADOConnectionColibri);
+
+      // tblDistribuicaoRota (bdColibri) — uma rota por embarcação por operação
+      CriarTableDB('tblDistribuicaoRota', 'idDistribuicaoRota',
+        '[idOperacaoDistribuicao] INTEGER, ' +
+        '[idRoteamento] INTEGER, ' +
+        '[NomeEmbarcacao] VARCHAR(50), ' +
+        '[HoraPartida] VARCHAR(5), ' +
+        '[SequenciaSolver] VARCHAR(255), ' +
+        '[DistanciaNM] DOUBLE, ' +
+        '[UsaHubM9] YESNO, ' +
+        '[PaxTMIB] INTEGER, ' +
+        '[PaxM9] INTEGER, ' +
+        '[RotaFixa] YESNO',
+        FrmDataModule.ADOConnectionColibri);
+
+      // tblDistribuicaoPaxAlocado (bdColibri) — vínculo executante ↔ rota do solver
+      CriarTableDB('tblDistribuicaoPaxAlocado', 'idDistribuicaoPaxAlocado',
+        '[idDistribuicaoRota] INTEGER, ' +
+        '[idProgramacaoExecutante] INTEGER, ' +
+        '[OrigemSolver] VARCHAR(10), ' +
+        '[PosicaoNaSequencia] INTEGER, ' +
+        '[DataHoraChegadaEstimada] DATETIME',
+        FrmDataModule.ADOConnectionColibri);
+
+      // tblDistribuicaoExclusao (bdColibri) — executantes excluídos da distribuição e motivo
+      CriarTableDB('tblDistribuicaoExclusao', 'idDistribuicaoExclusao',
+        '[idOperacaoDistribuicao] INTEGER, ' +
+        '[idProgramacaoExecutante] INTEGER, ' +
+        '[MotivoExclusao] VARCHAR(50), ' +
+        '[DescricaoMotivo] VARCHAR(255)',
+        FrmDataModule.ADOConnectionColibri);
+
+      // tblDistribuicaoConfig (bdColibri) — parâmetros configuráveis do solver
+      CriarTableDB('tblDistribuicaoConfig', 'idDistribuicaoConfig',
+        '[ChaveConfig] VARCHAR(50), ' +
+        '[ValorConfig] VARCHAR(255), ' +
+        '[TipoValor] VARCHAR(10), ' +
+        '[Descricao] VARCHAR(255)',
+        FrmDataModule.ADOConnectionColibri);
+
+      // Valores padrão da configuração do solver
+      try
+        FrmDataModule.ADOConnectionColibri.Execute(
+          'INSERT INTO tblDistribuicaoConfig (ChaveConfig, ValorConfig, TipoValor, Descricao) VALUES ' +
+          '(''DEFAULT_SPEED_KN'', ''14.0'', ''FLOAT'', ' +
+          '''Velocidade padrao das embarcacoes em nos quando nao configurada individualmente'')');
+        FrmDataModule.ADOConnectionColibri.Execute(
+          'INSERT INTO tblDistribuicaoConfig (ChaveConfig, ValorConfig, TipoValor, Descricao) VALUES ' +
+          '(''AQUA_APPROACH_TIME'', ''25'', ''INT'', ' +
+          '''Minutos extras de aproximacao por parada para embarcacao do tipo AQUA'')');
+        FrmDataModule.ADOConnectionColibri.Execute(
+          'INSERT INTO tblDistribuicaoConfig (ChaveConfig, ValorConfig, TipoValor, Descricao) VALUES ' +
+          '(''PRIORITY1_PRECEDENCE_PENALTY_NM'', ''250.0'', ''FLOAT'', ' +
+          '''Penalidade em NM por ordenar destino Prioridade 1 apos destinos sem prioridade'')');
+        FrmDataModule.ADOConnectionColibri.Execute(
+          'INSERT INTO tblDistribuicaoConfig (ChaveConfig, ValorConfig, TipoValor, Descricao) VALUES ' +
+          '(''PASTA_REDE_RAIZ'', '''', ''TEXT'', ' +
+          '''Pasta raiz de rede para salvar arquivos de entrada e saida da distribuicao'')');
+        FrmDataModule.ADOConnectionColibri.Execute(
+          'INSERT INTO tblDistribuicaoConfig (ChaveConfig, ValorConfig, TipoValor, Descricao) VALUES ' +
+          '(''PYTHON_EXE_PATH'', ''python.exe'', ''TEXT'', ' +
+          '''Caminho do executavel Python usado para rodar o solver.py'')');
+        FrmDataModule.ADOConnectionColibri.Execute(
+          'INSERT INTO tblDistribuicaoConfig (ChaveConfig, ValorConfig, TipoValor, Descricao) VALUES ' +
+          '(''SOLVER_WORK_PATH'', '''', ''TEXT'', ' +
+          '''Pasta de trabalho para arquivos temporarios do solver (input/output)'')');
+      except
+        // Silencia erros de insert duplicado em re-execução da conversão
+      end;
     end;
 
     FrmDataModule.ADOQueryColibri.Edit;
@@ -1281,64 +1291,6 @@ end;
 function TFrmPrincipal.FormatarCPF(CPF: String): String;
 begin
 
-end;
-
-procedure TFrmPrincipal.actDownlodaDBMemoriaExecute(Sender: TObject);
-  var
-    Caminho_Copia,enderecoMemoria: String;
-begin
-  ProgressBarIncializa(4,'Copiando dbMemoria.mdb...');
-  FrmDataModule.ADOQueryColibri.Active:= false;
-  FrmDataModule.ADOQueryColibri.Active:= true;
-  enderecoMemoria := FrmPrincipal.registroEndereco('Banco de dados');
-  enderecoMemoria:= ExtractFilePath(enderecoMemoria)+'\dbMemoria.mdb';
-  Caminho_Copia := ExtractFilePath(Application.ExeName) + 'dbMemoria.mdb';
-  DeleteFile(Caminho_Copia);
-  ProgressBarIncremento(1);
-  CopyFile(PChar(enderecoMemoria), PChar(Caminho_Copia), false);
-  ProgressBarIncremento(2);
-  FrmPrincipal.conectarBDDireto(Caminho_Copia,FrmDataModule.ADOConnectionMemoria);
-  ProgressBarAtualizar;
-end;
-
-procedure TFrmPrincipal.actMatrizExecutanteAPLATExecute(Sender: TObject);
-  var
-    NumRegistros,i: Integer;
-    SQLBase: String;
-begin
-  SQLBase:= 'SELECT tblExecutanteAPLAT.* FROM tblExecutanteAPLAT;';
-  //=========================================================================
-  FrmDataModule.ADOQueryTemporarioDBMemoria.Close;
-  FrmDataModule.ADOQueryTemporarioDBMemoria.SQL.Clear;
-  FrmDataModule.ADOQueryTemporarioDBMemoria.SQL.Add(SQLBase);
-  FrmDataModule.ADOQueryTemporarioDBMemoria.Open;
-  NumRegistros:= FrmDataModule.ADOQueryTemporarioDBMemoria.RecordCount;
-  //=========================================================================
-  MatrizExecutanteAPLAT:= nil;
-  SetLength(MatrizExecutanteAPLAT, 7);
-  for i := 0 to High(MatrizExecutanteAPLAT) do
-    SetLength(MatrizExecutanteAPLAT[i], NumRegistros);
-
-  for i := 0 to High(MatrizExecutanteAPLAT[0]) do
-  begin
-
-    MatrizExecutanteAPLAT[0,i]:= FrmDataModule.DataSourceTemporarioDBMemoria.
-    DataSet.FieldByName('txtTipoEtapaServico').AsString;
-    MatrizExecutanteAPLAT[1,i]:= FrmDataModule.DataSourceTemporarioDBMemoria.
-    DataSet.FieldByName('txtFuncao').AsString;
-    MatrizExecutanteAPLAT[2,i]:= FrmDataModule.DataSourceTemporarioDBMemoria.
-    DataSet.FieldByName('txtEmpresa').AsString;
-    MatrizExecutanteAPLAT[3,i]:= FrmDataModule.DataSourceTemporarioDBMemoria.
-    DataSet.FieldByName('txtNomeExecutante').AsString;
-    MatrizExecutanteAPLAT[4,i]:= FrmDataModule.DataSourceTemporarioDBMemoria.
-    DataSet.FieldByName('codigoSAP').AsString;
-    MatrizExecutanteAPLAT[5,i]:= FrmDataModule.DataSourceTemporarioDBMemoria.
-    DataSet.FieldByName('DataEmbarque').AsString;
-    MatrizExecutanteAPLAT[6,i]:= FrmDataModule.DataSourceTemporarioDBMemoria.
-    DataSet.FieldByName('DataDesembarque').AsString;
-
-    FrmDataModule.ADOQueryTemporarioDBMemoria.Next;
-  end;
 end;
 
 procedure TFrmPrincipal.actMatrizExecutanteCadastroExecute(Sender: TObject);
@@ -1470,22 +1422,6 @@ begin
     MatrizSalvatagem[1,i]:= FrmDataModule.DataSourceConsultaPlataforma.DataSet.FieldByName('Salvatagem').AsString;
     FrmDataModule.ADOQueryConsultaPlataforma.Next;
   end;
-end;
-
-procedure TFrmPrincipal.actUploadDBMemoriaExecute(Sender: TObject);
-  var
-    Caminho_Copia,enderecoMemoria: String;
-begin
-  FrmDataModule.ADOQueryColibri.Active:= false;
-  FrmDataModule.ADOQueryColibri.Active:= true;
-  enderecoMemoria := FrmPrincipal.registroEndereco('Banco de dados');
-  enderecoMemoria:= ExtractFilePath(enderecoMemoria)+'\dbMemoria.mdb';
-  Caminho_Copia := ExtractFilePath(Application.ExeName) + 'dbMemoria.mdb';
-  FrmPrincipal.compactarDB(Caminho_Copia,false,false,FrmDataModule.ADOConnectionMemoria);
-  FrmDataModule.ADOConnectionMemoria.Connected:= false;
-  CopyFile(PChar(Caminho_Copia), PChar(enderecoMemoria), false);
-  FrmDataModule.ADOConnectionMemoria.Connected:= true;
-  //FrmPrincipal.conectarBDDireto(enderecoMemoria,FrmDataModule.ADOConnectionMemoria);
 end;
 
 procedure TFrmPrincipal.actVerificaVersaoExecute(Sender: TObject);
@@ -1858,7 +1794,6 @@ begin
       CadastroUsuario1.Enabled:= true;
       ProgramacaoDiaria2.Enabled:= true;
       SalvarBancoDadosComo1.Enabled:= true;
-      ImportarPlanilhas1.Enabled:= true;
       GerenciarTransportes1.Enabled:= true;
       Executantes1.Enabled:= true;
       CompactarBancoDados1.Enabled:= true;
@@ -1869,7 +1804,6 @@ begin
       CadastroUsuario1.Enabled:= true;
       ProgramacaoDiaria2.Enabled:= true;
       SalvarBancoDadosComo1.Enabled:= true;
-      ImportarPlanilhas1.Enabled:= true;
       GerenciarTransportes1.Enabled:= true;
       Executantes1.Enabled:= true;
       CompactarBancoDados1.Enabled:= true;
@@ -1880,7 +1814,6 @@ begin
       CadastroUsuario1.Enabled:= false;
       ProgramacaoDiaria2.Enabled:= true;
       SalvarBancoDadosComo1.Enabled:= true;
-      ImportarPlanilhas1.Enabled:= true;
       GerenciarTransportes1.Enabled:= true;
       Executantes1.Enabled:= true;
       CompactarBancoDados1.Enabled:= true;
@@ -1891,7 +1824,6 @@ begin
       CadastroUsuario1.Enabled:= false;
       ProgramacaoDiaria2.Enabled:= true;
       SalvarBancoDadosComo1.Enabled:= true;
-      ImportarPlanilhas1.Enabled:= true;
       GerenciarTransportes1.Enabled:= true;
       Executantes1.Enabled:= true;
       CompactarBancoDados1.Enabled:= true;
@@ -1902,7 +1834,6 @@ begin
       CadastroUsuario1.Enabled:= false;
       ProgramacaoDiaria2.Enabled:= false;
       SalvarBancoDadosComo1.Enabled:= true;
-      ImportarPlanilhas1.Enabled:= true;
       GerenciarTransportes1.Enabled:= false;
       Executantes1.Enabled:= true;
       CompactarBancoDados1.Enabled:= true;
@@ -1913,7 +1844,6 @@ begin
       CadastroUsuario1.Enabled:= false;
       ProgramacaoDiaria2.Enabled:= false;
       SalvarBancoDadosComo1.Enabled:= true;
-      ImportarPlanilhas1.Enabled:= true;
       GerenciarTransportes1.Enabled:= true;
       Executantes1.Enabled:= false;
       CompactarBancoDados1.Enabled:= true;
@@ -1925,7 +1855,6 @@ end;
 procedure TFrmPrincipal.Force_Reconnect;
 begin
   ADOConnection_Reconnect(FrmDataModule.ADOConnectionColibri);
-  ADOConnection_Reconnect(FrmDataModule.ADOConnectionMemoria);
   ADOConnection_Reconnect(FrmDataModule.ADOConnectionConsulta);
 end;
 
@@ -2093,9 +2022,6 @@ begin
     //Consulta
     caminhoReg:= ExtractFilePath(caminhoReg)+'dbConsulta.mdb';
     compactarDB(caminhoReg,false,false,FrmDataModule.ADOConnectionConsulta);
-    //Memoria
-    caminhoReg:= ExtractFilePath(caminhoReg)+'dbMemoria.mdb';
-    compactarDB(caminhoReg,false,false,FrmDataModule.ADOConnectionMemoria);
     //RT
     caminhoReg:= ExtractFilePath(caminhoReg)+'dbRT.mdb';
     compactarDB(caminhoReg,false,false,FrmDataModule.ADOConnectionRT);
@@ -2179,42 +2105,6 @@ begin
       SourceADOConnection.Connected := true;
       FrmPrincipal.ProgressBarAtualizar;
     end;
-  end;
-end;
-
-procedure TFrmPrincipal.compactarDBMemoria(EnderecoArquivo: String;SourceADOConnection: TADOConnection);
-var
-  dao: OleVariant;
-  Caminho_Temp: String;
-begin
-  // Compactar e Reparar Banco de dados
-  try
-    FrmPrincipal.ProgressBarIncializa(18,'Compactando dbMemoria.mdb');
-    //Endereço do arquivo temporário
-    Caminho_Temp := ExtractFilePath(Application.ExeName) + 'TEMP.mdb';
-    //Copiar Arquivo para o Temp.
-    CopyFile(PChar(EnderecoArquivo), PChar(Caminho_Temp), false);
-    //Excluir arquivo temporário antigo caso exista
-    FrmPrincipal.ProgressBarIncremento(2);
-    DeleteFile(Caminho_Temp);
-    //Fechar Conexão
-    SourceADOConnection.Connected := false;
-    FrmPrincipal.ProgressBarIncremento(2);
-    SourceADOConnection.Close;
-    FrmPrincipal.ProgressBarIncremento(3);
-    //Criar banco
-    dao := CreateOleObject('DAO.DBEngine.36');
-    FrmPrincipal.ProgressBarIncremento(5);
-    //Compactar banco
-    dao.CompactDatabase(EnderecoArquivo, Caminho_Temp);
-    FrmPrincipal.ProgressBarIncremento(5);
-    CopyFile(PChar(Caminho_Temp), PChar(EnderecoArquivo), false);
-    //Excluir arquivo temporário
-    FrmPrincipal.ProgressBarIncremento(1);
-    DeleteFile(Caminho_Temp);
-    FrmPrincipal.ProgressBarAtualizar;
-  except
-    FrmPrincipal.ProgressBarAtualizar;
   end;
 end;
 
@@ -3505,14 +3395,6 @@ begin
   end;
 end;
 
-procedure TFrmPrincipal.ImportarPlanilhas1Click(Sender: TObject);
-begin
-  if not Assigned(FrmImportacao) then
-    FrmImportacao:= TFrmImportacao.Create(Application)
-  else
-    FrmImportacao.Show;
-end;
-
 procedure TFrmPrincipal.ImportDataAccess(const AccessDb, TableName,
   ExcelFileName: String);
   Const
@@ -3595,8 +3477,6 @@ begin
   except
   end;
   FrmPrincipal.ProgressBarAtualizar;
-  FrmDataModule.ADOConnectionMemoria.Connected:= false;
-  FrmDataModule.ADOConnectionMemoria.Connected:= true;
 end;
 
 function TFrmPrincipal.incialListaBusca(CampoString: String): TStringList;
@@ -4439,12 +4319,11 @@ end;
 procedure TFrmPrincipal.SalvarBancoDadosComo1Click(Sender: TObject);
 var
   arquivo_original,enderecoConsulta_original,enderecoConsulta,
-  enderecoMemoria_original,enderecoRT_original,enderecoMemoria,enderecoRT: string;
+  enderecoRT_original,enderecoRT: string;
 begin
   // diretorio e nome do arquivo original
   arquivo_original := registroEndereco('Banco de dados');
   enderecoConsulta_original:= ExtractFilePath(arquivo_original)+'dbConsulta.mdb';
-  enderecoMemoria_original:= ExtractFilePath(arquivo_original)+'dbMemoria.mdb';
   enderecoRT_original:= ExtractFilePath(arquivo_original)+'dbRT.mdb';
   //====================================================
   SaveDialog1.Filter:= 'Arquivo Colibri|*.colibri';
@@ -4455,7 +4334,7 @@ begin
       try
         if CopyFile(PChar(arquivo_original), PChar(SaveDialog1.FileName), false) then
         begin
-          FrmPrincipal.ProgressBarIncializa(5,'Copiando banco de dados');
+          FrmPrincipal.ProgressBarIncializa(4,'Copiando banco de dados');
           registroEscrever('Banco de dados', SaveDialog1.FileName);
           FrmPrincipal.ProgressBarAtualizar;
           //Carregar banco de dados
@@ -4463,15 +4342,10 @@ begin
           FrmPrincipal.ProgressBarIncremento(1);
           //Banco de dados de Consulta
           enderecoConsulta:= ExtractFileDir(SaveDialog1.FileName)+'\dbConsulta.mdb';
-          enderecoMemoria:= ExtractFileDir(SaveDialog1.FileName)+'\dbMemoria.mdb';
           enderecoRT:= ExtractFileDir(SaveDialog1.FileName)+'\dbRT.mdb';
 
           if CopyFile(PChar(enderecoConsulta_original), PChar(enderecoConsulta), false) then
             FrmPrincipal.conectarBDDireto(enderecoConsulta,FrmDataModule.ADOConnectionConsulta);
-          FrmPrincipal.ProgressBarIncremento(1);
-
-          if CopyFile(PChar(enderecoMemoria_original), PChar(enderecoMemoria), false) then
-            FrmPrincipal.conectarBDDireto(enderecoMemoria,FrmDataModule.ADOConnectionMemoria);
           FrmPrincipal.ProgressBarIncremento(1);
 
           if CopyFile(PChar(enderecoRT_original), PChar(enderecoRT), false) then

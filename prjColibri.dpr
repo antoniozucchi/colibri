@@ -1,4 +1,4 @@
-program prjColibri;
+ï»¿program prjColibri;
 
 {$IF CompilerVersion >= 21.0}
 {$WEAKLINKRTTI ON}
@@ -17,7 +17,6 @@ uses
   untFrmCadastroUsuario in 'untFrmCadastroUsuario.pas' {FrmCadastroUsuario},
   untFrmPreview in 'untFrmPreview.pas' {FrmPreview},
   untProgramacaoDiaria in 'untProgramacaoDiaria.pas' {FrmProgramacaoDiaria},
-  untImportacao in 'untImportacao.pas' {FrmImportacao},
   untFrmSobre in 'untFrmSobre.pas' {FrmSobre},
   untGerenciarSolicitacoes in 'untGerenciarSolicitacoes.pas' {FrmGerenciarSolicitacoes},
   untGerenciarEmbarcacoes in 'untGerenciarEmbarcacoes.pas' {FrmGerenciarEmbarcacoes},
@@ -39,8 +38,9 @@ uses
   untConexaoLOCAL in 'untConexaoLOCAL.pas' {FrmConexaoLOCAL},
   untMotivoCancelamento in 'untMotivoCancelamento.pas' {FrmMotivoCancelamento},
   uDistribuicaoLogistica in 'uDistribuicaoLogistica.pas',
-  uSimulacaoLogistica in 'uSimulacaoLogistica.pas',
-  uRTBusinessRules in 'uRTBusinessRules.pas';
+  uRTBusinessRules in 'uRTBusinessRules.pas',
+  uPreparacaoSolver in 'uPreparacaoSolver.pas';
+  //uSimulacaoLogistica in 'uSimulacaoLogistica.pas';
 
 {$R *.res}
 
@@ -58,6 +58,6 @@ begin
   Application.CreateForm(TFrmMotivoCancelamento, FrmMotivoCancelamento);
   //=====================================================
   FrmTelaAbertura.Hide; {Esconde o FormAbertura}
-  FrmTelaAbertura.Free; {Libera Memória}
+  FrmTelaAbertura.Free; {Libera Memï¿½ria}
   Application.Run;
 end.
