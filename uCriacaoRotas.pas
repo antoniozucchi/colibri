@@ -41,6 +41,11 @@ type
     ProximaHoraLivre: TDateTime;
   end;
 
+  TParObrigatorio = record
+    PlataformaA: string;
+    PlataformaB: string;
+  end;
+
   // Classe principal para criação automática de rotas
   TProgressoRotasEvent = procedure(ATotal, AAtual: Integer; const AMensagem: string) of object;
 
@@ -50,6 +55,8 @@ type
     FConnConsulta: TADOConnection;
     FCacheCoord: TDictionary<string, TPlataformaCoord>; // Cache de coordenadas
     FCacheHoraSaida: TDictionary<string, TTime>; // Cache de horários
+    FCachePrioridade: TDictionary<string, Integer>; // Plataforma -> PrioridadeDistribuicao
+    FCachePares: TArray<TParObrigatorio>; // pares obrigatórios ativos
     FOnProgresso: TProgressoRotasEvent;
     FCacheGrupoFisico: TDictionary<string, string>; // Nome operacional -> NomeSAP
     FCacheModal: TDictionary<string, string>; // Plataforma -> RT_Modal
@@ -83,6 +90,8 @@ type
     // Métodos auxiliares
     function ObterCoordenadasPlataforma(const ANome: string): TPlataformaCoord;
     function CalcularDistancia(const P1, P2: TPlataformaCoord): Double;
+    function ObterPrioridade(const APlataforma: string): Integer;
+    procedure CarregarParesObrigatorios;
     function OtimizarSequencia(const AOrigem: string; const ADestinos: TArray<string>): TArray<string>;
     function ObterHoraSaidaOrigem(const AOrigem: string): TTime;
     function ObterProximoNomeRota(const AOrigem: string; const ADataProg: string): string;
@@ -127,11 +136,17 @@ type
     function EhExecutanteBridge(const AOrigem, ADestino: string): Boolean;
     function ObterNomeEmbarcacaoBridge(const AOrigem: string): string;
     function ObterHoraBridgePorTurno(const ATurno: string): TTime;
+    function CarregarRotasExclusivasDoDia(
+      const ADataProg: string): TDictionary<Integer, Byte>;
     function CriarOuObterRotaBridge(const ADataProg, AOrigem, ADestino,
-      ANomeEmbarcacaoBridge: string; out AIdRota: Integer;
+      ANomeEmbarcacaoBridge: string;
+      const ARotasExclusivas: TDictionary<Integer, Byte>;
+      out AIdRota: Integer;
       out AMensagemErro: string): Boolean;
     function ProcessarRotasBridgeDoDia(const ADataProg: string;
-      DistLogistica: TDistribuicaoLogistica; out AMensagem: string;
+      DistLogistica: TDistribuicaoLogistica;
+      const ARotasExclusivas: TDictionary<Integer, Byte>;
+      out AMensagem: string;
       var ASucessos, AFalhas, ARotasCriadas: Integer): Boolean;
 
   public
@@ -222,8 +237,40 @@ begin
     Result := EncodeTime(6, 0, 0, 0);
 end;
 
+function TCriacaoRotas.CarregarRotasExclusivasDoDia(
+  const ADataProg: string): TDictionary<Integer, Byte>;
+var
+  Qry: TADOQuery;
+  IdRota: Integer;
+begin
+  Result := TDictionary<Integer, Byte>.Create;
+
+  Qry := TADOQuery.Create(nil);
+  try
+    Qry.Connection := FConnColibri;
+    Qry.SQL.Text :=
+      'SELECT DISTINCT r.idRoteamento ' +
+      'FROM tblRoteamento r ' +
+      'INNER JOIN tblAux_Rota_Distribuicao ard ON ard.CodigoRota = r.idRoteamento ' +
+      'WHERE r.DataRoteamento = :DataProg';
+    Qry.Parameters.ParamByName('DataProg').Value := ADataProg;
+    Qry.Open;
+
+    while not Qry.Eof do
+    begin
+      IdRota := Qry.FieldByName('idRoteamento').AsInteger;
+      Result.AddOrSetValue(IdRota, 0);
+      Qry.Next;
+    end;
+  finally
+    Qry.Free;
+  end;
+end;
+
 function TCriacaoRotas.CriarOuObterRotaBridge(const ADataProg, AOrigem, ADestino,
-  ANomeEmbarcacaoBridge: string; out AIdRota: Integer; out AMensagemErro: string): Boolean;
+  ANomeEmbarcacaoBridge: string;
+  const ARotasExclusivas: TDictionary<Integer, Byte>;
+  out AIdRota: Integer; out AMensagemErro: string): Boolean;
 var
   Qry: TADOQuery;
   DescricaoRota, Sequencia: string;
@@ -255,17 +302,23 @@ begin
       'FROM tblRoteamento ' +
       'WHERE DataRoteamento = :DataProg ' +
       '  AND NomeEmbarcacao = :Embarcacao ' +
-      '  AND NomeRota = :NomeRota';
+      '  AND NomeRota = :NomeRota ' +
+      'ORDER BY idRoteamento';
     Qry.Parameters.ParamByName('DataProg').Value := ADataProg;
     Qry.Parameters.ParamByName('Embarcacao').Value := ANomeEmbarcacaoBridge;
     Qry.Parameters.ParamByName('NomeRota').Value := DescricaoRota;
     Qry.Open;
 
-    if not Qry.IsEmpty then
+    while not Qry.Eof do
     begin
       AIdRota := Qry.FieldByName('idRoteamento').AsInteger;
-      Result := True;
-      Exit;
+      if (ARotasExclusivas = nil) or
+         (not ARotasExclusivas.ContainsKey(AIdRota)) then
+      begin
+        Result := True;
+        Exit;
+      end;
+      Qry.Next;
     end;
 
     Qry.Close;
@@ -299,6 +352,7 @@ end;
 
 function TCriacaoRotas.ProcessarRotasBridgeDoDia(const ADataProg: string;
   DistLogistica: TDistribuicaoLogistica;
+  const ARotasExclusivas: TDictionary<Integer, Byte>;
   out AMensagem: string;
   var ASucessos, AFalhas, ARotasCriadas: Integer): Boolean;
 var
@@ -320,7 +374,12 @@ begin
       'FROM tblProgramacaoExecutante pe ' +
       'INNER JOIN tblProgramacaoDiaria pd ON pe.CodigoProgramacaoDiaria = pd.idProgramacaoDiaria ' +
       'WHERE pd.DataProgramacao = :DataProg ' +
-      '  AND (pe.InseridoProgramacaoTransporte = False OR pe.InseridoProgramacaoTransporte IS NULL)';
+      '  AND (pe.InseridoProgramacaoTransporte = False OR pe.InseridoProgramacaoTransporte IS NULL) ' +
+      '  AND NOT EXISTS (' +
+      '    SELECT 1 ' +
+      '    FROM tblAux_Rota_Distribuicao ard ' +
+      '    WHERE ard.CodigoProgramacaoExecutante = pe.idProgramacaoExecutante' +
+      '  )';
     Qry.Parameters.ParamByName('DataProg').Value := ADataProg;
     Qry.Open;
 
@@ -353,7 +412,15 @@ begin
 
         if not RotasCriadasNoMetodo.TryGetValue(ChaveRota, IdRota) then
         begin
-          if CriarOuObterRotaBridge(ADataProg, Origem, Destino, NomeBridge, IdRota, MsgErro) then
+          if CriarOuObterRotaBridge(
+               ADataProg,
+               Origem,
+               Destino,
+               NomeBridge,
+               ARotasExclusivas,
+               IdRota,
+               MsgErro
+             ) then
           begin
             RotasCriadasNoMetodo.AddOrSetValue(ChaveRota, IdRota);
             Inc(ARotasCriadas);
@@ -836,6 +903,7 @@ begin
 
   FCacheCoord.Clear;
   FCacheHoraSaida.Clear;
+  FCachePrioridade.Clear;
   FCacheGrupoFisico.Clear;
   FCacheModal.Clear;
 
@@ -849,7 +917,8 @@ begin
       '       tblPlataforma.Latitude, ' +
       '       tblPlataforma.Longitude, ' +
       '       tblPlataforma.HoraSaidaOrigem, ' +
-      '       tblPlataforma.RT_Modal ' +
+      '       tblPlataforma.RT_Modal, ' +
+      '       tblPlataforma.PrioridadeDistribuicao ' +
       'FROM tblPlataforma ' +
       'WHERE (tblPlataforma.Latitude IS NOT NULL) ' +
       '  AND (tblPlataforma.Longitude IS NOT NULL) ' +
@@ -874,7 +943,17 @@ begin
           FCacheGrupoFisico.AddOrSetValue(NomePlataforma, GrupoFisico);
 
         if NomePlataforma <> '' then
-        FCacheModal.AddOrSetValue(NomePlataforma, UpperCase(Trim(Qry.FieldByName('RT_Modal').AsString)));
+          FCacheModal.AddOrSetValue(NomePlataforma, UpperCase(Trim(Qry.FieldByName('RT_Modal').AsString)));
+
+        // Prioridade de distribuição (menor = mais prioritário; 99 = sem prioridade)
+        if NomePlataforma <> '' then
+        begin
+          if Qry.FieldByName('PrioridadeDistribuicao').IsNull then
+            FCachePrioridade.AddOrSetValue(NomePlataforma, 99)
+          else
+            FCachePrioridade.AddOrSetValue(NomePlataforma,
+              Qry.FieldByName('PrioridadeDistribuicao').AsInteger);
+        end;
 
         // Coordenadas físicas ficam indexadas pelo NomeSAP
         if (GrupoFisico <> '') and (not FCacheCoord.ContainsKey(GrupoFisico)) then
@@ -917,17 +996,65 @@ begin
   FConnConsulta := AConnConsulta;
   FCacheCoord := TDictionary<string, TPlataformaCoord>.Create;
   FCacheHoraSaida := TDictionary<string, TTime>.Create;
+  FCachePrioridade := TDictionary<string, Integer>.Create;
   FCacheGrupoFisico := TDictionary<string, string>.Create;
   FCacheModal := TDictionary<string, string>.Create;
+  SetLength(FCachePares, 0);
 end;
 
 destructor TCriacaoRotas.Destroy;
 begin
   FCacheCoord.Free;
   FCacheHoraSaida.Free;
+  FCachePrioridade.Free;
   FCacheGrupoFisico.Free;
   FCacheModal.Free;
   inherited;
+end;
+
+function TCriacaoRotas.ObterPrioridade(const APlataforma: string): Integer;
+var
+  NormP: string;
+begin
+  NormP := NormalizarPlataforma(APlataforma);
+  if (FCachePrioridade <> nil) and FCachePrioridade.ContainsKey(NormP) then
+    Result := FCachePrioridade[NormP]
+  else
+    Result := 99; // sem prioridade definida
+end;
+
+procedure TCriacaoRotas.CarregarParesObrigatorios;
+var
+  Qry: TADOQuery;
+  Par: TParObrigatorio;
+begin
+  SetLength(FCachePares, 0);
+  Qry := TADOQuery.Create(nil);
+  try
+    Qry.Connection := FConnConsulta;
+    Qry.SQL.Text :=
+      'SELECT PlataformaA, PlataformaB ' +
+      'FROM tblParObrigatorio ' +
+      'WHERE Ativo = True';
+    try
+      Qry.Open;
+      while not Qry.Eof do
+      begin
+        Par.PlataformaA := Trim(Qry.FieldByName('PlataformaA').AsString);
+        Par.PlataformaB := Trim(Qry.FieldByName('PlataformaB').AsString);
+        if (Par.PlataformaA <> '') and (Par.PlataformaB <> '') then
+        begin
+          SetLength(FCachePares, Length(FCachePares) + 1);
+          FCachePares[High(FCachePares)] := Par;
+        end;
+        Qry.Next;
+      end;
+    except
+      // Silencioso: tblParObrigatorio pode não existir em DB mais antigo
+    end;
+  finally
+    Qry.Free;
+  end;
 end;
 
 function TCriacaoRotas.DeveConsiderarDistribuicaoMaritima(
@@ -1049,52 +1176,76 @@ function TCriacaoRotas.OtimizarSequencia(const AOrigem: string;
   const ADestinos: TArray<string>): TArray<string>;
 var
   NaoVisitadas: TList<TPlataformaCoord>;
+  GrupoPrio: TList<TPlataformaCoord>;
+  Prioridades: TList<Integer>;
   Atual, Proxima: TPlataformaCoord;
   MenorDistancia, Dist: Double;
-  I, IndiceProxima: Integer;
+  I, IndiceProxima, PrioAtual: Integer;
   ResultList: TList<string>;
   DestinosLimpos: TArray<string>;
 begin
   NaoVisitadas := TList<TPlataformaCoord>.Create;
-  ResultList := TList<string>.Create;
+  GrupoPrio    := TList<TPlataformaCoord>.Create;
+  Prioridades  := TList<Integer>.Create;
+  ResultList   := TList<string>.Create;
   try
     Atual := ObterCoordenadasPlataforma(NormalizarPlataforma(AOrigem));
     ResultList.Add(NormalizarPlataforma(AOrigem));
 
     DestinosLimpos := RemoverDuplicadosMantendoOrdem(ADestinos, AOrigem);
 
+    // Coletar níveis de prioridade únicos e ordenar (menor = mais prioritário)
     for I := 0 to High(DestinosLimpos) do
-      NaoVisitadas.Add(ObterCoordenadasPlataforma(DestinosLimpos[I]));
-
-    while NaoVisitadas.Count > 0 do
     begin
-      MenorDistancia := MaxDouble;
-      IndiceProxima := -1;
+      PrioAtual := ObterPrioridade(DestinosLimpos[I]);
+      if not Prioridades.Contains(PrioAtual) then
+        Prioridades.Add(PrioAtual);
+    end;
+    Prioridades.Sort;
 
-      for I := 0 to NaoVisitadas.Count - 1 do
+    // Nearest-neighbor por grupo de prioridade, em ordem crescente
+    for PrioAtual in Prioridades do
+    begin
+      GrupoPrio.Clear;
+      for I := 0 to High(DestinosLimpos) do
+        if ObterPrioridade(DestinosLimpos[I]) = PrioAtual then
+          GrupoPrio.Add(ObterCoordenadasPlataforma(DestinosLimpos[I]));
+
+      NaoVisitadas.Clear;
+      NaoVisitadas.AddRange(GrupoPrio.ToArray);
+
+      while NaoVisitadas.Count > 0 do
       begin
-        Dist := CalcularDistancia(Atual, NaoVisitadas[I]);
-        if Dist < MenorDistancia then
+        MenorDistancia := MaxDouble;
+        IndiceProxima  := -1;
+
+        for I := 0 to NaoVisitadas.Count - 1 do
         begin
-          MenorDistancia := Dist;
-          IndiceProxima := I;
+          Dist := CalcularDistancia(Atual, NaoVisitadas[I]);
+          if Dist < MenorDistancia then
+          begin
+            MenorDistancia := Dist;
+            IndiceProxima  := I;
+          end;
         end;
-      end;
 
-      if IndiceProxima >= 0 then
-      begin
-        Proxima := NaoVisitadas[IndiceProxima];
-        ResultList.Add(NormalizarPlataforma(Proxima.Nome));
-        Atual := Proxima;
-        NaoVisitadas.Delete(IndiceProxima);
-      end
-      else
-        Break;
+        if IndiceProxima >= 0 then
+        begin
+          Proxima := NaoVisitadas[IndiceProxima];
+          ResultList.Add(NormalizarPlataforma(Proxima.Nome));
+          Atual := Proxima;
+          NaoVisitadas.Delete(IndiceProxima);
+        end
+        else
+          Break;
+      end;
     end;
 
     Result := RemoverDuplicadosMantendoOrdem(ResultList.ToArray);
   finally
     NaoVisitadas.Free;
+    GrupoPrio.Free;
+    Prioridades.Free;
     ResultList.Free;
   end;
 end;
@@ -1223,7 +1374,12 @@ begin
       'FROM tblProgramacaoExecutante pe ' +
       'INNER JOIN tblProgramacaoDiaria pd ON pe.CodigoProgramacaoDiaria = pd.idProgramacaoDiaria ' +
       'WHERE pd.DataProgramacao = :DataProg ' +
-      'AND (pe.InseridoProgramacaoTransporte = False OR pe.InseridoProgramacaoTransporte IS NULL)';
+      'AND (pe.InseridoProgramacaoTransporte = False OR pe.InseridoProgramacaoTransporte IS NULL) ' +
+      'AND NOT EXISTS (' +
+      '  SELECT 1 ' +
+      '  FROM tblAux_Rota_Distribuicao ard ' +
+      '  WHERE ard.CodigoProgramacaoExecutante = pe.idProgramacaoExecutante' +
+      ')';
     QryExec.Parameters.ParamByName('DataProg').Value := ADataProg;
     QryExec.Open;
     
@@ -1378,6 +1534,7 @@ var
   Sugestoes: TArray<TSugestaoNovaRota>;
   Estados: TArray<TEstadoEmbarcacao>;
   DistLogistica: TDistribuicaoLogistica;
+  RotasExclusivas: TDictionary<Integer, Byte>;
   PendentesOrigem: TList<TExecutantePendente>;
   ExecutantesOrdenados: TArray<TExecutantePendente>;
   SugestaoLote: TSugestaoNovaRota;
@@ -1407,6 +1564,8 @@ begin
   Sucessos := 0;
   Falhas := 0;
   RotasCriadas := 0;
+  DistLogistica := nil;
+  RotasExclusivas := nil;
 
   ReportarProgresso(0, 1, 'Iniciando distribuição automática...');
 
@@ -1418,19 +1577,29 @@ begin
   end;
 
   DistLogistica := TDistribuicaoLogistica.Create(FConnColibri, FConnConsulta);
+  RotasExclusivas := CarregarRotasExclusivasDoDia(ADataProg);
 
   if FCacheGrupoFisico.Count = 0 then
     CarregarTodasAsCoordenadasDeUmaVez;
+
+  CarregarParesObrigatorios;
 
   try
     ProcessarRotasBridgeDoDia(
       ADataProg,
       DistLogistica,
+      RotasExclusivas,
       MsgBridge,
       Sucessos,
       Falhas,
       RotasCriadas
     );
+
+    if RotasExclusivas.Count > 0 then
+      AMensagem := Format(
+        '%d rota(s) fixa(s) já vinculada(s) foram preservadas e não entraram na distribuição automática.',
+        [RotasExclusivas.Count]
+      ) + sLineBreak + AMensagem;
 
     if Trim(MsgBridge) <> '' then
       AMensagem := AMensagem + MsgBridge + sLineBreak;
@@ -1647,6 +1816,7 @@ begin
     ReportarProgresso(TotalEtapas, TotalEtapas, 'Processo concluído.');
     Result := True;
   finally
+    RotasExclusivas.Free;
     DistLogistica.Free;
   end;
 end;
@@ -1892,8 +2062,11 @@ function TCriacaoRotas.MontarLoteRespeitandoGrupoHorario(
   ACapacidade: Integer
 ): TArray<TExecutantePendente>;
 var
-  I, Count: Integer;
+  I, J, K, Count: Integer;
   GrupoTrava, GrupoAtual: string;
+  DestinosNoLote: TDictionary<string, Boolean>;
+  PareiroDestino: string;
+  JaNoLote: Boolean;
 begin
   SetLength(Result, 0);
 
@@ -1925,6 +2098,56 @@ begin
 
     if Count >= ACapacidade then
       Break;
+  end;
+
+  // Expansão por pares obrigatórios:
+  // se destino A está no lote, incluir também executantes com destino B do mesmo par
+  if (Length(FCachePares) = 0) or (Length(Result) = 0) then
+    Exit;
+
+  DestinosNoLote := TDictionary<string, Boolean>.Create;
+  try
+    for I := 0 to High(Result) do
+      DestinosNoLote.AddOrSetValue(NormalizarPlataforma(Result[I].Destino), True);
+
+    for K := 0 to High(FCachePares) do
+    begin
+      if DestinosNoLote.ContainsKey(NormalizarPlataforma(FCachePares[K].PlataformaA)) then
+        PareiroDestino := NormalizarPlataforma(FCachePares[K].PlataformaB)
+      else if DestinosNoLote.ContainsKey(NormalizarPlataforma(FCachePares[K].PlataformaB)) then
+        PareiroDestino := NormalizarPlataforma(FCachePares[K].PlataformaA)
+      else
+        Continue;
+
+      // Já está incluído — nada a fazer
+      if DestinosNoLote.ContainsKey(PareiroDestino) then
+        Continue;
+
+      // Adicionar pendentes que vão ao destino pareiro (se ainda cabem)
+      for J := 0 to APendentes.Count - 1 do
+      begin
+        if Count >= ACapacidade then Break;
+        if NormalizarPlataforma(APendentes[J].Destino) <> PareiroDestino then Continue;
+
+        JaNoLote := False;
+        for I := 0 to High(Result) do
+          if Result[I].IdExecutante = APendentes[J].IdExecutante then
+          begin
+            JaNoLote := True;
+            Break;
+          end;
+
+        if not JaNoLote then
+        begin
+          SetLength(Result, Length(Result) + 1);
+          Result[High(Result)] := APendentes[J];
+          Inc(Count);
+          DestinosNoLote.AddOrSetValue(PareiroDestino, True);
+        end;
+      end;
+    end;
+  finally
+    DestinosNoLote.Free;
   end;
 end;
 
