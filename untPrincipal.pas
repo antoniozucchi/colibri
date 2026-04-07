@@ -1277,6 +1277,53 @@ begin
       except
         // Silencia erros de insert duplicado em re-execução da conversão
       end;
+
+      versaoDB := '1.7.0.5';
+    end;
+    if (versaoDB = '1.7.0.5') then
+    begin
+      // -----------------------------------------------------------------------
+      // Campos booleanos de distribuição em tblPlataforma (dbConsulta)
+      // -----------------------------------------------------------------------
+
+      // Hub principal: identifica a plataforma que concentra PAX de outras origens
+      // (ex: PCM-09). Apenas um hub pode estar ativo por vez (regra no BeforePost).
+      CriarFieldDB('booleanHubPrincipal', 'tblPlataforma', 'YESNO',
+        FrmDataModule.ADOQueryTemporarioDBConsulta1);
+
+      // Gangway Aqua: plataforma acessível por embarcações do tipo AQUA Helix
+      CriarFieldDB('booleanGangwayAqua', 'tblPlataforma', 'YESNO',
+        FrmDataModule.ADOQueryTemporarioDBConsulta1);
+
+      // Gangway SOV: plataforma acessível por embarcações SOV/Bridge
+      CriarFieldDB('booleanGangwaySOV', 'tblPlataforma', 'YESNO',
+        FrmDataModule.ADOQueryTemporarioDBConsulta1);
+
+      // -----------------------------------------------------------------------
+      // tblParObrigatorio (dbConsulta) — pares de plataformas que obrigatoriamente
+      // devem ser atendidas pela mesma embarcação em uma distribuição.
+      // Ex: PCM-02 + PCM-03 (M2+M3, muito próximas)
+      //     PCM-06 + PCB-01 (M6+B1, muito próximas)
+      // -----------------------------------------------------------------------
+      CriarTableDB('tblParObrigatorio', 'idParObrigatorio',
+        '[PlataformaA] VARCHAR(50), ' +
+        '[PlataformaB] VARCHAR(50), ' +
+        '[Ativo] YESNO',
+        FrmDataModule.ADOConnectionConsulta);
+
+      // Pares padrão baseados na operação offshore atual
+      try
+        FrmDataModule.ADOConnectionConsulta.Execute(
+          'INSERT INTO tblParObrigatorio (PlataformaA, PlataformaB, Ativo) VALUES ' +
+          '(''PCM-02'', ''PCM-03'', True)');
+        FrmDataModule.ADOConnectionConsulta.Execute(
+          'INSERT INTO tblParObrigatorio (PlataformaA, PlataformaB, Ativo) VALUES ' +
+          '(''PCM-06'', ''PCB-01'', True)');
+      except
+        // Silencia erros de insert duplicado em re-execução
+      end;
+
+      versaoDB := '1.7.0.6';
     end;
 
     FrmDataModule.ADOQueryColibri.Edit;

@@ -99,7 +99,7 @@ var
 begin
   Result := -1;
 
-  // Buscamos panel a panel hasta encontrar en cual está XY
+  // Buscamos panel a panel hasta encontrar en cual estï¿½ XY
   with StatusBar do
     for i := 0 to Panels.Count - 1 do
     begin
@@ -142,6 +142,36 @@ begin
         FieldByName('booleanOrigem').AsBoolean:= not Self.DBGridPlataformas.SelectedField.AsBoolean;
         FrmDataModule.ADOQueryPlataforma.Post;
       end
+      else if (Self.DBGridPlataformas.SelectedField.DataType = ftBoolean)AND
+      (Column.Field.FieldName = 'booleanHubPrincipal') then
+      begin
+        DBGridPlataformas.Options:=
+        [dgTitles,dgIndicator,dgColumnResize,dgColLines,dgRowLines,dgTabs,dgAlwaysShowSelection,dgTitleClick,dgTitleHotTrack];
+        FrmDataModule.ADOQueryPlataforma.Edit;
+        FrmDataModule.DataSourcePlataforma.DataSet.
+        FieldByName('booleanHubPrincipal').AsBoolean:= not Self.DBGridPlataformas.SelectedField.AsBoolean;
+        FrmDataModule.ADOQueryPlataforma.Post;
+      end
+      else if (Self.DBGridPlataformas.SelectedField.DataType = ftBoolean)AND
+      (Column.Field.FieldName = 'booleanGangwayAqua') then
+      begin
+        DBGridPlataformas.Options:=
+        [dgTitles,dgIndicator,dgColumnResize,dgColLines,dgRowLines,dgTabs,dgAlwaysShowSelection,dgTitleClick,dgTitleHotTrack];
+        FrmDataModule.ADOQueryPlataforma.Edit;
+        FrmDataModule.DataSourcePlataforma.DataSet.
+        FieldByName('booleanGangwayAqua').AsBoolean:= not Self.DBGridPlataformas.SelectedField.AsBoolean;
+        FrmDataModule.ADOQueryPlataforma.Post;
+      end
+      else if (Self.DBGridPlataformas.SelectedField.DataType = ftBoolean)AND
+      (Column.Field.FieldName = 'booleanGangwaySOV') then
+      begin
+        DBGridPlataformas.Options:=
+        [dgTitles,dgIndicator,dgColumnResize,dgColLines,dgRowLines,dgTabs,dgAlwaysShowSelection,dgTitleClick,dgTitleHotTrack];
+        FrmDataModule.ADOQueryPlataforma.Edit;
+        FrmDataModule.DataSourcePlataforma.DataSet.
+        FieldByName('booleanGangwaySOV').AsBoolean:= not Self.DBGridPlataformas.SelectedField.AsBoolean;
+        FrmDataModule.ADOQueryPlataforma.Post;
+      end
       else
         DBGridPlataformas.Options:=
         [dgEditing,dgTitles,dgIndicator,dgColumnResize,dgColLines,dgRowLines,dgTabs,dgAlwaysShowSelection,dgTitleClick,dgTitleHotTrack];
@@ -159,8 +189,11 @@ procedure TFrmPlataforma.DBGridPlataformasDrawColumnCell(Sender: TObject;
     DFCS_BUTTONCHECK or DFCS_CHECKED);
 begin
   FrmPrincipal.GridZebrado(DBGridPlataformas,ColunasLayout,State,Rect,DataCol,Column);
-  if ((Column.Field.FieldName = 'booleanPlataforma')OR
-  (Column.Field.FieldName = 'booleanOrigem')) then
+  if ((Column.Field.FieldName = 'booleanPlataforma') OR
+  (Column.Field.FieldName = 'booleanOrigem') OR
+  (Column.Field.FieldName = 'booleanHubPrincipal') OR
+  (Column.Field.FieldName = 'booleanGangwayAqua') OR
+  (Column.Field.FieldName = 'booleanGangwaySOV')) then
   begin
     Self.DBGridPlataformas.Canvas.FillRect(Rect);
     CheckBoxRectangle.Left := Rect.Left + 2;
@@ -187,7 +220,7 @@ begin
   DataSet.FieldByName('Longitude').AsString;
 
   PanelTitulo.Caption:=
-  'Cadastro de Instalações - '+plataforma;
+  'Cadastro de Instalaï¿½ï¿½es - '+plataforma;
 end;
 
 procedure TFrmPlataforma.actCalcularXYExecute(Sender: TObject);
@@ -255,12 +288,12 @@ begin
   //===============================================================
   AlturaAgora:=0;
   //=====================================
-  //Incicialização
+  //Incicializaï¿½ï¿½o
   FrmDataModule.setFilterDBGrid(DBGridPlataformas);
 
   //======ADICIONAR TABSET DO FOMRMDI=======
   FrmPrincipal.MDIChildCreated(self.Handle);
-  //Configuração de Perfil
+  //Configuraï¿½ï¿½o de Perfil
   if ((FrmPrincipal.logPerfil = FrmPrincipal.PERFILADM) OR
   (FrmPrincipal.logPerfil = FrmPrincipal.PERFILSUPERVISAO) OR
   (FrmPrincipal.logPerfil = FrmPrincipal.PERFILRT)OR

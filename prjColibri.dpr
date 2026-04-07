@@ -40,7 +40,8 @@ uses
   uDistribuicaoLogistica in 'uDistribuicaoLogistica.pas',
   uRTBusinessRules in 'uRTBusinessRules.pas',
   uPreparacaoSolver in 'uPreparacaoSolver.pas',
-  uExecucaoSolver in 'uExecucaoSolver.pas';
+  uExecucaoSolver in 'uExecucaoSolver.pas',
+  untParesObrigatorios in 'untParesObrigatorios.pas' {FrmParesObrigatorios};
   //uSimulacaoLogistica in 'uSimulacaoLogistica.pas';
 
 {$R *.res}

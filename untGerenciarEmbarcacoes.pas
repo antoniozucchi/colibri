@@ -10,7 +10,8 @@ uses
   Vcl.Mask, Vcl.ToolWin, Registry,DateUtils,Vcl.Buttons,Math, Vcl.Menus,
   Data.Win.ADODB, Vcl.CheckLst,SDL_rchart,SDL_sdlbase, Vcl.ExtDlgs,ComObj, SDL_NumIO,
   Vcl.Samples.Spin,UITYPES,ClipBrd, untDBGridFilter, untConsultaExecutantesProgramados,
-  uZucchi, uProgramacaoRTUtils, uDistribuicaoLogistica, uCriacaoRotas;
+  uZucchi, uProgramacaoRTUtils, uDistribuicaoLogistica, uCriacaoRotas,
+  untParesObrigatorios;
 
 type
   TFrmGerenciarEmbarcacoes = class(TForm)
@@ -239,6 +240,7 @@ type
     actSugerirRota: TAction;
     actAlocacaoAutomatica: TAction;
     actCriarRotasAutomaticamente: TAction;
+    actParesObrigatorios: TAction;
     BitBtn4: TBitBtn;
     actExcluirRoteamentoTODOS: TAction;
     BitBtn6: TBitBtn;
@@ -363,6 +365,7 @@ type
     procedure actSugerirRotaExecute(Sender: TObject);
     procedure actAlocacaoAutomaticaExecute(Sender: TObject);
     procedure actCriarRotasAutomaticamenteExecute(Sender: TObject);
+    procedure actParesObrigatoriosExecute(Sender: TObject);
     procedure actExcluirRoteamentoTODOSExecute(Sender: TObject);
 
   private
@@ -373,7 +376,6 @@ type
 
     procedure WMMDIACTIVATE(var msg: TWMMDIACTIVATE);message WM_MDIACTIVATE;
     procedure editarRoteamento(Tipo: Integer);
-    function verificaAPLAT(NomeExecutante,Funcao: String): Boolean;
     function MontarRotaSequenciaDoGrid: string;
 
   public
@@ -777,7 +779,7 @@ end;
 
 procedure TFrmGerenciarEmbarcacoes.actExtratoOrigemExecute(Sender: TObject);
   var
-    DataProcura,SQLBase,NomeExecutante,Funcao,Origem,SQLOrigem,
+    DataProcura,SQLBase,NomeExecutante,Origem,SQLOrigem,
     txtDestino,txtTipoEtapaServico,Empresa: String;
     numLinhas: integer;
 begin
@@ -817,8 +819,6 @@ begin
   begin
     NomeExecutante:= FrmDataModule.DataSourceTemporarioDBColibri.DataSet.
     FieldByName('NomeExecutante').AsString;
-    Funcao:= FrmDataModule.DataSourceTemporarioDBColibri.DataSet.
-    FieldByName('Funcao').AsString;
     Origem:= FrmDataModule.DataSourceTemporarioDBColibri.DataSet.
     FieldByName('Origem').AsString;
     txtDestino:= FrmDataModule.DataSourceTemporarioDBColibri.DataSet.
@@ -827,16 +827,13 @@ begin
     FieldByName('txtTipoEtapaServico').AsString;
     Empresa:= FrmDataModule.DataSourceTemporarioDBColibri.DataSet.
     FieldByName('Empresa').AsString;
-    if verificaAPLAT(NomeExecutante,Funcao) then
-    begin
-      numLinhas:= RLImpressao.RowCount;
-      RLImpressao.RowCount:= numLinhas+1;
-      RLImpressao.Cells[0,numLinhas]:= NomeExecutante;
-      RLImpressao.Cells[1,numLinhas]:= txtTipoEtapaServico;
-      RLImpressao.Cells[2,numLinhas]:= Empresa;
-      RLImpressao.Cells[3,numLinhas]:= Origem;
-      RLImpressao.Cells[4,numLinhas]:= txtDestino;
-    end;
+    numLinhas:= RLImpressao.RowCount;
+    RLImpressao.RowCount:= numLinhas+1;
+    RLImpressao.Cells[0,numLinhas]:= NomeExecutante;
+    RLImpressao.Cells[1,numLinhas]:= txtTipoEtapaServico;
+    RLImpressao.Cells[2,numLinhas]:= Empresa;
+    RLImpressao.Cells[3,numLinhas]:= Origem;
+    RLImpressao.Cells[4,numLinhas]:= txtDestino;
     FrmDataModule.ADOQueryTemporarioDBColibri.Next;
     FrmPrincipal.ProgressBarIncremento(1);
   end;
@@ -971,6 +968,19 @@ begin
     CriadorRotas.Free;
     EmbarcacoesDisponiveis.Free;
     actFiltroDestinos.Execute;
+  end;
+end;
+
+procedure TFrmGerenciarEmbarcacoes.actParesObrigatoriosExecute(Sender: TObject);
+var
+  Frm: TFrmParesObrigatorios;
+begin
+  Frm := TFrmParesObrigatorios.Create(nil);
+  try
+    Frm.Inicializar(FrmDataModule.ADOConnectionConsulta);
+    Frm.ShowModal;
+  finally
+    Frm.Free;
   end;
 end;
 
@@ -2365,20 +2375,6 @@ begin
   actGerarLinhas.Execute;
 end;
 
-function TFrmGerenciarEmbarcacoes.verificaAPLAT(NomeExecutante,Funcao: String): Boolean;
-  var
-    i: Integer;
-begin
-  Result:= false;
-  for i := 0 to High(FrmPrincipal.MatrizExecutanteAPLAT[0]) do
-    if ((FrmPrincipal.MatrizExecutanteAPLAT[3,i] = NomeExecutante)AND
-    (FrmPrincipal.MatrizExecutanteAPLAT[1,i] = Funcao)) then
-    begin
-      Result:= true;
-      break
-    end;
-end;
-
 procedure TFrmGerenciarEmbarcacoes.StrGridResumoDblClick(Sender: TObject);
   var
     numLinha: Integer;
@@ -3107,6 +3103,7 @@ begin
   'SELECT NomeEmbarcacao FROM tblEmbarcacao '+
   'WHERE ((TipoEmbarcacao = "Lancha de passageiros")OR(TipoEmbarcacao = "Mergulho"))'+
   'AND((StatusEmbarcacao = "Operando"))'+
+  'AND((Distribuicao = True)OR(UsaBridgeMesmoGrupo = True)) '+
   'ORDER BY NomeEmbarcacao;',DBGridRoteamento,true);
   FrmPrincipal.ProgressBarIncremento(1);
   FrmPrincipal.carregarComboBox(FrmDataModule.ADOConnectionConsulta,'Plataforma',
@@ -3150,7 +3147,6 @@ begin
   FrmPrincipal.ProgressBarIncremento(1);
   actLocalizarRoteamentos.Execute;
   FrmPrincipal.ProgressBarIncremento(1);
-  FrmPrincipal.actMatrizExecutanteAPLAT.Execute;
   FrmPrincipal.ProgressBarAtualizar;
 end;
 

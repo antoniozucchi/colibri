@@ -198,6 +198,10 @@
         <DCCReference Include="uRTBusinessRules.pas"/>
         <DCCReference Include="uPreparacaoSolver.pas"/>
         <DCCReference Include="uExecucaoSolver.pas"/>
+        <DCCReference Include="untParesObrigatorios.pas">
+            <Form>FrmParesObrigatorios</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>
