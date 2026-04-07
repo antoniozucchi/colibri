@@ -46,6 +46,20 @@ type
     PlataformaB: string;
   end;
 
+  // Executante já vinculado a uma rota no BD (para relocate inter-rotas)
+  TExecNaRota = record
+    IdAuxRota: Integer;    // PK de tblAux_Rota_Distribuicao
+    IdExecutante: Integer; // idProgramacaoExecutante
+    Destino: string;
+  end;
+
+  TRotaInfo = record
+    IdRota: Integer;
+    Capacidade: Integer;
+    Sequencia: string;                // semicolon-separated, atual no BD
+    Executantes: TArray<TExecNaRota>;
+  end;
+
   // Classe principal para criação automática de rotas
   TProgressoRotasEvent = procedure(ATotal, AAtual: Integer; const AMensagem: string) of object;
 
@@ -97,6 +111,9 @@ type
     procedure CarregarHubPlataforma;
     function InserirParadaHubNaSequencia(const ASeqArray: TArray<string>): TArray<string>;
     function AbsorverExecutantesHub(var ASugestao: TSugestaoNovaRota): Integer;
+    procedure OrdenarPorPrioridadeECluster(var AExecs: TArray<TExecutantePendente>);
+    procedure OtimizarInterRotas(const ADataProg: string;
+      const ARotasExclusivas: TDictionary<Integer, Byte>);
     function OtimizarSequencia(const AOrigem: string; const ADestinos: TArray<string>): TArray<string>;
     function ObterHoraSaidaOrigem(const AOrigem: string): TTime;
     function ObterProximoNomeRota(const AOrigem: string; const ADataProg: string): string;
@@ -1339,6 +1356,233 @@ begin
   Result := R * c;
 end;
 
+// Ordena executantes por (PrioridadeDestino ASC, NomeSAPDestino ASC).
+// Dentro da mesma prioridade agrupa destinos geograficamente próximos
+// (mesmo NomeSAP = mesmo cluster físico), evitando rotas dispersas.
+procedure TCriacaoRotas.OrdenarPorPrioridadeECluster(
+  var AExecs: TArray<TExecutantePendente>);
+var
+  Comparer: IComparer<TExecutantePendente>;
+begin
+  Comparer := TComparer<TExecutantePendente>.Construct(
+    function(const A, B: TExecutantePendente): Integer
+    var
+      PA, PB: Integer;
+      CA, CB: string;
+    begin
+      PA := ObterPrioridade(A.Destino);
+      PB := ObterPrioridade(B.Destino);
+      Result := PA - PB;
+      if Result = 0 then
+      begin
+        CA := ObterGrupoFisico(A.Destino);
+        CB := ObterGrupoFisico(B.Destino);
+        Result := CompareText(CA, CB);
+      end;
+    end
+  );
+  TArray.Sort<TExecutantePendente>(AExecs, Comparer);
+end;
+
+// Otimização inter-rotas pós-criação: tentativas de relocate "zero-custo".
+// Um executante E da rota A é movido para rota B se:
+//   - O destino de E já está na sequência de B (nenhuma parada extra)
+//   - B tem capacidade disponível
+//   - E é o único executante de A indo àquele destino →
+//     a parada pode ser removida de A, reduzindo a distância de A
+// Executa até MaxPassadas iterações ou até não encontrar mais melhoras.
+procedure TCriacaoRotas.OtimizarInterRotas(const ADataProg: string;
+  const ARotasExclusivas: TDictionary<Integer, Byte>);
+const
+  MaxPassadas = 2;
+var
+  Qry: TADOQuery;
+  Rotas: TList<TRotaInfo>;
+  Rota, RotaB: TRotaInfo;
+  Exec: TExecNaRota;
+  I, J, K, L, Passada: Integer;
+  Moveu: Boolean;
+  DestNorm, StopRemovido: string;
+  SeqA, NovaSeqA: TArray<string>;
+  DistOriginal, DistNova: Double;
+  OcupacaoB, CapacidadeB: Integer;
+  ExecCountNoDestino: Integer;
+begin
+  Rotas := TList<TRotaInfo>.Create;
+  Qry   := TADOQuery.Create(nil);
+  try
+    // 1. Carregar todas as rotas do dia (excluindo fixas)
+    Qry.Connection := FConnColibri;
+    Qry.SQL.Text :=
+      'SELECT r.idRoteamento, r.CapacidadePAX, r.RotaSequencia, ' +
+      '       COUNT(ard.idAux_Rota_Distribuicao) AS Ocupacao ' +
+      'FROM tblRoteamento r ' +
+      'LEFT JOIN tblAux_Rota_Distribuicao ard ON ard.CodigoRota = r.idRoteamento ' +
+      'WHERE r.DataRoteamento = :DataProg ' +
+      'GROUP BY r.idRoteamento, r.CapacidadePAX, r.RotaSequencia';
+    Qry.Parameters.ParamByName('DataProg').Value := ADataProg;
+    Qry.Open;
+    while not Qry.Eof do
+    begin
+      Rota.IdRota     := Qry.FieldByName('idRoteamento').AsInteger;
+      Rota.Capacidade := Qry.FieldByName('CapacidadePAX').AsInteger;
+      Rota.Sequencia  := Trim(Qry.FieldByName('RotaSequencia').AsString);
+      SetLength(Rota.Executantes, 0);
+      // Pula rotas exclusivas (fixas)
+      if not ARotasExclusivas.ContainsKey(Rota.IdRota) then
+        Rotas.Add(Rota);
+      Qry.Next;
+    end;
+    Qry.Close;
+
+    if Rotas.Count < 2 then Exit;
+
+    // 2. Carregar executantes de cada rota
+    for I := 0 to Rotas.Count - 1 do
+    begin
+      Rota := Rotas[I];
+      Qry.SQL.Text :=
+        'SELECT ard.idAux_Rota_Distribuicao, ard.CodigoProgramacaoExecutante, ' +
+        '       pd.txtDestino AS Destino ' +
+        'FROM tblAux_Rota_Distribuicao ard ' +
+        'INNER JOIN tblProgramacaoExecutante pe ' +
+        '       ON pe.idProgramacaoExecutante = ard.CodigoProgramacaoExecutante ' +
+        'INNER JOIN tblProgramacaoDiaria pd ' +
+        '       ON pd.idProgramacaoDiaria = pe.CodigoProgramacaoDiaria ' +
+        'WHERE ard.CodigoRota = :IdRota';
+      Qry.Parameters.ParamByName('IdRota').Value := Rota.IdRota;
+      Qry.Open;
+      while not Qry.Eof do
+      begin
+        Exec.IdAuxRota    := Qry.FieldByName('idAux_Rota_Distribuicao').AsInteger;
+        Exec.IdExecutante := Qry.FieldByName('CodigoProgramacaoExecutante').AsInteger;
+        Exec.Destino      := Trim(Qry.FieldByName('Destino').AsString);
+        SetLength(Rota.Executantes, Length(Rota.Executantes) + 1);
+        Rota.Executantes[High(Rota.Executantes)] := Exec;
+        Qry.Next;
+      end;
+      Qry.Close;
+      Rotas[I] := Rota;
+    end;
+
+    // 3. Passadas de relocate
+    for Passada := 1 to MaxPassadas do
+    begin
+      Moveu := False;
+
+      for I := 0 to Rotas.Count - 1 do  // rota A
+      begin
+        Rota  := Rotas[I];
+        SeqA  := SplitSequencia(Rota.Sequencia);
+
+        K := 0;
+        while K <= High(Rota.Executantes) do
+        begin
+          Exec     := Rota.Executantes[K];
+          DestNorm := NormalizarPlataforma(Exec.Destino);
+
+          // Conta quantos em A vão para este destino
+          ExecCountNoDestino := 0;
+          for L := 0 to High(Rota.Executantes) do
+            if NormalizarPlataforma(Rota.Executantes[L].Destino) = DestNorm then
+              Inc(ExecCountNoDestino);
+
+          // Só vale mover se for o ÚNICO — permitindo remover a parada de A
+          if ExecCountNoDestino <> 1 then
+          begin
+            Inc(K);
+            Continue;
+          end;
+
+          // Calcular ganho de remover esta parada da sequência de A
+          NovaSeqA := Copy(SeqA);
+          for L := High(NovaSeqA) downto 0 do
+            if SameText(NormalizarPlataforma(NovaSeqA[L]), DestNorm) then
+            begin
+              Delete(NovaSeqA, L, 1);
+              Break;
+            end;
+
+          DistOriginal := CalcularDistanciaSequenciaArray(SeqA);
+          DistNova     := CalcularDistanciaSequenciaArray(NovaSeqA);
+
+          // Só move se realmente economiza distância em A
+          if DistNova >= DistOriginal then
+          begin
+            Inc(K);
+            Continue;
+          end;
+
+          // Procurar rota B onde o destino já existe na sequência
+          StopRemovido := '';
+          for J := 0 to Rotas.Count - 1 do
+          begin
+            if J = I then Continue;
+
+            OcupacaoB   := Length(Rotas[J].Executantes);
+            CapacidadeB := Rotas[J].Capacidade;
+            if (CapacidadeB > 0) and (OcupacaoB >= CapacidadeB) then Continue;
+
+            SeqA := SplitSequencia(Rotas[J].Sequencia); // reuso temporário da var
+            for L := 0 to High(SeqA) do
+              if SameText(NormalizarPlataforma(SeqA[L]), DestNorm) then
+              begin
+                StopRemovido := DestNorm;
+                Break;
+              end;
+            SeqA := SplitSequencia(Rota.Sequencia); // restaura SeqA de A
+
+            if StopRemovido = '' then Continue;
+
+            // Executar o move no BD
+            try
+              FConnColibri.Execute(
+                Format('UPDATE tblAux_Rota_Distribuicao ' +
+                       'SET CodigoRota = %d ' +
+                       'WHERE idAux_Rota_Distribuicao = %d',
+                  [Rotas[J].IdRota, Exec.IdAuxRota]));
+
+              FConnColibri.Execute(
+                Format('UPDATE tblRoteamento ' +
+                       'SET RotaSequencia = %s ' +
+                       'WHERE idRoteamento = %d',
+                  [QuotedStr(NormalizarSequenciaTexto(string.Join(';', NovaSeqA))),
+                   Rota.IdRota]));
+            except
+              StopRemovido := ''; // falhou — não registra como movido
+              Break;
+            end;
+
+            // Atualizar estruturas em memória para próximas iterações
+            Delete(Rota.Executantes, K, 1);
+            Rota.Sequencia := NormalizarSequenciaTexto(string.Join(';', NovaSeqA));
+            SeqA := NovaSeqA;
+            Rotas[I] := Rota;
+
+            RotaB := Rotas[J];
+            SetLength(RotaB.Executantes, Length(RotaB.Executantes) + 1);
+            RotaB.Executantes[High(RotaB.Executantes)] := Exec;
+            Rotas[J] := RotaB;
+
+            Moveu := True;
+            Break; // para de procurar rota B para este executante
+          end;
+
+          // Se moveu, K não avança (array encolheu e K já aponta pro próximo)
+          if StopRemovido = '' then
+            Inc(K);
+        end;
+      end;
+
+      if not Moveu then Break;
+    end;
+
+  finally
+    Rotas.Free;
+    Qry.Free;
+  end;
+end;
+
 function TCriacaoRotas.OtimizarSequencia(const AOrigem: string;
   const ADestinos: TArray<string>): TArray<string>;
 var
@@ -1826,6 +2070,8 @@ begin
       try
         ExecutantesOrdenados := Copy(Sugestoes[I].Executantes);
         OrdenarExecutantesPorSequencia(ExecutantesOrdenados, Sugestoes[I].Origem);
+        // Cluster cohesion: dentro de cada prioridade agrupa por NomeSAP do destino
+        OrdenarPorPrioridadeECluster(ExecutantesOrdenados);
 
         for J := 0 to High(ExecutantesOrdenados) do
           PendentesOrigem.Add(ExecutantesOrdenados[J]);
@@ -2047,6 +2293,13 @@ begin
           Format('%d executante(s) do hub %s não foram absorvidos e não há embarcação disponível.',
             [FPendentesHub.Count, FHubPlataforma]) + sLineBreak;
       end;
+    end;
+
+    // Otimização inter-rotas: relocate zero-custo entre rotas já criadas
+    if RotasCriadas >= 2 then
+    begin
+      AvancarProgresso('Otimizando alocações entre rotas...');
+      OtimizarInterRotas(ADataProg, RotasExclusivas);
     end;
 
     if Trim(MsgAlocacaoExistentes) <> '' then
