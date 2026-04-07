@@ -39,7 +39,8 @@ uses
   untMotivoCancelamento in 'untMotivoCancelamento.pas' {FrmMotivoCancelamento},
   uDistribuicaoLogistica in 'uDistribuicaoLogistica.pas',
   uRTBusinessRules in 'uRTBusinessRules.pas',
-  uPreparacaoSolver in 'uPreparacaoSolver.pas';
+  uPreparacaoSolver in 'uPreparacaoSolver.pas',
+  uExecucaoSolver in 'uExecucaoSolver.pas';
   //uSimulacaoLogistica in 'uSimulacaoLogistica.pas';
 
 {$R *.res}

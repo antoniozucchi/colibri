@@ -143,9 +143,6 @@
         <DCCReference Include="untProgramacaoDiaria.pas">
             <Form>FrmProgramacaoDiaria</Form>
         </DCCReference>
-        <DCCReference Include="untImportacao.pas">
-            <Form>FrmImportacao</Form>
-        </DCCReference>
         <DCCReference Include="untFrmSobre.pas">
             <Form>FrmSobre</Form>
         </DCCReference>
@@ -198,8 +195,9 @@
             <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="uDistribuicaoLogistica.pas"/>
-        <DCCReference Include="uSimulacaoLogistica.pas"/>
         <DCCReference Include="uRTBusinessRules.pas"/>
+        <DCCReference Include="uPreparacaoSolver.pas"/>
+        <DCCReference Include="uExecucaoSolver.pas"/>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>
