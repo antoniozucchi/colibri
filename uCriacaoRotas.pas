@@ -57,6 +57,8 @@ type
     FCacheHoraSaida: TDictionary<string, TTime>; // Cache de horários
     FCachePrioridade: TDictionary<string, Integer>; // Plataforma -> PrioridadeDistribuicao
     FCachePares: TArray<TParObrigatorio>; // pares obrigatórios ativos
+    FHubPlataforma: string; // plataforma hub (booleanHubPrincipal = True)
+    FPendentesHub: TList<TExecutantePendente>; // executantes cuja origem é o hub
     FOnProgresso: TProgressoRotasEvent;
     FCacheGrupoFisico: TDictionary<string, string>; // Nome operacional -> NomeSAP
     FCacheModal: TDictionary<string, string>; // Plataforma -> RT_Modal
@@ -92,6 +94,9 @@ type
     function CalcularDistancia(const P1, P2: TPlataformaCoord): Double;
     function ObterPrioridade(const APlataforma: string): Integer;
     procedure CarregarParesObrigatorios;
+    procedure CarregarHubPlataforma;
+    function InserirParadaHubNaSequencia(const ASeqArray: TArray<string>): TArray<string>;
+    function AbsorverExecutantesHub(var ASugestao: TSugestaoNovaRota): Integer;
     function OtimizarSequencia(const AOrigem: string; const ADestinos: TArray<string>): TArray<string>;
     function ObterHoraSaidaOrigem(const AOrigem: string): TTime;
     function ObterProximoNomeRota(const AOrigem: string; const ADataProg: string): string;
@@ -999,6 +1004,8 @@ begin
   FCachePrioridade := TDictionary<string, Integer>.Create;
   FCacheGrupoFisico := TDictionary<string, string>.Create;
   FCacheModal := TDictionary<string, string>.Create;
+  FPendentesHub := TList<TExecutantePendente>.Create;
+  FHubPlataforma := '';
   SetLength(FCachePares, 0);
 end;
 
@@ -1009,6 +1016,7 @@ begin
   FCachePrioridade.Free;
   FCacheGrupoFisico.Free;
   FCacheModal.Free;
+  FPendentesHub.Free;
   inherited;
 end;
 
@@ -1054,6 +1062,165 @@ begin
     end;
   finally
     Qry.Free;
+  end;
+end;
+
+procedure TCriacaoRotas.CarregarHubPlataforma;
+var
+  Qry: TADOQuery;
+begin
+  FHubPlataforma := '';
+  Qry := TADOQuery.Create(nil);
+  try
+    Qry.Connection := FConnConsulta;
+    Qry.SQL.Text :=
+      'SELECT TOP 1 Plataforma ' +
+      'FROM tblPlataforma ' +
+      'WHERE booleanHubPrincipal = True';
+    try
+      Qry.Open;
+      if not Qry.IsEmpty then
+        FHubPlataforma := Trim(Qry.FieldByName('Plataforma').AsString);
+    except
+      // Silencioso: campo pode não existir em DB mais antigo
+    end;
+  finally
+    Qry.Free;
+  end;
+end;
+
+// Insere a parada hub na posição da sequência que minimiza distância adicional.
+// ASeqArray deve incluir a origem como primeiro elemento.
+function TCriacaoRotas.InserirParadaHubNaSequencia(
+  const ASeqArray: TArray<string>): TArray<string>;
+var
+  HubCoord, C1, C2: TPlataformaCoord;
+  MelhorCusto, CustoSemHub, CustoComHub: Double;
+  MelhorPos, I: Integer;
+begin
+  // Se já está na sequência, não duplica
+  for I := 0 to High(ASeqArray) do
+    if SameText(NormalizarPlataforma(ASeqArray[I]),
+                NormalizarPlataforma(FHubPlataforma)) then
+    begin
+      Result := ASeqArray;
+      Exit;
+    end;
+
+  if Length(ASeqArray) = 0 then
+  begin
+    Result := ASeqArray;
+    Exit;
+  end;
+
+  HubCoord := ObterCoordenadasPlataforma(NormalizarPlataforma(FHubPlataforma));
+
+  // Caso: sequência com apenas a origem → hub vai logo após
+  if Length(ASeqArray) = 1 then
+  begin
+    SetLength(Result, 2);
+    Result[0] := ASeqArray[0];
+    Result[1] := NormalizarPlataforma(FHubPlataforma);
+    Exit;
+  end;
+
+  // Avaliar inserção entre cada par de paradas consecutivas
+  MelhorCusto := MaxDouble;
+  MelhorPos := 1; // padrão: após a origem
+
+  for I := 0 to High(ASeqArray) - 1 do
+  begin
+    C1 := ObterCoordenadasPlataforma(NormalizarPlataforma(ASeqArray[I]));
+    C2 := ObterCoordenadasPlataforma(NormalizarPlataforma(ASeqArray[I + 1]));
+
+    CustoSemHub  := CalcularDistancia(C1, C2);
+    CustoComHub  := CalcularDistancia(C1, HubCoord) +
+                    CalcularDistancia(HubCoord, C2);
+
+    if (CustoComHub - CustoSemHub) < MelhorCusto then
+    begin
+      MelhorCusto := CustoComHub - CustoSemHub;
+      MelhorPos   := I + 1; // inserir antes de ASeqArray[I+1]
+    end;
+  end;
+
+  // Montar nova sequência com hub inserido em MelhorPos
+  SetLength(Result, Length(ASeqArray) + 1);
+  for I := 0 to MelhorPos - 1 do
+    Result[I] := ASeqArray[I];
+  Result[MelhorPos] := NormalizarPlataforma(FHubPlataforma);
+  for I := MelhorPos to High(ASeqArray) do
+    Result[I + 1] := ASeqArray[I];
+end;
+
+// Tenta absorver executantes hub cuja Origem = FHubPlataforma e cujo Destino
+// já está entre os destinos do lote ASugestao.
+// Insere a parada hub na sequência e adiciona os executantes ao lote.
+// Retorna o número de executantes absorvidos.
+function TCriacaoRotas.AbsorverExecutantesHub(
+  var ASugestao: TSugestaoNovaRota): Integer;
+var
+  DestinosDoLote: TDictionary<string, Boolean>;
+  Absorvidos: TList<TExecutantePendente>;
+  I, J: Integer;
+  DestNorm: string;
+  SeqArray: TArray<string>;
+begin
+  Result := 0;
+
+  if (FHubPlataforma = '') or (FPendentesHub.Count = 0) then
+    Exit;
+
+  // Montar set de destinos já no lote
+  DestinosDoLote := TDictionary<string, Boolean>.Create;
+  Absorvidos := TList<TExecutantePendente>.Create;
+  try
+    for I := 0 to High(ASugestao.Destinos) do
+      DestinosDoLote.AddOrSetValue(
+        NormalizarPlataforma(ASugestao.Destinos[I]), True);
+
+    // Selecionar hub executantes que vão a destinos já na rota
+    for I := 0 to FPendentesHub.Count - 1 do
+    begin
+      DestNorm := NormalizarPlataforma(FPendentesHub[I].Destino);
+      if DestinosDoLote.ContainsKey(DestNorm) then
+        Absorvidos.Add(FPendentesHub[I]);
+    end;
+
+    if Absorvidos.Count = 0 then
+      Exit;
+
+    // Inserir parada hub na melhor posição da sequência atual
+    SeqArray := SplitSequencia(ASugestao.SequenciaOtimizada);
+    SeqArray  := InserirParadaHubNaSequencia(SeqArray);
+    ASugestao.SequenciaOtimizada := string.Join(';', SeqArray);
+
+    // Adicionar executantes absorvidos ao lote
+    J := Length(ASugestao.Executantes);
+    SetLength(ASugestao.Executantes, J + Absorvidos.Count);
+    SetLength(ASugestao.ExecutantesIds, J + Absorvidos.Count);
+    for I := 0 to Absorvidos.Count - 1 do
+    begin
+      ASugestao.Executantes[J + I]    := Absorvidos[I];
+      ASugestao.ExecutantesIds[J + I] := Absorvidos[I].IdExecutante;
+    end;
+    ASugestao.QtdExecutantes := Length(ASugestao.Executantes);
+
+    // Remover absorvidos da lista de pendentes hub
+    for I := 0 to Absorvidos.Count - 1 do
+    begin
+      for J := FPendentesHub.Count - 1 downto 0 do
+        if FPendentesHub[J].IdExecutante = Absorvidos[I].IdExecutante then
+        begin
+          FPendentesHub.Delete(J);
+          Break;
+        end;
+    end;
+
+    Result := Absorvidos.Count;
+  finally
+    DestinosDoLote.Free;
+    Absorvidos.Free;
   end;
 end;
 
@@ -1402,6 +1569,16 @@ begin
         Continue;
       end;
 
+      // Executantes do hub são tratados separadamente (absorção em rotas existentes)
+      if (FHubPlataforma <> '') and
+         SameText(NormalizarPlataforma(Exec.Origem),
+                  NormalizarPlataforma(FHubPlataforma)) then
+      begin
+        FPendentesHub.Add(Exec);
+        QryExec.Next;
+        Continue;
+      end;
+
       // VALIDAÇÃO: Pula executantes cuja origem não está marcada como Origem válida
       if not ValidarOrigemPlataforma(Exec.Origem, AOrigemPlataformasValidas) then
       begin
@@ -1416,7 +1593,7 @@ begin
           DictOrigens.Add(Exec.Origem, TList<TExecutantePendente>.Create);
           ListaOrigens.Add(Exec.Origem);
         end;
-        
+
         DictOrigens[Exec.Origem].Add(Exec);
       end;
       
@@ -1584,6 +1761,10 @@ begin
 
   CarregarParesObrigatorios;
 
+  // Hub: identifica plataforma hub e zera lista de pendentes hub
+  CarregarHubPlataforma;
+  FPendentesHub.Clear;
+
   try
     ProcessarRotasBridgeDoDia(
       ADataProg,
@@ -1704,6 +1885,9 @@ begin
             NomeEmbarcacaoRota := Estados[IdxEmb].Nome;
           end;
 
+          // Tenta absorver executantes hub na rota antes de criá-la
+          AbsorverExecutantesHub(SugestaoLote);
+
           QtdLote := Length(SugestaoLote.Executantes);
 
           if QtdLote <= 0 then
@@ -1800,6 +1984,68 @@ begin
         end;
       finally
         PendentesOrigem.Free;
+      end;
+    end;
+
+    // Fallback hub: executantes não absorvidos recebem rota própria
+    if (FHubPlataforma <> '') and (FPendentesHub.Count > 0) then
+    begin
+      AvancarProgresso(
+        Format('Criando rota de fallback para %d executante(s) do hub %s...',
+          [FPendentesHub.Count, FHubPlataforma])
+      );
+      SugestaoLote := MontarSugestaoParaLote(
+        FHubPlataforma,
+        FPendentesHub.ToArray,
+        ADataProg
+      );
+      IdxEmb := EscolherMelhorEmbarcacaoParaPendentes(
+        Estados,
+        FPendentesHub,
+        FHubPlataforma,
+        ADataProg,
+        SugestaoLote
+      );
+      if IdxEmb >= 0 then
+      begin
+        NomeEmbarcacaoRota := Estados[IdxEmb].Nome;
+        IdNovaRota := CriarRota(SugestaoLote, ADataProg, NomeEmbarcacaoRota, MsgErro);
+        if IdNovaRota > 0 then
+        begin
+          Inc(RotasCriadas);
+          for K := 0 to High(SugestaoLote.Executantes) do
+          begin
+            if DistLogistica.VincularExecutanteARota(
+                 SugestaoLote.Executantes[K].IdExecutante,
+                 IdNovaRota, MsgErro) then
+            begin
+              FConnColibri.Execute(
+                Format('UPDATE tblProgramacaoExecutante ' +
+                       'SET InseridoProgramacaoTransporte = True ' +
+                       'WHERE idProgramacaoExecutante = %d',
+                  [SugestaoLote.Executantes[K].IdExecutante]));
+              Inc(Sucessos);
+            end
+            else
+              Inc(Falhas);
+          end;
+          AtualizarEstadoEmbarcacaoAposRota(Estados[IdxEmb], SugestaoLote, ADataProg);
+          FPendentesHub.Clear;
+        end
+        else
+        begin
+          Inc(Falhas, FPendentesHub.Count);
+          AMensagem := AMensagem +
+            Format('Erro ao criar rota de fallback para hub %s: %s',
+              [FHubPlataforma, MsgErro]) + sLineBreak;
+        end;
+      end
+      else
+      begin
+        Inc(Falhas, FPendentesHub.Count);
+        AMensagem := AMensagem +
+          Format('%d executante(s) do hub %s não foram absorvidos e não há embarcação disponível.',
+            [FPendentesHub.Count, FHubPlataforma]) + sLineBreak;
       end;
     end;
 
