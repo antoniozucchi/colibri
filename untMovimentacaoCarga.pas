@@ -15,7 +15,6 @@ type
     ToolBar1: TToolBar;
     DBNavigator1: TDBNavigator;
     DBGridMovimentacaoCarga: TFilterDBGrid;
-    ColunasLayout: TStringGrid;
     ActionManager1: TActionManager;
     actProcurar: TAction;
     actExcel: TAction;
@@ -58,9 +57,9 @@ procedure TFrmMovimentacaoCarga.actProcurarExecute(Sender: TObject);
 begin
   DataProcuraIncio:= (FormatDateTime('mm/dd/yyyy',dataInicio.Date));
   DataProcuraFim:= (FormatDateTime('mm/dd/yyyy',dataFim.Date));
-  SQLString:= frmPrincipal.SQLStringFiltroTabela(ColunasLayout,false);
+  SQLString:= BuildFilterSQL(DBGridMovimentacaoCarga,false);
   if SQLString <> '' then
-    SQLString:= 'AND'+SQLString;
+    SQLString:= ' AND '+SQLString;
   SQLBase:= 'SELECT tblMovimentacaoCarga.* FROM tblMovimentacaoCarga '+
   'WHERE (DataNecessidade BETWEEN #'+DataProcuraIncio+'# and #'+DataProcuraFim+'#)'+
   SQLString+' ORDER BY DataNecessidade;';
@@ -71,7 +70,7 @@ procedure TFrmMovimentacaoCarga.DBGridMovimentacaoCargaDrawColumnCell(
   Sender: TObject; const Rect: TRect; DataCol: Integer; Column: TColumn;
   State: TGridDrawState);
 begin
-  FrmPrincipal.GridZebrado(DBGridMovimentacaoCarga,ColunasLayout,State,Rect,DataCol,Column);
+
   if (Column.Field.FieldName = 'Status') then
   begin
     if FrmDataModule.DataSourceMovimentacaoCarga.DataSet.
@@ -153,8 +152,7 @@ begin
   FrmPrincipal.MDIChildCreated(self.Handle);
   dataInicio.Date:= IncDay(now,-2);
   dataFim.Date:= IncDay(now,2);
-  //Incicialização
-  FrmDataModule.setFilterDBGrid(DBGridMovimentacaoCarga);
+  //Inicializacao
   actProcurar.Execute;
 end;
 
@@ -180,3 +178,4 @@ begin
 end;
 
 end.
+

@@ -1444,11 +1444,11 @@ begin
       Qry.SQL.Text :=
         'SELECT ard.idAux_Rota_Distribuicao, ard.CodigoProgramacaoExecutante, ' +
         '       pd.txtDestino AS Destino ' +
-        'FROM tblAux_Rota_Distribuicao ard ' +
+        'FROM ((tblAux_Rota_Distribuicao ard ' +
         'INNER JOIN tblProgramacaoExecutante pe ' +
-        '       ON pe.idProgramacaoExecutante = ard.CodigoProgramacaoExecutante ' +
+        '  ON pe.idProgramacaoExecutante = ard.CodigoProgramacaoExecutante) ' +
         'INNER JOIN tblProgramacaoDiaria pd ' +
-        '       ON pd.idProgramacaoDiaria = pe.CodigoProgramacaoDiaria ' +
+        '  ON pd.idProgramacaoDiaria = pe.CodigoProgramacaoDiaria) ' +
         'WHERE ard.CodigoRota = :IdRota';
       Qry.Parameters.ParamByName('IdRota').Value := Rota.IdRota;
       Qry.Open;
@@ -1985,7 +1985,6 @@ begin
   Sucessos := 0;
   Falhas := 0;
   RotasCriadas := 0;
-  DistLogistica := nil;
   RotasExclusivas := nil;
 
   ReportarProgresso(0, 1, 'Iniciando distribuição automática...');
@@ -2082,28 +2081,48 @@ begin
           IdxEmb := -1;
           SetLength(LoteBridge, 0);
 
+          // limpa totalmente a sugestão da iteração atual
+          SugestaoLote.Origem := '';
+          SugestaoLote.SequenciaOtimizada := '';
+          SugestaoLote.NomeRotaSugerido := '';
+          SugestaoLote.HoraPartidaSugerida := 0;
+          SugestaoLote.QtdExecutantes := 0;
+          SetLength(SugestaoLote.Executantes, 0);
+          SetLength(SugestaoLote.ExecutantesIds, 0);
+          SetLength(SugestaoLote.Destinos, 0);
+
           // 1) Tenta primeiro usar a própria SOV/bridge,
-          // sem concorrer com embarcação externa
+          // mas só assume bridge se realmente conseguir montar um lote bridge válido
           if OrigemUsaBridge(Sugestoes[I].Origem) then
           begin
             NomeEmbarcacaoRota := ObterNomeEmbarcacaoBridge(Sugestoes[I].Origem);
-            CapBridge := ObterCapacidadeEmbarcacao(NomeEmbarcacaoRota);
 
-            if NomeEmbarcacaoRota = '' then
-              CapBridge := 0;
+            if NomeEmbarcacaoRota <> '' then
+            begin
+              CapBridge := ObterCapacidadeEmbarcacao(NomeEmbarcacaoRota);
+              if CapBridge <= 0 then
+                CapBridge := PendentesOrigem.Count;
 
-            LoteBridge := MontarLoteBridgeMesmoGrupo(
-              Sugestoes[I].Origem,
-              PendentesOrigem,
-              CapBridge
-            );
-
-            if Length(LoteBridge) > 0 then
-              SugestaoLote := MontarSugestaoParaLote(
+              LoteBridge := MontarLoteBridgeMesmoGrupo(
                 Sugestoes[I].Origem,
-                LoteBridge,
-                ADataProg
+                PendentesOrigem,
+                CapBridge
               );
+
+              if Length(LoteBridge) > 0 then
+              begin
+                SugestaoLote := MontarSugestaoParaLote(
+                  Sugestoes[I].Origem,
+                  LoteBridge,
+                  ADataProg
+                );
+              end
+              else
+              begin
+                // não houve lote bridge; libera para o fluxo normal
+                NomeEmbarcacaoRota := '';
+              end;
+            end;
           end;
 
           // 2) Se não montou lote bridge, usa fluxo normal de embarcação externa
@@ -2131,6 +2150,20 @@ begin
             NomeEmbarcacaoRota := Estados[IdxEmb].Nome;
           end;
 
+          // proteção extra contra reutilização indevida de sugestão antiga
+          if (SugestaoLote.QtdExecutantes <= 0) or
+             (Trim(SugestaoLote.Origem) = '') or
+             (not SameText(Trim(SugestaoLote.Origem), Trim(Sugestoes[I].Origem))) then
+          begin
+            Inc(Falhas, PendentesOrigem.Count);
+            AMensagem := AMensagem +
+              Format(
+                'Não foi possível montar lote válido para a origem %s.',
+                [Sugestoes[I].Origem]
+              ) + sLineBreak;
+            Break;
+          end;
+
           // Tenta absorver executantes hub na rota antes de criá-la
           AbsorverExecutantesHub(SugestaoLote);
 
@@ -2149,7 +2182,7 @@ begin
 
           AvancarProgresso(
             Format(
-              'Criando rota para origem %s com embarcação %s...',
+              'Criando rota para origem %s com embarcação %s.',
               [SugestaoLote.Origem, NomeEmbarcacaoRota]
             )
           );

@@ -128,7 +128,6 @@ object FrmSituacaoEquipamentoAcesso: TFrmSituacaoEquipamentoAcesso
     OnKeyPress = DBGridSituacaoEquipamentoAcessoKeyPress
     ClearFilterButton = btnClearFiltro
     SearchAction = actProcurar
-    LayoutGrid = ColunasLayout
     EnableZebra = False
     LayoutButton = btnLayout
     ExcelButton = btnExcel
@@ -283,32 +282,6 @@ object FrmSituacaoEquipamentoAcesso: TFrmSituacaoEquipamentoAcesso
       end>
     ExplicitTop = 327
     ExplicitWidth = 819
-  end
-  object ColunasLayout: TStringGrid
-    Left = 48
-    Top = 102
-    Width = 113
-    Height = 94
-    ColCount = 7
-    DefaultRowHeight = 21
-    RowCount = 14
-    TabOrder = 4
-    Visible = False
-    RowHeights = (
-      21
-      21
-      21
-      21
-      21
-      21
-      21
-      21
-      21
-      21
-      21
-      21
-      21
-      21)
   end
   object Panel2: TPanel
     Left = 0

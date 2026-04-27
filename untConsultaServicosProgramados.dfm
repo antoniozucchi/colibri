@@ -31,10 +31,8 @@ object FrmConsultaServicosProgramados: TFrmConsultaServicosProgramados
     TitleFont.Height = -11
     TitleFont.Name = 'Tahoma'
     TitleFont.Style = []
-    OnDrawColumnCell = DBGridServicosProgramadosDrawColumnCell
     ClearFilterButton = btnClearFiltro
     SearchAction = actProcurar
-    LayoutGrid = ColunasLayout
     EnableZebra = False
     LayoutButton = btnLayout
     ExcelButton = btnExcel
@@ -182,30 +180,6 @@ object FrmConsultaServicosProgramados: TFrmConsultaServicosProgramados
     ExplicitTop = 387
     ExplicitWidth = 1354
   end
-  object ColunasLayout: TStringGrid
-    Left = 50
-    Top = 153
-    Width = 113
-    Height = 94
-    ColCount = 7
-    DefaultRowHeight = 21
-    RowCount = 12
-    TabOrder = 3
-    Visible = False
-    RowHeights = (
-      21
-      21
-      21
-      21
-      21
-      21
-      21
-      21
-      21
-      21
-      21
-      21)
-  end
   object ToolBar1: TToolBar
     Left = 0
     Top = 25
@@ -214,7 +188,7 @@ object FrmConsultaServicosProgramados: TFrmConsultaServicosProgramados
     ButtonHeight = 24
     Caption = 'ToolBar1'
     Images = FrmPrincipal.ImageList1
-    TabOrder = 4
+    TabOrder = 3
     ExplicitWidth = 1354
     object Panel8: TPanel
       Left = 0

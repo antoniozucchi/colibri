@@ -629,7 +629,12 @@ begin
       'FROM tblProgramacaoExecutante pe ' +
       'INNER JOIN tblProgramacaoDiaria pd ON pe.CodigoProgramacaoDiaria = pd.idProgramacaoDiaria ' +
       'WHERE pd.DataProgramacao = :DataProg ' +
-      'AND (pe.InseridoProgramacaoTransporte = False OR pe.InseridoProgramacaoTransporte IS NULL)';
+      'AND (pe.InseridoProgramacaoTransporte = False OR pe.InseridoProgramacaoTransporte IS NULL) ' +
+      'AND NOT EXISTS (' +
+      '  SELECT 1 ' +
+      '  FROM tblAux_Rota_Distribuicao ard ' +
+      '  WHERE ard.CodigoProgramacaoExecutante = pe.idProgramacaoExecutante' +
+      ')';
     QryExec.Parameters.ParamByName('DataProg').Value := ADataProgramacao;
     QryExec.Open;
     

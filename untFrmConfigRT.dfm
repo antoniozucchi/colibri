@@ -81,6 +81,7 @@ object FrmConfigRT: TFrmConfigRT
             Value = 32.736762677292360000
           end>
         TabOrder = 0
+        ExplicitWidth = 780
         DesignSize = (
           782
           75)
@@ -269,6 +270,7 @@ object FrmConfigRT: TFrmConfigRT
             Value = 24.852739562117450000
           end>
         TabOrder = 1
+        ExplicitWidth = 780
         DesignSize = (
           782
           105)
@@ -316,6 +318,7 @@ object FrmConfigRT: TFrmConfigRT
           ParentShowHint = False
           ShowHint = True
           TabOrder = 1
+          ExplicitLeft = 617
           ExplicitHeight = 23
         end
         object Label11: TLabel
@@ -338,6 +341,7 @@ object FrmConfigRT: TFrmConfigRT
           ParentShowHint = False
           ShowHint = True
           TabOrder = 2
+          ExplicitLeft = 617
           ExplicitHeight = 23
         end
         object Label13: TLabel
@@ -380,6 +384,7 @@ object FrmConfigRT: TFrmConfigRT
           Caption = ''
           DataField = 'RT_HoraCobertura'
           DataSource = FrmDataModule.DataSourceConfigRT
+          ExplicitLeft = 230
         end
         object DBEdit12: TDBEdit
           Left = 231
@@ -393,6 +398,7 @@ object FrmConfigRT: TFrmConfigRT
           ParentShowHint = False
           ShowHint = True
           TabOrder = 4
+          ExplicitLeft = 230
           ExplicitHeight = 23
         end
         object DBEdit13: TDBEdit
@@ -407,6 +413,7 @@ object FrmConfigRT: TFrmConfigRT
           ParentShowHint = False
           ShowHint = True
           TabOrder = 5
+          ExplicitLeft = 617
           ExplicitHeight = 23
         end
         object DBEdit1: TDBEdit
@@ -421,6 +428,7 @@ object FrmConfigRT: TFrmConfigRT
           ParentShowHint = False
           ShowHint = True
           TabOrder = 6
+          ExplicitLeft = 230
           ExplicitHeight = 23
         end
         object Label1: TLabel
@@ -442,6 +450,7 @@ object FrmConfigRT: TFrmConfigRT
           DataField = 'RT_Salvar'
           DataSource = FrmDataModule.DataSourceConfigRT
           TabOrder = 7
+          ExplicitLeft = 459
         end
       end
       object ToolBar1: TToolBar
@@ -453,6 +462,7 @@ object FrmConfigRT: TFrmConfigRT
         DrawingStyle = dsGradient
         EdgeBorders = [ebLeft, ebTop, ebRight, ebBottom]
         TabOrder = 2
+        ExplicitWidth = 780
         object DBNavigator1: TDBNavigator
           Left = 0
           Top = 0
@@ -482,20 +492,52 @@ object FrmConfigRT: TFrmConfigRT
     object TabSheet2: TTabSheet
       Caption = 'Regras de recolhimento'
       ImageIndex = 1
+      object Splitter1: TSplitter
+        Left = 0
+        Top = 189
+        Width = 782
+        Height = 3
+        Cursor = crVSplit
+        Align = alBottom
+        ExplicitTop = 29
+        ExplicitWidth = 211
+      end
       object ToolBar3: TToolBar
         Left = 0
         Top = 0
         Width = 782
         Height = 29
-        ButtonHeight = 23
         Caption = 'ToolBar3'
         DrawingStyle = dsGradient
         EdgeBorders = [ebLeft, ebTop, ebRight, ebBottom]
         Images = FrmPrincipal.ImageList1
         TabOrder = 0
-        ExplicitWidth = 780
-        object btnClearFiltroRT: TToolButton
+        object DBNavigator2: TDBNavigator
           Left = 0
+          Top = 0
+          Width = 150
+          Height = 22
+          DataSource = FrmDataModule.DataSourceRegrasRecolhimento
+          VisibleButtons = [nbInsert, nbDelete, nbEdit, nbPost, nbCancel, nbRefresh]
+          Hints.Strings = (
+            'First record'
+            'Prior record'
+            'Next record'
+            'Last record'
+            'Insert record'
+            'Delete record'
+            'Editar'
+            'Gravar'
+            'Cancelar'
+            'Atualizar'
+            'Aplicar'
+            'Cancelar')
+          ParentShowHint = False
+          ShowHint = True
+          TabOrder = 0
+        end
+        object btnClearFiltroRT: TToolButton
+          Left = 150
           Top = 0
           Hint = 'Limpar filtro'
           Caption = 'btnClearFiltroRT'
@@ -504,7 +546,7 @@ object FrmConfigRT: TFrmConfigRT
           ShowHint = True
         end
         object btnExcelRT: TToolButton
-          Left = 23
+          Left = 173
           Top = 0
           Hint = 'Exportar dados para o Excel'
           Caption = 'btnExcelRT'
@@ -513,7 +555,7 @@ object FrmConfigRT: TFrmConfigRT
           ShowHint = True
         end
         object btnLaypoutRT: TToolButton
-          Left = 46
+          Left = 196
           Top = 0
           Hint = 'Editar layout de colunas'
           Caption = 'btnLaypoutRT'
@@ -526,7 +568,7 @@ object FrmConfigRT: TFrmConfigRT
         Left = 0
         Top = 29
         Width = 782
-        Height = 353
+        Height = 160
         Align = alClient
         DataSource = FrmDataModule.DataSourceRegrasRecolhimento
         TabOrder = 1
@@ -537,8 +579,7 @@ object FrmConfigRT: TFrmConfigRT
         TitleFont.Style = []
         ClearFilterButton = btnClearFiltroRT
         SearchAction = actProcurar
-        LayoutGrid = RLLayout
-        EnableZebra = False
+            EnableZebra = False
         LayoutButton = btnLaypoutRT
         Columns = <
           item
@@ -546,6 +587,12 @@ object FrmConfigRT: TFrmConfigRT
             FieldName = 'idRegraRecolhimento'
             Title.Alignment = taCenter
             Title.Caption = 'ID'
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'Prioridade'
+            Title.Alignment = taCenter
             Visible = True
           end
           item
@@ -559,12 +606,14 @@ object FrmConfigRT: TFrmConfigRT
             FieldName = 'Descricao'
             Title.Alignment = taCenter
             Title.Caption = 'Descri'#231#227'o da Regra'
+            Width = 125
             Visible = True
           end
           item
             Expanded = False
             FieldName = 'Origem'
             Title.Alignment = taCenter
+            Width = 69
             Visible = True
           end
           item
@@ -572,6 +621,7 @@ object FrmConfigRT: TFrmConfigRT
             FieldName = 'txtDestino'
             Title.Alignment = taCenter
             Title.Caption = 'Destino'
+            Width = 68
             Visible = True
           end
           item
@@ -579,6 +629,7 @@ object FrmConfigRT: TFrmConfigRT
             FieldName = 'DestinoNaoCriarRT'
             Title.Alignment = taCenter
             Title.Caption = 'Destino N'#227'o Criar RT'
+            Width = 121
             Visible = True
           end
           item
@@ -586,6 +637,7 @@ object FrmConfigRT: TFrmConfigRT
             FieldName = 'RecolherParaTipo'
             Title.Alignment = taCenter
             Title.Caption = 'Tipo Recolher Para'
+            Width = 116
             Visible = True
           end
           item
@@ -593,6 +645,7 @@ object FrmConfigRT: TFrmConfigRT
             FieldName = 'RecolherParaValor'
             Title.Alignment = taCenter
             Title.Caption = 'Valor Recolher Para'
+            Width = 123
             Visible = True
           end
           item
@@ -600,12 +653,7 @@ object FrmConfigRT: TFrmConfigRT
             FieldName = 'Observacao'
             Title.Alignment = taCenter
             Title.Caption = 'Observa'#231#227'o'
-            Visible = True
-          end
-          item
-            Expanded = False
-            FieldName = 'Prioridade'
-            Title.Alignment = taCenter
+            Width = 86
             Visible = True
           end>
       end
@@ -630,19 +678,82 @@ object FrmConfigRT: TFrmConfigRT
           item
             Width = 50
           end>
-        ExplicitTop = 374
-        ExplicitWidth = 780
       end
-      object RLLayout: TStringGrid
-        Left = 384
-        Top = 168
-        Width = 97
-        Height = 120
-        ColCount = 7
-        RowCount = 10
-        FixedRows = 0
-        TabOrder = 3
-        Visible = False
+      object MemoExplica: TMemo
+        Left = 0
+        Top = 192
+        Width = 782
+        Height = 190
+        Align = alBottom
+        Color = clBtnFace
+        Lines.Strings = (
+          'ORIENTA'#199#213'ES PARA PREENCHIMENTO DAS REGRAS DE RECOLHIMENTO'
+          ''
+          '1. O sistema considera apenas regras ATIVAS.'
+          
+            '2. As regras s'#227'o avaliadas por PRIORIDADE. A primeira regra que ' +
+            'casar com a programa'#231#227'o ser'#225' aplicada.'
+          
+            '3. Use prioridades menores para regras mais espec'#237'ficas e maiore' +
+            's para regras mais gen'#233'ricas.'
+          ''
+          'INTERPRETA'#199#195'O DOS CAMPOS'
+          ''
+          '- Origem:'
+          
+            '  Preencha quando a regra valer apenas para uma origem espec'#237'fic' +
+            'a.'
+          '  Se ficar em branco, vale para qualquer origem.'
+          ''
+          '- Destino:'
+          
+            '  Preencha quando a regra valer apenas para um destino espec'#237'fic' +
+            'o.'
+          '  Se ficar em branco, vale para qualquer destino.'
+          ''
+          '- Destino N'#227'o Criar RT:'
+          '  Deixe em branco para ignorar esta condi'#231#227'o.'
+          
+            '  Use SIM quando a regra s'#243' valer para destinos marcados como "N' +
+            #227'o Criar RT".'
+          
+            '  Use NAO quando a regra s'#243' valer para destinos que criam RT nor' +
+            'malmente.'
+          ''
+          '- Tipo Recolher Para:'
+          '  ORIGEM  = recolhe para a origem da programa'#231#227'o'
+          '  DESTINO = recolhe para o destino da programa'#231#227'o'
+          
+            '  FIXO    = recolhe para o valor informado em "Valor Recolher Pa' +
+            'ra"'
+          
+            '  NAO     = n'#227'o aplica recolhimento para os casos que casarem co' +
+            'm a regra'
+          ''
+          '- Valor Recolher Para:'
+          '  Preencha somente quando o tipo for FIXO.'
+          ''
+          'EXEMPLO:'
+          'Para "qualquer origem com destino TMIB n'#227'o tem recolhimento":'
+          '- Origem: em branco'
+          '- Destino: TMIB'
+          '- Tipo Recolher Para: NAO'
+          ''
+          'BOAS PR'#193'TICAS'
+          ''
+          '- Regras espec'#237'ficas devem vir antes das gen'#233'ricas.'
+          
+            '- Evite criar duas regras que possam atender o mesmo caso com a ' +
+            'mesma prioridade.'
+          
+            '- Se uma regra for para um caso muito particular, preencha Orige' +
+            'm e/ou Destino.'
+          
+            '- Se a regra for ampla, deixe Origem e Destino em branco conform' +
+            'e necess'#225'rio.')
+        ReadOnly = True
+        ScrollBars = ssVertical
+        TabOrder = 4
       end
     end
   end
@@ -677,3 +788,4 @@ object FrmConfigRT: TFrmConfigRT
     end
   end
 end
+

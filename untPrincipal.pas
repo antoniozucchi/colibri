@@ -46,6 +46,7 @@ type
     ServiosProgramados1: TMenuItem;
     ExecutantesProgramadosporPerodo1: TMenuItem;
     ControledeGeradores1: TMenuItem;
+    AplatanexodePT1: TMenuItem;
     ActionManager1: TActionManager;
     actVerificaVersao: TAction;
     actAbrirDB: TAction;
@@ -66,8 +67,10 @@ type
     actMatrizExecutanteCadastro: TAction;
     ResumoProgramao1: TMenuItem;
     SituaodosEquipamentoseAcessodasPlataformas1: TMenuItem;
-    Reconexoforada1: TMenuItem;
     actMatrizForaOperacao: TAction;
+    EmbarquePassageiros1: TMenuItem;
+    ManifestodeEmbarque1: TMenuItem;
+    APLAT1: TMenuItem;
     procedure SalvarBancoDadosComo1Click(Sender: TObject);
     procedure Timer1Timer(Sender: TObject);
     procedure FormCreate(Sender: TObject);
@@ -89,6 +92,7 @@ type
     procedure ServiosProgramados1Click(Sender: TObject);
     procedure ExecutantesProgramadosporPerodo1Click(Sender: TObject);
     procedure ControledeGeradores1Click(Sender: TObject);
+    procedure AplatanexodePT1Click(Sender: TObject);
     procedure actVerificaVersaoExecute(Sender: TObject);
     procedure actAbrirDBExecute(Sender: TObject);
     procedure CompactarBancoDados1Click(Sender: TObject);
@@ -106,8 +110,8 @@ type
     procedure actMatrizExecutanteCadastroExecute(Sender: TObject);
     procedure ResumoProgramao1Click(Sender: TObject);
     procedure SituaodosEquipamentoseAcessodasPlataformas1Click(Sender: TObject);
-    procedure Reconexoforada1Click(Sender: TObject);
     procedure actMatrizForaOperacaoExecute(Sender: TObject);
+    procedure ManifestodeEmbarque1Click(Sender: TObject);
     type
       TExecutanteProgramado = record
         ListaDestinos: TStrings;
@@ -136,6 +140,7 @@ type
       ASQLConsulta: string; const AExecutante: Boolean);
     procedure LimparCamposRTDaProgramacao(
       const ACodigoProgramacaoDiaria: Integer);
+    procedure CriarTabelasProntidao;
     //procedure Descomprime(ArquivoZip: TFileName; DiretorioDestino: string);
 
   public
@@ -176,8 +181,7 @@ type
     //DBGrid e StringGrid
     procedure ClassificaDBGrid(Grid: TDBGrid;sourceADOQuery: TADOQuery;TipoSORT: Integer);
     function CharAscDesc(const Ch: Char; const S: string): Boolean;
-    procedure GridZebrado(Grid: TDBGrid; ColunasLayout: TStringGrid; State: TGridDrawState;
-    const Rect: TRect; DataCol: Integer; Column: TColumn);
+
     procedure SetupGridPickListSQL(Conection: TADOConnection; const FieldName, sql: String;
       var Tabela: TDBGrid; DeletarRepetidos: Boolean);
     procedure SetupGridFilterPickListSQL(Conection: TADOConnection;
@@ -202,8 +206,6 @@ type
     numColuna,Largura: Integer; booleanReadOnly: Boolean);
 
     procedure limparTitleGrid(Grid: TDBGrid);
-    procedure buscaFiledGrid1(FieldName,palavraBusca,Operador:String;ColunasLayout:
-    TStringGrid; ACol: Integer;BooleanConcatenar: Boolean);
     procedure AlterarTituloColuna(ColunasLayout:TStringGrid;FieldName,strTitulo: String);
     function indexLayoutFieldName(FieldName: String; ColunasLayout: TStringGrid): Integer;
     function indexLayoutCaption(Caption: String; ColunasLayout: TStringGrid): Integer;
@@ -259,12 +261,10 @@ type
     function CalcNumExecutantes(idProgramacaoDiaria: Integer): Integer;
     procedure AvaliarProgramacaoExecutante(idProgramacaoExecutante,Fonte: Integer;
     StatusProgramacao,Motivo: String);
-    function SQLStringFiltroTabela(ColunasLayout: TStringGrid;BooleanWHERE: Boolean): String;
     procedure ProcuraQuery(SQLBase: String; sourceQuery: TADOQuery;StatusBar: TStatusBar);
 
     function verificaOperacao(StatusSistemaOP: String): String;
     //Layout Grid
-    procedure LimparColunasFiltro(Grid: TDBGrid; ColunasLayout: TStringGrid);
     //PDF
     procedure ImageExcluir(NomeArquivo: String);
     function dadosColuna(txtCaption: String; ColunasLayout: TStringGrid): TStringList;
@@ -321,7 +321,7 @@ implementation
   untConsultaExecutantesProgramados, untControleGeradores,
   untAgendaIntervencao,untMovimentacaoCarga,untTelaAbertura,
   untSituacaoEquipamentoAcesso,
-  untCondicaoEmbarcacao, untFrmTabela, untConexaoLOCAL;
+  untCondicaoEmbarcacao, untFrmTabela, untConexaoLOCAL, untAplatAnexos, untFrmManifestoEmbarque;
 
 {$R *.dfm}
 
@@ -661,7 +661,7 @@ begin
           FrmDataModule.ADOQueryTemporarioDBColibri);
       CriarFieldDB('RT_HoraVolta','tblProgramacaoExecutante','VARCHAR(5)',
           FrmDataModule.ADOQueryTemporarioDBColibri);
-      CriarFieldDB('RT_Mensagem','tblProgramacaoExecutante','VARCHAR(255)',
+      CriarFieldDB('RT_Mensagem','tblProgramacaoExecutante','VARCHAR(100)',
           FrmDataModule.ADOQueryTemporarioDBColibri);
       CriarFieldDB('RT_Status','tblProgramacaoExecutante','VARCHAR(40)',
           FrmDataModule.ADOQueryTemporarioDBColibri);
@@ -1325,6 +1325,52 @@ begin
 
       versaoDB := '1.7.0.6';
     end;
+    if (versaoDB = '1.7.0.6') then
+    begin
+      CriarTableDB(
+        'tblManifestoEmbarque',
+        'idManifestoEmbarque',
+        '[NomeExecutante] VARCHAR(255), '+
+        '[CodigoSAP] VARCHAR(10), '+
+        '[CPF] VARCHAR(14), '+
+        '[OutroDocumento] VARCHAR(25), '+
+        '[Origem] VARCHAR(20), '+
+        '[Destino] VARCHAR(20), '+
+        '[CentroCusto] VARCHAR(20), '+
+        '[DiagramaRede] VARCHAR(20), '+
+        '[OperRede] VARCHAR(4), '+
+        '[ElementoPEP] VARCHAR(20), '+
+        '[TipoEmbarque] VARCHAR(20), '+
+        '[DataEmbarque] DATETIME',
+        FrmDataModule.ADOConnectionRT
+      );
+      CriarFieldDB('txtTipoEtapaServico','tblManifestoEmbarque','VARCHAR(100)',
+        FrmDataModule.ADOQueryTemporarioRT);
+      CriarFieldDB('txtEmpresa','tblManifestoEmbarque','VARCHAR(150)',
+        FrmDataModule.ADOQueryTemporarioRT);
+      CriarFieldDB('Servico','tblManifestoEmbarque','VARCHAR(255)',
+        FrmDataModule.ADOQueryTemporarioRT);
+
+      CriarFieldDB('txtFuncao','tblManifestoEmbarque','VARCHAR(50)',
+        FrmDataModule.ADOQueryTemporarioRT);
+      CriarFieldDB('EmbarqueDesembarque','tblManifestoEmbarque','VARCHAR(15)',
+        FrmDataModule.ADOQueryTemporarioRT);
+      CriarFieldDB('HorarioSaida','tblManifestoEmbarque','VARCHAR(10)',
+        FrmDataModule.ADOQueryTemporarioRT);
+      CriarFieldDB('TransporteTerrestre','tblManifestoEmbarque','YESNO',
+        FrmDataModule.ADOQueryTemporarioRT);
+
+
+
+      versaoDB := '1.7.0.7';
+    end;
+    if (versaoDB = '1.7.0.7') then
+    begin
+      CriarTabelasProntidao;
+
+
+      versaoDB := '1.7.0.7';
+    end;
 
     FrmDataModule.ADOQueryColibri.Edit;
     FrmDataModule.DataSourceColibri.DataSet.FieldByName('versao').AsString:= versaoPRG;
@@ -1335,9 +1381,340 @@ begin
   end;
 end;
 
+procedure TFrmPrincipal.CriarTabelasProntidao;
+begin
+  // ============================================================
+  // 1. CAMPANHAS DE PRONTIDÃO
+  // ============================================================
+
+  CriarTableDB(
+    'tblProntidaoCampanha',
+    'idCampanha',
+    '[NomeCampanha] VARCHAR(150), ' +
+    '[PlataformaBase] VARCHAR(50), ' +
+    '[DataInicioCampanha] DATETIME, ' +
+    '[DataFimCampanha] DATETIME, ' +
+    '[StatusCampanha] VARCHAR(50), ' +
+    '[Observacao] MEMO, ' +
+    '[DataCadastro] DATETIME, ' +
+    '[UsuarioCadastro] VARCHAR(100), ' +
+    '[Ativo] YESNO',
+    FrmDataModule.ADOConnectionProntidao
+  );
+
+  CriarTableDB(
+    'tblProntidaoPremissaCampanha',
+    'idPremissa',
+    '[idCampanha] LONG, ' +
+    '[DataInicioVigencia] DATETIME, ' +
+    '[DataFimVigencia] DATETIME, ' +
+    '[DescricaoPremissa] VARCHAR(150), ' +
+    '[QtdeTurnosPrevistos] LONG, ' +
+    '[POBMaximoPorTurno] LONG, ' +
+    '[POBDiretoReferencia] LONG, ' +
+    '[POBIndiretoReferencia] LONG, ' +
+    '[POBTotalReferencia] LONG, ' +
+    '[HEPPorTurno] DOUBLE, ' +
+    '[IntervaloRefeicaoHoras] DOUBLE, ' +
+    '[FontePremissa] VARCHAR(100), ' +
+    '[Observacao] MEMO, ' +
+    '[DataCadastro] DATETIME, ' +
+    '[UsuarioCadastro] VARCHAR(100), ' +
+    '[Ativo] YESNO',
+    FrmDataModule.ADOConnectionProntidao
+  );
+
+  // ============================================================
+  // 2. IMPORTAÇÃO DO WHATSAPP
+  // ============================================================
+
+  CriarTableDB(
+    'tblWAImportacao',
+    'idImportacao',
+    '[idCampanha] LONG, ' +
+    '[ArquivoOrigem] VARCHAR(255), ' +
+    '[CaminhoArquivo] VARCHAR(255), ' +
+    '[GrupoWhatsApp] VARCHAR(150), ' +
+    '[DataImportacao] DATETIME, ' +
+    '[UsuarioImportacao] VARCHAR(100), ' +
+    '[HashArquivo] VARCHAR(100), ' +
+    '[QtdMensagensImportadas] LONG, ' +
+    '[QtdMensagensOperacionais] LONG, ' +
+    '[StatusImportacao] VARCHAR(50), ' +
+    '[Observacao] MEMO',
+    FrmDataModule.ADOConnectionProntidao
+  );
+
+  CriarTableDB(
+    'tblWAMensagem',
+    'idMensagem',
+    '[idImportacao] LONG, ' +
+    '[DataHoraMensagem] DATETIME, ' +
+    '[Remetente] VARCHAR(150), ' +
+    '[TextoOriginal] MEMO, ' +
+    '[TextoNormalizado] MEMO, ' +
+    '[TipoMensagem] VARCHAR(50), ' +
+    '[Processada] YESNO, ' +
+    '[Ignorada] YESNO, ' +
+    '[HashMensagem] VARCHAR(100), ' +
+    '[Observacao] MEMO',
+    FrmDataModule.ADOConnectionProntidao
+  );
+
+  // ============================================================
+  // 3. PRODUTIVIDADE POR TURNO
+  // Uma linha por campanha + data + turno + origem + plataforma serviço
+  // ============================================================
+
+  CriarTableDB(
+    'tblProntidaoProdutividadeTurno',
+    'idProdutividadeTurno',
+    '[idCampanha] LONG, ' +
+    '[idPremissa] LONG, ' +
+    '[idImportacao] LONG, ' +
+    '[idMensagemInicio] LONG, ' +
+    '[idMensagemFechamento] LONG, ' +
+
+    '[DataReferencia] DATETIME, ' +
+    '[Turno] VARCHAR(30), ' +                         // DIURNO / NOTURNO
+    '[PlataformaBase] TEXT(50), ' +                // plataforma da campanha/grupo
+    '[PlataformaServico] VARCHAR(50), ' +             // onde o serviço ocorreu
+
+    '[OrigemTipo] VARCHAR(50), ' +                    // Plataforma / Embarcacao / Terminal / Outro
+    '[OrigemCodigo] VARCHAR(100), ' +                 // PCM-01 / SOV / TMIB etc.
+    '[OrigemDescricao] VARCHAR(150), ' +
+
+    '[EmbarcacaoTipo] VARCHAR(50), ' +                // SOV / SURFER / AQUA HELIX
+    '[EmbarcacaoNome] VARCHAR(100), ' +               // SURF 1930 / P5 / NORWIND GALE etc.
+    '[TipoOperacao] VARCHAR(50), ' +                  // Prontidao / Apoio / Deslocamento
+
+    '[HoraChegadaPlataforma] DATETIME, ' +
+    '[HoraInicioAtividade] DATETIME, ' +
+    '[HoraEncerramentoAtividade] DATETIME, ' +
+    '[HoraSaidaPlataforma] DATETIME, ' +
+
+    '[PermanenciaHoras] DOUBLE, ' +
+    '[HoraEfetivaProjetada] DOUBLE, ' +            // HEP
+    '[HoraEfetivaRealizada] DOUBLE, ' +            // HER
+    '[MediaHoraEfetivaRealizada] DOUBLE, ' +       // MHER, se desejar gravar
+    '[PerdasPNP] DOUBLE, ' +                       // paradas não programadas
+    '[PerdasPOBReduzido] DOUBLE, ' +               // PPR
+    '[HoraUtilReal] DOUBLE, ' +                    // HUR
+
+    '[QtdPOBTotalInformado] LONG, ' +
+    '[QtdPOBDiretoInformado] LONG, ' +
+    '[QtdPOBIndiretoInformado] LONG, ' +
+    '[DiferencaPOBDireto] LONG, ' +
+    '[DeficitPOBDireto] LONG, ' +
+
+    '[StatusExtracao] VARCHAR(50), ' +                // Pendente / Extraido / Parcial / Erro
+    '[StatusRevisao] VARCHAR(50), ' +                 // Pendente / Revisado / Consolidado
+    '[ConfiancaExtracao] DOUBLE, ' +
+    '[Revisado] YESNO, ' +
+    '[TextoFonteResumo] MEMO, ' +
+    '[ObservacaoRevisao] MEMO, ' +
+    '[DataCadastro] DATETIME, ' +
+    '[UsuarioCadastro] VARCHAR(100)',
+    FrmDataModule.ADOConnectionProntidao
+  );
+
+  // ============================================================
+  // 4. EQUIPE INFORMADA NO WHATSAPP POR TURNO
+  // ============================================================
+
+  CriarTableDB(
+    'tblProntidaoEquipeTurno',
+    'idEquipeTurno',
+    '[idProdutividadeTurno] LONG, ' +
+    '[idFuncaoProdutividade] LONG, ' +
+    '[FuncaoOriginalWhatsApp] VARCHAR(150), ' +
+    '[FuncaoNormalizada] VARCHAR(150), ' +
+    '[TipoEtapaServico] VARCHAR(150), ' +
+    '[QuantidadeInformada] LONG, ' +
+    '[EhIndireto] YESNO, ' +
+    '[ContaComoPOBDireto] YESNO, ' +
+    '[OrigemInformacao] VARCHAR(50), ' +              // WhatsApp / Manual / Colibri
+    '[TextoOriginalLinha] MEMO, ' +
+    '[ConfiancaExtracao] DOUBLE, ' +
+    '[Revisado] YESNO, ' +
+    '[Observacao] MEMO',
+    FrmDataModule.ADOConnectionProntidao
+  );
+
+  // ============================================================
+  // 5. DESLOCAMENTO DE EFETIVO PARA OUTRAS PLATAFORMAS
+  // ============================================================
+
+  CriarTableDB(
+    'tblProntidaoDeslocamentoEfetivo',
+    'idDeslocamento',
+    '[idProdutividadeTurnoOrigem] LONG, ' +
+    '[idCampanha] LONG, ' +
+    '[DataReferencia] DATETIME, ' +
+    '[Turno] VARCHAR(30), ' +
+
+    '[PlataformaBase] VARCHAR(50), ' +
+    '[PlataformaDestino] VARCHAR(50), ' +
+
+    '[OrigemDeslocamentoTipo] VARCHAR(50), ' +
+    '[OrigemDeslocamentoCodigo] VARCHAR(100), ' +
+
+    '[EmbarcacaoTipo] VARCHAR(50), ' +
+    '[EmbarcacaoNome] VARCHAR(100), ' +
+
+    '[HoraSaidaOrigem] DATETIME, ' +
+    '[HoraChegadaDestino] DATETIME, ' +
+    '[HoraSaidaDestino] DATETIME, ' +
+    '[HoraRetornoOrigem] DATETIME, ' +
+
+    '[MotivoDeslocamento] MEMO, ' +
+    '[TextoFonte] MEMO, ' +
+    '[Revisado] YESNO, ' +
+    '[Observacao] MEMO',
+    FrmDataModule.ADOConnectionProntidao
+  );
+
+  CriarTableDB(
+    'tblProntidaoDeslocamentoEquipe',
+    'idDeslocamentoEquipe',
+    '[idDeslocamento] LONG, ' +
+    '[idFuncaoProdutividade] LONG, ' +
+    '[FuncaoOriginalWhatsApp] VARCHAR(150), ' +
+    '[FuncaoNormalizada] VARCHAR(150), ' +
+    '[TipoEtapaServico] VARCHAR(150), ' +
+    '[QuantidadeDeslocada] LONG, ' +
+    '[TextoOriginalLinha] MEMO, ' +
+    '[ConfiancaExtracao] DOUBLE, ' +
+    '[Revisado] YESNO, ' +
+    '[Observacao] MEMO',
+    FrmDataModule.ADOConnectionProntidao
+  );
+
+  // ============================================================
+  // 6. DESVIOS, TEMPOS MORTOS E TEMPOS INTRA-EFETIVA
+  // ============================================================
+
+  CriarTableDB(
+    'tblProntidaoDesvioTurno',
+    'idDesvioTurno',
+    '[idProdutividadeTurno] LONG, ' +
+    '[idTipoDesvio] LONG, ' +
+    '[TipoDesvio] VARCHAR(100), ' +
+    '[CategoriaDesvio] VARCHAR(100), ' +
+    '[DescricaoDesvio] MEMO, ' +
+    '[TempoMortoHoras] DOUBLE, ' +
+    '[TempoIntraEfetivaHoras] DOUBLE, ' +
+    '[AfetaHoraEfetiva] YESNO, ' +
+    '[AfetaEficiencia] YESNO, ' +
+    '[TextoFonte] MEMO, ' +
+    '[ConfiancaExtracao] DOUBLE, ' +
+    '[Revisado] YESNO, ' +
+    '[Observacao] MEMO',
+    FrmDataModule.ADOConnectionProntidao
+  );
+
+  CriarTableDB(
+    'tblTipoDesvioProdutividade',
+    'idTipoDesvio',
+    '[TipoDesvio] VARCHAR(100), ' +
+    '[CategoriaDesvio] VARCHAR(100), ' +
+    '[AfetaHoraEfetivaPadrao] YESNO, ' +
+    '[AfetaEficienciaPadrao] YESNO, ' +
+    '[PalavrasChave] MEMO, ' +
+    '[Observacao] MEMO, ' +
+    '[Ativo] YESNO',
+    FrmDataModule.ADOConnectionProntidao
+  );
+
+  // ============================================================
+  // 7. CADASTRO DE FUNÇÕES / ETAPAS DE SERVIÇO
+  // ============================================================
+
+  CriarTableDB(
+    'tblFuncaoProdutividade',
+    'idFuncaoProdutividade',
+    '[FuncaoNormalizada] VARCHAR(150), ' +
+    '[TipoEtapaServico] VARCHAR(150), ' +
+    '[EhIndireto] YESNO, ' +
+    '[ContaComoPOBDireto] YESNO, ' +
+    '[ContaNoPOBTotal] YESNO, ' +
+    '[Observacao] MEMO, ' +
+    '[Ativo] YESNO',
+    FrmDataModule.ADOConnectionProntidao
+  );
+
+  CriarTableDB(
+    'tblAliasFuncaoProdutividade',
+    'idAliasFuncao',
+    '[TextoAlias] VARCHAR(150), ' +
+    '[TextoAliasNormalizado] VARCHAR(150), ' +
+    '[idFuncaoProdutividade] LONG, ' +
+    '[Prioridade] LONG, ' +
+    '[Observacao] MEMO, ' +
+    '[Ativo] YESNO',
+    FrmDataModule.ADOConnectionProntidao
+  );
+
+  // ============================================================
+  // 8. DE/PARA COM A PROGRAMAÇÃO DO COLIBRI
+  // Segundo momento: comparação com tblProgramacaoExecutante
+  // ============================================================
+
+  CriarTableDB(
+    'tblDeParaFuncaoColibriProdutividade',
+    'idDePara',
+    '[txtFuncaoColibri] VARCHAR(150), ' +
+    '[txtFuncaoColibriNormalizada] VARCHAR(150), ' +
+    '[TipoEtapaServico] VARCHAR(150), ' +
+    '[idFuncaoProdutividade] LONG, ' +
+    '[Observacao] MEMO, ' +
+    '[Ativo] YESNO',
+    FrmDataModule.ADOConnectionProntidao
+  );
+
+  // ============================================================
+  // 9. CONFRONTO CONSOLIDADO ENTRE COLIBRI E WHATSAPP
+  // Pode ser tabela materializada para auditoria histórica.
+  // Também pode ser gerada inicialmente via query.
+  // ============================================================
+
+  CriarTableDB(
+    'tblProntidaoConfrontoEquipe',
+    'idConfrontoEquipe',
+    '[idProdutividadeTurno] LONG, ' +
+    '[idCampanha] LONG, ' +
+    '[DataReferencia] DATETIME, ' +
+    '[Turno] VARCHAR(30), ' +
+    '[PlataformaBase] VARCHAR(50), ' +
+    '[PlataformaServico] VARCHAR(50), ' +
+    '[TipoEtapaServico] VARCHAR(150), ' +
+    '[idFuncaoProdutividade] LONG, ' +
+    '[FuncaoNormalizada] VARCHAR(150), ' +
+    '[QtdProgramadaColibri] LONG, ' +
+    '[QtdInformadaWhatsApp] LONG, ' +
+    '[QtdDeslocada] LONG, ' +
+    '[QtdOficialConsolidada] LONG, ' +
+    '[DiferencaProgramadoInformado] LONG, ' +
+    '[StatusConfronto] VARCHAR(50), ' +               // OK / Divergente / Extra / Ausente / Deslocado
+    '[FonteOficial] VARCHAR(50), ' +                  // Colibri / WhatsApp / Revisao Manual
+    '[Revisado] YESNO, ' +
+    '[Observacao] MEMO',
+    FrmDataModule.ADOConnectionProntidao
+  );
+
+end;
+
 function TFrmPrincipal.FormatarCPF(CPF: String): String;
 begin
+  CPF := SomenteNumero(CPF);
 
+  if Length(CPF) = 11 then
+    Result := Copy(CPF, 1, 3) + '.' +
+              Copy(CPF, 4, 3) + '.' +
+              Copy(CPF, 7, 3) + '-' +
+              Copy(CPF, 10, 2)
+  else
+    Result := CPF;
 end;
 
 procedure TFrmPrincipal.actMatrizExecutanteCadastroExecute(Sender: TObject);
@@ -1669,32 +2046,6 @@ begin
     end;
   except
     ShowMessage('Erro');
-  end;
-end;
-
-procedure TFrmPrincipal.buscaFiledGrid1(FieldName, palavraBusca,Operador: String;
-  ColunasLayout: TStringGrid; ACol: Integer;BooleanConcatenar: Boolean);
-var
-  I: Integer;
-begin
-  for I := 0 to ColunasLayout.RowCount-1 do
-  begin
-    if ColunasLayout.Cells[0,i] = FieldName then
-    begin
-      if (BooleanConcatenar)AND(ColunasLayout.Cells[ACol,i]<>'') then
-      begin
-        ColunasLayout.Cells[ACol,i]:= ColunasLayout.Cells[ACol,i]+';'+palavraBusca;
-        if ACol = 4 then
-          ColunasLayout.Cells[5,i]:= Operador;
-      end
-      else
-      begin
-        ColunasLayout.Cells[ACol,i]:= palavraBusca;
-        if ACol = 4 then
-          ColunasLayout.Cells[5,i]:= Operador;
-      end;
-      break;
-    end;
   end;
 end;
 
@@ -2298,7 +2649,10 @@ procedure TFrmPrincipal.configurarCheckListBox(CheckListBox: TCheckListBox;
 begin
   //Sistemas
   if BooleanLimparColunas then
-    FrmPrincipal.LimparColunasFiltro(DBGrid,Layout);
+  begin
+    limparTitleGrid(DBGrid);
+    ClearFilterValues(Layout);
+  end;
   //=======================================================
   for i := 0 to CheckListBox.Items.Count-1 do
   begin
@@ -2319,7 +2673,7 @@ begin
           FieldName:= DBGrid.Columns[j].FieldName;
           Busca:= FrmDataModule.ADOQueryTemporarioDBConsulta1.FieldByName('PalavraBusca').AsString;
           Condicional:= FrmDataModule.ADOQueryTemporarioDBConsulta1.FieldByName('Condicional').AsString;
-          FrmPrincipal.buscaFiledGrid1(FieldName,Busca,Condicional,Layout,4,true);
+          SetFilterValue(FieldName,Busca,Condicional,Layout,4,true);
         end;
       end;
     end;
@@ -2332,6 +2686,14 @@ begin
     FrmControleGeradores:= TFrmControleGeradores.Create(Application)
   else
     FrmControleGeradores.Show;
+end;
+
+procedure TFrmPrincipal.AplatanexodePT1Click(Sender: TObject);
+begin
+  if not Assigned(FrmAplatAnexos) then
+    FrmAplatAnexos := TFrmAplatAnexos.Create(Application)
+  else
+    FrmAplatAnexos.Show;
 end;
 
 {procedure TFrmPrincipal.CopiarProgramacao(DataProgramacao: String; DataSource: TDataSource);
@@ -3299,34 +3661,6 @@ begin
   result:=Linha;
 end;
 
-procedure TFrmPrincipal.GridZebrado(Grid: TDBGrid; ColunasLayout: TStringGrid;
- State: TGridDrawState; const Rect: TRect; DataCol: Integer; Column: TColumn);
-begin
-  //DBGRIDZEBRADO
-  if gdSelected in State then
-    Grid.Canvas.Brush.Color:= $004080FF
-  else
-  begin
-    if Grid.DataSource.DataSet.RecNo mod 2 = 0  then
-      Grid.Canvas.Brush.Color:= clInfoBk
-    else
-      Grid.Canvas.Brush.Color:= clMoneyGreen;
-  end;
-  if ColunasLayout.Cells[4,indexLayoutFieldName(Column.FieldName,ColunasLayout)] <> '' then
-  begin
-    Column.Title.Font.Style := [FSBOLD];
-    Column.Title.Font.Color:= clRed;
-  end
-  else
-  begin
-    Column.Title.Font.Style := [];
-    Column.Title.Font.Color:= clBlack;
-  end;
-  Grid.Canvas.Font.Color:= clBlack;
-  Grid.Canvas.FillRect(Rect);
-  Grid.DefaultDrawColumnCell(Rect, DataCol, Column, State);
-end;
-
 function TFrmPrincipal.HoraParaMin(Hora: String): Integer;
 begin
   try
@@ -3767,6 +4101,14 @@ begin
     txtString:= FrmPrincipal.DeleteChar(char(8722),txtString);
     Grid.Columns.Items[i].Title.Caption:= txtString;
   end;
+end;
+
+procedure TFrmPrincipal.ManifestodeEmbarque1Click(Sender: TObject);
+begin
+  if not Assigned(FrmManifestoEmbarque) then
+    FrmManifestoEmbarque:= TFrmManifestoEmbarque.Create(Application)
+  else
+    FrmManifestoEmbarque.Show;
 end;
 
 procedure TFrmPrincipal.MDIChildCreated(const childHandle: THandle);
@@ -4257,11 +4599,6 @@ begin
   StatusBarPrincipal.Repaint;
 end;
 
-procedure TFrmPrincipal.Reconexoforada1Click(Sender: TObject);
-begin
-  Force_Reconnect;
-end;
-
 function TFrmPrincipal.RefToCell(const iCol, iRow: Integer): String;
 var
   ACount, APos: Integer;
@@ -4580,18 +4917,6 @@ begin
   end;
 end;
 
-procedure TFrmPrincipal.LimparColunasFiltro(Grid: TDBGrid; ColunasLayout: TStringGrid);
-  var
-    i: Integer;
-begin
-  limparTitleGrid(Grid);
-  for I := 0 to ColunasLayout.RowCount-1 do
-  begin
-    ColunasLayout.Cells[4,i]:= '';
-    ColunasLayout.Cells[5,i]:= '';
-  end;
-end;
-
 procedure TFrmPrincipal.SetupGridPickListLista(FieldName: string; Lista: TStringList; Tabela: TDBGrid);
 var
   i: Integer;
@@ -4740,26 +5065,6 @@ begin
   except
     Result:= '';
   end;
-end;
-
-function TFrmPrincipal.SQLStringFiltroTabela(ColunasLayout: TStringGrid;BooleanWHERE: Boolean): String;
-  var
-    SQLString: String;
-    i: Integer;
-begin
-  SQLString:= '';
-  for i := 0 to ColunasLayout.RowCount do
-  begin
-    if ColunasLayout.Cells[4,i] <> '' then
-    begin
-      SQLString:= FrmPrincipal.palavraBusca(SQLString,ColunasLayout.Cells[0,i],
-      ColunasLayout.Cells[5,i],ColunasLayout.Cells[4,i],'AND');
-    end;
-  end;
-  if ((SQLString <> '')AND(BooleanWHERE)) then
-    SQLString:= ' WHERE '+SQLString;
-
-  Result:= SQLString;
 end;
 
 procedure TFrmPrincipal.PanelTituloAjuda1MouseDown(Sender: TObject;

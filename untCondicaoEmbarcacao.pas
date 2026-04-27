@@ -26,7 +26,6 @@ type
     PanelTabelaCondicaoMar: TPanel;
     ToolBar1: TToolBar;
     DBGridCondicaoMar: TFilterDBGrid;
-    ColunasLayoutMar: TStringGrid;
     StatusBarCondicaoMar: TStatusBar;
     PanelAno: TPanel;
     Splitter1: TSplitter;
@@ -49,7 +48,6 @@ type
     Panel4: TPanel;
     ToolBar3: TToolBar;
     DBGridCondicaoEmbarcacao: TFilterDBGrid;
-    ColunasLayoutEmbarcacao: TStringGrid;
     StatusBarCondicaoEmbarcacao: TStatusBar;
     Panel5: TPanel;
     ToolBar4: TToolBar;
@@ -124,9 +122,6 @@ type
     procedure actProcurarMarExecute(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure FormDestroy(Sender: TObject);
-    procedure DBGridCondicaoMarDrawColumnCell(Sender: TObject;
-      const Rect: TRect; DataCol: Integer; Column: TColumn;
-      State: TGridDrawState);
     procedure CalendarMarDblClick(Sender: TObject);
     procedure CalendarMarSelectCell(Sender: TObject; ACol, ARow: Integer;
       var CanSelect: Boolean);
@@ -138,9 +133,6 @@ type
     procedure btnAnoProximoClick(Sender: TObject);
     procedure actProcurarEmbarcacaoExecute(Sender: TObject);
     procedure PageControl1Change(Sender: TObject);
-    procedure DBGridCondicaoEmbarcacaoDrawColumnCell(Sender: TObject;
-      const Rect: TRect; DataCol: Integer; Column: TColumn;
-      State: TGridDrawState);
     procedure CalendarioEmbarcacaoDrawCell(Sender: TObject; ACol, ARow: Integer;
       Rect: TRect; State: TGridDrawState);
     procedure RLEmbarcacaoDrawCell(Sender: TObject; ACol, ARow: Integer;
@@ -352,16 +344,16 @@ procedure TFrmCondicaoEmbarcacao.actExcelCalendarioEmbarcacaoExecute(
   Sender: TObject);
 begin
   if GRF1.Checked then
-    ExcelStringGrid(RLEmbarcacao,'Embarcação Anual','','','',false,
+    ExcelStringGrid(RLEmbarcacao,'Embarcaï¿½ï¿½o Anual','','','',false,
     FrmPrincipal.ProgressBarPrincipal,FrmPrincipal.MemoPrincipal)
   else
-    ExcelStringGrid(RLGeral,'Sobreposição','','','',false,
+    ExcelStringGrid(RLGeral,'Sobreposiï¿½ï¿½o','','','',false,
     FrmPrincipal.ProgressBarPrincipal,FrmPrincipal.MemoPrincipal);
 end;
 
 procedure TFrmCondicaoEmbarcacao.actExcelCalendarioMarExecute(Sender: TObject);
 begin
-  ExcelStringGrid(RLMar,'Condição de Mar Anual',
+  ExcelStringGrid(RLMar,'Condiï¿½ï¿½o de Mar Anual',
   '','','',false,
     FrmPrincipal.ProgressBarPrincipal,FrmPrincipal.MemoPrincipal);
 end;
@@ -378,12 +370,12 @@ begin
   RLGeral.Visible:= true;
   RLGeral.Align:= alClient;
   Ano:= IntToStr(YearOf(PrimeiroDiaMes));
-  FrmPrincipal.ProgressBarIncializa(12,'Gráfico geral');
-  RLGeral.Cells[0,0]:= 'Mês/Ano';
+  FrmPrincipal.ProgressBarIncializa(12,'Grï¿½fico geral');
+  RLGeral.Cells[0,0]:= 'Mï¿½s/Ano';
   RLGeral.Cells[1,0]:= 'Total Dias';
   RLGeral.Cells[33,0]:= 'Dias Perdidos';
   RLGeral.Cells[34,0]:= 'Dias Trab.';
-  //Inicialização
+  //Inicializaï¿½ï¿½o
   for mes := 1 to 12 do
     RLGeral.Rows[mes].Clear;
   for dia := 2 to 32 do
@@ -449,8 +441,8 @@ begin
     actDadosEmbarcacao.Execute;
   end
   else
-     MessageBox(0,'Os campos  "N° Previsto:" e  "N° Indisponivel:" são obrigatórios!',
-     '.::ATENÇÃO::.',MB_ICONERROR);
+     MessageBox(0,'Os campos  "Nï¿½ Previsto:" e  "Nï¿½ Indisponivel:" sï¿½o obrigatï¿½rios!',
+     '.::ATENï¿½ï¿½O::.',MB_ICONERROR);
 end;
 
 procedure TFrmCondicaoEmbarcacao.actSalvarListaEmbarcacaoExecute(
@@ -458,7 +450,7 @@ procedure TFrmCondicaoEmbarcacao.actSalvarListaEmbarcacaoExecute(
 begin
   FrmPrincipal.SaveDialog1.Filter := 'Texto|*.txt';
   FrmPrincipal.SaveDialog1.DefaultExt := '*.txt';
-  FrmPrincipal.SaveDialog1.FileName:= 'Datas Disponibilidade Embarcações';
+  FrmPrincipal.SaveDialog1.FileName:= 'Datas Disponibilidade Embarcaï¿½ï¿½es';
   if FrmPrincipal.SaveDialog1.Execute then
   begin
     CheckListBoxEmbarcacao.Items.SaveToFile(FrmPrincipal.SaveDialog1.FileName);
@@ -469,7 +461,7 @@ procedure TFrmCondicaoEmbarcacao.actSalvarListaMarExecute(Sender: TObject);
 begin
   FrmPrincipal.SaveDialog1.Filter := 'Texto|*.txt';
   FrmPrincipal.SaveDialog1.DefaultExt := '*.txt';
-  FrmPrincipal.SaveDialog1.FileName:= 'Datas Condição de Mar';
+  FrmPrincipal.SaveDialog1.FileName:= 'Datas Condiï¿½ï¿½o de Mar';
   if FrmPrincipal.SaveDialog1.Execute then
   begin
     CheckListBoxMar.Items.SaveToFile(FrmPrincipal.SaveDialog1.FileName);
@@ -495,8 +487,8 @@ begin
         txtString:= CheckListBoxEmbarcacao.Items[i];
     end;
   end;
-  ColunasLayoutEmbarcacao.Cells[4,0]:= txtString;
-  ColunasLayoutEmbarcacao.Cells[5,0]:= 'Contem';
+  SetFilterValue(DBGridCondicaoEmbarcacao.EffectiveLayoutGrid.Cells[0,0], txtString,
+    'Contem', DBGridCondicaoEmbarcacao, 4, False);
   actProcurarEmbarcacao.Execute;
 end;
 
@@ -519,8 +511,8 @@ begin
         txtString:= CheckListBoxMar.Items[i];
     end;
   end;
-  ColunasLayoutMar.Cells[4,0]:= txtString;
-  ColunasLayoutMar.Cells[5,0]:= 'Contem';
+  SetFilterValue(DBGridCondicaoMar.EffectiveLayoutGrid.Cells[0,0], txtString,
+    'Contem', DBGridCondicaoMar, 4, False);
   actProcurarMar.Execute;
 end;
 
@@ -535,7 +527,7 @@ procedure TFrmCondicaoEmbarcacao.actProcurarEmbarcacaoExecute(Sender: TObject);
     SQLString,SQLBase: String;
 begin
   //====================================================
-  SQLString:= FrmPrincipal.SQLStringFiltroTabela(ColunasLayoutEmbarcacao,true);
+  SQLString:= BuildFilterSQL(DBGridCondicaoEmbarcacao,true);
   SQLBase:= 'SELECT tblCondicaoEmbarcacao.* FROM tblCondicaoEmbarcacao '+
   SQLString+' ORDER BY DataCondicaoEmbarcacao;';
   FrmPrincipal.ProcuraQuery(SQLBase,FrmDataModule.ADOQueryCondicaoEmbarcacao,StatusBarCondicaoEmbarcacao);
@@ -546,7 +538,7 @@ procedure TFrmCondicaoEmbarcacao.actProcurarMarExecute(Sender: TObject);
     SQLString,SQLBase: String;
 begin
   //====================================================
-  SQLString:= FrmPrincipal.SQLStringFiltroTabela(ColunasLayoutMar,true);
+  SQLString:= BuildFilterSQL(DBGridCondicaoMar,true);
   SQLBase:= 'SELECT tblCondicaoMar.* FROM tblCondicaoMar '+
   SQLString+' ORDER BY DataCondicaoMar;';
   FrmPrincipal.ProcuraQuery(SQLBase,FrmDataModule.ADOQueryCondicaoMar,StatusBarCondicaoMar);
@@ -571,8 +563,8 @@ begin
         txtString:= CheckListBoxEmbarcacao.Items[i];
     end;
   end;
-  ColunasLayoutEmbarcacao.Cells[4,0]:= txtString;
-  ColunasLayoutEmbarcacao.Cells[5,0]:= 'Contem';
+  SetFilterValue(DBGridCondicaoEmbarcacao.EffectiveLayoutGrid.Cells[0,0], txtString,
+    'Contem', DBGridCondicaoEmbarcacao, 4, False);
   actProcurarEmbarcacao.Execute;
 end;
 
@@ -595,8 +587,8 @@ begin
         txtString:= CheckListBoxMar.Items[i];
     end;
   end;
-  ColunasLayoutMar.Cells[4,0]:= txtString;
-  ColunasLayoutMar.Cells[5,0]:= 'Contem';
+  SetFilterValue(DBGridCondicaoMar.EffectiveLayoutGrid.Cells[0,0], txtString,
+    'Contem', DBGridCondicaoMar, 4, False);
   actProcurarMar.Execute;
 end;
 
@@ -620,7 +612,7 @@ begin
     ProcurarData:= CalendarioEmbarcacao.Cells[AColSelect,ARowSelect];
     DataCondicaoEmbarcacao:= StrToDate(ProcurarData);
     if DataCondicaoEmbarcacao > now then
-      MessageBox(0,'Não é permitido inserir uma data no futuro!','.::ATENÇÃO::.',MB_ICONERROR)
+      MessageBox(0,'Nï¿½o ï¿½ permitido inserir uma data no futuro!','.::ATENï¿½ï¿½O::.',MB_ICONERROR)
     else
     begin
       booleanExiste:= false;
@@ -636,7 +628,7 @@ begin
       begin
         if Application.MessageBox(PChar(
         'Deseja realmente excluir a data '+ProcurarData+'?'),
-        '.::ATENÇÃO::.',36) = 6 then
+        '.::ATENï¿½ï¿½O::.',36) = 6 then
         begin
           ProcurarData:= FormatDateTime('dd/mm/yyyy',DataCondicaoEmbarcacao);
           SQLBase:= 'SELECT tblCondicaoEmbarcacao.* FROM tblCondicaoEmbarcacao '+
@@ -659,14 +651,14 @@ begin
       else
       begin
         if Application.MessageBox(PChar(
-        'Deseja realmente incluir está data como indisponibilidade de embarcação?'),
-        '.::ATENÇÃO::.',36) = 6 then
+        'Deseja realmente incluir estï¿½ data como indisponibilidade de embarcaï¿½ï¿½o?'),
+        '.::ATENï¿½ï¿½O::.',36) = 6 then
         begin
           actLimparAjuda.Execute;
           FrmDataModule.ADOQueryCondicaoEmbarcacao.Insert;
           FrmDataModule.ADOQueryCondicaoEmbarcacao.FieldByName('DataCondicaoEmbarcacao').
           AsDateTime:= DataCondicaoEmbarcacao;
-          PanelTituloAjuda1.Caption:= 'Inserir Embarcação Indisponíel';
+          PanelTituloAjuda1.Caption:= 'Inserir Embarcaï¿½ï¿½o Indisponï¿½el';
           PanelEmbarcacaoIndisponivel.Align:= alClient;
           PanelEmbarcacaoIndisponivel.Visible:= true;
           PanelAjuda.Top:= 100;
@@ -689,19 +681,19 @@ var
 begin
   with CalendarioEmbarcacao do
   begin
-    //Limpando o Calendário Para Recria-lo
+    //Limpando o Calendï¿½rio Para Recria-lo
     Canvas.Brush.Color := clWhite;
     Canvas.Pen.Color   := clWhite;
     Canvas.Font.Style  := [];
     Canvas.Font.Color  := clBlack;
     Canvas.FillRect(Rect);
     DiaGrid := Cells[aCol, aRow];
-    //Senão for Cabeçalho dos Dias da Semana
+    //Senï¿½o for Cabeï¿½alho dos Dias da Semana
     if aRow > 0 then
     begin
       Data := StrToDate(DiaGrid);
       DiaGrid := IntToStr(DayOf(Data));
-      //Checa se os Dias São do Mês Selecionado
+      //Checa se os Dias Sï¿½o do Mï¿½s Selecionado
       if MonthOf(Data) = MonthOf(PrimeiroDiaMes) then
       begin
         //Pintando a Data Atual
@@ -738,18 +730,18 @@ begin
       end
       else
       begin
-        //Deixando Cinza as Dia Que Não São do Mês Selecionado
+        //Deixando Cinza as Dia Que Nï¿½o Sï¿½o do Mï¿½s Selecionado
         Canvas.Brush.Color :=clWhite;
         Canvas.Font.Color  :=clSilver;
       end;
     end
-    //Se for Cabeçalho dos Dias da Semana
+    //Se for Cabeï¿½alho dos Dias da Semana
     else
     begin
       Canvas.Font.Color := clRed;
       Canvas.Font.Style :=[fsBold];
     end;
-    //Desenhando o Calendario e Colocando os Dias, Altura, Largura e Posição
+    //Desenhando o Calendario e Colocando os Dias, Altura, Largura e Posiï¿½ï¿½o
     AlturaGrid  := Canvas.TextHeight(DiaGrid);
     LarguraGrid := Canvas.TextWidth(DiaGrid);
     LeftGrid    := Rect.Left + (ColWidths[ACol]  - LarguraGrid) div 2;
@@ -781,7 +773,7 @@ begin
     ProcurarData:= CalendarMar.Cells[AColSelect,ARowSelect];
     DataCondicaoMar:= StrToDate(ProcurarData);
     if DataCondicaoMar > now then
-      MessageBox(0,'Não é permitido inserir uma data no futuro!','.::ATENÇÃO::.',MB_ICONERROR)
+      MessageBox(0,'Nï¿½o ï¿½ permitido inserir uma data no futuro!','.::ATENï¿½ï¿½O::.',MB_ICONERROR)
     else
     begin
       booleanExiste:= false;
@@ -797,7 +789,7 @@ begin
       begin
         if Application.MessageBox(PChar(
         'Deseja realmente excluir a data '+ProcurarData+'?'),
-        '.::ATENÇÃO::.',36) = 6 then
+        '.::ATENï¿½ï¿½O::.',36) = 6 then
         begin
           ProcurarData:= FormatDateTime('dd/mm/yyyy',DataCondicaoMar);
           SQLBase:= 'SELECT tblCondicaoMar.* FROM tblCondicaoMar '+
@@ -820,8 +812,8 @@ begin
       else
       begin
         if Application.MessageBox(PChar(
-        'Deseja realmente incluir está data como condição de mar?'),
-        '.::ATENÇÃO::.',36) = 6 then
+        'Deseja realmente incluir estï¿½ data como condiï¿½ï¿½o de mar?'),
+        '.::ATENï¿½ï¿½O::.',36) = 6 then
         begin
           FrmDataModule.ADOQueryCondicaoMar.Insert;
           FrmDataModule.DataSourceCondicaoMar.DataSet.
@@ -843,19 +835,19 @@ var
 begin
   with CalendarMar do
   begin
-    //Limpando o Calendário Para Recria-lo
+    //Limpando o Calendï¿½rio Para Recria-lo
     Canvas.Brush.Color := clWhite;
     Canvas.Pen.Color   := clWhite;
     Canvas.Font.Style  := [];
     Canvas.Font.Color  := clBlack;
     Canvas.FillRect(Rect);
     DiaGrid := Cells[aCol, aRow];
-    //Senão for Cabeçalho dos Dias da Semana
+    //Senï¿½o for Cabeï¿½alho dos Dias da Semana
     if aRow > 0 then
     begin
       Data := StrToDate(DiaGrid);
       DiaGrid := IntToStr(DayOf(Data));
-      //Checa se os Dias São do Mês Selecionado
+      //Checa se os Dias Sï¿½o do Mï¿½s Selecionado
       if MonthOf(Data) = MonthOf(PrimeiroDiaMes) then
       begin
         //Pintando a Data Atual
@@ -892,18 +884,18 @@ begin
       end
       else
       begin
-        //Deixando Cinza as Dia Que Não São do Mês Selecionado
+        //Deixando Cinza as Dia Que Nï¿½o Sï¿½o do Mï¿½s Selecionado
         Canvas.Brush.Color :=clWhite;
         Canvas.Font.Color  :=clSilver;
       end;
     end
-    //Se for Cabeçalho dos Dias da Semana
+    //Se for Cabeï¿½alho dos Dias da Semana
     else
     begin
       Canvas.Font.Color := clRed;
       Canvas.Font.Style :=[fsBold];
     end;
-    //Desenhando o Calendario e Colocando os Dias, Altura, Largura e Posição
+    //Desenhando o Calendario e Colocando os Dias, Altura, Largura e Posiï¿½ï¿½o
     AlturaGrid  := Canvas.TextHeight(DiaGrid);
     LarguraGrid := Canvas.TextWidth(DiaGrid);
     LeftGrid    := Rect.Left + (ColWidths[ACol]  - LarguraGrid) div 2;
@@ -937,8 +929,8 @@ begin
         txtString:= CheckListBoxEmbarcacao.Items[i];
     end;
   end;
-  ColunasLayoutEmbarcacao.Cells[4,0]:= txtString;
-  ColunasLayoutEmbarcacao.Cells[5,0]:= 'Contem';
+  SetFilterValue(DBGridCondicaoEmbarcacao.EffectiveLayoutGrid.Cells[0,0], txtString,
+    'Contem', DBGridCondicaoEmbarcacao, 4, False);
   actProcurarEmbarcacao.Execute;
 end;
 
@@ -959,24 +951,9 @@ begin
         txtString:= CheckListBoxMar.Items[i];
     end;
   end;
-  ColunasLayoutMar.Cells[4,0]:= txtString;
-  ColunasLayoutMar.Cells[5,0]:= 'Contem';
+  SetFilterValue(DBGridCondicaoMar.EffectiveLayoutGrid.Cells[0,0], txtString,
+    'Contem', DBGridCondicaoMar, 4, False);
   actProcurarMar.Execute;
-end;
-
-procedure TFrmCondicaoEmbarcacao.DBGridCondicaoEmbarcacaoDrawColumnCell(
-  Sender: TObject; const Rect: TRect; DataCol: Integer; Column: TColumn;
-  State: TGridDrawState);
-begin
-  FrmPrincipal.GridZebrado(DBGridCondicaoEmbarcacao,
-  ColunasLayoutEmbarcacao,State,Rect,DataCol,Column);
-end;
-
-procedure TFrmCondicaoEmbarcacao.DBGridCondicaoMarDrawColumnCell(
-  Sender: TObject; const Rect: TRect; DataCol: Integer; Column: TColumn;
-  State: TGridDrawState);
-begin
-  FrmPrincipal.GridZebrado(DBGridCondicaoMar,ColunasLayoutMar,State,Rect,DataCol,Column);
 end;
 
 procedure TFrmCondicaoEmbarcacao.GRF1Click(
@@ -1016,7 +993,7 @@ begin
   CalendarMar.Cells[5,0]:= 'Sex';
   CalendarMar.Cells[6,0]:= 'Sab';
   //===========================================
-  RLMar.Cells[0,0]:= 'Mês/Ano';
+  RLMar.Cells[0,0]:= 'Mï¿½s/Ano';
   RLMar.Cells[1,0]:= 'Total Dias';
   RLMar.Cells[33,0]:= 'Dias Perdidos';
   RLMar.Cells[34,0]:= 'Dias Trab.';
@@ -1028,10 +1005,10 @@ begin
   RLMar.ColWidths[33]:= 90;
   RLMar.ColWidths[34]:= 90;
   //===========================================
-  RLEmbarcacao.Cells[0,0]:= 'Mês/Ano';
+  RLEmbarcacao.Cells[0,0]:= 'Mï¿½s/Ano';
   RLEmbarcacao.Cells[1,0]:= 'Total Indisp.';
-  RLEmbarcacao.Cells[33,0]:= 'Média Disp.';
-  RLEmbarcacao.Cells[34,0]:= 'Média Indisp.';
+  RLEmbarcacao.Cells[33,0]:= 'Mï¿½dia Disp.';
+  RLEmbarcacao.Cells[34,0]:= 'Mï¿½dia Indisp.';
   for I := 1 to 31 do
     RLEmbarcacao.Cells[i+1,0]:= IntToStr(i);
 
@@ -1044,9 +1021,7 @@ begin
   PrimeiroDiaMes := RecodeDay(Date, 1);
   FrmPrincipal.DesenharCalendario(CalendarMar,PanelNomeMesMar,PrimeiroDiaMes);
   FrmPrincipal.DesenharCalendario(CalendarioEmbarcacao,PanelNomeMesEmbarcacao,PrimeiroDiaMes);
-  //Incicialização
-  FrmDataModule.setFilterDBGrid(DBGridCondicaoMar);
-  FrmDataModule.setFilterDBGrid(DBGridCondicaoEmbarcacao);
+  //Incicializaï¿½ï¿½o
   actProcurarMar.Execute;
   actDadosMar.Execute;
 end;
@@ -1337,3 +1312,5 @@ begin
 end;
 
 end.
+
+

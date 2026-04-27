@@ -17,7 +17,6 @@ type
     ActionManager1: TActionManager;
     actProcurar: TAction;
     StatusBar1: TStatusBar;
-    ColunasLayout: TStringGrid;
     Splitter1: TSplitter;
     Panel2: TPanel;
     PanelTituloNotas: TPanel;
@@ -54,9 +53,9 @@ procedure TFrmSituacaoEquipamentoAcesso.actProcurarExecute(Sender: TObject);
   var
     SQLString,SQLBase: String;
 begin
-  SQLString:= frmPrincipal.SQLStringFiltroTabela(ColunasLayout,false);
+  SQLString:= BuildFilterSQL(DBGridSituacaoEquipamentoAcesso,false);
   if SQLString <> '' then
-    SQLString:= 'AND' + SQLString;
+    SQLString:= ' AND ' + SQLString;
 
   SQLBase:= 'SELECT tblPlataforma.* FROM tblPlataforma '+
   'WHERE (BooleanPlataforma = True) '+
@@ -151,8 +150,7 @@ begin
     DBNavigator.Enabled:= false;
     DBGridSituacaoEquipamentoAcesso.ReadOnly:= true;
   end;
-  //Incicialização
-  FrmDataModule.setFilterDBGrid(DBGridSituacaoEquipamentoAcesso);
+  //Inicializacao
   actProcurar.Execute;
 end;
 
@@ -178,3 +176,4 @@ begin
 end;
 
 end.
+

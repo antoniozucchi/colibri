@@ -111,11 +111,9 @@ object FrmEmbarcacao: TFrmEmbarcacao
     TitleFont.Height = -11
     TitleFont.Name = 'Tahoma'
     TitleFont.Style = []
-    OnDrawColumnCell = DBGridEmbarcacaoDrawColumnCell
     OnKeyPress = DBGridEmbarcacaoKeyPress
     ClearFilterButton = btnClearFiltro
     SearchAction = actProcurar
-    LayoutGrid = ColunasLayout
     EnableZebra = False
     ProgressBar = FrmPrincipal.ProgressBarPrincipal
     LayoutButton = btnLayout
@@ -141,6 +139,7 @@ object FrmEmbarcacao: TFrmEmbarcacao
         Expanded = False
         FieldName = 'OrigemBridge'
         Title.Alignment = taCenter
+        Title.Caption = 'Origem Bridge'
         Visible = True
       end
       item
@@ -259,30 +258,6 @@ object FrmEmbarcacao: TFrmEmbarcacao
       end>
     ExplicitTop = 338
     ExplicitWidth = 738
-  end
-  object ColunasLayout: TStringGrid
-    Left = 80
-    Top = 166
-    Width = 113
-    Height = 94
-    ColCount = 7
-    DefaultRowHeight = 21
-    RowCount = 12
-    TabOrder = 4
-    Visible = False
-    RowHeights = (
-      21
-      21
-      21
-      21
-      21
-      21
-      21
-      21
-      21
-      21
-      21
-      21)
   end
   object ActionManager1: TActionManager
     Images = FrmPrincipal.ImageList1

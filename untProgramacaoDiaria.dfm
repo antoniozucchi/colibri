@@ -94,7 +94,6 @@ object FrmProgramacaoDiaria: TFrmProgramacaoDiaria
           OnKeyPress = DBGridExecutanteKeyPress
           ClearFilterButton = btnFiltroClearExecutante
           SearchAction = actProcurarExecutantes
-          LayoutGrid = ColunasLayoutExecutante
           EnableZebra = False
           Columns = <
             item
@@ -226,28 +225,6 @@ object FrmProgramacaoDiaria: TFrmProgramacaoDiaria
               Width = 50
             end>
         end
-        object ColunasLayoutExecutante: TStringGrid
-          Left = 57
-          Top = 101
-          Width = 113
-          Height = 94
-          ColCount = 7
-          DefaultRowHeight = 21
-          RowCount = 10
-          TabOrder = 4
-          Visible = False
-          RowHeights = (
-            21
-            21
-            21
-            21
-            21
-            21
-            21
-            21
-            21
-            21)
-        end
       end
       object PanelServico: TPanel
         Left = 1
@@ -271,12 +248,10 @@ object FrmProgramacaoDiaria: TFrmProgramacaoDiaria
           TitleFont.Height = -11
           TitleFont.Name = 'Tahoma'
           TitleFont.Style = []
-          OnDrawColumnCell = DBGridServicoDrawColumnCell
           OnKeyDown = DBGridServicoKeyDown
           OnKeyPress = DBGridServicoKeyPress
           ClearFilterButton = btnFiltroClearServicos
           SearchAction = actProcurarServicos
-          LayoutGrid = ColunasLayoutServico
           EnableZebra = False
           Columns = <
             item
@@ -358,24 +333,6 @@ object FrmProgramacaoDiaria: TFrmProgramacaoDiaria
             end>
           ExplicitTop = 294
         end
-        object ColunasLayoutServico: TStringGrid
-          Left = 73
-          Top = 91
-          Width = 113
-          Height = 94
-          ColCount = 7
-          DefaultRowHeight = 21
-          RowCount = 6
-          TabOrder = 3
-          Visible = False
-          RowHeights = (
-            21
-            21
-            21
-            21
-            21
-            21)
-        end
         object ToolBar7: TToolBar
           Left = 1
           Top = 26
@@ -385,7 +342,7 @@ object FrmProgramacaoDiaria: TFrmProgramacaoDiaria
           DrawingStyle = dsGradient
           EdgeBorders = [ebLeft, ebTop, ebRight, ebBottom]
           Images = FrmPrincipal.ImageList1
-          TabOrder = 4
+          TabOrder = 3
           object btnFiltroClearServicos: TToolButton
             Left = 0
             Top = 0
@@ -461,8 +418,19 @@ object FrmProgramacaoDiaria: TFrmProgramacaoDiaria
           ParentShowHint = False
           ShowHint = True
         end
-        object BitBtn11: TBitBtn
+        object BitBtn3: TBitBtn
           Left = 117
+          Top = 0
+          Width = 70
+          Height = 22
+          Action = actProcurarProgramacao
+          Caption = 'Procurar'
+          ParentShowHint = False
+          ShowHint = True
+          TabOrder = 5
+        end
+        object BitBtn11: TBitBtn
+          Left = 187
           Top = 0
           Width = 70
           Height = 22
@@ -473,7 +441,7 @@ object FrmProgramacaoDiaria: TFrmProgramacaoDiaria
           TabOrder = 1
         end
         object BitBtn5: TBitBtn
-          Left = 187
+          Left = 257
           Top = 0
           Width = 70
           Height = 22
@@ -484,7 +452,7 @@ object FrmProgramacaoDiaria: TFrmProgramacaoDiaria
           TabOrder = 4
         end
         object BitBtn12: TBitBtn
-          Left = 257
+          Left = 327
           Top = 0
           Width = 70
           Height = 22
@@ -495,7 +463,7 @@ object FrmProgramacaoDiaria: TFrmProgramacaoDiaria
           TabOrder = 2
         end
         object ToolButton7: TToolButton
-          Left = 327
+          Left = 397
           Top = 0
           Hint = 'Excluir programa'#231#227'o'
           Caption = 'ToolButton7'
@@ -506,7 +474,7 @@ object FrmProgramacaoDiaria: TFrmProgramacaoDiaria
           Style = tbsDropDown
         end
         object ToolButton8: TToolButton
-          Left = 369
+          Left = 439
           Top = 0
           Hint = 'Copiar programa'#231#227'o para data no futuro'
           Caption = 'ToolButton8'
@@ -517,17 +485,17 @@ object FrmProgramacaoDiaria: TFrmProgramacaoDiaria
           Style = tbsDropDown
         end
         object ToolButton9: TToolButton
-          Left = 411
+          Left = 481
           Top = 0
           Action = actZoomMais
         end
         object ToolButton10: TToolButton
-          Left = 434
+          Left = 504
           Top = 0
           Action = actZoomMenos
         end
         object DBEditProgramacao: TDBEdit
-          Left = 457
+          Left = 527
           Top = 0
           Width = 31
           Height = 22
@@ -555,7 +523,6 @@ object FrmProgramacaoDiaria: TFrmProgramacaoDiaria
         OnDrawColumnCell = DBGridProgramacaoDrawColumnCell
         ClearFilterButton = btnFiltroClearProgramacao
         SearchAction = actProcurarProgramacao
-        LayoutGrid = ColunasLayoutProgramacao
         EnableZebra = False
         Columns = <
           item
@@ -702,30 +669,6 @@ object FrmProgramacaoDiaria: TFrmProgramacaoDiaria
           end>
         ExplicitTop = 579
       end
-      object ColunasLayoutProgramacao: TStringGrid
-        Left = 49
-        Top = 209
-        Width = 113
-        Height = 94
-        ColCount = 7
-        DefaultRowHeight = 21
-        RowCount = 12
-        TabOrder = 4
-        Visible = False
-        RowHeights = (
-          21
-          21
-          21
-          21
-          21
-          21
-          21
-          21
-          21
-          21
-          21
-          21)
-      end
     end
   end
   object PanelProgramacao: TPanel
@@ -830,19 +773,8 @@ object FrmProgramacaoDiaria: TFrmProgramacaoDiaria
         ShowHint = True
         TabOrder = 0
       end
-      object BitBtn7: TBitBtn
-        Left = 280
-        Top = 0
-        Width = 96
-        Height = 22
-        Action = actConfigurarExecutante
-        Caption = 'Config.Busca'
-        ParentShowHint = False
-        ShowHint = True
-        TabOrder = 4
-      end
       object BitBtn9: TBitBtn
-        Left = 376
+        Left = 280
         Top = 0
         Width = 75
         Height = 22
@@ -946,6 +878,18 @@ object FrmProgramacaoDiaria: TFrmProgramacaoDiaria
           Action = actExecutantesNaoEncontrados
           ParentShowHint = False
           ShowHint = True
+        end
+        object edtLocalizar: TEdit
+          Left = 72
+          Top = 0
+          Width = 273
+          Height = 22
+          Hint = 'Buscar executante pelo Nome ou Fun'#231#227'o'
+          ParentShowHint = False
+          ShowHint = True
+          TabOrder = 0
+          TextHint = 'Buscar executante pelo Nome ou Fun'#231#227'o'
+          OnKeyPress = edtLocalizarKeyPress
         end
       end
       object ComboBoxOrigem: TComboBox
@@ -1211,7 +1155,7 @@ object FrmProgramacaoDiaria: TFrmProgramacaoDiaria
     Visible = False
     object PanelTituloAjuda: TPanel
       Left = 1
-      Top = 89
+      Top = 1
       Width = 335
       Height = 26
       Align = alTop
@@ -1280,7 +1224,7 @@ object FrmProgramacaoDiaria: TFrmProgramacaoDiaria
     end
     object PanelAjudaInserirServico: TPanel
       Left = 1
-      Top = 289
+      Top = 201
       Width = 335
       Height = 156
       Align = alTop
@@ -1522,7 +1466,7 @@ object FrmProgramacaoDiaria: TFrmProgramacaoDiaria
     end
     object PanelNaoEncontrados: TPanel
       Left = 1
-      Top = 445
+      Top = 357
       Width = 335
       Height = 2
       Align = alClient
@@ -1566,7 +1510,7 @@ object FrmProgramacaoDiaria: TFrmProgramacaoDiaria
     end
     object PanelLogAcao: TPanel
       Left = 1
-      Top = 115
+      Top = 27
       Width = 335
       Height = 174
       Align = alTop
@@ -1593,125 +1537,6 @@ object FrmProgramacaoDiaria: TFrmProgramacaoDiaria
         ScrollBars = ssBoth
         TabOrder = 1
         WordWrap = False
-      end
-    end
-    object PanelConfigurarExecutante: TPanel
-      Left = 1
-      Top = 1
-      Width = 335
-      Height = 88
-      Align = alTop
-      TabOrder = 4
-      object ToolBar9: TToolBar
-        Left = 1
-        Top = 1
-        Width = 333
-        Height = 29
-        Caption = 'ToolBar6'
-        DrawingStyle = dsGradient
-        EdgeBorders = [ebLeft, ebTop, ebRight, ebBottom]
-        TabOrder = 0
-        object DBNavigator1: TDBNavigator
-          Left = 0
-          Top = 0
-          Width = 104
-          Height = 22
-          DataSource = FrmDataModule.DataSourceColibri
-          VisibleButtons = [nbEdit, nbPost, nbCancel, nbRefresh]
-          Hints.Strings = (
-            'Primeiro'
-            'Anterior'
-            'Pr'#243'ximo'
-            #218'ltimo'
-            'Inserir'
-            'Excluir'
-            'Editar'
-            'Gravar'
-            'Cancelar'
-            'Atualizar'
-            'Aplicar atualiza'#231#245'es'
-            'Calcelar atualiza'#231#245'es')
-          ParentShowHint = False
-          ShowHint = True
-          TabOrder = 0
-        end
-      end
-      object Panel83: TPanel
-        Left = 1
-        Top = 55
-        Width = 333
-        Height = 25
-        Align = alTop
-        TabOrder = 1
-        object Panel84: TPanel
-          Left = 1
-          Top = 1
-          Width = 60
-          Height = 23
-          Align = alLeft
-          Alignment = taLeftJustify
-          Caption = ' Turma:'
-          TabOrder = 0
-        end
-        object Panel85: TPanel
-          Left = 61
-          Top = 1
-          Width = 271
-          Height = 23
-          Align = alClient
-          TabOrder = 1
-          object DBEditTurma: TDBEdit
-            Left = 1
-            Top = 1
-            Width = 269
-            Height = 21
-            Hint = 'Definir n'#250'mero da turma de pesquisa'
-            Align = alClient
-            DataField = 'Turma'
-            DataSource = FrmDataModule.DataSourceColibri
-            ParentShowHint = False
-            ShowHint = True
-            TabOrder = 0
-          end
-        end
-      end
-      object Panel86: TPanel
-        Left = 1
-        Top = 30
-        Width = 333
-        Height = 25
-        Align = alTop
-        TabOrder = 2
-        object Panel87: TPanel
-          Left = 1
-          Top = 1
-          Width = 60
-          Height = 23
-          Align = alLeft
-          Alignment = taLeftJustify
-          Caption = ' Turma:'
-          TabOrder = 0
-        end
-        object Panel88: TPanel
-          Left = 61
-          Top = 1
-          Width = 271
-          Height = 23
-          Align = alClient
-          TabOrder = 1
-          object CheckBoxTurma: TCheckBox
-            Left = 1
-            Top = 1
-            Width = 264
-            Height = 21
-            Align = alLeft
-            Caption = 'Pesquisar por Turma do cadastro de executante'
-            Checked = True
-            State = cbChecked
-            TabOrder = 0
-            OnClick = CheckBoxTurmaClick
-          end
-        end
       end
     end
   end
@@ -1945,13 +1770,6 @@ object FrmProgramacaoDiaria: TFrmProgramacaoDiaria
       Hint = 'Excliur executante selecionado'
       ImageIndex = 450
       OnExecute = actExecutanteExcluirExecute
-    end
-    object actConfigurarExecutante: TAction
-      Category = 'Alterar Registros'
-      Caption = 'Config.Busca'
-      Hint = 'Configurar pesquisa de executantes dispon'#237'veis'
-      ImageIndex = 32
-      OnExecute = actConfigurarExecutanteExecute
     end
     object actServicosNaoEncontrados: TAction
       Category = 'Executantes e Servi'#231'os'

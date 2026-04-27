@@ -46,9 +46,12 @@ type
     btnLaypoutRT: TToolButton;
     FilterDBGrid1: TFilterDBGrid;
     StatusBarRegrasRecolhimento: TStatusBar;
-    RLLayout: TStringGrid;
+
     ActionManager1: TActionManager;
     actProcurar: TAction;
+    DBNavigator2: TDBNavigator;
+    MemoExplica: TMemo;
+    Splitter1: TSplitter;
     procedure FormCreate(Sender: TObject);
     procedure actProcurarExecute(Sender: TObject);
   private
@@ -69,7 +72,7 @@ procedure TFrmConfigRT.actProcurarExecute(Sender: TObject);
   var
     SQLString,SQLBase: String;
 begin
-  SQLString:= frmPrincipal.SQLStringFiltroTabela(RLLayout,true);
+  SQLString:= BuildFilterSQL(FilterDBGrid1,true);
   SQLBase:= 'SELECT tblRTRegraRecolhimento.* FROM tblRTRegraRecolhimento '+
   SQLString+' ORDER BY Origem;';
   FrmPrincipal.ProcuraQuery(SQLBase,FrmDataModule.ADOQueryRegrasRecolhimento,
@@ -80,8 +83,9 @@ procedure TFrmConfigRT.FormCreate(Sender: TObject);
 begin
   FrmDataModule.ADOQueryConfigRT.Active:= false;
   FrmDataModule.ADOQueryConfigRT.Active:= true;
-  FrmDataModule.setFilterDBGrid(FilterDBGrid1);
   actProcurar.Execute;
 end;
 
 end.
+
+

@@ -426,7 +426,7 @@ object FrmPrincipal: TFrmPrincipal
   object MainMenu1: TMainMenu
     Images = ImageList1
     Left = 280
-    Top = 192
+    Top = 200
     object MenuArquivo: TMenuItem
       Caption = 'Arquivo'
       object Abrirbancodedados1: TMenuItem
@@ -447,9 +447,6 @@ object FrmPrincipal: TFrmPrincipal
         Enabled = False
         ImageIndex = 32
         OnClick = CadastroUsuario1Click
-      end
-      object Converterverso1: TMenuItem
-        Action = actConverterDB
       end
       object N1: TMenuItem
         Caption = '-'
@@ -492,11 +489,6 @@ object FrmPrincipal: TFrmPrincipal
         ImageIndex = 0
         OnClick = Programaodiria1Click
       end
-      object ExecutantesProgramadosporPerodo1: TMenuItem
-        Caption = 'Executantes Programados por Per'#237'odo'
-        ImageIndex = 0
-        OnClick = ExecutantesProgramadosporPerodo1Click
-      end
       object ServiosProgramados1: TMenuItem
         Caption = 'Servi'#231'os Programados por Per'#237'odo'
         ImageIndex = 0
@@ -509,11 +501,6 @@ object FrmPrincipal: TFrmPrincipal
         Caption = 'Gerenciar Programa'#231#227'o Di'#225'ria de Servi'#231'os'
         ImageIndex = 8
         OnClick = GerenciarSolicitaes1Click
-      end
-      object GerenciarTransportes1: TMenuItem
-        Caption = 'Gerenciar Transporte Mar'#237'timo'
-        ImageIndex = 458
-        OnClick = GerenciarTransportes1Click
       end
       object N3: TMenuItem
         Caption = '-'
@@ -544,17 +531,37 @@ object FrmPrincipal: TFrmPrincipal
         OnClick = SituaodosEquipamentoseAcessodasPlataformas1Click
       end
     end
-    object MenuImportacao: TMenuItem
-      Caption = 'Importa'#231#227'o'
-      object ImportarPlanilhas1: TMenuItem
-        Caption = 'Importar planilhas'
-        Enabled = False
-        ImageIndex = 204
-        OnClick = ImportarPlanilhas1Click
+    object EmbarquePassageiros1: TMenuItem
+      Caption = 'Embarque Passageiros'
+      object ExecutantesProgramadosporPerodo1: TMenuItem
+        Caption = 'Executantes Programados por Per'#237'odo'
+        ImageIndex = 0
+        OnClick = ExecutantesProgramadosporPerodo1Click
+      end
+      object GerenciarTransportes1: TMenuItem
+        Caption = 'Gerenciar Transporte Mar'#237'timo'
+        ImageIndex = 458
+        OnClick = GerenciarTransportes1Click
+      end
+      object ManifestodeEmbarque1: TMenuItem
+        Caption = 'Manifesto de Embarque'
+        ImageIndex = 455
+        OnClick = ManifestodeEmbarque1Click
+      end
+    end
+    object APLAT1: TMenuItem
+      Caption = 'APLAT'
+      object AplatanexodePT1: TMenuItem
+        Caption = 'APLAT - Anexar PT'
+        ImageIndex = 459
+        OnClick = AplatanexodePT1Click
       end
     end
     object MenuSistema: TMenuItem
       Caption = 'Sistema'
+      object Converterverso1: TMenuItem
+        Action = actConverterDB
+      end
       object CompactarBancoDados1: TMenuItem
         Caption = 'Compactar e Reparar Banco de Dados'
         Enabled = False
@@ -571,11 +578,6 @@ object FrmPrincipal: TFrmPrincipal
         Caption = 'Sobre'
         ImageIndex = 22
         OnClick = Sobre1Click
-      end
-      object Reconexoforada1: TMenuItem
-        Caption = 'Reconex'#227'o for'#231'ada'
-        ImageIndex = 29
-        OnClick = Reconexoforada1Click
       end
     end
   end
@@ -16874,11 +16876,6 @@ object FrmPrincipal: TFrmPrincipal
       ImageIndex = 199
       OnExecute = actConverterDBExecute
     end
-    object actMatrizExecutanteAPLAT: TAction
-      Category = 'Configuracao'
-      Caption = 'actMatrizExecutanteAPLAT'
-      OnExecute = actMatrizExecutanteAPLATExecute
-    end
     object actMatrizExecutanteCadastro: TAction
       Category = 'Configuracao'
       Caption = 'actMatrizExecutanteCadastro'
@@ -16887,18 +16884,6 @@ object FrmPrincipal: TFrmPrincipal
     object actUnidadePetrobras: TAction
       Category = 'Configuracao'
       Caption = 'actUnidadePetrobras'
-    end
-    object actDownlodaDBMemoria: TAction
-      Category = 'Configuracao'
-      Caption = 'Baixar Banco de Dados Memoria'
-      Hint = 'Baixar banco de dados Memoria para pasta local'
-      ImageIndex = 288
-      OnExecute = actDownlodaDBMemoriaExecute
-    end
-    object actUploadDBMemoria: TAction
-      Category = 'Configuracao'
-      Caption = 'actUploadDBMemoria'
-      OnExecute = actUploadDBMemoriaExecute
     end
     object actMatrizForaOperacao: TAction
       Category = 'Configuracao'

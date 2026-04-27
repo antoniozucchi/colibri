@@ -377,10 +377,8 @@ object FrmCondicaoEmbarcacao: TFrmCondicaoEmbarcacao
             TitleFont.Height = -11
             TitleFont.Name = 'Tahoma'
             TitleFont.Style = []
-            OnDrawColumnCell = DBGridCondicaoMarDrawColumnCell
             ClearFilterButton = btnClearFiltro
             SearchAction = actProcurarMar
-            LayoutGrid = ColunasLayoutMar
             EnableZebra = False
             LayoutButton = btnLayout
             ExcelButton = btnExcelMar
@@ -416,23 +414,6 @@ object FrmCondicaoEmbarcacao: TFrmCondicaoEmbarcacao
                 Title.Alignment = taCenter
                 Visible = True
               end>
-          end
-          object ColunasLayoutMar: TStringGrid
-            Left = 48
-            Top = 80
-            Width = 113
-            Height = 97
-            ColCount = 7
-            FixedCols = 0
-            RowCount = 4
-            Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goDrawFocusSelected, goRowSizing, goColSizing, goEditing]
-            TabOrder = 2
-            Visible = False
-            RowHeights = (
-              24
-              24
-              21
-              24)
           end
           object StatusBarCondicaoMar: TStatusBar
             Left = 1
@@ -916,10 +897,8 @@ object FrmCondicaoEmbarcacao: TFrmCondicaoEmbarcacao
             TitleFont.Height = -11
             TitleFont.Name = 'Tahoma'
             TitleFont.Style = []
-            OnDrawColumnCell = DBGridCondicaoEmbarcacaoDrawColumnCell
             ClearFilterButton = btnClearFiltroEmbarcacao
             SearchAction = actProcurarEmbarcacao
-            LayoutGrid = ColunasLayoutEmbarcacao
             EnableZebra = False
             ExcelButton = btnExcelEmbarcacao
             Columns = <
@@ -982,26 +961,6 @@ object FrmCondicaoEmbarcacao: TFrmCondicaoEmbarcacao
                 Title.Alignment = taCenter
                 Visible = True
               end>
-          end
-          object ColunasLayoutEmbarcacao: TStringGrid
-            Left = 48
-            Top = 80
-            Width = 113
-            Height = 97
-            ColCount = 7
-            FixedCols = 0
-            RowCount = 7
-            Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goDrawFocusSelected, goRowSizing, goColSizing, goEditing]
-            TabOrder = 2
-            Visible = False
-            RowHeights = (
-              24
-              24
-              21
-              24
-              24
-              24
-              24)
           end
           object StatusBarCondicaoEmbarcacao: TStatusBar
             Left = 1

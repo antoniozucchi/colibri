@@ -114,7 +114,6 @@ object FrmMovimentacaoCarga: TFrmMovimentacaoCarga
     OnKeyPress = DBGridMovimentacaoCargaKeyPress
     ClearFilterButton = btnClearFiltro
     SearchAction = actProcurar
-    LayoutGrid = ColunasLayout
     EnableZebra = False
     LayoutButton = brnLayout
     ExcelButton = btnExcel
@@ -219,30 +218,6 @@ object FrmMovimentacaoCarga: TFrmMovimentacaoCarga
         Visible = True
       end>
   end
-  object ColunasLayout: TStringGrid
-    Left = 53
-    Top = 160
-    Width = 113
-    Height = 94
-    ColCount = 7
-    DefaultRowHeight = 21
-    RowCount = 12
-    TabOrder = 3
-    Visible = False
-    RowHeights = (
-      21
-      21
-      21
-      21
-      21
-      21
-      21
-      21
-      21
-      21
-      21
-      21)
-  end
   object StatusBar1: TStatusBar
     Left = 0
     Top = 402
@@ -273,7 +248,7 @@ object FrmMovimentacaoCarga: TFrmMovimentacaoCarga
     Width = 806
     Height = 25
     Align = alTop
-    TabOrder = 5
+    TabOrder = 4
     ExplicitWidth = 804
     object dataInicio: TDateTimePicker
       Left = 71
@@ -344,7 +319,7 @@ object FrmMovimentacaoCarga: TFrmMovimentacaoCarga
     Height = 21
     Date = 46073.000000000000000000
     Time = 0.399926018515543500
-    TabOrder = 7
+    TabOrder = 5
     Visible = False
     Caption = ''
     DataField = 'DataAtendimento'

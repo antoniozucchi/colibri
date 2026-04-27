@@ -10,9 +10,84 @@ uses
   Vcl.ExtDlgs, Vcl.Menus, Vcl.AppEvnts,ComOBJ, ADODB,
   untDBGridFilter, System.StrUtils, Vcl.DBCtrls, System.Math,
   System.Generics.Collections, System.Generics.Defaults, uProgramacaoRTUtils, System.UITypes,
-  uSimulacaoLogistica, uAccessDBUtils,uZucchi, Vcl.Mask;
+  uSimulacaoLogistica, uAccessDBUtils,uZucchi, Vcl.Mask,
+  uEmpresaExecutanteUtils,
+  uFuncaoExecutanteUtils;
 
 type
+  TAuditoriaDiaSituacao = (adsFolga, adsFolgaCurta, adsProgramado);
+
+  TAuditoriaEmbarqueLinha = class
+  private
+    function GetChaveOrdenacao: string;
+  public
+    CodigoSAP: string;
+    NomeExecutante: string;
+    Empresa: string;
+    Funcao: string;
+    Documento: string;
+    Identificacao: string;
+    DiasProgramadosFlags: array of Boolean;
+    DiasProgramados: Integer;
+    DiasFolga: Integer;
+    DiasFolgaCurta: Integer;
+    MaxSeqProgramada: Integer;
+    MaxSeqFolga: Integer;
+    FrequenciaPercentual: Double;
+    RankingFrequencia: Integer;
+    MediaDiasProgFuncaoEmpresa: Double;
+    DeltaDiasProgFuncaoEmpresa: Double;
+    MediaDiasProgFuncao: Double;
+    MediaDiasFolgaFuncao: Double;
+    PosicaoGrupoFuncaoEmpresa: Integer;
+    TotalGrupoFuncaoEmpresa: Integer;
+    constructor Create(const APeriodoDias: Integer);
+    procedure CalcularResumo(const ALimiteFolgaCurtaDias: Integer);
+    function SituacaoDia(const AIndex,
+      ALimiteFolgaCurtaDias: Integer): TAuditoriaDiaSituacao;
+    property ChaveOrdenacao: string read GetChaveOrdenacao;
+  end;
+
+  TAuditoriaResumoGrupo = class
+  public
+    SomaDiasProgramados: Integer;
+    SomaDiasFolga: Integer;
+    Quantidade: Integer;
+  end;
+
+  TAuditoriaAplatColibriLinha = class
+  private
+    function GetChaveOrdenacao: string;
+  public
+    CodigoSAP: string;
+    NomeExecutante: string;
+    Empresa: string;
+    FuncaoColibri: string;
+    FuncaoAplat: string;
+    Documento: string;
+    DiasColibriFlags: array of Boolean;
+    DiasAplatFlags: array of Boolean;
+    DiasColibri: Integer;
+    DiasFolgaColibri: Integer;
+    DiasFolgaCurtaColibri: Integer;
+    MaxSeqColibri: Integer;
+    MaxSeqFolgaColibri: Integer;
+    DiasAplat: Integer;
+    DiasFolgaAplat: Integer;
+    DiasFolgaCurtaAplat: Integer;
+    MaxSeqAplat: Integer;
+    MaxSeqFolgaAplat: Integer;
+    DiasEmComum: Integer;
+    DiasSoAplat: Integer;
+    DiasSoColibri: Integer;
+    DeltaDiasAplatColibri: Integer;
+    RankingRisco: Integer;
+    constructor Create(const APeriodoDias: Integer);
+    procedure CalcularResumo(const ALimiteFolgaCurtaDias: Integer);
+    function FuncaoExibicao: string;
+    property ChaveOrdenacao: string read GetChaveOrdenacao;
+  end;
+
   TFrmConsultaExecutantesProgramados = class(TForm)
     PanelTitulo: TPanel;
     ActionManager1: TActionManager;
@@ -44,6 +119,7 @@ type
     actTransbordo: TAction;
     actMotivo: TAction;
     MemoSAP: TMemo;
+    btnPararGeracaoRT: TBitBtn;
     actGerarMultiplasRTs: TAction;
     ToolButton4: TToolButton;
     actConfigurarRT: TAction;
@@ -139,6 +215,27 @@ type
     SplitterSimulacao: TSplitter;
     MemoSimulacaoRelatorio: TMemo;
     StatusBarSimulacao: TStatusBar;
+    TabSheet6: TTabSheet;
+    ToolBar5: TToolBar;
+    actAtualizarAuditoriaEmbarques: TAction;
+    Panel7: TPanel;
+    StatusBarEmbarcado: TStatusBar;
+    strGridEmbarque: TStringGrid;
+    btnAtualizarAuditoriaEmbarque: TBitBtn;
+    btnExcelAuditoriaEmbarque: TToolButton;
+    btnColunasFixasAuditoriaEmbarque: TBitBtn;
+    edtLimiteFolgaCurtaEmbarque: TEdit;
+    edtBuscaEmbarque: TEdit;
+    TabSheet7: TTabSheet;
+    ToolBar6: TToolBar;
+    btnExcelAuditoriaAplatColibri: TToolButton;
+    btnAtualizarAuditoriaAplatColibri: TBitBtn;
+    Panel9: TPanel;
+    StatusBarAuditoriaAplatColibri: TStatusBar;
+    strGridAuditoriaAplatColibri: TStringGrid;
+    edtBuscaAuditoriaAplatColibri: TEdit;
+    edtArquivoAuditoriaAplatColibri: TEdit;
+    actPararGeracaoRT: TAction;
     procedure actProcurarProgramacaoExecutanteExecute(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure FormCreate(Sender: TObject);
@@ -188,6 +285,25 @@ type
     procedure btnSimulacaoRodarClick(Sender: TObject);
     procedure btnSimulacaoCompararClick(Sender: TObject);
     procedure btnSimulacaoExportarClick(Sender: TObject);
+    procedure strGridEmbarqueDrawCell(Sender: TObject; ACol, ARow: Integer;
+      Rect: TRect; State: TGridDrawState);
+    procedure btnAtualizarAuditoriaEmbarqueClick(Sender: TObject);
+    procedure btnExcelAuditoriaEmbarqueClick(Sender: TObject);
+    procedure btnColunasFixasAuditoriaEmbarqueClick(Sender: TObject);
+    procedure edtLimiteFolgaCurtaEmbarqueChange(Sender: TObject);
+    procedure edtLimiteFolgaCurtaEmbarqueExit(Sender: TObject);
+    procedure edtBuscaEmbarqueChange(Sender: TObject);
+    procedure strGridEmbarqueFixedCellClick(Sender: TObject; ACol, ARow: Integer);
+    procedure strGridEmbarqueMouseUp(Sender: TObject; Button: TMouseButton;
+      Shift: TShiftState; X, Y: Integer);
+    procedure btnAtualizarAuditoriaAplatColibriClick(Sender: TObject);
+    procedure btnExcelAuditoriaAplatColibriClick(Sender: TObject);
+    procedure edtBuscaAuditoriaAplatColibriChange(Sender: TObject);
+    procedure strGridAuditoriaAplatColibriFixedCellClick(Sender: TObject;
+      ACol, ARow: Integer);
+    procedure strGridAuditoriaAplatColibriMouseUp(Sender: TObject;
+      Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
+    procedure actPararGeracaoRTExecute(Sender: TObject);
   type
       TDadosRT = record
         idProgramacaoExecutante, idProgramacaoRT, TipoCusto: Integer;
@@ -260,7 +376,7 @@ type
       Origem: string;
       Destino: string;
       DestinoNaoCriarRT: string; // '', 'SIM', 'NAO'
-      RecolherParaTipo: string;  // 'ORIGEM', 'DESTINO', 'FIXO'
+      RecolherParaTipo: string;  // 'ORIGEM', 'DESTINO', 'FIXO', 'NAO'
       RecolherParaValor: string;
       Observacao: string;
     end;
@@ -301,6 +417,36 @@ type
   private
     { Private declarations }
     enderecoColibriRegistro: String;
+    FPararGeracaoRT: Boolean;   // sinaliza interrupção do lote RT-SAP
+    FEnderecoStopFlag: string;  // caminho do arquivo flag de parada para o VBS
+    FCampoTextoTamanhoCache: TDictionary<string, Integer>;
+    FPlataformaPorNomeSAPCache: TDictionary<string, string>;
+    FNomeSAPPorReferenciaCache: TDictionary<string, string>;
+    FIndiceSyncRTPorSAP: TDictionary<string, Integer>;
+    FIndiceSyncRTPorDocumento: TDictionary<string, Integer>;
+    FIndiceSyncRTPorPassaporte: TDictionary<string, Integer>;
+    FAuditoriaEmbarqueLinhas: TObjectList<TAuditoriaEmbarqueLinha>;
+    FAuditoriaEmbarqueLinhasFiltradas: TList<TAuditoriaEmbarqueLinha>;
+    FAuditoriaColunasFixas: Integer;
+    FAuditoriaLimiteFolgaCurtaDias: Integer;
+    FAuditoriaSortCol: Integer;
+    FAuditoriaSortAsc: Boolean;
+    FAuditoriaPeriodoInicio: TDateTime;
+    FAuditoriaPeriodoFim: TDateTime;
+    FAuditoriaTotalDiasPeriodo: Integer;
+    FAuditoriaTotalDiasProgramados: Integer;
+    FAuditoriaTotalFolgasCurtas: Integer;
+    FAuditoriaTotalLinhasComFolgaCurta: Integer;
+    FAuditoriaMelhorFrequencia: Double;
+    FAuditoriaAplatColibriLinhas: TObjectList<TAuditoriaAplatColibriLinha>;
+    FAuditoriaAplatColibriLinhasFiltradas: TList<TAuditoriaAplatColibriLinha>;
+    FAuditoriaAplatColibriSortCol: Integer;
+    FAuditoriaAplatColibriSortAsc: Boolean;
+    FAuditoriaAplatColibriTotalDiasAplat: Integer;
+    FAuditoriaAplatColibriTotalDiasColibri: Integer;
+    FAuditoriaAplatColibriTotalDiasSoAplat: Integer;
+    FAuditoriaAplatColibriTotalDiasSoColibri: Integer;
+    FAuditoriaAplatColibriTotalDiasEmComum: Integer;
     function RegistroDentroDoPeriodo(const DS: TDataSet; const ADataIni,
       ADataFim: TDateTime): Boolean;
     procedure DebugCamposDataset(DS: TDataSet);
@@ -315,6 +461,44 @@ type
       ADiagramaRede, AOperRede, AElementoPEP: string): Boolean;
 
     procedure CarregarDetalheFrequencia;
+    procedure ConfigurarGridAuditoriaEmbarques;
+    procedure LimparAuditoriaEmbarques(const AMensagem: string);
+    procedure AplicarColunasFixasAuditoria(const APularParaDias: Boolean = True);
+    procedure PreencherGridAuditoriaEmbarques;
+    procedure AplicarFiltroAuditoriaEmbarques;
+    procedure RecalcularResumoAuditoriaEmbarques;
+    procedure AtualizarStatusAuditoriaEmbarques;
+    function TituloFolgaCurtaAuditoria: string;
+    function TituloMesAuditoria(const AData: TDateTime): string;
+    function DataColunaAuditoria(const ACol: Integer; out AData: TDateTime): Boolean;
+    function ColunaAuditoriaIniciaNovoMes(const ACol: Integer): Boolean;
+    function CorCalendarioAuditoria(const AData: TDateTime;
+      const ACabecalho: Boolean): TColor;
+    function LimparIndicadorOrdenacaoAuditoria(const ATitulo: string): string;
+    procedure AtualizarTitulosColunasAuditoria;
+    procedure OrdenarAuditoriaEmbarques(const ACol: Integer;
+      const AAlternarDirecao: Boolean = True);
+    function TituloColunaAuditoria(const ACol: Integer): string;
+    function LinhaAuditoriaEmbarqueAtendeFiltro(
+      const ALinha: TAuditoriaEmbarqueLinha; const AFiltro: string): Boolean;
+    procedure CarregarAuditoriaEmbarques;
+    function CaminhoPadraoRelatorioAplat: string;
+    function LerTextoCelulaExcel(const ASheet: Variant; const ARow,
+      ACol: Integer): string;
+    function LerDataCelulaExcel(const ASheet: Variant; const ARow,
+      ACol: Integer; out AData: TDateTime): Boolean;
+    procedure ConfigurarGridAuditoriaAplatColibri;
+    procedure AtualizarTitulosAuditoriaAplatColibri;
+    procedure LimparAuditoriaAplatColibri(const AMensagem: string);
+    procedure PreencherGridAuditoriaAplatColibri;
+    procedure AtualizarStatusAuditoriaAplatColibri;
+    procedure AplicarFiltroAuditoriaAplatColibri;
+    procedure RecalcularResumoAuditoriaAplatColibri;
+    procedure OrdenarAuditoriaAplatColibri(const ACol: Integer;
+      const AAlternarDirecao: Boolean = True);
+    function LinhaAuditoriaAplatColibriAtendeFiltro(
+      const ALinha: TAuditoriaAplatColibriLinha; const AFiltro: string): Boolean;
+    procedure CarregarAuditoriaAplatColibri;
     function StatusRTNormalizado(const AStatus: string): string;
     function StatusUnicoPorEventoSAP(const AEvento, AValor,
       ARTNumero: string): string;
@@ -358,6 +542,13 @@ type
       const ACenarios: array of TSimulacaoCenario): string;
     function GerarRelatorioComparativoCSV(
       const ACenarios: array of TSimulacaoCenario): string;
+    function RegraEhNaoRecolher(const ARegra: TRegraRecolhimentoRT): Boolean;
+    function MensagemPadraoStatusRTTabela(const AStatus,
+      ARTNumero: string): string;
+    function NormalizarMensagemStatusRTTabela(const AStatus, ARTNumero,
+      AMensagem: string): string;
+    function StatusRTNormalizadoTabelaRT(const AStatus,
+      ARTNumero: string): string;
 
   const
     SIM_COL_PARAMETRO         = 0;
@@ -401,16 +592,16 @@ type
     RT_STATUS_ERRO_CONFLITO_RT = 'ERRO_CONFLITO_RT';
     RT_STATUS_ERRO_EMISSAO     = 'ERRO_EMISSAO';
 
-    MSG_RT_NAO_CRIAR        = 'Registro não requer emissão de RT.';
-    MSG_RT_PENDENTE         = 'Registro precisa de revisão.';
-    MSG_RT_PRONTO_EMITIR    = 'Registro apto para emissão de RT.';
-    MSG_RT_EMITIDA          = 'RT emitida com sucesso no SAP.';
-    MSG_RT_JA_EXISTE        = 'Registro já possui RT válida.';
+    MSG_RT_NAO_CRIAR        = 'Não criar RT.';
+    MSG_RT_PENDENTE         = 'Revisar dados da RT.';
+    MSG_RT_PRONTO_EMITIR    = 'RT pronta para emissão.';
+    MSG_RT_EMITIDA          = 'RT emitida.';
+    MSG_RT_JA_EXISTE        = 'RT já existente.';
     MSG_RT_CANCELADA        = 'RT cancelada.';
     MSG_RT_ORFA             = 'RT órfã identificada.';
-    MSG_RT_ERRO_NAO_ATIVO   = 'Código SAP do passageiro não está ativo.';
-    MSG_RT_ERRO_CONFLITO_RT = 'Conflito com outra RT já existente.';
-    MSG_RT_ERRO_EMISSAO     = 'Erro ao processar RT no SAP.';
+    MSG_RT_ERRO_NAO_ATIVO   = 'Código SAP inativo.';
+    MSG_RT_ERRO_CONFLITO_RT = 'Conflito com RT existente.';
+    MSG_RT_ERRO_EMISSAO     = 'Erro ao emitir RT.';
 
     //Dados da embarcação
     const HoraBase: string = '07:00';
@@ -469,12 +660,21 @@ type
       const ADestinoPlataforma: TDadosPlataforma): Boolean;
     function ResolverRecolherParaRegra(const ARegra: TRegraRecolhimentoRT;
       const AOrigem, ADestino: string): string;
+    function NomeSAPPorReferencia(const APlataformaOuNomeSAP: string): string;
+    function LocaisEquivalentesNoSAP(const ALocal1, ALocal2: string): Boolean;
+    function RecolhimentoValidoParaRT(const ADestino, ARecolherPara: string;
+      const ABooleanRecolhimento: Boolean): Boolean;
+    procedure NormalizarRecolhimentoDadosRT(var Dados: TDadosRT);
     procedure AtualizarRecolhimentoExecutante(
       const AIdProgramacaoExecutante: Integer;
       const ARecolhe: Boolean;
       const ARecolherPara, AHoraIda, AHoraVolta: string;
       const ADataVolta: TDateTime;
       const ATemDataVolta: Boolean);
+    procedure AtualizarClasseExecutantePosRecolhimento(
+      const AIdProgramacaoExecutante: Integer;
+      const ATipoRT, AOrigem, ADestino: string;
+      const ARecolhe: Boolean);
     procedure AplicarRegrasRecolhimentoBanco(
       const ADataIni, ADataFim: TDateTime;
       const AForcarTudo: Boolean = False);
@@ -485,11 +685,18 @@ type
     function ExecutanteSustentaRT(DS: TDataSet): Boolean;
     procedure AtualizarVinculoProgramacaoRTExecutante(const AIdProgramacaoRT,
       AIdProgramacaoExecutante: Integer);
+    function ChaveBaseProgramacaoSincronizacao(const ADataProgramacao: TDateTime;
+      const AOrigem, ADestino: string): string;
+    procedure RegistrarIndiceProgramacaoExecutanteSincronizacao(
+      AIndice: TDictionary<string, Integer>; const AChave: string;
+      const AIdProgramacaoExecutante: Integer);
+    procedure SincronizarFiltroGridParaLayout(AGrid: TFilterDBGrid; ALayout: TStringGrid);
+    procedure MontarIndiceProgramacaoExecutanteSincronizacao(
+      const ADataIni, ADataFim: TDateTime);
+    procedure LimparIndiceProgramacaoExecutanteSincronizacao;
     function BuscarProgramacaoExecutanteParaSincronizarRT(
       DSRT: TDataSet): Integer;
     function ExecutanteAceitaRT(DS: TDataSet): Boolean;
-    function ExecutanteIdAceitaRT(
-      const AIdProgramacaoExecutante: Integer): Boolean;
     procedure LimparProgramacaoExecutanteRT(
       const AIdProgramacaoExecutante: Integer; const AMotivo: string);
     function CodigoSAPEhNumerico(const CodigoSAP: string): Boolean;
@@ -497,6 +704,15 @@ type
       AEmpresa: string; out ACodigoSAP: string): Boolean;
     procedure AtualizarCodigoSAPProgramacaoExecutante(
       const AIdProgramacaoExecutante: Integer;
+      const ACodigoSAPNovo: string);
+    procedure ProcessarEventoR7ComMatriculaValida(
+      const AIdProgramacaoExecutante, AIdProgramacaoRT: Integer;
+      const ACodigoSAPNovo, ADocumentoDetectado: string);
+    procedure ReclassificarProgramacaoExecutanteParaR3PorCodigoSAP(
+      const AIdProgramacaoExecutante: Integer;
+      const ACodigoSAPNovo: string);
+    procedure ReclassificarProgramacaoRTParaR3PorCodigoSAP(
+      const AIdProgramacaoRT: Integer;
       const ACodigoSAPNovo: string);
     function TentarReclassificarExecutanteParaR3(
       const AIdProgramacaoExecutante: Integer; const ANomeExecutante, AEmpresa,
@@ -509,6 +725,10 @@ type
       const AIdProgramacaoExecutante: Integer; const ANomeExecutante, AEmpresa,
       ACodigoSAPOriginal: string; out ACodigoSAPNormalizado: string);
     function PrecisaPrepararRegistro(
+      DS: TDataSet; const AForcarTudo: Boolean): Boolean;
+    function StatusPermiteReprocessarIncremental(
+      const AStatus: string): Boolean;
+    function RegistroRTJaPreparado(
       DS: TDataSet; const AForcarTudo: Boolean): Boolean;
     function PrecisaReprocessarRecolhimentoOuClasse(DS: TDataSet;
       const AForcarTudo: Boolean): Boolean;
@@ -529,6 +749,8 @@ type
     function CriarRegistroTabelaRT(Dados: TDadosRT): Integer;
     function CustoExecutante(const CodigoSAP, CPF, Passaporte: String): TCodicoCusto;
     procedure GerarMultiplasRTsArray;
+    function ExecVbsInterruptivel(const AFileName: string;
+      const AVisibility: Integer): Boolean;
 
     procedure AtualizarProgramacaoRT_Cancelamento(
       const idProgramacaoRT: Integer; const Cancelada: Boolean; const Mensagem,
@@ -635,7 +857,8 @@ type
       PlataformaDestino: TDadosPlataforma): Boolean;
     procedure AplicarRecolhimentoNoRegistro(DS: TDataSet;
       const Horario: THorario; const AOrigem: string;
-      const ABooleanRecolhimento: Boolean);
+      const ABooleanRecolhimento: Boolean;
+      const APreservarSePreenchido: Boolean = False);
     procedure PreencherCamposAutomaticosRTNoRegistro(DS: TDataSet; const TipoRT,
       Modal, Classe: string; const Horario: THorario);
 
@@ -698,6 +921,51 @@ begin
   inherited;
 end;
 
+procedure TFrmConsultaExecutantesProgramados.SincronizarFiltroGridParaLayout(
+  AGrid: TFilterDBGrid; ALayout: TStringGrid);
+var
+  i, j: Integer;
+  FieldName: string;
+begin
+  if (AGrid = nil) or (ALayout = nil) or (AGrid.EffectiveLayoutGrid = nil) then
+    Exit;
+
+  ALayout.ColCount := AGrid.EffectiveLayoutGrid.ColCount;
+  ALayout.RowCount := AGrid.EffectiveLayoutGrid.RowCount;
+
+  for i := 0 to AGrid.EffectiveLayoutGrid.RowCount - 1 do
+    for j := 0 to AGrid.EffectiveLayoutGrid.ColCount - 1 do
+      if (j <> 4) and (j <> 5) then
+        ALayout.Cells[j, i] := AGrid.EffectiveLayoutGrid.Cells[j, i];
+
+  for i := 0 to ALayout.RowCount - 1 do
+  begin
+    FieldName := ALayout.Cells[0, i];
+    for j := 0 to AGrid.EffectiveLayoutGrid.RowCount - 1 do
+    begin
+      if SameText(AGrid.EffectiveLayoutGrid.Cells[0, j], FieldName) then
+      begin
+        ALayout.Cells[4, i] := AGrid.EffectiveLayoutGrid.Cells[4, j];
+        ALayout.Cells[5, i] := AGrid.EffectiveLayoutGrid.Cells[5, j];
+        Break;
+      end;
+    end;
+  end;
+end;
+
+function TFrmConsultaExecutantesProgramados.RegraEhNaoRecolher(
+  const ARegra: TRegraRecolhimentoRT): Boolean;
+var
+  Tipo: string;
+begin
+  Tipo := UpperCase(Trim(ARegra.RecolherParaTipo));
+
+  Result :=
+    (Tipo = 'NAO') or
+    (Tipo = 'N') or
+    (Tipo = 'SEM');
+end;
+
 function TMetricasModalReal.OcupacaoMediaPercentual: Double;
 begin
   if TotalCapacidadeOferta > 0 then
@@ -706,25 +974,1810 @@ begin
     Result := 0;
 end;
 
-function TFrmConsultaExecutantesProgramados.StatusRTNormalizado(
-  const AStatus: string): string;
-var
-  S: string;
+const
+  AUD_ROW_MES_HEADER  = 0;
+  AUD_ROW_COL_HEADER  = 1;
+  AUD_ROW_DADOS       = 2;
+  AUD_COL_RANK        = 0;
+  AUD_COL_FREQ        = 1;
+  AUD_COL_CODIGOSAP   = 2;
+  AUD_COL_EXECUTANTE  = 3;
+  AUD_COL_EMPRESA     = 4;
+  AUD_COL_FUNCAO      = 5;
+  AUD_COL_DIAS_PROG   = 6;
+  AUD_COL_DIAS_FOLGA  = 7;
+  AUD_COL_FOLGA_CURTA = 8;
+  AUD_COL_MAX_EMB     = 9;
+  AUD_COL_MAX_FOLGA   = 10;
+  AUD_COL_MEDIA_EMB_GRP   = 11;
+  AUD_COL_DELTA_EMB_GRP   = 12;
+  AUD_COL_MEDIA_EMB_FUNC  = 13;
+  AUD_COL_MEDIA_FOLGA_FUNC = 14;
+  AUD_COL_POS_GRP         = 15;
+  AUD_COL_DIA_INICIAL     = 16;
+
+  APLAT_COL_RANK                = 0;
+  APLAT_COL_CODIGOSAP           = 1;
+  APLAT_COL_EXECUTANTE          = 2;
+  APLAT_COL_EMPRESA             = 3;
+  APLAT_COL_FUNCAO              = 4;
+  APLAT_COL_APLAT_DIAS          = 5;
+  APLAT_COL_APLAT_FOLGA         = 6;
+  APLAT_COL_APLAT_FOLGA_CURTA   = 7;
+  APLAT_COL_APLAT_MAX_EMB       = 8;
+  APLAT_COL_APLAT_MAX_FOLGA     = 9;
+  APLAT_COL_COLIBRI_DIAS        = 10;
+  APLAT_COL_COLIBRI_FOLGA       = 11;
+  APLAT_COL_COLIBRI_FOLGA_CURTA = 12;
+  APLAT_COL_COLIBRI_MAX_EMB     = 13;
+  APLAT_COL_COLIBRI_MAX_FOLGA   = 14;
+  APLAT_COL_DIAS_EM_COMUM       = 15;
+  APLAT_COL_DIAS_SO_APLAT       = 16;
+  APLAT_COL_DIAS_SO_COLIBRI     = 17;
+  APLAT_COL_DELTA_DIAS          = 18;
+
+constructor TAuditoriaEmbarqueLinha.Create(const APeriodoDias: Integer);
 begin
-  S := UpperCase(Trim(AStatus));
+  inherited Create;
+  SetLength(DiasProgramadosFlags, APeriodoDias);
+end;
 
-  if S = RT_STATUS_NAO_CRIAR then Exit(RT_STATUS_NAO_CRIAR);
-  if S = RT_STATUS_PENDENTE then Exit(RT_STATUS_PENDENTE);
-  if S = RT_STATUS_PRONTO_EMITIR then Exit(RT_STATUS_PRONTO_EMITIR);
-  if S = RT_STATUS_EMITIDA then Exit(RT_STATUS_EMITIDA);
-  if S = RT_STATUS_JA_EXISTE then Exit(RT_STATUS_JA_EXISTE);
-  if S = RT_STATUS_CANCELADA then Exit(RT_STATUS_CANCELADA);
-  if S = RT_STATUS_ORFA then Exit(RT_STATUS_ORFA);
-  if S = RT_STATUS_ERRO_NAO_ATIVO then Exit(RT_STATUS_ERRO_NAO_ATIVO);
-  if S = RT_STATUS_ERRO_CONFLITO_RT then Exit(RT_STATUS_ERRO_CONFLITO_RT);
-  if S = RT_STATUS_ERRO_EMISSAO then Exit(RT_STATUS_ERRO_EMISSAO);
+procedure TAuditoriaEmbarqueLinha.CalcularResumo(
+  const ALimiteFolgaCurtaDias: Integer);
+var
+  I, Seq: Integer;
+  DentroDeFolgaCurta: Boolean;
+  LimiteFolgaCurtaDias: Integer;
+begin
+  LimiteFolgaCurtaDias := Max(1, ALimiteFolgaCurtaDias);
+  DiasProgramados := 0;
+  DiasFolga := 0;
+  DiasFolgaCurta := 0;
+  MaxSeqProgramada := 0;
+  MaxSeqFolga := 0;
+  I := 0;
 
+  while I <= High(DiasProgramadosFlags) do
+  begin
+    if DiasProgramadosFlags[I] then
+    begin
+      Seq := 0;
+      while (I <= High(DiasProgramadosFlags)) and DiasProgramadosFlags[I] do
+      begin
+        Inc(DiasProgramados);
+        Inc(Seq);
+        Inc(I);
+      end;
+      MaxSeqProgramada := Max(MaxSeqProgramada, Seq);
+      Continue;
+    end;
+
+    Seq := 0;
+    DentroDeFolgaCurta := (I > 0) and DiasProgramadosFlags[I - 1];
+    while (I <= High(DiasProgramadosFlags)) and (not DiasProgramadosFlags[I]) do
+    begin
+      Inc(DiasFolga);
+      Inc(Seq);
+      Inc(I);
+    end;
+
+    MaxSeqFolga := Max(MaxSeqFolga, Seq);
+    DentroDeFolgaCurta := DentroDeFolgaCurta and
+      (I <= High(DiasProgramadosFlags)) and DiasProgramadosFlags[I] and
+      (Seq <= LimiteFolgaCurtaDias);
+
+    if DentroDeFolgaCurta then
+      Inc(DiasFolgaCurta, Seq);
+  end;
+end;
+
+function TAuditoriaEmbarqueLinha.GetChaveOrdenacao: string;
+begin
+  Result := UpperCase(Trim(CodigoSAP)) + '|' +
+            UpperCase(Trim(NomeExecutante)) + '|' +
+            UpperCase(Trim(Empresa)) + '|' +
+            UpperCase(Trim(Funcao));
+end;
+
+function TAuditoriaEmbarqueLinha.SituacaoDia(const AIndex,
+  ALimiteFolgaCurtaDias: Integer): TAuditoriaDiaSituacao;
+var
+  InicioFolga, FimFolga: Integer;
+  LimiteFolgaCurtaDias: Integer;
+begin
+  LimiteFolgaCurtaDias := Max(1, ALimiteFolgaCurtaDias);
+  Result := adsFolga;
+
+  if (AIndex < 0) or (AIndex > High(DiasProgramadosFlags)) then
+    Exit;
+
+  if DiasProgramadosFlags[AIndex] then
+    Exit(adsProgramado);
+
+  InicioFolga := AIndex;
+  while (InicioFolga > 0) and (not DiasProgramadosFlags[InicioFolga - 1]) do
+    Dec(InicioFolga);
+
+  FimFolga := AIndex;
+  while (FimFolga < High(DiasProgramadosFlags)) and
+        (not DiasProgramadosFlags[FimFolga + 1]) do
+    Inc(FimFolga);
+
+  if (InicioFolga > 0) and (FimFolga < High(DiasProgramadosFlags)) and
+     DiasProgramadosFlags[InicioFolga - 1] and
+     DiasProgramadosFlags[FimFolga + 1] and
+     ((FimFolga - InicioFolga + 1) <= LimiteFolgaCurtaDias) then
+    Result := adsFolgaCurta;
+end;
+
+constructor TAuditoriaAplatColibriLinha.Create(const APeriodoDias: Integer);
+begin
+  inherited Create;
+  SetLength(DiasColibriFlags, APeriodoDias);
+  SetLength(DiasAplatFlags, APeriodoDias);
+end;
+
+function TAuditoriaAplatColibriLinha.FuncaoExibicao: string;
+begin
+  if Trim(FuncaoColibri) <> '' then
+    Result := FuncaoColibri
+  else
+    Result := FuncaoAplat;
+end;
+
+function TAuditoriaAplatColibriLinha.GetChaveOrdenacao: string;
+begin
+  Result := UpperCase(Trim(CodigoSAP)) + '|' +
+            UpperCase(Trim(NomeExecutante)) + '|' +
+            UpperCase(Trim(Empresa)) + '|' +
+            UpperCase(Trim(FuncaoExibicao));
+end;
+
+procedure TAuditoriaAplatColibriLinha.CalcularResumo(
+  const ALimiteFolgaCurtaDias: Integer);
+var
+  LimiteFolgaCurtaDias: Integer;
+  I: Integer;
+
+  procedure CalcularSerie(const AFlags: array of Boolean; out ADiasEmbarcado,
+    ADiasFolga, ADiasFolgaCurta, AMaxSeqEmbarcado, AMaxSeqFolga: Integer);
+  var
+    Idx, Seq: Integer;
+    DentroDeFolgaCurta: Boolean;
+  begin
+    ADiasEmbarcado := 0;
+    ADiasFolga := 0;
+    ADiasFolgaCurta := 0;
+    AMaxSeqEmbarcado := 0;
+    AMaxSeqFolga := 0;
+    Idx := 0;
+
+    while Idx <= High(AFlags) do
+    begin
+      if AFlags[Idx] then
+      begin
+        Seq := 0;
+        while (Idx <= High(AFlags)) and AFlags[Idx] do
+        begin
+          Inc(ADiasEmbarcado);
+          Inc(Seq);
+          Inc(Idx);
+        end;
+        AMaxSeqEmbarcado := Max(AMaxSeqEmbarcado, Seq);
+        Continue;
+      end;
+
+      Seq := 0;
+      DentroDeFolgaCurta := (Idx > 0) and AFlags[Idx - 1];
+      while (Idx <= High(AFlags)) and (not AFlags[Idx]) do
+      begin
+        Inc(ADiasFolga);
+        Inc(Seq);
+        Inc(Idx);
+      end;
+
+      AMaxSeqFolga := Max(AMaxSeqFolga, Seq);
+      DentroDeFolgaCurta := DentroDeFolgaCurta and
+        (Idx <= High(AFlags)) and AFlags[Idx] and
+        (Seq <= LimiteFolgaCurtaDias);
+
+      if DentroDeFolgaCurta then
+        Inc(ADiasFolgaCurta, Seq);
+    end;
+  end;
+begin
+  LimiteFolgaCurtaDias := Max(1, ALimiteFolgaCurtaDias);
+
+  CalcularSerie(DiasColibriFlags, DiasColibri, DiasFolgaColibri,
+    DiasFolgaCurtaColibri, MaxSeqColibri, MaxSeqFolgaColibri);
+  CalcularSerie(DiasAplatFlags, DiasAplat, DiasFolgaAplat,
+    DiasFolgaCurtaAplat, MaxSeqAplat, MaxSeqFolgaAplat);
+
+  DiasEmComum := 0;
+  DiasSoAplat := 0;
+  DiasSoColibri := 0;
+  for I := 0 to High(DiasAplatFlags) do
+  begin
+    if DiasAplatFlags[I] and DiasColibriFlags[I] then
+      Inc(DiasEmComum)
+    else if DiasAplatFlags[I] then
+      Inc(DiasSoAplat)
+    else if DiasColibriFlags[I] then
+      Inc(DiasSoColibri);
+  end;
+
+  DeltaDiasAplatColibri := DiasAplat - DiasColibri;
+end;
+
+procedure TFrmConsultaExecutantesProgramados.ConfigurarGridAuditoriaEmbarques;
+var
+  Coluna: Integer;
+begin
+  strGridEmbarque.DefaultDrawing := False;
+  strGridEmbarque.FixedRows := AUD_ROW_DADOS;
+  strGridEmbarque.Options := strGridEmbarque.Options + [goColSizing, goRowSelect];
+  strGridEmbarque.Options := strGridEmbarque.Options - [goEditing, goAlwaysShowEditor];
+  strGridEmbarque.DefaultRowHeight := 20;
+  strGridEmbarque.RowCount := AUD_ROW_DADOS + 1;
+  strGridEmbarque.ColCount := AUD_COL_DIA_INICIAL + 1;
+  strGridEmbarque.FixedCols := AUD_COL_DIA_INICIAL;
+
+  for Coluna := 0 to AUD_COL_DIA_INICIAL - 1 do
+    strGridEmbarque.Cells[Coluna, AUD_ROW_MES_HEADER] := '';
+
+  strGridEmbarque.Cells[AUD_COL_RANK, AUD_ROW_COL_HEADER] := 'Rank';
+  strGridEmbarque.Cells[AUD_COL_FREQ, AUD_ROW_COL_HEADER] := 'Freq%';
+  strGridEmbarque.Cells[AUD_COL_CODIGOSAP, AUD_ROW_COL_HEADER] := 'SAP';
+  strGridEmbarque.Cells[AUD_COL_EXECUTANTE, AUD_ROW_COL_HEADER] := 'Executante';
+  strGridEmbarque.Cells[AUD_COL_EMPRESA, AUD_ROW_COL_HEADER] := 'Empresa';
+  strGridEmbarque.Cells[AUD_COL_FUNCAO, AUD_ROW_COL_HEADER] := 'Funcao';
+  strGridEmbarque.Cells[AUD_COL_DIAS_PROG, AUD_ROW_COL_HEADER] := 'Prog';
+  strGridEmbarque.Cells[AUD_COL_DIAS_FOLGA, AUD_ROW_COL_HEADER] := 'Folga';
+  strGridEmbarque.Cells[AUD_COL_FOLGA_CURTA, AUD_ROW_COL_HEADER] := TituloFolgaCurtaAuditoria;
+  strGridEmbarque.Cells[AUD_COL_MAX_EMB, AUD_ROW_COL_HEADER] := 'MaxEmb';
+  strGridEmbarque.Cells[AUD_COL_MAX_FOLGA, AUD_ROW_COL_HEADER] := 'MaxFolga';
+  strGridEmbarque.Cells[AUD_COL_MEDIA_EMB_GRP, AUD_ROW_COL_HEADER] := 'MedEmbGrp';
+  strGridEmbarque.Cells[AUD_COL_DELTA_EMB_GRP, AUD_ROW_COL_HEADER] := 'DeltaEmbGrp';
+  strGridEmbarque.Cells[AUD_COL_MEDIA_EMB_FUNC, AUD_ROW_COL_HEADER] := 'MedEmbFunc';
+  strGridEmbarque.Cells[AUD_COL_MEDIA_FOLGA_FUNC, AUD_ROW_COL_HEADER] := 'MedFolgaFunc';
+  strGridEmbarque.Cells[AUD_COL_POS_GRP, AUD_ROW_COL_HEADER] := 'PosGrp';
+
+  strGridEmbarque.ColWidths[AUD_COL_RANK] := 45;
+  strGridEmbarque.ColWidths[AUD_COL_FREQ] := 55;
+  strGridEmbarque.ColWidths[AUD_COL_CODIGOSAP] := 70;
+  strGridEmbarque.ColWidths[AUD_COL_EXECUTANTE] := 220;
+  strGridEmbarque.ColWidths[AUD_COL_EMPRESA] := 110;
+  strGridEmbarque.ColWidths[AUD_COL_FUNCAO] := 105;
+  strGridEmbarque.ColWidths[AUD_COL_DIAS_PROG] := 55;
+  strGridEmbarque.ColWidths[AUD_COL_DIAS_FOLGA] := 55;
+  strGridEmbarque.ColWidths[AUD_COL_FOLGA_CURTA] := 70;
+  strGridEmbarque.ColWidths[AUD_COL_MAX_EMB] := 60;
+  strGridEmbarque.ColWidths[AUD_COL_MAX_FOLGA] := 65;
+  strGridEmbarque.ColWidths[AUD_COL_MEDIA_EMB_GRP] := 78;
+  strGridEmbarque.ColWidths[AUD_COL_DELTA_EMB_GRP] := 84;
+  strGridEmbarque.ColWidths[AUD_COL_MEDIA_EMB_FUNC] := 82;
+  strGridEmbarque.ColWidths[AUD_COL_MEDIA_FOLGA_FUNC] := 88;
+  strGridEmbarque.ColWidths[AUD_COL_POS_GRP] := 58;
+
+  if StatusBarEmbarcado.Panels.Count >= 3 then
+  begin
+    StatusBarEmbarcado.Panels[0].Width := 260;
+    StatusBarEmbarcado.Panels[1].Width := 220;
+    StatusBarEmbarcado.Panels[2].Width := 280;
+  end;
+
+  AtualizarTitulosColunasAuditoria;
+  strGridEmbarque.Rows[AUD_ROW_DADOS].Clear;
+end;
+
+function TFrmConsultaExecutantesProgramados.TituloFolgaCurtaAuditoria: string;
+begin
+  Result := Format('Folga<=%d', [Max(1, FAuditoriaLimiteFolgaCurtaDias)]);
+end;
+
+function TFrmConsultaExecutantesProgramados.TituloMesAuditoria(
+  const AData: TDateTime): string;
+begin
+  Result := UpperCase(FormatDateTime('mmm', AData));
+end;
+
+function TFrmConsultaExecutantesProgramados.DataColunaAuditoria(
+  const ACol: Integer; out AData: TDateTime): Boolean;
+begin
+  Result := (ACol >= AUD_COL_DIA_INICIAL) and
+            (ACol < AUD_COL_DIA_INICIAL + FAuditoriaTotalDiasPeriodo);
+  if Result then
+    AData := IncDay(FAuditoriaPeriodoInicio, ACol - AUD_COL_DIA_INICIAL);
+end;
+
+function TFrmConsultaExecutantesProgramados.ColunaAuditoriaIniciaNovoMes(
+  const ACol: Integer): Boolean;
+var
+  DataAtual, DataAnterior: TDateTime;
+begin
+  if not DataColunaAuditoria(ACol, DataAtual) then
+    Exit(False);
+
+  if ACol = AUD_COL_DIA_INICIAL then
+    Exit(True);
+
+  if not DataColunaAuditoria(ACol - 1, DataAnterior) then
+    Exit(True);
+
+  Result := (MonthOf(DataAtual) <> MonthOf(DataAnterior)) or
+            (YearOf(DataAtual) <> YearOf(DataAnterior));
+end;
+
+function TFrmConsultaExecutantesProgramados.CorCalendarioAuditoria(
+  const AData: TDateTime; const ACabecalho: Boolean): TColor;
+var
+  MesIndice: Integer;
+begin
+  MesIndice := YearOf(AData) * 12 + MonthOf(AData);
+
+  if ACabecalho then
+  begin
+    if Odd(MesIndice) then
+      Result := $00F4EAD9
+    else
+      Result := $00E8F1FB;
+  end
+  else
+  begin
+    if Odd(MesIndice) then
+      Result := $00FCF7F0
+    else
+      Result := $00F7FBFF;
+  end;
+end;
+
+procedure TFrmConsultaExecutantesProgramados.LimparAuditoriaEmbarques(
+  const AMensagem: string);
+var
+  I: Integer;
+begin
+  ConfigurarGridAuditoriaEmbarques;
+  FAuditoriaEmbarqueLinhas.Clear;
+  FAuditoriaEmbarqueLinhasFiltradas.Clear;
+
+  strGridEmbarque.RowCount := AUD_ROW_DADOS + 1;
+  for I := 0 to strGridEmbarque.ColCount - 1 do
+    strGridEmbarque.Cells[I, AUD_ROW_DADOS] := '';
+
+  strGridEmbarque.Cells[AUD_COL_EXECUTANTE, AUD_ROW_DADOS] := AMensagem;
+  FAuditoriaPeriodoInicio := dataInicio.Date;
+  FAuditoriaPeriodoFim := dataFim.Date;
+  FAuditoriaTotalDiasPeriodo :=
+    Max(1, DaysBetween(Trunc(dataFim.Date), Trunc(dataInicio.Date)) + 1);
+  FAuditoriaTotalDiasProgramados := 0;
+  FAuditoriaTotalFolgasCurtas := 0;
+  FAuditoriaTotalLinhasComFolgaCurta := 0;
+  FAuditoriaMelhorFrequencia := 0;
+  AtualizarStatusAuditoriaEmbarques;
+  AplicarColunasFixasAuditoria(False);
+  strGridEmbarque.Invalidate;
+end;
+
+function TFrmConsultaExecutantesProgramados.LinhaAuditoriaEmbarqueAtendeFiltro(
+  const ALinha: TAuditoriaEmbarqueLinha; const AFiltro: string): Boolean;
+var
+  Filtro: string;
+begin
+  Filtro := Trim(AFiltro);
+  if Filtro = '' then
+    Exit(True);
+
+  Result :=
+    ContainsText(ALinha.NomeExecutante, Filtro) or
+    ContainsText(ALinha.CodigoSAP, Filtro) or
+    ContainsText(ALinha.Empresa, Filtro) or
+    ContainsText(ALinha.Funcao, Filtro);
+end;
+
+procedure TFrmConsultaExecutantesProgramados.AplicarColunasFixasAuditoria(
+  const APularParaDias: Boolean = True);
+begin
+  FAuditoriaColunasFixas := EnsureRange(FAuditoriaColunasFixas, 0, AUD_COL_DIA_INICIAL);
+  strGridEmbarque.FixedCols := FAuditoriaColunasFixas;
+
+  if APularParaDias then
+    strGridEmbarque.LeftCol := Max(strGridEmbarque.FixedCols, AUD_COL_DIA_INICIAL);
+end;
+
+function TFrmConsultaExecutantesProgramados.TituloColunaAuditoria(
+  const ACol: Integer): string;
+begin
+  if (ACol >= 0) and (ACol < strGridEmbarque.ColCount) then
+    Result := Trim(LimparIndicadorOrdenacaoAuditoria(
+      strGridEmbarque.Cells[ACol, AUD_ROW_COL_HEADER]))
+  else
+    Result := '';
+end;
+
+function TFrmConsultaExecutantesProgramados.LimparIndicadorOrdenacaoAuditoria(
+  const ATitulo: string): string;
+begin
+  Result := ATitulo;
+  Result := StringReplace(Result, Char(9650), '', [rfReplaceAll]);
+  Result := StringReplace(Result, Char(9660), '', [rfReplaceAll]);
+  Result := StringReplace(Result, Char(8722), '', [rfReplaceAll]);
+  Result := Trim(Result);
+end;
+
+procedure TFrmConsultaExecutantesProgramados.AtualizarTitulosColunasAuditoria;
+var
+  I: Integer;
+  Indicador, TituloBase: string;
+begin
+  for I := 0 to strGridEmbarque.ColCount - 1 do
+    strGridEmbarque.Cells[I, AUD_ROW_COL_HEADER] :=
+      LimparIndicadorOrdenacaoAuditoria(
+        strGridEmbarque.Cells[I, AUD_ROW_COL_HEADER]);
+
+  strGridEmbarque.Cells[AUD_COL_FOLGA_CURTA, AUD_ROW_COL_HEADER] :=
+    TituloFolgaCurtaAuditoria;
+
+  if (FAuditoriaSortCol >= 0) and (FAuditoriaSortCol < strGridEmbarque.ColCount) then
+  begin
+    if FAuditoriaSortAsc then
+      Indicador := ' ' + Char(9650)
+    else
+      Indicador := ' ' + Char(9660);
+
+    TituloBase := LimparIndicadorOrdenacaoAuditoria(
+      strGridEmbarque.Cells[FAuditoriaSortCol, AUD_ROW_COL_HEADER]
+    );
+    strGridEmbarque.Cells[FAuditoriaSortCol, AUD_ROW_COL_HEADER] :=
+      TituloBase + Indicador;
+  end;
+end;
+
+procedure TFrmConsultaExecutantesProgramados.AtualizarStatusAuditoriaEmbarques;
+var
+  Ordenacao: string;
+  TextoLinhas: string;
+begin
+  if StatusBarEmbarcado.Panels.Count < 3 then
+    Exit;
+
+  StatusBarEmbarcado.Panels[0].Text := Format(
+    'Periodo: %s a %s (%d dias)',
+    [FormatDateTime('dd/mm/yyyy', FAuditoriaPeriodoInicio),
+     FormatDateTime('dd/mm/yyyy', FAuditoriaPeriodoFim),
+     FAuditoriaTotalDiasPeriodo]
+  );
+
+  if Trim(edtBuscaEmbarque.Text) <> '' then
+    TextoLinhas := Format(
+      'Linhas: %d/%d',
+      [FAuditoriaEmbarqueLinhasFiltradas.Count, FAuditoriaEmbarqueLinhas.Count]
+    )
+  else
+    TextoLinhas := Format('Linhas: %d', [FAuditoriaEmbarqueLinhas.Count]);
+
+  StatusBarEmbarcado.Panels[1].Text := Format(
+    '%s | Dias prog: %d | Pico %.1f%% | Fixas: %d',
+    [TextoLinhas,
+     FAuditoriaTotalDiasProgramados,
+     FAuditoriaMelhorFrequencia,
+     FAuditoriaColunasFixas]
+  );
+
+  Ordenacao := TituloColunaAuditoria(FAuditoriaSortCol);
+  if Ordenacao <> '' then
+    Ordenacao := Ordenacao + IfThen(FAuditoriaSortAsc, ' asc', ' desc');
+
+  StatusBarEmbarcado.Panels[2].Text := Format(
+    'Folgas <=%dd: %d dias em %d linhas%s',
+    [Max(1, FAuditoriaLimiteFolgaCurtaDias),
+     FAuditoriaTotalFolgasCurtas,
+     FAuditoriaTotalLinhasComFolgaCurta,
+     IfThen(Ordenacao <> '', ' | Ord: ' + Ordenacao, '')]
+  );
+end;
+
+procedure TFrmConsultaExecutantesProgramados.AplicarFiltroAuditoriaEmbarques;
+var
+  Linha: TAuditoriaEmbarqueLinha;
+begin
+  if FAuditoriaEmbarqueLinhasFiltradas = nil then
+    Exit;
+
+  FAuditoriaEmbarqueLinhasFiltradas.Clear;
+  for Linha in FAuditoriaEmbarqueLinhas do
+    if LinhaAuditoriaEmbarqueAtendeFiltro(Linha, edtBuscaEmbarque.Text) then
+      FAuditoriaEmbarqueLinhasFiltradas.Add(Linha);
+
+  PreencherGridAuditoriaEmbarques;
+end;
+
+procedure TFrmConsultaExecutantesProgramados.RecalcularResumoAuditoriaEmbarques;
+var
+  Linha: TAuditoriaEmbarqueLinha;
+  MelhorFrequencia: Double;
+  TotalDiasProgramados: Integer;
+  TotalFolgasCurtas: Integer;
+  TotalLinhasComFolgaCurta: Integer;
+begin
+  MelhorFrequencia := 0;
+  TotalDiasProgramados := 0;
+  TotalFolgasCurtas := 0;
+  TotalLinhasComFolgaCurta := 0;
+
+  for Linha in FAuditoriaEmbarqueLinhas do
+  begin
+    Linha.CalcularResumo(FAuditoriaLimiteFolgaCurtaDias);
+    Linha.FrequenciaPercentual := 0;
+    if FAuditoriaTotalDiasPeriodo > 0 then
+      Linha.FrequenciaPercentual :=
+        (Linha.DiasProgramados / FAuditoriaTotalDiasPeriodo) * 100;
+
+    if Linha.FrequenciaPercentual > MelhorFrequencia then
+      MelhorFrequencia := Linha.FrequenciaPercentual;
+
+    Inc(TotalDiasProgramados, Linha.DiasProgramados);
+    if Linha.DiasFolgaCurta > 0 then
+    begin
+      Inc(TotalFolgasCurtas, Linha.DiasFolgaCurta);
+      Inc(TotalLinhasComFolgaCurta);
+    end;
+  end;
+
+  FAuditoriaTotalDiasProgramados := TotalDiasProgramados;
+  FAuditoriaTotalFolgasCurtas := TotalFolgasCurtas;
+  FAuditoriaTotalLinhasComFolgaCurta := TotalLinhasComFolgaCurta;
+  FAuditoriaMelhorFrequencia := MelhorFrequencia;
+
+  if FAuditoriaEmbarqueLinhas.Count > 0 then
+    OrdenarAuditoriaEmbarques(FAuditoriaSortCol, False)
+  else
+    AplicarFiltroAuditoriaEmbarques;
+end;
+
+procedure TFrmConsultaExecutantesProgramados.PreencherGridAuditoriaEmbarques;
+var
+  Linha: TAuditoriaEmbarqueLinha;
+  I, DiaIndex: Integer;
+begin
+  SendMessage(strGridEmbarque.Handle, WM_SETREDRAW, 0, 0);
+  try
+  if FAuditoriaEmbarqueLinhasFiltradas.Count > 0 then
+  begin
+    strGridEmbarque.RowCount := FAuditoriaEmbarqueLinhasFiltradas.Count + AUD_ROW_DADOS;
+    for I := 0 to FAuditoriaEmbarqueLinhasFiltradas.Count - 1 do
+    begin
+      Linha := FAuditoriaEmbarqueLinhasFiltradas[I];
+      strGridEmbarque.Cells[AUD_COL_RANK, I + AUD_ROW_DADOS] := IntToStr(Linha.RankingFrequencia);
+      strGridEmbarque.Cells[AUD_COL_FREQ, I + AUD_ROW_DADOS] :=
+        FormatFloat('0.0', Linha.FrequenciaPercentual);
+      strGridEmbarque.Cells[AUD_COL_CODIGOSAP, I + AUD_ROW_DADOS] := Linha.CodigoSAP;
+      strGridEmbarque.Cells[AUD_COL_EXECUTANTE, I + AUD_ROW_DADOS] := Linha.NomeExecutante;
+      strGridEmbarque.Cells[AUD_COL_EMPRESA, I + AUD_ROW_DADOS] := Linha.Empresa;
+      strGridEmbarque.Cells[AUD_COL_FUNCAO, I + AUD_ROW_DADOS] := Linha.Funcao;
+      strGridEmbarque.Cells[AUD_COL_DIAS_PROG, I + AUD_ROW_DADOS] := IntToStr(Linha.DiasProgramados);
+      strGridEmbarque.Cells[AUD_COL_DIAS_FOLGA, I + AUD_ROW_DADOS] := IntToStr(Linha.DiasFolga);
+      strGridEmbarque.Cells[AUD_COL_FOLGA_CURTA, I + AUD_ROW_DADOS] := IntToStr(Linha.DiasFolgaCurta);
+      strGridEmbarque.Cells[AUD_COL_MAX_EMB, I + AUD_ROW_DADOS] := IntToStr(Linha.MaxSeqProgramada);
+      strGridEmbarque.Cells[AUD_COL_MAX_FOLGA, I + AUD_ROW_DADOS] := IntToStr(Linha.MaxSeqFolga);
+      strGridEmbarque.Cells[AUD_COL_MEDIA_EMB_GRP, I + AUD_ROW_DADOS] :=
+        FormatFloat('0.0', Linha.MediaDiasProgFuncaoEmpresa);
+      strGridEmbarque.Cells[AUD_COL_DELTA_EMB_GRP, I + AUD_ROW_DADOS] :=
+        FormatFloat('+0.0;-0.0;0.0', Linha.DeltaDiasProgFuncaoEmpresa);
+      strGridEmbarque.Cells[AUD_COL_MEDIA_EMB_FUNC, I + AUD_ROW_DADOS] :=
+        FormatFloat('0.0', Linha.MediaDiasProgFuncao);
+      strGridEmbarque.Cells[AUD_COL_MEDIA_FOLGA_FUNC, I + AUD_ROW_DADOS] :=
+        FormatFloat('0.0', Linha.MediaDiasFolgaFuncao);
+      strGridEmbarque.Cells[AUD_COL_POS_GRP, I + AUD_ROW_DADOS] :=
+        IntToStr(Linha.PosicaoGrupoFuncaoEmpresa) + '/' +
+        IntToStr(Linha.TotalGrupoFuncaoEmpresa);
+
+      for DiaIndex := 0 to FAuditoriaTotalDiasPeriodo - 1 do
+        case Linha.SituacaoDia(DiaIndex, FAuditoriaLimiteFolgaCurtaDias) of
+          adsProgramado:
+            strGridEmbarque.Cells[AUD_COL_DIA_INICIAL + DiaIndex, I + AUD_ROW_DADOS] := 'P';
+          adsFolga,
+          adsFolgaCurta:
+            strGridEmbarque.Cells[AUD_COL_DIA_INICIAL + DiaIndex, I + AUD_ROW_DADOS] := 'F';
+        else
+          strGridEmbarque.Cells[AUD_COL_DIA_INICIAL + DiaIndex, I + AUD_ROW_DADOS] := '';
+        end;
+    end;
+  end
+  else if FAuditoriaEmbarqueLinhas.Count > 0 then
+  begin
+    strGridEmbarque.RowCount := AUD_ROW_DADOS + 1;
+    strGridEmbarque.Rows[AUD_ROW_DADOS].Clear;
+    strGridEmbarque.Cells[AUD_COL_EXECUTANTE, AUD_ROW_DADOS] := 'Nenhum executante encontrado para o filtro informado.';
+  end
+  else
+  begin
+    strGridEmbarque.RowCount := AUD_ROW_DADOS + 1;
+    strGridEmbarque.Rows[AUD_ROW_DADOS].Clear;
+    strGridEmbarque.Cells[AUD_COL_EXECUTANTE, AUD_ROW_DADOS] := 'Nenhuma programacao aprovada no periodo.';
+  end;
+
+  AtualizarTitulosColunasAuditoria;
+  AtualizarStatusAuditoriaEmbarques;
+  AplicarColunasFixasAuditoria(False);
+  finally
+    SendMessage(strGridEmbarque.Handle, WM_SETREDRAW, 1, 0);
+    RedrawWindow(strGridEmbarque.Handle, nil, 0,
+      RDW_INVALIDATE or RDW_ERASE or RDW_FRAME or RDW_ALLCHILDREN);
+  end;
+end;
+
+procedure TFrmConsultaExecutantesProgramados.OrdenarAuditoriaEmbarques(
+  const ACol: Integer; const AAlternarDirecao: Boolean = True);
+var
+  DiaIndex: Integer;
+begin
+  if (FAuditoriaEmbarqueLinhas = nil) or (FAuditoriaEmbarqueLinhas.Count = 0) then
+    Exit;
+
+  if AAlternarDirecao and (FAuditoriaSortCol = ACol) then
+    FAuditoriaSortAsc := not FAuditoriaSortAsc
+  else
+  begin
+    if FAuditoriaSortCol <> ACol then
+    begin
+      if (ACol >= AUD_COL_DIA_INICIAL) or
+         (ACol in [AUD_COL_RANK, AUD_COL_FREQ, AUD_COL_DIAS_PROG, AUD_COL_DIAS_FOLGA,
+                   AUD_COL_FOLGA_CURTA, AUD_COL_MAX_EMB, AUD_COL_MAX_FOLGA,
+                   AUD_COL_MEDIA_EMB_GRP, AUD_COL_DELTA_EMB_GRP,
+                   AUD_COL_MEDIA_EMB_FUNC, AUD_COL_MEDIA_FOLGA_FUNC,
+                   AUD_COL_POS_GRP]) then
+        FAuditoriaSortAsc := False
+      else
+        FAuditoriaSortAsc := True;
+    end;
+    FAuditoriaSortCol := ACol;
+  end;
+
+  DiaIndex := ACol - AUD_COL_DIA_INICIAL;
+
+  FAuditoriaEmbarqueLinhas.Sort(
+    TComparer<TAuditoriaEmbarqueLinha>.Construct(
+      function(const Left, Right: TAuditoriaEmbarqueLinha): Integer
+      var
+        Comp: Integer;
+        VL, VR: Integer;
+      begin
+        case ACol of
+          AUD_COL_RANK:
+            Comp := CompareValue(Left.RankingFrequencia, Right.RankingFrequencia);
+          AUD_COL_FREQ:
+            Comp := CompareValue(Left.FrequenciaPercentual, Right.FrequenciaPercentual);
+          AUD_COL_CODIGOSAP:
+            Comp := CompareText(Left.CodigoSAP, Right.CodigoSAP);
+          AUD_COL_EXECUTANTE:
+            Comp := CompareText(Left.NomeExecutante, Right.NomeExecutante);
+          AUD_COL_EMPRESA:
+            Comp := CompareText(Left.Empresa, Right.Empresa);
+          AUD_COL_FUNCAO:
+            Comp := CompareText(Left.Funcao, Right.Funcao);
+          AUD_COL_DIAS_PROG:
+            Comp := CompareValue(Left.DiasProgramados, Right.DiasProgramados);
+          AUD_COL_DIAS_FOLGA:
+            Comp := CompareValue(Left.DiasFolga, Right.DiasFolga);
+          AUD_COL_FOLGA_CURTA:
+            Comp := CompareValue(Left.DiasFolgaCurta, Right.DiasFolgaCurta);
+          AUD_COL_MAX_EMB:
+            Comp := CompareValue(Left.MaxSeqProgramada, Right.MaxSeqProgramada);
+          AUD_COL_MAX_FOLGA:
+            Comp := CompareValue(Left.MaxSeqFolga, Right.MaxSeqFolga);
+          AUD_COL_MEDIA_EMB_GRP:
+            Comp := CompareValue(Left.MediaDiasProgFuncaoEmpresa,
+              Right.MediaDiasProgFuncaoEmpresa);
+          AUD_COL_DELTA_EMB_GRP:
+            Comp := CompareValue(Left.DeltaDiasProgFuncaoEmpresa,
+              Right.DeltaDiasProgFuncaoEmpresa);
+          AUD_COL_MEDIA_EMB_FUNC:
+            Comp := CompareValue(Left.MediaDiasProgFuncao, Right.MediaDiasProgFuncao);
+          AUD_COL_MEDIA_FOLGA_FUNC:
+            Comp := CompareValue(Left.MediaDiasFolgaFuncao, Right.MediaDiasFolgaFuncao);
+          AUD_COL_POS_GRP:
+            Comp := CompareValue(Left.PosicaoGrupoFuncaoEmpresa,
+              Right.PosicaoGrupoFuncaoEmpresa);
+        else
+          begin
+            VL := Ord(Left.SituacaoDia(DiaIndex, FAuditoriaLimiteFolgaCurtaDias));
+            VR := Ord(Right.SituacaoDia(DiaIndex, FAuditoriaLimiteFolgaCurtaDias));
+            Comp := CompareValue(VL, VR);
+          end;
+        end;
+
+        if not FAuditoriaSortAsc then
+          Comp := -Comp;
+
+        if Comp = 0 then
+          Comp := CompareText(Left.ChaveOrdenacao, Right.ChaveOrdenacao);
+
+        Result := Comp;
+      end
+    )
+  );
+
+  AplicarFiltroAuditoriaEmbarques;
+end;
+
+procedure TFrmConsultaExecutantesProgramados.CarregarAuditoriaEmbarques;
+var
+  Q: TADOQuery;
+  LinhasPorChave: TDictionary<string, TAuditoriaEmbarqueLinha>;
+  GruposFuncaoEmpresa: TDictionary<string, TAuditoriaResumoGrupo>;
+  GruposFuncao: TDictionary<string, TAuditoriaResumoGrupo>;
+  ListasFuncaoEmpresa: TObjectDictionary<string, TObjectList<TAuditoriaEmbarqueLinha>>;
+  Linha: TAuditoriaEmbarqueLinha;
+  ResumoGrupo: TAuditoriaResumoGrupo;
+  ListaGrupo: TObjectList<TAuditoriaEmbarqueLinha>;
+  PeriodoInicio, PeriodoFim, DataRegistro: TDateTime;
+  TotalDiasPeriodo, DiaIndex: Integer;
+  CodigoSAP, Documento, NomeExecutante, Empresa, Funcao, ChaveLinha: string;
+  ChaveFuncaoEmpresa, ChaveFuncao: string;
+  TotalFolgasCurtas, TotalLinhasComFolgaCurta, TotalDiasProgramados: Integer;
+  DtHeader: TDateTime;
+  I, J: Integer;
+  TmpDate: TDateTime;
+  MelhorFrequencia: Double;
+  Processados, Reportados, PassoProgresso: Integer;
+begin
+  ConfigurarGridAuditoriaEmbarques;
+  FAuditoriaEmbarqueLinhas.Clear;
+  FAuditoriaEmbarqueLinhasFiltradas.Clear;
+
+  PeriodoInicio := Trunc(dataInicio.Date);
+  PeriodoFim := Trunc(dataFim.Date);
+  if PeriodoFim < PeriodoInicio then
+  begin
+    TmpDate := PeriodoInicio;
+    PeriodoInicio := PeriodoFim;
+    PeriodoFim := TmpDate;
+  end;
+
+  TotalDiasPeriodo := Trunc(PeriodoFim) - Trunc(PeriodoInicio) + 1;
+  if TotalDiasPeriodo <= 0 then
+    TotalDiasPeriodo := 1;
+
+  strGridEmbarque.ColCount := AUD_COL_DIA_INICIAL + TotalDiasPeriodo;
+  for I := 0 to TotalDiasPeriodo - 1 do
+  begin
+    DtHeader := IncDay(PeriodoInicio, I);
+    strGridEmbarque.Cells[AUD_COL_DIA_INICIAL + I, AUD_ROW_MES_HEADER] :=
+      TituloMesAuditoria(DtHeader);
+    strGridEmbarque.Cells[AUD_COL_DIA_INICIAL + I, AUD_ROW_COL_HEADER] :=
+      FormatDateTime('dd', DtHeader) +
+      Copy(UpperCase(FormatDateTime('ddd', DtHeader)), 1, 1);
+    strGridEmbarque.ColWidths[AUD_COL_DIA_INICIAL + I] := 34;
+  end;
+  AtualizarTitulosColunasAuditoria;
+
+  LinhasPorChave := TDictionary<string, TAuditoriaEmbarqueLinha>.Create;
+  GruposFuncaoEmpresa := TDictionary<string, TAuditoriaResumoGrupo>.Create;
+  GruposFuncao := TDictionary<string, TAuditoriaResumoGrupo>.Create;
+  ListasFuncaoEmpresa :=
+    TObjectDictionary<string, TObjectList<TAuditoriaEmbarqueLinha>>.Create([doOwnsValues]);
+  Q := TADOQuery.Create(nil);
+  try
+    Q.Connection := FrmDataModule.ADOConnectionColibri;
+    Q.ParamCheck := True;
+    Q.SQL.Text :=
+      'SELECT DISTINCT ' +
+      '  pd.DataProgramacao, ' +
+      '  pe.CodigoSAP, ' +
+      '  pe.Documento, ' +
+      '  pe.NomeExecutante, ' +
+      '  pe.Empresa, ' +
+      '  pe.Funcao ' +
+      'FROM tblProgramacaoDiaria pd ' +
+      'INNER JOIN tblProgramacaoExecutante pe ' +
+      '  ON pd.idProgramacaoDiaria = pe.CodigoProgramacaoDiaria ' +
+      'WHERE pd.DataProgramacao >= :DtIni ' +
+      '  AND pd.DataProgramacao < :DtFimMais1 ' +
+      '  AND pe.StatusProgramacao = ''Aprovado'' ' +
+      'ORDER BY pe.NomeExecutante, pe.Empresa, pe.Funcao, pd.DataProgramacao';
+
+    Q.Parameters.ParamByName('DtIni').Value := PeriodoInicio;
+    Q.Parameters.ParamByName('DtFimMais1').Value := IncDay(PeriodoFim, 1);
+    Q.Open;
+
+    FrmPrincipal.ProgressBarIncializa(
+      Q.RecordCount,
+      'Montando auditoria de embarques por executante...'
+    );
+    Processados := 0;
+    Reportados := 0;
+    PassoProgresso := 50;
+
+    while not Q.Eof do
+    begin
+      DataRegistro := Trunc(Q.FieldByName('DataProgramacao').AsDateTime);
+      DiaIndex := Trunc(DataRegistro) - Trunc(PeriodoInicio);
+
+      CodigoSAP := NormalizarCodigoSAP(Trim(Q.FieldByName('CodigoSAP').AsString));
+      Documento := NormalizarDocumentoChave(Trim(Q.FieldByName('Documento').AsString));
+      NomeExecutante := Trim(Q.FieldByName('NomeExecutante').AsString);
+      Empresa := NormalizarEmpresaExecutante(
+        Q.FieldByName('Empresa').AsString
+      );
+      Funcao := NormalizarFuncaoExecutante(
+        Q.FieldByName('Funcao').AsString
+      );
+
+      if CodigoSAP <> '' then
+        ChaveLinha := 'SAP=' + CodigoSAP
+      else if Documento <> '' then
+        ChaveLinha := 'DOC=' + Documento
+      else
+        ChaveLinha := 'NOME=' + UpperCase(NomeExecutante);
+
+      ChaveLinha := ChaveLinha + '|NOME=' + UpperCase(NomeExecutante) +
+        '|EMP=' + UpperCase(Empresa) +
+        '|FUN=' + UpperCase(Funcao);
+
+      if not LinhasPorChave.TryGetValue(ChaveLinha, Linha) then
+      begin
+        Linha := TAuditoriaEmbarqueLinha.Create(TotalDiasPeriodo);
+        Linha.CodigoSAP := CodigoSAP;
+        Linha.Documento := Documento;
+        Linha.NomeExecutante := NomeExecutante;
+        Linha.Empresa := Empresa;
+        Linha.Funcao := Funcao;
+        if CodigoSAP <> '' then
+          Linha.Identificacao := NomeExecutante + ' [' + CodigoSAP + ']'
+        else if Documento <> '' then
+          Linha.Identificacao := NomeExecutante + ' [DOC ' + Documento + ']'
+        else
+          Linha.Identificacao := NomeExecutante;
+        LinhasPorChave.Add(ChaveLinha, Linha);
+      end;
+
+      if (DiaIndex >= 0) and (DiaIndex < Length(Linha.DiasProgramadosFlags)) then
+        Linha.DiasProgramadosFlags[DiaIndex] := True;
+
+      Q.Next;
+      Inc(Processados);
+      if (Processados - Reportados >= PassoProgresso) or Q.Eof then
+      begin
+        FrmPrincipal.ProgressBarIncremento(Processados - Reportados);
+        Reportados := Processados;
+      end;
+    end;
+
+    TotalFolgasCurtas := 0;
+    TotalLinhasComFolgaCurta := 0;
+    TotalDiasProgramados := 0;
+    MelhorFrequencia := 0;
+
+    for Linha in LinhasPorChave.Values do
+    begin
+      Linha.CalcularResumo(FAuditoriaLimiteFolgaCurtaDias);
+      Linha.FrequenciaPercentual := 0;
+      if TotalDiasPeriodo > 0 then
+        Linha.FrequenciaPercentual :=
+          (Linha.DiasProgramados / TotalDiasPeriodo) * 100;
+      if Linha.FrequenciaPercentual > MelhorFrequencia then
+        MelhorFrequencia := Linha.FrequenciaPercentual;
+
+      if Linha.DiasFolgaCurta > 0 then
+      begin
+        Inc(TotalFolgasCurtas, Linha.DiasFolgaCurta);
+        Inc(TotalLinhasComFolgaCurta);
+      end;
+      Inc(TotalDiasProgramados, Linha.DiasProgramados);
+      FAuditoriaEmbarqueLinhas.Add(Linha);
+
+      ChaveFuncaoEmpresa := UpperCase(Trim(Linha.Empresa)) + '|' +
+        UpperCase(Trim(Linha.Funcao));
+      if not GruposFuncaoEmpresa.TryGetValue(ChaveFuncaoEmpresa, ResumoGrupo) then
+      begin
+        ResumoGrupo := TAuditoriaResumoGrupo.Create;
+        GruposFuncaoEmpresa.Add(ChaveFuncaoEmpresa, ResumoGrupo);
+      end;
+      Inc(ResumoGrupo.SomaDiasProgramados, Linha.DiasProgramados);
+      Inc(ResumoGrupo.SomaDiasFolga, Linha.DiasFolga);
+      Inc(ResumoGrupo.Quantidade);
+
+      if not ListasFuncaoEmpresa.TryGetValue(ChaveFuncaoEmpresa, ListaGrupo) then
+      begin
+        ListaGrupo := TObjectList<TAuditoriaEmbarqueLinha>.Create(False);
+        ListasFuncaoEmpresa.Add(ChaveFuncaoEmpresa, ListaGrupo);
+      end;
+      ListaGrupo.Add(Linha);
+
+      ChaveFuncao := UpperCase(Trim(Linha.Funcao));
+      if not GruposFuncao.TryGetValue(ChaveFuncao, ResumoGrupo) then
+      begin
+        ResumoGrupo := TAuditoriaResumoGrupo.Create;
+        GruposFuncao.Add(ChaveFuncao, ResumoGrupo);
+      end;
+      Inc(ResumoGrupo.SomaDiasProgramados, Linha.DiasProgramados);
+      Inc(ResumoGrupo.SomaDiasFolga, Linha.DiasFolga);
+      Inc(ResumoGrupo.Quantidade);
+    end;
+
+    for Linha in FAuditoriaEmbarqueLinhas do
+    begin
+      Linha.RankingFrequencia := 1;
+      for J := 0 to FAuditoriaEmbarqueLinhas.Count - 1 do
+        if FAuditoriaEmbarqueLinhas[J].FrequenciaPercentual > Linha.FrequenciaPercentual then
+          Inc(Linha.RankingFrequencia);
+    end;
+
+    for Linha in FAuditoriaEmbarqueLinhas do
+    begin
+      ChaveFuncaoEmpresa := UpperCase(Trim(Linha.Empresa)) + '|' +
+        UpperCase(Trim(Linha.Funcao));
+      if GruposFuncaoEmpresa.TryGetValue(ChaveFuncaoEmpresa, ResumoGrupo) and
+         (ResumoGrupo.Quantidade > 0) then
+      begin
+        Linha.MediaDiasProgFuncaoEmpresa :=
+          ResumoGrupo.SomaDiasProgramados / ResumoGrupo.Quantidade;
+        Linha.DeltaDiasProgFuncaoEmpresa :=
+          Linha.DiasProgramados - Linha.MediaDiasProgFuncaoEmpresa;
+      end
+      else
+      begin
+        Linha.MediaDiasProgFuncaoEmpresa := 0;
+        Linha.DeltaDiasProgFuncaoEmpresa := 0;
+      end;
+
+      ChaveFuncao := UpperCase(Trim(Linha.Funcao));
+      if GruposFuncao.TryGetValue(ChaveFuncao, ResumoGrupo) and
+         (ResumoGrupo.Quantidade > 0) then
+      begin
+        Linha.MediaDiasProgFuncao := ResumoGrupo.SomaDiasProgramados / ResumoGrupo.Quantidade;
+        Linha.MediaDiasFolgaFuncao := ResumoGrupo.SomaDiasFolga / ResumoGrupo.Quantidade;
+      end
+      else
+      begin
+        Linha.MediaDiasProgFuncao := 0;
+        Linha.MediaDiasFolgaFuncao := 0;
+      end;
+    end;
+
+    for ListaGrupo in ListasFuncaoEmpresa.Values do
+    begin
+      ListaGrupo.Sort(
+        TComparer<TAuditoriaEmbarqueLinha>.Construct(
+          function(const Left, Right: TAuditoriaEmbarqueLinha): Integer
+          begin
+            Result := CompareValue(Right.DiasProgramados, Left.DiasProgramados);
+            if Result = 0 then
+              Result := CompareText(Left.ChaveOrdenacao, Right.ChaveOrdenacao);
+          end
+        )
+      );
+
+      for I := 0 to ListaGrupo.Count - 1 do
+      begin
+        ListaGrupo[I].PosicaoGrupoFuncaoEmpresa := I + 1;
+        ListaGrupo[I].TotalGrupoFuncaoEmpresa := ListaGrupo.Count;
+      end;
+    end;
+
+    if FAuditoriaEmbarqueLinhas.Count > 0 then
+    begin
+      FAuditoriaEmbarqueLinhas.Sort(
+        TComparer<TAuditoriaEmbarqueLinha>.Construct(
+          function(const Left, Right: TAuditoriaEmbarqueLinha): Integer
+          begin
+            Result := CompareValue(Right.DiasFolgaCurta, Left.DiasFolgaCurta);
+            if Result = 0 then
+              Result := CompareValue(Right.FrequenciaPercentual, Left.FrequenciaPercentual);
+            if Result = 0 then
+              Result := CompareValue(Right.DiasProgramados, Left.DiasProgramados);
+            if Result = 0 then
+              Result := CompareText(Left.ChaveOrdenacao, Right.ChaveOrdenacao);
+          end
+        )
+      );
+    end;
+
+    FAuditoriaPeriodoInicio := PeriodoInicio;
+    FAuditoriaPeriodoFim := PeriodoFim;
+    FAuditoriaTotalDiasPeriodo := TotalDiasPeriodo;
+    FAuditoriaTotalDiasProgramados := TotalDiasProgramados;
+    FAuditoriaTotalFolgasCurtas := TotalFolgasCurtas;
+    FAuditoriaTotalLinhasComFolgaCurta := TotalLinhasComFolgaCurta;
+    FAuditoriaMelhorFrequencia := MelhorFrequencia;
+    FAuditoriaSortCol := AUD_COL_FOLGA_CURTA;
+    FAuditoriaSortAsc := False;
+    AplicarFiltroAuditoriaEmbarques;
+  finally
+    FrmPrincipal.ProgressBarAtualizar;
+    Q.Free;
+    ListasFuncaoEmpresa.Free;
+    for ResumoGrupo in GruposFuncaoEmpresa.Values do
+      ResumoGrupo.Free;
+    for ResumoGrupo in GruposFuncao.Values do
+      ResumoGrupo.Free;
+    GruposFuncaoEmpresa.Free;
+    GruposFuncao.Free;
+    LinhasPorChave.Free;
+  end;
+end;
+
+procedure TFrmConsultaExecutantesProgramados.strGridEmbarqueDrawCell(
+  Sender: TObject; ACol, ARow: Integer; Rect: TRect; State: TGridDrawState);
+var
+  Grid: TStringGrid;
+  Texto: string;
+  TextoRect: TRect;
+  RectBordaMes: TRect;
+  TextoX, TextoY: Integer;
+  AlinharEsquerda: Boolean;
+  DataCalendario: TDateTime;
+  ColunaCalendario: Boolean;
+  InicioNovoMes: Boolean;
+begin
+  Grid := TStringGrid(Sender);
+  Grid.Canvas.Font.Assign(Grid.Font);
+  Grid.Canvas.Font.Style := [];
+  Grid.Canvas.Font.Color := clBlack;
+  Grid.Canvas.Brush.Color := clWindow;
+  Texto := Grid.Cells[ACol, ARow];
+  ColunaCalendario := DataColunaAuditoria(ACol, DataCalendario);
+  InicioNovoMes := ColunaCalendario and ColunaAuditoriaIniciaNovoMes(ACol);
+
+  if ARow = AUD_ROW_MES_HEADER then
+  begin
+    if ColunaCalendario then
+      Grid.Canvas.Brush.Color := CorCalendarioAuditoria(DataCalendario, True)
+    else
+      Grid.Canvas.Brush.Color := clBtnFace;
+    Grid.Canvas.Font.Style := [fsBold];
+    Grid.Canvas.Font.Size := Max(7, Grid.Canvas.Font.Size - 1);
+  end
+  else if ARow = AUD_ROW_COL_HEADER then
+  begin
+    if ColunaCalendario then
+      Grid.Canvas.Brush.Color := CorCalendarioAuditoria(DataCalendario, True)
+    else
+      Grid.Canvas.Brush.Color := clBtnFace;
+    Grid.Canvas.Font.Style := [fsBold];
+  end
+  else if ACol < AUD_COL_DIA_INICIAL then
+  begin
+    if StrToIntDef(Grid.Cells[AUD_COL_FOLGA_CURTA, ARow], 0) > 0 then
+      Grid.Canvas.Brush.Color := $00E8F5FF;
+
+    if (ACol = AUD_COL_FOLGA_CURTA) and
+       (StrToIntDef(Grid.Cells[AUD_COL_FOLGA_CURTA, ARow], 0) > 0) then
+      Grid.Canvas.Font.Style := [fsBold];
+  end
+  else
+  begin
+    if SameText(Trim(Texto), 'P') then
+      Grid.Canvas.Brush.Color := $00C6EFCE
+    else if SameText(Trim(Texto), 'F') then
+      Grid.Canvas.Brush.Color := $00CCFFFF
+    else if ColunaCalendario then
+      Grid.Canvas.Brush.Color := CorCalendarioAuditoria(DataCalendario, False)
+    else
+      Grid.Canvas.Brush.Color := clWhite;
+  end;
+
+  if gdSelected in State then
+    Grid.Canvas.Brush.Color := $00FFD9B3;
+
+  Grid.Canvas.FillRect(Rect);
+
+  Grid.Canvas.Pen.Color := clSilver;
+  Grid.Canvas.Brush.Style := bsClear;
+  Grid.Canvas.Rectangle(Rect.Left, Rect.Top, Rect.Right, Rect.Bottom);
+  Grid.Canvas.Brush.Style := bsSolid;
+
+  if InicioNovoMes then
+  begin
+    RectBordaMes := Rect;
+    RectBordaMes.Right := Min(Rect.Right, Rect.Left + 2);
+    Grid.Canvas.Brush.Color := $007D6A58;
+    Grid.Canvas.FillRect(RectBordaMes);
+    Grid.Canvas.Brush.Color := clWindow;
+  end;
+
+  TextoRect := Rect;
+  InflateRect(TextoRect, -3, -1);
+
+  if (ACol = AUD_COL_EXECUTANTE) or (ACol = AUD_COL_CODIGOSAP) or
+     (ACol = AUD_COL_EMPRESA) or
+     (ACol = AUD_COL_FUNCAO) then
+    AlinharEsquerda := True
+  else
+    AlinharEsquerda := False;
+
+  if Texto <> '' then
+  begin
+    SetBkMode(Grid.Canvas.Handle, TRANSPARENT);
+    Grid.Canvas.Brush.Style := bsClear;
+    TextoY := TextoRect.Top + Max(0,
+      ((TextoRect.Bottom - TextoRect.Top) - Grid.Canvas.TextHeight(Texto)) div 2);
+
+    if AlinharEsquerda then
+      TextoX := TextoRect.Left + 2
+    else
+      TextoX := TextoRect.Left + Max(0,
+        ((TextoRect.Right - TextoRect.Left) - Grid.Canvas.TextWidth(Texto)) div 2);
+
+    Grid.Canvas.TextOut(TextoX, TextoY, Texto);
+    Grid.Canvas.Brush.Style := bsSolid;
+    SetBkMode(Grid.Canvas.Handle, OPAQUE);
+  end;
+end;
+
+function TFrmConsultaExecutantesProgramados.CaminhoPadraoRelatorioAplat: string;
+var
+  CaminhoRegistrado, CaminhoBancoDados, PastaBancoDados: string;
+begin
+  CaminhoRegistrado := Trim(FrmPrincipal.registroEndereco('POB_APLAT'));
+  if FileExists(CaminhoRegistrado) then
+    Exit(CaminhoRegistrado);
+
+  CaminhoBancoDados := Trim(FrmPrincipal.registroEndereco('Banco de dados'));
+  PastaBancoDados := ExtractFileDir(CaminhoBancoDados);
+  if PastaBancoDados <> '' then
+  begin
+    Result := IncludeTrailingPathDelimiter(PastaBancoDados) +
+      'REL EMBARQUES REALIZADOS.xlsx';
+    if FileExists(Result) then
+      Exit;
+  end;
+
+  Result := CaminhoRegistrado;
+end;
+
+function TFrmConsultaExecutantesProgramados.LerTextoCelulaExcel(
+  const ASheet: Variant; const ARow, ACol: Integer): string;
+var
+  V: Variant;
+begin
   Result := '';
+  try
+    V := ASheet.Cells[ARow, ACol].Value;
+    if VarIsNull(V) or VarIsEmpty(V) then
+      Exit;
+    Result := Trim(VarToStr(V));
+  except
+    Result := '';
+  end;
+end;
+
+function TFrmConsultaExecutantesProgramados.LerDataCelulaExcel(
+  const ASheet: Variant; const ARow, ACol: Integer; out AData: TDateTime): Boolean;
+var
+  V: Variant;
+  Texto: string;
+begin
+  Result := False;
+  AData := 0;
+  try
+    V := ASheet.Cells[ARow, ACol].Value;
+    if VarIsNull(V) or VarIsEmpty(V) then
+      Exit;
+
+    if VarIsNumeric(V) or (VarType(V) = varDate) then
+    begin
+      AData := VarToDateTime(V);
+      Exit(True);
+    end;
+
+    Texto := Trim(VarToStr(V));
+    Result := TryStrToDate(Texto, AData);
+  except
+    Result := False;
+  end;
+end;
+
+procedure TFrmConsultaExecutantesProgramados.ConfigurarGridAuditoriaAplatColibri;
+begin
+  strGridAuditoriaAplatColibri.DefaultDrawing := True;
+  strGridAuditoriaAplatColibri.FixedRows := 1;
+  strGridAuditoriaAplatColibri.Options :=
+    strGridAuditoriaAplatColibri.Options + [goColSizing, goRowSelect];
+  strGridAuditoriaAplatColibri.Options :=
+    strGridAuditoriaAplatColibri.Options - [goEditing, goAlwaysShowEditor];
+  strGridAuditoriaAplatColibri.RowCount := 2;
+  strGridAuditoriaAplatColibri.ColCount := APLAT_COL_DELTA_DIAS + 1;
+
+  strGridAuditoriaAplatColibri.Cells[APLAT_COL_RANK, 0] := 'Rank';
+  strGridAuditoriaAplatColibri.Cells[APLAT_COL_CODIGOSAP, 0] := 'SAP';
+  strGridAuditoriaAplatColibri.Cells[APLAT_COL_EXECUTANTE, 0] := 'Executante';
+  strGridAuditoriaAplatColibri.Cells[APLAT_COL_EMPRESA, 0] := 'Empresa';
+  strGridAuditoriaAplatColibri.Cells[APLAT_COL_FUNCAO, 0] := 'Funcao';
+  strGridAuditoriaAplatColibri.Cells[APLAT_COL_APLAT_DIAS, 0] := 'APLAT Emb';
+  strGridAuditoriaAplatColibri.Cells[APLAT_COL_APLAT_FOLGA, 0] := 'APLAT Folga';
+  strGridAuditoriaAplatColibri.Cells[APLAT_COL_APLAT_FOLGA_CURTA, 0] :=
+    'APLAT ' + TituloFolgaCurtaAuditoria;
+  strGridAuditoriaAplatColibri.Cells[APLAT_COL_APLAT_MAX_EMB, 0] := 'APLAT MaxEmb';
+  strGridAuditoriaAplatColibri.Cells[APLAT_COL_APLAT_MAX_FOLGA, 0] := 'APLAT MaxFolga';
+  strGridAuditoriaAplatColibri.Cells[APLAT_COL_COLIBRI_DIAS, 0] := 'Colibri Emb';
+  strGridAuditoriaAplatColibri.Cells[APLAT_COL_COLIBRI_FOLGA, 0] := 'Colibri Folga';
+  strGridAuditoriaAplatColibri.Cells[APLAT_COL_COLIBRI_FOLGA_CURTA, 0] :=
+    'Colibri ' + TituloFolgaCurtaAuditoria;
+  strGridAuditoriaAplatColibri.Cells[APLAT_COL_COLIBRI_MAX_EMB, 0] := 'Colibri MaxEmb';
+  strGridAuditoriaAplatColibri.Cells[APLAT_COL_COLIBRI_MAX_FOLGA, 0] := 'Colibri MaxFolga';
+  strGridAuditoriaAplatColibri.Cells[APLAT_COL_DIAS_EM_COMUM, 0] := 'Em Comum';
+  strGridAuditoriaAplatColibri.Cells[APLAT_COL_DIAS_SO_APLAT, 0] := 'So APLAT';
+  strGridAuditoriaAplatColibri.Cells[APLAT_COL_DIAS_SO_COLIBRI, 0] := 'So Colibri';
+  strGridAuditoriaAplatColibri.Cells[APLAT_COL_DELTA_DIAS, 0] := 'Delta';
+
+  strGridAuditoriaAplatColibri.ColWidths[APLAT_COL_RANK] := 45;
+  strGridAuditoriaAplatColibri.ColWidths[APLAT_COL_CODIGOSAP] := 70;
+  strGridAuditoriaAplatColibri.ColWidths[APLAT_COL_EXECUTANTE] := 220;
+  strGridAuditoriaAplatColibri.ColWidths[APLAT_COL_EMPRESA] := 140;
+  strGridAuditoriaAplatColibri.ColWidths[APLAT_COL_FUNCAO] := 140;
+  strGridAuditoriaAplatColibri.ColWidths[APLAT_COL_APLAT_DIAS] := 70;
+  strGridAuditoriaAplatColibri.ColWidths[APLAT_COL_APLAT_FOLGA] := 78;
+  strGridAuditoriaAplatColibri.ColWidths[APLAT_COL_APLAT_FOLGA_CURTA] := 78;
+  strGridAuditoriaAplatColibri.ColWidths[APLAT_COL_APLAT_MAX_EMB] := 88;
+  strGridAuditoriaAplatColibri.ColWidths[APLAT_COL_APLAT_MAX_FOLGA] := 92;
+  strGridAuditoriaAplatColibri.ColWidths[APLAT_COL_COLIBRI_DIAS] := 76;
+  strGridAuditoriaAplatColibri.ColWidths[APLAT_COL_COLIBRI_FOLGA] := 84;
+  strGridAuditoriaAplatColibri.ColWidths[APLAT_COL_COLIBRI_FOLGA_CURTA] := 84;
+  strGridAuditoriaAplatColibri.ColWidths[APLAT_COL_COLIBRI_MAX_EMB] := 94;
+  strGridAuditoriaAplatColibri.ColWidths[APLAT_COL_COLIBRI_MAX_FOLGA] := 98;
+  strGridAuditoriaAplatColibri.ColWidths[APLAT_COL_DIAS_EM_COMUM] := 72;
+  strGridAuditoriaAplatColibri.ColWidths[APLAT_COL_DIAS_SO_APLAT] := 72;
+  strGridAuditoriaAplatColibri.ColWidths[APLAT_COL_DIAS_SO_COLIBRI] := 78;
+  strGridAuditoriaAplatColibri.ColWidths[APLAT_COL_DELTA_DIAS] := 55;
+
+  if StatusBarAuditoriaAplatColibri.Panels.Count >= 3 then
+  begin
+    StatusBarAuditoriaAplatColibri.Panels[0].Width := 240;
+    StatusBarAuditoriaAplatColibri.Panels[1].Width := 320;
+    StatusBarAuditoriaAplatColibri.Panels[2].Width := 320;
+  end;
+
+  AtualizarTitulosAuditoriaAplatColibri;
+end;
+
+procedure TFrmConsultaExecutantesProgramados.AtualizarTitulosAuditoriaAplatColibri;
+var
+  I: Integer;
+  Indicador, TituloBase: string;
+begin
+  for I := 0 to strGridAuditoriaAplatColibri.ColCount - 1 do
+    strGridAuditoriaAplatColibri.Cells[I, 0] :=
+      LimparIndicadorOrdenacaoAuditoria(
+        strGridAuditoriaAplatColibri.Cells[I, 0]
+      );
+
+  strGridAuditoriaAplatColibri.Cells[APLAT_COL_APLAT_FOLGA_CURTA, 0] :=
+    'APLAT ' + TituloFolgaCurtaAuditoria;
+  strGridAuditoriaAplatColibri.Cells[APLAT_COL_COLIBRI_FOLGA_CURTA, 0] :=
+    'Colibri ' + TituloFolgaCurtaAuditoria;
+
+  if (FAuditoriaAplatColibriSortCol >= 0) and
+     (FAuditoriaAplatColibriSortCol < strGridAuditoriaAplatColibri.ColCount) then
+  begin
+    if FAuditoriaAplatColibriSortAsc then
+      Indicador := ' ' + Char(9650)
+    else
+      Indicador := ' ' + Char(9660);
+
+    TituloBase := LimparIndicadorOrdenacaoAuditoria(
+      strGridAuditoriaAplatColibri.Cells[FAuditoriaAplatColibriSortCol, 0]
+    );
+    strGridAuditoriaAplatColibri.Cells[FAuditoriaAplatColibriSortCol, 0] :=
+      TituloBase + Indicador;
+  end;
+end;
+
+procedure TFrmConsultaExecutantesProgramados.LimparAuditoriaAplatColibri(
+  const AMensagem: string);
+var
+  I: Integer;
+begin
+  ConfigurarGridAuditoriaAplatColibri;
+  FAuditoriaAplatColibriLinhas.Clear;
+  FAuditoriaAplatColibriLinhasFiltradas.Clear;
+  FAuditoriaAplatColibriTotalDiasAplat := 0;
+  FAuditoriaAplatColibriTotalDiasColibri := 0;
+  FAuditoriaAplatColibriTotalDiasSoAplat := 0;
+  FAuditoriaAplatColibriTotalDiasSoColibri := 0;
+  FAuditoriaAplatColibriTotalDiasEmComum := 0;
+
+  strGridAuditoriaAplatColibri.RowCount := 2;
+  for I := 0 to strGridAuditoriaAplatColibri.ColCount - 1 do
+    strGridAuditoriaAplatColibri.Cells[I, 1] := '';
+  strGridAuditoriaAplatColibri.Cells[APLAT_COL_EXECUTANTE, 1] := AMensagem;
+  AtualizarStatusAuditoriaAplatColibri;
+end;
+
+function TFrmConsultaExecutantesProgramados.LinhaAuditoriaAplatColibriAtendeFiltro(
+  const ALinha: TAuditoriaAplatColibriLinha; const AFiltro: string): Boolean;
+var
+  Filtro: string;
+begin
+  Filtro := Trim(AFiltro);
+  if Filtro = '' then
+    Exit(True);
+
+  Result :=
+    ContainsText(ALinha.NomeExecutante, Filtro) or
+    ContainsText(ALinha.CodigoSAP, Filtro) or
+    ContainsText(ALinha.Empresa, Filtro) or
+    ContainsText(ALinha.FuncaoExibicao, Filtro);
+end;
+
+procedure TFrmConsultaExecutantesProgramados.PreencherGridAuditoriaAplatColibri;
+var
+  Linha: TAuditoriaAplatColibriLinha;
+  I: Integer;
+begin
+  if FAuditoriaAplatColibriLinhasFiltradas.Count > 0 then
+  begin
+    strGridAuditoriaAplatColibri.RowCount :=
+      FAuditoriaAplatColibriLinhasFiltradas.Count + 1;
+    for I := 0 to FAuditoriaAplatColibriLinhasFiltradas.Count - 1 do
+    begin
+      Linha := FAuditoriaAplatColibriLinhasFiltradas[I];
+      strGridAuditoriaAplatColibri.Cells[APLAT_COL_RANK, I + 1] :=
+        IntToStr(Linha.RankingRisco);
+      strGridAuditoriaAplatColibri.Cells[APLAT_COL_CODIGOSAP, I + 1] :=
+        Linha.CodigoSAP;
+      strGridAuditoriaAplatColibri.Cells[APLAT_COL_EXECUTANTE, I + 1] :=
+        Linha.NomeExecutante;
+      strGridAuditoriaAplatColibri.Cells[APLAT_COL_EMPRESA, I + 1] :=
+        Linha.Empresa;
+      strGridAuditoriaAplatColibri.Cells[APLAT_COL_FUNCAO, I + 1] :=
+        Linha.FuncaoExibicao;
+      strGridAuditoriaAplatColibri.Cells[APLAT_COL_APLAT_DIAS, I + 1] :=
+        IntToStr(Linha.DiasAplat);
+      strGridAuditoriaAplatColibri.Cells[APLAT_COL_APLAT_FOLGA, I + 1] :=
+        IntToStr(Linha.DiasFolgaAplat);
+      strGridAuditoriaAplatColibri.Cells[APLAT_COL_APLAT_FOLGA_CURTA, I + 1] :=
+        IntToStr(Linha.DiasFolgaCurtaAplat);
+      strGridAuditoriaAplatColibri.Cells[APLAT_COL_APLAT_MAX_EMB, I + 1] :=
+        IntToStr(Linha.MaxSeqAplat);
+      strGridAuditoriaAplatColibri.Cells[APLAT_COL_APLAT_MAX_FOLGA, I + 1] :=
+        IntToStr(Linha.MaxSeqFolgaAplat);
+      strGridAuditoriaAplatColibri.Cells[APLAT_COL_COLIBRI_DIAS, I + 1] :=
+        IntToStr(Linha.DiasColibri);
+      strGridAuditoriaAplatColibri.Cells[APLAT_COL_COLIBRI_FOLGA, I + 1] :=
+        IntToStr(Linha.DiasFolgaColibri);
+      strGridAuditoriaAplatColibri.Cells[APLAT_COL_COLIBRI_FOLGA_CURTA, I + 1] :=
+        IntToStr(Linha.DiasFolgaCurtaColibri);
+      strGridAuditoriaAplatColibri.Cells[APLAT_COL_COLIBRI_MAX_EMB, I + 1] :=
+        IntToStr(Linha.MaxSeqColibri);
+      strGridAuditoriaAplatColibri.Cells[APLAT_COL_COLIBRI_MAX_FOLGA, I + 1] :=
+        IntToStr(Linha.MaxSeqFolgaColibri);
+      strGridAuditoriaAplatColibri.Cells[APLAT_COL_DIAS_EM_COMUM, I + 1] :=
+        IntToStr(Linha.DiasEmComum);
+      strGridAuditoriaAplatColibri.Cells[APLAT_COL_DIAS_SO_APLAT, I + 1] :=
+        IntToStr(Linha.DiasSoAplat);
+      strGridAuditoriaAplatColibri.Cells[APLAT_COL_DIAS_SO_COLIBRI, I + 1] :=
+        IntToStr(Linha.DiasSoColibri);
+      strGridAuditoriaAplatColibri.Cells[APLAT_COL_DELTA_DIAS, I + 1] :=
+        IntToStr(Linha.DeltaDiasAplatColibri);
+    end;
+  end
+  else if FAuditoriaAplatColibriLinhas.Count > 0 then
+  begin
+    strGridAuditoriaAplatColibri.RowCount := 2;
+    strGridAuditoriaAplatColibri.Rows[1].Clear;
+    strGridAuditoriaAplatColibri.Cells[APLAT_COL_EXECUTANTE, 1] :=
+      'Nenhum executante encontrado para o filtro informado.';
+  end
+  else
+  begin
+    strGridAuditoriaAplatColibri.RowCount := 2;
+    strGridAuditoriaAplatColibri.Rows[1].Clear;
+    strGridAuditoriaAplatColibri.Cells[APLAT_COL_EXECUTANTE, 1] :=
+      'Nenhum dado carregado para auditoria APLAT x Colibri.';
+  end;
+
+  AtualizarTitulosAuditoriaAplatColibri;
+  AtualizarStatusAuditoriaAplatColibri;
+end;
+
+procedure TFrmConsultaExecutantesProgramados.AtualizarStatusAuditoriaAplatColibri;
+var
+  TextoLinhas, Ordenacao: string;
+begin
+  if StatusBarAuditoriaAplatColibri.Panels.Count < 3 then
+    Exit;
+
+  StatusBarAuditoriaAplatColibri.Panels[0].Text := Format(
+    'Periodo: %s a %s',
+    [FormatDateTime('dd/mm/yyyy', Trunc(dataInicio.Date)),
+     FormatDateTime('dd/mm/yyyy', Trunc(dataFim.Date))]
+  );
+
+  if Trim(edtBuscaAuditoriaAplatColibri.Text) <> '' then
+    TextoLinhas := Format(
+      'Linhas: %d/%d',
+      [FAuditoriaAplatColibriLinhasFiltradas.Count,
+       FAuditoriaAplatColibriLinhas.Count]
+    )
+  else
+    TextoLinhas := Format('Linhas: %d', [FAuditoriaAplatColibriLinhas.Count]);
+
+  StatusBarAuditoriaAplatColibri.Panels[1].Text := Format(
+    '%s | APLAT: %d | Colibri: %d | Em comum: %d',
+    [TextoLinhas,
+     FAuditoriaAplatColibriTotalDiasAplat,
+     FAuditoriaAplatColibriTotalDiasColibri,
+     FAuditoriaAplatColibriTotalDiasEmComum]
+  );
+
+  if (FAuditoriaAplatColibriSortCol >= 0) and
+     (FAuditoriaAplatColibriSortCol < strGridAuditoriaAplatColibri.ColCount) then
+    Ordenacao := strGridAuditoriaAplatColibri.Cells[FAuditoriaAplatColibriSortCol, 0]
+  else
+    Ordenacao := '';
+
+  StatusBarAuditoriaAplatColibri.Panels[2].Text := Format(
+    'So APLAT: %d | So Colibri: %d%s',
+    [FAuditoriaAplatColibriTotalDiasSoAplat,
+     FAuditoriaAplatColibriTotalDiasSoColibri,
+     IfThen(Ordenacao <> '', ' | Ord: ' + Ordenacao, '')]
+  );
+end;
+
+procedure TFrmConsultaExecutantesProgramados.AplicarFiltroAuditoriaAplatColibri;
+var
+  Linha: TAuditoriaAplatColibriLinha;
+begin
+  if FAuditoriaAplatColibriLinhasFiltradas = nil then
+    Exit;
+
+  FAuditoriaAplatColibriLinhasFiltradas.Clear;
+  for Linha in FAuditoriaAplatColibriLinhas do
+    if LinhaAuditoriaAplatColibriAtendeFiltro(
+         Linha, edtBuscaAuditoriaAplatColibri.Text) then
+      FAuditoriaAplatColibriLinhasFiltradas.Add(Linha);
+
+  PreencherGridAuditoriaAplatColibri;
+end;
+
+procedure TFrmConsultaExecutantesProgramados.RecalcularResumoAuditoriaAplatColibri;
+var
+  Linha: TAuditoriaAplatColibriLinha;
+  J: Integer;
+begin
+  for Linha in FAuditoriaAplatColibriLinhas do
+    Linha.CalcularResumo(FAuditoriaLimiteFolgaCurtaDias);
+
+  for Linha in FAuditoriaAplatColibriLinhas do
+  begin
+    Linha.RankingRisco := 1;
+    for J := 0 to FAuditoriaAplatColibriLinhas.Count - 1 do
+      if (FAuditoriaAplatColibriLinhas[J].DiasFolgaCurtaAplat > Linha.DiasFolgaCurtaAplat) or
+         ((FAuditoriaAplatColibriLinhas[J].DiasFolgaCurtaAplat = Linha.DiasFolgaCurtaAplat) and
+          (FAuditoriaAplatColibriLinhas[J].DiasAplat > Linha.DiasAplat)) then
+        Inc(Linha.RankingRisco);
+  end;
+
+  if FAuditoriaAplatColibriLinhas.Count > 0 then
+    OrdenarAuditoriaAplatColibri(FAuditoriaAplatColibriSortCol, False)
+  else
+    AplicarFiltroAuditoriaAplatColibri;
+end;
+
+procedure TFrmConsultaExecutantesProgramados.OrdenarAuditoriaAplatColibri(
+  const ACol: Integer; const AAlternarDirecao: Boolean = True);
+begin
+  if (FAuditoriaAplatColibriLinhas = nil) or
+     (FAuditoriaAplatColibriLinhas.Count = 0) then
+    Exit;
+
+  if AAlternarDirecao and (FAuditoriaAplatColibriSortCol = ACol) then
+    FAuditoriaAplatColibriSortAsc := not FAuditoriaAplatColibriSortAsc
+  else
+  begin
+    if FAuditoriaAplatColibriSortCol <> ACol then
+    begin
+      if ACol in [APLAT_COL_CODIGOSAP, APLAT_COL_EXECUTANTE, APLAT_COL_EMPRESA,
+                  APLAT_COL_FUNCAO] then
+        FAuditoriaAplatColibriSortAsc := True
+      else
+        FAuditoriaAplatColibriSortAsc := False;
+    end;
+    FAuditoriaAplatColibriSortCol := ACol;
+  end;
+
+  FAuditoriaAplatColibriLinhas.Sort(
+    TComparer<TAuditoriaAplatColibriLinha>.Construct(
+      function(const Left, Right: TAuditoriaAplatColibriLinha): Integer
+      begin
+        case ACol of
+          APLAT_COL_RANK:
+            Result := CompareValue(Left.RankingRisco, Right.RankingRisco);
+          APLAT_COL_CODIGOSAP:
+            Result := CompareText(Left.CodigoSAP, Right.CodigoSAP);
+          APLAT_COL_EXECUTANTE:
+            Result := CompareText(Left.NomeExecutante, Right.NomeExecutante);
+          APLAT_COL_EMPRESA:
+            Result := CompareText(Left.Empresa, Right.Empresa);
+          APLAT_COL_FUNCAO:
+            Result := CompareText(Left.FuncaoExibicao, Right.FuncaoExibicao);
+          APLAT_COL_APLAT_DIAS:
+            Result := CompareValue(Left.DiasAplat, Right.DiasAplat);
+          APLAT_COL_APLAT_FOLGA:
+            Result := CompareValue(Left.DiasFolgaAplat, Right.DiasFolgaAplat);
+          APLAT_COL_APLAT_FOLGA_CURTA:
+            Result := CompareValue(Left.DiasFolgaCurtaAplat, Right.DiasFolgaCurtaAplat);
+          APLAT_COL_APLAT_MAX_EMB:
+            Result := CompareValue(Left.MaxSeqAplat, Right.MaxSeqAplat);
+          APLAT_COL_APLAT_MAX_FOLGA:
+            Result := CompareValue(Left.MaxSeqFolgaAplat, Right.MaxSeqFolgaAplat);
+          APLAT_COL_COLIBRI_DIAS:
+            Result := CompareValue(Left.DiasColibri, Right.DiasColibri);
+          APLAT_COL_COLIBRI_FOLGA:
+            Result := CompareValue(Left.DiasFolgaColibri, Right.DiasFolgaColibri);
+          APLAT_COL_COLIBRI_FOLGA_CURTA:
+            Result := CompareValue(Left.DiasFolgaCurtaColibri, Right.DiasFolgaCurtaColibri);
+          APLAT_COL_COLIBRI_MAX_EMB:
+            Result := CompareValue(Left.MaxSeqColibri, Right.MaxSeqColibri);
+          APLAT_COL_COLIBRI_MAX_FOLGA:
+            Result := CompareValue(Left.MaxSeqFolgaColibri, Right.MaxSeqFolgaColibri);
+          APLAT_COL_DIAS_EM_COMUM:
+            Result := CompareValue(Left.DiasEmComum, Right.DiasEmComum);
+          APLAT_COL_DIAS_SO_APLAT:
+            Result := CompareValue(Left.DiasSoAplat, Right.DiasSoAplat);
+          APLAT_COL_DIAS_SO_COLIBRI:
+            Result := CompareValue(Left.DiasSoColibri, Right.DiasSoColibri);
+          APLAT_COL_DELTA_DIAS:
+            Result := CompareValue(Left.DeltaDiasAplatColibri,
+              Right.DeltaDiasAplatColibri);
+        else
+          Result := CompareText(Left.ChaveOrdenacao, Right.ChaveOrdenacao);
+        end;
+
+        if not FAuditoriaAplatColibriSortAsc then
+          Result := -Result;
+
+        if Result = 0 then
+          Result := CompareText(Left.ChaveOrdenacao, Right.ChaveOrdenacao);
+      end
+    )
+  );
+
+  AplicarFiltroAuditoriaAplatColibri;
+end;
+
+procedure TFrmConsultaExecutantesProgramados.CarregarAuditoriaAplatColibri;
+var
+  Excel, Workbook, Sheet: Variant;
+  Q: TADOQuery;
+  LinhasPorChave: TDictionary<string, TAuditoriaAplatColibriLinha>;
+  Linha: TAuditoriaAplatColibriLinha;
+  PeriodoInicio, PeriodoFim, DataRegistro, DataAplatIni, DataAplatFim: TDateTime;
+  TotalDiasPeriodo, DiaIndex, I, J, UltimaLinha, LinhaExcel: Integer;
+  CodigoSAP, Documento, NomeExecutante, Empresa, Funcao, ChaveLinha: string;
+  ArquivoAplat: string;
+  TmpDate: TDateTime;
+begin
+  ConfigurarGridAuditoriaAplatColibri;
+  FAuditoriaAplatColibriLinhas.Clear;
+  FAuditoriaAplatColibriLinhasFiltradas.Clear;
+
+  ArquivoAplat := Trim(edtArquivoAuditoriaAplatColibri.Text);
+  if ArquivoAplat = '' then
+  begin
+    ArquivoAplat := CaminhoPadraoRelatorioAplat;
+    edtArquivoAuditoriaAplatColibri.Text := ArquivoAplat;
+    FrmPrincipal.registroEscrever('POB_APLAT', ArquivoAplat);
+  end;
+
+  if not FileExists(ArquivoAplat) then
+  begin
+    LimparAuditoriaAplatColibri('Arquivo APLAT não encontrado.');
+    Exit;
+  end;
+
+  PeriodoInicio := Trunc(dataInicio.Date);
+  PeriodoFim := Trunc(dataFim.Date);
+  if PeriodoFim < PeriodoInicio then
+  begin
+    TmpDate := PeriodoInicio;
+    PeriodoInicio := PeriodoFim;
+    PeriodoFim := TmpDate;
+  end;
+
+  TotalDiasPeriodo := Trunc(PeriodoFim) - Trunc(PeriodoInicio) + 1;
+  if TotalDiasPeriodo <= 0 then
+    TotalDiasPeriodo := 1;
+
+  LinhasPorChave := TDictionary<string, TAuditoriaAplatColibriLinha>.Create;
+  Q := TADOQuery.Create(nil);
+  Excel := Unassigned;
+  Workbook := Unassigned;
+  Sheet := Unassigned;
+  try
+    Q.Connection := FrmDataModule.ADOConnectionColibri;
+    Q.ParamCheck := True;
+    Q.SQL.Text :=
+      'SELECT DISTINCT ' +
+      '  pd.DataProgramacao, ' +
+      '  pe.CodigoSAP, ' +
+      '  pe.Documento, ' +
+      '  pe.NomeExecutante, ' +
+      '  pe.Empresa, ' +
+      '  pe.Funcao ' +
+      'FROM tblProgramacaoDiaria pd ' +
+      'INNER JOIN tblProgramacaoExecutante pe ' +
+      '  ON pd.idProgramacaoDiaria = pe.CodigoProgramacaoDiaria ' +
+      'WHERE pd.DataProgramacao >= :DtIni ' +
+      '  AND pd.DataProgramacao < :DtFimMais1 ' +
+      '  AND pe.StatusProgramacao = ''Aprovado'' ' +
+      'ORDER BY pe.NomeExecutante, pe.Empresa, pe.Funcao, pd.DataProgramacao';
+    Q.Parameters.ParamByName('DtIni').Value := PeriodoInicio;
+    Q.Parameters.ParamByName('DtFimMais1').Value := IncDay(PeriodoFim, 1);
+    Q.Open;
+
+    while not Q.Eof do
+    begin
+      DataRegistro := Trunc(Q.FieldByName('DataProgramacao').AsDateTime);
+      DiaIndex := Trunc(DataRegistro) - Trunc(PeriodoInicio);
+      CodigoSAP := NormalizarCodigoSAP(Trim(Q.FieldByName('CodigoSAP').AsString));
+      Documento := NormalizarDocumentoChave(Trim(Q.FieldByName('Documento').AsString));
+      NomeExecutante := Trim(Q.FieldByName('NomeExecutante').AsString);
+      Empresa := NormalizarEmpresaExecutante(
+        Q.FieldByName('Empresa').AsString
+      );
+      Funcao := NormalizarFuncaoExecutante(
+        Q.FieldByName('Funcao').AsString
+      );
+
+      if CodigoSAP <> '' then
+        ChaveLinha := 'SAP=' + CodigoSAP
+      else if Documento <> '' then
+        ChaveLinha := 'DOC=' + Documento
+      else
+        ChaveLinha := 'NOME=' + UpperCase(NomeExecutante) +
+          '|EMP=' + UpperCase(Empresa);
+
+      if not LinhasPorChave.TryGetValue(ChaveLinha, Linha) then
+      begin
+        Linha := TAuditoriaAplatColibriLinha.Create(TotalDiasPeriodo);
+        Linha.CodigoSAP := CodigoSAP;
+        Linha.Documento := Documento;
+        Linha.NomeExecutante := NomeExecutante;
+        Linha.Empresa := Empresa;
+        Linha.FuncaoColibri := Funcao;
+        LinhasPorChave.Add(ChaveLinha, Linha);
+      end
+      else if (Linha.FuncaoColibri = '') and (Funcao <> '') then
+        Linha.FuncaoColibri := Funcao;
+
+      if (DiaIndex >= 0) and (DiaIndex < Length(Linha.DiasColibriFlags)) then
+        Linha.DiasColibriFlags[DiaIndex] := True;
+
+      Q.Next;
+    end;
+
+    try
+      Excel := CreateOleObject('Excel.Application');
+    except
+      LimparAuditoriaAplatColibri(
+        'Microsoft Excel não disponível para leitura da planilha APLAT.');
+      Exit;
+    end;
+
+    Excel.Visible := False;
+    Excel.DisplayAlerts := False;
+    Workbook := Excel.Workbooks.Open(ArquivoAplat);
+    Sheet := Workbook.WorkSheets[1];
+    UltimaLinha := Sheet.Cells.SpecialCells(11).Row;
+
+    for LinhaExcel := 9 to UltimaLinha do
+    begin
+      NomeExecutante := LerTextoCelulaExcel(Sheet, LinhaExcel, 2);
+      CodigoSAP := NormalizarCodigoSAP(LerTextoCelulaExcel(Sheet, LinhaExcel, 5));
+      Empresa := NormalizarEmpresaExecutante(
+        LerTextoCelulaExcel(Sheet, LinhaExcel, 9)
+      );
+      Funcao := NormalizarFuncaoExecutante(
+        LerTextoCelulaExcel(Sheet, LinhaExcel, 12)
+      );
+
+      if (NomeExecutante = '') and (CodigoSAP = '') then
+        Continue;
+
+      if not LerDataCelulaExcel(Sheet, LinhaExcel, 6, DataAplatIni) then
+        Continue;
+      if not LerDataCelulaExcel(Sheet, LinhaExcel, 7, DataAplatFim) then
+        Continue;
+
+      DataAplatIni := Trunc(DataAplatIni);
+      DataAplatFim := Trunc(DataAplatFim);
+      if DataAplatFim < DataAplatIni then
+      begin
+        TmpDate := DataAplatIni;
+        DataAplatIni := DataAplatFim;
+        DataAplatFim := TmpDate;
+      end;
+
+      if (DataAplatFim < PeriodoInicio) or (DataAplatIni > PeriodoFim) then
+        Continue;
+
+      if CodigoSAP <> '' then
+        ChaveLinha := 'SAP=' + CodigoSAP
+      else
+        ChaveLinha := 'NOME=' + UpperCase(NomeExecutante) +
+          '|EMP=' + UpperCase(Empresa);
+
+      if not LinhasPorChave.TryGetValue(ChaveLinha, Linha) then
+      begin
+        Linha := TAuditoriaAplatColibriLinha.Create(TotalDiasPeriodo);
+        Linha.CodigoSAP := CodigoSAP;
+        Linha.NomeExecutante := NomeExecutante;
+        Linha.Empresa := Empresa;
+        Linha.FuncaoAplat := Funcao;
+        LinhasPorChave.Add(ChaveLinha, Linha);
+      end
+      else
+      begin
+        if (Linha.NomeExecutante = '') and (NomeExecutante <> '') then
+          Linha.NomeExecutante := NomeExecutante;
+        if (Linha.Empresa = '') and (Empresa <> '') then
+          Linha.Empresa := Empresa;
+        if (Linha.FuncaoAplat = '') and (Funcao <> '') then
+          Linha.FuncaoAplat := Funcao;
+        if (Linha.CodigoSAP = '') and (CodigoSAP <> '') then
+          Linha.CodigoSAP := CodigoSAP;
+      end;
+
+      if DataAplatIni < PeriodoInicio then
+        DataAplatIni := PeriodoInicio;
+      if DataAplatFim > PeriodoFim then
+        DataAplatFim := PeriodoFim;
+
+      for I := Trunc(DataAplatIni) - Trunc(PeriodoInicio) to
+               Trunc(DataAplatFim) - Trunc(PeriodoInicio) do
+        if (I >= 0) and (I < Length(Linha.DiasAplatFlags)) then
+          Linha.DiasAplatFlags[I] := True;
+    end;
+
+    FAuditoriaAplatColibriTotalDiasAplat := 0;
+    FAuditoriaAplatColibriTotalDiasColibri := 0;
+    FAuditoriaAplatColibriTotalDiasSoAplat := 0;
+    FAuditoriaAplatColibriTotalDiasSoColibri := 0;
+    FAuditoriaAplatColibriTotalDiasEmComum := 0;
+
+    for Linha in LinhasPorChave.Values do
+    begin
+      Linha.CalcularResumo(FAuditoriaLimiteFolgaCurtaDias);
+      Inc(FAuditoriaAplatColibriTotalDiasAplat, Linha.DiasAplat);
+      Inc(FAuditoriaAplatColibriTotalDiasColibri, Linha.DiasColibri);
+      Inc(FAuditoriaAplatColibriTotalDiasSoAplat, Linha.DiasSoAplat);
+      Inc(FAuditoriaAplatColibriTotalDiasSoColibri, Linha.DiasSoColibri);
+      Inc(FAuditoriaAplatColibriTotalDiasEmComum, Linha.DiasEmComum);
+      FAuditoriaAplatColibriLinhas.Add(Linha);
+    end;
+
+    for Linha in FAuditoriaAplatColibriLinhas do
+    begin
+      Linha.RankingRisco := 1;
+      for J := 0 to FAuditoriaAplatColibriLinhas.Count - 1 do
+        if (FAuditoriaAplatColibriLinhas[J].DiasFolgaCurtaAplat > Linha.DiasFolgaCurtaAplat) or
+           ((FAuditoriaAplatColibriLinhas[J].DiasFolgaCurtaAplat = Linha.DiasFolgaCurtaAplat) and
+            (FAuditoriaAplatColibriLinhas[J].DiasAplat > Linha.DiasAplat)) then
+          Inc(Linha.RankingRisco);
+    end;
+
+    if FAuditoriaAplatColibriLinhas.Count = 0 then
+    begin
+      LimparAuditoriaAplatColibri('Nenhum dado APLAT/Colibri encontrado no periodo.');
+      Exit;
+    end;
+
+    FAuditoriaAplatColibriSortCol := APLAT_COL_APLAT_FOLGA_CURTA;
+    FAuditoriaAplatColibriSortAsc := False;
+    OrdenarAuditoriaAplatColibri(FAuditoriaAplatColibriSortCol, False);
+  finally
+    if not VarIsEmpty(Workbook) then
+      Workbook.Close(False);
+    if not VarIsEmpty(Excel) then
+      Excel.Quit;
+    Sheet := Unassigned;
+    Workbook := Unassigned;
+    Excel := Unassigned;
+    Q.Free;
+    LinhasPorChave.Free;
+  end;
 end;
 
 procedure TFrmConsultaExecutantesProgramados.CarregarRegrasRecolhimentoRT(
@@ -812,6 +2865,9 @@ function TFrmConsultaExecutantesProgramados.ResolverRecolherParaRegra(
 begin
   Result := '';
 
+  if RegraEhNaoRecolher(ARegra) then
+    Exit('');
+
   if ARegra.RecolherParaTipo = 'ORIGEM' then
     Exit(Trim(AOrigem));
 
@@ -820,6 +2876,76 @@ begin
 
   if ARegra.RecolherParaTipo = 'FIXO' then
     Exit(Trim(ARegra.RecolherParaValor));
+end;
+
+function TFrmConsultaExecutantesProgramados.NomeSAPPorReferencia(
+  const APlataformaOuNomeSAP: string): string;
+var
+  Valor, ChaveCache, PlataformaLocal: string;
+  DadosPlataforma: TDadosPlataforma;
+begin
+  Valor := Trim(APlataformaOuNomeSAP);
+  Result := Valor;
+
+  if Valor = '' then
+    Exit;
+
+  if FNomeSAPPorReferenciaCache = nil then
+    FNomeSAPPorReferenciaCache := TDictionary<string, string>.Create;
+
+  ChaveCache := NormalizarTextoChave(Valor);
+  if FNomeSAPPorReferenciaCache.TryGetValue(ChaveCache, Result) then
+    Exit;
+
+  PlataformaLocal := PlataformaPorNomeSAP(Valor);
+
+  if Trim(PlataformaLocal) <> '' then
+  begin
+    try
+      DadosPlataforma := TProgramacaoRTUtils.DadosPlataforma_RT(PlataformaLocal);
+      if Trim(DadosPlataforma.NomeSAP) <> '' then
+        Result := Trim(DadosPlataforma.NomeSAP)
+      else
+        Result := Trim(PlataformaLocal);
+    except
+      Result := Valor;
+    end;
+  end;
+
+  FNomeSAPPorReferenciaCache.AddOrSetValue(ChaveCache, Result);
+end;
+
+function TFrmConsultaExecutantesProgramados.LocaisEquivalentesNoSAP(
+  const ALocal1, ALocal2: string): Boolean;
+begin
+  Result := SameText(
+    NomeSAPPorReferencia(ALocal1),
+    NomeSAPPorReferencia(ALocal2)
+  );
+end;
+
+function TFrmConsultaExecutantesProgramados.RecolhimentoValidoParaRT(
+  const ADestino, ARecolherPara: string;
+  const ABooleanRecolhimento: Boolean): Boolean;
+begin
+  Result :=
+    ABooleanRecolhimento and
+    (not LocaisEquivalentesNoSAP(ADestino, ARecolherPara));
+end;
+
+procedure TFrmConsultaExecutantesProgramados.NormalizarRecolhimentoDadosRT(
+  var Dados: TDadosRT);
+begin
+  if Dados.booleanRecolhimento and
+     (Trim(Dados.Destino) <> '') and
+     (Trim(Dados.Retorno) <> '') and
+     (not LocaisEquivalentesNoSAP(Dados.Destino, Dados.Retorno)) then
+      Exit;
+
+  Dados.booleanRecolhimento := False;
+  Dados.Retorno := '';
+  Dados.HoraVolta := '';
+  Dados.DataVolta := '';
 end;
 
 procedure TFrmConsultaExecutantesProgramados.AtualizarRecolhimentoExecutante(
@@ -886,6 +3012,47 @@ begin
         '  AND (RT_Classe IS NULL OR RT_Classe <> ''TR'')';
     end;
 
+    Q.Parameters.ParamByName('ID').Value := AIdProgramacaoExecutante;
+    Q.ExecSQL;
+  finally
+    Q.Free;
+  end;
+end;
+
+procedure TFrmConsultaExecutantesProgramados.AtualizarClasseExecutantePosRecolhimento(
+  const AIdProgramacaoExecutante: Integer;
+  const ATipoRT, AOrigem, ADestino: string;
+  const ARecolhe: Boolean);
+var
+  Q: TADOQuery;
+  ClasseNova: string;
+begin
+  if (AIdProgramacaoExecutante <= 0) or (Trim(ATipoRT) = '') then
+    Exit;
+
+  ClasseNova := DetermineClasse(
+    ATipoRT,
+    AOrigem,
+    ADestino,
+    FrmPrincipal.OrigemPlataformas,
+    '',
+    ARecolhe
+  );
+
+  if Trim(ClasseNova) = '' then
+    Exit;
+
+  Q := TADOQuery.Create(nil);
+  try
+    Q.Connection := FrmDataModule.ADOConnectionColibri;
+    Q.ParamCheck := True;
+    Q.SQL.Text :=
+      'UPDATE tblProgramacaoExecutante SET ' +
+      '  RT_Classe = :RT_Classe ' +
+      'WHERE idProgramacaoExecutante = :ID ' +
+      '  AND (RT_Transbordo = False OR RT_Transbordo IS NULL)';
+
+    Q.Parameters.ParamByName('RT_Classe').Value := ClasseNova;
     Q.Parameters.ParamByName('ID').Value := AIdProgramacaoExecutante;
     Q.ExecSQL;
   finally
@@ -975,10 +3142,54 @@ begin
         if RegraRecolhimentoConfere(Regra, Origem, Destino, PlataformaDestino) then
         begin
           AchouRegra := True;
+
+          // Exceção explícita: regra de NÃO recolher
+          if RegraEhNaoRecolher(Regra) then
+          begin
+            AtualizarRecolhimentoExecutante(
+              IdExec,
+              False,
+              '',
+              '',
+              '',
+              0,
+              False
+            );
+            AtualizarClasseExecutantePosRecolhimento(
+              IdExec,
+              Trim(Q.FieldByName('RT_Tipo').AsString),
+              Origem,
+              Destino,
+              False
+            );
+            Break;
+          end;
+
           RecolherPara := ResolverRecolherParaRegra(Regra, Origem, Destino);
 
           if Trim(RecolherPara) = '' then
             RecolherPara := Origem;
+
+          if not RecolhimentoValidoParaRT(Destino, RecolherPara, True) then
+          begin
+            AtualizarRecolhimentoExecutante(
+              IdExec,
+              False,
+              '',
+              '',
+              '',
+              0,
+              False
+            );
+            AtualizarClasseExecutantePosRecolhimento(
+              IdExec,
+              Trim(Q.FieldByName('RT_Tipo').AsString),
+              Origem,
+              Destino,
+              False
+            );
+            Break;
+          end;
 
           Horario := HoraIdaHoraVolta(
             PlataformaDestino.booleanTurno2,
@@ -992,6 +3203,13 @@ begin
             Horario.HoraIda,
             Horario.HoraVolta,
             Horario.DataVolta,
+            True
+          );
+          AtualizarClasseExecutantePosRecolhimento(
+            IdExec,
+            Trim(Q.FieldByName('RT_Tipo').AsString),
+            Origem,
+            Destino,
             True
           );
 
@@ -1008,6 +3226,13 @@ begin
           '',
           '',
           0,
+          False
+        );
+        AtualizarClasseExecutantePosRecolhimento(
+          IdExec,
+          Trim(Q.FieldByName('RT_Tipo').AsString),
+          Origem,
+          Destino,
           False
         );
       end;
@@ -1090,6 +3315,8 @@ begin
   end
   else
     Dados.DataVolta := '';
+
+  NormalizarRecolhimentoDadosRT(Dados);
 
   Dados.ChavePassageiro := ChavePassageiro(
     Dados.MatriculaPax,
@@ -1182,13 +3409,15 @@ procedure TFrmConsultaExecutantesProgramados.AtualizarMarcacaoRTOrfa(
   const AOrfa, APendenteCancelamento: Boolean; const AMotivo: string);
 var
   Q: TADOQuery;
-  StatusAtual, StatusNovo, MotivoSafe, StatusSafe: string;
+  StatusAtual, StatusNovo, MotivoSafe, StatusSafe, RTNumeroAtual,
+  MensagemSafe: string;
   RTCanceladaAtual: Boolean;
 begin
   if AIdProgramacaoRT <= 0 then
     Exit;
 
   StatusAtual := '';
+  RTNumeroAtual := '';
   RTCanceladaAtual := False;
 
   Q := TADOQuery.Create(nil);
@@ -1196,7 +3425,7 @@ begin
     Q.Connection := FrmDataModule.ADOConnectionRT;
     Q.ParamCheck := True;
     Q.SQL.Text :=
-      'SELECT RT_Status, RT_Cancelada ' +
+      'SELECT RT, RT_Status, RT_Cancelada ' +
       'FROM tblProgramacaoRT ' +
       'WHERE idProgramacaoRT = :idProgramacaoRT';
 
@@ -1205,6 +3434,7 @@ begin
 
     if not Q.Eof then
     begin
+      RTNumeroAtual := Trim(Q.FieldByName('RT').AsString);
       StatusAtual := Trim(Q.FieldByName('RT_Status').AsString);
       RTCanceladaAtual := (Q.FindField('RT_Cancelada') <> nil) and
                           Q.FieldByName('RT_Cancelada').AsBoolean;
@@ -1215,6 +3445,8 @@ begin
 
   if RTCanceladaAtual or SameText(StatusAtual, RT_STATUS_CANCELADA) then
     StatusNovo := RT_STATUS_CANCELADA
+  else if RTNumeroAtual = '' then
+    StatusNovo := RT_STATUS_ERRO_EMISSAO
   else if APendenteCancelamento then
     StatusNovo := RT_STATUS_ORFA
   else
@@ -1236,6 +3468,14 @@ begin
     40
   );
 
+  MensagemSafe := AjustarTextoParaCampo(
+    FrmDataModule.ADOConnectionRT,
+    'tblProgramacaoRT',
+    'RT_Mensagem',
+    NormalizarMensagemStatusRTTabela(StatusNovo, RTNumeroAtual, AMotivo),
+    100
+  );
+
   Q := TADOQuery.Create(nil);
   try
     Q.Connection := FrmDataModule.ADOConnectionRT;
@@ -1246,6 +3486,7 @@ begin
       '  RT_PendenteCancelamento = :RT_PendenteCancelamento, ' +
       '  RT_MotivoConciliacao = :RT_MotivoConciliacao, ' +
       '  RT_DataUltimaConciliacao = :RT_DataUltimaConciliacao, ' +
+      '  RT_Mensagem = :RT_Mensagem, ' +
       '  RT_Status = :RT_Status ' +
       'WHERE idProgramacaoRT = :idProgramacaoRT';
 
@@ -1253,6 +3494,7 @@ begin
     Q.Parameters.ParamByName('RT_PendenteCancelamento').Value := APendenteCancelamento;
     Q.Parameters.ParamByName('RT_MotivoConciliacao').Value := MotivoSafe;
     Q.Parameters.ParamByName('RT_DataUltimaConciliacao').Value := Now;
+    Q.Parameters.ParamByName('RT_Mensagem').Value := MensagemSafe;
     Q.Parameters.ParamByName('RT_Status').Value := StatusSafe;
     Q.Parameters.ParamByName('idProgramacaoRT').Value := AIdProgramacaoRT;
     Q.ExecSQL;
@@ -1273,7 +3515,7 @@ begin
     'tblProgramacaoExecutante',
     'RT_Mensagem',
     Trim(AMensagem),
-    255
+    100
   );
 
   MsgRTSafe := AjustarTextoParaCampo(
@@ -1281,7 +3523,7 @@ begin
     'tblProgramacaoRT',
     'RT_Mensagem',
     Trim(AMensagem),
-    255
+    100
   );
 
   if AIdExec > 0 then
@@ -1494,8 +3736,6 @@ begin
       'FROM tblProgramacaoRT ' +
       'WHERE DataIda >= :DtIni ' +
       '  AND DataIda < :DtFimMais1 ' +
-      '  AND [RT] IS NOT NULL ' +
-      '  AND Trim([RT]) <> '''' ' +
       '  AND ([RT_Cancelada] IS NULL OR [RT_Cancelada] = False) ' +
       'ORDER BY DataIda, RT, idProgramacaoRT';
 
@@ -1515,6 +3755,18 @@ begin
       ChCompleta := Trim(QRT.FieldByName('ChaveCompleta').AsString);
       ChIda := Trim(QRT.FieldByName('ChaveIda').AsString);
       ChVolta := Trim(QRT.FieldByName('ChaveVolta').AsString);
+
+      if NumeroRT = '' then
+      begin
+        AtualizarMarcacaoRTOrfa(
+          QRT.FieldByName('idProgramacaoRT').AsInteger,
+          False,
+          False,
+          'RT local sem número preenchido. Registro classificado como erro de emissão.'
+        );
+        QRT.Next;
+        Continue;
+      end;
 
       Sustenta :=
         HasKeySet(IDsValidos, IntToStr(IdExec)) or
@@ -1893,9 +4145,16 @@ begin
           Destino    := DS.FieldByName('txtDestino').AsString; // atenção: aqui é txtDestino
           CodigoSAP  := RemoverZerosEsquerda(DS.FieldByName('CodigoSAP').AsString);
 
-          // regra 1: se RT está vazia → só marca erro local / loga e pula
+          // regra 1: se RT está vazia → marca erro local, loga e pula
           if RTNumero = '' then
           begin
+            AtualizarProgramacaoRT_Cancelamento(
+              idProgramacaoRT,
+              False,
+              'RT sem número para cancelamento forçado.',
+              RT_STATUS_ERRO_EMISSAO
+            );
+
             MemoAdd('LogLine "' + IntToStr(idProgramacaoRT) + '|CANCELAR|ERRO|RT_VAZIA"');
             DS.Next;
             Continue;
@@ -1953,7 +4212,10 @@ begin
   if Application.MessageBox(PChar(
   'Deseja rodar a concliliação de RTs orfãs no período?'),
   '.::ATENÇÃO::.',36) = 6 then
+  begin
     ConciliarRTsOrfasNoPeriodo(dataInicio.Date, dataFim.Date);
+    actProcurarProgramacaoRT.Execute;
+  end;
 end;
 
 procedure TFrmConsultaExecutantesProgramados.actConfigurarRTExecute(
@@ -2237,8 +4499,23 @@ function TFrmConsultaExecutantesProgramados.TamanhoCampoTexto(
   const APadrao: Integer = 255): Integer;
 var
   Q: TADOQuery;
+  ChaveCache: string;
 begin
   Result := APadrao;
+
+  if (AConn = nil) or (Trim(ATabela) = '') or (Trim(ACampo) = '') then
+    Exit;
+
+  if FCampoTextoTamanhoCache = nil then
+    FCampoTextoTamanhoCache := TDictionary<string, Integer>.Create;
+
+  ChaveCache :=
+    IntToHex(NativeInt(AConn), SizeOf(Pointer) * 2) + '|' +
+    UpperCase(Trim(ATabela)) + '|' +
+    UpperCase(Trim(ACampo));
+
+  if FCampoTextoTamanhoCache.TryGetValue(ChaveCache, Result) then
+    Exit;
 
   Q := TADOQuery.Create(nil);
   try
@@ -2253,6 +4530,8 @@ begin
   finally
     Q.Free;
   end;
+
+  FCampoTextoTamanhoCache.AddOrSetValue(ChaveCache, Result);
 end;
 
 function TFrmConsultaExecutantesProgramados.AjustarTextoParaCampo(
@@ -2314,7 +4593,7 @@ begin
     'tblProgramacaoExecutante',
     'RT_Mensagem',
     Trim(AMensagem),
-    255
+    100
   );
 
   RTSafe := AjustarTextoParaCampo(
@@ -2397,11 +4676,17 @@ begin
   if AIdRT <= 0 then
     Exit;
 
+  MensagemSafe := NormalizarMensagemStatusRTTabela(
+    AStatus,
+    ANumeroRT,
+    AMensagem
+  );
+
   StatusSafe := AjustarTextoParaCampo(
     FrmDataModule.ADOConnectionRT,
     'tblProgramacaoRT',
     'RT_Status',
-    StatusRTNormalizado(AStatus),
+    StatusRTNormalizadoTabelaRT(AStatus, ANumeroRT),
     30
   );
 
@@ -2409,8 +4694,8 @@ begin
     FrmDataModule.ADOConnectionRT,
     'tblProgramacaoRT',
     'RT_Mensagem',
-    Trim(AMensagem),
-    255
+    MensagemSafe,
+    100
   );
 
 
@@ -2987,7 +5272,10 @@ function TFrmConsultaExecutantesProgramados.ChaveRTVolta(
 var
   ChPass: string;
 begin
-  if not Dados.booleanRecolhimento then
+  if not RecolhimentoValidoParaRT(
+           Dados.Destino,
+           Dados.Retorno,
+           Dados.booleanRecolhimento) then
     Exit('');
 
   if (Trim(Dados.DataVolta) = '') or
@@ -3054,6 +5342,7 @@ type
     Ingrp: string;
     CodTrasg: string;
     Classe: string;
+    ClasseR3Fallback: string;
     Origem: string;
     Destino: string;
     Retorno: string;
@@ -3077,6 +5366,7 @@ var
   Itens: array of TRTItem;
   ItemCount: Integer;
   HasBookmark: Boolean;
+  Interrompido: Boolean;
 
   QtBloqueados, QtProntos: Integer;
   MotivoBloqueio: string;
@@ -3089,7 +5379,8 @@ var
   i, seq: Integer;
   A: TRTItem;
   HoraAtual, HoraCobertura: TDateTime;
-  CodigoSAPAtual, CodigoSAPFinal, TipoRTFinal: string;
+  CodigoSAPAtual, CodigoSAPFinal, TipoRTFinal, TipoRTInformado: string;
+  CoberturaMarcadaNoRegistro: Boolean;
 
   function VbsQuote(const S: string): string;
   begin
@@ -3155,7 +5446,8 @@ var
         VbsQuote(A.OperRede) + ',' +
         VbsQuote(A.ElementoPEP) + ',' +
         VbsQuote(A.Cobertura) + ',' +
-        VbsQuote(A.Recolhimetno) +
+        VbsQuote(A.Recolhimetno) + ',' +
+        VbsQuote(A.ClasseR3Fallback) +
       ')';
   end;
 
@@ -3167,6 +5459,8 @@ var
 begin
   EnderecoVbs := ExtractFilePath(ParamStr(0)) + 'RT_R3_R7.vbs';
   EnderecoLog := ExtractFilePath(ParamStr(0)) + 'sap_log_rts.txt';
+  FEnderecoStopFlag := ChangeFileExt(EnderecoVbs, '.stop');
+  FPararGeracaoRT := False;
   OrigemPlataformas := FrmPrincipal.OrigemPlataformas;
   QtProntos:= 0;
   QtBloqueados:= 0;
@@ -3216,11 +5510,26 @@ begin
         Dados.Requisitante  := Trim(DSRT.FieldByName('RT_Requisitante').AsString);
         Dados.TelContato    := Trim(DSRT.FieldByName('RT_TelContato').AsString);
         Dados.PessoaContato := Trim(DSRT.FieldByName('RT_PessoaContato').AsString);
-        Dados.HoraCobertura := DSRT.FieldByName('RT_HoraCobertura').AsDateTime;
-        //-----------------------------------------------
-        HoraAtual     := Frac(Now);
-        HoraCobertura := Frac(Dados.HoraCobertura);
-        Dados.RTCobertura := (HoraAtual > HoraCobertura);
+        if (DSRT.FindField('RT_HoraCobertura') <> nil) and
+           (not VarIsNull(DSRT.FieldByName('RT_HoraCobertura').Value)) then
+        begin
+          Dados.HoraCobertura := DSRT.FieldByName('RT_HoraCobertura').AsDateTime;
+          HoraAtual := Frac(Now);
+          HoraCobertura := Frac(Dados.HoraCobertura);
+          Dados.RTCobertura := (HoraAtual > HoraCobertura);
+        end
+        else
+        begin
+          Dados.HoraCobertura := 0;
+          Dados.RTCobertura := False;
+        end;
+
+        CoberturaMarcadaNoRegistro := False;
+        if (DS.FindField('RT_Cobertura') <> nil) and
+           (not VarIsNull(DS.FieldByName('RT_Cobertura').Value)) then
+          CoberturaMarcadaNoRegistro := DS.FieldByName('RT_Cobertura').AsBoolean;
+
+        Dados.RTCobertura := Dados.RTCobertura or CoberturaMarcadaNoRegistro;
         //-----------------------------------------------
         Dados.idProgramacaoExecutante := DS.FieldByName('idProgramacaoExecutante').AsInteger;
         //-----------------------------------------------
@@ -3259,7 +5568,10 @@ begin
         Dados.MatriculaPax := CodigoSAPFinal;
         Dados.Modal        := Trim(DS.FieldByName('RT_Modal').AsString);
 
-        if TipoRTFinal <> '' then
+        TipoRTInformado := UpperCase(Trim(DS.FieldByName('RT_Tipo').AsString));
+        if (TipoRTInformado = 'R3') or (TipoRTInformado = 'R7') then
+          Dados.TipoRT := TipoRTInformado
+        else if TipoRTFinal <> '' then
           Dados.TipoRT := TipoRTFinal
         else
           Dados.TipoRT := DeterminarTipoRTAutomatico(CodigoSAPFinal);
@@ -3307,6 +5619,7 @@ begin
         if Dados.booleanRecolhimento and (Trim(Dados.DataVolta) = '') then
           Dados.DataVolta := Dados.DataIda;
         //----------------------------------------------------------
+        NormalizarRecolhimentoDadosRT(Dados);
 
 
         if PlataformaDestino.booleanProntidao then
@@ -3373,6 +5686,16 @@ begin
           A.Ingrp          := Dados.GrpPlan;
           A.CodTrasg       := Dados.Modal;
           A.Classe         := Dados.Classe;
+          A.ClasseR3Fallback := DetermineClasse(
+            'R3',
+            Trim(DS.FieldByName('Origem').AsString),
+            Trim(DS.FieldByName('txtDestino').AsString),
+            FrmPrincipal.OrigemPlataformas,
+            '',
+            Dados.booleanRecolhimento
+          );
+          if Trim(A.ClasseR3Fallback) = '' then
+            A.ClasseR3Fallback := 'TT';
           A.Origem         := Dados.Origem;
           A.Destino        := Dados.Destino;
           A.Retorno        := Dados.Retorno;
@@ -3451,9 +5774,11 @@ begin
   MemoAdd('Option Explicit');
   MemoAdd('');
   MemoAdd('Dim SapGuiAuto, application, connection, session');
-  MemoAdd('Dim LOGFILE');
+  MemoAdd('Dim LOGFILE, STOPFILE, fsoStop');
   MemoAdd('');
   MemoAdd('LOGFILE = ' + VbsQuote(EnderecoLog));
+  MemoAdd('STOPFILE = ' + VbsQuote(FEnderecoStopFlag));
+  MemoAdd('Set fsoStop = CreateObject("Scripting.FileSystemObject")');
   MemoAdd('');
 
   MemoAdd('Sub LogLine(ByVal line)');
@@ -3562,26 +5887,397 @@ begin
   MemoAdd('');
   //-----------------------------------------------------------------
   MemoAdd('Function GetPopupMessageText(ByVal sess)');
-  MemoAdd('  Dim txt');
+  MemoAdd('  Dim txt, parte, wndTxt');
+  MemoAdd('  txt = ""');
   MemoAdd('  GetPopupMessageText = ""');
   MemoAdd('  On Error Resume Next');
   MemoAdd('  If sess.Children.Count > 1 Then');
-  MemoAdd('    txt = Trim(CStr(sess.findById("wnd[1]/usr/txtMESSTXT2").Text))');
-  MemoAdd('    If Len(txt) > 0 Then GetPopupMessageText = txt');
-  MemoAdd('    If Len(GetPopupMessageText) = 0 Then');
-  MemoAdd('      txt = Trim(CStr(sess.findById("wnd[1]/usr/txtMESSTXT1").Text))');
-  MemoAdd('      If Len(txt) > 0 Then GetPopupMessageText = txt');
+    MemoAdd('    wndTxt = Trim(CStr(sess.findById("wnd[1]").Text))');
+    MemoAdd('    If Len(wndTxt) > 0 Then txt = wndTxt');
+  MemoAdd('    parte = Trim(CStr(sess.findById("wnd[1]/usr/subSUBSCREEN:SAPLSPO1:0502/cntlHTML_CONTROL_CON").Text))');
+  MemoAdd('    If Len(parte) > 0 Then');
+  MemoAdd('      If Len(txt) > 0 Then txt = txt & " "');
+  MemoAdd('      txt = txt & parte');
   MemoAdd('    End If');
-  MemoAdd('    If Len(GetPopupMessageText) = 0 Then');
-  MemoAdd('      txt = Trim(CStr(sess.findById("wnd[1]/usr/txtMESSTXT3").Text))');
-  MemoAdd('      If Len(txt) > 0 Then GetPopupMessageText = txt');
+  MemoAdd('    parte = Trim(CStr(sess.findById("wnd[1]/usr/subSUBSCREEN:SAPLSPO1:0502/cntlHTML_CONTROL_CON/shellcont").Text))');
+  MemoAdd('    If Len(parte) > 0 Then');
+  MemoAdd('      If Len(txt) > 0 Then txt = txt & " "');
+  MemoAdd('      txt = txt & parte');
   MemoAdd('    End If');
+  MemoAdd('    parte = Trim(CStr(sess.findById("wnd[1]/usr/subSUBSCREEN:SAPLSPO1:0502/cntlHTML_CONTROL_CON/shellcont/shell").Text))');
+  MemoAdd('    If Len(parte) > 0 Then');
+  MemoAdd('      If Len(txt) > 0 Then txt = txt & " "');
+  MemoAdd('      txt = txt & parte');
+  MemoAdd('    End If');
+  MemoAdd('    parte = Trim(CStr(sess.findById("wnd[1]/usr/txtICON_POPUP_TYPE").Tooltip))');
+  MemoAdd('    If Len(parte) > 0 And Len(txt) = 0 Then txt = parte');
+  MemoAdd('    parte = Trim(CStr(sess.findById("wnd[1]/usr/txtMESSTXT1").Text))');
+  MemoAdd('    If Len(parte) > 0 Then');
+  MemoAdd('      If Len(txt) > 0 Then txt = txt & " "');
+  MemoAdd('      txt = txt & parte');
+  MemoAdd('    End If');
+  MemoAdd('    parte = Trim(CStr(sess.findById("wnd[1]/usr/txtMESSTXT2").Text))');
+  MemoAdd('    If Len(parte) > 0 Then');
+  MemoAdd('      If Len(txt) > 0 Then txt = txt & " "');
+  MemoAdd('      txt = txt & parte');
+  MemoAdd('    End If');
+  MemoAdd('    parte = Trim(CStr(sess.findById("wnd[1]/usr/txtMESSTXT3").Text))');
+  MemoAdd('    If Len(parte) > 0 Then');
+  MemoAdd('      If Len(txt) > 0 Then txt = txt & " "');
+  MemoAdd('      txt = txt & parte');
+  MemoAdd('    End If');
+  MemoAdd('    If Len(txt) = 0 Then');
+  MemoAdd('      parte = Trim(CStr(sess.findById("wnd[1]/usr/lblMESSTXT1").Text))');
+  MemoAdd('      If Len(parte) > 0 Then txt = parte');
+  MemoAdd('      parte = Trim(CStr(sess.findById("wnd[1]/usr/lblMESSTXT2").Text))');
+  MemoAdd('      If Len(parte) > 0 Then');
+  MemoAdd('        If Len(txt) > 0 Then txt = txt & " "');
+  MemoAdd('        txt = txt & parte');
+  MemoAdd('      End If');
+  MemoAdd('      parte = Trim(CStr(sess.findById("wnd[1]/usr/lblMESSTXT3").Text))');
+  MemoAdd('      If Len(parte) > 0 Then');
+  MemoAdd('        If Len(txt) > 0 Then txt = txt & " "');
+  MemoAdd('        txt = txt & parte');
+  MemoAdd('      End If');
+  MemoAdd('    End If');
+  MemoAdd('    If Len(txt) = 0 Then');
+  MemoAdd('      Dim usrCont, j, k, child, grandChild, childTxt');
+  MemoAdd('      Set usrCont = sess.findById("wnd[1]/usr")');
+  MemoAdd('      If Err.Number = 0 And IsObject(usrCont) Then');
+  MemoAdd('        For j = 0 To usrCont.Children.Count - 1');
+  MemoAdd('          Err.Clear');
+  MemoAdd('          Set child = usrCont.Children(j)');
+  MemoAdd('          If Err.Number = 0 And IsObject(child) Then');
+  MemoAdd('            Err.Clear');
+  MemoAdd('            childTxt = Trim(CStr(child.Text))');
+  MemoAdd('            If Err.Number = 0 And Len(childTxt) > 8 Then');
+  MemoAdd('              If Len(txt) > 0 Then txt = txt & " "');
+  MemoAdd('              txt = txt & childTxt');
+  MemoAdd('            End If');
+  MemoAdd('            If IsObject(child) Then');
+  MemoAdd('              For k = 0 To child.Children.Count - 1');
+  MemoAdd('                Err.Clear');
+  MemoAdd('                Set grandChild = child.Children(k)');
+  MemoAdd('                If Err.Number = 0 And IsObject(grandChild) Then');
+  MemoAdd('                  Err.Clear');
+  MemoAdd('                  childTxt = Trim(CStr(grandChild.Text))');
+  MemoAdd('                  If Err.Number = 0 And Len(childTxt) > 3 Then');
+  MemoAdd('                    If InStr(1, txt, childTxt, vbTextCompare) = 0 Then');
+  MemoAdd('                      If Len(txt) > 0 Then txt = txt & " "');
+  MemoAdd('                      txt = txt & childTxt');
+  MemoAdd('                    End If');
+  MemoAdd('                  End If');
+  MemoAdd('                End If');
+  MemoAdd('              Next');
+  MemoAdd('            End If');
+  MemoAdd('          End If');
+  MemoAdd('        Next');
+  MemoAdd('      End If');
+  MemoAdd('      Err.Clear');
+  MemoAdd('    End If');
+  MemoAdd('    GetPopupMessageText = Trim(CStr(txt))');
   MemoAdd('  End If');
   MemoAdd('  If Len(GetPopupMessageText) = 0 Then');
   MemoAdd('    GetPopupMessageText = Trim(CStr(GetStatusText(sess)))');
   MemoAdd('  End If');
   MemoAdd('  Err.Clear');
   MemoAdd('  On Error GoTo 0');
+  MemoAdd('End Function');
+  MemoAdd('');
+  //-----------------------------------------------------------------
+  MemoAdd('Sub AppendPopupParte(ByRef txt, ByVal parte)');
+  MemoAdd('  parte = Trim(CStr(parte))');
+  MemoAdd('  If Len(parte) = 0 Then Exit Sub');
+  MemoAdd('  If InStr(1, txt, parte, vbTextCompare) > 0 Then Exit Sub');
+  MemoAdd('  If Len(txt) > 0 Then txt = txt & " "');
+  MemoAdd('  txt = txt & parte');
+  MemoAdd('End Sub');
+  MemoAdd('');
+  //-----------------------------------------------------------------
+  MemoAdd('Sub ColetarTextoObjetoPopup(ByVal obj, ByRef txt, ByVal nivelRestante)');
+  MemoAdd('  On Error Resume Next');
+  MemoAdd('  Dim i, filho, parte');
+  MemoAdd('  If obj Is Nothing Then Exit Sub');
+  MemoAdd('  parte = ""');
+  MemoAdd('  parte = Trim(CStr(obj.Text))');
+  MemoAdd('  If Err.Number = 0 Then Call AppendPopupParte(txt, parte)');
+  MemoAdd('  Err.Clear');
+  MemoAdd('  parte = Trim(CStr(obj.Tooltip))');
+  MemoAdd('  If Err.Number = 0 Then Call AppendPopupParte(txt, parte)');
+  MemoAdd('  Err.Clear');
+  MemoAdd('  parte = Trim(CStr(obj.DefaultTooltip))');
+  MemoAdd('  If Err.Number = 0 Then Call AppendPopupParte(txt, parte)');
+  MemoAdd('  Err.Clear');
+  MemoAdd('  If nivelRestante <= 0 Then');
+  MemoAdd('    On Error GoTo 0');
+  MemoAdd('    Exit Sub');
+  MemoAdd('  End If');
+  MemoAdd('  For i = 0 To obj.Children.Count - 1');
+  MemoAdd('    Set filho = obj.Children(i)');
+  MemoAdd('    If Err.Number = 0 And IsObject(filho) Then');
+  MemoAdd('      Call ColetarTextoObjetoPopup(filho, txt, nivelRestante - 1)');
+  MemoAdd('    End If');
+  MemoAdd('    Err.Clear');
+  MemoAdd('  Next');
+  MemoAdd('  On Error GoTo 0');
+  MemoAdd('End Sub');
+  MemoAdd('');
+  //-----------------------------------------------------------------
+  MemoAdd('Function GetPopupDebugDump(ByVal sess)');
+  MemoAdd('  Dim txt, objPopup, objHtml');
+  MemoAdd('  txt = ""');
+  MemoAdd('  GetPopupDebugDump = ""');
+  MemoAdd('  On Error Resume Next');
+  MemoAdd('  If sess.Children.Count > 1 Then');
+    MemoAdd('    Set objPopup = sess.findById("wnd[1]")');
+    MemoAdd('    If Err.Number = 0 And IsObject(objPopup) Then');
+      MemoAdd('      Call ColetarTextoObjetoPopup(objPopup, txt, 6)');
+    MemoAdd('    End If');
+  MemoAdd('    Err.Clear');
+  MemoAdd('    Set objHtml = sess.findById("wnd[1]/usr/subSUBSCREEN:SAPLSPO1:0502/cntlHTML_CONTROL_CON")');
+  MemoAdd('    If Err.Number = 0 And IsObject(objHtml) Then');
+  MemoAdd('      Call ColetarTextoObjetoPopup(objHtml, txt, 8)');
+  MemoAdd('    End If');
+  MemoAdd('    Err.Clear');
+  MemoAdd('    Call AppendPopupParte(txt, sess.findById("wnd[1]/usr/subSUBSCREEN:SAPLSPO1:0502/cntlHTML_CONTROL_CON").Text)');
+  MemoAdd('    Err.Clear');
+  MemoAdd('    Call AppendPopupParte(txt, sess.findById("wnd[1]/usr/subSUBSCREEN:SAPLSPO1:0502/cntlHTML_CONTROL_CON/shellcont").Text)');
+  MemoAdd('    Err.Clear');
+  MemoAdd('    Call AppendPopupParte(txt, sess.findById("wnd[1]/usr/subSUBSCREEN:SAPLSPO1:0502/cntlHTML_CONTROL_CON/shellcont/shell").Text)');
+    MemoAdd('    Err.Clear');
+  MemoAdd('  End If');
+  MemoAdd('  GetPopupDebugDump = Trim(CStr(txt))');
+  MemoAdd('  On Error GoTo 0');
+  MemoAdd('End Function');
+  MemoAdd('');
+  //-----------------------------------------------------------------
+  MemoAdd('Function GetPopupMessageTextStable(ByVal sess, ByVal tentativas, ByVal esperaMs)');
+  MemoAdd('  Dim i, txt');
+  MemoAdd('  GetPopupMessageTextStable = ""');
+  MemoAdd('  For i = 1 To tentativas');
+    MemoAdd('    txt = Trim(CStr(GetPopupMessageText(sess)))');
+  MemoAdd('    If (Len(txt) = 0) Or (LCase(txt) = LCase("Atenção!")) Or (LCase(txt) = LCase("Atencao!")) Then');
+  MemoAdd('      txt = Trim(CStr(GetPopupDebugDump(sess)))');
+  MemoAdd('    End If');
+  MemoAdd('    If Len(txt) > 0 Then');
+  MemoAdd('      GetPopupMessageTextStable = txt');
+  MemoAdd('      Exit Function');
+  MemoAdd('    End If');
+  MemoAdd('    WScript.Sleep esperaMs');
+  MemoAdd('  Next');
+  MemoAdd('End Function');
+  MemoAdd('');
+  //-----------------------------------------------------------------
+  MemoAdd('Function PossuiPopupMatriculaRT7(ByVal sess)');
+  MemoAdd('  PossuiPopupMatriculaRT7 = False');
+  MemoAdd('  On Error Resume Next');
+  MemoAdd('  Dim obj');
+  MemoAdd('  Set obj = sess.findById("wnd[1]/usr/btnBUTTON_2")');
+  MemoAdd('  If Err.Number = 0 Then PossuiPopupMatriculaRT7 = True');
+  MemoAdd('  Err.Clear');
+  MemoAdd('  Set obj = Nothing');
+  MemoAdd('  On Error GoTo 0');
+  MemoAdd('End Function');
+  MemoAdd('');
+  //-----------------------------------------------------------------
+  MemoAdd('Function SomenteDigitos(ByVal txt)');
+  MemoAdd('  Dim s, i, ch, res');
+  MemoAdd('  s = CStr(txt)');
+  MemoAdd('  res = ""');
+  MemoAdd('  For i = 1 To Len(s)');
+  MemoAdd('    ch = Mid(s, i, 1)');
+  MemoAdd('    If (ch >= "0") And (ch <= "9") Then res = res & ch');
+  MemoAdd('  Next');
+  MemoAdd('  SomenteDigitos = res');
+  MemoAdd('End Function');
+  MemoAdd('');
+  //-----------------------------------------------------------------
+  MemoAdd('Function RemoverZerosEsquerda(ByVal txt)');
+  MemoAdd('  Dim s');
+  MemoAdd('  s = Trim(CStr(txt))');
+  MemoAdd('  Do While (Len(s) > 1) And (Left(s, 1) = "0")');
+  MemoAdd('    s = Mid(s, 2)');
+  MemoAdd('  Loop');
+  MemoAdd('  RemoverZerosEsquerda = s');
+  MemoAdd('End Function');
+  MemoAdd('');
+  //-----------------------------------------------------------------
+  MemoAdd('Function ExtrairTextoEntreAspasSimples(ByVal txt, ByVal indice)');
+  MemoAdd('  Dim s, aspas, posIni, posFim, atual');
+  MemoAdd('  ExtrairTextoEntreAspasSimples = ""');
+  MemoAdd('  s = CStr(txt)');
+  MemoAdd('  aspas = Chr(39)');
+  MemoAdd('  posIni = 1');
+  MemoAdd('  atual = 0');
+  MemoAdd('  Do');
+  MemoAdd('    posIni = InStr(posIni, s, aspas)');
+  MemoAdd('    If posIni = 0 Then Exit Do');
+  MemoAdd('    posFim = InStr(posIni + 1, s, aspas)');
+  MemoAdd('    If posFim = 0 Then Exit Do');
+  MemoAdd('    If atual = indice Then');
+  MemoAdd('      ExtrairTextoEntreAspasSimples = Mid(s, posIni + 1, posFim - posIni - 1)');
+  MemoAdd('      Exit Function');
+  MemoAdd('    End If');
+  MemoAdd('    atual = atual + 1');
+  MemoAdd('    posIni = posFim + 1');
+  MemoAdd('  Loop');
+  MemoAdd('End Function');
+  MemoAdd('');
+  //-----------------------------------------------------------------
+  MemoAdd('Function ExtrairUltimoNumeroLongo(ByVal txt)');
+  MemoAdd('  Dim re, ms');
+  MemoAdd('  ExtrairUltimoNumeroLongo = ""');
+  MemoAdd('  On Error Resume Next');
+  MemoAdd('  Set re = CreateObject("VBScript.RegExp")');
+  MemoAdd('  re.Global = True');
+  MemoAdd('  re.IgnoreCase = True');
+  MemoAdd('  re.Pattern = "(\d{6,})"');
+  MemoAdd('  Set ms = re.Execute(CStr(txt))');
+  MemoAdd('  If ms.Count > 0 Then');
+  MemoAdd('    ExtrairUltimoNumeroLongo = ms(ms.Count - 1).SubMatches(0)');
+  MemoAdd('  End If');
+  MemoAdd('  On Error GoTo 0');
+  MemoAdd('End Function');
+  MemoAdd('');
+  //-----------------------------------------------------------------
+  MemoAdd('Function ExtrairCPFRegexPopupMatriculaValidaRT7(ByVal txt)');
+  MemoAdd('  Dim re, ms');
+  MemoAdd('  ExtrairCPFRegexPopupMatriculaValidaRT7 = ""');
+  MemoAdd('  On Error Resume Next');
+  MemoAdd('  Set re = CreateObject("VBScript.RegExp")');
+  MemoAdd('  re.Global = False');
+  MemoAdd('  re.IgnoreCase = True');
+  MemoAdd('  re.Pattern = "CPF\s*''([^'']+)''"');
+  MemoAdd('  Set ms = re.Execute(CStr(txt))');
+  MemoAdd('  If ms.Count > 0 Then');
+  MemoAdd('    ExtrairCPFRegexPopupMatriculaValidaRT7 = SomenteDigitos(ms(0).SubMatches(0))');
+  MemoAdd('  End If');
+  MemoAdd('  On Error GoTo 0');
+  MemoAdd('End Function');
+  MemoAdd('');
+  //-----------------------------------------------------------------
+  MemoAdd('Function ExtrairMatriculaRegexPopupMatriculaValidaRT7(ByVal txt)');
+  MemoAdd('  Dim re, ms');
+  MemoAdd('  ExtrairMatriculaRegexPopupMatriculaValidaRT7 = ""');
+  MemoAdd('  On Error Resume Next');
+  MemoAdd('  Set re = CreateObject("VBScript.RegExp")');
+  MemoAdd('  re.Global = False');
+  MemoAdd('  re.IgnoreCase = True');
+  MemoAdd('  re.Pattern = "matr\S*cula\s+v\S*lida[\s\r\n]*''([^'']+)''"');
+  MemoAdd('  Set ms = re.Execute(CStr(txt))');
+  MemoAdd('  If ms.Count > 0 Then');
+  MemoAdd('    ExtrairMatriculaRegexPopupMatriculaValidaRT7 = RemoverZerosEsquerda(SomenteDigitos(ms(0).SubMatches(0)))');
+  MemoAdd('  End If');
+  MemoAdd('  On Error GoTo 0');
+  MemoAdd('End Function');
+  MemoAdd('');
+  //-----------------------------------------------------------------
+  MemoAdd('Function MsgCPFComMatriculaValidaRT7(ByVal st)');
+  MemoAdd('  Dim s');
+  MemoAdd('  s = LCase(Trim(CStr(st)))');
+  MemoAdd('  MsgCPFComMatriculaValidaRT7 = (InStr(1, s, "cpf", vbTextCompare) > 0) And _');
+  MemoAdd('    ((InStr(1, s, "matrícula válida", vbTextCompare) > 0) Or _');
+  MemoAdd('     (InStr(1, s, "matricula válida", vbTextCompare) > 0) Or _');
+  MemoAdd('     (InStr(1, s, "matrícula valida", vbTextCompare) > 0) Or _');
+  MemoAdd('     (InStr(1, s, "matricula valida", vbTextCompare) > 0))');
+  MemoAdd('End Function');
+  MemoAdd('');
+  //-----------------------------------------------------------------
+  MemoAdd('Function ExtrairCPFPopupMatriculaValidaRT7(ByVal txt)');
+  MemoAdd('  ExtrairCPFPopupMatriculaValidaRT7 = ExtrairCPFRegexPopupMatriculaValidaRT7(txt)');
+  MemoAdd('  If Len(Trim(ExtrairCPFPopupMatriculaValidaRT7)) = 0 Then');
+  MemoAdd('    ExtrairCPFPopupMatriculaValidaRT7 = SomenteDigitos(ExtrairTextoEntreAspasSimples(txt, 0))');
+  MemoAdd('  End If');
+  MemoAdd('End Function');
+  MemoAdd('');
+  //-----------------------------------------------------------------
+  MemoAdd('Function ExtrairMatriculaPopupMatriculaValidaRT7(ByVal txt)');
+  MemoAdd('  ExtrairMatriculaPopupMatriculaValidaRT7 = ExtrairMatriculaRegexPopupMatriculaValidaRT7(txt)');
+  MemoAdd('  If Len(Trim(ExtrairMatriculaPopupMatriculaValidaRT7)) = 0 Then');
+  MemoAdd('    ExtrairMatriculaPopupMatriculaValidaRT7 = RemoverZerosEsquerda(SomenteDigitos(ExtrairTextoEntreAspasSimples(txt, 1)))');
+  MemoAdd('  End If');
+  MemoAdd('  If Len(Trim(ExtrairMatriculaPopupMatriculaValidaRT7)) = 0 Then');
+  MemoAdd('    ExtrairMatriculaPopupMatriculaValidaRT7 = RemoverZerosEsquerda(ExtrairUltimoNumeroLongo(txt))');
+  MemoAdd('  End If');
+  MemoAdd('End Function');
+  MemoAdd('');
+  //-----------------------------------------------------------------
+  MemoAdd('Function ClicarNaoPopupMatriculaValidaRT7(ByVal sess)');
+  MemoAdd('  ClicarNaoPopupMatriculaValidaRT7 = False');
+  MemoAdd('  On Error Resume Next');
+  MemoAdd('  sess.findById("wnd[1]/usr/btnBUTTON_2").press');
+  MemoAdd('  If Err.Number = 0 Then');
+  MemoAdd('    ClicarNaoPopupMatriculaValidaRT7 = True');
+  MemoAdd('  Else');
+  MemoAdd('    Err.Clear');
+  MemoAdd('    sess.findById("wnd[1]/tbar[0]/btn[12]").press');
+  MemoAdd('    If Err.Number = 0 Then');
+  MemoAdd('      ClicarNaoPopupMatriculaValidaRT7 = True');
+  MemoAdd('    Else');
+  MemoAdd('      Err.Clear');
+  MemoAdd('      sess.findById("wnd[1]").sendVKey 12');
+  MemoAdd('      If Err.Number = 0 Then ClicarNaoPopupMatriculaValidaRT7 = True');
+  MemoAdd('    End If');
+  MemoAdd('  End If');
+  MemoAdd('  Err.Clear');
+  MemoAdd('  On Error GoTo 0');
+  MemoAdd('End Function');
+  MemoAdd('');
+  //-----------------------------------------------------------------
+  MemoAdd('Function ClicarSimPopupMatriculaValidaRT7(ByVal sess)');
+  MemoAdd('  ClicarSimPopupMatriculaValidaRT7 = False');
+  MemoAdd('  On Error Resume Next');
+  MemoAdd('  sess.findById("wnd[1]/usr/btnBUTTON_1").press');
+  MemoAdd('  If Err.Number = 0 Then');
+  MemoAdd('    ClicarSimPopupMatriculaValidaRT7 = True');
+  MemoAdd('  Else');
+  MemoAdd('    Err.Clear');
+  MemoAdd('    sess.findById("wnd[1]/tbar[0]/btn[0]").press');
+  MemoAdd('    If Err.Number = 0 Then');
+  MemoAdd('      ClicarSimPopupMatriculaValidaRT7 = True');
+  MemoAdd('    Else');
+  MemoAdd('      Err.Clear');
+  MemoAdd('      sess.findById("wnd[1]").sendVKey 0');
+  MemoAdd('      If Err.Number = 0 Then ClicarSimPopupMatriculaValidaRT7 = True');
+  MemoAdd('    End If');
+  MemoAdd('  End If');
+  MemoAdd('  Err.Clear');
+  MemoAdd('  On Error GoTo 0');
+  MemoAdd('End Function');
+  MemoAdd('');
+  //-----------------------------------------------------------------
+  MemoAdd('Function TryGetTextByIds(ByVal sess, ByVal ids)');
+  MemoAdd('  Dim i, valor');
+  MemoAdd('  TryGetTextByIds = ""');
+  MemoAdd('  On Error Resume Next');
+  MemoAdd('  For i = 0 To UBound(ids)');
+  MemoAdd('    Err.Clear');
+  MemoAdd('    valor = Trim(CStr(sess.findById(CStr(ids(i))).Text))');
+  MemoAdd('    If Err.Number = 0 And Len(valor) > 0 Then');
+  MemoAdd('      TryGetTextByIds = valor');
+  MemoAdd('      Exit Function');
+  MemoAdd('    End If');
+  MemoAdd('  Next');
+  MemoAdd('  Err.Clear');
+  MemoAdd('  On Error GoTo 0');
+  MemoAdd('End Function');
+  MemoAdd('');
+  //-----------------------------------------------------------------
+  MemoAdd('Function CapturarMatriculaPreenchidaRT7(ByVal sess)');
+  MemoAdd('  Dim ids, valor');
+  MemoAdd('  CapturarMatriculaPreenchidaRT7 = ""');
+  MemoAdd('  ids = Array( _');
+  MemoAdd('    "wnd[0]/usr/subSUBTELA_001:SAPLYSCS_INFADREQTRANS:0107/tblSAPLYSCS_INFADREQTRANSTC_RT7/ctxtYSCSRTITPAX-PERNR[3,0]", _');
+  MemoAdd('    "wnd[0]/usr/subSUBTELA_001:SAPLYSCS_INFADREQTRANS:0107/tblSAPLYSCS_INFADREQTRANSTC_RT7/txtYSCSRTITPAX-PERNR[3,0]", _');
+  MemoAdd('    "wnd[0]/usr/subSUBTELA_001:SAPLYSCS_INFADREQTRANS:0107/tblSAPLYSCS_INFADREQTRANSTC_RT7/ctxtYSCSRTITPAX-PERNR[2,0]", _');
+  MemoAdd('    "wnd[0]/usr/subSUBTELA_001:SAPLYSCS_INFADREQTRANS:0107/tblSAPLYSCS_INFADREQTRANSTC_RT7/txtYSCSRTITPAX-PERNR[2,0]", _');
+  MemoAdd('    "wnd[0]/usr/subSUBTELA_001:SAPLYSCS_INFADREQTRANS:0107/tblSAPLYSCS_INFADREQTRANSTC_RT7/ctxtYSCSRTITPAX-PERNR[4,0]", _');
+  MemoAdd('    "wnd[0]/usr/subSUBTELA_001:SAPLYSCS_INFADREQTRANS:0107/tblSAPLYSCS_INFADREQTRANSTC_RT7/txtYSCSRTITPAX-PERNR[4,0]", _');
+  MemoAdd('    "wnd[0]/usr/subSUBTELA_001:SAPLYSCS_INFADREQTRANS:0107/tblSAPLYSCS_INFADREQTRANSTC_RT7/ctxtYSCSRTITPAX-PERNR[5,0]", _');
+  MemoAdd('    "wnd[0]/usr/subSUBTELA_001:SAPLYSCS_INFADREQTRANS:0107/tblSAPLYSCS_INFADREQTRANSTC_RT7/txtYSCSRTITPAX-PERNR[5,0]" _');
+  MemoAdd('  )');
+  MemoAdd('  valor = TryGetTextByIds(sess, ids)');
+  MemoAdd('  CapturarMatriculaPreenchidaRT7 = RemoverZerosEsquerda(SomenteDigitos(valor))');
   MemoAdd('End Function');
   MemoAdd('');
   //-----------------------------------------------------------------
@@ -3683,7 +6379,7 @@ begin
   MemoAdd('                   a(8),a(9),a(10), _');
   MemoAdd('                   a(11),a(12),a(13),a(14),a(15),a(16),a(17),a(18), _');
   MemoAdd('                   a(19),a(20),a(21),a(22),a(23),a(24), _');
-  MemoAdd('                   a(25),a(26),a(27),a(28),a(29),a(30),a(31), salvar)');
+  MemoAdd('                   a(25),a(26),a(27),a(28),a(29),a(30),a(31),a(32), salvar)');
   MemoAdd('  If Err.Number <> 0 Then');
   MemoAdd('    LogLine a(0) & "|" & a(1) & "|" & a(2) & "|EXCECAO_VBS|" & Err.Number & "|" & Err.Description');
   MemoAdd('    Err.Clear');
@@ -3933,7 +6629,11 @@ begin
   MemoAdd('  Else');
   MemoAdd('    session.findById("wnd[0]/tbar[0]/okcd").text = "/niw51"');
   MemoAdd('    session.findById("wnd[0]").sendVKey 0');
-  MemoAdd('    WScript.Sleep 100');
+  MemoAdd('    WScript.Sleep 200');
+  MemoAdd('    If session.Children.Count > 1 Then');
+  MemoAdd('      session.findById("wnd[1]").sendVKey 0');
+  MemoAdd('      WScript.Sleep 150');
+  MemoAdd('    End If');
   MemoAdd('    session.findById("wnd[0]/usr/ctxtRIWO00-QMART").text = tipoRT');
   MemoAdd('    session.findById("wnd[0]").sendVKey 0');
   MemoAdd('    WScript.Sleep 100');
@@ -4158,67 +6858,116 @@ begin
   MemoAdd('  On Error GoTo 0');
   MemoAdd('End Function');
   //FIM ProcessarRT3-----------------------------------------
-  MemoAdd('Function TrySetText(ByVal sess, ByVal id, ByVal value)');
-  MemoAdd('  TrySetText = False');
+  MemoAdd('Function TrySetTextNoEnter(ByVal sess, ByVal id, ByVal value)');
+  MemoAdd('  TrySetTextNoEnter = False');
   MemoAdd('  On Error Resume Next');
   MemoAdd('  sess.findById(id).setFocus');
+  MemoAdd('  If Err.Number <> 0 Then');
+  MemoAdd('    Err.Clear');
+  MemoAdd('    On Error GoTo 0');
+  MemoAdd('    Exit Function');
+  MemoAdd('  End If');
+  MemoAdd('  Err.Clear');
   MemoAdd('  sess.findById(id).Text = value');
-  MemoAdd('  sess.findById("wnd[0]").sendVKey 0');
-  MemoAdd('  If Err.Number = 0 Then TrySetText = True');
+  MemoAdd('  If Err.Number = 0 Then TrySetTextNoEnter = True');
   MemoAdd('  Err.Clear');
   MemoAdd('  On Error GoTo 0');
   MemoAdd('End Function');
   MemoAdd('');
   //-------------------------------------------------------
-  MemoAdd('Function TrySetTextByIds(ByVal sess, ByVal ids, ByVal value)');
-  MemoAdd('  TrySetTextByIds = False');
+  MemoAdd('Function TrySetTextByIdsNoEnter(ByVal sess, ByVal ids, ByVal value)');
+  MemoAdd('  TrySetTextByIdsNoEnter = False');
   MemoAdd('  Dim i');
   MemoAdd('  For i = 0 To UBound(ids)');
-  MemoAdd('    If TrySetText(sess, CStr(ids(i)), value) Then');
-  MemoAdd('      TrySetTextByIds = True');
+  MemoAdd('    If TrySetTextNoEnter(sess, CStr(ids(i)), value) Then');
+  MemoAdd('      TrySetTextByIdsNoEnter = True');
   MemoAdd('      Exit Function');
   MemoAdd('    End If');
   MemoAdd('  Next');
   MemoAdd('End Function');
   MemoAdd('');
   //-------------------------------------------------------
-  MemoAdd('Sub PreencherRateioAprovacaoRT7(ByVal idExec, ByVal idRT, ByVal linha, ByVal ccusto, ByVal ElementoPEP, ByVal DiagramaRede, ByVal OperRede)');
+  MemoAdd('Sub TryClearTextByIds(ByVal sess, ByVal ids)');
   MemoAdd('  On Error Resume Next');
-  MemoAdd('  Dim c, pep, r, o, ok, ids');
+  MemoAdd('  Dim i, idAtual');
+  MemoAdd('  For i = 0 To UBound(ids)');
+  MemoAdd('    idAtual = CStr(ids(i))');
+  MemoAdd('    Err.Clear');
+  MemoAdd('    sess.findById(idAtual).setFocus');
+  MemoAdd('    If Err.Number = 0 Then');
+  MemoAdd('      sess.findById(idAtual).Text = ""');
+  MemoAdd('      Err.Clear');
+  MemoAdd('    Else');
+  MemoAdd('      Err.Clear');
+  MemoAdd('    End If');
+  MemoAdd('  Next');
+  MemoAdd('  On Error GoTo 0');
+  MemoAdd('End Sub');
+  MemoAdd('');
+  //-------------------------------------------------------
+  MemoAdd('Function PreencherRateioAprovacaoRT7(ByVal idExec, ByVal idRT, ByVal linha, ByVal ccusto, ByVal ElementoPEP, ByVal DiagramaRede, ByVal OperRede)');
+  MemoAdd('  PreencherRateioAprovacaoRT7 = False');
+  MemoAdd('  On Error Resume Next');
+  MemoAdd('  Dim c, pep, r, o');
+  MemoAdd('  Dim idsCCusto, idsPep, idsRede, idsOperRede');
   MemoAdd('  c   = Trim(CStr(ccusto))');
   MemoAdd('  pep = Trim(CStr(ElementoPEP))');
   MemoAdd('  r   = Trim(CStr(DiagramaRede))');
   MemoAdd('  o   = Trim(CStr(OperRede))');
-  MemoAdd('  ok = False');
+  MemoAdd('  idsCCusto = Array( _');
+  MemoAdd('    "wnd[0]/usr/tblSAPLYSCS_INFADREQTRANSTC_OBJ_APR_RT/ctxtYSCSOBJAPRO-CCUSTO[3,0]", _');
+  MemoAdd('    "wnd[0]/usr/tblSAPLYSCS_INFADREQTRANSTC_OBJ_APR_RT/txtYSCSOBJAPRO-CCUSTO[3,0]" _');
+  MemoAdd('  )');
+  MemoAdd('  idsPep = Array( _');
+  MemoAdd('    "wnd[0]/usr/tblSAPLYSCS_INFADREQTRANSTC_OBJ_APR_RT/ctxtYSCSOBJAPRO-ELEM_PEP[4,0]", _');
+  MemoAdd('    "wnd[0]/usr/tblSAPLYSCS_INFADREQTRANSTC_OBJ_APR_RT/txtYSCSOBJAPRO-ELEM_PEP[4,0]", _');
+  MemoAdd('    "wnd[0]/usr/tblSAPLYSCS_INFADREQTRANSTC_OBJ_APR_RT/ctxtYSCSOBJAPRO-PEP[4,0]", _');
+  MemoAdd('    "wnd[0]/usr/tblSAPLYSCS_INFADREQTRANSTC_OBJ_APR_RT/txtYSCSOBJAPRO-PEP[4,0]", _');
+  MemoAdd('    "wnd[0]/usr/tblSAPLYSCS_INFADREQTRANSTC_OBJ_APR_RT/ctxtYSCSOBJAPRO-ELEM_PEP[3,0]", _');
+  MemoAdd('    "wnd[0]/usr/tblSAPLYSCS_INFADREQTRANSTC_OBJ_APR_RT/txtYSCSOBJAPRO-ELEM_PEP[3,0]", _');
+  MemoAdd('    "wnd[0]/usr/tblSAPLYSCS_INFADREQTRANSTC_OBJ_APR_RT/ctxtYSCSOBJAPRO-PEP[3,0]", _');
+  MemoAdd('    "wnd[0]/usr/tblSAPLYSCS_INFADREQTRANSTC_OBJ_APR_RT/txtYSCSOBJAPRO-PEP[3,0]" _');
+  MemoAdd('  )');
+  MemoAdd('  idsRede = Array( _');
+  MemoAdd('    "wnd[0]/usr/tblSAPLYSCS_INFADREQTRANSTC_OBJ_APR_RT/ctxtYSCSOBJAPRO-REDE[4,0]", _');
+  MemoAdd('    "wnd[0]/usr/tblSAPLYSCS_INFADREQTRANSTC_OBJ_APR_RT/txtYSCSOBJAPRO-REDE[4,0]", _');
+  MemoAdd('    "wnd[0]/usr/tblSAPLYSCS_INFADREQTRANSTC_OBJ_APR_RT/ctxtYSCSOBJAPRO-REDE[3,0]", _');
+  MemoAdd('    "wnd[0]/usr/tblSAPLYSCS_INFADREQTRANSTC_OBJ_APR_RT/txtYSCSOBJAPRO-REDE[3,0]" _');
+  MemoAdd('  )');
+  MemoAdd('  idsOperRede = Array( _');
+  MemoAdd('    "wnd[0]/usr/tblSAPLYSCS_INFADREQTRANSTC_OBJ_APR_RT/ctxtYSCSOBJAPRO-OPER_REDE[5,0]", _');
+  MemoAdd('    "wnd[0]/usr/tblSAPLYSCS_INFADREQTRANSTC_OBJ_APR_RT/txtYSCSOBJAPRO-OPER_REDE[5,0]", _');
+  MemoAdd('    "wnd[0]/usr/tblSAPLYSCS_INFADREQTRANSTC_OBJ_APR_RT/ctxtYSCSOBJAPRO-OPER_REDE[4,0]", _');
+  MemoAdd('    "wnd[0]/usr/tblSAPLYSCS_INFADREQTRANSTC_OBJ_APR_RT/txtYSCSOBJAPRO-OPER_REDE[4,0]" _');
+  MemoAdd('  )');
   MemoAdd('  If Len(c) > 0 Then');
-  MemoAdd('    ok = TrySetText(session, "wnd[0]/usr/tblSAPLYSCS_INFADREQTRANSTC_OBJ_APR_RT/ctxtYSCSOBJAPRO-CCUSTO[3,0]", c)');
-  MemoAdd('    Exit Sub');
+  MemoAdd('    Call TryClearTextByIds(session, idsPep)');
+  MemoAdd('    Call TryClearTextByIds(session, idsRede)');
+  MemoAdd('    Call TryClearTextByIds(session, idsOperRede)');
+  MemoAdd('    PreencherRateioAprovacaoRT7 = TrySetTextByIdsNoEnter(session, idsCCusto, c)');
+  MemoAdd('    On Error GoTo 0');
+  MemoAdd('    Exit Function');
   MemoAdd('  End If');
   MemoAdd('  If Len(pep) > 0 Then');
-  MemoAdd('    ids = Array( _');
-  MemoAdd('      "wnd[0]/usr/tblSAPLYSCS_INFADREQTRANSTC_OBJ_APR_RT/ctxtYSCSOBJAPRO-ELEM_PEP[4,0]", _');
-  MemoAdd('      "wnd[0]/usr/tblSAPLYSCS_INFADREQTRANSTC_OBJ_APR_RT/ctxtYSCSOBJAPRO-PEP[4,0]", _');
-  MemoAdd('      "wnd[0]/usr/tblSAPLYSCS_INFADREQTRANSTC_OBJ_APR_RT/ctxtYSCSOBJAPRO-ELEM_PEP[3,0]", _');
-  MemoAdd('      "wnd[0]/usr/tblSAPLYSCS_INFADREQTRANSTC_OBJ_APR_RT/ctxtYSCSOBJAPRO-PEP[3,0]" _');
-  MemoAdd('    )');
-  MemoAdd('    ok = TrySetTextByIds(session, ids, pep)');
-  MemoAdd('    Exit Sub');
+  MemoAdd('    Call TryClearTextByIds(session, idsCCusto)');
+  MemoAdd('    Call TryClearTextByIds(session, idsRede)');
+  MemoAdd('    Call TryClearTextByIds(session, idsOperRede)');
+  MemoAdd('    PreencherRateioAprovacaoRT7 = TrySetTextByIdsNoEnter(session, idsPep, pep)');
+  MemoAdd('    On Error GoTo 0');
+  MemoAdd('    Exit Function');
   MemoAdd('  End If');
   MemoAdd('  If (Len(r) > 0) And (Len(o) > 0) Then');
-  MemoAdd('    ids = Array( _');
-  MemoAdd('      "wnd[0]/usr/tblSAPLYSCS_INFADREQTRANSTC_OBJ_APR_RT/ctxtYSCSOBJAPRO-REDE[4,0]", _');
-  MemoAdd('      "wnd[0]/usr/tblSAPLYSCS_INFADREQTRANSTC_OBJ_APR_RT/ctxtYSCSOBJAPRO-REDE[3,0]" _');
-  MemoAdd('    )');
-  MemoAdd('    ok = TrySetTextByIds(session, ids, r)');
-  MemoAdd('    ids = Array( _');
-  MemoAdd('      "wnd[0]/usr/tblSAPLYSCS_INFADREQTRANSTC_OBJ_APR_RT/ctxtYSCSOBJAPRO-OPER_REDE[5,0]", _');
-  MemoAdd('      "wnd[0]/usr/tblSAPLYSCS_INFADREQTRANSTC_OBJ_APR_RT/ctxtYSCSOBJAPRO-OPER_REDE[4,0]" _');
-  MemoAdd('    )');
-  MemoAdd('    ok = ok And TrySetTextByIds(session, ids, o)');
-  MemoAdd('    Exit Sub');
+  MemoAdd('    Call TryClearTextByIds(session, idsCCusto)');
+  MemoAdd('    Call TryClearTextByIds(session, idsPep)');
+  MemoAdd('    PreencherRateioAprovacaoRT7 = TrySetTextByIdsNoEnter(session, idsRede, r)');
+  MemoAdd('    If PreencherRateioAprovacaoRT7 Then');
+  MemoAdd('      PreencherRateioAprovacaoRT7 = TrySetTextByIdsNoEnter(session, idsOperRede, o)');
+  MemoAdd('    End If');
+  MemoAdd('    On Error GoTo 0');
+  MemoAdd('    Exit Function');
   MemoAdd('  End If');
   MemoAdd('  On Error GoTo 0');
-  MemoAdd('End Sub');
+  MemoAdd('End Function');
   MemoAdd('');
   //-----------------------------------------------------------------------
 
@@ -4230,17 +6979,23 @@ begin
   MemoAdd('                     ByVal iwerk, ByVal ingrp, ByVal codTrasg, ByVal classePas, _');
   MemoAdd('                     ByVal origem, ByVal destino, ByVal retorno, ByVal dtIda, ByVal hIda, ByVal dtVolta, ByVal hVolta, _');
   MemoAdd('                     ByVal ccusto, ByVal DiagramaRede, ByVal OperRede, ByVal ElementoPEP, _');
-  MemoAdd('                     ByVal cobertura, ByVal Recolhimetno, ByVal salvar)');
+  MemoAdd('                     ByVal cobertura, ByVal Recolhimetno, ByVal classePasR3Fallback, ByVal salvar)');
   MemoAdd('  ProcessarRT7 = False');
   MemoAdd('  On Error Resume Next');
-  MemoAdd('  Dim st, stType, hIda2, hVolta2, rtCriada, temRecolhimento, popupMsg');
+  MemoAdd('  Dim st, stType, hIda2, hVolta2, rtCriada, temRecolhimento, popupMsg, popupDump, popupPernr, popupCpf, popupAceito, popupSrc');
   MemoAdd('  rtCriada = ""');
   MemoAdd('  popupMsg = ""');
+  MemoAdd('  popupDump = ""');
+  MemoAdd('  popupPernr = ""');
+  MemoAdd('  popupCpf = ""');
+  MemoAdd('  popupAceito = False');
+  MemoAdd('  popupSrc = "POPUP"');
   MemoAdd('  hIda2 = Trim(CStr(hIda))');
   MemoAdd('  hVolta2 = Trim(CStr(hVolta))');
   MemoAdd('  If Len(hIda2) = 5 Then hIda2 = hIda2 & ":00"');
   MemoAdd('  If Len(hVolta2) = 5 Then hVolta2 = hVolta2 & ":00"');
   MemoAdd('  temRecolhimento = ((Trim(CStr(Recolhimetno)) = "1") Or (UCase(Trim(CStr(Recolhimetno))) = "TRUE"))');
+  MemoAdd('  If Len(Trim(classePasR3Fallback)) = 0 Then classePasR3Fallback = "TT"');
   MemoAdd('');
   MemoAdd('  If UCase(acao) = "MODIFICAR" Then');
   MemoAdd('    session.findById("wnd[0]/tbar[0]/okcd").text = "/niw52"');
@@ -4294,7 +7049,55 @@ begin
   MemoAdd('  session.findById("wnd[0]/usr/subSUBTELA_001:SAPLYSCS_INFADREQTRANS:0107/" & _');
   MemoAdd('                   "tblSAPLYSCS_INFADREQTRANSTC_RT7/txtYSCSRTITPAX-PASSAGEIRO[8,0]").text = passageiro');
   MemoAdd('  session.findById("wnd[0]").sendVKey 0');
-  MemoAdd('  WScript.Sleep 100');
+  MemoAdd('  WScript.Sleep 300');
+  MemoAdd('');
+  MemoAdd('  If session.Children.Count > 1 Then');
+  MemoAdd('    popupMsg = GetPopupMessageTextStable(session, 20, 300)');
+  MemoAdd('    If Len(Trim(popupMsg)) = 0 Then popupMsg = GetPopupMessageText(session)');
+  MemoAdd('    If MsgCPFComMatriculaValidaRT7(popupMsg) Or PossuiPopupMatriculaRT7(session) Then');
+  MemoAdd('      popupMsg = GetPopupMessageTextStable(session, 10, 300)');
+  MemoAdd('      If Len(Trim(popupMsg)) = 0 Then popupMsg = GetPopupMessageText(session)');
+  MemoAdd('      popupDump = GetPopupDebugDump(session)');
+  MemoAdd('      popupPernr = ExtrairMatriculaPopupMatriculaValidaRT7(popupMsg)');
+  MemoAdd('      If Len(Trim(popupPernr)) = 0 Then popupPernr = ExtrairMatriculaPopupMatriculaValidaRT7(popupDump)');
+  MemoAdd('      popupCpf = ExtrairCPFPopupMatriculaValidaRT7(popupMsg)');
+  MemoAdd('      If Len(Trim(popupCpf)) = 0 Then popupCpf = ExtrairCPFPopupMatriculaValidaRT7(popupDump)');
+  MemoAdd('      If Len(Trim(popupPernr)) = 0 Then');
+  MemoAdd('        If Not ClicarSimPopupMatriculaValidaRT7(session) Then');
+  MemoAdd('          LogLine idExec & "|" & idRT & "|" & linha & "|ERRO_R7_MATRICULA_VALIDA|Nao foi possivel responder ao popup do SAP. TEXTO_POPUP=" & Replace(popupMsg, "|", "/") & "|DUMP=" & Replace(popupDump, "|", "/")');
+  MemoAdd('          Exit Function');
+  MemoAdd('        End If');
+  MemoAdd('        popupAceito = True');
+  MemoAdd('        popupSrc = "TELA_RT7"');
+  MemoAdd('        WScript.Sleep 500');
+  MemoAdd('        popupPernr = CapturarMatriculaPreenchidaRT7(session)');
+  MemoAdd('        If Len(Trim(popupPernr)) = 0 Then');
+  MemoAdd('          LogLine idExec & "|" & idRT & "|" & linha & "|ERRO_R7_MATRICULA_VALIDA|Popup detectado, aceitei SIM mas a matricula nao foi localizada na tela RT7. TEXTO_POPUP=" & Replace(popupMsg, "|", "/") & "|DUMP=" & Replace(popupDump, "|", "/")');
+  MemoAdd('          Call ResetSAP(session)');
+  MemoAdd('          Exit Function');
+  MemoAdd('        End If');
+  MemoAdd('        Call ResetSAP(session)');
+  MemoAdd('      Else');
+  MemoAdd('        If Not ClicarNaoPopupMatriculaValidaRT7(session) Then');
+  MemoAdd('          LogLine idExec & "|" & idRT & "|" & linha & "|ERRO_R7_MATRICULA_VALIDA|Nao foi possivel responder NAO ao popup do SAP. TEXTO_POPUP=" & Replace(popupMsg, "|", "/") & "|DUMP=" & Replace(popupDump, "|", "/")');
+  MemoAdd('          Exit Function');
+  MemoAdd('        End If');
+  MemoAdd('        WScript.Sleep 200');
+  MemoAdd('        If session.Children.Count > 1 Then');
+  MemoAdd('          session.findById("wnd[1]").sendVKey 0');
+  MemoAdd('          WScript.Sleep 100');
+  MemoAdd('        End If');
+  MemoAdd('      End If');
+  MemoAdd('      LogLine idExec & "|" & idRT & "|" & linha & "|R7_RECLASSIFICADO_R3|SAP=" & popupPernr & "|CPF=" & popupCpf & "|MSG=" & Replace(popupMsg, "|", "/") & "|SRC=" & popupSrc');
+  MemoAdd('      ProcessarRT7 = ProcessarRT3(idExec,idRT,linha,"CRIAR","", "R3", popupPernr, contratoFix, tipoDoc, documento, passageiro, _');
+  MemoAdd('                                qmtxt,requis,pessoaContato,foneContato,iwerk,ingrp,codTrasg,classePasR3Fallback,origem,destino,retorno,dtIda,hIda,dtVolta,hVolta, _');
+  MemoAdd('                                ccusto,DiagramaRede,OperRede,ElementoPEP,cobertura,Recolhimetno,salvar)');
+  MemoAdd('      Exit Function');
+  MemoAdd('    Else');
+  MemoAdd('      session.findById("wnd[1]").sendVKey 0');
+  MemoAdd('      WScript.Sleep 100');
+  MemoAdd('    End If');
+  MemoAdd('  End If');
   MemoAdd('');
   MemoAdd('  session.findById("wnd[0]/usr/subSUBTELA_001:SAPLYSCS_INFADREQTRANS:0107/" & _');
   MemoAdd('                   "tblSAPLYSCS_INFADREQTRANSTC_RT7/ctxtYSCSRTSITPAX-CODTRASG[16,0]").text = codTrasg');
@@ -4332,7 +7135,10 @@ begin
   MemoAdd('  WScript.Sleep 100');
   MemoAdd('');
   MemoAdd('  session.findById("wnd[0]/usr/tblSAPLYSCS_INFADREQTRANSTC_OBJ_APR_RT/txtYSCSOBJAPRO-PERCENTUAL[2,0]").text = "100"');
-  MemoAdd('  Call PreencherRateioAprovacaoRT7(idExec, idRT, linha, ccusto, ElementoPEP, DiagramaRede, OperRede)');
+  MemoAdd('  If Not PreencherRateioAprovacaoRT7(idExec, idRT, linha, ccusto, ElementoPEP, DiagramaRede, OperRede) Then');
+  MemoAdd('    LogLine idExec & "|" & idRT & "|" & linha & "|ERRO_RATEIO_RT7|Nao foi possivel preencher o rateio de aprovacao do R7."');
+  MemoAdd('    Exit Function');
+  MemoAdd('  End If');
   MemoAdd('  session.findById("wnd[0]").sendVKey 0');
   MemoAdd('  WScript.Sleep 100');
   MemoAdd('');
@@ -4510,11 +7316,11 @@ begin
   MemoAdd('                    ByVal iwerk, ByVal ingrp, ByVal codTrasg, ByVal classePas, _');
   MemoAdd('                    ByVal origem, ByVal destino, ByVal retorno, ByVal dtIda, ByVal hIda, ByVal dtVolta, ByVal hVolta, _');
   MemoAdd('                    ByVal ccusto, ByVal DiagramaRede, ByVal OperRede, ByVal ElementoPEP, _');
-  MemoAdd('                    ByVal cobertura, ByVal Recolhimetno, ByVal salvar)');
+  MemoAdd('                    ByVal cobertura, ByVal Recolhimetno, ByVal classePasR3Fallback, ByVal salvar)');
   MemoAdd('  If LCase(Trim(tipoRT)) = "r7" Then');
   MemoAdd('    ProcessarRT = ProcessarRT7(idExec,idRT,linha,acao,rtNumero,tipoRT,pernr,contratoFix,tipoDoc,documento,passageiro, _');
   MemoAdd('                              qmtxt,requis,pessoaContato,foneContato,iwerk,ingrp,codTrasg,classePas,origem,destino,retorno,dtIda,hIda,dtVolta,hVolta, _');
-  MemoAdd('                              ccusto,DiagramaRede,OperRede,ElementoPEP,cobertura,Recolhimetno,salvar)');
+  MemoAdd('                              ccusto,DiagramaRede,OperRede,ElementoPEP,cobertura,Recolhimetno,classePasR3Fallback,salvar)');
   MemoAdd('  Else');
   MemoAdd('    ProcessarRT = ProcessarRT3(idExec,idRT,linha,acao,rtNumero,tipoRT,pernr,contratoFix,tipoDoc,documento,passageiro, _');
   MemoAdd('                              qmtxt,requis,pessoaContato,foneContato,iwerk,ingrp,codTrasg,classePas,origem,destino,retorno,dtIda,hIda,dtVolta,hVolta, _');
@@ -4567,7 +7373,7 @@ begin
   MemoAdd('  Dim a, n');
   MemoAdd('  a = itens(i)');
   MemoAdd('  n = UBound(a)');
-  MemoAdd('  If n < 31 Then');
+  MemoAdd('  If n < 32 Then');
   MemoAdd('    LogLine "ERRO_ITEM_TAMANHO|" & i & "|UBOUND=" & n');
   MemoAdd('    errCount = errCount + 1');
   MemoAdd('  Else');
@@ -4578,6 +7384,11 @@ begin
   MemoAdd('    End If');
   MemoAdd('  End If');
   MemoAdd('  WScript.Sleep 100');
+  MemoAdd('  If fsoStop.FileExists(STOPFILE) Then');
+  MemoAdd('    fsoStop.DeleteFile STOPFILE');
+  MemoAdd('    LogLine "INTERROMPIDO_USUARIO|OK=" & okCount & "|ERRO=" & errCount');
+  MemoAdd('    WScript.Quit 2');
+  MemoAdd('  End If');
   MemoAdd('Next');
   MemoAdd('');
   MemoAdd('LogLine "FIM_LOTE|OK=" & okCount & "|ERRO=" & errCount');
@@ -4587,8 +7398,9 @@ begin
   if FileExists(EnderecoLog) then
     DeleteFile(EnderecoLog);
 
-  if ExecFileAndWait(EnderecoVbs, SW_SHOWNORMAL) then
+  if ExecVbsInterruptivel(EnderecoVbs, SW_SHOWNORMAL) then
   begin
+    Interrompido := FPararGeracaoRT;
     if FileExists(EnderecoLog) then
     begin
       LogRetorno := TStringList.Create;
@@ -4599,13 +7411,23 @@ begin
       finally
         LogRetorno.Free;
       end;
-      MessageBox(0,
-        PChar('Processamento SAP concluído!' + sLineBreak +
-              'Itens enviados ao SAP: ' + IntToStr(ItemCount) + sLineBreak +
-              'Registros prontos analisados: ' + IntToStr(QtProntos) + sLineBreak +
-              'Registros bloqueados: ' + IntToStr(QtBloqueados)),
-        'Colibri',
-        MB_ICONINFORMATION);
+      if Interrompido then
+        MessageBox(0,
+          PChar('Processamento interrompido pelo usuário.' + sLineBreak +
+                'Os registros já processados pelo SAP foram importados.' + sLineBreak +
+                'Itens enviados ao SAP: ' + IntToStr(ItemCount) + sLineBreak +
+                'Registros prontos analisados: ' + IntToStr(QtProntos) + sLineBreak +
+                'Registros bloqueados: ' + IntToStr(QtBloqueados)),
+          'Colibri',
+          MB_ICONWARNING)
+      else
+        MessageBox(0,
+          PChar('Processamento SAP concluído!' + sLineBreak +
+                'Itens enviados ao SAP: ' + IntToStr(ItemCount) + sLineBreak +
+                'Registros prontos analisados: ' + IntToStr(QtProntos) + sLineBreak +
+                'Registros bloqueados: ' + IntToStr(QtBloqueados)),
+          'Colibri',
+          MB_ICONINFORMATION);
     end
     else
       MessageBox(0,PChar('Script terminou, mas não encontrei o log: ' + EnderecoLog),
@@ -4620,9 +7442,38 @@ function TFrmConsultaExecutantesProgramados.CriarRegistroTabelaRT(Dados: TDadosR
 var
   Q: TADOQuery;
   QID: TADOQuery;
+  QExec: TADOQuery;
   NewID: Variant;
+  StatusInicial, MensagemInicial: string;
 begin
   Q := FrmDataModule.ADOQueryAuxTabelaRT;
+  StatusInicial := '';
+  MensagemInicial := '';
+  NormalizarRecolhimentoDadosRT(Dados);
+
+  if Dados.idProgramacaoExecutante > 0 then
+  begin
+    QExec := TADOQuery.Create(nil);
+    try
+      QExec.Connection := FrmDataModule.ADOConnectionColibri;
+      QExec.ParamCheck := True;
+      QExec.SQL.Text :=
+        'SELECT RT_Status, RT_Mensagem ' +
+        'FROM tblProgramacaoExecutante ' +
+        'WHERE idProgramacaoExecutante = :idProgramacaoExecutante';
+      QExec.Parameters.ParamByName('idProgramacaoExecutante').Value :=
+        Dados.idProgramacaoExecutante;
+      QExec.Open;
+
+      if not QExec.Eof then
+      begin
+        StatusInicial := Trim(CampoAsString(QExec, 'RT_Status'));
+        MensagemInicial := Trim(CampoAsString(QExec, 'RT_Mensagem'));
+      end;
+    finally
+      QExec.Free;
+    end;
+  end;
 
   // garante conexão
   if not Assigned(Q.Connection) then
@@ -4684,10 +7535,29 @@ begin
     //-------------------------------------------------------
     if Q.FindField('RT_Status') <> nil then
     begin
-      if Trim(Dados.RTNumero) <> '' then
+      if StatusInicial <> '' then
+        Q.FieldByName('RT_Status').AsString := Copy(StatusInicial, 1, 40)
+      else if Trim(Dados.RTNumero) <> '' then
         Q.FieldByName('RT_Status').AsString := RT_STATUS_EMITIDA
       else
-        Q.FieldByName('RT_Status').AsString := RT_STATUS_PRONTO_EMITIR;
+        Q.FieldByName('RT_Status').AsString := RT_STATUS_ERRO_EMISSAO;
+    end;
+
+    if Q.FindField('RT_Mensagem') <> nil then
+    begin
+      if MensagemInicial <> '' then
+        Q.FieldByName('RT_Mensagem').AsString := Copy(MensagemInicial, 1, 100)
+      else if SameText(StatusInicial, RT_STATUS_PRONTO_EMITIR) then
+        Q.FieldByName('RT_Mensagem').AsString := MSG_RT_PRONTO_EMITIR
+      else if SameText(StatusInicial, RT_STATUS_PENDENTE) then
+        Q.FieldByName('RT_Mensagem').AsString := MSG_RT_PENDENTE
+      else if SameText(StatusInicial, RT_STATUS_NAO_CRIAR) then
+        Q.FieldByName('RT_Mensagem').AsString := MSG_RT_NAO_CRIAR
+      else if Trim(Dados.RTNumero) <> '' then
+        Q.FieldByName('RT_Mensagem').AsString := MSG_RT_EMITIDA
+      else
+        Q.FieldByName('RT_Mensagem').AsString :=
+          NormalizarMensagemStatusRTTabela(RT_STATUS_ERRO_EMISSAO, Dados.RTNumero, '');
     end;
 
     Q.Post;
@@ -4753,7 +7623,7 @@ begin
       'FROM tblExecutante '+
       'WHERE CPF = :CPF OR CPF = :CPF2';
     Q.Parameters.ParamByName('CPF').Value  := Trim(CPF);
-    Q.Parameters.ParamByName('CPF2').Value := FrmPrincipal.FormatarCPF(FrmPrincipal.SomenteNumero(CPF));
+    Q.Parameters.ParamByName('CPF2').Value := FrmPrincipal.FormatarCPF(CPF);
   end
   else if Trim(Passaporte) <> '' then
   begin
@@ -4818,6 +7688,24 @@ var
   Partes: TArray<string>;
   IdExec, IdRT: Integer;
   Evento, Valor, NumeroRT, StatusUnico, ValorNorm: string;
+  CodigoSAPDetectado, DocumentoDetectado: string;
+
+  function ExtrairValorEvento(const AChave: string): string;
+  var
+    I, TamPrefixo: Integer;
+    ParteAtual, Prefixo: string;
+  begin
+    Result := '';
+    Prefixo := UpperCase(Trim(AChave)) + '=';
+    TamPrefixo := Length(Prefixo);
+
+    for I := 5 to High(Partes) do
+    begin
+      ParteAtual := Trim(Partes[I]);
+      if UpperCase(Copy(ParteAtual, 1, TamPrefixo)) = Prefixo then
+        Exit(Copy(ParteAtual, TamPrefixo + 1, MaxInt));
+    end;
+  end;
 begin
   if Trim(LinhaLog) = '' then
     Exit;
@@ -4843,6 +7731,20 @@ begin
   ValorNorm := NormalizarMensagemLog(Valor);
 
   NumeroRT := '';
+
+  if Evento = 'R7_RECLASSIFICADO_R3' then
+  begin
+    CodigoSAPDetectado := ExtrairValorEvento('SAP');
+    DocumentoDetectado := ExtrairValorEvento('CPF');
+
+    ProcessarEventoR7ComMatriculaValida(
+      IdExec,
+      IdRT,
+      CodigoSAPDetectado,
+      DocumentoDetectado
+    );
+    Exit;
+  end;
 
   if Evento = 'RT_CRIADA' then
   begin
@@ -4920,20 +7822,22 @@ begin
     Exit;
   end;
 
-  if Evento = 'ERRO' then
+  if Copy(Evento, 1, 4) = 'ERRO' then
   begin
+    StatusUnico := StatusUnicoPorEventoSAP('RT_NAO_CONFIRMADA', ValorNorm, '');
+
     AtualizarRetornoTabelaRT(
       IdRT,
       ValorNorm,
       '',
-      RT_STATUS_ERRO_EMISSAO
+      StatusUnico
     );
 
     AtualizarRetornoExecutante(
       IdExec,
       ValorNorm,
       '',
-      RT_STATUS_ERRO_EMISSAO
+      StatusUnico
     );
     Exit;
   end;
@@ -4978,9 +7882,18 @@ begin
 
   StatusSeguro := Trim(RT_Status);
 
-  // tabela soberana não deve ficar como CANCELADA
+  // tblProgramacaoExecutante não deve ficar como CANCELADA
   if SameText(StatusSeguro, RT_STATUS_CANCELADA) then
     StatusSeguro := RT_STATUS_JA_EXISTE;
+
+  // tblProgramacaoExecutante nunca deve receber ORFA
+  if SameText(StatusSeguro, RT_STATUS_ORFA) then
+  begin
+    if Trim(RT_Numero) <> '' then
+      StatusSeguro := RT_STATUS_JA_EXISTE
+    else
+      StatusSeguro := RT_STATUS_ERRO_EMISSAO;
+  end;
 
   if Trim(StatusSeguro) = '' then
     StatusSeguro := RT_STATUS_PENDENTE;
@@ -5003,20 +7916,20 @@ begin
       100
     );
 
-    RTSafe := AjustarTextoParaCampo(
-      FrmDataModule.ADOConnectionColibri,
-      'tblProgramacaoExecutante',
-      'RT',
-      Trim(RT_Numero),
-      15
-    );
-
     StatusSafe := AjustarTextoParaCampo(
       FrmDataModule.ADOConnectionColibri,
       'tblProgramacaoExecutante',
       'RT_Status',
       StatusSeguro,
-      40
+      30
+    );
+
+    RTSafe := AjustarTextoParaCampo(
+      FrmDataModule.ADOConnectionColibri,
+      'tblProgramacaoExecutante',
+      'RT',
+      RT_Numero,
+      50
     );
 
     HoraIdaSafe := AjustarTextoParaCampo(
@@ -5024,7 +7937,7 @@ begin
       'tblProgramacaoExecutante',
       'RT_HoraIda',
       RT_HoraIda,
-      5
+      20
     );
 
     HoraVoltaSafe := AjustarTextoParaCampo(
@@ -5032,7 +7945,7 @@ begin
       'tblProgramacaoExecutante',
       'RT_HoraVolta',
       RT_HoraVolta,
-      5
+      20
     );
 
     ModalSafe := AjustarTextoParaCampo(
@@ -5040,7 +7953,7 @@ begin
       'tblProgramacaoExecutante',
       'RT_Modal',
       RT_Modal,
-      5
+      10
     );
 
     ClasseSafe := AjustarTextoParaCampo(
@@ -5048,7 +7961,7 @@ begin
       'tblProgramacaoExecutante',
       'RT_Classe',
       RT_Classe,
-      5
+      10
     );
 
     RecolherParaSafe := AjustarTextoParaCampo(
@@ -5056,7 +7969,7 @@ begin
       'tblProgramacaoExecutante',
       'RecolherPara',
       RecolherPara,
-      20
+      100
     );
 
     Q.SQL.Text :=
@@ -5107,7 +8020,14 @@ begin
   '.::ATENÇÃO::.',36) = 6 then
   begin
     HoraComecou := Now;
-    GerarMultiplasRTsArray;
+    btnPararGeracaoRT.Enabled := True;
+    btnPararGeracaoRT.Visible := True;
+    try
+      GerarMultiplasRTsArray;
+    finally
+      btnPararGeracaoRT.Visible := False;
+      btnPararGeracaoRT.Enabled := False;
+    end;
 
     FrmDataModule.ADOQueryConsultaExecutantesProgramados.Active := False;
     FrmDataModule.ADOQueryConsultaExecutantesProgramados.Active := True;
@@ -5213,6 +8133,25 @@ begin
 end;
 
 
+procedure TFrmConsultaExecutantesProgramados.actPararGeracaoRTExecute(Sender: TObject);
+var
+  F: TextFile;
+begin
+  FPararGeracaoRT := True;
+  btnPararGeracaoRT.Enabled := False;
+  btnPararGeracaoRT.Caption := 'Parando...';
+  if FEnderecoStopFlag <> '' then
+  begin
+    try
+      AssignFile(F, FEnderecoStopFlag);
+      Rewrite(F);
+      CloseFile(F);
+    except
+      // ignora falha ao criar o arquivo flag
+    end;
+  end;
+end;
+
 procedure TFrmConsultaExecutantesProgramados.actPrepararDadosRTExecute(
   Sender: TObject);
 var
@@ -5224,7 +8163,9 @@ begin
     PChar(
       'Como deseja preparar a programação para criação das RTs?' + sLineBreak + sLineBreak +
       'SIM = Preparação incremental' + sLineBreak +
-      '     Reprocessa somente registros pendentes, com erro ou inconsistentes.' + sLineBreak + sLineBreak +
+      '     Processa registros ainda não preparados e também' + sLineBreak +
+      '     reavalia pendências/erros após correções.' + sLineBreak +
+      '     Preserva registros já estáveis, como PRONTO_EMITIR.' + sLineBreak + sLineBreak +
       'NÃO = Preparação total' + sLineBreak +
       '     Reprocessa todos os registros do período.' + sLineBreak + sLineBreak +
       'CANCELAR = Não executar.'
@@ -5252,17 +8193,11 @@ begin
 
   Screen.Cursor := crSQLWait;
   try
-    actProcurarProgramacaoExecutante.Execute;
-    actProcurarProgramacaoRT.Execute;
-    actProcurarSAPImport.Execute;
-
     ReclassificarExecutantesParaR3NoPeriodo(
       dataInicio.Date,
       dataFim.Date,
       ForcarTudo
     );
-
-    actProcurarProgramacaoExecutante.Execute;
 
     PrepararProgramacaoExecutanteParaRT(
       dataInicio.Date,
@@ -5270,9 +8205,8 @@ begin
       ForcarTudo
     );
 
-    actProcurarProgramacaoExecutante.Execute;
-    actProcurarProgramacaoRT.Execute;
-    actProcurarSAPImport.Execute;
+    if PageControl1.TabIndex = 1 then
+      actProcurarProgramacaoRT.Execute;
   finally
     Screen.Cursor := crDefault;
   end;
@@ -5374,6 +8308,9 @@ function TFrmConsultaExecutantesProgramados.PrecisaPrepararRegistro(
 var
   Status, RTNumero, MsgAtual: string;
 begin
+  if RegistroRTJaPreparado(DS, AForcarTudo) then
+    Exit(False);
+
   if AForcarTudo then
     Exit(True);
 
@@ -5395,7 +8332,7 @@ begin
       Exit(True);
 
     { se veio da importação SAP e por algum motivo ainda não consolidou }
-    if (Pos('IMPORTADO DO SAP POR', MsgAtual) > 0) and
+  if (Pos('SAP ', MsgAtual) = 1) and
        (Status <> RT_STATUS_JA_EXISTE) then
       Exit(True);
 
@@ -5438,6 +8375,50 @@ begin
   Result := True;
 end;
 
+function TFrmConsultaExecutantesProgramados.StatusPermiteReprocessarIncremental(
+  const AStatus: string): Boolean;
+var
+  Status: string;
+begin
+  Status := StatusRTNormalizado(AStatus);
+
+  Result :=
+    (Status = RT_STATUS_PENDENTE) or
+    (Status = RT_STATUS_ERRO_EMISSAO) or
+    (Status = RT_STATUS_ERRO_NAO_ATIVO) or
+    (Status = RT_STATUS_ERRO_CONFLITO_RT);
+end;
+
+function TFrmConsultaExecutantesProgramados.RegistroRTJaPreparado(
+  DS: TDataSet; const AForcarTudo: Boolean): Boolean;
+var
+  StatusAtual, MensagemAtual, DestinoAtual, RecolherParaAtual: string;
+begin
+  if AForcarTudo then
+    Exit(False);
+
+  if (DS = nil) or (not DS.Active) then
+    Exit(False);
+
+  StatusAtual := Trim(CampoAsString(DS, 'RT_Status'));
+  MensagemAtual := Trim(CampoAsString(DS, 'RT_Mensagem'));
+
+  if StatusPermiteReprocessarIncremental(StatusAtual) then
+    Exit(False);
+
+  if (DS.FindField('booleanRecolhimento') <> nil) and
+     DS.FieldByName('booleanRecolhimento').AsBoolean then
+  begin
+    DestinoAtual := Trim(CampoAsString(DS, 'txtDestino'));
+    RecolherParaAtual := Trim(CampoAsString(DS, 'RecolherPara'));
+
+    if not RecolhimentoValidoParaRT(DestinoAtual, RecolherParaAtual, True) then
+      Exit(False);
+  end;
+
+  Result := (StatusAtual <> '') and (MensagemAtual <> '');
+end;
+
 procedure TFrmConsultaExecutantesProgramados.PrepararProgramacaoExecutanteParaRT(
   const ADataIni, ADataFim: TDateTime;
   const AForcarTudo: Boolean = False);
@@ -5451,11 +8432,7 @@ begin
 
   AplicarRegrasAutomaticasRT(ADataIni, ADataFim, AForcarTudo);
 
-  actProcurarProgramacaoExecutante.Execute;
-
   AplicarRegrasRecolhimentoBanco(ADataIni, ADataFim, AForcarTudo);
-
-  actProcurarProgramacaoExecutante.Execute;
 
   RecalcularClassesRTNoPeriodo(ADataIni, ADataFim, AForcarTudo);
 
@@ -5468,10 +8445,13 @@ function TFrmConsultaExecutantesProgramados.PrecisaReprocessarRecolhimentoOuClas
   DS: TDataSet; const AForcarTudo: Boolean): Boolean;
 var
   Status, TipoRT, ClasseAtual, ClasseEsperada: string;
-  Origem, RecolherPara, HoraVolta: string;
+  Origem, Destino, RecolherPara, HoraVolta: string;
   BooleanRecolhimento, EhTransbordo, TemDataVolta: Boolean;
   RTNumero: string;
 begin
+  if RegistroRTJaPreparado(DS, AForcarTudo) then
+    Exit(False);
+
   if AForcarTudo then
     Exit(True);
 
@@ -5511,12 +8491,16 @@ begin
 
   ClasseAtual := UpperCase(Trim(CampoAsString(DS, 'RT_Classe')));
   Origem := UpperCase(Trim(CampoAsString(DS, 'Origem')));
+  Destino := Trim(CampoAsString(DS, 'txtDestino'));
   RecolherPara := Trim(CampoAsString(DS, 'RecolherPara'));
   HoraVolta := Trim(CampoAsString(DS, 'RT_HoraVolta'));
 
   if DS.FindField('booleanRecolhimento') <> nil then
     BooleanRecolhimento := DS.FieldByName('booleanRecolhimento').AsBoolean
   else
+    BooleanRecolhimento := False;
+
+  if not RecolhimentoValidoParaRT(Destino, RecolherPara, BooleanRecolhimento) then
     BooleanRecolhimento := False;
 
   if DS.FindField('RT_Transbordo') <> nil then
@@ -5531,6 +8515,9 @@ begin
   { inconsistência nos campos de recolhimento }
   if BooleanRecolhimento then
   begin
+    if not RecolhimentoValidoParaRT(Destino, RecolherPara, True) then
+      Exit(True);
+
     if (RecolherPara = '') or (HoraVolta = '') or (not TemDataVolta) then
       Exit(True);
   end
@@ -5578,7 +8565,7 @@ begin
   if RTNum <> '' then
     Exit(RT_STATUS_JA_EXISTE);
 
-  Result := RT_STATUS_PENDENTE;
+  Result := RT_STATUS_ERRO_EMISSAO;
 end;
 
 procedure TFrmConsultaExecutantesProgramados.SincronizarProgramacaoExecutanteComRTExistente(
@@ -5603,6 +8590,8 @@ begin
 
   QRT := TADOQuery.Create(nil);
   try
+    MontarIndiceProgramacaoExecutanteSincronizacao(ADataIni, ADataFim);
+
     QRT.Connection := FrmDataModule.ADOConnectionRT;
     QRT.SQL.Text :=
       'SELECT * ' +
@@ -5636,14 +8625,11 @@ begin
 
       IdExecCorreto := BuscarProgramacaoExecutanteParaSincronizarRT(QRT);
 
-      if (IdExecCorreto > 0) and (not ExecutanteIdAceitaRT(IdExecCorreto)) then
-        IdExecCorreto := 0;
-
       if (IdExecAtual > 0) and (IdExecAtual <> IdExecCorreto) then
       begin
         LimparProgramacaoExecutanteRT(
           IdExecAtual,
-          'RT desvinculada por inconsistência entre RT local e programação vigente'
+          'RT desvinculada por inconsistência.'
         );
       end;
 
@@ -5691,7 +8677,7 @@ begin
             RT_Status := RT_STATUS_PRONTO_EMITIR;
 
           if Trim(MensagemRT) = '' then
-            MensagemRT := 'RT sincronizada com a programação vigente';
+          MensagemRT := 'RT sincronizada.';
         end;
 
         // se houve cancelamento real no SAP / espelho local,
@@ -5757,6 +8743,7 @@ begin
     );
   finally
     QRT.Free;
+    LimparIndiceProgramacaoExecutanteSincronizacao;
   end;
 end;
 
@@ -5828,6 +8815,12 @@ begin
         else
           BooleanRecolhimentoAtual := False;
 
+        if not RecolhimentoValidoParaRT(
+                 ADestino,
+                 Trim(CampoAsString(DS, 'RecolherPara')),
+                 BooleanRecolhimentoAtual) then
+          BooleanRecolhimentoAtual := False;
+
         PlataformaOrigem := TProgramacaoRTUtils.DadosPlataforma_RT(AOrigem);
         PlataformaDestino := TProgramacaoRTUtils.DadosPlataforma_RT(ADestino);
 
@@ -5838,8 +8831,8 @@ begin
 
         Modal := DeterminarModalAutomatico(AOrigem, ADestino);
 
-        if Trim(CodigoSAPNormalizado) <> '' then
-          TipoRT := DeterminarTipoRTAutomatico(CodigoSAPNormalizado)
+        if Trim(TipoRTNormalizado) <> '' then
+          TipoRT := TipoRTNormalizado
         else
           TipoRT := DeterminarTipoRTAutomatico(CodigoSAPOriginal);
 
@@ -5877,7 +8870,8 @@ begin
               DS,
               Horario,
               AOrigem,
-              BooleanRecolhimentoAtual
+              BooleanRecolhimentoAtual,
+              not AForcarTudo  // SIM (incremental): preserva RecolherPara já preenchido
             );
           end;
 
@@ -5887,7 +8881,7 @@ begin
             PlataformaOrigem,
             PlataformaDestino
           ) then
-            DS.FieldByName('RT_Mensagem').AsString := 'NÃO CRIAR RT';
+            DS.FieldByName('RT_Mensagem').AsString := 'Não criar RT.';
 
           DS.Post;
         except
@@ -6029,6 +9023,19 @@ begin
   Q := TADOQuery.Create(nil);
   try
     Q.Connection := FrmDataModule.ADOConnectionRT;
+
+    // Exceção: qualquer destino TMIB não deve recolher
+    InserirRegra(
+      True,
+      5,
+      'Destino TMIB não tem recolhimento',
+      '',
+      'TMIB',
+      '',
+      'NAO',
+      '',
+      'Exceção para destino TMIB'
+    );
 
     // Regra atual: TMIB e destino que cria RT => recolher para origem
     InserirRegra(
@@ -6360,36 +9367,6 @@ begin
   );
 end;
 
-function TFrmConsultaExecutantesProgramados.ExecutanteIdAceitaRT(
-  const AIdProgramacaoExecutante: Integer): Boolean;
-var
-  Q: TADOQuery;
-begin
-  Result := False;
-
-  if AIdProgramacaoExecutante <= 0 then
-    Exit;
-
-  Q := TADOQuery.Create(nil);
-  try
-    Q.Connection := FrmDataModule.ADOConnectionColibri;
-    Q.SQL.Text :=
-      'SELECT pd.DataProgramacao, pd.txtDestino, pe.* ' +
-      'FROM tblProgramacaoDiaria pd ' +
-      'INNER JOIN tblProgramacaoExecutante pe ' +
-      '  ON pd.idProgramacaoDiaria = pe.CodigoProgramacaoDiaria ' +
-      'WHERE pe.idProgramacaoExecutante = :ID';
-
-    Q.Parameters.ParamByName('ID').Value := AIdProgramacaoExecutante;
-    Q.Open;
-
-    if not Q.Eof then
-      Result := ExecutanteAceitaRT(Q);
-  finally
-    Q.Free;
-  end;
-end;
-
 procedure TFrmConsultaExecutantesProgramados.AtualizarVinculoProgramacaoRTExecutante(
   const AIdProgramacaoRT, AIdProgramacaoExecutante: Integer);
 var
@@ -6449,14 +9426,136 @@ begin
   end;
 end;
 
+function TFrmConsultaExecutantesProgramados.ChaveBaseProgramacaoSincronizacao(
+  const ADataProgramacao: TDateTime;
+  const AOrigem, ADestino: string): string;
+begin
+  Result :=
+    NormalizarDataChave(Trunc(ADataProgramacao)) + '|' +
+    NormalizarTextoChave(AOrigem) + '|' +
+    NormalizarTextoChave(ADestino);
+end;
+
+procedure TFrmConsultaExecutantesProgramados.RegistrarIndiceProgramacaoExecutanteSincronizacao(
+  AIndice: TDictionary<string, Integer>; const AChave: string;
+  const AIdProgramacaoExecutante: Integer);
+var
+  IdAtual: Integer;
+begin
+  if (AIndice = nil) or (AIdProgramacaoExecutante <= 0) or (Trim(AChave) = '') then
+    Exit;
+
+  if AIndice.TryGetValue(AChave, IdAtual) then
+  begin
+    if AIdProgramacaoExecutante > IdAtual then
+      AIndice.AddOrSetValue(AChave, AIdProgramacaoExecutante);
+  end
+  else
+    AIndice.Add(AChave, AIdProgramacaoExecutante);
+end;
+
+procedure TFrmConsultaExecutantesProgramados.LimparIndiceProgramacaoExecutanteSincronizacao;
+begin
+  FreeAndNil(FIndiceSyncRTPorSAP);
+  FreeAndNil(FIndiceSyncRTPorDocumento);
+  FreeAndNil(FIndiceSyncRTPorPassaporte);
+end;
+
+procedure TFrmConsultaExecutantesProgramados.MontarIndiceProgramacaoExecutanteSincronizacao(
+  const ADataIni, ADataFim: TDateTime);
+var
+  Q: TADOQuery;
+  DtIni, DtFimMais1: TDateTime;
+  IdExec: Integer;
+  BaseChave, CodigoSAP, CodigoSAPNormalizado, Documento, Passaporte: string;
+begin
+  LimparIndiceProgramacaoExecutanteSincronizacao;
+
+  FIndiceSyncRTPorSAP := TDictionary<string, Integer>.Create;
+  FIndiceSyncRTPorDocumento := TDictionary<string, Integer>.Create;
+  FIndiceSyncRTPorPassaporte := TDictionary<string, Integer>.Create;
+
+  DtIni := Trunc(ADataIni);
+  DtFimMais1 := Trunc(ADataFim) + 1;
+
+  Q := TADOQuery.Create(nil);
+  try
+    Q.Connection := FrmDataModule.ADOConnectionColibri;
+    Q.ParamCheck := True;
+    Q.SQL.Text :=
+      'SELECT pd.DataProgramacao, pd.txtDestino, pe.idProgramacaoExecutante, ' +
+      '       pe.Origem, pe.CodigoSAP, pe.Documento, pe.OutroDocumento ' +
+      'FROM tblProgramacaoDiaria pd ' +
+      'INNER JOIN tblProgramacaoExecutante pe ' +
+      '  ON pd.idProgramacaoDiaria = pe.CodigoProgramacaoDiaria ' +
+      'WHERE pd.DataProgramacao >= :DtIni ' +
+      '  AND pd.DataProgramacao < :DtFimMais1 ' +
+      'ORDER BY pe.idProgramacaoExecutante DESC';
+
+    Q.Parameters.ParamByName('DtIni').Value := DtIni;
+    Q.Parameters.ParamByName('DtFimMais1').Value := DtFimMais1;
+    Q.Open;
+
+    while not Q.Eof do
+    begin
+      if ExecutanteAceitaRT(Q) then
+      begin
+        IdExec := Q.FieldByName('idProgramacaoExecutante').AsInteger;
+        BaseChave := ChaveBaseProgramacaoSincronizacao(
+          Q.FieldByName('DataProgramacao').AsDateTime,
+          Q.FieldByName('Origem').AsString,
+          Q.FieldByName('txtDestino').AsString
+        );
+
+        CodigoSAP := Trim(Q.FieldByName('CodigoSAP').AsString);
+        CodigoSAPNormalizado := NormalizarCodigoSAP(CodigoSAP);
+        if CodigoSAP <> '' then
+          RegistrarIndiceProgramacaoExecutanteSincronizacao(
+            FIndiceSyncRTPorSAP,
+            BaseChave + '|SAP=' + NormalizarTextoChave(CodigoSAP),
+            IdExec
+          );
+        if (CodigoSAPNormalizado <> '') and
+           (not SameText(CodigoSAPNormalizado, CodigoSAP)) then
+          RegistrarIndiceProgramacaoExecutanteSincronizacao(
+            FIndiceSyncRTPorSAP,
+            BaseChave + '|SAP=' + NormalizarTextoChave(CodigoSAPNormalizado),
+            IdExec
+          );
+
+        Documento := NormalizarDocumentoChave(Q.FieldByName('Documento').AsString);
+        if Documento <> '' then
+          RegistrarIndiceProgramacaoExecutanteSincronizacao(
+            FIndiceSyncRTPorDocumento,
+            BaseChave + '|DOC=' + Documento,
+            IdExec
+          );
+
+        Passaporte := NormalizarDocumentoChave(Q.FieldByName('OutroDocumento').AsString);
+        if Passaporte <> '' then
+          RegistrarIndiceProgramacaoExecutanteSincronizacao(
+            FIndiceSyncRTPorPassaporte,
+            BaseChave + '|P=' + Passaporte,
+            IdExec
+          );
+      end;
+
+      Q.Next;
+    end;
+  finally
+    Q.Free;
+  end;
+end;
+
 function TFrmConsultaExecutantesProgramados.BuscarProgramacaoExecutanteParaSincronizarRT(
   DSRT: TDataSet): Integer;
 var
   Q: TADOQuery;
   DtIni, DtFimMais1, DataIdaRT: TDateTime;
   OrigemRT, DestinoRT, OrigemLocal, DestinoLocal: string;
-  CodigoSAPRT, ChavePassRT, TipoPass, ValorPass: string;
+  CodigoSAPRT, CodigoSAPRTNormalizado, ChavePassRT, TipoPass, ValorPass: string;
   DocumentoNumerico, DocumentoFmt: string;
+  BaseChave: string;
 
   function ExtrairTipoValorChavePassageiro(
     const AChave: string;
@@ -6501,7 +9600,76 @@ begin
   DestinoLocal := PlataformaPorNomeSAP(DestinoRT);
 
   CodigoSAPRT := RemoverZerosEsquerda(Trim(DSRT.FieldByName('CodigoSAP').AsString));
+  CodigoSAPRTNormalizado := NormalizarCodigoSAP(CodigoSAPRT);
   ChavePassRT := Trim(DSRT.FieldByName('ChavePassageiro').AsString);
+
+  if FIndiceSyncRTPorSAP <> nil then
+  begin
+    BaseChave := ChaveBaseProgramacaoSincronizacao(
+      DataIdaRT,
+      OrigemLocal,
+      DestinoLocal
+    );
+
+    if CodigoSAPRT <> '' then
+    begin
+      if FIndiceSyncRTPorSAP.TryGetValue(
+           BaseChave + '|SAP=' + NormalizarTextoChave(CodigoSAPRT),
+           Result) then
+        Exit;
+
+      if (CodigoSAPRTNormalizado <> '') and
+         (not SameText(CodigoSAPRTNormalizado, CodigoSAPRT)) and
+         FIndiceSyncRTPorSAP.TryGetValue(
+           BaseChave + '|SAP=' + NormalizarTextoChave(CodigoSAPRTNormalizado),
+           Result) then
+        Exit;
+
+      Exit(0);
+    end;
+
+    if ExtrairTipoValorChavePassageiro(ChavePassRT, TipoPass, ValorPass) then
+    begin
+      TipoPass := NormalizarTextoChave(TipoPass);
+
+      if TipoPass = 'SAP' then
+      begin
+        if FIndiceSyncRTPorSAP.TryGetValue(
+             BaseChave + '|SAP=' + NormalizarTextoChave(ValorPass),
+             Result) then
+          Exit;
+
+        ValorPass := NormalizarCodigoSAP(ValorPass);
+        if (ValorPass <> '') and
+           FIndiceSyncRTPorSAP.TryGetValue(
+             BaseChave + '|SAP=' + NormalizarTextoChave(ValorPass),
+             Result) then
+          Exit;
+      end
+      else if (TipoPass = 'C') or (TipoPass = 'DOC') then
+      begin
+        ValorPass := NormalizarDocumentoChave(ValorPass);
+        if (ValorPass <> '') and
+           FIndiceSyncRTPorDocumento.TryGetValue(
+             BaseChave + '|DOC=' + ValorPass,
+             Result) then
+          Exit;
+      end
+      else if TipoPass = 'P' then
+      begin
+        ValorPass := NormalizarDocumentoChave(ValorPass);
+        if (ValorPass <> '') and
+           FIndiceSyncRTPorPassaporte.TryGetValue(
+             BaseChave + '|P=' + ValorPass,
+             Result) then
+          Exit;
+      end;
+
+      Exit(0);
+    end;
+
+    Exit(0);
+  end;
 
   DtIni := DataIdaRT;
   DtFimMais1 := DtIni + 1;
@@ -6812,7 +9980,7 @@ begin
             0,
             IdExec,
             False,
-            'Falhou ao criar/localizar tblProgramacaoRT'
+            'Falha ao criar/localizar RT.'
           );
 
           if IdExec <= 0 then
@@ -6931,12 +10099,19 @@ function TFrmConsultaExecutantesProgramados.PlataformaPorNomeSAP(
   const ANomeSAP: string): string;
 var
   Q: TADOQuery;
-  Nome: string;
+  Nome, NomeCache: string;
 begin
   Nome := Trim(ANomeSAP);
   Result := Nome;
 
   if Nome = '' then
+    Exit;
+
+  if FPlataformaPorNomeSAPCache = nil then
+    FPlataformaPorNomeSAPCache := TDictionary<string, string>.Create;
+
+  NomeCache := NormalizarTextoChave(Nome);
+  if FPlataformaPorNomeSAPCache.TryGetValue(NomeCache, Result) then
     Exit;
 
   Q := TADOQuery.Create(nil);
@@ -6971,6 +10146,8 @@ begin
   finally
     Q.Free;
   end;
+
+  FPlataformaPorNomeSAPCache.AddOrSetValue(NomeCache, Result);
 end;
 
 function TFrmConsultaExecutantesProgramados.BuscarProgramacaoExecutantePorImportacaoSAP(
@@ -7060,6 +10237,11 @@ begin
       );
 
     Dados.booleanRecolhimento := Q.FieldByName('booleanRecolhimento').AsBoolean;
+    if not RecolhimentoValidoParaRT(
+             Dados.Destino,
+             Dados.Retorno,
+             Dados.booleanRecolhimento) then
+      Dados.booleanRecolhimento := False;
 
     ClasseCalc := Trim(DadosSAP.RT_Classe);
     if ClasseCalc = '' then
@@ -7168,6 +10350,8 @@ procedure TFrmConsultaExecutantesProgramados.AvaliarNecessidadeCriacaoRT(
 var
   DS: TDataSet;
   Status, Msg: string;
+  IdProgramacaoRT: Integer;
+  RTNumero: string;
 begin
   DS := FrmDataModule.DataSourceConsultaExecutantesProgramados.DataSet;
   if DS = nil then
@@ -7193,6 +10377,13 @@ begin
           if Trim(Msg) = '' then
             Msg := MSG_RT_PENDENTE;
 
+          IdProgramacaoRT := 0;
+          if (DS.FindField('idProgramacaoRT') <> nil) and
+             (not VarIsNull(DS.FieldByName('idProgramacaoRT').Value)) then
+            IdProgramacaoRT := DS.FieldByName('idProgramacaoRT').AsInteger;
+
+          RTNumero := Trim(CampoAsString(DS, 'RT'));
+
           DS.Edit;
 
           if DS.FindField('RT_Status') <> nil then
@@ -7202,6 +10393,14 @@ begin
             DS.FieldByName('RT_Mensagem').AsString := Msg;
 
           DS.Post;
+
+          if IdProgramacaoRT > 0 then
+            AtualizarRetornoTabelaRT(
+              IdProgramacaoRT,
+              Msg,
+              RTNumero,
+              Status
+            );
         end;
       end;
 
@@ -7291,9 +10490,7 @@ function TFrmConsultaExecutantesProgramados.AvaliarNecessidadeCriacaoRT(
       if RateioValido(CCD, DRD, ORD, EPD) then
         Exit(True);
 
-      AMensagemRateio :=
-        'Plataforma de destino de prontidão sem rateio na tblPlataforma: ' +
-        DestinoLocal + '. Preencher CentroCusto, ou DiagramaRede + OperRede, ou ElementoPEP.';
+      AMensagemRateio := 'Rateio ausente na plataforma destino: ' + DestinoLocal + '.';
       Exit(False);
     end;
 
@@ -7305,9 +10502,7 @@ function TFrmConsultaExecutantesProgramados.AvaliarNecessidadeCriacaoRT(
       if RateioValido(CCO, DRO, ORO, EPO) then
         Exit(True);
 
-      AMensagemRateio :=
-        'Plataforma de origem de prontidão sem rateio na tblPlataforma: ' +
-        OrigemLocal + '. Preencher CentroCusto, ou DiagramaRede + OperRede, ou ElementoPEP.';
+      AMensagemRateio := 'Rateio ausente na plataforma origem: ' + OrigemLocal + '.';
       Exit(False);
     end;
 
@@ -7325,13 +10520,9 @@ function TFrmConsultaExecutantesProgramados.AvaliarNecessidadeCriacaoRT(
       Exit(True);
 
     if Trim(CodigoSAPLocal) <> '' then
-      AMensagemRateio :=
-        'Preencher CentroCusto, ou DiagramaRede + OperRede, ou ElementoPEP na tblExecutante para o CodigoSAP ' +
-        Trim(CodigoSAPLocal) + '.'
+      AMensagemRateio := 'Rateio ausente no executante SAP ' + Trim(CodigoSAPLocal) + '.'
     else
-      AMensagemRateio :=
-        'Preencher CentroCusto, ou DiagramaRede + OperRede, ou ElementoPEP na tblExecutante para o executante ' +
-        NomeExecutante + ' / ' + Empresa + '.';
+      AMensagemRateio := 'Rateio ausente no executante.';
   end;
 
 var
@@ -7349,7 +10540,7 @@ begin
   if DS = nil then
   begin
     Status := RT_STATUS_PENDENTE;
-    Mensagem := 'Dataset não informado para avaliação da RT.';
+    Mensagem := 'Registro não localizado para avaliar RT.';
     Exit;
   end;
 
@@ -7366,7 +10557,7 @@ begin
     if MsgAtual <> '' then
       Mensagem := MsgAtual
     else if RTAtual <> '' then
-      Mensagem := 'RT já existente no SAP: ' + RTAtual
+      Mensagem := 'RT já existe: ' + RTAtual
     else
       Mensagem := MSG_RT_JA_EXISTE;
 
@@ -7374,7 +10565,7 @@ begin
   end;
 
   { 2. Se veio da importação SAP com status diferente de cancelado, preservar como JA_EXISTE }
-  if (Pos('IMPORTADO DO SAP POR', MsgAtualUp) > 0) and
+  if (Pos('SAP ', MsgAtualUp) = 1) and
      (Pos('STATUS 09', MsgAtualUp) = 0) then
   begin
     Status := RT_STATUS_JA_EXISTE;
@@ -7417,6 +10608,9 @@ begin
   RecolherPara := TextoCampo('RecolherPara');
   BooleanRecolhimento := BoolCampo('booleanRecolhimento');
 
+  if not RecolhimentoValidoParaRT(Destino, RecolherPara, BooleanRecolhimento) then
+    BooleanRecolhimento := False;
+
   PlataformaOrigem := TProgramacaoRTUtils.DadosPlataforma_RT(Origem);
   PlataformaDestino := TProgramacaoRTUtils.DadosPlataforma_RT(Destino);
 
@@ -7430,63 +10624,63 @@ begin
   if not TipoRTValido(TipoRT) then
   begin
     Status := RT_STATUS_PENDENTE;
-    Mensagem := 'Tipo de RT inválido ou não preenchido.';
+    Mensagem := 'Tipo de RT inválido.';
     Exit;
   end;
 
   if Origem = '' then
   begin
     Status := RT_STATUS_PENDENTE;
-    Mensagem := 'Origem não preenchida.';
+    Mensagem := 'Origem não informada.';
     Exit;
   end;
 
   if Destino = '' then
   begin
     Status := RT_STATUS_PENDENTE;
-    Mensagem := 'Destino não preenchido.';
+    Mensagem := 'Destino não informado.';
     Exit;
   end;
 
   if not DataCampoValida('DataProgramacao') then
   begin
     Status := RT_STATUS_PENDENTE;
-    Mensagem := 'Data da programação não preenchida.';
+    Mensagem := 'Data da programação ausente.';
     Exit;
   end;
 
   if HoraIda = '' then
   begin
     Status := RT_STATUS_PENDENTE;
-    Mensagem := 'Hora de ida não preenchida.';
+    Mensagem := 'Hora de ida ausente.';
     Exit;
   end;
 
   if Modal = '' then
   begin
     Status := RT_STATUS_PENDENTE;
-    Mensagem := 'Modal não preenchido.';
+    Mensagem := 'Modal não informado.';
     Exit;
   end;
 
   if Classe = '' then
   begin
     Status := RT_STATUS_PENDENTE;
-    Mensagem := 'Classe não preenchida.';
+    Mensagem := 'Classe não informada.';
     Exit;
   end;
 
   if SameText(TipoRT, 'R3') and (CodigoSAP = '') then
   begin
     Status := RT_STATUS_PENDENTE;
-    Mensagem := 'RT do tipo R3 exige Código SAP preenchido.';
+    Mensagem := 'R3 exige Código SAP.';
     Exit;
   end;
 
   if SameText(TipoRT, 'R7') and (not DocumentoR7Preenchido) then
   begin
     Status := RT_STATUS_PENDENTE;
-    Mensagem := 'RT do tipo R7 exige Documento ou OutroDocumento.';
+    Mensagem := 'R7 exige Documento.';
     Exit;
   end;
 
@@ -7495,21 +10689,21 @@ begin
     if RecolherPara = '' then
     begin
       Status := RT_STATUS_PENDENTE;
-      Mensagem := 'Recolhimento marcado sem campo RecolherPara preenchido.';
+      Mensagem := 'Recolhimento sem destino.';
       Exit;
     end;
 
     if HoraVolta = '' then
     begin
       Status := RT_STATUS_PENDENTE;
-      Mensagem := 'Recolhimento marcado sem HoraVolta preenchida.';
+      Mensagem := 'Recolhimento sem hora de volta.';
       Exit;
     end;
 
     if not DataCampoValida('DataVolta') then
     begin
       Status := RT_STATUS_PENDENTE;
-      Mensagem := 'Recolhimento marcado sem DataVolta preenchida.';
+      Mensagem := 'Recolhimento sem data de volta.';
       Exit;
     end;
   end;
@@ -7647,7 +10841,8 @@ begin
   DataProcuraFim    := FormatDateTime('mm/dd/yyyy', dataFim.Date);
 
   //=======================================================
-  SQLString := FrmPrincipal.SQLStringFiltroTabela(ColunasLayoutExecutanteProgramado, False);
+  SincronizarFiltroGridParaLayout(DBGridExecutantesProgramados, ColunasLayoutExecutanteProgramado);
+  SQLString := BuildFilterSQL(ColunasLayoutExecutanteProgramado, False);
   if Trim(SQLString) <> '' then
     SQLString := ' AND ' + SQLString;
 
@@ -7876,7 +11071,8 @@ procedure TFrmConsultaExecutantesProgramados.actProcurarProgramacaoRTExecute(
 var
   SQLString, SQLBase, DataProcuraInicio, DataProcuraFim: string;
 begin
-  SQLString := FrmPrincipal.SQLStringFiltroTabela(ColunasLayoutRT, False);
+  SincronizarFiltroGridParaLayout(DBGridProgramcaoRT, ColunasLayoutRT);
+  SQLString := BuildFilterSQL(ColunasLayoutRT, False);
   if Trim(SQLString) <> '' then
     SQLString := ' AND ' + SQLString;
 
@@ -7907,7 +11103,8 @@ begin
   DataProcuraFim    := FormatDateTime('mm/dd/yyyy', Trunc(dataFim.Date + 1));
 
   //=======================================================
-  SQLString := frmPrincipal.SQLStringFiltroTabela(RLLayoutBuscaEmbarque, False);
+  SincronizarFiltroGridParaLayout(DBGridResumoFrequencia, RLLayoutBuscaEmbarque);
+  SQLString := BuildFilterSQL(RLLayoutBuscaEmbarque, False);
 
   if SQLString <> '' then
     SQLString := ' AND ' + SQLString;
@@ -7964,7 +11161,8 @@ begin
   if CheckBoxOrigemDestino.Checked then
     SQL_OrigemDestino:= 'AND (tblProgramacaoDiaria.txtDestino <> tblProgramacaoExecutante.Origem)';
   //=======================================================
-  SQLString:= frmPrincipal.SQLStringFiltroTabela(ColunasLayoutExecutanteProgramado,false);
+  SincronizarFiltroGridParaLayout(DBGridExecutantesProgramados, ColunasLayoutExecutanteProgramado);
+  SQLString:= BuildFilterSQL(ColunasLayoutExecutanteProgramado,false);
   //Query de procura
   if SQLString <> '' then
     SQLString:= ' AND '+SQLString;
@@ -7986,7 +11184,8 @@ begin
   DataProcuraInicio := FormatDateTime('mm/dd/yyyy', Trunc(dataInicio.Date));
   DataProcuraFim    := FormatDateTime('mm/dd/yyyy', Trunc(dataFim.Date + 1));
 
-  SQLString := FrmPrincipal.SQLStringFiltroTabela(ColunasLayoutSAPImport, False);
+  SincronizarFiltroGridParaLayout(DBGridRTSapImport, ColunasLayoutSAPImport);
+  SQLString := BuildFilterSQL(ColunasLayoutSAPImport, False);
   if Trim(SQLString) <> '' then
     SQLString := ' AND ' + SQLString;
 
@@ -8269,6 +11468,10 @@ begin
   actProcurarProgramacaoExecutante.Execute;
   actProcurarProgramacaoRT.Execute;
   actProcurarSAPImport.Execute;
+  LimparAuditoriaEmbarques('Periodo alterado. Clique em "Auditoria".');
+  LimparAuditoriaAplatColibri(
+    'Periodo alterado. Clique em "Auditoria APLAT x Colibri".'
+  );
   AtualizarDiasDisponiveisSimulacao;
 end;
 
@@ -8284,6 +11487,10 @@ begin
   actProcurarProgramacaoExecutante.Execute;
   actProcurarProgramacaoRT.Execute;
   actProcurarSAPImport.Execute;
+  LimparAuditoriaEmbarques('Periodo alterado. Clique em "Auditoria".');
+  LimparAuditoriaAplatColibri(
+    'Periodo alterado. Clique em "Auditoria APLAT x Colibri".'
+  );
   AtualizarDiasDisponiveisSimulacao;
 end;
 
@@ -8403,7 +11610,7 @@ begin
     else if SameText(Column.Field.AsString, RT_STATUS_CANCELADA) then
       DBGridExecutantesProgramados.Canvas.Brush.Color := clRed
     else if SameText(Column.Field.AsString, RT_STATUS_ORFA) then
-      DBGridExecutantesProgramados.Canvas.Brush.Color := clYellow
+      DBGridExecutantesProgramados.Canvas.Brush.Color := clRed
     else if SameText(Column.Field.AsString, RT_STATUS_ERRO_NAO_ATIVO) then
       DBGridExecutantesProgramados.Canvas.Brush.Color := clRed
     else if SameText(Column.Field.AsString, RT_STATUS_ERRO_CONFLITO_RT) then
@@ -8428,9 +11635,9 @@ begin
       if SameText(Column.Field.AsString, RT_STATUS_EMITIDA) then
         Canvas.Brush.Color := clLime
       else if SameText(Column.Field.AsString, RT_STATUS_PENDENTE) then
-        Canvas.Brush.Color := clYellow
+        Canvas.Brush.Color := clRed
       else if SameText(Column.Field.AsString, RT_STATUS_PRONTO_EMITIR) then
-        Canvas.Brush.Color := clAqua
+        Canvas.Brush.Color := clRed
       else if SameText(Column.Field.AsString, RT_STATUS_NAO_CRIAR) then
         Canvas.Brush.Color := clSilver
       else if SameText(Column.Field.AsString, RT_STATUS_JA_EXISTE) then
@@ -8575,6 +11782,362 @@ begin
   end;
 end;
 
+procedure TFrmConsultaExecutantesProgramados.ProcessarEventoR7ComMatriculaValida(
+  const AIdProgramacaoExecutante, AIdProgramacaoRT: Integer;
+  const ACodigoSAPNovo, ADocumentoDetectado: string);
+var
+  CodigoSAPNormalizado, MensagemInfo: string;
+begin
+  CodigoSAPNormalizado := NormalizarCodigoSAP(ACodigoSAPNovo);
+
+  if Trim(CodigoSAPNormalizado) = '' then
+    Exit;
+
+  ReclassificarProgramacaoExecutanteParaR3PorCodigoSAP(
+    AIdProgramacaoExecutante,
+    CodigoSAPNormalizado
+  );
+
+  ReclassificarProgramacaoRTParaR3PorCodigoSAP(
+    AIdProgramacaoRT,
+    CodigoSAPNormalizado
+  );
+
+  if Trim(ADocumentoDetectado) <> '' then
+    MensagemInfo := Format(
+      'CPF %s com matrícula SAP %s detectado no SAP. Registro reclassificado para R3 e CodigoSAP retroalimentado em tblProgramacaoExecutante, tblProgramacaoRT e tblExecutante.',
+      [Trim(ADocumentoDetectado), CodigoSAPNormalizado]
+    )
+  else
+    MensagemInfo := Format(
+      'Matrícula SAP %s detectada no SAP. Registro reclassificado para R3 e CodigoSAP retroalimentado em tblProgramacaoExecutante, tblProgramacaoRT e tblExecutante.',
+      [CodigoSAPNormalizado]
+    );
+
+  AtualizarMensagemRetornoSemRebaixarStatus(
+    AIdProgramacaoExecutante,
+    AIdProgramacaoRT,
+    MensagemInfo
+  );
+end;
+
+procedure TFrmConsultaExecutantesProgramados.ReclassificarProgramacaoExecutanteParaR3PorCodigoSAP(
+  const AIdProgramacaoExecutante: Integer;
+  const ACodigoSAPNovo: string);
+var
+  QSel, QUpd: TADOQuery;
+  CodigoSAPNormalizado, NomeExecutante, Empresa: string;
+  OrigemLocal, DestinoLocal, RecolherParaLocal, ClasseNova: string;
+  BooleanRecolhimento, EhTransbordo: Boolean;
+begin
+  if AIdProgramacaoExecutante <= 0 then
+    Exit;
+
+  CodigoSAPNormalizado := NormalizarCodigoSAP(ACodigoSAPNovo);
+  if Trim(CodigoSAPNormalizado) = '' then
+    Exit;
+
+  QSel := TADOQuery.Create(nil);
+  QUpd := TADOQuery.Create(nil);
+  try
+    QSel.Connection := FrmDataModule.ADOConnectionColibri;
+    QSel.ParamCheck := True;
+    QSel.SQL.Text :=
+      'SELECT TOP 1 ' +
+      '  pe.NomeExecutante, pe.Empresa, pe.Origem, pd.txtDestino, ' +
+      '  pe.RecolherPara, pe.booleanRecolhimento, pe.RT_Transbordo ' +
+      'FROM tblProgramacaoExecutante pe ' +
+      'INNER JOIN tblProgramacaoDiaria pd ' +
+      '  ON pd.idProgramacaoDiaria = pe.CodigoProgramacaoDiaria ' +
+      'WHERE pe.idProgramacaoExecutante = :ID';
+    QSel.Parameters.ParamByName('ID').Value := AIdProgramacaoExecutante;
+    QSel.Open;
+
+    if QSel.Eof then
+      Exit;
+
+    NomeExecutante := Trim(QSel.FieldByName('NomeExecutante').AsString);
+    Empresa := Trim(QSel.FieldByName('Empresa').AsString);
+    OrigemLocal := Trim(QSel.FieldByName('Origem').AsString);
+    DestinoLocal := Trim(QSel.FieldByName('txtDestino').AsString);
+    RecolherParaLocal := Trim(QSel.FieldByName('RecolherPara').AsString);
+    BooleanRecolhimento :=
+      (QSel.FindField('booleanRecolhimento') <> nil) and
+      QSel.FieldByName('booleanRecolhimento').AsBoolean;
+    EhTransbordo :=
+      (QSel.FindField('RT_Transbordo') <> nil) and
+      QSel.FieldByName('RT_Transbordo').AsBoolean;
+
+    BooleanRecolhimento := RecolhimentoValidoParaRT(
+      DestinoLocal,
+      RecolherParaLocal,
+      BooleanRecolhimento
+    );
+
+    if EhTransbordo then
+      ClasseNova := 'TR'
+    else
+      ClasseNova := DetermineClasse(
+        'R3',
+        OrigemLocal,
+        DestinoLocal,
+        FrmPrincipal.OrigemPlataformas,
+        '',
+        BooleanRecolhimento
+      );
+
+    QUpd.Connection := FrmDataModule.ADOConnectionColibri;
+    QUpd.ParamCheck := True;
+    QUpd.SQL.Text :=
+      'UPDATE tblProgramacaoExecutante SET ' +
+      '  CodigoSAP = :CodigoSAP, ' +
+      '  RT_Tipo = :RT_Tipo, ' +
+      '  RT_Classe = :RT_Classe ' +
+      'WHERE idProgramacaoExecutante = :ID';
+    QUpd.Parameters.ParamByName('CodigoSAP').Value := CodigoSAPNormalizado;
+    QUpd.Parameters.ParamByName('RT_Tipo').Value := 'R3';
+    QUpd.Parameters.ParamByName('RT_Classe').Value := ClasseNova;
+    QUpd.Parameters.ParamByName('ID').Value := AIdProgramacaoExecutante;
+    QUpd.ExecSQL;
+
+    AtualizarCodigoSAPTblExecutante(
+      NomeExecutante,
+      Empresa,
+      CodigoSAPNormalizado
+    );
+  finally
+    QUpd.Free;
+    QSel.Free;
+  end;
+end;
+
+procedure TFrmConsultaExecutantesProgramados.ReclassificarProgramacaoRTParaR3PorCodigoSAP(
+  const AIdProgramacaoRT: Integer;
+  const ACodigoSAPNovo: string);
+var
+  QSel, QUpd: TADOQuery;
+  Dados: TDadosRT;
+  CodigoSAPNormalizado, OrigemLocal, DestinoLocal, ClasseAtual: string;
+begin
+  if AIdProgramacaoRT <= 0 then
+    Exit;
+
+  CodigoSAPNormalizado := NormalizarCodigoSAP(ACodigoSAPNovo);
+  if Trim(CodigoSAPNormalizado) = '' then
+    Exit;
+
+  QSel := TADOQuery.Create(nil);
+  QUpd := TADOQuery.Create(nil);
+  try
+    QSel.Connection := FrmDataModule.ADOConnectionRT;
+    QSel.ParamCheck := True;
+    QSel.SQL.Text :=
+      'SELECT TOP 1 * ' +
+      'FROM tblProgramacaoRT ' +
+      'WHERE idProgramacaoRT = :ID';
+    QSel.Parameters.ParamByName('ID').Value := AIdProgramacaoRT;
+    QSel.Open;
+
+    if QSel.Eof then
+      Exit;
+
+    Dados := Default(TDadosRT);
+    Dados.TipoRT := 'R3';
+    Dados.MatriculaPax := CodigoSAPNormalizado;
+    Dados.CentroPlan := Trim(CampoAsString(QSel, 'RT_CentroPlan'));
+    Dados.GrpPlan := Trim(CampoAsString(QSel, 'RT_GrpPlan'));
+    Dados.Modal := Trim(CampoAsString(QSel, 'RT_Modal'));
+    Dados.Origem := Trim(CampoAsString(QSel, 'Origem'));
+    Dados.Destino := Trim(CampoAsString(QSel, 'txtDestino'));
+    Dados.Retorno := Trim(CampoAsString(QSel, 'RecolherPara'));
+    Dados.HoraIda := Trim(CampoAsString(QSel, 'RT_HoraIda'));
+    Dados.HoraVolta := Trim(CampoAsString(QSel, 'RT_HoraVolta'));
+    Dados.booleanRecolhimento :=
+      (QSel.FindField('booleanRecolhimento') <> nil) and
+      QSel.FieldByName('booleanRecolhimento').AsBoolean;
+
+    if (QSel.FindField('DataIda') <> nil) and
+       (not VarIsNull(QSel.FieldByName('DataIda').Value)) then
+      Dados.DataIda := DataSAP(QSel.FieldByName('DataIda').AsDateTime);
+
+    if (QSel.FindField('DataVolta') <> nil) and
+       (not VarIsNull(QSel.FieldByName('DataVolta').Value)) then
+      Dados.DataVolta := DataSAP(QSel.FieldByName('DataVolta').AsDateTime);
+
+    NormalizarRecolhimentoDadosRT(Dados);
+
+    OrigemLocal := PlataformaPorNomeSAP(Dados.Origem);
+    if Trim(OrigemLocal) = '' then
+      OrigemLocal := Dados.Origem;
+
+    DestinoLocal := PlataformaPorNomeSAP(Dados.Destino);
+    if Trim(DestinoLocal) = '' then
+      DestinoLocal := Dados.Destino;
+
+    ClasseAtual := Trim(CampoAsString(QSel, 'RT_Classe'));
+    if SameText(ClasseAtual, 'TR') then
+      Dados.Classe := 'TR'
+    else
+      Dados.Classe := DetermineClasse(
+        'R3',
+        OrigemLocal,
+        DestinoLocal,
+        FrmPrincipal.OrigemPlataformas,
+        '',
+        Dados.booleanRecolhimento
+      );
+
+    QUpd.Connection := FrmDataModule.ADOConnectionRT;
+    QUpd.ParamCheck := True;
+    QUpd.SQL.Text :=
+      'UPDATE tblProgramacaoRT SET ' +
+      '  CodigoSAP = :CodigoSAP, ' +
+      '  RT_Tipo = :RT_Tipo, ' +
+      '  RT_Classe = :RT_Classe, ' +
+      '  booleanRecolhimento = :booleanRecolhimento, ' +
+      '  RecolherPara = :RecolherPara, ' +
+      '  RT_HoraVolta = :RT_HoraVolta, ' +
+      '  DataVolta = :DataVolta, ' +
+      '  ChavePassageiro = :ChavePassageiro, ' +
+      '  ChaveIda = :ChaveIda, ' +
+      '  ChaveVolta = :ChaveVolta, ' +
+      '  ChaveCompleta = :ChaveCompleta ' +
+      'WHERE idProgramacaoRT = :ID';
+
+    QUpd.Parameters.ParamByName('CodigoSAP').Value := CodigoSAPNormalizado;
+    QUpd.Parameters.ParamByName('RT_Tipo').Value := 'R3';
+    QUpd.Parameters.ParamByName('RT_Classe').Value := Dados.Classe;
+    QUpd.Parameters.ParamByName('booleanRecolhimento').Value := Dados.booleanRecolhimento;
+    QUpd.Parameters.ParamByName('RecolherPara').Value := Trim(Dados.Retorno);
+    QUpd.Parameters.ParamByName('RT_HoraVolta').Value := Trim(Dados.HoraVolta);
+
+    if Trim(Dados.DataVolta) <> '' then
+      QUpd.Parameters.ParamByName('DataVolta').Value :=
+        FrmPrincipal.DataSAP_ToDate(Dados.DataVolta)
+    else
+      QUpd.Parameters.ParamByName('DataVolta').Value := Null;
+
+    QUpd.Parameters.ParamByName('ChavePassageiro').Value :=
+      ChavePassageiro(CodigoSAPNormalizado, '', '');
+    QUpd.Parameters.ParamByName('ChaveIda').Value := ChaveRTIda(Dados);
+    QUpd.Parameters.ParamByName('ChaveVolta').Value := ChaveRTVolta(Dados);
+    QUpd.Parameters.ParamByName('ChaveCompleta').Value :=
+      ChaveRTCompleta(Dados);
+    QUpd.Parameters.ParamByName('ID').Value := AIdProgramacaoRT;
+    QUpd.ExecSQL;
+  finally
+    QUpd.Free;
+    QSel.Free;
+  end;
+end;
+
+function TFrmConsultaExecutantesProgramados.StatusRTNormalizado(
+  const AStatus: string): string;
+var
+  S: string;
+begin
+  S := UpperCase(Trim(AStatus));
+
+  // Domínio da tblProgramacaoExecutante
+  if S = RT_STATUS_NAO_CRIAR        then Exit(RT_STATUS_NAO_CRIAR);
+  if S = RT_STATUS_PENDENTE         then Exit(RT_STATUS_PENDENTE);
+  if S = RT_STATUS_PRONTO_EMITIR    then Exit(RT_STATUS_PRONTO_EMITIR);
+  if S = RT_STATUS_EMITIDA          then Exit(RT_STATUS_EMITIDA);
+  if S = RT_STATUS_JA_EXISTE        then Exit(RT_STATUS_JA_EXISTE);
+  if S = RT_STATUS_CANCELADA        then Exit(RT_STATUS_CANCELADA);
+  if S = RT_STATUS_ERRO_NAO_ATIVO   then Exit(RT_STATUS_ERRO_NAO_ATIVO);
+  if S = RT_STATUS_ERRO_CONFLITO_RT then Exit(RT_STATUS_ERRO_CONFLITO_RT);
+  if S = RT_STATUS_ERRO_EMISSAO     then Exit(RT_STATUS_ERRO_EMISSAO);
+
+  // ORFA NÃO pertence à tblProgramacaoExecutante
+  Result := '';
+end;
+
+function TFrmConsultaExecutantesProgramados.MensagemPadraoStatusRTTabela(
+  const AStatus, ARTNumero: string): string;
+var
+  StatusNorm, RTNum: string;
+begin
+  StatusNorm := StatusRTNormalizadoTabelaRT(AStatus, ARTNumero);
+  RTNum := Trim(ARTNumero);
+
+  if StatusNorm = RT_STATUS_CANCELADA then
+    Exit(MSG_RT_CANCELADA);
+
+  if StatusNorm = RT_STATUS_ORFA then
+    Exit(MSG_RT_ORFA);
+
+  if StatusNorm = RT_STATUS_ERRO_NAO_ATIVO then
+    Exit(MSG_RT_ERRO_NAO_ATIVO);
+
+  if StatusNorm = RT_STATUS_ERRO_CONFLITO_RT then
+    Exit(MSG_RT_ERRO_CONFLITO_RT);
+
+  if StatusNorm = RT_STATUS_ERRO_EMISSAO then
+    Exit(MSG_RT_ERRO_EMISSAO);
+
+  if StatusNorm = RT_STATUS_JA_EXISTE then
+  begin
+    if RTNum <> '' then
+      Exit('RT já existe: ' + RTNum);
+
+    Exit(MSG_RT_JA_EXISTE);
+  end;
+
+  if StatusNorm = RT_STATUS_EMITIDA then
+  begin
+    if RTNum <> '' then
+      Exit('RT emitida: ' + RTNum);
+
+    Exit(MSG_RT_EMITIDA);
+  end;
+
+  Result := '';
+end;
+
+function TFrmConsultaExecutantesProgramados.NormalizarMensagemStatusRTTabela(
+  const AStatus, ARTNumero, AMensagem: string): string;
+begin
+  Result := Trim(AMensagem);
+  if Result = '' then
+    Result := MensagemPadraoStatusRTTabela(AStatus, ARTNumero);
+end;
+
+function TFrmConsultaExecutantesProgramados.StatusRTNormalizadoTabelaRT(
+  const AStatus, ARTNumero: string): string;
+var
+  S, RTNum: string;
+begin
+  S := UpperCase(Trim(AStatus));
+  RTNum := Trim(ARTNumero);
+
+  // Domínio da tblProgramacaoRT
+  if S = RT_STATUS_PRONTO_EMITIR    then Exit(RT_STATUS_PRONTO_EMITIR);
+  if S = RT_STATUS_PENDENTE         then Exit(RT_STATUS_PENDENTE);
+  if S = RT_STATUS_NAO_CRIAR        then Exit(RT_STATUS_NAO_CRIAR);
+  if S = RT_STATUS_EMITIDA          then Exit(RT_STATUS_EMITIDA);
+  if S = RT_STATUS_JA_EXISTE        then Exit(RT_STATUS_JA_EXISTE);
+  if S = RT_STATUS_CANCELADA        then Exit(RT_STATUS_CANCELADA);
+  if S = RT_STATUS_ORFA             then Exit(RT_STATUS_ORFA);
+  if S = RT_STATUS_ERRO_NAO_ATIVO   then Exit(RT_STATUS_ERRO_NAO_ATIVO);
+  if S = RT_STATUS_ERRO_CONFLITO_RT then Exit(RT_STATUS_ERRO_CONFLITO_RT);
+  if S = RT_STATUS_ERRO_EMISSAO     then Exit(RT_STATUS_ERRO_EMISSAO);
+
+  if S = '' then
+  begin
+    if RTNum <> '' then
+      Exit(RT_STATUS_JA_EXISTE)
+    else
+      Exit(RT_STATUS_ERRO_EMISSAO);
+  end;
+
+  // fallback defensivo
+  if RTNum <> '' then
+    Result := RT_STATUS_JA_EXISTE
+  else
+    Result := RT_STATUS_ERRO_EMISSAO;
+end;
+
 function TFrmConsultaExecutantesProgramados.TentarReclassificarExecutanteParaR3(
   const AIdProgramacaoExecutante: Integer;
   const ANomeExecutante, AEmpresa, ACodigoSAPAtual: string;
@@ -8645,7 +12208,7 @@ begin
   Result :=
     (Trim(AOrigem) <> '') and
     (Trim(ADestino) <> '') and
-    (AOrigem <> ADestino) and
+    (not LocaisEquivalentesNoSAP(AOrigem, ADestino)) and
     (not PlataformaOrigem.booleanNaoCriarRT) and
     (not PlataformaDestino.booleanNaoCriarRT);
 end;
@@ -8654,7 +12217,8 @@ procedure TFrmConsultaExecutantesProgramados.AplicarRecolhimentoNoRegistro(
   DS: TDataSet;
   const Horario: THorario;
   const AOrigem: string;
-  const ABooleanRecolhimento: Boolean);
+  const ABooleanRecolhimento: Boolean;
+  const APreservarSePreenchido: Boolean = False);
 begin
   if ABooleanRecolhimento then
   begin
@@ -8669,7 +12233,12 @@ begin
   end
   else
   begin
-    DS.FieldByName('RecolherPara').AsString := '';
+    // Em modo incremental (APreservarSePreenchido = True), não limpa
+    // RecolherPara se já tiver um valor definido no registro.
+    if not (APreservarSePreenchido and
+            (Trim(DS.FieldByName('RecolherPara').AsString) <> '')) then
+      DS.FieldByName('RecolherPara').AsString := '';
+
     DS.FieldByName('RT_HoraVolta').AsString := '';
     DS.FieldByName('DataVolta').Clear;
   end;
@@ -8699,27 +12268,26 @@ var
   Acao, Status, Msg, MsgNormalizada: string;
   p1, p2, p3: Integer;
   CancelamentoEfetivado: Boolean;
+  StatusRetorno: string;
 begin
-  // ignora linhas gerais
   if Pos('|CANCELAR|', LinhaLog) = 0 then
     Exit;
 
-  // pega só a parte depois do " | "
   p1 := Pos(' | ', LinhaLog);
   if p1 <= 0 then Exit;
   Msg := Copy(LinhaLog, p1 + 3, MaxInt);
 
-  // id|acao|status|msg
   p1 := Pos('|', Msg); if p1 <= 0 then Exit;
-  p2 := PosEx('|', Msg, p1+1); if p2 <= 0 then Exit;
-  p3 := PosEx('|', Msg, p2+1); if p3 <= 0 then Exit;
+  p2 := PosEx('|', Msg, p1 + 1); if p2 <= 0 then Exit;
+  p3 := PosEx('|', Msg, p2 + 1); if p3 <= 0 then Exit;
 
-  idProgRT := StrToIntDef(Copy(Msg, 1, p1-1), 0);
-  Acao     := Copy(Msg, p1+1, p2-p1-1);
-  Status   := Copy(Msg, p2+1, p3-p2-1);
-  Msg      := Trim(Copy(Msg, p3+1, MaxInt));
+  idProgRT := StrToIntDef(Copy(Msg, 1, p1 - 1), 0);
+  Acao     := Copy(Msg, p1 + 1, p2 - p1 - 1);
+  Status   := Copy(Msg, p2 + 1, p3 - p2 - 1);
+  Msg      := Trim(Copy(Msg, p3 + 1, MaxInt));
 
-  if (idProgRT <= 0) or (Acao <> 'CANCELAR') then Exit;
+  if (idProgRT <= 0) or (Acao <> 'CANCELAR') then
+    Exit;
 
   CancelamentoEfetivado :=
     SameText(Trim(Status), 'FINALIZADO') or
@@ -8734,9 +12302,16 @@ begin
   end;
 
   if CancelamentoEfetivado then
-    AtualizarProgramacaoRT_Cancelamento(idProgRT, True, Msg, RT_STATUS_CANCELADA)
+    StatusRetorno := RT_STATUS_CANCELADA
   else
-    AtualizarProgramacaoRT_Cancelamento(idProgRT, False, Msg, '');
+    StatusRetorno := RT_STATUS_ERRO_EMISSAO;
+
+  AtualizarProgramacaoRT_Cancelamento(
+    idProgRT,
+    CancelamentoEfetivado,
+    Msg,
+    StatusRetorno
+  );
 end;
 
 procedure TFrmConsultaExecutantesProgramados.ImportarRTsSAPPeriodoPorTipo(
@@ -9305,9 +12880,9 @@ begin
   CanceladaSAP := SameText(StatusUnico, RT_STATUS_CANCELADA);
 
   Msg := Copy(
-    Trim('Importado do SAP por ' + AOrigemVinculo +
-         ' - Status ' + Trim(AStatusItem) + ' ' + Trim(AStatusDescricao)),
-    1, 255
+    Trim('SAP ' + AOrigemVinculo + ' - ' +
+         Trim(AStatusItem) + ' ' + Trim(AStatusDescricao)),
+    1, 100
   );
 
   Q := TADOQuery.Create(nil);
@@ -9337,7 +12912,7 @@ begin
         'tblProgramacaoRT',
         'RT_Mensagem',
         Msg,
-        255
+        100
       );
     Q.Parameters.ParamByName('RT_Cancelada').Value := CanceladaSAP;
     Q.Parameters.ParamByName('idProgramacaoRT').Value := AIdProgramacaoRT;
@@ -9361,9 +12936,9 @@ begin
   StatusUnico := StatusImportacaoSAP(ARTNumero, AStatusItem, AStatusDescricao);
 
   Msg := Copy(
-    Trim('Importado do SAP por ' + AOrigemVinculo +
-         ' - Status ' + Trim(AStatusItem) + ' ' + Trim(AStatusDescricao)),
-    1, 255
+    Trim('SAP ' + AOrigemVinculo + ' - ' +
+         Trim(AStatusItem) + ' ' + Trim(AStatusDescricao)),
+    1, 100
   );
 
   Q := TADOQuery.Create(nil);
@@ -9392,7 +12967,7 @@ begin
         'tblProgramacaoExecutante',
         'RT_Mensagem',
         Msg,
-        255
+        100
       );
     Q.Parameters.ParamByName('idProgramacaoExecutante').Value := AIdProgramacaoExecutante;
 
@@ -9568,7 +13143,7 @@ begin
               IdRTCriado,
               IdExecDireto,
               True,
-              'RT local criada a partir da importação SAP'
+              'RT local criada via SAP.'
             );
 
             AtualizarProgramacaoRTViaImportacaoSAP(
@@ -9596,7 +13171,7 @@ begin
               0,
               IdExecDireto,
               False,
-              'Executante localizado, mas falhou ao criar tblProgramacaoRT'
+              'Falha ao criar RT local.'
             );
             Inc(QtSemMatch);
           end;
@@ -9641,27 +13216,57 @@ procedure TFrmConsultaExecutantesProgramados.AtualizarProgramacaoRT_Cancelamento
   const Cancelada: Boolean;
   const Mensagem, RT_Status: string);
 var
-  Q: TADOQuery;
+  Q, QSel: TADOQuery;
   SQL, StatusSafe, MensagemSafe: string;
+  IdProgramacaoExecutante: Integer;
+  RTAtual: string;
 begin
+  IdProgramacaoExecutante := 0;
+  RTAtual := '';
   Q := TADOQuery.Create(nil);
+  QSel := TADOQuery.Create(nil);
   try
+    QSel.Connection := FrmDataModule.ADOConnectionRT;
+    QSel.ParamCheck := True;
+    QSel.SQL.Text :=
+      'SELECT TOP 1 idProgramacaoExecutante, RT ' +
+      'FROM tblProgramacaoRT ' +
+      'WHERE idProgramacaoRT = :idProgramacaoRT';
+    QSel.Parameters.ParamByName('idProgramacaoRT').Value := idProgramacaoRT;
+    QSel.Open;
+
+    if not QSel.Eof then
+    begin
+      if (QSel.FindField('idProgramacaoExecutante') <> nil) and
+         (not VarIsNull(QSel.FieldByName('idProgramacaoExecutante').Value)) then
+        IdProgramacaoExecutante :=
+          QSel.FieldByName('idProgramacaoExecutante').AsInteger;
+
+      RTAtual := Trim(CampoAsString(QSel, 'RT'));
+    end;
+
     Q.Connection := FrmDataModule.ADOConnectionRT;
     Q.ParamCheck := True;
+
+    MensagemSafe := NormalizarMensagemStatusRTTabela(
+      RT_Status,
+      '',
+      Mensagem
+    );
 
     MensagemSafe := AjustarTextoParaCampo(
       FrmDataModule.ADOConnectionRT,
       'tblProgramacaoRT',
       'RT_Mensagem',
-      Trim(Mensagem),
-      255
+      MensagemSafe,
+      100
     );
 
     StatusSafe := AjustarTextoParaCampo(
       FrmDataModule.ADOConnectionRT,
       'tblProgramacaoRT',
       'RT_Status',
-      StatusRTNormalizado(RT_Status),
+      StatusRTNormalizadoTabelaRT(RT_Status, ''),
       40
     );
 
@@ -9686,7 +13291,16 @@ begin
     Q.Parameters.ParamByName('idProgramacaoRT').Value := idProgramacaoRT;
 
     Q.ExecSQL;
+
+    if IdProgramacaoExecutante > 0 then
+      AtualizarRetornoExecutante(
+        IdProgramacaoExecutante,
+        MensagemSafe,
+        RTAtual,
+        RT_STATUS_CANCELADA
+      );
   finally
+    QSel.Free;
     Q.Free;
   end;
 end;
@@ -10614,13 +14228,25 @@ begin
 end;
 
 procedure TFrmConsultaExecutantesProgramados.FormCreate(Sender: TObject);
+var
+  PodeVerAuditorias: Boolean;
 begin
+  FAuditoriaEmbarqueLinhas := TObjectList<TAuditoriaEmbarqueLinha>.Create(True);
+  FAuditoriaEmbarqueLinhasFiltradas := TList<TAuditoriaEmbarqueLinha>.Create;
+  FAuditoriaAplatColibriLinhas := TObjectList<TAuditoriaAplatColibriLinha>.Create(True);
+  FAuditoriaAplatColibriLinhasFiltradas := TList<TAuditoriaAplatColibriLinha>.Create;
+  FAuditoriaColunasFixas := AUD_COL_EXECUTANTE + 1;
+  FAuditoriaLimiteFolgaCurtaDias := 2;
+  FAuditoriaSortCol := AUD_COL_FOLGA_CURTA;
+  FAuditoriaSortAsc := False;
+  FAuditoriaAplatColibriSortCol := APLAT_COL_APLAT_FOLGA_CURTA;
+  FAuditoriaAplatColibriSortAsc := False;
+  FCampoTextoTamanhoCache := TDictionary<string, Integer>.Create;
+  FPlataformaPorNomeSAPCache := TDictionary<string, string>.Create;
+  //========================================
+  edtArquivoAuditoriaAplatColibri.Text:= FrmPrincipal.registroEndereco('POB_APLAT');
   //======ADICIONAR TABSET DO FOMRMDI=======
   FrmPrincipal.MDIChildCreated(self.Handle);
-  FrmDataModule.setFilterDBGrid(DBGridExecutantesProgramados);
-  FrmDataModule.setFilterDBGrid(DBGridProgramcaoRT);
-  FrmDataModule.setFilterDBGrid(DBGridRTSapImport);
-  FrmDataModule.setFilterDBGrid(DBGridResumoFrequencia);
   enderecoColibriRegistro:= registroEndereco('Banco de dados');
   dataInicio.Date:= IncDay(now,1);
   dataFim.Date:= IncDay(now,1);
@@ -10628,8 +14254,37 @@ begin
   FrmDataModule.ADOQueryColibri.Active:= true;
   FrmDataModule.ADOQueryConfigRT.Active:= false;
   FrmDataModule.ADOQueryConfigRT.Active:= true;
+  CarregarMapaDeParaEmpresaExecutante(FrmDataModule.ADOConnectionColibri);
+  CarregarMapaDeParaFuncaoExecutante(FrmDataModule.ADOConnectionColibri);
   //=====================================
   FrmDataModule.ADOQueryProgramacaoCalendario1.Active:= true;
+  strGridEmbarque.OnDrawCell := strGridEmbarqueDrawCell;
+  strGridEmbarque.OnFixedCellClick := nil;
+  strGridEmbarque.OnMouseUp := strGridEmbarqueMouseUp;
+  edtLimiteFolgaCurtaEmbarque.Text := IntToStr(FAuditoriaLimiteFolgaCurtaDias);
+  edtLimiteFolgaCurtaEmbarque.OnChange := edtLimiteFolgaCurtaEmbarqueChange;
+  edtLimiteFolgaCurtaEmbarque.OnExit := edtLimiteFolgaCurtaEmbarqueExit;
+  edtBuscaEmbarque.OnChange := edtBuscaEmbarqueChange;
+  strGridAuditoriaAplatColibri.OnFixedCellClick :=
+    strGridAuditoriaAplatColibriFixedCellClick;
+  strGridAuditoriaAplatColibri.OnMouseUp := strGridAuditoriaAplatColibriMouseUp;
+  edtBuscaAuditoriaAplatColibri.OnChange := edtBuscaAuditoriaAplatColibriChange;
+  edtArquivoAuditoriaAplatColibri.Text := CaminhoPadraoRelatorioAplat;
+  ConfigurarGridAuditoriaEmbarques;
+  ConfigurarGridAuditoriaAplatColibri;
+  LimparAuditoriaAplatColibri(
+    'Clique em "Atualizar Auditoria" para cruzar APLAT x Colibri.'
+  );
+
+  PodeVerAuditorias :=
+    (FrmPrincipal.logPerfil = FrmPrincipal.PERFILADM) or
+    (FrmPrincipal.logPerfil = FrmPrincipal.PERFILSUPERVISAO);
+
+  TabSheet6.TabVisible := PodeVerAuditorias;
+  TabSheet7.TabVisible := PodeVerAuditorias;
+
+  if not PodeVerAuditorias then
+    PageControl1.ActivePage := TabSheet1;
 
   if ((FrmPrincipal.logPerfil = FrmPrincipal.PERFILPROGRAMACAO)OR
   (FrmPrincipal.logPerfil = FrmPrincipal.PERFILADM)OR
@@ -10678,12 +14333,21 @@ begin
   actProcurarProgramacaoExecutante.Execute;
   actProcurarProgramacaoRT.Execute;
   actProcurarSAPImport.Execute;
+  CarregarAuditoriaEmbarques;
   GarantirTabelaRTRegraRecolhimento;
   InicializarSimulacaoLogistica;
 end;
 
 procedure TFrmConsultaExecutantesProgramados.FormDestroy(Sender: TObject);
 begin
+  FreeAndNil(FAuditoriaAplatColibriLinhasFiltradas);
+  FreeAndNil(FAuditoriaAplatColibriLinhas);
+  FreeAndNil(FAuditoriaEmbarqueLinhasFiltradas);
+  FreeAndNil(FAuditoriaEmbarqueLinhas);
+  LimparIndiceProgramacaoExecutanteSincronizacao;
+  FreeAndNil(FNomeSAPPorReferenciaCache);
+  FreeAndNil(FPlataformaPorNomeSAPCache);
+  FreeAndNil(FCampoTextoTamanhoCache);
   FrmPrincipal.MDIChildDestroyed(self.Handle);
 end;
 
@@ -10696,6 +14360,12 @@ begin
     2: actProcurarSAPImport.Execute;
     3: actProcurarBuscaEmbarque.Execute;
     4: AtualizarDiasDisponiveisSimulacao;
+    {5: CarregarAuditoriaEmbarques;
+    6:
+      if FAuditoriaAplatColibriLinhas.Count = 0 then
+        CarregarAuditoriaAplatColibri
+      else
+        AtualizarStatusAuditoriaAplatColibri;}
   end;
 end;
 
@@ -10703,6 +14373,143 @@ procedure TFrmConsultaExecutantesProgramados.btnSimulacaoPadraoClick(
   Sender: TObject);
 begin
   PreencherCenarioBaseSimulacao;
+end;
+
+procedure TFrmConsultaExecutantesProgramados.btnAtualizarAuditoriaEmbarqueClick(
+  Sender: TObject);
+begin
+  CarregarAuditoriaEmbarques;
+  AplicarColunasFixasAuditoria(True);
+end;
+
+procedure TFrmConsultaExecutantesProgramados.btnColunasFixasAuditoriaEmbarqueClick(
+  Sender: TObject);
+var
+  Valor: string;
+  Quantidade: Integer;
+begin
+  Valor := IntToStr(FAuditoriaColunasFixas);
+  if not InputQuery(
+       'Auditoria Embarques',
+       'Quantidade de colunas fixas (0 a ' + IntToStr(AUD_COL_DIA_INICIAL) + '):',
+       Valor) then
+    Exit;
+
+  if not TryStrToInt(Trim(Valor), Quantidade) then
+  begin
+    ShowMessage('Informe um numero inteiro valido.');
+    Exit;
+  end;
+
+  FAuditoriaColunasFixas := EnsureRange(Quantidade, 0, AUD_COL_DIA_INICIAL);
+  AplicarColunasFixasAuditoria(True);
+  AtualizarStatusAuditoriaEmbarques;
+end;
+
+procedure TFrmConsultaExecutantesProgramados.edtLimiteFolgaCurtaEmbarqueChange(
+  Sender: TObject);
+var
+  Valor: Integer;
+begin
+  if not TryStrToInt(Trim(edtLimiteFolgaCurtaEmbarque.Text), Valor) then
+    Exit;
+
+  Valor := Max(1, Valor);
+  if Valor = FAuditoriaLimiteFolgaCurtaDias then
+    Exit;
+
+  FAuditoriaLimiteFolgaCurtaDias := Valor;
+  RecalcularResumoAuditoriaEmbarques;
+  if FAuditoriaAplatColibriLinhas.Count > 0 then
+    RecalcularResumoAuditoriaAplatColibri
+  else if strGridAuditoriaAplatColibri <> nil then
+  begin
+    AtualizarTitulosAuditoriaAplatColibri;
+    AtualizarStatusAuditoriaAplatColibri;
+    strGridAuditoriaAplatColibri.Invalidate;
+  end;
+end;
+
+procedure TFrmConsultaExecutantesProgramados.edtLimiteFolgaCurtaEmbarqueExit(
+  Sender: TObject);
+begin
+  if Trim(edtLimiteFolgaCurtaEmbarque.Text) = '' then
+    edtLimiteFolgaCurtaEmbarque.Text := IntToStr(FAuditoriaLimiteFolgaCurtaDias)
+  else if StrToIntDef(Trim(edtLimiteFolgaCurtaEmbarque.Text), 0) <= 0 then
+    edtLimiteFolgaCurtaEmbarque.Text := IntToStr(FAuditoriaLimiteFolgaCurtaDias);
+end;
+
+procedure TFrmConsultaExecutantesProgramados.edtBuscaEmbarqueChange(
+  Sender: TObject);
+begin
+  AplicarFiltroAuditoriaEmbarques;
+end;
+
+procedure TFrmConsultaExecutantesProgramados.strGridEmbarqueFixedCellClick(
+  Sender: TObject; ACol, ARow: Integer);
+begin
+  if ARow = AUD_ROW_COL_HEADER then
+    OrdenarAuditoriaEmbarques(ACol, True);
+end;
+
+procedure TFrmConsultaExecutantesProgramados.strGridEmbarqueMouseUp(
+  Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
+var
+  Col, Row: Longint;
+begin
+  if Button <> mbLeft then
+    Exit;
+
+  TStringGrid(Sender).MouseToCell(X, Y, Col, Row);
+  if Row = AUD_ROW_COL_HEADER then
+    OrdenarAuditoriaEmbarques(Col, True);
+end;
+
+procedure TFrmConsultaExecutantesProgramados.btnExcelAuditoriaEmbarqueClick(
+  Sender: TObject);
+begin
+  ExcelStringGrid(strGridEmbarque,'Dados_Embarque', '', '', '',
+  true, FrmPrincipal.ProgressBarPrincipal,FrmPrincipal.MemoPrincipal);
+end;
+
+procedure TFrmConsultaExecutantesProgramados.btnAtualizarAuditoriaAplatColibriClick(
+  Sender: TObject);
+begin
+  CarregarAuditoriaAplatColibri;
+end;
+
+procedure TFrmConsultaExecutantesProgramados.btnExcelAuditoriaAplatColibriClick(
+  Sender: TObject);
+begin
+  ExcelStringGrid(strGridAuditoriaAplatColibri,'Auditoria_APLAT_Colibri',
+    '', '', '', True, FrmPrincipal.ProgressBarPrincipal,
+    FrmPrincipal.MemoPrincipal);
+end;
+
+procedure TFrmConsultaExecutantesProgramados.edtBuscaAuditoriaAplatColibriChange(
+  Sender: TObject);
+begin
+  AplicarFiltroAuditoriaAplatColibri;
+end;
+
+procedure TFrmConsultaExecutantesProgramados.strGridAuditoriaAplatColibriFixedCellClick(
+  Sender: TObject; ACol, ARow: Integer);
+begin
+  if ARow = 0 then
+    OrdenarAuditoriaAplatColibri(ACol, True);
+end;
+
+procedure TFrmConsultaExecutantesProgramados.strGridAuditoriaAplatColibriMouseUp(
+  Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
+var
+  Col, Row: Longint;
+begin
+  if Button <> mbLeft then
+    Exit;
+
+  TStringGrid(Sender).MouseToCell(X, Y, Col, Row);
+  if Row = 0 then
+    OrdenarAuditoriaAplatColibri(Col, True);
 end;
 
 procedure TFrmConsultaExecutantesProgramados.btnSimulacaoBaseRealClick(
@@ -10936,5 +14743,35 @@ begin
     Result := Trim(DS.FieldByName(NomeCampo).AsString);
 end;
 
+function TFrmConsultaExecutantesProgramados.ExecVbsInterruptivel(
+  const AFileName: string; const AVisibility: Integer): Boolean;
+var
+  SI: TStartupInfo;
+  PI: TProcessInformation;
+  WaitResult: DWORD;
+  Cmd: string;
+begin
+  Result := False;
+  FillChar(SI, SizeOf(SI), 0);
+  SI.cb := SizeOf(SI);
+  SI.dwFlags := STARTF_USESHOWWINDOW;
+  SI.wShowWindow := AVisibility;
+  Cmd := 'wscript.exe "' + AFileName + '"';
+  if not CreateProcess(nil, PChar(Cmd),
+    nil, nil, False, 0, nil, nil, SI, PI) then
+    Exit;
+  Result := True;
+  try
+    repeat
+      WaitResult := WaitForSingleObject(PI.hProcess, 200);
+      if WaitResult = WAIT_TIMEOUT then
+        Application.ProcessMessages;
+    until WaitResult <> WAIT_TIMEOUT;
+  finally
+    CloseHandle(PI.hThread);
+    CloseHandle(PI.hProcess);
+  end;
+end;
 
 end.
+

@@ -1,4 +1,4 @@
-﻿unit untGerenciarEmbarcacoes;
+unit untGerenciarEmbarcacoes;
 
 interface
 
@@ -240,10 +240,11 @@ type
     actSugerirRota: TAction;
     actAlocacaoAutomatica: TAction;
     actCriarRotasAutomaticamente: TAction;
-    actParesObrigatorios: TAction;
     BitBtn4: TBitBtn;
     actExcluirRoteamentoTODOS: TAction;
     BitBtn6: TBitBtn;
+    actPrioridadeDistribuicao: TAction;
+    BitBtn10: TBitBtn;
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure FormDestroy(Sender: TObject);
     procedure FormCreate(Sender: TObject);
@@ -367,11 +368,13 @@ type
     procedure actCriarRotasAutomaticamenteExecute(Sender: TObject);
     procedure actParesObrigatoriosExecute(Sender: TObject);
     procedure actExcluirRoteamentoTODOSExecute(Sender: TObject);
+    procedure actPrioridadeDistribuicaoExecute(Sender: TObject);
 
   private
     booleanZoomMapa,BooleanIndividual: Boolean;
     FUltimoTickProgresso: Cardinal;
     procedure AtualizarProgressoCriacaoRotas(ATotal, AAtual: Integer; const AMensagem: string);
+    procedure SincronizarFiltroGridParaLayout(AGrid: TFilterDBGrid; ALayout: TStringGrid);
     { Private declarations }
 
     procedure WMMDIACTIVATE(var msg: TWMMDIACTIVATE);message WM_MDIACTIVATE;
@@ -387,8 +390,40 @@ var
   FrmGerenciarEmbarcacoes: TFrmGerenciarEmbarcacoes;
 
 implementation
-  uses untDataModule,UntPrincipal,untFrmPreview, untFrmTabela;
+  uses untDataModule,UntPrincipal,untFrmPreview, untFrmTabela, untFrmPrioridadeDistribuicao;
 {$R *.dfm}
+
+procedure TFrmGerenciarEmbarcacoes.SincronizarFiltroGridParaLayout(
+  AGrid: TFilterDBGrid; ALayout: TStringGrid);
+var
+  i, j: Integer;
+  FieldName: string;
+begin
+  if (AGrid = nil) or (ALayout = nil) or (AGrid.EffectiveLayoutGrid = nil) then
+    Exit;
+
+  ALayout.ColCount := AGrid.EffectiveLayoutGrid.ColCount;
+  ALayout.RowCount := AGrid.EffectiveLayoutGrid.RowCount;
+
+  for i := 0 to AGrid.EffectiveLayoutGrid.RowCount - 1 do
+    for j := 0 to AGrid.EffectiveLayoutGrid.ColCount - 1 do
+      if (j <> 4) and (j <> 5) then
+        ALayout.Cells[j, i] := AGrid.EffectiveLayoutGrid.Cells[j, i];
+
+  for i := 0 to ALayout.RowCount - 1 do
+  begin
+    FieldName := ALayout.Cells[0, i];
+    for j := 0 to AGrid.EffectiveLayoutGrid.RowCount - 1 do
+    begin
+      if SameText(AGrid.EffectiveLayoutGrid.Cells[0, j], FieldName) then
+      begin
+        ALayout.Cells[4, i] := AGrid.EffectiveLayoutGrid.Cells[4, j];
+        ALayout.Cells[5, i] := AGrid.EffectiveLayoutGrid.Cells[5, j];
+        Break;
+      end;
+    end;
+  end;
+end;
 
 procedure TFrmGerenciarEmbarcacoes.actAbrirDesenhoExecute(Sender: TObject);
 begin
@@ -518,16 +553,156 @@ end;
 
 procedure TFrmGerenciarEmbarcacoes.actExcluirRoteamentoTODOSExecute(
   Sender: TObject);
+var
+  ListaIds: TStringList;
+  QryUpdExec, QryDelAux, QryDelRota: TADOQuery;
+  I, CodigoRota, NumRegistros: Integer;
+  EmTransacao: Boolean;
 begin
-  if Application.MessageBox(PChar(
-  'Deseja realmente excluir todas as rotas filtradas?'),'.::ATENÇÃO::.',36) = 6 then
-  begin
-    FrmDataModule.ADOQueryRoteamento.First;
-    while not FrmDataModule.ADOQueryRoteamento.Eof do
-    begin
-      actExcluirVinculoExecuntanteTodos.Execute;
-      FrmDataModule.ADOQueryRoteamento.Delete;
+  if Application.MessageBox(
+       PChar('Deseja realmente excluir todas as rotas filtradas?'),
+       '.::ATENÇÃO::.',
+       MB_YESNO + MB_ICONQUESTION
+     ) = IDNO then
+    Exit;
+
+  if FrmDataModule.ADOQueryRoteamento.IsEmpty then
+    Exit;
+
+  Screen.Cursor := crHourGlass;
+  ListaIds := TStringList.Create;
+  QryUpdExec := TADOQuery.Create(nil);
+  QryDelAux := TADOQuery.Create(nil);
+  QryDelRota := TADOQuery.Create(nil);
+
+  try
+    // 1) Captura os IDs das rotas filtradas antes de começar a excluir
+    FrmDataModule.ADOQueryRoteamento.DisableControls;
+    try
+      FrmDataModule.ADOQueryRoteamento.First;
+      while not FrmDataModule.ADOQueryRoteamento.Eof do
+      begin
+        ListaIds.Add(
+          FrmDataModule.ADOQueryRoteamento.FieldByName('idRoteamento').AsString
+        );
+        FrmDataModule.ADOQueryRoteamento.Next;
+      end;
+    finally
+      FrmDataModule.ADOQueryRoteamento.EnableControls;
     end;
+
+    if ListaIds.Count = 0 then
+      Exit;
+
+    // 2) Prepara queries em lote
+    QryUpdExec.Connection := FrmDataModule.ADOConnectionColibri;
+    QryDelAux.Connection := FrmDataModule.ADOConnectionColibri;
+    QryDelRota.Connection := FrmDataModule.ADOConnectionColibri;
+
+    // Atualiza InseridoProgramacaoTransporte de todos os executantes da rota
+    QryUpdExec.SQL.Text :=
+      'UPDATE tblProgramacaoExecutante ' +
+      'INNER JOIN tblAux_Rota_Distribuicao ' +
+      'ON tblProgramacaoExecutante.idProgramacaoExecutante = tblAux_Rota_Distribuicao.CodigoProgramacaoExecutante ' +
+      'SET tblProgramacaoExecutante.InseridoProgramacaoTransporte = False ' +
+      'WHERE tblAux_Rota_Distribuicao.CodigoRota = :CodigoRota';
+
+    // Exclui vínculos da rota
+    QryDelAux.SQL.Text :=
+      'DELETE FROM tblAux_Rota_Distribuicao ' +
+      'WHERE CodigoRota = :CodigoRota';
+
+    // Exclui a própria rota
+    QryDelRota.SQL.Text :=
+      'DELETE FROM tblRoteamento ' +
+      'WHERE idRoteamento = :CodigoRota';
+
+    FrmPrincipal.ProgressBarIncializa(ListaIds.Count, 'Excluindo rotas filtradas...');
+
+    // 3) Executa tudo em transação
+    FrmDataModule.ADOConnectionColibri.BeginTrans;
+    EmTransacao := True;
+    try
+      for I := 0 to ListaIds.Count - 1 do
+      begin
+        CodigoRota := StrToIntDef(ListaIds[I], 0);
+        if CodigoRota <= 0 then
+          Continue;
+
+        QryUpdExec.Parameters.ParamByName('CodigoRota').Value := CodigoRota;
+        QryUpdExec.ExecSQL;
+
+        QryDelAux.Parameters.ParamByName('CodigoRota').Value := CodigoRota;
+        QryDelAux.ExecSQL;
+
+        QryDelRota.Parameters.ParamByName('CodigoRota').Value := CodigoRota;
+        QryDelRota.ExecSQL;
+
+        FrmPrincipal.ProgressBarIncremento(1);
+      end;
+
+      FrmDataModule.ADOConnectionColibri.CommitTrans;
+      EmTransacao := False;
+    except
+      on E: Exception do
+      begin
+        if EmTransacao then
+          FrmDataModule.ADOConnectionColibri.RollbackTrans;
+        raise;
+      end;
+    end;
+
+
+    // 4) Atualiza tudo uma única vez no final
+    FrmDataModule.ADOQueryRoteamento.Close;
+    FrmDataModule.ADOQueryRoteamento.Open;
+
+    if not FrmDataModule.ADOQueryRoteamento.IsEmpty then
+    begin
+      actProcuraRotaExecutantes.Execute;
+    end
+    else
+    begin
+      FrmDataModule.ADOQueryTM_RotaExecutantes.Close;
+      if FrmDataModule.ADOQueryTM_RotaExecutantes.Parameters.Count > 0 then
+        FrmDataModule.ADOQueryTM_RotaExecutantes.Parameters.Items[0].Value := 0;
+      FrmDataModule.ADOQueryTM_RotaExecutantes.Open;
+
+      StatusBarRotaExecutantes.Panels[0].Text := 'N° registros: 0';
+      AutoFitStatusBar(StatusBarRotaExecutantes);
+
+      StrGridRota.RowCount := 1;
+    end;
+
+    FrmDataModule.ADOQueryConsultaExecutantes_DataProgramacao.Close;
+    FrmDataModule.ADOQueryConsultaExecutantes_DataProgramacao.Open;
+
+    NumRegistros := FrmDataModule.ADOQueryRoteamento.RecordCount;
+    StatusBarRoteamento.Panels[0].Text := 'N° registros: ' + IntToStr(NumRegistros);
+    AutoFitStatusBar(StatusBarRoteamento);
+
+    if FrmDataModule.ADOQueryTM_RotaExecutantes.Active then
+      NumRegistros := FrmDataModule.ADOQueryTM_RotaExecutantes.RecordCount
+    else
+      NumRegistros := 0;
+
+    StatusBarRotaExecutantes.Panels[0].Text := 'N° registros: ' + IntToStr(NumRegistros);
+    AutoFitStatusBar(StatusBarRotaExecutantes);
+
+    NumRegistros := FrmDataModule.ADOQueryConsultaExecutantes_DataProgramacao.RecordCount;
+    StatusBarExecutantes.Panels[0].Text := 'N° registros: ' + IntToStr(NumRegistros);
+    AutoFitStatusBar(StatusBarExecutantes);
+
+    actFiltroDestinos.Execute;
+    actDisponivel.Execute;
+
+  finally
+    FrmPrincipal.ProgressBarAtualizar;
+    Screen.Cursor := crDefault;
+    ListaIds.Free;
+    QryUpdExec.Free;
+    QryDelAux.Free;
+    QryDelRota.Free;
   end;
 end;
 
@@ -774,6 +949,23 @@ begin
   try
     StrGridRota.FixedRows:= 1;
   except
+  end;
+end;
+
+procedure TFrmGerenciarEmbarcacoes.actPrioridadeDistribuicaoExecute(Sender: TObject);
+var
+  Frm: TFrmPrioridadeDistribuicao;
+begin
+  Frm := TFrmPrioridadeDistribuicao.Create(nil);
+  try
+    Frm.Inicializar(
+      FrmDataModule.ADOConnectionColibri,
+      FrmDataModule.ADOConnectionConsulta,
+      DateTimePickerProgramacao.DateTime
+    );
+    Frm.ShowModal;
+  finally
+    Frm.Free;
   end;
 end;
 
@@ -1126,21 +1318,30 @@ begin
         else
           Destino:= StrGridRota.Cells[1,i];
       end;
-      FrmPrincipal.buscaFiledGrid1('InseridoProgramacaoTransporte','False','Exato',ColunasLayoutProcuraGeral,4,false);
-      FrmPrincipal.buscaFiledGrid1('txtDestino',Destino,'Exato',ColunasLayoutProcuraGeral,4,false);
-      FrmPrincipal.buscaFiledGrid1('Origem',Origem,'Exato',ColunasLayoutProcuraGeral,4,false);
-      FrmPrincipal.buscaFiledGrid1('StatusProgramacao','Aprovado','Exato',ColunasLayoutProcuraGeral,4,false);
+      SetFilterValue('InseridoProgramacaoTransporte', 'False', 'Exato', ColunasLayoutProcuraGeral, 4, False);
+      SetFilterValue('txtDestino', Destino, 'Exato', ColunasLayoutProcuraGeral, 4, False);
+      SetFilterValue('Origem', Origem, 'Exato', ColunasLayoutProcuraGeral, 4, False);
+      SetFilterValue('StatusProgramacao', 'Aprovado', 'Exato', ColunasLayoutProcuraGeral, 4, False);
+      SetFilterValue('InseridoProgramacaoTransporte', 'False', 'Exato', DBGridProcuraGeral, 4, False);
+      SetFilterValue('txtDestino', Destino, 'Exato', DBGridProcuraGeral, 4, False);
+      SetFilterValue('Origem', Origem, 'Exato', DBGridProcuraGeral, 4, False);
+      SetFilterValue('StatusProgramacao', 'Aprovado', 'Exato', DBGridProcuraGeral, 4, False);
       actProcuraExecutantes.Execute;
     except
     end;
   end
   else
   begin
-    FrmPrincipal.buscaFiledGrid1('InseridoProgramacaoTransporte','','',ColunasLayoutProcuraGeral,4,false);
-    FrmPrincipal.buscaFiledGrid1('Origem','','',ColunasLayoutProcuraGeral,4,false);
-    FrmPrincipal.buscaFiledGrid1('txtDestino','','',ColunasLayoutProcuraGeral,4,false);
-    FrmPrincipal.buscaFiledGrid1('StatusProgramacao','','',ColunasLayoutProcuraGeral,4,false);
-    FrmPrincipal.buscaFiledGrid1('CodigoSAP','','',ColunasLayoutProcuraGeral,4,false);
+    SetFilterValue('InseridoProgramacaoTransporte', '', '', ColunasLayoutProcuraGeral, 4, False);
+    SetFilterValue('Origem', '', '', ColunasLayoutProcuraGeral, 4, False);
+    SetFilterValue('txtDestino', '', '', ColunasLayoutProcuraGeral, 4, False);
+    SetFilterValue('StatusProgramacao', '', '', ColunasLayoutProcuraGeral, 4, False);
+    SetFilterValue('CodigoSAP', '', '', ColunasLayoutProcuraGeral, 4, False);
+    SetFilterValue('InseridoProgramacaoTransporte', '', '', DBGridProcuraGeral, 4, False);
+    SetFilterValue('Origem', '', '', DBGridProcuraGeral, 4, False);
+    SetFilterValue('txtDestino', '', '', DBGridProcuraGeral, 4, False);
+    SetFilterValue('StatusProgramacao', '', '', DBGridProcuraGeral, 4, False);
+    SetFilterValue('CodigoSAP', '', '', DBGridProcuraGeral, 4, False);
     actProcuraExecutantes.Execute;
   end;
 end;
@@ -1325,7 +1526,8 @@ end;
 
 procedure TFrmGerenciarEmbarcacoes.actLimparFiltrosRotaExecute(Sender: TObject);
 begin
-  FrmPrincipal.LimparColunasFiltro(DBGridRotaExecutantes,ColunasLayoutRotaExecutantes);
+  ClearFilterValues(ColunasLayoutRotaExecutantes);
+  ClearFilterValues(DBGridRotaExecutantes);
   actProcuraRotaExecutantes.Execute;
 end;
 
@@ -1583,7 +1785,8 @@ begin
   if CheckBoxOrigemDestino.Checked then
     SQL_OrigemDestino:= 'AND (tblProgramacaoDiaria.txtDestino <> tblProgramacaoExecutante.Origem)';
   //==========================================================
-  SQLString:= frmPrincipal.SQLStringFiltroTabela(ColunasLayoutProcuraGeral,false);
+  SincronizarFiltroGridParaLayout(DBGridProcuraGeral, ColunasLayoutProcuraGeral);
+  SQLString:= BuildFilterSQL(ColunasLayoutProcuraGeral,false);
   //Query de procura
   if SQLString <> '' then
     SQLString:= ' AND '+SQLString;
@@ -1612,7 +1815,8 @@ begin
   if CheckBoxOrigemDestino.Checked then
     SQL_OrigemDestino:= 'AND (tblProgramacaoDiaria.txtDestino <> tblProgramacaoExecutante.Origem)';
   //==========================================================
-  SQLString:= frmPrincipal.SQLStringFiltroTabela(ColunasLayoutProgramados,false);
+  SincronizarFiltroGridParaLayout(DBGridProcuraProgramados, ColunasLayoutProgramados);
+  SQLString:= BuildFilterSQL(ColunasLayoutProgramados,false);
   //Query de procura
   if SQLString <> '' then
     SQLString:= ' AND '+SQLString;
@@ -1644,7 +1848,8 @@ begin
   begin
     try
       idRoteamento:= FrmDataModule.DataSourceRoteamento.DataSet.FieldByName('idRoteamento').AsString;
-      SQLString:= frmPrincipal.SQLStringFiltroTabela(ColunasLayoutRotaExecutantes,false);
+      SincronizarFiltroGridParaLayout(DBGridRotaExecutantes, ColunasLayoutRotaExecutantes);
+      SQLString:= BuildFilterSQL(ColunasLayoutRotaExecutantes,false);
       if SQLString<>'' then
         SQLString:= 'AND'+SQLString;
       SQLBase:= 'SELECT tblRoteamento.*, tblAux_Rota_Distribuicao.*, tblProgramacaoExecutante.*, '+
@@ -1717,7 +1922,8 @@ procedure TFrmGerenciarEmbarcacoes.actProcuraRoteamentoExecute(Sender: TObject);
     SQLString,SQLBase,DataProcura: String;
 begin
   DataProcura:= DateToStr(DateTimePickerProgramacao.Date);
-  SQLString:= frmPrincipal.SQLStringFiltroTabela(ColunasLayoutRoteamento,false);
+  SincronizarFiltroGridParaLayout(DBGridRoteamento, ColunasLayoutRoteamento);
+  SQLString:= BuildFilterSQL(ColunasLayoutRoteamento,false);
   if SQLString<>'' then
     SQLString:= 'AND'+SQLString;
   SQLBase:=  'SELECT tblRoteamento.* FROM tblRoteamento '+
@@ -2762,7 +2968,7 @@ procedure TFrmGerenciarEmbarcacoes.DBGridProcuraGeralDrawColumnCell(Sender: TObj
   var
     CheckBoxRectangle : TRect;
 begin
-  FrmPrincipal.GridZebrado(DBGridProcuraGeral,ColunasLayoutProcuraGeral,State,Rect,DataCol,Column);
+
   if (Column.Field.FieldName = 'InseridoProgramacaoTransporte') then
   begin
     if FrmDataModule.DataSourceConsultaExecutantes_DataProgramacao.DataSet.
@@ -2840,7 +3046,7 @@ procedure TFrmGerenciarEmbarcacoes.DBGridProcuraProgramadosDrawColumnCell(
   var
     CheckBoxRectangle : TRect;
 begin
-  FrmPrincipal.GridZebrado(DBGridProcuraProgramados,ColunasLayoutProgramados,State,Rect,DataCol,Column);
+
   if (Column.Field.FieldName = 'RequisitantePT') then
   begin
     if FrmDataModule.DataSourceProgramados.DataSet.
@@ -2890,7 +3096,7 @@ end;
 procedure TFrmGerenciarEmbarcacoes.DBGridRoteamentoDrawColumnCell(Sender: TObject;
   const Rect: TRect; DataCol: Integer; Column: TColumn; State: TGridDrawState);
 begin
-  FrmPrincipal.GridZebrado(DBGridRoteamento,ColunasLayoutRoteamento,State,Rect,DataCol,Column);
+
   if (gdFocused in State) then
   begin
     //Cor da linha
@@ -2969,7 +3175,7 @@ procedure TFrmGerenciarEmbarcacoes.DBGridRotaExecutantesDrawColumnCell(
   var
     CheckBoxRectangle : TRect;
 begin
-  FrmPrincipal.GridZebrado(DBGridRotaExecutantes,ColunasLayoutRotaExecutantes,State,Rect,DataCol,Column);
+
   if (Column.Field.FieldName = 'booleanSelecao') then   //  mudança no código
   begin
     Self.DBGridRotaExecutantes.Canvas.FillRect(Rect);
@@ -3072,10 +3278,6 @@ end;
 procedure TFrmGerenciarEmbarcacoes.FormCreate(Sender: TObject);
 begin
   FrmPrincipal.ProgressBarIncializa(7,'Inicializando....');
-  FrmDataModule.setFilterDBGrid(DBGridRoteamento);
-  FrmDataModule.setFilterDBGrid(DBGridRotaExecutantes);
-  FrmDataModule.setFilterDBGrid(DBGridProcuraGeral);
-  FrmDataModule.setFilterDBGrid(DBGridProcuraProgramados);
 
   PageControlPrincipal.TabIndex:= 0;
   StrGridRota.Cells[1,0]:= 'Plataforma';
@@ -3140,10 +3342,6 @@ begin
     StrGridRota.Enabled:= false;
   end;
   FrmPrincipal.ProgressBarIncremento(1);
-  FrmDataModule.setFilterDBGrid(DBGridProcuraProgramados);
-  FrmDataModule.setFilterDBGrid(DBGridProcuraGeral);
-  FrmDataModule.setFilterDBGrid(DBGridRotaExecutantes);
-  FrmDataModule.setFilterDBGrid(DBGridRoteamento);
   FrmPrincipal.ProgressBarIncremento(1);
   actLocalizarRoteamentos.Execute;
   FrmPrincipal.ProgressBarIncremento(1);
@@ -3294,3 +3492,5 @@ begin
 end;
 
 end.
+
+

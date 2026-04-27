@@ -1,4 +1,4 @@
-﻿unit untGerenciarSolicitacoes;
+unit untGerenciarSolicitacoes;
 
 interface
 
@@ -8,10 +8,36 @@ uses
   Data.DB, Vcl.Grids, Vcl.DBGrids, System.Actions, Vcl.ActnList,
   Vcl.PlatformDefaultStyleActnCtrls, Vcl.ActnMan, Vcl.StdCtrls, Vcl.Buttons,
   Vcl.Mask, Vcl.DBCtrls,DateUtils, Vcl.Menus, Vcl.CheckLst, ADODB, SDL_NumIO,
-  Clipbrd,
+  Clipbrd, System.Generics.Collections, System.Math,
   untDBGridFilter, uZucchi, uProgramacaoRTUtils;
 
 type
+  TControlMetrics = record
+    Left: Integer;
+    Top: Integer;
+    Width: Integer;
+    Height: Integer;
+    FontHeight: Integer;
+  end;
+
+  TToolBarMetrics = record
+    ButtonWidth: Integer;
+    ButtonHeight: Integer;
+  end;
+
+  TStringGridMetrics = record
+    FontHeight: Integer;
+    DefaultColWidth: Integer;
+    DefaultRowHeight: Integer;
+    ColWidths: TArray<Integer>;
+  end;
+
+  TDBGridMetrics = record
+    FontHeight: Integer;
+    TitleFontHeight: Integer;
+    ColumnWidths: TArray<Integer>;
+  end;
+
   TFrmGerenciarSolicitacoes = class(TForm)
     PanelTitulo: TPanel;
     ActionManager1: TActionManager;
@@ -132,23 +158,20 @@ type
     Panel17: TPanel;
     DBCheckBox1: TDBCheckBox;
     DBGridContador: TFilterDBGrid;
-    ColunasLayoutContador: TStringGrid;
     actConfigurarContador: TAction;
     ToolButton11: TToolButton;
     Panel19: TPanel;
     DBGridServicos: TFilterDBGrid;
-    ColunasLayoutServico: TStringGrid;
     btnFiltroClearExecutantes: TToolButton;
     btnClearFiltroContador: TToolButton;
     btnExcelContador: TToolButton;
     ToolButton6: TToolButton;
     actExcelProgramacao: TAction;
     actCopyImage: TAction;
+    Splitter2: TSplitter;
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
-    procedure DBGridServicosDrawColumnCell(Sender: TObject; const Rect: TRect;
-      DataCol: Integer; Column: TColumn; State: TGridDrawState);
     procedure actCancelarSelecionadoExecute(Sender: TObject);
     procedure PanelTituloAjudaMouseDown(Sender: TObject; Button: TMouseButton;
       Shift: TShiftState; X, Y: Integer);
@@ -234,6 +257,11 @@ type
     abrirDestinoOrigem: Boolean;
     MatrizPlataforma,MatrizConsulta: array of array of String;
     DestinoMudanca: String;
+    FEscalaVisualAtual: Integer;
+    FMetricsControles: TDictionary<TControl, TControlMetrics>;
+    FMetricsToolBars: TDictionary<TToolBar, TToolBarMetrics>;
+    FMetricsStringGrids: TDictionary<TStringGrid, TStringGridMetrics>;
+    FMetricsDBGrids: TDictionary<TDBGrid, TDBGridMetrics>;
     procedure WMMDIACTIVATE(var msg: TWMMDIACTIVATE);message WM_MDIACTIVATE;
     procedure GravarStatus(StatusProgramacao: String);
     function TotalDestino(Destino,StatusProgramacao: String): Integer;
@@ -244,6 +272,20 @@ type
     function InfoPlataforma(Plataforma: String): TPlataforma;
     function SalvatagemPlataforma(Plataforma: String): String;
     procedure CopiarGridComoImagemParaClipboard(AGrid: TStringGrid);
+    procedure CapturarMetricasBase;
+    procedure AplicarEscalaVisual(const APercent: Integer);
+    procedure AplicarEscalaControle(AControl: TControl; const APercent: Integer);
+    procedure AplicarEscalaToolBar(AToolBar: TToolBar; const APercent: Integer);
+    procedure AplicarEscalaStringGrid(AGrid: TStringGrid; const APercent: Integer);
+    procedure AplicarEscalaDBGrid(AGrid: TDBGrid; const APercent: Integer);
+    procedure AutoFitStringGridLocal(AGrid: TStringGrid);
+    procedure AjustarColunasFixasExecutantes(const APercent: Integer);
+    function EscalarValor(const AValor, APercent: Integer;
+      const AMinimo: Integer = 0): Integer;
+    procedure AtualizarHintsZoom;
+    procedure AplicarModoApresentacao(const AAtivo: Boolean);
+    procedure LimparFiltrosExecutantes;
+    procedure btnFiltroClearExecutantesClick(Sender: TObject);
 
   public
     procedure StatusLinhaSelecionada;
@@ -260,6 +302,302 @@ implementation
 
 type
   TWinControlAccess = class(TWinControl);
+
+const
+  ESCALA_VISUAL_MIN = 100;
+  ESCALA_VISUAL_APRESENTACAO = 135;
+  ESCALA_VISUAL_MAX = 160;
+  ESCALA_VISUAL_PASSO = 10;
+
+function LerFontHeight(AControl: TControl): Integer;
+begin
+  if AControl is TWinControl then
+    Result := TWinControlAccess(AControl).Font.Height
+  else
+    Result := 0;
+end;
+
+function EscalarFontHeight(const ABaseHeight, APercent: Integer): Integer;
+begin
+  Result := MulDiv(ABaseHeight, APercent, 100);
+
+  if ABaseHeight < 0 then
+  begin
+    if Result > -8 then
+      Result := -8;
+  end
+  else if (ABaseHeight > 0) and (Result < 8) then
+    Result := 8;
+end;
+
+procedure DefinirFontHeight(AControl: TControl; const AHeight: Integer);
+begin
+  if AControl is TWinControl then
+    TWinControlAccess(AControl).Font.Height := AHeight;
+end;
+
+function TFrmGerenciarSolicitacoes.EscalarValor(const AValor,
+  APercent: Integer; const AMinimo: Integer = 0): Integer;
+begin
+  Result := MulDiv(AValor, APercent, 100);
+  if Result < AMinimo then
+    Result := AMinimo;
+end;
+
+procedure TFrmGerenciarSolicitacoes.CapturarMetricasBase;
+var
+  I, J: Integer;
+  C: TControl;
+  Metrics: TControlMetrics;
+  ToolBarMetrics: TToolBarMetrics;
+  StringGridMetrics: TStringGridMetrics;
+  DBGridMetrics: TDBGridMetrics;
+begin
+  if not Assigned(FMetricsControles) then
+    Exit;
+
+  FMetricsControles.Clear;
+  FMetricsToolBars.Clear;
+  FMetricsStringGrids.Clear;
+  FMetricsDBGrids.Clear;
+
+  for I := 0 to ComponentCount - 1 do
+  begin
+    if not (Components[I] is TControl) then
+      Continue;
+
+    C := TControl(Components[I]);
+    Metrics.Left := C.Left;
+    Metrics.Top := C.Top;
+    Metrics.Width := C.Width;
+    Metrics.Height := C.Height;
+
+    Metrics.FontHeight := LerFontHeight(C);
+
+    FMetricsControles.AddOrSetValue(C, Metrics);
+
+    if C is TToolBar then
+    begin
+      ToolBarMetrics.ButtonWidth := TToolBar(C).ButtonWidth;
+      ToolBarMetrics.ButtonHeight := TToolBar(C).ButtonHeight;
+      FMetricsToolBars.AddOrSetValue(TToolBar(C), ToolBarMetrics);
+    end;
+
+    if C is TStringGrid then
+    begin
+      StringGridMetrics.FontHeight := LerFontHeight(C);
+      StringGridMetrics.DefaultColWidth := TStringGrid(C).DefaultColWidth;
+      StringGridMetrics.DefaultRowHeight := TStringGrid(C).DefaultRowHeight;
+      SetLength(StringGridMetrics.ColWidths, TStringGrid(C).ColCount);
+      for J := 0 to TStringGrid(C).ColCount - 1 do
+        StringGridMetrics.ColWidths[J] := TStringGrid(C).ColWidths[J];
+      FMetricsStringGrids.AddOrSetValue(TStringGrid(C), StringGridMetrics);
+    end;
+
+    if C is TDBGrid then
+    begin
+      DBGridMetrics.FontHeight := LerFontHeight(C);
+      DBGridMetrics.TitleFontHeight := TDBGrid(C).TitleFont.Height;
+      SetLength(DBGridMetrics.ColumnWidths, TDBGrid(C).Columns.Count);
+      for J := 0 to TDBGrid(C).Columns.Count - 1 do
+        DBGridMetrics.ColumnWidths[J] := TDBGrid(C).Columns[J].Width;
+      FMetricsDBGrids.AddOrSetValue(TDBGrid(C), DBGridMetrics);
+    end;
+  end;
+end;
+
+procedure TFrmGerenciarSolicitacoes.AplicarEscalaControle(AControl: TControl;
+  const APercent: Integer);
+var
+  Metrics: TControlMetrics;
+begin
+  if (AControl = nil) or
+     (not Assigned(FMetricsControles)) or
+     (not FMetricsControles.TryGetValue(AControl, Metrics)) then
+    Exit;
+
+  if (AControl is TWinControl) and (Metrics.FontHeight <> 0) and
+     not (AControl is TPanel) and
+     not (AControl is TStatusBar) and
+     not (AControl is TBitBtn) and
+     not (AControl is TSpeedButton) and
+     not (AControl is TToolBar) and
+     not (AControl is TToolButton) then
+    DefinirFontHeight(AControl, EscalarFontHeight(Metrics.FontHeight, APercent));
+
+  if (AControl is TDBEdit) or (AControl is TDateTimePicker) or
+          (AControl is TComboBox) then
+    AControl.Height := EscalarValor(Metrics.Height, APercent, 21)
+  else if AControl is TDBMemo then
+    TDBMemo(AControl).ScrollBars := ssVertical
+  else if AControl is TSplitter then
+  begin
+    if TSplitter(AControl).Align in [alLeft, alRight] then
+      AControl.Width := EscalarValor(Metrics.Width, APercent, 4)
+    else
+      AControl.Height := EscalarValor(Metrics.Height, APercent, 4);
+  end;
+end;
+
+procedure TFrmGerenciarSolicitacoes.AplicarEscalaToolBar(AToolBar: TToolBar;
+  const APercent: Integer);
+var
+  Metrics: TToolBarMetrics;
+begin
+  if (AToolBar = nil) or
+     (not Assigned(FMetricsToolBars)) or
+     (not FMetricsToolBars.TryGetValue(AToolBar, Metrics)) then
+    Exit;
+
+  if Metrics.ButtonWidth > 0 then
+    AToolBar.ButtonWidth := Metrics.ButtonWidth;
+
+  if Metrics.ButtonHeight > 0 then
+    AToolBar.ButtonHeight := Metrics.ButtonHeight;
+end;
+
+procedure TFrmGerenciarSolicitacoes.AplicarEscalaStringGrid(AGrid: TStringGrid;
+  const APercent: Integer);
+var
+  Metrics: TStringGridMetrics;
+  I: Integer;
+begin
+  if (AGrid = nil) or
+     (not Assigned(FMetricsStringGrids)) or
+     (not FMetricsStringGrids.TryGetValue(AGrid, Metrics)) then
+    Exit;
+
+  DefinirFontHeight(AGrid, EscalarFontHeight(Metrics.FontHeight, APercent));
+  AGrid.DefaultColWidth := EscalarValor(Metrics.DefaultColWidth, APercent, 20);
+  AGrid.DefaultRowHeight := EscalarValor(Metrics.DefaultRowHeight, APercent, 18);
+
+  if Length(Metrics.ColWidths) = AGrid.ColCount then
+  begin
+    for I := 0 to AGrid.ColCount - 1 do
+      AGrid.ColWidths[I] := EscalarValor(Metrics.ColWidths[I], APercent, 20);
+  end;
+
+  AutoFitStringGridLocal(AGrid);
+end;
+
+procedure TFrmGerenciarSolicitacoes.AplicarEscalaDBGrid(AGrid: TDBGrid;
+  const APercent: Integer);
+var
+  Metrics: TDBGridMetrics;
+  I: Integer;
+begin
+  if (AGrid = nil) or
+     (not Assigned(FMetricsDBGrids)) or
+     (not FMetricsDBGrids.TryGetValue(AGrid, Metrics)) then
+    Exit;
+
+  DefinirFontHeight(AGrid, EscalarFontHeight(Metrics.FontHeight, APercent));
+  AGrid.TitleFont.Height := EscalarFontHeight(Metrics.TitleFontHeight, APercent);
+
+  for I := 0 to Min(AGrid.Columns.Count, Length(Metrics.ColumnWidths)) - 1 do
+    AGrid.Columns[I].Width := EscalarValor(Metrics.ColumnWidths[I], APercent, 30);
+end;
+
+procedure TFrmGerenciarSolicitacoes.AutoFitStringGridLocal(AGrid: TStringGrid);
+var
+  Coluna: Integer;
+  Linha: Integer;
+  LarguraColuna: Integer;
+  LarguraTotal: Integer;
+  EspacoDisponivel: Integer;
+  Padding: Integer;
+begin
+  if (AGrid = nil) or (AGrid.ColCount <= 0) then
+    Exit;
+
+  Padding := Max(12, MulDiv(16, FEscalaVisualAtual, 100));
+  AGrid.Canvas.Font := AGrid.Font;
+  LarguraTotal := 0;
+
+  for Coluna := 0 to AGrid.ColCount - 1 do
+  begin
+    LarguraColuna := EscalarValor(20, FEscalaVisualAtual, 20);
+
+    for Linha := 0 to AGrid.RowCount - 1 do
+      LarguraColuna := Max(LarguraColuna,
+        AGrid.Canvas.TextWidth(Trim(AGrid.Cells[Coluna, Linha])) + Padding);
+
+    AGrid.ColWidths[Coluna] := LarguraColuna;
+    Inc(LarguraTotal, LarguraColuna);
+  end;
+
+  EspacoDisponivel := AGrid.ClientWidth - LarguraTotal;
+  if (EspacoDisponivel > 0) and (AGrid.ColCount > 0) then
+    AGrid.ColWidths[AGrid.ColCount - 1] :=
+      AGrid.ColWidths[AGrid.ColCount - 1] + EspacoDisponivel;
+end;
+
+procedure TFrmGerenciarSolicitacoes.AjustarColunasFixasExecutantes(
+  const APercent: Integer);
+begin
+  if DBGridExecutantes.Columns.Count >= 3 then
+  begin
+    DBGridExecutantes.Columns[0].Width := EscalarValor(40, APercent, 40);
+    DBGridExecutantes.Columns[1].Width := EscalarValor(40, APercent, 40);
+    DBGridExecutantes.Columns[2].Width := EscalarValor(40, APercent, 40);
+  end;
+end;
+
+procedure TFrmGerenciarSolicitacoes.AtualizarHintsZoom;
+begin
+  actZoomMais.Hint := Format('Ampliar visualizacao (%d%%)', [FEscalaVisualAtual]);
+  actZoomMenos.Hint := Format('Reduzir visualizacao (%d%%)', [FEscalaVisualAtual]);
+end;
+
+procedure TFrmGerenciarSolicitacoes.AplicarEscalaVisual(
+  const APercent: Integer);
+var
+  I: Integer;
+begin
+  FEscalaVisualAtual := EnsureRange(APercent, ESCALA_VISUAL_MIN, ESCALA_VISUAL_MAX);
+
+  DisableAlign;
+  try
+    for I := 0 to ComponentCount - 1 do
+      if Components[I] is TControl then
+        AplicarEscalaControle(TControl(Components[I]), FEscalaVisualAtual);
+
+    AplicarEscalaToolBar(ToolBar1, FEscalaVisualAtual);
+    AplicarEscalaToolBar(ToolBar2, FEscalaVisualAtual);
+    AplicarEscalaToolBar(ToolBar3, FEscalaVisualAtual);
+    AplicarEscalaToolBar(ToolBar5, FEscalaVisualAtual);
+    AplicarEscalaToolBar(ToolBar6, FEscalaVisualAtual);
+
+    AplicarEscalaDBGrid(DBGridExecutantes, FEscalaVisualAtual);
+    AplicarEscalaDBGrid(DBGridServicos, FEscalaVisualAtual);
+    AplicarEscalaDBGrid(DBGridContador, FEscalaVisualAtual);
+
+    AplicarEscalaStringGrid(RLDestinoOrigem, FEscalaVisualAtual);
+    AplicarEscalaStringGrid(RLContadorSolicitacao, FEscalaVisualAtual);
+    AplicarEscalaStringGrid(RLAlterarDestinos, FEscalaVisualAtual);
+
+
+
+    FrmPrincipal.AutoSizeDBGrid(DBGridExecutantes);
+    FrmPrincipal.AutoSizeDBGrid(DBGridServicos);
+    AjustarColunasFixasExecutantes(FEscalaVisualAtual);
+    AutoFitStatusBar(StatusBarExecutantes);
+  finally
+    EnableAlign;
+    Realign;
+    Invalidate;
+  end;
+
+  AtualizarHintsZoom;
+end;
+
+procedure TFrmGerenciarSolicitacoes.AplicarModoApresentacao(const AAtivo: Boolean);
+begin
+  if AAtivo then
+    AplicarEscalaVisual(ESCALA_VISUAL_APRESENTACAO)
+  else
+    AplicarEscalaVisual(ESCALA_VISUAL_MIN);
+end;
 
 procedure TFrmGerenciarSolicitacoes.actAbrirServicoExecute(Sender: TObject);
   var
@@ -294,8 +632,10 @@ procedure TFrmGerenciarSolicitacoes.actAutoFitExecute(Sender: TObject);
 begin
   FrmPrincipal.AutoSizeDBGrid(DBGridExecutantes);
   FrmPrincipal.AutoSizeDBGrid(DBGridServicos);
-  AutoFitGrade(RLDestinoOrigem);
+  AutoFitStringGridLocal(RLDestinoOrigem);
+  AutoFitStringGridLocal(RLContadorSolicitacao);
   AutoFitStatusBar(StatusBarExecutantes);
+  AjustarColunasFixasExecutantes(FEscalaVisualAtual);
 end;
 
 procedure TFrmGerenciarSolicitacoes.actOcultarExecute(Sender: TObject);
@@ -471,7 +811,7 @@ begin
 
   StatusBarAlterarDestinos.Panels[0].Text:= 'N° registros: '+
   intToStr(RLAlterarDestinos.RowCount-1);
-  AutoFitGrade(RLAlterarDestinos);
+  AutoFitStringGridLocal(RLAlterarDestinos);
   FrmPrincipal.ProgressBarAtualizar;
   RLAlterarDestinos.ColWidths[1] := 90;
   AutoFitStatusBar(StatusBarAlterarDestinos);
@@ -529,7 +869,7 @@ begin
     begin
       ListaNaoEncontrado:= TStringList.Create;
       ListaNaoEncontrado.Clear;
-      btnFiltroClearExecutantes.Click;
+      btnFiltroClearExecutantesClick(btnFiltroClearExecutantes);
       SQLBase:=
       'SELECT tblProgramacaoDiaria.*, tblProgramacaoExecutante.* '+
       'FROM tblProgramacaoDiaria INNER JOIN tblProgramacaoExecutante ON '+
@@ -543,13 +883,14 @@ begin
       FrmDataModule.ADOQueryTemporarioDBColibri.Open;
       while not FrmDataModule.ADOQueryTemporarioDBColibri.Eof do
       begin
+        LimparFiltrosExecutantes;
         txtDestino:= FrmDataModule.DataSourceTemporarioDBColibri.DataSet.
         FieldByName('txtDestino').AsString;
         NomeExecutante:= FrmDataModule.DataSourceTemporarioDBColibri.DataSet.
         FieldByName('NomeExecutante').AsString;
-        FrmPrincipal.buscaFiledGrid1('Origem',FrmPrincipal.OrigemPlataformas,'Exato',ColunasLayoutExecutantes,4,false);
-        FrmPrincipal.buscaFiledGrid1('NomeExecutante',NomeExecutante,'Exato',ColunasLayoutExecutantes,4,false);
-        FrmPrincipal.buscaFiledGrid1('txtDestino',txtDestino,'Exato',ColunasLayoutExecutantes,4,false);
+        SetFilterValue('Origem', FrmPrincipal.OrigemPlataformas, 'Exato', DBGridExecutantes, 4, False);
+        SetFilterValue('NomeExecutante', NomeExecutante, 'Exato', DBGridExecutantes, 4, False);
+        SetFilterValue('txtDestino', txtDestino, 'Exato', DBGridExecutantes, 4, False);
         actProcurar.Execute;
         if not FrmDataModule.ADOQueryGerenciarExecutante.IsEmpty then
         begin
@@ -564,8 +905,8 @@ begin
         end;
         FrmDataModule.ADOQueryTemporarioDBColibri.Next;
       end;
-      btnFiltroClearExecutantes.Click;
-      FrmPrincipal.buscaFiledGrid1('Kit_PS','True','Exato',ColunasLayoutExecutantes,4,false);
+      btnFiltroClearExecutantesClick(btnFiltroClearExecutantes);
+      SetFilterValue('Kit_PS', 'True', 'Exato', DBGridExecutantes, 4, False);
       actProcurar.Execute;
       if ListaNaoEncontrado.Count > 0 then
       begin
@@ -620,6 +961,9 @@ begin
   RLContadorSolicitacao.Rows[0].Clear;
   while not FrmDataModule.ADOQueryContadorSolicitacao.Eof do
   begin
+    if RLContadorSolicitacao.ColCount < (Coluna + 1) then
+      RLContadorSolicitacao.ColCount:= Coluna + 1;
+
     Descricao:= FrmDataModule.DataSourceContadorSolicitacao.DataSet.FieldByName('Descricao').AsString;
     Origem:= FrmDataModule.DataSourceContadorSolicitacao.DataSet.FieldByName('Origem').AsString;
     Destino:= FrmDataModule.DataSourceContadorSolicitacao.DataSet.FieldByName('Destino').AsString;
@@ -647,11 +991,16 @@ begin
         Total:= Total+1;
     end;
     RLContadorSolicitacao.Cells[Coluna,0]:= Descricao+': '+IntToStr(Total);
-    Coluna:= RLContadorSolicitacao.ColCount;
-    RLContadorSolicitacao.ColCount:= RLContadorSolicitacao.ColCount+1;
+    Inc(Coluna);
     FrmDataModule.ADOQueryContadorSolicitacao.Next;
   end;
-  AutoFitGrade(RLContadorSolicitacao);
+
+  if Coluna = 0 then
+    RLContadorSolicitacao.ColCount:= 1
+  else
+    RLContadorSolicitacao.ColCount:= Coluna;
+
+  AplicarEscalaStringGrid(RLContadorSolicitacao, FEscalaVisualAtual);
   FrmDataModule.ADOQueryContadorSolicitacao.First;
   FrmDataModule.DataSourceContadorSolicitacao.Enabled:= true;
 end;
@@ -882,10 +1231,11 @@ begin
     RLDestinoOrigem.FixedRows:= 1;
     RLDestinoOrigem.Rows[1].Clear;
   end;
-  AutoFitGrade(RLDestinoOrigem);
+  AutoFitStringGridLocal(RLDestinoOrigem);
   RLDestinoOrigem.Row:= 1;
   Destino:= (RLDestinoOrigem.Cells[0,1]);
-  FrmPrincipal.buscaFiledGrid1('txtDestino',Destino,'Contem',ColunasLayoutExecutantes,4,false);
+  LimparFiltrosExecutantes;
+  SetFilterValue('txtDestino', Destino, 'Contem', DBGridExecutantes, 4, False);
   actProcurar.Execute;
 end;
 
@@ -975,10 +1325,11 @@ begin
     RLDestinoOrigem.FixedRows:= 1;
     RLDestinoOrigem.Rows[1].Clear;
   end;
-  AutoFitGrade(RLDestinoOrigem);
+  AutoFitStringGridLocal(RLDestinoOrigem);
   RLDestinoOrigem.Row:= 1;
   Origem:= (RLDestinoOrigem.Cells[0,1]);
-  FrmPrincipal.buscaFiledGrid1('Origem',Origem,'Contem',ColunasLayoutExecutantes,4,false);
+  LimparFiltrosExecutantes;
+  SetFilterValue('Origem', Origem, 'Contem', DBGridExecutantes, 4, False);
   actProcurar.Execute;
 end;
 
@@ -989,7 +1340,7 @@ begin
   if not FrmDataModule.ADOQueryGerenciarSolicitacoes.IsEmpty then
   begin
     DataProcura:= DateToStr(DateProgramacao.Date);
-    SQLString:= frmPrincipal.SQLStringFiltroTabela(ColunasLayoutExecutantes,false);
+    SQLString:= BuildFilterSQL(DBGridExecutantes,false);
     if SQLString <> '' then
       SQLString:= ' AND '+SQLString;
     SQLBase:=
@@ -1089,53 +1440,18 @@ end;
 
 procedure TFrmGerenciarSolicitacoes.actZoomMaisExecute(Sender: TObject);
 begin
-  DBGridExecutantes.Font.Size:= DBGridExecutantes.Font.Size+1;
-  DBGridServicos.Font.Size:= DBGridServicos.Font.Size+1;
-  //RLDestinoOrigem
-  RLDestinoOrigem.Font.Size:= RLDestinoOrigem.Font.Size+1;
-  RLDestinoOrigem.DefaultRowHeight:= RLDestinoOrigem.DefaultRowHeight+1;
-  AutoFitGrade(RLDestinoOrigem);
-  //Contador Solicitações
-  RLContadorSolicitacao.Font.Size:= RLContadorSolicitacao.Font.Size+1;
-  RLContadorSolicitacao.DefaultRowHeight:= RLContadorSolicitacao.DefaultRowHeight+1;
-  AutoFitGrade(RLContadorSolicitacao);
-  //StatusBarExecutantes
-  StatusBarExecutantes.Height:= StatusBarExecutantes.Height+2;
-  StatusBarExecutantes.Font.Size:= StatusBarExecutantes.Font.Size+1;
-  //Notas
-  DBMemoNotas.Font.Size:= DBMemoNotas.Font.Size+1;
-  //AutoFit
-  actAutoFit.Execute;
-  DBGridExecutantes.Columns[0].Width:= 40;
-  DBGridExecutantes.Columns[1].Width:= 40;
-  DBGridExecutantes.Columns[2].Width:= 40;
+  if FEscalaVisualAtual < ESCALA_VISUAL_APRESENTACAO then
+    AplicarModoApresentacao(True)
+  else
+    AplicarEscalaVisual(FEscalaVisualAtual + ESCALA_VISUAL_PASSO);
 end;
 
 procedure TFrmGerenciarSolicitacoes.actZoomMenosExecute(Sender: TObject);
 begin
-  if DBGridExecutantes.Font.Size > 7 then
-  begin
-    DBGridExecutantes.Font.Size:= DBGridExecutantes.Font.Size-1;
-    DBGridServicos.Font.Size:= DBGridServicos.Font.Size-1;
-    //RLDestinoOrigem
-    RLDestinoOrigem.Font.Size:= RLDestinoOrigem.Font.Size-1;
-    RLDestinoOrigem.DefaultRowHeight:= RLDestinoOrigem.DefaultRowHeight-1;
-    AutoFitGrade(RLDestinoOrigem);
-    //Contador Solicitações
-    RLContadorSolicitacao.Font.Size:= RLContadorSolicitacao.Font.Size-1;
-    RLContadorSolicitacao.DefaultRowHeight:= RLContadorSolicitacao.DefaultRowHeight-1;
-    AutoFitGrade(RLContadorSolicitacao);
-    //StatusBarExecutantes
-    StatusBarExecutantes.Font.Size:= StatusBarExecutantes.Font.Size-1;
-    StatusBarExecutantes.Height:= StatusBarExecutantes.Height-2;
-    //Notas
-    DBMemoNotas.Font.Size:= DBMemoNotas.Font.Size-1;
-    //AutoFit
-    actAutoFit.Execute;
-    DBGridExecutantes.Columns[0].Width:= 40;
-    DBGridExecutantes.Columns[1].Width:= 40;
-    DBGridExecutantes.Columns[2].Width:= 40;
-  end;
+  if FEscalaVisualAtual <= ESCALA_VISUAL_APRESENTACAO then
+    AplicarModoApresentacao(False)
+  else
+    AplicarEscalaVisual(FEscalaVisualAtual - ESCALA_VISUAL_PASSO);
 end;
 
 procedure TFrmGerenciarSolicitacoes.btnDestinoClick(Sender: TObject);
@@ -1269,7 +1585,7 @@ procedure TFrmGerenciarSolicitacoes.DBGridContadorDrawColumnCell(
   var
     CheckBoxRectangle : TRect;
 begin
-  FrmPrincipal.GridZebrado(DBGridContador,ColunasLayoutContador,State,Rect,DataCol,Column);
+
   if (Column.Field.FieldName = 'BooleanOrigemDestino') then
   begin
     Self.DBGridContador.Canvas.FillRect(Rect);
@@ -1337,7 +1653,7 @@ procedure TFrmGerenciarSolicitacoes.DBGridExecutantesDrawColumnCell(
     CtrlState : array[Boolean] of Integer = (DFCS_BUTTONCHECK,
     DFCS_BUTTONCHECK or DFCS_CHECKED);
 begin
-  FrmPrincipal.GridZebrado(DBGridExecutantes,ColunasLayoutExecutantes,State,Rect,DataCol,Column);
+
   if (Column.Field.FieldName = 'StatusProgramacao')OR
   (Column.Field.FieldName = 'NomeExecutante')OR
   (Column.Field.FieldName = 'txtTipoEtapaServico') then
@@ -1405,12 +1721,6 @@ begin
   Key:= #0;
 end;
 
-procedure TFrmGerenciarSolicitacoes.DBGridServicosDrawColumnCell(Sender: TObject;
-  const Rect: TRect; DataCol: Integer; Column: TColumn; State: TGridDrawState);
-begin
-  FrmPrincipal.GridZebrado(DBGridServicos,ColunasLayoutServico,State,Rect,DataCol,Column);
-end;
-
 procedure TFrmGerenciarSolicitacoes.DBGridServicosKeyDown(Sender: TObject;
   var Key: Word; Shift: TShiftState);
 begin
@@ -1453,12 +1763,29 @@ begin
   FrmGerenciarSolicitacoes:=nil;
 end;
 
+procedure TFrmGerenciarSolicitacoes.LimparFiltrosExecutantes;
+begin
+  ClearFilterValues(ColunasLayoutExecutantes);
+  ClearFilterValues(DBGridExecutantes);
+end;
+
+procedure TFrmGerenciarSolicitacoes.btnFiltroClearExecutantesClick(Sender: TObject);
+begin
+  LimparFiltrosExecutantes;
+  actProcurar.Execute;
+end;
+
 procedure TFrmGerenciarSolicitacoes.FormCreate(Sender: TObject);
 begin
+  FMetricsControles := TDictionary<TControl, TControlMetrics>.Create;
+  FMetricsToolBars := TDictionary<TToolBar, TToolBarMetrics>.Create;
+  FMetricsStringGrids := TDictionary<TStringGrid, TStringGridMetrics>.Create;
+  FMetricsDBGrids := TDictionary<TDBGrid, TDBGridMetrics>.Create;
+  FEscalaVisualAtual := ESCALA_VISUAL_MIN;
+
   //======ADICIONAR TABSET DO FOMRMDI=======
   FrmPrincipal.MDIChildCreated(self.Handle);
-  FrmDataModule.setFilterDBGrid(DBGridExecutantes);
-  FrmDataModule.setFilterDBGrid(DBGridServicos);
+  btnFiltroClearExecutantes.OnClick := btnFiltroClearExecutantesClick;
   //=====================================
   actTransbordos.ImageIndex:= 456;
   actTransbordos.Caption:= 'Transbordo';
@@ -1511,10 +1838,17 @@ begin
   FrmDataModule.ADOQueryInserirExecutante1.Active:= false;
   FrmDataModule.ADOQueryInserirExecutante1.Active:= true;
   FrmPrincipal.ProgressBarAtualizar;
+
+  CapturarMetricasBase;
+  AplicarModoApresentacao(False);
 end;
 
 procedure TFrmGerenciarSolicitacoes.FormDestroy(Sender: TObject);
 begin
+  FreeAndNil(FMetricsDBGrids);
+  FreeAndNil(FMetricsStringGrids);
+  FreeAndNil(FMetricsToolBars);
+  FreeAndNil(FMetricsControles);
   FrmPrincipal.MDIChildDestroyed(self.Handle);
 end;
 
@@ -1727,18 +2061,20 @@ begin
     try
       if btnDestino.Down then
       begin
+        LimparFiltrosExecutantes;
         Destino:= (RLDestinoOrigem.Cells[0, ARow]);
-        FrmPrincipal.buscaFiledGrid1('txtDestino',Destino,'Contem',ColunasLayoutExecutantes,4,false);
-        FrmPrincipal.buscaFiledGrid1('Origem','','',ColunasLayoutExecutantes,4,false);
-        FrmPrincipal.buscaFiledGrid1('CodigoSAP','','',ColunasLayoutExecutantes,4,false);
+        SetFilterValue('txtDestino', Destino, 'Contem', DBGridExecutantes, 4, False);
+        SetFilterValue('Origem', '', '', DBGridExecutantes, 4, False);
+        SetFilterValue('CodigoSAP', '', '', DBGridExecutantes, 4, False);
         actProcurar.Execute;
       end
       else if btnOrigem.Down then
       begin
+        LimparFiltrosExecutantes;
         Origem:= (RLDestinoOrigem.Cells[0, ARow]);
-        FrmPrincipal.buscaFiledGrid1('txtDestino','','',ColunasLayoutExecutantes,4,false);
-        FrmPrincipal.buscaFiledGrid1('Origem',Origem,'Contem',ColunasLayoutExecutantes,4,false);
-        FrmPrincipal.buscaFiledGrid1('CodigoSAP','','',ColunasLayoutExecutantes,4,false);
+        SetFilterValue('txtDestino', '', '', DBGridExecutantes, 4, False);
+        SetFilterValue('Origem', Origem, 'Contem', DBGridExecutantes, 4, False);
+        SetFilterValue('CodigoSAP', '', '', DBGridExecutantes, 4, False);
         actProcurar.Execute;
       end;
     except
@@ -1928,3 +2264,9 @@ begin
 end;
 
 end.
+
+
+
+
+
+

@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(ls -la /c/Dev/Projetos/Colibri/*.pas)",
+      "Read(//c/Dev/Projetos/Colibri/**)",
+      "Bash(git add:*)",
+      "Bash(git commit -m ':*)",
+      "Bash(git push:*)",
+      "Bash(\"C:\\\\Program Files \\(x86\\)\\\\Embarcadero\\\\Studio\\\\23.0\\\\bin\\\\dcc32.exe\" prjColibri.dpr -Q)",
+      "Bash(ls *.pas)"
+    ]
+  }
+}

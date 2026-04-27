@@ -27,8 +27,9 @@ uses
   untTelaAbertura in 'untTelaAbertura.pas' {FrmTelaAbertura},
   untAgendaIntervencao in 'untAgendaIntervencao.pas' {FrmAgendaIntervencao},
   untSituacaoEquipamentoAcesso in 'untSituacaoEquipamentoAcesso.pas' {FrmSituacaoEquipamentoAcesso},
-  uExcelSapRunner in 'uExcelSapRunner.pas',
-  uAccessDBUtils in 'uAccessDBUtils.pas',
+  untDBGridFilter in '..\..\Library_Delphi\FilterDBGrid\untDBGridFilter.pas',
+  untFrmMagicFiltro in '..\..\Library_Delphi\FilterDBGrid\untFrmMagicFiltro.pas' {FrmMagicFiltro},
+  untFrmDBGridLayoutEditor in '..\..\Library_Delphi\FilterDBGrid\untFrmDBGridLayoutEditor.pas' {FrmDBGridLayoutEditor},
   uZucchi in '..\..\Library_Delphi\Zucchi\uZucchi.pas',
   untFrmConfigRT in 'untFrmConfigRT.pas' {FrmConfigRT},
   uMensagens in '..\..\Library_Delphi\Mensagens\uMensagens.pas',
@@ -41,8 +42,13 @@ uses
   uRTBusinessRules in 'uRTBusinessRules.pas',
   uPreparacaoSolver in 'uPreparacaoSolver.pas',
   uExecucaoSolver in 'uExecucaoSolver.pas',
-  untParesObrigatorios in 'untParesObrigatorios.pas' {FrmParesObrigatorios};
-  //uSimulacaoLogistica in 'uSimulacaoLogistica.pas';
+  untParesObrigatorios in 'untParesObrigatorios.pas' {FrmParesObrigatorios},
+  untFrmPrioridadeDistribuicao in 'untFrmPrioridadeDistribuicao.pas' {FrmPrioridadeDistribuicao},
+  uFuncaoExecutanteUtils in 'uFuncaoExecutanteUtils.pas',
+  untAplatAnexos in 'untAplatAnexos.pas' {FrmAplatAnexos},
+  untFrmManifestoEmbarque in 'untFrmManifestoEmbarque.pas' {FrmManifestoEmbarque};
+
+//uSimulacaoLogistica in 'uSimulacaoLogistica.pas';
 
 {$R *.res}
 
@@ -63,3 +69,4 @@ begin
   FrmTelaAbertura.Free; {Libera Mem�ria}
   Application.Run;
 end.
+

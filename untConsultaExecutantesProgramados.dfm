@@ -99,7 +99,7 @@ object FrmConsultaExecutantesProgramados: TFrmConsultaExecutantesProgramados
     Top = 50
     Width = 1090
     Height = 578
-    ActivePage = TabSheet4
+    ActivePage = TabSheet2
     Align = alClient
     TabOrder = 2
     OnChange = PageControl1Change
@@ -126,7 +126,6 @@ object FrmConsultaExecutantesProgramados: TFrmConsultaExecutantesProgramados
         SelectClearButton = btnSelClear
         ClearFilterButton = btnClearFiltroExecutante
         SearchAction = actProcurarProgramacaoExecutante
-        LayoutGrid = ColunasLayoutExecutanteProgramado
         EnableZebra = False
         FieldSelection = 'booleanRecolhimento'
         ProgressBar = FrmPrincipal.ProgressBarPrincipal
@@ -505,9 +504,9 @@ object FrmConsultaExecutantesProgramados: TFrmConsultaExecutantesProgramados
         ExplicitWidth = 1080
       end
       object RLTemporario: TStringGrid
-        Left = 128
-        Top = 288
-        Width = 179
+        Left = 44
+        Top = 240
+        Width = 165
         Height = 97
         FixedCols = 0
         FixedRows = 0
@@ -647,8 +646,26 @@ object FrmConsultaExecutantesProgramados: TFrmConsultaExecutantesProgramados
           ShowHint = True
           TabOrder = 6
         end
-        object BitBtn9: TBitBtn
+        object btnPararGeracaoRT: TBitBtn
           Left = 631
+          Top = 0
+          Width = 106
+          Height = 23
+          Action = actPararGeracaoRT
+          Align = alLeft
+          Caption = 'Parar RT-SAP'
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clRed
+          Font.Height = -11
+          Font.Name = 'Tahoma'
+          Font.Style = [fsBold]
+          ParentFont = False
+          ParentShowHint = False
+          ShowHint = True
+          TabOrder = 7
+        end
+        object BitBtn9: TBitBtn
+          Left = 737
           Top = 0
           Width = 74
           Height = 23
@@ -660,7 +677,7 @@ object FrmConsultaExecutantesProgramados: TFrmConsultaExecutantesProgramados
           TabOrder = 2
         end
         object ToolButton11: TToolButton
-          Left = 705
+          Left = 811
           Top = 0
           Width = 8
           Caption = 'ToolButton11'
@@ -668,7 +685,7 @@ object FrmConsultaExecutantesProgramados: TFrmConsultaExecutantesProgramados
           Style = tbsSeparator
         end
         object CheckBoxOrigemDestino: TCheckBox
-          Left = 713
+          Left = 819
           Top = 0
           Width = 173
           Height = 23
@@ -731,9 +748,9 @@ object FrmConsultaExecutantesProgramados: TFrmConsultaExecutantesProgramados
           24)
       end
       object MemoSAP: TMemo
-        Left = 344
-        Top = 288
-        Width = 185
+        Left = 44
+        Top = 352
+        Width = 165
         Height = 89
         Lines.Strings = (
           'MemoSAP')
@@ -863,7 +880,6 @@ object FrmConsultaExecutantesProgramados: TFrmConsultaExecutantesProgramados
         OnDrawColumnCell = DBGridProgramcaoRTDrawColumnCell
         ClearFilterButton = btnClearFiltroRT
         SearchAction = actProcurarProgramacaoRT
-        LayoutGrid = ColunasLayoutRT
         EnableZebra = False
         ProgressBar = FrmPrincipal.ProgressBarPrincipal
         LayoutButton = btnLaypoutRT
@@ -905,6 +921,14 @@ object FrmConsultaExecutantesProgramados: TFrmConsultaExecutantesProgramados
             Title.Alignment = taCenter
             Title.Caption = 'Status'
             Width = 135
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'RT_Mensagem'
+            Title.Alignment = taCenter
+            Title.Caption = 'Mensagem'
+            Width = 147
             Visible = True
           end
           item
@@ -994,14 +1018,6 @@ object FrmConsultaExecutantesProgramados: TFrmConsultaExecutantesProgramados
             FieldName = 'RT_HoraVolta'
             Title.Alignment = taCenter
             Title.Caption = 'Hora Volta'
-            Visible = True
-          end
-          item
-            Expanded = False
-            FieldName = 'RT_Mensagem'
-            Title.Alignment = taCenter
-            Title.Caption = 'Mensagem'
-            Width = 147
             Visible = True
           end
           item
@@ -1216,7 +1232,6 @@ object FrmConsultaExecutantesProgramados: TFrmConsultaExecutantesProgramados
         TitleFont.Style = []
         ClearFilterButton = btnClearFiltroSAPImport
         SearchAction = actProcurarSAPImport
-        LayoutGrid = ColunasLayoutSAPImport
         EnableZebra = False
         ProgressBar = FrmPrincipal.ProgressBarPrincipal
         LayoutButton = btnLayoutSAPImport
@@ -1604,7 +1619,6 @@ object FrmConsultaExecutantesProgramados: TFrmConsultaExecutantesProgramados
         TitleFont.Style = []
         ClearFilterButton = btnClearFiltroBuscaEmbarque
         SearchAction = actProcurarBuscaEmbarque
-        LayoutGrid = RLLayoutBuscaEmbarque
         EnableZebra = False
         ProgressBar = FrmPrincipal.ProgressBarPrincipal
         LayoutButton = btnLauoutBuscaEmbarque
@@ -1932,6 +1946,231 @@ object FrmConsultaExecutantesProgramados: TFrmConsultaExecutantesProgramados
         TabOrder = 4
       end
     end
+    object TabSheet6: TTabSheet
+      Caption = 'Auditoria Embarques'
+      ImageIndex = 5
+      object ToolBar5: TToolBar
+        Left = 0
+        Top = 25
+        Width = 1082
+        Height = 29
+        Caption = 'ToolBar5'
+        Images = FrmPrincipal.ImageList1
+        TabOrder = 0
+        object btnExcelAuditoriaEmbarque: TToolButton
+          Left = 0
+          Top = 0
+          Hint = 'Exportar para o Excel'
+          Caption = 'btnExcelAuditoriaEmbarque'
+          ImageIndex = 54
+          OnClick = btnExcelAuditoriaEmbarqueClick
+        end
+        object btnAtualizarAuditoriaEmbarque: TBitBtn
+          Left = 23
+          Top = 0
+          Width = 130
+          Height = 22
+          Hint = 
+            'Rodar auditoria de programa'#231#227'o de servi'#231'o por executante no per'#237 +
+            'odo'
+          Align = alLeft
+          Caption = 'Atualizar Auditoria'
+          ImageIndex = 2
+          Images = FrmPrincipal.ImageList1
+          ParentShowHint = False
+          ShowHint = True
+          TabOrder = 0
+          OnClick = btnAtualizarAuditoriaEmbarqueClick
+        end
+        object btnColunasFixasAuditoriaEmbarque: TBitBtn
+          Left = 153
+          Top = 0
+          Width = 120
+          Height = 22
+          Hint = 'Definir quantas colunas do resumo ficam fixas'
+          Align = alLeft
+          Caption = 'Colunas Fixas'
+          ImageIndex = 37
+          Images = FrmPrincipal.ImageList1
+          ParentShowHint = False
+          ShowHint = True
+          TabOrder = 1
+          OnClick = btnColunasFixasAuditoriaEmbarqueClick
+        end
+        object edtLimiteFolgaCurtaEmbarque: TEdit
+          Left = 273
+          Top = 0
+          Width = 90
+          Height = 22
+          Hint = 'Dias maximos para considerar folga curta'
+          Align = alLeft
+          NumbersOnly = True
+          ParentShowHint = False
+          ShowHint = True
+          TabOrder = 2
+          Text = '2'
+          TextHint = 'Folga<= dias'
+          OnChange = edtLimiteFolgaCurtaEmbarqueChange
+          OnExit = edtLimiteFolgaCurtaEmbarqueExit
+        end
+        object edtBuscaEmbarque: TEdit
+          Left = 363
+          Top = 0
+          Width = 360
+          Height = 22
+          Hint = 'Busca por nome, codigo SAP, empresa ou fun'#231#227'o'
+          ParentShowHint = False
+          ShowHint = True
+          TabOrder = 3
+          TextHint = 'Busca por nome, codigo SAP, empresa ou fun'#231#227'o'
+        end
+      end
+      object Panel7: TPanel
+        Left = 0
+        Top = 0
+        Width = 1082
+        Height = 25
+        Align = alTop
+        Caption = 'Auditoria de Programa'#231#245'es por Executante'
+        Color = clSilver
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -13
+        Font.Name = 'Tahoma'
+        Font.Style = [fsBold]
+        ParentBackground = False
+        ParentFont = False
+        TabOrder = 1
+      end
+      object StatusBarEmbarcado: TStatusBar
+        Left = 0
+        Top = 531
+        Width = 1082
+        Height = 19
+        Panels = <
+          item
+            Width = 50
+          end
+          item
+            Width = 50
+          end
+          item
+            Width = 50
+          end>
+      end
+      object strGridEmbarque: TStringGrid
+        Left = 0
+        Top = 54
+        Width = 1082
+        Height = 477
+        Align = alClient
+        Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goColSizing, goColMoving, goFixedRowDefAlign]
+        TabOrder = 3
+        OnDrawCell = strGridEmbarqueDrawCell
+        OnFixedCellClick = strGridEmbarqueFixedCellClick
+      end
+    end
+    object TabSheet7: TTabSheet
+      Caption = 'Auditoria APLAT x Colibri'
+      ImageIndex = 6
+      object ToolBar6: TToolBar
+        Left = 0
+        Top = 25
+        Width = 1082
+        Height = 29
+        Caption = 'ToolBar6'
+        Images = FrmPrincipal.ImageList1
+        TabOrder = 0
+        object btnExcelAuditoriaAplatColibri: TToolButton
+          Left = 0
+          Top = 0
+          Hint = 'Exportar para o Excel'
+          Caption = 'btnExcelAuditoriaAplatColibri'
+          ImageIndex = 54
+          OnClick = btnExcelAuditoriaAplatColibriClick
+        end
+        object btnAtualizarAuditoriaAplatColibri: TBitBtn
+          Left = 23
+          Top = 0
+          Width = 130
+          Height = 22
+          Hint = 'Cruzar a planilha APLAT com a programacao aprovada no Colibri'
+          Align = alLeft
+          Caption = 'Atualizar Auditoria'
+          ImageIndex = 2
+          Images = FrmPrincipal.ImageList1
+          ParentShowHint = False
+          ShowHint = True
+          TabOrder = 0
+          OnClick = btnAtualizarAuditoriaAplatColibriClick
+        end
+        object edtArquivoAuditoriaAplatColibri: TEdit
+          Left = 153
+          Top = 0
+          Width = 380
+          Height = 22
+          Hint = 'Caminho da planilha REL EMBARQUES REALIZADOS.xlsx'
+          Align = alLeft
+          ParentShowHint = False
+          ShowHint = True
+          TabOrder = 1
+          TextHint = 'Arquivo APLAT (.xlsx)'
+        end
+        object edtBuscaAuditoriaAplatColibri: TEdit
+          Left = 533
+          Top = 0
+          Width = 320
+          Height = 22
+          Hint = 'Busca por nome, codigo SAP, empresa ou funcao'
+          ParentShowHint = False
+          ShowHint = True
+          TabOrder = 2
+          TextHint = 'Busca por nome, codigo SAP, empresa ou funcao'
+        end
+      end
+      object Panel9: TPanel
+        Left = 0
+        Top = 0
+        Width = 1082
+        Height = 25
+        Align = alTop
+        Caption = 'Auditoria de Dias Embarcados - APLAT x Colibri'
+        Color = clSilver
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -13
+        Font.Name = 'Tahoma'
+        Font.Style = [fsBold]
+        ParentBackground = False
+        ParentFont = False
+        TabOrder = 1
+      end
+      object StatusBarAuditoriaAplatColibri: TStatusBar
+        Left = 0
+        Top = 531
+        Width = 1082
+        Height = 19
+        Panels = <
+          item
+            Width = 50
+          end
+          item
+            Width = 50
+          end
+          item
+            Width = 50
+          end>
+      end
+      object strGridAuditoriaAplatColibri: TStringGrid
+        Left = 0
+        Top = 54
+        Width = 1082
+        Height = 477
+        Align = alClient
+        Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goColSizing, goRowSelect, goFixedRowDefAlign]
+        TabOrder = 3
+      end
+    end
   end
   object ActionManager1: TActionManager
     Images = FrmPrincipal.ImageList1
@@ -2113,6 +2352,20 @@ object FrmConsultaExecutantesProgramados: TFrmConsultaExecutantesProgramados
       Hint = 'Buscar registros no banco de dados'
       ImageIndex = 27
       OnExecute = actProcurarBuscaEmbarqueExecute
+    end
+    object actAtualizarAuditoriaEmbarques: TAction
+      Category = 'Procurar'
+      Caption = 'Atualizar Auditoria'
+      Hint = 'Montar auditoria de embarques do periodo informado'
+      ImageIndex = 27
+    end
+    object actPararGeracaoRT: TAction
+      Category = 'Script SAP'
+      Caption = 'Parar RT-SAP'
+      Hint = 'Interromper processo de cria'#231#227'o de RT no SAP via script'
+      ImageIndex = 162
+      Visible = False
+      OnExecute = actPararGeracaoRTExecute
     end
   end
   object SavePictureDialog1: TSavePictureDialog

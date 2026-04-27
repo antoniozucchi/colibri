@@ -38,6 +38,7 @@ object FrmControleGeradores: TFrmControleGeradores
     EdgeBorders = [ebLeft, ebTop, ebRight, ebBottom]
     Images = FrmPrincipal.ImageList1
     TabOrder = 0
+    ExplicitWidth = 920
     object DBNavigatorGerador: TDBNavigator
       Left = 0
       Top = 0
@@ -107,6 +108,7 @@ object FrmControleGeradores: TFrmControleGeradores
     ParentBackground = False
     ParentFont = False
     TabOrder = 1
+    ExplicitWidth = 920
   end
   object DBGridGerador: TFilterDBGrid
     Left = 0
@@ -126,7 +128,6 @@ object FrmControleGeradores: TFrmControleGeradores
     OnKeyPress = DBGridGeradorKeyPress
     ClearFilterButton = btnClearFiltro
     SearchAction = actProcurar
-    LayoutGrid = ColunasLayout
     EnableZebra = False
     LayoutButton = btnLayput
     ExcelButton = btnExcel
@@ -253,30 +254,8 @@ object FrmControleGeradores: TFrmControleGeradores
       item
         Width = 50
       end>
-  end
-  object ColunasLayout: TStringGrid
-    Left = 48
-    Top = 102
-    Width = 113
-    Height = 94
-    ColCount = 7
-    DefaultRowHeight = 21
-    RowCount = 12
-    TabOrder = 4
-    Visible = False
-    RowHeights = (
-      21
-      21
-      21
-      21
-      21
-      21
-      21
-      21
-      21
-      21
-      21
-      21)
+    ExplicitTop = 479
+    ExplicitWidth = 920
   end
   object Panel2: TPanel
     Left = 0
@@ -285,11 +264,13 @@ object FrmControleGeradores: TFrmControleGeradores
     Height = 108
     Align = alBottom
     Caption = 'Panel2'
-    TabOrder = 5
+    TabOrder = 4
+    ExplicitTop = 371
+    ExplicitWidth = 920
     object PanelTituloPltaformas: TPanel
       Left = 1
       Top = 1
-      Width = 922
+      Width = 920
       Height = 20
       Align = alTop
       Caption = 'Ocorr'#234'ncias'
@@ -302,12 +283,12 @@ object FrmControleGeradores: TFrmControleGeradores
       ParentBackground = False
       ParentFont = False
       TabOrder = 0
-      ExplicitWidth = 920
+      ExplicitWidth = 918
     end
     object DBMemo1: TDBMemo
       Left = 1
       Top = 21
-      Width = 922
+      Width = 920
       Height = 86
       Align = alClient
       DataField = 'Notas'
@@ -319,7 +300,7 @@ object FrmControleGeradores: TFrmControleGeradores
       Font.Style = []
       ParentFont = False
       TabOrder = 1
-      ExplicitWidth = 920
+      ExplicitWidth = 918
     end
   end
   object ActionManager1: TActionManager

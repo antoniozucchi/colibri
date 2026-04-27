@@ -16,7 +16,6 @@ type
     ActionManager1: TActionManager;
     actProcurar: TAction;
     StatusBar1: TStatusBar;
-    ColunasLayout: TStringGrid;
     ToolBar1: TToolBar;
     btnClearFiltro: TToolButton;
     btnLayout: TToolButton;
@@ -28,9 +27,6 @@ type
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
-    procedure DBGridServicosProgramadosDrawColumnCell(Sender: TObject;
-      const Rect: TRect; DataCol: Integer; Column: TColumn;
-      State: TGridDrawState);
     procedure actProcurarExecute(Sender: TObject);
   private
     { Private declarations }
@@ -54,7 +50,7 @@ begin
   DataProcuraIncio:= (FormatDateTime('mm/dd/yyyy',dataInicio.Date));
   DataProcuraFim:= (FormatDateTime('mm/dd/yyyy',dataFim.Date));
   //=======================================================
-  SQLString:= frmPrincipal.SQLStringFiltroTabela(ColunasLayout,false);
+  SQLString:= BuildFilterSQL(DBGridServicosProgramados,false);
   if SQLString <> '' then
     SQLString:= ' AND '+SQLString;
   SQLBase:= 'SELECT tblProgramacaoDiaria.*, tblProgramacaoServico.* '+
@@ -65,13 +61,6 @@ begin
   SQLString+' ORDER BY DataProgramacao;';
   FrmPrincipal.ProcuraQuery(SQLBase,FrmDataModule.ADOQueryConsultaServicosProgramados,
   StatusBar1);
-end;
-
-procedure TFrmConsultaServicosProgramados.DBGridServicosProgramadosDrawColumnCell(
-  Sender: TObject; const Rect: TRect; DataCol: Integer; Column: TColumn;
-  State: TGridDrawState);
-begin
-  FrmPrincipal.GridZebrado(DBGridServicosProgramados,ColunasLayout,State,Rect,DataCol,Column);
 end;
 
 procedure TFrmConsultaServicosProgramados.FormClose(Sender: TObject;
@@ -87,8 +76,7 @@ begin
   FrmPrincipal.MDIChildCreated(self.Handle);
   dataInicio.Date:= IncDay(now,1);
   dataFim.Date:= IncDay(now,1);
-  //Incicialização
-  FrmDataModule.setFilterDBGrid(DBGridServicosProgramados);
+  //Inicializacao
   actProcurar.Execute;
 end;
 
@@ -114,3 +102,4 @@ begin
 end;
 
 end.
+

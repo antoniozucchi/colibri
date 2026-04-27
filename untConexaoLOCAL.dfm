@@ -69,13 +69,8 @@ object FrmConexaoLOCAL: TFrmConexaoLOCAL
       end
       item
         Column = 0
-        Control = Label6
-        Row = 3
-      end
-      item
-        Column = 0
         Control = Label7
-        Row = 4
+        Row = 3
       end
       item
         Column = 2
@@ -94,23 +89,13 @@ object FrmConexaoLOCAL: TFrmConexaoLOCAL
       end
       item
         Column = 1
-        Control = chkUPMemoria
-        Row = 3
-      end
-      item
-        Column = 2
-        Control = chkDownMemoria
-        Row = 3
-      end
-      item
-        Column = 1
         Control = chkUPRT
-        Row = 4
+        Row = 3
       end
       item
         Column = 2
         Control = chkDownRT
-        Row = 4
+        Row = 3
       end
       item
         Column = 1
@@ -131,9 +116,6 @@ object FrmConexaoLOCAL: TFrmConexaoLOCAL
       end
       item
         Value = 19.840463261971320000
-      end
-      item
-        Value = 19.358371566371950000
       end
       item
         Value = 20.337495706050150000
@@ -181,18 +163,9 @@ object FrmConexaoLOCAL: TFrmConexaoLOCAL
       Caption = 'Tabelas de Cadastro e Consulta (dbConsulta.mdb)'
       ExplicitLeft = 165
     end
-    object Label6: TLabel
-      Left = 82
-      Top = 91
-      Width = 220
-      Height = 15
-      Anchors = []
-      Caption = 'Tabelas de Importa'#231#227'o (dbMemoria.mdb)'
-      ExplicitLeft = 165
-    end
     object Label7: TLabel
       Left = 87
-      Top = 119
+      Top = 91
       Width = 209
       Height = 15
       Anchors = []
@@ -223,7 +196,7 @@ object FrmConexaoLOCAL: TFrmConexaoLOCAL
       Anchors = []
       TabOrder = 3
     end
-    object chkUPMemoria: TCheckBox
+    object chkUPRT: TCheckBox
       Left = 448
       Top = 90
       Width = 20
@@ -231,29 +204,13 @@ object FrmConexaoLOCAL: TFrmConexaoLOCAL
       Anchors = []
       TabOrder = 4
     end
-    object chkDownMemoria: TCheckBox
+    object chkDownRT: TCheckBox
       Left = 604
       Top = 90
       Width = 20
       Height = 17
       Anchors = []
       TabOrder = 5
-    end
-    object chkUPRT: TCheckBox
-      Left = 448
-      Top = 118
-      Width = 20
-      Height = 17
-      Anchors = []
-      TabOrder = 6
-    end
-    object chkDownRT: TCheckBox
-      Left = 604
-      Top = 118
-      Width = 20
-      Height = 17
-      Anchors = []
-      TabOrder = 7
     end
     object BitBtn1: TBitBtn
       Left = 419

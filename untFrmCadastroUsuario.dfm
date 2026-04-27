@@ -135,11 +135,9 @@ object FrmCadastroUsuario: TFrmCadastroUsuario
     TitleFont.Height = -11
     TitleFont.Name = 'Tahoma'
     TitleFont.Style = []
-    OnDrawColumnCell = DBGridUsuariosDrawColumnCell
     OnKeyPress = DBGridUsuariosKeyPress
     ClearFilterButton = btnClearFiltro
     SearchAction = actProcurar
-    LayoutGrid = ColunasLayout
     EnableZebra = False
     LayoutButton = btnLayout
     ExcelButton = btnExcel
@@ -195,24 +193,6 @@ object FrmCadastroUsuario: TFrmCadastroUsuario
         Width = 81
         Visible = True
       end>
-  end
-  object ColunasLayout: TStringGrid
-    Left = 49
-    Top = 209
-    Width = 113
-    Height = 94
-    ColCount = 7
-    DefaultRowHeight = 21
-    RowCount = 6
-    TabOrder = 4
-    Visible = False
-    RowHeights = (
-      21
-      21
-      21
-      21
-      21
-      21)
   end
   object ActionManager1: TActionManager
     Images = FrmPrincipal.ImageList1

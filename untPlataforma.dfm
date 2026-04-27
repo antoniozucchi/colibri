@@ -77,24 +77,55 @@ object FrmPlataforma: TFrmPlataforma
     OnDrawColumnCell = DBGridPlataformasDrawColumnCell
     ClearFilterButton = btnClearFiltro
     SearchAction = actProcurar
-    LayoutGrid = ColunasLayout
     EnableZebra = False
     LayoutButton = btnLayout
     ExcelButton = btnExcel
     Columns = <
+      item
+        Expanded = False
+        FieldName = 'booleanPlataforma'
+        Title.Alignment = taCenter
+        Title.Caption = 'Plataforma'
+        Visible = True
+      end
+      item
+        Alignment = taCenter
+        Expanded = False
+        FieldName = 'PrioridadeDistribuicao'
+        Title.Alignment = taCenter
+        Title.Caption = 'Prioridade'
+        Visible = True
+      end
+      item
+        Alignment = taCenter
+        Expanded = False
+        FieldName = 'booleanHubPrincipal'
+        Title.Alignment = taCenter
+        Title.Caption = 'Hub Principal'
+        Visible = True
+      end
+      item
+        Alignment = taCenter
+        Expanded = False
+        FieldName = 'booleanGangwayAqua'
+        Title.Alignment = taCenter
+        Title.Caption = 'Gangway Aqua'
+        Visible = True
+      end
+      item
+        Alignment = taCenter
+        Expanded = False
+        FieldName = 'booleanGangwaySOV'
+        Title.Alignment = taCenter
+        Title.Caption = 'Gangway SOV'
+        Visible = True
+      end
       item
         Alignment = taCenter
         Expanded = False
         FieldName = 'HoraSaidaOrigem'
         Title.Alignment = taCenter
         Title.Caption = 'Hora Sa'#237'da Origem'
-        Visible = True
-      end
-      item
-        Expanded = False
-        FieldName = 'booleanPlataforma'
-        Title.Alignment = taCenter
-        Title.Caption = 'Controle'
         Visible = True
       end
       item
@@ -266,6 +297,31 @@ object FrmPlataforma: TFrmPlataforma
         Title.Caption = 'Elemento PEP'
         Width = 97
         Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'CodigoNormSolver'
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'GrupoFisico'
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'GrupoHorario'
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'ExcluirDistribuicaoAuto'
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'TipoNoLogistico'
+        Visible = True
       end>
   end
   object ToolBar1: TToolBar
@@ -358,42 +414,6 @@ object FrmPlataforma: TFrmPlataforma
       TabOrder = 1
       Visible = False
     end
-  end
-  object ColunasLayout: TStringGrid
-    Left = 521
-    Top = 160
-    Width = 248
-    Height = 145
-    ColCount = 7
-    DefaultRowHeight = 21
-    RowCount = 24
-    TabOrder = 4
-    Visible = False
-    RowHeights = (
-      21
-      21
-      21
-      21
-      21
-      21
-      21
-      21
-      21
-      21
-      21
-      21
-      21
-      21
-      21
-      21
-      21
-      21
-      21
-      21
-      21
-      21
-      21
-      21)
   end
   object ActionManager1: TActionManager
     Images = FrmPrincipal.ImageList1
@@ -545,3 +565,4 @@ object FrmPlataforma: TFrmPlataforma
     Top = 115
   end
 end
+

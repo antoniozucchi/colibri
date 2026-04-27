@@ -18,7 +18,6 @@ type
     ActionManager1: TActionManager;
     actProcurar: TAction;
     StatusBar1: TStatusBar;
-    ColunasLayout: TStringGrid;
     Splitter1: TSplitter;
     Panel2: TPanel;
     PanelTituloPltaformas: TPanel;
@@ -51,7 +50,7 @@ procedure TFrmControleGeradores.actProcurarExecute(Sender: TObject);
   var
     SQLString,SQLBase: String;
 begin
-  SQLString:= frmPrincipal.SQLStringFiltroTabela(ColunasLayout,true);
+  SQLString:= BuildFilterSQL(DBGridGerador,true);
   SQLBase:= 'SELECT tblGerador.* FROM tblGerador '+
   SQLString+' ORDER BY Plataforma;';
   FrmPrincipal.ProcuraQuery(SQLBase,FrmDataModule.ADOQueryGeradores,StatusBar1);
@@ -60,7 +59,7 @@ end;
 procedure TFrmControleGeradores.DBGridGeradorDrawColumnCell(Sender: TObject;
   const Rect: TRect; DataCol: Integer; Column: TColumn; State: TGridDrawState);
 begin
-  FrmPrincipal.GridZebrado(DBGridGerador,ColunasLayout,State,Rect,DataCol,Column);
+
   if (Column.Field.FieldName = 'Status') then
   begin
     if FrmDataModule.DataSourceGeradores.DataSet.
@@ -71,8 +70,8 @@ begin
       DBGridGerador.Canvas.FillRect(Rect);
       DBGridGerador.DefaultDrawColumnCell(Rect, DataCol,Column, State);
     end
-    else if FrmDataModule.DataSourceGeradores.DataSet.
-    FieldByName('Status').AsString = 'Fora de operação' then
+    else if Pos('Fora', FrmDataModule.DataSourceGeradores.DataSet.
+      FieldByName('Status').AsString) > 0 then
     begin
       DBGridGerador.Canvas.Brush.Color:= clRed;
       DBGridGerador.Font.Color:= clBlack;
@@ -115,8 +114,7 @@ begin
     DBNavigatorGerador.Enabled:= false;
     DBGridGerador.ReadOnly:= true;
   end;
-  //Incicialização
-  FrmDataModule.setFilterDBGrid(DBGridGerador);
+  //Inicializacao
   FrmPrincipal.SetupGridFilterPickListSQL(FrmDataModule.ADOConnectionConsulta,'Plataforma',
   'SELECT Plataforma FROM tblPlataforma ORDER BY Plataforma',
   DBGridGerador,false);
@@ -145,3 +143,4 @@ begin
 end;
 
 end.
+

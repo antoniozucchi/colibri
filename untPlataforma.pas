@@ -54,7 +54,7 @@ type
     btnClearFiltro: TToolButton;
     btnExcel: TToolButton;
     btnLayout: TToolButton;
-    ColunasLayout: TStringGrid;
+
     procedure StatusBar1DrawPanel(StatusBar: TStatusBar; Panel: TStatusPanel;
       const Rect: TRect);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
@@ -188,7 +188,7 @@ procedure TFrmPlataforma.DBGridPlataformasDrawColumnCell(Sender: TObject;
     CtrlState : array[Boolean] of Integer = (DFCS_BUTTONCHECK,
     DFCS_BUTTONCHECK or DFCS_CHECKED);
 begin
-  FrmPrincipal.GridZebrado(DBGridPlataformas,ColunasLayout,State,Rect,DataCol,Column);
+
   if ((Column.Field.FieldName = 'booleanPlataforma') OR
   (Column.Field.FieldName = 'booleanOrigem') OR
   (Column.Field.FieldName = 'booleanHubPrincipal') OR
@@ -228,12 +228,12 @@ procedure TFrmPlataforma.actCalcularXYExecute(Sender: TObject);
     Latitude,Longitude: Double;
     NoOrigem,NODestino: TPointFloat;
 begin
-  FrmDataModule.ADOQueryPlataforma.Active:= false;
-  FrmDataModule.ADOQueryPlataforma.Active:= true;
+  //FrmDataModule.ADOQueryPlataforma.Active:= false;
+  //FrmDataModule.ADOQueryPlataforma.Active:= true;
   NoOrigem.X:= 0;
   NoOrigem.Y:= 0;
-  FrmDataModule.ADOQueryPlataforma.Active:= false;
-  FrmDataModule.ADOQueryPlataforma.Active:= true;
+  //FrmDataModule.ADOQueryPlataforma.Active:= false;
+  //FrmDataModule.ADOQueryPlataforma.Active:= true;
   //======================================================
   FrmPrincipal.ProgressBarIncializa(FrmDataModule.ADOQueryPlataforma.RecordCount,'Calculando coordenadas (X,Y)');
   FrmDataModule.DataSourcePlataforma.Enabled:= false;
@@ -263,7 +263,7 @@ procedure TFrmPlataforma.actProcurarExecute(Sender: TObject);
   var
     SQLString,SQLBase: String;
 begin
-  SQLString:= frmPrincipal.SQLStringFiltroTabela(ColunasLayout,true);
+  SQLString:= BuildFilterSQL(DBGridPlataformas,true);
   SQLBase:= 'SELECT tblPlataforma.* FROM tblPlataforma '+
   SQLString+' ORDER BY Plataforma;';
   FrmPrincipal.ProcuraQuery(SQLBase,FrmDataModule.ADOQueryPlataforma,StatusBar1);
@@ -289,7 +289,6 @@ begin
   AlturaAgora:=0;
   //=====================================
   //Incicializa��o
-  FrmDataModule.setFilterDBGrid(DBGridPlataformas);
 
   //======ADICIONAR TABSET DO FOMRMDI=======
   FrmPrincipal.MDIChildCreated(self.Handle);
@@ -342,3 +341,5 @@ begin
 end;
 
 end.
+
+

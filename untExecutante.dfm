@@ -33,7 +33,6 @@ object FrmExecutante: TFrmExecutante
     ParentBackground = False
     ParentFont = False
     TabOrder = 0
-    ExplicitWidth = 1157
   end
   object PageControl1: TPageControl
     Left = 0
@@ -43,8 +42,6 @@ object FrmExecutante: TFrmExecutante
     ActivePage = TabSheet1
     Align = alClient
     TabOrder = 1
-    ExplicitWidth = 1157
-    ExplicitHeight = 455
     object TabSheet1: TTabSheet
       Caption = 'Executante'
       object DBGridExecutante: TFilterDBGrid
@@ -67,7 +64,6 @@ object FrmExecutante: TFrmExecutante
         OnKeyPress = DBGridExecutanteKeyPress
         ClearFilterButton = btnFiltroClearExecutante
         SearchAction = actProcurarExecutante
-        LayoutGrid = ColunasLayoutExecutante
         EnableZebra = False
         LayoutButton = btnLayoutExecutante
         ExcelButton = btnExcelExecutante
@@ -173,6 +169,7 @@ object FrmExecutante: TFrmExecutante
             FieldName = 'RequisitantePT'
             Title.Alignment = taCenter
             Title.Caption = 'Requisitante PT'
+            Width = 81
             Visible = True
           end
           item
@@ -181,6 +178,7 @@ object FrmExecutante: TFrmExecutante
             FieldName = 'CentroCusto'
             Title.Alignment = taCenter
             Title.Caption = 'Centro de Custo'
+            Width = 88
             Visible = True
           end
           item
@@ -189,6 +187,7 @@ object FrmExecutante: TFrmExecutante
             FieldName = 'DiagramaRede'
             Title.Alignment = taCenter
             Title.Caption = 'Diagrama de Rede'
+            Width = 101
             Visible = True
           end
           item
@@ -197,6 +196,7 @@ object FrmExecutante: TFrmExecutante
             FieldName = 'OperRede'
             Title.Alignment = taCenter
             Title.Caption = 'Oper. Rede'
+            Width = 71
             Visible = True
           end
           item
@@ -205,6 +205,7 @@ object FrmExecutante: TFrmExecutante
             FieldName = 'ElementoPEP'
             Title.Alignment = taCenter
             Title.Caption = 'Elemento PEP'
+            Width = 80
             Visible = True
           end
           item
@@ -276,7 +277,6 @@ object FrmExecutante: TFrmExecutante
         EdgeBorders = [ebLeft, ebTop, ebRight, ebBottom]
         Images = FrmPrincipal.ImageList1
         TabOrder = 1
-        ExplicitWidth = 1149
         object DBNavigatorExecutante: TDBNavigator
           Left = 0
           Top = 0
@@ -413,58 +413,6 @@ object FrmExecutante: TFrmExecutante
           item
             Width = 50
           end>
-        ExplicitTop = 408
-        ExplicitWidth = 1149
-      end
-      object ColunasLayoutExecutante: TStringGrid
-        Left = 21
-        Top = 110
-        Width = 113
-        Height = 94
-        ColCount = 7
-        DefaultRowHeight = 21
-        RowCount = 24
-        TabOrder = 4
-        Visible = False
-        RowHeights = (
-          21
-          21
-          21
-          21
-          21
-          21
-          21
-          21
-          21
-          21
-          21
-          21
-          21
-          21
-          21
-          21
-          21
-          21
-          21
-          21
-          21
-          21
-          21
-          21)
-      end
-      object MaskEditCPF: TMaskEdit
-        Left = 363
-        Top = 183
-        Width = 120
-        Height = 21
-        EditMask = '000\.000\.000\-00;;_'
-        MaxLength = 14
-        ParentShowHint = False
-        ShowHint = True
-        TabOrder = 5
-        Text = '   .   .   -  '
-        Visible = False
-        OnChange = MaskEditCPFChange
       end
     end
     object TabSheet2: TTabSheet
@@ -557,7 +505,6 @@ object FrmExecutante: TFrmExecutante
           OnDrawColumnCell = DBGridTipoServicoDrawColumnCell
           ClearFilterButton = btnFiltroClearTipoEtapaServico
           SearchAction = actProcurarTipoEtapaServico
-          LayoutGrid = ColunasLayoutTipoEtapaServico
           EnableZebra = False
           LayoutButton = btnLayoutTipoEtapaServico
           ExcelButton = btnExcelTIpoServico
@@ -640,25 +587,6 @@ object FrmExecutante: TFrmExecutante
             item
               Width = 50
             end>
-        end
-        object ColunasLayoutTipoEtapaServico: TStringGrid
-          Left = 158
-          Top = 110
-          Width = 113
-          Height = 94
-          ColCount = 7
-          DefaultRowHeight = 21
-          RowCount = 7
-          TabOrder = 3
-          Visible = False
-          RowHeights = (
-            21
-            20
-            21
-            21
-            21
-            21
-            21)
         end
       end
     end

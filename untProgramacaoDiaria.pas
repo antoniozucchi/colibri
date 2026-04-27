@@ -114,9 +114,9 @@ type
     actExcelNaoEncontrado: TAction;
     BitBtn4: TBitBtn;
     actNaoEncontrados: TAction;
-    ColunasLayoutProgramacao: TStringGrid;
-    ColunasLayoutExecutante: TStringGrid;
-    ColunasLayoutServico: TStringGrid;
+
+
+
     DateProgramacao: TDateTimePicker;
     BitBtn5: TBitBtn;
     Panel4: TPanel;
@@ -167,8 +167,6 @@ type
     procedure actConfigGRIDExecute(Sender: TObject);
     procedure DBEditProgramacaoChange(Sender: TObject);
     procedure DBGridExecutanteDrawColumnCell(Sender: TObject; const Rect: TRect;
-      DataCol: Integer; Column: TColumn; State: TGridDrawState);
-    procedure DBGridServicoDrawColumnCell(Sender: TObject; const Rect: TRect;
       DataCol: Integer; Column: TColumn; State: TGridDrawState);
     procedure actProcurarProgramacaoExecute(Sender: TObject);
     procedure DBGridProgramacaoDrawColumnCell(Sender: TObject;
@@ -330,7 +328,7 @@ begin
   case tipo of
     0: //Editar
     begin
-      PanelTitulo.Caption:= 'Editar Programa'+#231+#227+'o';
+      PanelTitulo.Caption:= 'Editar Programa��o';
       DateTimePickerProgramacao2.Date:= FrmDataModule.DataSourceProgramacaoDiaria_Cadastro.DataSet.
       FieldByName('DataProgramacao').AsDateTime;
       BitBtn22.Action:= actCalcelarProgramacao;
@@ -407,7 +405,7 @@ begin
   PanelProgramacao.Visible:= false;
   PanelCriacao.Visible:= true;
   PanelCriacao.Align:= alClient;
-  PanelTitulo.Caption:= 'Programa'+#231+#227+'o di'+#225+'ria';
+  PanelTitulo.Caption:= 'Programa��o di�ria';
   actProcurarProgramacao.Execute;
 end;
 
@@ -420,21 +418,21 @@ var
 begin
   RLExecutantes.RowCount:= 1;
   RLExecutantes.ColCount:= 16;
-  RLExecutantes.Cells[0,0]:= 'Sele'+#231+#227+'o';
+  RLExecutantes.Cells[0,0]:= 'Sele��o';
   RLExecutantes.Cells[1,0]:= 'Nome do Executante';
   RLExecutantes.Cells[2,0]:= '      Origem      ';
-  RLExecutantes.Cells[3,0]:= 'Fun'+#231+#227+'o';
+  RLExecutantes.Cells[3,0]:= 'Fun��o';
   RLExecutantes.Cells[4,0]:= 'Empresa';
-  RLExecutantes.Cells[5,0]:= 'C'+#243+'digo SAP';
+  RLExecutantes.Cells[5,0]:= 'C�digo SAP';
   RLExecutantes.Cells[6,0]:= 'CPF';
   RLExecutantes.Cells[7,0]:= 'Req. PT';
-  RLExecutantes.Cells[8,0]:= 'Programa'+#231+#227+'o';
-  RLExecutantes.Cells[9,0]:= 'Status [Programa'+#231+#227+'o]';
-  RLExecutantes.Cells[10,0]:= 'Motivo [Programa'+#231+#227+'o]';
-  RLExecutantes.Cells[11,0]:= 'Palavras Chave [Programa'+#231+#227+'o]';
-  RLExecutantes.Cells[12,0]:= 'Avalia'+#231+#227+'o [Programa'+#231+#227+'o]';
-  RLExecutantes.Cells[13,0]:= 'Data [Programa'+#231+#227+'o]';
-  RLExecutantes.Cells[14,0]:= 'Computador [Programa'+#231+#227+'o]';
+  RLExecutantes.Cells[8,0]:= 'Programa��o';
+  RLExecutantes.Cells[9,0]:= 'Status [Programa��o]';
+  RLExecutantes.Cells[10,0]:= 'Motivo [Programa��o]';
+  RLExecutantes.Cells[11,0]:= 'Palavras Chave [Programa��o]';
+  RLExecutantes.Cells[12,0]:= 'Avalia��o [Programa��o]';
+  RLExecutantes.Cells[13,0]:= 'Data [Programa��o]';
+  RLExecutantes.Cells[14,0]:= 'Computador [Programa��o]';
   RLExecutantes.Cells[15,0]:= 'Passaporte';
 
   FreeAndNil(ListaExecutanteNaoEncontrado);
@@ -514,9 +512,9 @@ begin
   end;
 
   StatusBarDisponivelExecutantes.Panels[0].Text:=
-    'N'+#176+' Selecionados: '+IntToStr(FrmPrincipal.CountChecked(RLExecutantes));
+    'N� Selecionados: '+IntToStr(FrmPrincipal.CountChecked(RLExecutantes));
   StatusBarDisponivelExecutantes.Panels[1].Text:=
-    'N'+#176+' Registros: '+IntToStr(RLExecutantes.RowCount-1);
+    'N� Registros: '+IntToStr(RLExecutantes.RowCount-1);
   AutoFitStatusBar(StatusBarDisponivelExecutantes);
 end;
 
@@ -608,30 +606,30 @@ end;
 procedure TFrmProgramacaoDiaria.actConfigGRIDExecute(Sender: TObject);
 begin
   RLExecutantes.ColCount:= 16;
-  RLExecutantes.Cells[0,0]:= 'Sele'+#231+#227+'o';
+  RLExecutantes.Cells[0,0]:= 'Sele��o';
   RLExecutantes.Cells[1,0]:= 'Nome do Executante';
   RLExecutantes.Cells[2,0]:= '      Origem      ';
-  RLExecutantes.Cells[3,0]:= 'Fun'+#231+#227+'o';
+  RLExecutantes.Cells[3,0]:= 'Fun��o';
   RLExecutantes.Cells[4,0]:= 'Empresa';
-  RLExecutantes.Cells[5,0]:= 'C'+#243+'digo SAP';
+  RLExecutantes.Cells[5,0]:= 'C�digo SAP';
   RLExecutantes.Cells[6,0]:= 'CPF';
   RLExecutantes.Cells[7,0]:= 'Req. PT';
-  RLExecutantes.Cells[8,0]:= 'Programa'+#231+#227+'o';
-  RLExecutantes.Cells[9,0]:= 'Status [Programa'+#231+#227+'o]';
-  RLExecutantes.Cells[10,0]:= 'Motivo [Programa'+#231+#227+'o]';
-  RLExecutantes.Cells[11,0]:= 'Palavras Chave [Programa'+#231+#227+'o]';
-  RLExecutantes.Cells[12,0]:= 'Avalia'+#231+#227+'o [Programa'+#231+#227+'o]';
-  RLExecutantes.Cells[13,0]:= 'Data [Programa'+#231+#227+'o]';
-  RLExecutantes.Cells[14,0]:= 'Computador [Programa'+#231+#227+'o]';
+  RLExecutantes.Cells[8,0]:= 'Programa��o';
+  RLExecutantes.Cells[9,0]:= 'Status [Programa��o]';
+  RLExecutantes.Cells[10,0]:= 'Motivo [Programa��o]';
+  RLExecutantes.Cells[11,0]:= 'Palavras Chave [Programa��o]';
+  RLExecutantes.Cells[12,0]:= 'Avalia��o [Programa��o]';
+  RLExecutantes.Cells[13,0]:= 'Data [Programa��o]';
+  RLExecutantes.Cells[14,0]:= 'Computador [Programa��o]';
   RLExecutantes.Cells[15,0]:= 'Passaporte';
 
   RLServicos.ColCount:= 7;
-  RLServicos.Cells[0,0]:= 'Sele'+#231+#227+'o';
+  RLServicos.Cells[0,0]:= 'Sele��o';
   RLServicos.Cells[1,0]:= 'Servico/Ano-Etapa';
-  RLServicos.Cells[2,0]:= 'Texto Breve de Opera'+#231+#227+'o';
+  RLServicos.Cells[2,0]:= 'Texto Breve de Opera��o';
   RLServicos.Cells[3,0]:= 'Texto Breve de Ordem';
-  RLServicos.Cells[4,0]:= 'Ordem de Manuten'+#231+#227+'o';
-  RLServicos.Cells[5,0]:= 'Opera'+#231+#227+'o';
+  RLServicos.Cells[4,0]:= 'Ordem de Manuten��o';
+  RLServicos.Cells[5,0]:= 'Opera��o';
   RLServicos.Cells[6,0]:= 'Centro Trabalho [OP]';
 end;
 procedure TFrmProgramacaoDiaria.actEditarProgramacaoExecute(Sender: TObject);
@@ -650,7 +648,7 @@ begin
   edtTextoBreveOM.Text:= (RLServicos.Cells[3,ARowIndex]);
   edtOrdemManutencao.Text:= (RLServicos.Cells[4,ARowIndex]);
   edtOperacao.Text:= (RLServicos.Cells[5,ARowIndex]);
-  abrirAjuda('Editar Servi'+#231+'o',PanelAjudaInserirServico,500,160);
+  abrirAjuda('Editar Servi�o',PanelAjudaInserirServico,500,160);
 end;
 
 procedure TFrmProgramacaoDiaria.actExcelNaoEncontradoExecute(Sender: TObject);
@@ -670,11 +668,11 @@ begin
   if DataProgramacao >= FrmPrincipal.carregaDataMinima(false) then
   begin
     if Application.MessageBox(PChar(
-    'Deseja realmente excluir a programa'+#231+#227+'o selecionada?'),'.::ATEN'+#199+#195+'O::.',36) = 6 then
+    'Deseja realmente excluir a programa��o selecionada?'),'.::ATEN��O::.',36) = 6 then
       FrmDataModule.ADOQueryProgramacaoDiaria_Cadastro.Delete;
   end
   else
-    MessageBox(0, 'N'+#227+'o '+#233+' possivel alterar uma programa'+#231+#227+'o do passado!',
+    MessageBox(0, 'N�o � possivel alterar uma programa��o do passado!',
     'Colibri', MB_ICONERROR);
 
   actProcurarProgramacao.Execute;
@@ -691,10 +689,10 @@ begin
   if DataProgramacao >= FrmPrincipal.carregaDataMinima(false) then
   begin
     if Application.MessageBox(PChar(
-    'Deseja realmente excluir todas programa'+#231+#245+'es?'),'.::ATEN'+#199+#195+'O::.',36) = 6 then
+    'Deseja realmente excluir todas programa��es?'),'.::ATEN��O::.',36) = 6 then
     begin
       FrmPrincipal.ProgressBarIncializa(FrmDataModule.ADOQueryProgramacaoDiaria_Cadastro.RecordCount,
-      'Excluindo programa'+#231+#245+'es filtradas...');
+      'Excluindo programa��es filtradas...');
       FrmDataModule.ADOQueryProgramacaoDiaria_Cadastro.First;
       while not FrmDataModule.ADOQueryProgramacaoDiaria_Cadastro.Eof do
       begin
@@ -705,7 +703,7 @@ begin
     end;
   end
   else
-    MessageBox(0, 'N'+#227+'o '+#233+' possivel alterar uma programa'+#231+#227+'o do passado!',
+    MessageBox(0, 'N�o � possivel alterar uma programa��o do passado!',
     'Colibri', MB_ICONERROR);
 
   actProcurarProgramacao.Execute;
@@ -716,7 +714,7 @@ begin
   //Lista de executantes nao encontrados
   if RLNaoEncontrados.RowCount > 1 then
   begin
-    abrirAjuda('Executantes n'+#227+'o encontrados',PanelNaoEncontrados,650,400);
+    abrirAjuda('Executantes n�o encontrados',PanelNaoEncontrados,650,400);
     AutoFitGrade(RLNaoEncontrados);
     try
       RLNaoEncontrados.FixedRows:= 1;
@@ -725,17 +723,17 @@ begin
   end
   else
   MessageBox(0,
-  'N'+#227+'o existem registros de "Executantes n'+#227+'o encontrados" durante a '+#250+'ltima importa'+#231+#227+'o!',
+  'N�o existem registros de "Executantes n�o encontrados" durante a �ltima importa��o!',
   'Colibri',MB_ICONINFORMATION);
 end;
 
 procedure TFrmProgramacaoDiaria.actNumSelecaoExecute(Sender: TObject);
 begin
   StatusBarDisponivelExecutantes.Panels[0].Text:=
-  'N'+#176+' Selecionados: '+(IntToStr(FrmPrincipal.CountChecked(RLExecutantes)));
+  'N� Selecionados: '+(IntToStr(FrmPrincipal.CountChecked(RLExecutantes)));
   AutoFitStatusBar(StatusBarDisponivelExecutantes);
   StatusBarDisponivelServicos.Panels[0].Text:=
-  'N'+#176+' Selecionados: '+(IntToStr(FrmPrincipal.CountChecked(RLServicos)));
+  'N� Selecionados: '+(IntToStr(FrmPrincipal.CountChecked(RLServicos)));
   AutoFitStatusBar(StatusBarDisponivelServicos);
 end;
 
@@ -749,13 +747,13 @@ begin
   for I := 0 to ListaExecutanteNaoEncontrado.Count -1 do
     TextoMSG:= TextoMSG+#13+IntToStr(i)+'. '+ListaExecutanteNaoEncontrado[i];
 
-  MessageBox(0,PChar('Executantes n'+#227+'o encontrados:'+TextoMSG),'Colibri',MB_ICONINFORMATION);
+  MessageBox(0,PChar('Executantes n�o encontrados:'+TextoMSG),'Colibri',MB_ICONINFORMATION);
 end;
 
 procedure TFrmProgramacaoDiaria.actExecutantesServicosExecute(Sender: TObject);
 begin
   if (ComboBoxDestino.Text = '')OR(ComboBoxTipoEtapaServico.Text = '') then
-    ShowMessage('Selecione antes um "Destino" e um "Tipo de Etapa de Servi'+#231+'o".')
+    ShowMessage('Selecione antes um "Destino" e um "Tipo de Etapa de Servi�o".')
   else
   begin
     FrmPrincipal.ProgressBarIncializa(2,'Carregando...');
@@ -766,15 +764,15 @@ begin
   end;
   //=============================================
   StatusBarDisponivelServicos.Panels[0].Text:=
-  'N'+#176+' Selecionados: '+(IntToStr(FrmPrincipal.CountChecked(RLServicos)));
+  'N� Selecionados: '+(IntToStr(FrmPrincipal.CountChecked(RLServicos)));
   StatusBarDisponivelServicos.Panels[1].Text:=
-  'N'+#176+' Registros: '+(IntToStr(RLServicos.RowCount-1));
+  'N� Registros: '+(IntToStr(RLServicos.RowCount-1));
   AutoFitStatusBar(StatusBarDisponivelServicos);
   //=============================================
   StatusBarDisponivelExecutantes.Panels[0].Text:=
-  'N'+#176+' Selecionados: '+(IntToStr(FrmPrincipal.CountChecked(RLExecutantes)));
+  'N� Selecionados: '+(IntToStr(FrmPrincipal.CountChecked(RLExecutantes)));
   StatusBarDisponivelExecutantes.Panels[1].Text:=
-  'N'+#176+' Registros: '+(IntToStr(RLExecutantes.RowCount-1));
+  'N� Registros: '+(IntToStr(RLExecutantes.RowCount-1));
   AutoFitStatusBar(StatusBarDisponivelExecutantes);
 end;
 
@@ -799,7 +797,7 @@ begin
       FrmDataModule.ADOQueryProgramacaoDiaria_Cadastro.Post;
     end
     else
-      MessageBox(0, 'N'+#227+'o '+#233+' possivel alterar uma programa'+#231+#227+'o do passado!',
+      MessageBox(0, 'N�o � possivel alterar uma programa��o do passado!',
       'Colibri', MB_ICONERROR);
   except
     try
@@ -819,7 +817,7 @@ procedure TFrmProgramacaoDiaria.actCopiarProgramacaoTODASExecute(Sender: TObject
     srtDataProgramacao: String;
 begin
   srtDataProgramacao:= FormatDateTime('dd/mm/yyyy',IncDay(now,1));
-  if InputQuery('Data da Programa'+#231+#227+'o','Entre com a data da programa'+#231+#227+'o',
+  if InputQuery('Data da Programa��o','Entre com a data da programa��o',
   srtDataProgramacao) then
   begin
     if FrmPrincipal.isData(srtDataProgramacao) then
@@ -845,7 +843,7 @@ procedure TFrmProgramacaoDiaria.actCopiarProgramacaoSELECAOExecute(Sender: TObje
     DataProgramacao: String;
 begin
   DataProgramacao:= FormatDateTime('dd/mm/yyyy',IncDay(now,1));
-  if InputQuery('Data da Programa'+#231+#227+'o','Entre com a data da programa'+#231+#227+'o',
+  if InputQuery('Data da Programa��o','Entre com a data da programa��o',
   DataProgramacao) then
   begin
     if FrmPrincipal.isData(DataProgramacao) then
@@ -865,7 +863,7 @@ begin
   PanelCriacao.Visible:= false;
   PanelProgramacao.Visible:= true;
   PanelProgramacao.Align:= alClient;
-  PanelTitulo.Caption:= 'Inserir Nova Programa'+#231+#227+'o';
+  PanelTitulo.Caption:= 'Inserir Nova Programa��o';
   RLExecutantes.RowCount:= 2;
   RLExecutantes.FixedRows:= 1;
   RLExecutantes.Rows[1].Clear;
@@ -889,12 +887,12 @@ end;
 procedure TFrmProgramacaoDiaria.actInserirServicoExecute(Sender: TObject);
 begin
   BitBtn1.Action:= actServicoInserir;
-  abrirAjuda('Inserir Servi'+#231+'o',PanelAjudaInserirServico,500,190);
+  abrirAjuda('Inserir Servi�o',PanelAjudaInserirServico,500,190);
 end;
 
 procedure TFrmProgramacaoDiaria.actLogAcaoExecute(Sender: TObject);
 begin
-  abrirAjuda('Log de A'+#231+#227+'o - Hist'+#243+'rico',PanelLogAcao,650,300);
+  abrirAjuda('Log de A��o - Hist�rico',PanelLogAcao,650,300);
 end;
 
 procedure TFrmProgramacaoDiaria.actSelecaoExecutantesExecute(Sender: TObject);
@@ -925,7 +923,7 @@ procedure TFrmProgramacaoDiaria.actProcurarExecutantesExecute(Sender: TObject);
     CodigoProgramacaoDiaria: Integer;
 begin
   CodigoProgramacaoDiaria:= FrmDataModule.ADOQueryProgramacaoDiaria_Cadastro.FieldByName('idProgramacaoDiaria').AsInteger;
-  SQLString:= frmPrincipal.SQLStringFiltroTabela(ColunasLayoutExecutante,false);
+  SQLString:= BuildFilterSQL(DBGridExecutante,false);
   if SQLString <> '' then
     SQLString:= ' AND '+SQLString;
   SQLBase:=
@@ -940,7 +938,7 @@ procedure TFrmProgramacaoDiaria.actProcurarProgramacaoExecute(Sender: TObject);
     SQLString,SQLBase,DataProcura: String;
 begin
   DataProcura:= FormatDateTime('mm/dd/yyyy', DateProgramacao.Date);
-  SQLString:= frmPrincipal.SQLStringFiltroTabela(ColunasLayoutProgramacao,false);
+  SQLString:= BuildFilterSQL(DBGridProgramacao,false);
   if SQLString <> '' then
     SQLString:= ' AND '+SQLString;
   SQLBase:=
@@ -956,7 +954,7 @@ procedure TFrmProgramacaoDiaria.actProcurarServicosExecute(Sender: TObject);
     CodigoProgramacaoDiaria: Integer;
 begin
   CodigoProgramacaoDiaria:= FrmDataModule.ADOQueryProgramacaoDiaria_Cadastro.FieldByName('idProgramacaoDiaria').AsInteger;
-  SQLString:= frmPrincipal.SQLStringFiltroTabela(ColunasLayoutServico,false);
+  SQLString:= BuildFilterSQL(DBGridServico,false);
   if SQLString <> '' then
     SQLString:= ' AND '+SQLString;
   SQLBase:=
@@ -983,7 +981,7 @@ begin
     if DataProgramacao >= FrmPrincipal.carregaDataMinima(false) then
       FrmDataModule.ADOQueryProgramacaoServico_Cadastro.Delete
     else
-      MessageBox(0, 'N'+#227+'o '+#233+' possivel alterar uma programa'+#231+#227+'o do passado!',
+      MessageBox(0, 'N�o � possivel alterar uma programa��o do passado!',
       'Colibri', MB_ICONERROR);
 
     except
@@ -1013,7 +1011,7 @@ begin
       FrmDataModule.ADOQueryProgramacaoServico_Cadastro.Post;
     end
     else
-      MessageBox(0, 'N'+#227+'o '+#233+' possivel alterar uma programa'+#231+#227+'o do passado!',
+      MessageBox(0, 'N�o � possivel alterar uma programa��o do passado!',
       'Colibri', MB_ICONERROR);
   except
   end;
@@ -1035,7 +1033,7 @@ begin
   for I := 0 to ListaServicoNaoEncontrado.Count -1 do
     TextoMSG:= TextoMSG+#13+IntToStr(i)+'. '+ListaServicoNaoEncontrado[i];
 
-  MessageBox(0,PChar('Servi'+#231+'os n'+#227+'o encontrados:'+TextoMSG),'Colibri',MB_ICONINFORMATION);
+  MessageBox(0,PChar('Servi�os n�o encontrados:'+TextoMSG),'Colibri',MB_ICONINFORMATION);
 end;
 
 procedure TFrmProgramacaoDiaria.actZoomMaisExecute(Sender: TObject);
@@ -1213,7 +1211,6 @@ end;
 procedure TFrmProgramacaoDiaria.DBGridExecutanteDrawColumnCell(Sender: TObject;
   const Rect: TRect; DataCol: Integer; Column: TColumn; State: TGridDrawState);
 begin
-  FrmPrincipal.GridZebrado(DBGridExecutante,ColunasLayoutExecutante,State,Rect,DataCol,Column);
   if (Column.Field.FieldName = 'StatusProgramacao')OR
   (Column.Field.FieldName = 'NomeExecutante') then
   begin
@@ -1234,7 +1231,7 @@ begin
       DBGridExecutante.DefaultDrawColumnCell(Rect, DataCol,Column, State);
     end
     else if FrmDataModule.DataSourceProgramacaoExecutante_Cadastro.DataSet.
-    FieldByName('StatusProgramacao').AsString = 'Mudan'+#231+'a' then
+    FieldByName('StatusProgramacao').AsString = 'Mudan�a' then
     begin
       DBGridExecutante.Canvas.Brush.Color:= clYellow;
       DBGridExecutante.Font.Color:= clBlack;
@@ -1283,7 +1280,7 @@ begin
   FieldByName('NumAprovados').AsInteger;
   NumExecutantes:= FrmDataModule.DataSourceProgramacaoDiaria_Cadastro.DataSet.
   FieldByName('NumExecutantes').AsInteger;
-  FrmPrincipal.GridZebrado(DBGridProgramacao,ColunasLayoutProgramacao,State,Rect,DataCol,Column);
+
   if (Column.Field.FieldName = 'booleanFavorito') then
   begin
     if (FrmDataModule.DataSourceProgramacaoDiaria_Cadastro.DataSet.
@@ -1328,12 +1325,6 @@ begin
       DBGridProgramacao.DefaultDrawColumnCell(Rect, DataCol,Column, State);
     end;
   end;
-end;
-
-procedure TFrmProgramacaoDiaria.DBGridServicoDrawColumnCell(Sender: TObject;
-  const Rect: TRect; DataCol: Integer; Column: TColumn; State: TGridDrawState);
-begin
-  FrmPrincipal.GridZebrado(DBGridServico,ColunasLayoutServico,State,Rect,DataCol,Column);
 end;
 
 procedure TFrmProgramacaoDiaria.DBGridServicoKeyDown(Sender: TObject;
@@ -1638,9 +1629,6 @@ begin
   FrmPrincipal.ProgressBarIncremento(1);
   actAtualizarCombo.Execute;
   //Inicializacao
-  FrmDataModule.setFilterDBGrid(DBGridProgramacao);
-  FrmDataModule.setFilterDBGrid(DBGridExecutante);
-  FrmDataModule.setFilterDBGrid(DBGridServico);
   FrmPrincipal.ProgressBarIncremento(1);
   //=========================================
   FrmPrincipal.SetupGridFilterPickListSQL(FrmDataModule.ADOConnectionConsulta,'Origem',
@@ -1673,7 +1661,7 @@ procedure TFrmProgramacaoDiaria.GravarInserirProgramacao(Tipo: Integer;ImportarT
 begin
   if ((existeExecutante)AND (existeServico)) then
   begin
-    FrmPrincipal.ProgressBarIncializa(15,'Inserindo programa'+#231+#227+'o...');
+    FrmPrincipal.ProgressBarIncializa(15,'Inserindo programa��o...');
     CodigoProgramacaoDiaria:= 0;
     DataProgramacao:= FrmPrincipal.corrigirData(DateTimePickerProgramacao2.Date);
     //Incluir a programacao primeiro e depois vincular Executantes e Servicos
@@ -1704,8 +1692,8 @@ begin
         FrmDataModule.DataSourceProgramacaoDiaria_Cadastro.DataSet.
         FieldByName('ComputadorAtualizacao').AsString:= FrmPrincipal.logMaquina;
         //==========================================
-        LogAcao:= 'Programa'+#231+#227+'o: '+DataProgramacao+#9+ComboBoxDestino.Text+#9+ComboBoxTipoEtapaServico.Text+#9+
-        '['+FrmPrincipal.logChave+'; '+DateToStr(now)+'; '+FrmPrincipal.logMaquina+'; Atualiza'+#231+#227+'o]';
+        LogAcao:= 'Programa��o: '+DataProgramacao+#9+ComboBoxDestino.Text+#9+ComboBoxTipoEtapaServico.Text+#9+
+        '['+FrmPrincipal.logChave+'; '+DateToStr(now)+'; '+FrmPrincipal.logMaquina+'; Atualiza��o]';
         DBMemoLogAcao.Lines.Add(LogAcao);
         //==========================================
         FrmDataModule.ADOQueryProgramacaoDiaria_Cadastro.Post;
@@ -1744,7 +1732,7 @@ begin
             end;
             ComputadorProgramacao:= RLExecutantes.Cells[14,i];
             if (StatusProgramacao <> 'Cancelado')AND
-            (StatusProgramacao <> 'Mudan'+#231+'a')AND
+            (StatusProgramacao <> 'Mudan�a')AND
             (StatusProgramacao <> 'Aprovado') then
             begin
               StatusProgramacao:= 'Aprovado';
@@ -1800,7 +1788,7 @@ begin
       FrmDataModule.ADOQueryProgramacaoServico_Cadastro.Open;
 
 
-      FrmPrincipal.deleteQuery(FrmDataModule.ADOQueryProgramacaoServico_Cadastro,'Servi'+#231+'os');
+      FrmPrincipal.deleteQuery(FrmDataModule.ADOQueryProgramacaoServico_Cadastro,'Servi�os');
       //Inserir os Servicos
       for i := 1 to RLServicos.RowCount - 1 do
       begin
@@ -1855,8 +1843,8 @@ begin
   end;
   if ((existeExecutante=false)OR(existeServico=false)) then
   begin
-    myString:= 'Necess'+#225+'rio inserir pelo menos um Excecutante e um Servi'+#231+'o.'+#13+
-    'Opera'+#231+#227+'o cancelada!';
+    myString:= 'Necess�rio inserir pelo menos um Excecutante e um Servi�o.'+#13+
+    'Opera��o cancelada!';
     MessageBox(0, StringToWideChar(myString,wideChars,100),
     'Colibri', MB_ICONINFORMATION);
   end;
@@ -2015,7 +2003,7 @@ begin
         DrawText(RLExecutantes.Canvas.Handle, PChar(RLExecutantes.Cells[ACol, ARow]),
         -1, R, DT_Center);
       end
-      else if ((RLExecutantes.Cells[9,ARow] = 'Mudan'+#231+'a')AND(ACol=9)) then
+      else if ((RLExecutantes.Cells[9,ARow] = 'Mudan�a')AND(ACol=9)) then
       begin
         RLExecutantes.Canvas.Brush.Color := clYellow;
         RLExecutantes.Canvas.Font.Style := [];
@@ -2054,9 +2042,9 @@ begin
       RLExecutantes.Cells[0,RLExecutantes.Row]:= '  ';
 
     StatusBarDisponivelExecutantes.Panels[0].Text:=
-    'N'+#176+' Selecionados: '+(IntToStr(FrmPrincipal.CountChecked(RLExecutantes)));
+    'N� Selecionados: '+(IntToStr(FrmPrincipal.CountChecked(RLExecutantes)));
     StatusBarDisponivelExecutantes.Panels[1].Text:=
-    'N'+#176+' Registros: '+(IntToStr(RLExecutantes.RowCount-1));
+    'N� Registros: '+(IntToStr(RLExecutantes.RowCount-1));
     AutoFitStatusBar(StatusBarDisponivelExecutantes);
   end;
 end;
@@ -2078,9 +2066,9 @@ begin
       RLExecutantes.Cells[ACol,ARow]:= '  ';
   end;
   StatusBarDisponivelExecutantes.Panels[0].Text:=
-  'N'+#176+' Selecionados: '+(IntToStr(FrmPrincipal.CountChecked(RLExecutantes)));
+  'N� Selecionados: '+(IntToStr(FrmPrincipal.CountChecked(RLExecutantes)));
   StatusBarDisponivelExecutantes.Panels[1].Text:=
-  'N'+#176+' Registros: '+(IntToStr(RLExecutantes.RowCount-1));
+  'N� Registros: '+(IntToStr(RLExecutantes.RowCount-1));
   AutoFitStatusBar(StatusBarDisponivelExecutantes);
 end;
 
@@ -2145,9 +2133,9 @@ begin
       RLServicos.Cells[ACol,ARow]:= '  ';
   end;
   StatusBarDisponivelServicos.Panels[0].Text:=
-  'N'+#176+' Selecionados: '+(IntToStr(FrmPrincipal.CountChecked(RLServicos)));
+  'N� Selecionados: '+(IntToStr(FrmPrincipal.CountChecked(RLServicos)));
   StatusBarDisponivelServicos.Panels[1].Text:=
-  'N'+#176+' Registros: '+(IntToStr(RLServicos.RowCount-1));
+  'N� Registros: '+(IntToStr(RLServicos.RowCount-1));
   AutoFitStatusBar(StatusBarDisponivelServicos);
 end;
 
@@ -2207,3 +2195,5 @@ begin
 end;
 
 end.
+
+

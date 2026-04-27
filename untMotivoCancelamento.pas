@@ -14,7 +14,6 @@ type
     PanelCancelamentoMudanca: TPanel;
     PanelMotivoCancelamento: TPanel;
     DBGridPalavraChave: TFilterDBGrid;
-    ColunasLayoutPalavraChave: TStringGrid;
     ToolBar9: TToolBar;
     DBNavigatorPalavraChave: TDBNavigator;
     BitBtn15: TBitBtn;
@@ -75,18 +74,18 @@ begin
   if PalavraChave = '' then
   begin
     passou:= false;
-    MessageBox(0,'O campo "Palavra Chave" não pode estar em branco!','Avaliação de Programação',MB_ICONERROR);
+    MessageBox(0,'O campo "Palavra Chave" n'#227'o pode estar em branco!','Avalia'#231#227'o de Programa'#231#227'o',MB_ICONERROR);
   end;
   if passou then
   begin
     case RadioGroupFonteCancelamento.ItemIndex of
-      0://Gerenciar Solicitações (Cancelamento)
+      0://Gerenciar Solicitacoes (Cancelamento)
       begin
         FrmDataModule.DataSourceGerenciarExecutante.Enabled:= false;
         NumRegistros:= FrmDataModule.ADOQueryGerenciarExecutante.RecordCount;
         FrmDataModule.ADOQueryGerenciarExecutante.First;
         FrmPrincipal.ProgressBarIncializa(NumRegistros,
-        'Atribuindo status para programação...');
+        'Atribuindo status para programa'#231#227'o...');
         while not FrmDataModule.ADOQueryGerenciarExecutante.Eof do
         begin
           if FrmDataModule.DataSourceGerenciarExecutante.DataSet.
@@ -105,7 +104,7 @@ begin
         //Calcular Cancelados
         FrmDataModule.ADOQueryGerenciarExecutante.First;
         FrmPrincipal.ProgressBarIncializa(NumRegistros,
-        'Calculando: Aprovados, Cancelados e N° de Executantes...');
+        'Calculando: Aprovados, Cancelados e N'#176' de Executantes...');
         while not FrmDataModule.ADOQueryGerenciarExecutante.Eof do
         begin
           if FrmDataModule.DataSourceGerenciarExecutante.DataSet.
@@ -126,13 +125,13 @@ begin
         FrmGerenciarSolicitacoes.StatusLinhaSelecionada;
         FrmGerenciarSolicitacoes.actContadorSolicitacao.Execute;
       end;
-      1: //Marcar os não executados
+      1: //Marcar os nao executados
       begin
         FrmDataModule.DataSourceConsultaExecutantesProgramados.Enabled:= false;
         NumRegistros:= FrmDataModule.ADOQueryConsultaExecutantesProgramados.RecordCount;
         FrmDataModule.ADOQueryConsultaExecutantesProgramados.First;
         FrmPrincipal.ProgressBarIncializa(NumRegistros,
-        'Atribuindo Status de Execução...');
+        'Atribuindo Status de Execu'#231#227'o...');
         while not FrmDataModule.ADOQueryConsultaExecutantesProgramados.Eof do
         begin
           if FrmDataModule.DataSourceConsultaExecutantesProgramados.DataSet.
@@ -152,13 +151,13 @@ begin
         FrmDataModule.ADOQueryConsultaExecutantesProgramados.Active:= true;
         FrmDataModule.DataSourceConsultaExecutantesProgramados.Enabled:= true;
       end;
-      2: //Gerenciamento de Solicitações (Mudança)
+      2: //Gerenciamento de Solicitacoes (Mudanca)
       begin
         FrmDataModule.DataSourceGerenciarExecutante.Enabled:= false;
         NumRegistros:= FrmDataModule.ADOQueryGerenciarExecutante.RecordCount;
         FrmDataModule.ADOQueryGerenciarExecutante.First;
         FrmPrincipal.ProgressBarIncializa(NumRegistros,
-        'Atribuindo status para programação...');
+        'Atribuindo status para programa'#231#227'o...');
         while not FrmDataModule.ADOQueryGerenciarExecutante.Eof do
         begin
           if FrmDataModule.DataSourceGerenciarExecutante.DataSet.
@@ -168,7 +167,7 @@ begin
             DataSet.FieldByName('idProgramacaoExecutante').AsInteger;
 
             FrmPrincipal.AvaliarProgramacaoExecutante(idProgramacaoExecutante,0,
-            'Mudança',PalavraChave);
+            'Mudan'#231'a',PalavraChave);
           end;
           FrmDataModule.ADOQueryGerenciarExecutante.Next;
           FrmPrincipal.ProgressBarIncremento(1);
@@ -177,7 +176,7 @@ begin
         //Calcular Cancelados
         FrmDataModule.ADOQueryGerenciarExecutante.First;
         FrmPrincipal.ProgressBarIncializa(NumRegistros,
-        'Calculando: Aprovados, Cancelados e N° de Executantes...');
+        'Calculando: Aprovados, Cancelados e N'#176' de Executantes...');
         while not FrmDataModule.ADOQueryGerenciarExecutante.Eof do
         begin
           if FrmDataModule.DataSourceGerenciarExecutante.DataSet.
@@ -207,7 +206,7 @@ procedure TFrmMotivoCancelamento.actProcurarExecute(Sender: TObject);
   var
     SQLString,SQLBase: String;
 begin
-  SQLString:= frmPrincipal.SQLStringFiltroTabela(ColunasLayoutPalavraChave,true);
+  SQLString:= BuildFilterSQL(DBGridPalavraChave,true);
   SQLBase:= 'SELECT tblPalavraChave.* FROM tblPalavraChave'+
   SQLString+' ORDER BY PalavraChave;';
   FrmPrincipal.ProcuraQuery(SQLBase,FrmDataModule.ADOQueryPalavraChave,StatusBarPalavraChave);
@@ -215,11 +214,10 @@ end;
 
 procedure TFrmMotivoCancelamento.FormCreate(Sender: TObject);
 begin
-  FrmDataModule.setFilterDBGrid(DBGridPalavraChave);
   actProcurar.Execute;
 
   if ((FrmPrincipal.logPerfil = 'Administrador')OR
-  (FrmPrincipal.logPerfil = 'Programação')OR
+  (FrmPrincipal.logPerfil = 'Programa'#231#227'o')OR
   (FrmPrincipal.logPerfil = 'Supervisor')) then
   begin
     DBNavigatorPalavraChave.Enabled:= true;
@@ -241,9 +239,11 @@ begin
   RadioGroupFonteCancelamento.ItemIndex:= Fonte;
   case Fonte of
     0: PanelTitulo.Caption:= 'Motivo de Cancelamento e Palavras Chave';
-    1: PanelTitulo.Caption:= 'Motivo da Não Execução';
-    2: PanelTitulo.Caption:= 'Motivo da Mudança e Palavras Chave';
+    1: PanelTitulo.Caption:= 'Motivo da N'#227'o Execu'#231#227'o';
+    2: PanelTitulo.Caption:= 'Motivo da Mudan'#231'a e Palavras Chave';
   end;
 end;
 
 end.
+
+

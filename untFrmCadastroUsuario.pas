@@ -20,13 +20,10 @@ type
     btnClearFiltro: TToolButton;
     btnLayout: TToolButton;
     btnExcel: TToolButton;
-    ColunasLayout: TStringGrid;
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure DBGridUsuariosKeyPress(Sender: TObject; var Key: Char);
-    procedure DBGridUsuariosDrawColumnCell(Sender: TObject; const Rect: TRect;
-      DataCol: Integer; Column: TColumn; State: TGridDrawState);
     procedure actProcurarExecute(Sender: TObject);
   private
     { Private declarations }
@@ -46,16 +43,10 @@ procedure TFrmCadastroUsuario.actProcurarExecute(Sender: TObject);
   var
     SQLString,SQLBase: String;
 begin
-  SQLString:= frmPrincipal.SQLStringFiltroTabela(ColunasLayout,true);
+  SQLString:= BuildFilterSQL(DBGridUsuarios,true);
   SQLBase:= 'SELECT tblUsuario.* FROM tblUsuario '+
   SQLString+' ORDER BY Nome;';
   FrmPrincipal.ProcuraQuery(SQLBase,FrmDataModule.ADOQueryCadastroUsuario,StatusBarRegrasRecolhimento);
-end;
-
-procedure TFrmCadastroUsuario.DBGridUsuariosDrawColumnCell(Sender: TObject;
-  const Rect: TRect; DataCol: Integer; Column: TColumn; State: TGridDrawState);
-begin
-  FrmPrincipal.GridZebrado(DBGridUsuarios,ColunasLayout,State,Rect,DataCol,Column);
 end;
 
 procedure TFrmCadastroUsuario.DBGridUsuariosKeyPress(Sender: TObject;
@@ -76,8 +67,7 @@ procedure TFrmCadastroUsuario.FormCreate(Sender: TObject);
 begin
   //======ADICIONAR TABSET DO FOMRMDI=======
   FrmPrincipal.MDIChildCreated(self.Handle);
-  //Incicialização
-  FrmDataModule.setFilterDBGrid(DBGridUsuarios);
+  //Inicializacao
   actProcurar.Execute;
 end;
 
@@ -103,3 +93,4 @@ begin
 end;
 
 end.
+

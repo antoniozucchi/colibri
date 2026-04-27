@@ -19,15 +19,12 @@ type
     actExcel: TAction;
     actProcurar: TAction;
     StatusBar1: TStatusBar;
-    ColunasLayout: TStringGrid;
     btnClearFiltro: TToolButton;
     btnExcel: TToolButton;
     btnLayout: TToolButton;
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
-    procedure DBGridEmbarcacaoDrawColumnCell(Sender: TObject; const Rect: TRect;
-      DataCol: Integer; Column: TColumn; State: TGridDrawState);
     procedure DBGridEmbarcacaoKeyPress(Sender: TObject; var Key: Char);
     procedure actProcurarExecute(Sender: TObject);
   private
@@ -48,16 +45,10 @@ procedure TFrmEmbarcacao.actProcurarExecute(Sender: TObject);
   var
     SQLString,SQLBase: String;
 begin
-  SQLString:= frmPrincipal.SQLStringFiltroTabela(ColunasLayout,true);
+  SQLString:= BuildFilterSQL(DBGridEmbarcacao,true);
   SQLBase:= 'SELECT tblEmbarcacao.* FROM tblEmbarcacao '+
   SQLString+' ORDER BY TipoEmbarcacao;';
   FrmPrincipal.ProcuraQuery(SQLBase,FrmDataModule.ADOQueryEmbarcacoes,StatusBar1);
-end;
-
-procedure TFrmEmbarcacao.DBGridEmbarcacaoDrawColumnCell(Sender: TObject;
-  const Rect: TRect; DataCol: Integer; Column: TColumn; State: TGridDrawState);
-begin
-  FrmPrincipal.GridZebrado(DBGridEmbarcacao,ColunasLayout,State,Rect,DataCol,Column);
 end;
 
 procedure TFrmEmbarcacao.DBGridEmbarcacaoKeyPress(Sender: TObject;
@@ -89,8 +80,7 @@ begin
     DBNavigator1.Enabled:= false;
     DBGridEmbarcacao.ReadOnly:= true;
   end;
-  //Incicialização
-  FrmDataModule.setFilterDBGrid(DBGridEmbarcacao);
+  //Inicializacao
   actProcurar.Execute;
 end;
 
@@ -116,4 +106,5 @@ begin
 end;
 
 end.
+
 

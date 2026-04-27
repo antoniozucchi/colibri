@@ -100,7 +100,6 @@ object FrmGerenciarEmbarcacoes: TFrmGerenciarEmbarcacoes
             OnKeyDown = DBGridRoteamentoKeyDown
             ClearFilterButton = btnFiltroClearRoteamento
             SearchAction = actProcuraRoteamento
-            LayoutGrid = ColunasLayoutRoteamento
             EnableZebra = False
             ExcelButton = btnExcelRoteamento
             Columns = <
@@ -274,7 +273,7 @@ object FrmGerenciarEmbarcacoes: TFrmGerenciarEmbarcacoes
             object btnExcluirRota: TBitBtn
               Left = 339
               Top = 0
-              Width = 86
+              Width = 94
               Height = 22
               Action = actExcluirRoteamentoTODOS
               Caption = 'Excluir todas'
@@ -283,7 +282,7 @@ object FrmGerenciarEmbarcacoes: TFrmGerenciarEmbarcacoes
               TabOrder = 1
             end
             object DBEditCodigoRoteamento: TDBEdit
-              Left = 425
+              Left = 433
               Top = 0
               Width = 48
               Height = 22
@@ -418,7 +417,6 @@ object FrmGerenciarEmbarcacoes: TFrmGerenciarEmbarcacoes
               Top = 1
               Width = 206
               Height = 29
-              ButtonHeight = 23
               Caption = 'ToolBar4'
               DrawingStyle = dsGradient
               EdgeBorders = [ebLeft, ebTop, ebRight, ebBottom]
@@ -472,6 +470,17 @@ object FrmGerenciarEmbarcacoes: TFrmGerenciarEmbarcacoes
                 Action = actImprimirExtrato
                 ParentShowHint = False
                 ShowHint = True
+              end
+              object BitBtn10: TBitBtn
+                Left = 115
+                Top = 0
+                Width = 84
+                Height = 22
+                Action = actPrioridadeDistribuicao
+                Caption = 'Prioridade'
+                ParentShowHint = False
+                ShowHint = True
+                TabOrder = 0
               end
             end
             object StrGridResumo: TStringGrid
@@ -687,7 +696,6 @@ object FrmGerenciarEmbarcacoes: TFrmGerenciarEmbarcacoes
             OnKeyDown = DBGridRotaExecutantesKeyDown
             ClearFilterButton = btnFiltroClearRotaExecutante
             SearchAction = actProcuraRotaExecutantes
-            LayoutGrid = ColunasLayoutRotaExecutantes
             EnableZebra = False
             ExcelButton = btnExcelRotaExecutante
             Columns = <
@@ -984,7 +992,6 @@ object FrmGerenciarEmbarcacoes: TFrmGerenciarEmbarcacoes
             OnDrawColumnCell = DBGridProcuraGeralDrawColumnCell
             ClearFilterButton = btnFiltroClearProcuraGeral
             SearchAction = actProcuraGeral
-            LayoutGrid = ColunasLayoutProcuraGeral
             EnableZebra = False
             ExcelButton = btnExcelGeral
             Columns = <
@@ -1186,7 +1193,6 @@ object FrmGerenciarEmbarcacoes: TFrmGerenciarEmbarcacoes
             OnDrawColumnCell = DBGridProcuraProgramadosDrawColumnCell
             ClearFilterButton = btnFiltroClearProgramados
             SearchAction = actProcuraProgramados
-            LayoutGrid = ColunasLayoutProgramados
             EnableZebra = False
             Columns = <
               item
@@ -3105,6 +3111,13 @@ object FrmGerenciarEmbarcacoes: TFrmGerenciarEmbarcacoes
       Hint = 'Excluir todas as Rotas'
       ImageIndex = 324
       OnExecute = actExcluirRoteamentoTODOSExecute
+    end
+    object actPrioridadeDistribuicao: TAction
+      Category = 'Configura'#231#245'es'
+      Caption = 'Prioridade'
+      Hint = 'Defini'#231#227'o da prioridade das plataformas'
+      ImageIndex = 55
+      OnExecute = actPrioridadeDistribuicaoExecute
     end
   end
   object SavePictureDialog1: TSavePictureDialog

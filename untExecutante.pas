@@ -7,7 +7,8 @@ uses
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ExtCtrls, Data.DB, Vcl.Grids,
   Vcl.DBGrids, Vcl.DBCtrls, Vcl.ToolWin, Vcl.ComCtrls, Vcl.StdCtrls, Vcl.Mask,Data.Win.ADODB,
   Vcl.PlatformDefaultStyleActnCtrls, System.Actions, Vcl.ActnList, Vcl.ActnMan,ComOBJ,
-  Vcl.Buttons,UITypes, Vcl.Menus, untDBGridFilter, uZucchi;
+  Vcl.Buttons,UITypes, Vcl.Menus, untDBGridFilter, uZucchi,
+  uFuncaoExecutanteUtils, uEmpresaExecutanteUtils;
 
 type
   TFrmExecutante = class(TForm)
@@ -54,14 +55,11 @@ type
     ProcuraDuplicadosMatricula1: TMenuItem;
     ProcuraDuplicadosNome1: TMenuItem;
     actFiltros: TAction;
-    ColunasLayoutExecutante: TStringGrid;
     actProcurarTipoEtapaServico: TAction;
     StatusBarTipoEtapaServico: TStatusBar;
-    MaskEditCPF: TMaskEdit;
     actBuscaOrigemCadastro: TAction;
     actTurma: TAction;
     btnFiltroClearExecutante: TToolButton;
-    ColunasLayoutTipoEtapaServico: TStringGrid;
     btnFiltroClearTipoEtapaServico: TToolButton;
     btnLayoutExecutante: TToolButton;
     btnLayoutTipoEtapaServico: TToolButton;
@@ -92,7 +90,6 @@ type
     procedure actProcurarTipoEtapaServicoExecute(Sender: TObject);
     procedure actBuscaOrigemCadastroExecute(Sender: TObject);
     procedure actTurmaExecute(Sender: TObject);
-    procedure MaskEditCPFChange(Sender: TObject);
   private
     { Private declarations }
     procedure WMMDIACTIVATE(var msg: TWMMDIACTIVATE);message WM_MDIACTIVATE;
@@ -108,6 +105,52 @@ implementation
   uses untPrincipal,untDataModule,untConsultaExecutantesProgramados;
 {$R *.dfm}
 
+function NormalizarCodigoSAPLocal(const Texto: String): String;
+var
+  I: Integer;
+  ApenasNumeros: Boolean;
+begin
+  Result := Trim(Texto);
+  if Result = '' then
+    Exit;
+
+  ApenasNumeros := True;
+  for I := 1 to Length(Result) do
+  begin
+    if not CharInSet(Result[I], ['0'..'9']) then
+    begin
+      ApenasNumeros := False;
+      Break;
+    end;
+  end;
+
+  if ApenasNumeros then
+  begin
+    while (Length(Result) > 1) and (Result[1] = '0') do
+      Delete(Result, 1, 1);
+  end;
+
+  if Result = '0' then
+    Result := '';
+end;
+
+function NormalizarCodigoSAPGravacaoLocal(const Texto: String): String;
+begin
+  Result := NormalizarCodigoSAPLocal(Texto);
+  if Result = '' then
+    Result := 'NA';
+end;
+
+function NormalizarCPFLocal(const Texto: String): String;
+begin
+  Result := FrmPrincipal.VerificaCPF(Texto);
+end;
+
+function CPFEhValidoLocal(const Texto: String): Boolean;
+begin
+  Result := NormalizarCPFLocal(Texto) <> '';
+end;
+
 procedure TFrmExecutante.actAtualizarSelecionadoExecute(Sender: TObject);
   var
     codigoTipoEtapaServico: Integer;
@@ -120,10 +163,14 @@ begin
     DSTipo:= FrmDataModule.ADOQueryConsultaTipoEtapaServico_ID;
     //FrmDataModule.naoGravar:= true;
     NomeExecutante:= FrmPrincipal.TextoMaiusculo(DSExec.FieldByName('NomeExecutante').AsString);
-    txtEmpresa:= FrmPrincipal.TextoMaiusculo(DSExec.FieldByName('txtEmpresa').AsString);
-    txtFuncao:= FrmPrincipal.TextoMaiusculo(DSExec.FieldByName('txtFuncao').AsString);
+    txtEmpresa:= NormalizarEmpresaExecutante(
+      DSExec.FieldByName('txtEmpresa').AsString
+    );
+    txtFuncao:= NormalizarFuncaoExecutante(
+      DSExec.FieldByName('txtFuncao').AsString
+    );
     OrigemCadastro:= FrmPrincipal.TextoMaiusculo(DSExec.FieldByName('OrigemCadastro').AsString);
-    CodigoSAP:= RemoverZerosEsquerda(TRIM(DSExec.FieldByName('CodigoSAP').AsString));
+    CodigoSAP:= NormalizarCodigoSAPGravacaoLocal(DSExec.FieldByName('CodigoSAP').AsString);
     OutroDocumento:= TRIM(DSExec.FieldByName('OutroDocumento').AsString);
     CentroCusto:= TRIM(DSExec.FieldByName('CentroCusto').AsString);
     DiagramaRede:= TRIM(DSExec.FieldByName('DiagramaRede').AsString);
@@ -160,10 +207,10 @@ procedure TFrmExecutante.actAtualizarTodosExecute(Sender: TObject);
     SelRegistro: Integer;
 begin
   if Application.MessageBox(PChar(
-  'Deseja realmente atualizar todos os registros de Executantes "FILTRADOS"?'),'.::ATENÇÃO::.',36) = 6 then
+  'Deseja realmente atualizar todos os registros de Executantes "FILTRADOS"?'),'.::ATENï¿½ï¿½O::.',36) = 6 then
   begin
     FrmPrincipal.ProgressBarIncializa(FrmDataModule.ADOQueryExecutante.RecordCount,
-    'Atualizando e corrigindo: Executante, Empresa, Função e Tipo de Etapa de Serviço...');
+    'Atualizando e corrigindo: Executante, Empresa, Funï¿½ï¿½o e Tipo de Etapa de Serviï¿½o...');
     SelRegistro:= FrmDataModule.ADOQueryExecutante.RecNo;
     FrmDataModule.DataSourceExecutante.Enabled:= false;
     FrmDataModule.ADOQueryExecutante.First;
@@ -186,15 +233,23 @@ begin
   FrmDataModule.ADOQueryExecutante.First;
   while not FrmDataModule.ADOQueryExecutante.Eof do
   begin
-    CodigoSAP:= FrmDataModule.DataSourceExecutante.DataSet.
-    FieldByName('CodigoSAP').AsString;
-    FrmPrincipal.buscaFiledGrid1('CodigoSAP',CodigoSAP,'Exato',
-    FrmConsultaExecutantesProgramados.ColunasLayoutExecutanteProgramado,4,false);
-    FrmConsultaExecutantesProgramados.actProcurarProgramacaoExecutante.Execute;
-    FrmDataModule.ADOQueryExecutante.Edit;
-    FrmDataModule.DataSourceExecutante.DataSet.FieldByName('OrigemCadastro').AsString:=
-    FrmDataModule.DataSourceConsultaExecutantesProgramados.DataSet.FieldByName('Origem').AsString;
-    FrmDataModule.ADOQueryExecutante.Post;
+    CodigoSAP:= NormalizarCodigoSAPLocal(
+      FrmDataModule.DataSourceExecutante.DataSet.FieldByName('CodigoSAP').AsString);
+    if CodigoSAP <> '' then
+    begin
+      SetFilterValue('CodigoSAP',CodigoSAP,'Exato',
+      FrmConsultaExecutantesProgramados.ColunasLayoutExecutanteProgramado,4,false);
+      SetFilterValue('CodigoSAP',CodigoSAP,'Exato',
+      FrmConsultaExecutantesProgramados.DBGridExecutantesProgramados,4,false);
+      FrmConsultaExecutantesProgramados.actProcurarProgramacaoExecutante.Execute;
+      if not FrmDataModule.ADOQueryConsultaExecutantesProgramados.IsEmpty then
+      begin
+        FrmDataModule.ADOQueryExecutante.Edit;
+        FrmDataModule.DataSourceExecutante.DataSet.FieldByName('OrigemCadastro').AsString:=
+        FrmDataModule.DataSourceConsultaExecutantesProgramados.DataSet.FieldByName('Origem').AsString;
+        FrmDataModule.ADOQueryExecutante.Post;
+      end;
+    end;
     FrmDataModule.ADOQueryExecutante.Next;
   end;
 end;
@@ -216,7 +271,7 @@ procedure TFrmExecutante.actExcluirTodosExecute(Sender: TObject);
 begin
   if Application.MessageBox(PChar(
   'Deseja realmente excluir todos os registros de Executantes "FILTRADOS"?'),
-  '.::ATENÇÃO::.',36) = 6 then
+  '.::ATENï¿½ï¿½O::.',36) = 6 then
   begin
     FrmPrincipal.deleteQuery(FrmDataModule.ADOQueryExecutante,
     'Executantes');
@@ -249,7 +304,7 @@ procedure TFrmExecutante.actProcurarTipoEtapaServicoExecute(Sender: TObject);
   var
     SQLString,SQLBase: String;
 begin
-  SQLString:= frmPrincipal.SQLStringFiltroTabela(ColunasLayoutTipoEtapaServico,true);
+  SQLString:= BuildFilterSQL(DBGridTipoServico,true);
   SQLBase:= 'SELECT tblTipoEtapaServico.* FROM tblTipoEtapaServico '+
   SQLString+' ORDER BY TipoEtapaServico;';
   FrmPrincipal.ProcuraQuery(SQLBase,FrmDataModule.ADOQueryTipoEtapaServico,
@@ -261,17 +316,22 @@ procedure TFrmExecutante.actTurmaExecute(Sender: TObject);
     CodigoSAP,Turma: String;
 begin
   Turma:= '1';
-  if InputQuery('Turma','Entre com o número da turma a ser associado a todos os executantes FILTRADOS',Turma) then
+  if InputQuery('Turma','Entre com o nï¿½mero da turma a ser associado a todos os executantes FILTRADOS',Turma) then
   begin
     FrmDataModule.ADOQueryExecutante.First;
     while not FrmDataModule.ADOQueryExecutante.Eof do
     begin
-      CodigoSAP:= FrmDataModule.DataSourceExecutante.DataSet.
-      FieldByName('CodigoSAP').AsString;
-      FrmPrincipal.buscaFiledGrid1('CodigoSAP',CodigoSAP,'Exato',
-      FrmConsultaExecutantesProgramados.ColunasLayoutExecutanteProgramado,4,false);
-      FrmConsultaExecutantesProgramados.actProcurarProgramacaoExecutante.Execute;
-      if not FrmDataModule.ADOQueryConsultaExecutantesProgramados.IsEmpty then
+      CodigoSAP:= NormalizarCodigoSAPLocal(
+        FrmDataModule.DataSourceExecutante.DataSet.FieldByName('CodigoSAP').AsString);
+      if CodigoSAP <> '' then
+      begin
+        SetFilterValue('CodigoSAP',CodigoSAP,'Exato',
+        FrmConsultaExecutantesProgramados.ColunasLayoutExecutanteProgramado,4,false);
+        SetFilterValue('CodigoSAP',CodigoSAP,'Exato',
+        FrmConsultaExecutantesProgramados.DBGridExecutantesProgramados,4,false);
+        FrmConsultaExecutantesProgramados.actProcurarProgramacaoExecutante.Execute;
+      end;
+      if (CodigoSAP <> '') and (not FrmDataModule.ADOQueryConsultaExecutantesProgramados.IsEmpty) then
       begin
         FrmDataModule.ADOQueryExecutante.Edit;
         FrmDataModule.DataSourceExecutante.DataSet.FieldByName('Turma').AsString:= Turma;
@@ -288,13 +348,13 @@ procedure TFrmExecutante.actProcurarExecutanteExecute(Sender: TObject);
 begin
   if Procurar1.Checked then
   begin
-    SQLString:= frmPrincipal.SQLStringFiltroTabela(ColunasLayoutExecutante,true);
+    SQLString:= BuildFilterSQL(DBGridExecutante,true);
     SQLBase:= 'SELECT tblExecutante.* FROM tblExecutante '+
     SQLString+' ORDER BY NomeExecutante, txtEmpresa;';
   end
   else if ProcuraDuplicadosMatricula1.Checked then
   begin
-    SQLString:= frmPrincipal.SQLStringFiltroTabela(ColunasLayoutExecutante,false);
+    SQLString:= BuildFilterSQL(DBGridExecutante,false);
     if SQLString<>'' then
       SQLString:= 'AND'+SQLString;
     SQLBase:=
@@ -304,7 +364,7 @@ begin
   end
   else if ProcuraDuplicadosNome1.Checked then
   begin
-    SQLString:= frmPrincipal.SQLStringFiltroTabela(ColunasLayoutExecutante,false);
+    SQLString:= BuildFilterSQL(DBGridExecutante,false);
     if SQLString<>'' then
       SQLString:= 'AND'+SQLString;
     SQLBase:=
@@ -359,7 +419,7 @@ procedure TFrmExecutante.DBGridTipoServicoDrawColumnCell(Sender: TObject;
   var
     CheckBoxRectangle : TRect;
 begin
-  FrmPrincipal.GridZebrado(DBGridTipoServico,ColunasLayoutTipoEtapaServico,State,Rect,DataCol,Column);
+
   if (Column.Field.FieldName = 'BooleanCarteira') then
   begin
     Self.DBGridTipoServico.Canvas.FillRect(Rect);
@@ -467,10 +527,10 @@ begin
     else
       DBLookupComboBox_TipoServico.Visible := False;
   end;
-  FrmPrincipal.GridZebrado(DBGridExecutante,ColunasLayoutExecutante,State,Rect,DataCol,Column);
+
   //CHECKBOX
   if ((Column.Field.FieldName = 'RequisitantePT')OR(Column.Field.FieldName = 'Ativo')OR
-  (Column.Field.FieldName = 'booleanCESS')) then   //  mudança no código
+  (Column.Field.FieldName = 'booleanCESS')) then   //  mudanï¿½a no cï¿½digo
   begin
     Self.DBGridExecutante.Canvas.FillRect(Rect);
     CheckBoxRectangle.Left := Rect.Left + 2;
@@ -494,25 +554,6 @@ begin
       TDBGrid(Sender).Canvas.FillRect(Rect);
       FrmPrincipal.ImageList1.Draw(TDBGrid(Sender).Canvas, Rect.Left +15,Rect.Top + 1, 93);
     end;
-  end;
-  if (gdFocused in State) then
-  begin
-    if (DBGridExecutante.SelectedField.FieldName= 'CPF') then
-    begin
-      with MaskEditCPF do
-      begin
-        Left := Rect.Left + DBGridExecutante.Left + 1;
-        Top := Rect.Top + DBGridExecutante.Top + 1;
-        Width := Rect.Right - Rect.Left + 2;
-        Width := Rect.Right - Rect.Left + 2;
-        Height := Rect.Bottom - Rect.Top + 2;
-        MaskEditCPF.Text:= (DBGridExecutante.DataSource.
-        DataSet.FieldByName('CPF').AsString);
-        Visible := True;
-      end;
-    end
-    else
-      MaskEditCPF.Visible := False;
   end;
 end;
 
@@ -551,7 +592,7 @@ begin
     actBuscaEmpregadoMatricula.Enabled:= true;
     actBuscaEmpregadoChave.Enabled:= true;
     DBGridExecutante.ReadOnly:= false;
-    //Tipo de Etapa de Serviço
+    //Tipo de Etapa de Serviï¿½o
     DBNavigatorTipoEtapaServico.Enabled:= true;
     DBGridTipoServico.ReadOnly:= false;
   end
@@ -566,14 +607,14 @@ begin
     actBuscaEmpregadoMatricula.Enabled:= false;
     actBuscaEmpregadoChave.Enabled:= false;
     DBGridExecutante.ReadOnly:= true;
-    //Tipo de Etapa de Serviço
+    //Tipo de Etapa de Serviï¿½o
     DBNavigatorTipoEtapaServico.Enabled:= false;
     DBGridTipoServico.ReadOnly:= true;
   end;
   FrmPrincipal.MDIChildCreated(self.Handle);
-  //Incicialização
-  FrmDataModule.setFilterDBGrid(DBGridExecutante);
-  FrmDataModule.setFilterDBGrid(DBGridTipoServico);
+  CarregarMapaDeParaEmpresaExecutante(FrmDataModule.ADOConnectionColibri);
+  CarregarMapaDeParaFuncaoExecutante(FrmDataModule.ADOConnectionColibri);
+  //Incicializaï¿½ï¿½o
   actProcurarExecutante.Execute;
   actProcurarTipoEtapaServico.Execute;
   DBGridExecutante.Columns[2].DropDownRows:= 30;
@@ -584,24 +625,6 @@ end;
 procedure TFrmExecutante.FormDestroy(Sender: TObject);
 begin
   FrmPrincipal.MDIChildDestroyed(self.Handle);
-end;
-
-procedure TFrmExecutante.MaskEditCPFChange(Sender: TObject);
-  var
-    CPF: String;
-begin
-  try
-    if not (DBGridExecutante.DataSource.State in [dsEdit, dsInsert]) then
-      DBGridExecutante.DataSource.Edit;
-    //====================================================
-    if MaskEditCPF.Text = '   .   .   -  ' then
-      CPF:= '000.000.000-00'
-    else
-      CPF:= MaskEditCPF.Text;
-    //====================================================
-    DBGridExecutante.DataSource.DataSet.FieldByName('CPF').AsString:= CPF;
-  except
-  end;
 end;
 
 procedure TFrmExecutante.WMMDIACTIVATE(var msg: TWMMDIACTIVATE);
@@ -621,3 +644,5 @@ begin
 end;
 
 end.
+
+

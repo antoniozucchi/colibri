@@ -46,24 +46,16 @@ implementation
 function TFrmSobre.FileVerInfo(var FileInfo: TStringList): Boolean;
 const
 
-Key: array[1..9] of string =(
+Key: array[1..5] of string =(
   'CompanyName',
   'FileDescription',
-  'FileVersion',
-  'InternalName',
-  'LegalCopyright',
-  'OriginalFilename',
   'ProductName',
-  'ProductVersion',
+  'FileVersion',
   'Comments');
 
-KeyBr: array [1..9] of string = (
+KeyBr: array [1..5] of string = (
   'Empresa'+#9+#9+#9+': ',
   'Descrição'+#9+#9+#9+': ',
-  'Versão do Arquivo'+#9+#9+': ',
-  'Nome Interno'+#9+#9+': ',
-  'Copyright'+#9+#9+#9+': ',
-  'Nome Original do Arquivo'+#9+': ',
   'Produto'+#9+#9+#9+': ',
   'Versão do Produto'+#9+#9+': ',
   'Comentários'+#9+#9+': ');
@@ -87,7 +79,7 @@ begin
     Result := False;
     exit;
   end;
-  FileInfo.Add('Unidade'+#9+#9+#9+': E&P-UO-SEAL/ATP-SM/MI');
+  FileInfo.Add('Unidade'+#9+#9+#9+': GAD/GIAD-SEAL');
 
   FileInfo.Add('Autor'+#9+#9+#9+': Antonio Augusto Zuchi Leite');
   FileInfo.Add('Chave'+#9+#9+#9+': KBEB');

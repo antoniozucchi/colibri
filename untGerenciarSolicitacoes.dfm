@@ -2,7 +2,7 @@ object FrmGerenciarSolicitacoes: TFrmGerenciarSolicitacoes
   Left = 0
   Top = 0
   Caption = 'Gerenciar Programa'#231#227'o Di'#225'ria de Servi'#231'os'
-  ClientHeight = 562
+  ClientHeight = 637
   ClientWidth = 1534
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
@@ -20,10 +20,21 @@ object FrmGerenciarSolicitacoes: TFrmGerenciarSolicitacoes
   object Splitter1: TSplitter
     Left = 500
     Top = 25
-    Height = 510
+    Height = 564
     ExplicitLeft = 392
     ExplicitTop = 136
     ExplicitHeight = 100
+  end
+  object Splitter2: TSplitter
+    Left = 0
+    Top = 589
+    Width = 1534
+    Height = 3
+    Cursor = crVSplit
+    Align = alBottom
+    ExplicitLeft = 503
+    ExplicitTop = 25
+    ExplicitWidth = 585
   end
   object PanelTitulo: TPanel
     Left = 0
@@ -46,16 +57,18 @@ object FrmGerenciarSolicitacoes: TFrmGerenciarSolicitacoes
     Left = 503
     Top = 25
     Width = 1031
-    Height = 510
+    Height = 564
     Align = alClient
     TabOrder = 1
+    ExplicitHeight = 582
     object PanelServicos: TPanel
       Left = 1
-      Top = 484
+      Top = 538
       Width = 1029
       Height = 25
       Align = alBottom
       TabOrder = 0
+      ExplicitTop = 556
       object Panel4: TPanel
         Left = 1
         Top = 1
@@ -106,7 +119,6 @@ object FrmGerenciarSolicitacoes: TFrmGerenciarSolicitacoes
           TitleFont.Name = 'Tahoma'
           TitleFont.Style = []
           Visible = False
-          OnDrawColumnCell = DBGridServicosDrawColumnCell
           OnKeyDown = DBGridServicosKeyDown
           OnKeyPress = DBGridServicosKeyPress
           EnableZebra = False
@@ -156,31 +168,16 @@ object FrmGerenciarSolicitacoes: TFrmGerenciarSolicitacoes
               Visible = True
             end>
         end
-        object ColunasLayoutServico: TStringGrid
-          Left = 64
-          Top = 55
-          Width = 86
-          Height = 65
-          ColCount = 2
-          DefaultRowHeight = 21
-          TabOrder = 1
-          Visible = False
-          RowHeights = (
-            21
-            21
-            21
-            21
-            21)
-        end
       end
     end
     object PanelExecutantes: TPanel
       Left = 1
       Top = 1
       Width = 1029
-      Height = 483
+      Height = 537
       Align = alClient
       TabOrder = 1
+      ExplicitHeight = 555
       object Panel6: TPanel
         Left = 1
         Top = 1
@@ -355,7 +352,7 @@ object FrmGerenciarSolicitacoes: TFrmGerenciarSolicitacoes
       end
       object StatusBarExecutantes: TStatusBar
         Left = 1
-        Top = 463
+        Top = 517
         Width = 1027
         Height = 19
         Panels = <
@@ -374,6 +371,7 @@ object FrmGerenciarSolicitacoes: TFrmGerenciarSolicitacoes
           item
             Width = 50
           end>
+        ExplicitTop = 535
       end
       object ColunasLayoutExecutantes: TStringGrid
         Left = 49
@@ -415,14 +413,15 @@ object FrmGerenciarSolicitacoes: TFrmGerenciarSolicitacoes
         Left = 1
         Top = 55
         Width = 1027
-        Height = 408
+        Height = 462
         Align = alClient
         TabOrder = 4
+        ExplicitHeight = 480
         object DBGridExecutantes: TFilterDBGrid
           Left = 1
           Top = 1
           Width = 1025
-          Height = 406
+          Height = 460
           Align = alClient
           DataSource = FrmDataModule.DataSourceGerenciarExecutante
           Options = [dgEditing, dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgAlwaysShowSelection, dgTitleClick, dgTitleHotTrack]
@@ -438,7 +437,6 @@ object FrmGerenciarSolicitacoes: TFrmGerenciarSolicitacoes
           OnKeyPress = DBGridExecutantesKeyPress
           ClearFilterButton = btnFiltroClearExecutantes
           SearchAction = actProcurar
-          LayoutGrid = ColunasLayoutExecutantes
           EnableZebra = False
           ExcelButton = btnExcelExecutante
           Columns = <
@@ -657,12 +655,13 @@ object FrmGerenciarSolicitacoes: TFrmGerenciarSolicitacoes
     Left = 0
     Top = 25
     Width = 500
-    Height = 510
+    Height = 564
     Align = alLeft
     TabOrder = 2
+    ExplicitHeight = 582
     object Splitter3: TSplitter
       Left = 1
-      Top = 353
+      Top = 407
       Width = 498
       Height = 3
       Cursor = crVSplit
@@ -768,7 +767,7 @@ object FrmGerenciarSolicitacoes: TFrmGerenciarSolicitacoes
       Left = 1
       Top = 55
       Width = 498
-      Height = 298
+      Height = 352
       Align = alClient
       ColCount = 8
       DefaultRowHeight = 22
@@ -781,16 +780,16 @@ object FrmGerenciarSolicitacoes: TFrmGerenciarSolicitacoes
       TabOrder = 2
       OnDrawCell = RLDestinoOrigemDrawCell
       OnSelectCell = RLDestinoOrigemSelectCell
-      ExplicitLeft = 2
-      ExplicitTop = 56
+      ExplicitHeight = 370
     end
     object PanelNotas: TPanel
       Left = 1
-      Top = 356
+      Top = 410
       Width = 498
       Height = 153
       Align = alBottom
       TabOrder = 3
+      ExplicitTop = 428
       object Panel1: TPanel
         Left = 1
         Top = 1
@@ -1333,7 +1332,6 @@ object FrmGerenciarSolicitacoes: TFrmGerenciarSolicitacoes
         OnCellClick = DBGridContadorCellClick
         OnDrawColumnCell = DBGridContadorDrawColumnCell
         ClearFilterButton = btnClearFiltroContador
-        LayoutGrid = ColunasLayoutContador
         EnableZebra = False
         ExcelButton = btnExcelContador
         Columns = <
@@ -1384,30 +1382,20 @@ object FrmGerenciarSolicitacoes: TFrmGerenciarSolicitacoes
             Visible = True
           end>
       end
-      object ColunasLayoutContador: TStringGrid
-        Left = 304
-        Top = 53
-        Width = 88
-        Height = 62
-        ColCount = 7
-        RowCount = 6
-        TabOrder = 3
-        Visible = False
-      end
     end
   end
   object PanelContadorSolicitacao: TPanel
     Left = 0
-    Top = 535
+    Top = 592
     Width = 1534
-    Height = 27
+    Height = 45
     Align = alBottom
     TabOrder = 4
     object RLContadorSolicitacao: TStringGrid
       Left = 1
       Top = 1
       Width = 1532
-      Height = 25
+      Height = 43
       Align = alClient
       ColCount = 1
       DefaultRowHeight = 22
@@ -1415,7 +1403,9 @@ object FrmGerenciarSolicitacoes: TFrmGerenciarSolicitacoes
       RowCount = 1
       FixedRows = 0
       Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goDrawFocusSelected, goColSizing, goColMoving, goFixedRowClick]
+      ScrollBars = ssHorizontal
       TabOrder = 0
+      ExplicitHeight = 25
     end
   end
   object ActionManager1: TActionManager

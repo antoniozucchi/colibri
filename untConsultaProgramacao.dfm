@@ -197,7 +197,6 @@ object FrmConsultaProgramacao: TFrmConsultaProgramacao
       OnDrawColumnCell = DBGridProgramacaoDrawColumnCell
       ClearFilterButton = btnClearFiltroProgramacao
       SearchAction = actProcurarProgramacao
-      LayoutGrid = ColunasLayoutProgramacao
       EnableZebra = False
       ExcelButton = btnExcelProgramacao
       Columns = <
@@ -469,31 +468,6 @@ object FrmConsultaProgramacao: TFrmConsultaProgramacao
         OnClick = actProcurarProgramacaoExecute
       end
     end
-    object ColunasLayoutProgramacao: TStringGrid
-      Left = 16
-      Top = 212
-      Width = 113
-      Height = 94
-      ColCount = 7
-      DefaultRowHeight = 21
-      RowCount = 13
-      TabOrder = 5
-      Visible = False
-      RowHeights = (
-        21
-        21
-        21
-        21
-        21
-        21
-        21
-        21
-        21
-        21
-        21
-        21
-        21)
-    end
   end
   object PanelResultados: TPanel
     Left = 716
@@ -541,7 +515,6 @@ object FrmConsultaProgramacao: TFrmConsultaProgramacao
         OnKeyPress = DBGridExecutantesKeyPress
         ClearFilterButton = btnClearFiltroExecutante
         SearchAction = actProcurarExecutante
-        LayoutGrid = ColunasLayoutExecutantes
         EnableZebra = False
         ExcelButton = btnExcelExecutante
         Columns = <
@@ -740,30 +713,6 @@ object FrmConsultaProgramacao: TFrmConsultaProgramacao
           end>
         ExplicitWidth = 711
       end
-      object ColunasLayoutExecutantes: TStringGrid
-        Left = 123
-        Top = 134
-        Width = 142
-        Height = 94
-        ColCount = 7
-        DefaultRowHeight = 21
-        RowCount = 12
-        TabOrder = 4
-        Visible = False
-        RowHeights = (
-          21
-          21
-          21
-          21
-          21
-          21
-          21
-          21
-          21
-          21
-          21
-          21)
-      end
     end
     object PanelServico: TPanel
       Left = 1
@@ -787,12 +736,10 @@ object FrmConsultaProgramacao: TFrmConsultaProgramacao
         TitleFont.Height = -11
         TitleFont.Name = 'Tahoma'
         TitleFont.Style = []
-        OnDrawColumnCell = DBGridServicosDrawColumnCell
         OnKeyDown = DBGridServicosKeyDown
         OnKeyPress = DBGridServicosKeyPress
         ClearFilterButton = btnClearFiltroServico
         SearchAction = actProcurarServicos
-        LayoutGrid = ColunasLayoutServicos
         EnableZebra = False
         ExcelButton = btnExcelServico
         Columns = <
@@ -966,24 +913,6 @@ object FrmConsultaProgramacao: TFrmConsultaProgramacao
         ExplicitTop = 220
         ExplicitWidth = 711
       end
-      object ColunasLayoutServicos: TStringGrid
-        Left = 120
-        Top = 104
-        Width = 161
-        Height = 81
-        ColCount = 7
-        DefaultRowHeight = 21
-        RowCount = 6
-        TabOrder = 4
-        Visible = False
-        RowHeights = (
-          21
-          21
-          21
-          21
-          21
-          21)
-      end
     end
   end
   object PanelAjuda: TPanel
@@ -1014,8 +943,6 @@ object FrmConsultaProgramacao: TFrmConsultaProgramacao
       OnMouseDown = PanelTituloAjuda1MouseDown
       OnMouseMove = PanelTituloAjuda1MouseMove
       OnMouseUp = PanelTituloAjuda1MouseUp
-      ExplicitTop = 1383
-      ExplicitWidth = 398
       object SpeedButton4: TSpeedButton
         Left = 378
         Top = 1
@@ -1073,8 +1000,6 @@ object FrmConsultaProgramacao: TFrmConsultaProgramacao
       Height = 262
       Align = alTop
       TabOrder = 1
-      ExplicitTop = 629
-      ExplicitWidth = 398
       object ToolBar5: TToolBar
         Left = 1
         Top = 1
@@ -1085,7 +1010,6 @@ object FrmConsultaProgramacao: TFrmConsultaProgramacao
         EdgeBorders = [ebLeft, ebTop, ebRight, ebBottom]
         Images = FrmPrincipal.ImageList1
         TabOrder = 0
-        ExplicitWidth = 396
         object ToolButton2: TToolButton
           Left = 0
           Top = 0
@@ -1146,7 +1070,6 @@ object FrmConsultaProgramacao: TFrmConsultaProgramacao
         OnFixedCellClick = RLSelecionarServicosFixedCellClick
         OnKeyPress = RLSelecionarServicosKeyPress
         OnMouseDown = RLSelecionarServicosMouseDown
-        ExplicitWidth = 278
       end
       object StatusBarSelecaoServico: TStatusBar
         Left = 1
@@ -1163,7 +1086,6 @@ object FrmConsultaProgramacao: TFrmConsultaProgramacao
           item
             Width = 50
           end>
-        ExplicitWidth = 396
       end
       object Panel18: TPanel
         Left = 283
@@ -1172,7 +1094,6 @@ object FrmConsultaProgramacao: TFrmConsultaProgramacao
         Height = 212
         Align = alRight
         TabOrder = 3
-        ExplicitLeft = 279
         object RadioGroup1: TRadioGroup
           Left = 1
           Top = 1
@@ -1198,7 +1119,6 @@ object FrmConsultaProgramacao: TFrmConsultaProgramacao
       Align = alTop
       TabOrder = 2
       Visible = False
-      ExplicitWidth = 398
       object Panel1: TPanel
         Left = 1
         Top = 1
@@ -1206,7 +1126,6 @@ object FrmConsultaProgramacao: TFrmConsultaProgramacao
         Height = 216
         Align = alClient
         TabOrder = 0
-        ExplicitWidth = 396
         object DBGridImportar: TFilterDBGrid
           Left = 1
           Top = 111
@@ -1332,7 +1251,6 @@ object FrmConsultaProgramacao: TFrmConsultaProgramacao
             item
               Width = 50
             end>
-          ExplicitWidth = 394
         end
         object Panel3: TPanel
           Left = 1
@@ -1341,7 +1259,6 @@ object FrmConsultaProgramacao: TFrmConsultaProgramacao
           Height = 51
           Align = alTop
           TabOrder = 2
-          ExplicitWidth = 394
           object Panel4: TPanel
             Left = 1
             Top = 1
@@ -1450,22 +1367,6 @@ object FrmConsultaProgramacao: TFrmConsultaProgramacao
             OnClick = actProcurarImportarExecute
           end
         end
-        object ColunasLayoutImportar: TStringGrid
-          Left = 472
-          Top = 98
-          Width = 113
-          Height = 94
-          ColCount = 2
-          DefaultRowHeight = 21
-          TabOrder = 3
-          Visible = False
-          RowHeights = (
-            21
-            21
-            21
-            21
-            21)
-        end
         object Panel2: TPanel
           Left = 1
           Top = 1
@@ -1473,7 +1374,6 @@ object FrmConsultaProgramacao: TFrmConsultaProgramacao
           Height = 30
           Align = alTop
           TabOrder = 4
-          ExplicitWidth = 394
           object BitBtn2: TBitBtn
             Left = 1
             Top = 1
@@ -1497,7 +1397,6 @@ object FrmConsultaProgramacao: TFrmConsultaProgramacao
             ScrollBars = ssVertical
             ShowHint = True
             TabOrder = 1
-            ExplicitWidth = 307
           end
         end
         object ToolBar4: TToolBar
@@ -1508,8 +1407,7 @@ object FrmConsultaProgramacao: TFrmConsultaProgramacao
           Caption = 'ToolBar4'
           DrawingStyle = dsGradient
           EdgeBorders = [ebLeft, ebTop, ebRight, ebBottom]
-          TabOrder = 5
-          ExplicitWidth = 394
+          TabOrder = 3
           object BitBtn11: TBitBtn
             Left = 0
             Top = 0
@@ -1625,9 +1523,6 @@ object FrmConsultaProgramacao: TFrmConsultaProgramacao
       Height = 236
       Align = alTop
       TabOrder = 3
-      ExplicitTop = 978
-      ExplicitWidth = 398
-      ExplicitHeight = 200
       object MonthCalendar1: TMonthCalendar
         Left = 1
         Top = 30
@@ -1645,8 +1540,6 @@ object FrmConsultaProgramacao: TFrmConsultaProgramacao
         ParentFont = False
         TabOrder = 0
         OnDblClick = MonthCalendar1DblClick
-        ExplicitWidth = 263
-        ExplicitHeight = 169
       end
       object ToolBar7: TToolBar
         Left = 1
@@ -1658,7 +1551,6 @@ object FrmConsultaProgramacao: TFrmConsultaProgramacao
         EdgeBorders = [ebLeft, ebTop, ebRight, ebBottom]
         Images = FrmPrincipal.ImageList1
         TabOrder = 1
-        ExplicitWidth = 396
         object BitBtn32: TBitBtn
           Left = 0
           Top = 0
@@ -1732,8 +1624,6 @@ object FrmConsultaProgramacao: TFrmConsultaProgramacao
       Height = 87
       Align = alTop
       TabOrder = 4
-      ExplicitTop = 891
-      ExplicitWidth = 398
       object ToolBar10: TToolBar
         Left = 1
         Top = 1
@@ -1743,7 +1633,6 @@ object FrmConsultaProgramacao: TFrmConsultaProgramacao
         DrawingStyle = dsGradient
         EdgeBorders = [ebLeft, ebTop, ebRight, ebBottom]
         TabOrder = 0
-        ExplicitWidth = 396
         object BitBtn38: TBitBtn
           Left = 0
           Top = 0
@@ -1774,7 +1663,6 @@ object FrmConsultaProgramacao: TFrmConsultaProgramacao
         Height = 25
         Align = alTop
         TabOrder = 1
-        ExplicitWidth = 396
         object Panel41: TPanel
           Left = 1
           Top = 1
@@ -1792,7 +1680,6 @@ object FrmConsultaProgramacao: TFrmConsultaProgramacao
           Height = 23
           Align = alClient
           TabOrder = 1
-          ExplicitWidth = 274
           object ComboBoxFuncao1: TComboBox
             Left = 1
             Top = 1
@@ -1812,7 +1699,6 @@ object FrmConsultaProgramacao: TFrmConsultaProgramacao
         Height = 25
         Align = alTop
         TabOrder = 2
-        ExplicitWidth = 396
         object Panel47: TPanel
           Left = 1
           Top = 1
@@ -1830,7 +1716,6 @@ object FrmConsultaProgramacao: TFrmConsultaProgramacao
           Height = 23
           Align = alClient
           TabOrder = 1
-          ExplicitWidth = 274
           object ComboBoxOrigem: TComboBox
             Left = 1
             Top = 1
@@ -1853,8 +1738,6 @@ object FrmConsultaProgramacao: TFrmConsultaProgramacao
       Align = alTop
       Caption = 'PanelLogAcao'
       TabOrder = 5
-      ExplicitTop = 1178
-      ExplicitWidth = 398
       object DBMemoLogAcao: TDBMemo
         Left = 1
         Top = 30
@@ -1867,7 +1750,6 @@ object FrmConsultaProgramacao: TFrmConsultaProgramacao
         ScrollBars = ssBoth
         TabOrder = 0
         WordWrap = False
-        ExplicitWidth = 396
       end
       object ToolBar11: TToolBar
         Left = 1
@@ -1878,7 +1760,6 @@ object FrmConsultaProgramacao: TFrmConsultaProgramacao
         DrawingStyle = dsGradient
         EdgeBorders = [ebLeft, ebTop, ebRight, ebBottom]
         TabOrder = 1
-        ExplicitWidth = 396
       end
     end
     object PanelInserirProgramacao: TPanel
@@ -1888,8 +1769,6 @@ object FrmConsultaProgramacao: TFrmConsultaProgramacao
       Height = 114
       Align = alTop
       TabOrder = 6
-      ExplicitTop = 515
-      ExplicitWidth = 398
       object ToolBar12: TToolBar
         Left = 1
         Top = 1
@@ -1899,7 +1778,6 @@ object FrmConsultaProgramacao: TFrmConsultaProgramacao
         DrawingStyle = dsGradient
         EdgeBorders = [ebLeft, ebTop, ebRight, ebBottom]
         TabOrder = 0
-        ExplicitWidth = 396
         object BitBtn40: TBitBtn
           Left = 0
           Top = 0
@@ -1919,7 +1797,6 @@ object FrmConsultaProgramacao: TFrmConsultaProgramacao
         Height = 25
         Align = alTop
         TabOrder = 1
-        ExplicitWidth = 396
         object Panel72: TPanel
           Left = 1
           Top = 1
@@ -1937,7 +1814,6 @@ object FrmConsultaProgramacao: TFrmConsultaProgramacao
           Height = 23
           Align = alClient
           TabOrder = 1
-          ExplicitWidth = 264
           object DateTimePickerProgramacao2: TDateTimePicker
             Left = 1
             Top = 1
@@ -1950,7 +1826,6 @@ object FrmConsultaProgramacao: TFrmConsultaProgramacao
             ParentShowHint = False
             ShowHint = True
             TabOrder = 0
-            ExplicitWidth = 262
           end
         end
       end
@@ -1961,7 +1836,6 @@ object FrmConsultaProgramacao: TFrmConsultaProgramacao
         Height = 25
         Align = alTop
         TabOrder = 2
-        ExplicitWidth = 396
         object Panel75: TPanel
           Left = 1
           Top = 1
@@ -1979,7 +1853,6 @@ object FrmConsultaProgramacao: TFrmConsultaProgramacao
           Height = 23
           Align = alClient
           TabOrder = 1
-          ExplicitWidth = 264
           object ComboBoxJanelaDestino: TComboBox
             Left = 1
             Top = 1
@@ -2007,7 +1880,6 @@ object FrmConsultaProgramacao: TFrmConsultaProgramacao
         Height = 25
         Align = alTop
         TabOrder = 3
-        ExplicitWidth = 396
         object Panel78: TPanel
           Left = 1
           Top = 1
@@ -2025,7 +1897,6 @@ object FrmConsultaProgramacao: TFrmConsultaProgramacao
           Height = 23
           Align = alClient
           TabOrder = 1
-          ExplicitWidth = 264
           object ComboBoxJanelaTipoEtapaServico: TComboBox
             Left = 1
             Top = 1
@@ -2396,12 +2267,14 @@ object FrmConsultaProgramacao: TFrmConsultaProgramacao
       Caption = 'Procurar'
       Hint = 'Buscar registros no banco de dados'
       ImageIndex = 27
+      OnExecute = actProcurarExecutanteExecute
     end
     object actProcurarServicos: TAction
       Category = 'Procurar'
       Caption = 'Procurar'
       Hint = 'Buscar registros no banco de dados'
       ImageIndex = 27
+      OnExecute = actProcurarServicosExecute
     end
   end
   object PopupMenuExcluir: TPopupMenu

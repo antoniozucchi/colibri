@@ -46,7 +46,6 @@ object FrmMotivoCancelamento: TFrmMotivoCancelamento
         TitleFont.Style = []
         ClearFilterButton = btnClearFiltro
         SearchAction = actProcurar
-        LayoutGrid = ColunasLayoutPalavraChave
         EnableZebra = False
         ExcelButton = btnExcel
         Columns = <
@@ -66,19 +65,6 @@ object FrmMotivoCancelamento: TFrmMotivoCancelamento
             Width = 300
             Visible = True
           end>
-      end
-      object ColunasLayoutPalavraChave: TStringGrid
-        Left = 245
-        Top = 122
-        Width = 156
-        Height = 87
-        ColCount = 7
-        RowCount = 2
-        TabOrder = 1
-        Visible = False
-        RowHeights = (
-          24
-          31)
       end
       object ToolBar9: TToolBar
         Left = 1
